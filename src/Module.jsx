@@ -58,7 +58,7 @@ function Module({
             : <div>&nbsp;</div>
         }
 
-        {!item.free && item.showIcon && item.icon && <img className="module_icon" src={`/${item.icon}`} style={{ width: `calc(${style['--h']} * 0.25)`, height: `calc(${style['--h']} * 0.25)` }} />}
+        {!item.free && item.showIcon && item.icon && <img className="module_icon" src={`${import.meta.env.VITE_APP_BASE}${item.icon}`} style={{ width: `calc(${style['--h']} * 0.25)`, height: `calc(${style['--h']} * 0.25)` }} />}
 
         {!item.free && item.showText
             ? <div className="module_text" style={{ backgroundColor: item.bgcolor, color: item.fgcolor, height: `calc(${style['--h']} * 0.29)` }} dangerouslySetInnerHTML={{ __html: item.text.replaceAll("\n", "<br />") }}></div>
