@@ -410,7 +410,7 @@ function App() {
                       setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, icon: value } }));
                     }}
                   />
-                  {icon.filename ? <img src={`/${icon.filename}`} width={24} height={24} /> : icon.title}
+                  {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} /> : icon.title}
                 </div>
               ))}
             </div>
