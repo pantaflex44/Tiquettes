@@ -1,0 +1,186 @@
+[
+    {
+        "filename": "swb_ecl.svg",
+        "title": "Eclairage 1"
+    },
+    {
+        "filename": "swb_ecl2.svg",
+        "title": "Eclairage 2"
+    },
+    {
+        "filename": "swb_ecl_cmd.svg",
+        "title": "Eclairage commandé"
+    },
+    {
+        "filename": "swb_ecl_rgb.svg",
+        "title": "Eclairage RGB"
+    },
+    {
+        "filename": "swb_eclext.svg",
+        "title": "Eclairage extérieur"
+    },
+    {
+        "filename": "swb_pc.svg",
+        "title": "Prise de courant murale"
+    },
+    {
+        "filename": "swb_pc2.svg",
+        "title": "Appareil sur prise de courant"
+    },
+    {
+        "filename": "swb_alim_eco.svg",
+        "title": "Alimentation (Economique)"
+    },
+    {
+        "filename": "swb_alim_ht.svg",
+        "title": "Alimentation (Puissance)"
+    },
+    {
+        "filename": "swb_alim.svg",
+        "title": "Alimentation"
+    },
+    {
+        "filename": "swb_bec.svg",
+        "title": "Ballon d'eau chaude"
+    },
+    {
+        "filename": "swb_chauffage.svg",
+        "title": "Chauffage éledctrique"
+    },
+    {
+        "filename": "swb_clim.svg",
+        "title": "Pompe à chaleur"
+    },
+    {
+        "filename": "swb_cuissin.svg",
+        "title": "Plaque électrique"
+    },
+    {
+        "filename": "swb_eau.svg",
+        "title": "Compteur d'eau"
+    },
+    {
+        "filename": "swb_ext.svg",
+        "title": "Alimentation (Extension / Divisionnaire)"
+    },
+    {
+        "filename": "swb_four.svg",
+        "title": "Four"
+    },
+    {
+        "filename": "swb_frigo.svg",
+        "title": "Réfrigirateur"
+    },
+    {
+        "filename": "swb_froid.svg",
+        "title": "Congélateur"
+    },
+    {
+        "filename": "swb_gaz.svg",
+        "title": "Chaudière"
+    },
+    {
+        "filename": "swb_induction.svg",
+        "title": "Plaque induction"
+    },
+    {
+        "filename": "swb_informatique.svg",
+        "title": "Informatique"
+    },
+    {
+        "filename": "swb_journuit.svg",
+        "title": "Commutateur Jour/Nuit"
+    },
+    {
+        "filename": "swb_ll.svg",
+        "title": "Lave Linge"
+    },
+    {
+        "filename": "swb_lv.svg",
+        "title": "Lave Linge"
+    },
+    {
+        "filename": "swb_microonde.svg",
+        "title": "Micro Onde"
+    },
+    {
+        "filename": "swb_minuterie.svg",
+        "title": "Minuterie"
+    },
+    {
+        "filename": "swb_portail.svg",
+        "title": "Portail électrique"
+    },
+    {
+        "filename": "swb_puissance.svg",
+        "title": "Alimentation (Générale)"
+    },
+    {
+        "filename": "swb_solaire.svg",
+        "title": "Panneaux solaires"
+    },
+    {
+        "filename": "swb_solchauffant.svg",
+        "title": "Plancher chauffant"
+    },
+    {
+        "filename": "swb_split.svg",
+        "title": "Unité murale"
+    },
+    {
+        "filename": "swb_telec.svg",
+        "title": "Télécommande"
+    },
+    {
+        "filename": "swb_telephonie.svg",
+        "title": "Communication"
+    },
+    {
+        "filename": "swb_thermo.svg",
+        "title": "Thermostat 1"
+    },
+    {
+        "filename": "swb_thermo2.svg",
+        "title": "Thermostat 2"
+    },
+    {
+        "filename": "swb_thermo3.svg",
+        "title": "Thermostat 3"
+    },
+    {
+        "filename": "swb_thermo4.svg",
+        "title": "Thermostat 4"
+    },
+    {
+        "filename": "swb_tv.svg",
+        "title": "TV"
+    },
+    {
+        "filename": "swb_ventil.svg",
+        "title": "Ventilation 1"
+    },
+    {
+        "filename": "swb_ventil2.svg",
+        "title": "Ventilation 2"
+    },
+    {
+        "filename": "swb_vmc.svg",
+        "title": "VMC"
+    },
+    {
+        "filename": "swb_voitureelectrique.svg",
+        "title": "Véhicules électriques 1"
+    },
+    {
+        "filename": "swb_voitureelectrique2.svg",
+        "title": "Véhicules électriques 2"
+    },
+    {
+        "filename": "swb_volet.svg",
+        "title": "Volets roulants"
+    },
+    {
+        "filename": "",
+        "title": "aucun pictogramme"
+    }
+]

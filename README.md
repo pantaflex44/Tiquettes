@@ -1,0 +1,11 @@
+# Tiquettes
+
+Générateur d'étiquettes pour tableaux / armoires électriques.
+
+---
+
+<u>Licence</u>: MIT<br />
+<u>Auteur</u>: Christophe LEMOINE <pantaflex (at) hotmail (dot) fr><br />
+<u>Version</u>: 1.0<br />
+<u>Création</u>: 26/05/2024<br />
+<u>Modification</u>: <br />

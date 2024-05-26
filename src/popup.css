@@ -1,0 +1,100 @@
+.popup-overflow {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 30px);
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    max-width: 85%;
+    max-height: 93%;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+    z-index: 9000;
+    padding: 1em;
+}
+
+.popup_title {
+    font-size: smaller;
+    font-weight: bold;
+    margin-bottom: 3em;
+}
+
+.popup_cancel {
+    font-size: smaller;
+    font-weight: bold;
+    position: absolute;
+    top: 12px;
+    right: 1em;
+    cursor: pointer;
+}
+
+.popup_buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: end;
+    align-items: center;
+    gap: 0.5em;
+    margin-inline: 1.1em;
+    margin-top: 2em;
+}
+
+.popup_buttons button {
+    padding-block: 0.25em;
+    padding-inline: 0.75em;
+}
+
+.popup_row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    margin-block: 1em;
+    margin-inline: 1.1em;
+    align-items: baseline;
+    font-size: smaller;
+    justify-content: start;
+    text-align: left;
+}
+
+.popup_row input, .popup_row textarea {
+    padding: 0.5em;
+    font: inherit;
+}
+
+.popup_row input[name="editor_id"] {
+    text-transform: uppercase;
+}
+
+.popup_row input[type="checkbox"] {
+    padding: 0;
+    margin: 0;
+    margin-right: auto;
+}
+
+.popup_row input[type="color"] {
+    padding: 0;
+    margin: 0;
+    width: 48px;
+    height: 24px;
+}
+
+.popup_row input[type="text"] {
+    width: calc(100% - 1.3em);
+}
+
+.popup_error {
+    font-size: small;
+    color: red;
+}

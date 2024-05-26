@@ -1,0 +1,138 @@
+.module {
+    width: var(--sw);
+    min-width: var(--sw);
+    height: var(--h);
+    min-height: var(--h);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2mm;
+}
+
+.module:not(:last-of-type) {
+    border-right: 1px solid black;
+}
+
+.module:hover {
+    background-color: #e9e9e9;
+}
+
+.module .toolbox {
+    position: absolute;
+    top: -40px;
+    left: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 0.25em;
+    padding: 3px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background-color: #F0FFFC;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    z-index: 100;
+    display: none;
+}
+
+.module:hover .toolbox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    column-gap: 0.5em;
+    row-gap: 0.1em;
+    width: 83px;
+}
+
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.module .info {
+    font-size: 0.6em;
+    padding-inline: 0.1em;
+    color: black;
+}
+
+.module .info.title {
+    font-size: 0.7em;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.module .tool {
+    padding: 2px;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: small;
+    z-index: 1000;
+    color: black;
+}
+
+.module .tool.edit {
+    margin-bottom: -6px;
+}
+
+.module .tool[data-disabled="true"] {
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(1) opacity(0.3);
+}
+
+.module .module_title {
+    text-align: center;
+    font-size: 3mm;
+    font-weight: bold;
+    line-height: 5mm;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-inline: 1mm;
+    width: calc(100% - 2mm);
+}
+
+.module .module_text {
+    text-align: center;
+    font-size: 2.8mm;
+    font-weight: bold;
+    inline-size: 150px;
+    overflow-wrap: break-word;
+    overflow-y: hidden;
+    padding-inline: 1mm;
+    padding-block: 1.1mm;
+    width: calc(100% - 2mm);
+    height: 39px;
+}
+
+@media print {
+    .module:not(:last-of-type) {
+        border-right: 1px solid darkgray;
+    }
+
+    .module {
+        box-sizing: border-box;
+        border-left: 0;
+        border-right: 1px solid darkgray;
+        border-top: 1px solid darkgray;
+        border-bottom: 1px solid darkgray;
+    }
+
+    .module.first {
+        border-left: 1px solid darkgray;
+    }
+}

@@ -1,0 +1,31 @@
+.row {
+    box-sizing: border-box;
+    width: var(--w);
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: start;
+    align-items: start;
+}
+
+.row_title {
+    color: darkgray;
+    font-size: smaller;
+}
+
+@media print {
+    .row {
+        box-sizing: border-box;
+        width: calc(100% - 10mm);
+        border: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+        row-gap: 1mm;
+        justify-content: start;
+        align-items: start;
+    }
+}
