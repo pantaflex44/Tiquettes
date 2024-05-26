@@ -37,6 +37,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "vite": "^5.2.0",
-    "vite-plugin-favicon": "^1.0.8"
+    "vite-plugin-favicon": "^1.0.8",
+    "vite-plugin-open-graph": "^2.0.4"
   }
 }
