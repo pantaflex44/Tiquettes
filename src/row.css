@@ -1,6 +1,5 @@
 .row {
     box-sizing: border-box;
-    width: var(--w);
     border: 1px solid black;
     display: flex;
     flex-direction: row;
