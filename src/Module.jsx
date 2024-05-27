@@ -1,7 +1,6 @@
 import './module.css';
 
 import editIcon from './assets/edit.svg';
-import { useEffect } from 'react';
 
 /* eslint-disable react/prop-types */
 function Module({
@@ -16,28 +15,7 @@ function Module({
     onClear = null,
     onEdit = null
 }) {
-    useEffect(() => {
-        function highlightFirstModule() {
-            let mds = document.querySelectorAll(`.module[data-row="${rowPosition}"`);
-            let previousOffset = 0;
-            for (let m of mds) {
-                if (m.offsetTop > previousOffset) {
-                    previousOffset = m.offsetTop;
-                    m.classList.add('first');
-                } else {
-                    m.classList.remove('first');
-                }
-            }
-        }
-        window.addEventListener('resize', highlightFirstModule);
-        highlightFirstModule();
-
-        return () => {
-            window.removeEventListener('resize', highlightFirstModule);
-        }
-    }, [rowPosition]);
-
-    return item && <div className="module" data-row={rowPosition} style={{
+        return item && <div className="module" data-row={rowPosition} style={{
         ...style,
         "--sw": `calc(${style['--sw']} * ${item.span})`,
         color: item.free ? 'darkgray' : 'black'

@@ -19,11 +19,12 @@
         box-sizing: border-box;
         width: calc(100% - 10mm);
         border: 0;
+        border-left: 1px solid lightgray;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0;
-        row-gap: 1mm;
+        row-gap: 5mm;
         justify-content: start;
         align-items: start;
     }

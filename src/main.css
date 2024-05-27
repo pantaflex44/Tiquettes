@@ -61,7 +61,7 @@ h6 {
     main {
         width: calc(100% - 10mm);
         margin: 0;
-        padding: 5mm;
+        padding: 10mm;
     }
 
     h1, h6 {

@@ -40,6 +40,30 @@ function App() {
   const [hRow, setHRow] = useState(defaultHRow);
   const [editor, setEditor] = useState(null);
 
+  const highlightFirstModule = useCallback(() => {
+    for (let rp = 0; rp < npRows; rp++) {
+      let mds = document.querySelectorAll(`.module[data-row="${rp}"`);
+      let previousOffset = 0;
+      for (let m of mds) {
+        if (m.offsetTop > previousOffset) {
+          previousOffset = m.offsetTop;
+          m.classList.add('first');
+        } else {
+          m.classList.remove('first');
+        }
+      }
+    }
+  }, [npRows]);
+
+  useEffect(() => {
+    window.addEventListener('resize', highlightFirstModule);
+    highlightFirstModule();
+
+    return () => {
+      window.removeEventListener('resize', highlightFirstModule);
+    }
+  }, [highlightFirstModule, npRows]);
+
   const createRow = useCallback((steps, rowsCount = null) => {
     return Array(rowsCount ?? npRows).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({ ...q, id: `Q${(j + 1) + (((i + 1) * steps) - steps)}` })));
   }, [defaultModule, npRows])

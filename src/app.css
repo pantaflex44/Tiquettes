@@ -78,5 +78,10 @@ h3 {
         flex-wrap: nowrap;
         gap: 0.5em;
         width: 100%;
+        page-break-inside: avoid;
+    }
+
+    .switchboard_row:not(:first-of-type) {
+        padding-top: 10mm;
     }
 }

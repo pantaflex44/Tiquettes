@@ -4,12 +4,13 @@
     height: var(--h);
     min-height: var(--h);
     position: relative;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     padding-top: 2mm;
+    border: 0;
 }
 
 .module:not(:last-of-type) {
@@ -121,18 +122,17 @@
 
 @media print {
     .module:not(:last-of-type) {
-        border-right: 1px solid darkgray;
+        border-right: 1px solid lightgray;
+    }
+
+    .module:last-of-type {
+        border-right: 1px solid lightgray;
     }
 
     .module {
         box-sizing: border-box;
-        border-left: 0;
-        border-right: 1px solid darkgray;
-        border-top: 1px solid darkgray;
-        border-bottom: 1px solid darkgray;
-    }
-
-    .module.first {
-        border-left: 1px solid darkgray;
+        border: 0;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
     }
 }
