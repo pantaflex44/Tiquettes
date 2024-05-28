@@ -15,20 +15,22 @@ function Module({
     onClear = null,
     onEdit = null
 }) {
-        return item && <div className="module" data-row={rowPosition} style={{
+    return item && <div className="module" data-row={rowPosition} style={{
         ...style,
         "--sw": `calc(${style['--sw']} * ${item.span})`,
         color: item.free ? 'darkgray' : 'black'
     }} tabIndex="0" title={`(${item.id}) R${rowPosition} | P${modulePosition} | L${item.span}`}>
 
         <div className="toolbox">
-            <div className="info title"><div className="tool edit" title="Editer" onClick={() => onEdit(item)}><img src={editIcon} alt="" width={16} height={16} /></div> {item.id}</div>
-            <div className="break"></div>
+            <div className="info"><span className='title'>{item.id}</span></div>
             <div className="info">{`R${rowPosition} / P${modulePosition} / L${item.span}`}</div>
+
             <div className="break"></div>
-            <div className="tool shrink" title="Largeur -1" onClick={() => onShrink(item)} data-disabled={!shrinkAllowed(item)}>➖</div>
-            <div className="tool grow" title="Largeur +1" onClick={() => onGrow(item)} data-disabled={!growAllowed(item)}>➕</div>
-            <div className="tool clear" title="Libérer" onClick={() => onClear(item)} data-disabled={item.free}>⭕</div>
+
+            <div className="tool edit" title="Editer" onClick={() => onEdit(item)}><img src={editIcon} alt="" width={16} height={16} /> Editer...</div>
+            <div className="tool shrink" title="Largeur -1" onClick={() => onShrink(item)} data-disabled={!shrinkAllowed(item)}>➖ Diminuer</div>
+            <div className="tool grow" title="Largeur +1" onClick={() => onGrow(item)} data-disabled={!growAllowed(item)}>➕ Agrandir</div>
+            <div className="tool clear" title="Libérer" onClick={() => onClear(item)} data-disabled={item.free}>⭕ Libérer</div>
         </div>
 
         {!item.free && item.showId

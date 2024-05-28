@@ -7,6 +7,7 @@
     height: calc(100% - 30px);
     min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.75);
+    z-index: 8000;
 }
 
 .popup {

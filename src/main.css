@@ -62,9 +62,14 @@ h6 {
         width: calc(100% - 10mm);
         margin: 0;
         padding: 10mm;
+        max-width: initial;
     }
 
     h1, h6 {
         display: none;
+    }
+
+    .footer {
+        padding-top: 10mm;
     }
 }
