@@ -1,0 +1,12 @@
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-trash" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none">
+
+ <g>
+  <title>Layer 1</title>
+  <path stroke-opacity="0" stroke="#fffcfc" id="svg_1" fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/>
+  <path stroke="#ff5656" id="svg_2" d="m4,7l16,0"/>
+  <path stroke="#ff5656" id="svg_3" d="m10,11l0,6"/>
+  <path stroke="#ff5656" id="svg_4" d="m14,11l0,6"/>
+  <path stroke="#ff5656" id="svg_5" d="m5,7l1,12a2,2 0 0 0 2,2l8,0a2,2 0 0 0 2,-2l1,-12"/>
+  <path stroke="#ff5656" id="svg_6" d="m9,7l0,-3a1,1 0 0 1 1,-1l4,0a1,1 0 0 1 1,1l0,3"/>
+ </g>
+</svg>

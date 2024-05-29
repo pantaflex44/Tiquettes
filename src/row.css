@@ -1,6 +1,5 @@
 .row {
-    box-sizing: border-box;
-    border: 1px solid black;
+    border: 1px solid darkgray;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -12,11 +11,11 @@
 .row_title {
     color: darkgray;
     font-size: smaller;
+    margin-bottom: 60px;
 }
 
 @media print {
     .row {
-        box-sizing: border-box;
         width: calc(100% - 10mm);
         border: 0;
         border-left: 1px solid lightgray;
@@ -27,5 +26,9 @@
         row-gap: 5mm;
         justify-content: start;
         align-items: start;
+    }
+
+    .row_title {
+        margin-bottom: 0;
     }
 }

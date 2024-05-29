@@ -38,6 +38,7 @@ function App() {
 
   const [npRows, setNpRows] = useState(defaultNpRows);
   const [hRow, setHRow] = useState(defaultHRow);
+  const [spr, setSpr] = useState(defaultStepsPerRows);
   const [editor, setEditor] = useState(null);
 
   const highlightFirstModule = useCallback(() => {
@@ -91,6 +92,7 @@ function App() {
     setDocumentTitle("Nouveau projet");
     setHRow(defaultHRow);
     setNpRows(defaultNpRows);
+    setSpr(defaultStepsPerRows);
     create(defaultStepsPerRows, defaultNpRows, defaultHRow);
   }
 
@@ -172,30 +174,82 @@ function App() {
     setEditor({ rowIndex, moduleIndex, currentModule, errors: [] });
   }
 
+  const moduleFocus = (rowPosition, modulePosition) => {
+    const m = document.querySelector(`[data-id="${rowPosition}-${modulePosition}"]`);
+    if (m) {
+      m.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "end" });
+      m.focus();
+    }
+  }
+
   const handleModuleGrow = (rowIndex, moduleIndex) => {
     const row = switchboard.rows[rowIndex];
     const currentModule = row[moduleIndex];
     const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
 
-    if (nextModule?.free === true && nextModule?.span === 1) grow(rowIndex, moduleIndex);
+    if (nextModule?.free === true && nextModule?.span === 1) {
+      grow(rowIndex, moduleIndex);
+      moduleFocus(rowIndex + 1, moduleIndex + 1);
+    }
   }
 
   const handleModuleShrink = (rowIndex, moduleIndex) => {
     const row = switchboard.rows[rowIndex];
     const currentModule = row[moduleIndex];
 
-    if (currentModule.span > 1) shrink(rowIndex, moduleIndex);
+    if (currentModule.span > 1) {
+      shrink(rowIndex, moduleIndex);
+      moduleFocus(rowIndex + 1, moduleIndex + 1);
+    }
   }
 
   const handleModuleClear = (rowIndex, moduleIndex) => {
     const row = switchboard.rows[rowIndex];
     const currentModule = row[moduleIndex];
 
-    if (!currentModule.free) clear(rowIndex, moduleIndex);
+    if (!currentModule.free) {
+      clear(rowIndex, moduleIndex);
+      moduleFocus(rowIndex + 1, moduleIndex + 1);
+    }
   }
 
   const handleModuleEdit = (rowIndex, moduleIndex) => {
     edit(rowIndex, moduleIndex);
+    moduleFocus(rowIndex + 1, moduleIndex + 1);
+  }
+
+  const handleModuleMoveLeft = (rowIndex, moduleIndex) => {
+    let rows = switchboard.rows;
+    let row = rows[rowIndex];
+    const currentModule = row[moduleIndex];
+    const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
+
+    if (!currentModule.free && prevModule?.free === true && prevModule?.span === 1) {
+      row[moduleIndex - 1] = currentModule;
+      row[moduleIndex] = prevModule;
+      rows[rowIndex] = row;
+      setSwitchboard((old) => {
+        moduleFocus(rowIndex + 1, moduleIndex);
+        return { ...old, rows };
+      })
+    }
+  }
+
+  const handleModuleMoveRight = (rowIndex, moduleIndex) => {
+    let rows = switchboard.rows;
+    let row = rows[rowIndex];
+    const currentModule = row[moduleIndex];
+    const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
+
+    if (!currentModule.free && nextModule?.free === true && nextModule?.span === 1) {
+      row[moduleIndex + 1] = currentModule;
+      row[moduleIndex] = nextModule;
+      rows[rowIndex] = row;
+      setSwitchboard((old) => {
+        moduleFocus(rowIndex + 1, moduleIndex + 2);
+        return { ...old, rows };
+      })
+    }
   }
 
   const moduleShrinkAllowed = (rowIndex, moduleIndex) => {
@@ -213,6 +267,22 @@ function App() {
     return (nextModule?.free === true && nextModule?.span === 1);
   }
 
+  const moduleMoveLeftAllowed = (rowIndex, moduleIndex) => {
+    const row = switchboard.rows[rowIndex];
+    const currentModule = row[moduleIndex];
+    const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
+
+    return (!currentModule.free && prevModule?.free === true && prevModule?.span === 1);
+  }
+
+  const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
+    const row = switchboard.rows[rowIndex];
+    const currentModule = row[moduleIndex];
+    const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
+
+    return (!currentModule.free && nextModule?.free === true && nextModule?.span === 1);
+  }
+
   useEffect(() => {
     const swb = JSON.stringify(switchboard);
     if (sessionStorage.getItem("tiquettes") !== swb) {
@@ -223,73 +293,85 @@ function App() {
 
   return (
     <>
-      <h4>Nouveau projet
+      <div className="projectbox">
+        <div className="newproject">
+          <h4>Nouveau projet</h4>
+
+          <div className="toolbar">
+            {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
+              const c = parseInt(count.trim());
+              return <div key={c} style={{ display: 'flex', alignItems: 'center', marginRight: '1em' }}>
+                <input type="radio" name="spr" id={`spr${c}`} value={c} checked={spr === c} onChange={(e) => setSpr(parseInt(e.target.value))} style={{ margin: 0, marginRight: '0.5em' }} />
+                <label htmlFor={`spr${c}`}><small>{c} modules</small></label>
+              </div>;
+            })}
+          </div>
+
+          <div className="toolbar">
+            <button onClick={() => setNpRows((old) => {
+              if (old > rowsMin) return old - 1;
+              return old;
+            })}>-</button>
+            <input type="range" min={rowsMin} max={rowsMax} step={1} value={npRows} onChange={(e) => {
+              const value = parseInt(e.target.value);
+              if (value >= rowsMin) setNpRows(value);
+            }} />
+            <span><small>{npRows} rangées</small></span>
+            <button onClick={() => setNpRows((old) => {
+              if (old < rowsMax) return old + 1;
+              return old;
+            })}>+</button>
+          </div>
+
+          <div className="toolbar">
+            <button onClick={() => setHRow((old) => {
+              if (old > heightMin) return old - 1;
+              return old;
+            })}>-</button>
+            <input type="range" min={heightMin} max={heightMax} step={1} value={hRow} onChange={(e) => {
+              const value = parseInt(e.target.value);
+              if (value >= heightMin) setHRow(value);
+            }} />
+            <span><small>hauteur {hRow}mm</small></span>
+            <button onClick={() => setHRow((old) => {
+              if (old < heightMax) return old + 1;
+              return old;
+            })}>+</button>
+          </div>
+
+          <div className="toolbar">
+            <button onClick={() => {
+              if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) { create(spr); }
+            }}>Créer le nouveau projet...</button>
+          </div>
+        </div>
+        <div className="importproject">
+          <h4>Importer un projet
+            <br />
+            <input ref={importRef} style={{ marginTop: '1em' }} type="file" onChange={(e) => {
+              const fileReader = new FileReader();
+              fileReader.readAsText(e.target.files[0], "UTF-8");
+              fileReader.onload = (e) => {
+                try {
+                  const swb = JSON.parse(e.target.result);
+                  setSwitchboard((old) => ({ ...old, ...swb }));
+                  setDocumentTitle(importRef.current.value.replaceAll("\\", "/").split("/").pop());
+                } catch (err) {
+                  alert("Impossible d'importer ce fichier.");
+                  importRef.current.value = "";
+                }
+              };
+            }} />
+          </h4>
+        </div>
+      </div>
+
+      <h3>Projet courant
         <br />
-        <button style={{ marginTop: '1em' }} onClick={() => reset()}>Par défaut</button>
-        <input ref={importRef} style={{ marginLeft: '0.75em', marginTop: '1em' }} type="file" onChange={(e) => {
-          const fileReader = new FileReader();
-          fileReader.readAsText(e.target.files[0], "UTF-8");
-          fileReader.onload = (e) => {
-            try {
-              const swb = JSON.parse(e.target.result);
-              setSwitchboard((old) => ({ ...old, ...swb }));
-              setDocumentTitle(importRef.current.value.replaceAll("\\", "/").split("/").pop());
-            } catch (err) {
-              alert("Impossible d'importer ce fichier.");
-              importRef.current.value = "";
-            }
-          };
-        }} />
-      </h4>
-
-      <div className="toolbar">
-        <span style={{ width: '1em' }}><small>1)</small></span>
-        <span style={{ width: '4em', fontWeight: 'bold' }}><small>Rangées</small></span>
-        <button onClick={() => setNpRows((old) => {
-          if (old > rowsMin) return old - 1;
-          return old;
-        })}>-</button>
-        <input type="range" min={rowsMin} max={rowsMax} step={1} value={npRows} onChange={(e) => {
-          const value = parseInt(e.target.value);
-          if (value >= rowsMin) setNpRows(value);
-        }} />
-        <span><small>{npRows}</small></span>
-        <button onClick={() => setNpRows((old) => {
-          if (old < rowsMax) return old + 1;
-          return old;
-        })}>+</button>
-      </div>
-
-      <div className="toolbar">
-        <span style={{ width: '1em' }}><small>2)</small></span>
-        <span style={{ width: '4em', fontWeight: 'bold' }}><small>Hauteur</small></span>
-        <button onClick={() => setHRow((old) => {
-          if (old > heightMin) return old - 1;
-          return old;
-        })}>-</button>
-        <input type="range" min={heightMin} max={heightMax} step={1} value={hRow} onChange={(e) => {
-          const value = parseInt(e.target.value);
-          if (value >= heightMin) setHRow(value);
-        }} />
-        <span><small>{hRow}mm</small></span>
-        <button onClick={() => setHRow((old) => {
-          if (old < heightMax) return old + 1;
-          return old;
-        })}>+</button>
-      </div>
-
-      <div className="toolbar">
-        <span style={{ width: '1em' }}><small>3)</small></span>
-        <span style={{ width: '4em', fontWeight: 'bold' }}><small>Largeur</small></span>
-        {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
-          const c = parseInt(count.trim());
-          return <button key={c} onClick={() => create(c)}>{c}</button>;
-        })}
-        <span><small>modules</small></span>
-      </div>
-
-      <h3>Projet courant<br />
         <button style={{ marginTop: '1em' }} onClick={() => {
+          if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) { reset() }
+        }}>Réinitialiser</button>
+        <button style={{ marginLeft: '0.75em', marginTop: '1em' }} onClick={() => {
           const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(switchboard))}`;
           const link = document.createElement("a");
           link.href = jsonString;
@@ -300,22 +382,15 @@ function App() {
       </h3>
       <ul className="project">
         <li>
-          <small><b>{switchboard.rows.length}</b> rangée{switchboard.rows.length > 1 ? 's' : ''}</small>
-        </li>
-        <li>
-          <small><b>{switchboard.stepsPerRows}</b> module{switchboard.stepsPerRows > 1 ? 's' : ''} par rangée</small>
-        </li>
-        <li>
-          <small>Hauteur des étiquettes: <b>{switchboard.height}mm</b></small>
+          <small><b>{switchboard.rows.length}</b> rangée{switchboard.rows.length > 1 ? 's' : ''} de <b>{switchboard.stepsPerRows}</b> module{switchboard.stepsPerRows > 1 ? 's' : ''}. Hauteur des étiquettes: <b>{switchboard.height}mm</b>.</small>
         </li>
       </ul>
-
-
 
       <div className="switchboard">
         {switchboard.rows.map((row, i) => (
           <Row
             key={i}
+
             index={i + 1}
             items={row}
             stepsPerRows={switchboard.stepsPerRows}
@@ -323,14 +398,22 @@ function App() {
               "--w": `${switchboard.stepsPerRows * stepSize}mm`,
               "--h": `${switchboard.height}mm`,
               "--c": switchboard.stepsPerRows,
-              "--sw": `${stepSize}mm`
+              "--sw": `calc(${stepSize}mm + 1px)`
             }}
-            onModuleGrow={(moduleIndex, item) => handleModuleGrow(i, moduleIndex, item)}
-            onModuleShrink={(moduleIndex, item) => handleModuleShrink(i, moduleIndex, item)}
+
+            onModuleGrow={(moduleIndex, item, moduleRef) => handleModuleGrow(i, moduleIndex, item, moduleRef)}
+            onModuleShrink={(moduleIndex, item, moduleRef) => handleModuleShrink(i, moduleIndex, item, moduleRef)}
+
             onModuleClear={(moduleIndex, item) => handleModuleClear(i, moduleIndex, item)}
             onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
+
+            onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
+            onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
+
             moduleShrinkAllowed={(moduleIndex, item) => moduleShrinkAllowed(i, moduleIndex, item)}
             moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
+            moduleMoveLeftAllowed={(moduleIndex, item) => moduleMoveLeftAllowed(i, moduleIndex, item)}
+            moduleMoveRightAllowed={(moduleIndex, item) => moduleMoveRightAllowed(i, moduleIndex, item)}
           />
         ))}
 
@@ -347,7 +430,7 @@ function App() {
               errors: []
             }));
 
-            const id = editor.currentModule.id.trim();
+            const id = editor.currentModule.id.trim().toUpperCase();
             const icon = editor.currentModule.icon;
             const text = editor.currentModule.text.trim();
             const showId = editor.currentModule.showId;
@@ -356,7 +439,7 @@ function App() {
             const bgcolor = editor.currentModule.bgcolor;
             const fgcolor = editor.currentModule.fgcolor;
 
-            if (!(/[A-Z0-9.]{2,}/.test(id))) {
+            if (!(/[a-zA-Z0-9.]{2,}/.test(id))) {
               setEditor((old) => ({
                 ...old,
                 currentModule: { ...old.currentModule, id: "" },
@@ -406,7 +489,7 @@ function App() {
         >
           <div className="popup_row">
             <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
-            <input type="text" name="editor_id" id={`editor_id_${editor.currentModule.id.trim()}`} value={editor.currentModule.id} pattern="\w{2}" onChange={(e) => {
+            <input type="text" name="editor_id" id={`editor_id_${editor.currentModule.id.trim()}`} value={editor.currentModule.id} onChange={(e) => {
               const value = e.target.value;
               setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, id: value } }));
             }} autoFocus />
@@ -414,7 +497,7 @@ function App() {
 
           <div className="popup_row">
             <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Description</label>
-            <textarea name="editor_text" id={`editor_text_${editor.currentModule.id.trim()}`} value={editor.currentModule.text} pattern="/(\w+)/" onChange={(e) => {
+            <textarea name="editor_text" id={`editor_text_${editor.currentModule.id.trim()}`} value={editor.currentModule.text} onChange={(e) => {
               const value = e.target.value;
               setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, text: value } }));
             }} rows={2} />
@@ -492,8 +575,7 @@ function App() {
 
           {editor.errors.map((error, i) => <div key={i} className="popup_row"><div></div><div className="popup_error">{error}</div></div>)}
         </Popup >
-      )
-      }
+      )}
 
     </>
   )

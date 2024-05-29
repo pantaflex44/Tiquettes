@@ -1,3 +1,7 @@
+:focus {
+    outline: 0 !important;
+}
+
 body {
     font-family: sans-serif;
     position: relative;
@@ -55,6 +59,21 @@ h6 {
     justify-content: start;
     align-items: center;
     gap: 0.1em;
+}
+
+button {
+    padding-block: 0.3em;
+    padding-inline: 0.7em;
+    min-width: 28px;
+    min-height: 28px;
+}
+
+input[type="file"] {
+    min-height: 28px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    min-height: 28px;
 }
 
 @media print {

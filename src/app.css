@@ -14,17 +14,35 @@
 }
 
 h3 {
-    margin-top: 3em;
+    margin-top: 0;
 }
 
 .project {
     margin-bottom: 2em;
     list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    color: darkcyan;
+}
+
+.project li {
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .project li::before {
-    content: '-';
+    content: '˫';
     margin-right: 1em;
+}
+
+.projectbox {
+    padding-bottom: 1em;
+    margin-bottom: 2em;
+    border-bottom: 1px solid darkgray;
+}
+
+.projectbox .newproject {
+    margin-bottom: 2em;
 }
 
 .switchboard {
@@ -35,10 +53,7 @@ h3 {
     margin-block: 2em;
     overflow-x: scroll;
     padding-bottom: 2em;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid darkgray;
+    border: 1px solid lightgray;
     border-radius: 3px;
     padding: 2em;
 }
@@ -49,6 +64,7 @@ h3 {
     flex-wrap: nowrap;
     gap: 0.5em;
     width: max-content;
+    margin-bottom: 2em;
 }
 
 @media print {
@@ -60,13 +76,10 @@ h3 {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
-        gap: 2em;
+        gap: 0mm;
         margin-block: 0;
         overflow-x: initial;
         padding-bottom: 0;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
         border: 0;
         border-radius: initial;
         padding: 0;
@@ -76,12 +89,18 @@ h3 {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
-        gap: 0.5em;
+        gap: 2mm;
         width: 100%;
         page-break-inside: avoid;
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
 
     .switchboard_row:not(:first-of-type) {
         padding-top: 10mm;
+    }
+
+    .projectbox {
+        display: none;
     }
 }
