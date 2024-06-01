@@ -2,6 +2,8 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import ogPlugin from 'vite-plugin-open-graph';
 
+import * as pkg from './package.json';
+
 
 // https://vitejs.dev/config/
 
@@ -24,22 +26,22 @@ export default ({ mode }) => {
           {
             basic: {
               url: env.VITE_APP_URL,
-              title: env.VITE_APP_NAME,
+              title: pkg.title,
               type: 'website',
               image: `${env.VITE_APP_URL}og.webp`,
               determiner: 'auto',
-              description: env.VITE_APP_DESCRIPTION,
+              description: pkg.description,
               locale: 'fr_FR',
               localeAlternate: ['fr_FR'],
-              siteName: env.VITE_APP_NAME,
+              siteName: pkg.title,
             },
             twitter: {
               image: `${env.VITE_APP_URL}twitter.webp`,
               card: 'summary_large_image',
-              description: env.VITE_APP_DESCRIPTION,
-              title: env.VITE_APP_NAME,
+              description: pkg.description,
+              title: pkg.title,
               site: env.VITE_APP_URL,
-              creator: env.VITE_APP_AUTHOR,
+              creator: pkg.author,
             },
           }
         )
