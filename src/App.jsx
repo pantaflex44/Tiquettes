@@ -8,6 +8,10 @@ import themesList from './themes.json';
 import Row from "./Row";
 import Popup from "./Popup";
 
+import newProjectIcon from './assets/new_project.svg';
+import importProjectIcon from './assets/import_project.svg';
+import projectIcon from './assets/project.svg';
+
 function App() {
 
     function setDocumentTitle(title) {
@@ -411,7 +415,7 @@ function App() {
         <>
             <div className="projectbox">
                 <div className="newproject">
-                    <h4>Nouveau projet</h4>
+                    <h4><img src={newProjectIcon} width={20} height={20} /><span>Nouveau projet</span></h4>
 
                     <div className="toolbar">
                         {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
@@ -459,27 +463,26 @@ function App() {
                         <button onClick={() => { if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) create(spr); }}>Créer le nouveau projet...</button>
                     </div>
                 </div>
+
                 <div className="importproject">
-                    <h4>Importer un projet
-                        <br />
-                        <input ref={importRef} style={{ marginTop: '1em' }} type="file" onChange={(e) => { if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]); }} />
-                    </h4>
+                    <h4><img src={importProjectIcon} width={20} height={20} /><span>Importer un projet</span></h4>
+
+                    <div className="toolbar">
+                        <input ref={importRef} type="file" onChange={(e) => { if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]); }} />
+                    </div>
                 </div>
             </div>
 
             <h3>
-                <span style={{ display: 'inline-block', width: '7.1em' }}>Projet courant</span>
-                <br />
+                <span style={{ display: 'flex', width: '100%', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'start', alignItems: 'center', columnGap: '0.5em', marginBottom: '1em' }}><img src={projectIcon} width={24} height={24} /><span>Projet courant</span></span>
 
-                <button style={{ marginTop: '1em' }} onClick={() => { if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) reset(); }}>Réinitialiser</button>
-
+                <button style={{ marginLeft: '32px', marginTop: '1em' }} onClick={() => { if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) reset(); }}>Réinitialiser...</button>
                 <button style={{ marginLeft: '4em', marginTop: '1em' }} onClick={() => { exportProject(); }}>Exporter</button>
-
                 <button style={{ marginLeft: '1em', marginTop: '1em' }} onClick={() => { printProject(); }}>Imprimer</button>
-
                 <br />
+
                 <select
-                    style={{ marginTop: '1em' }}
+                    style={{ marginLeft: '32px', marginTop: '1em' }}
                     value={theme?.name ?? defaultTheme}
                     onChange={(e) => { updateTheme(e.target.value); }}
                 >

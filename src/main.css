@@ -42,6 +42,13 @@ h6 {
     color: darkcyan;
 }
 
+.description {
+    margin-block-start: 0;
+    margin-block-end: 3em;
+    font-size: 1.1em;
+    color: darkgray;
+}
+
 .icon_group {
     display: flex;
     flex-direction: row;
@@ -61,15 +68,15 @@ h6 {
     gap: 0.1em;
 }
 
-.icon_group .icon, 
+.icon_group .icon,
 .icon_group .icon input,
 .icon_group .icon label {
     cursor: pointer;
 }
 
 button, select {
-    padding-block: 0.3em;
-    padding-inline: 0.7em;
+    padding-block: 0.4em;
+    padding-inline: 0.8em;
     min-width: 28px;
     min-height: 28px;
 }
