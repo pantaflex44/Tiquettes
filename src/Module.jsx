@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import './module.css';
 
@@ -9,6 +9,24 @@ import trashIcon from './assets/trash.svg';
 import leftIcon from './assets/left.svg';
 import rightIcon from './assets/right.svg';
 import hourglass from './assets/hourglass.svg';
+
+import Hager1Theme from './themes/hgr1/Content';
+import Hager2Theme from './themes/hgr2/Content';
+import Hager3Theme from './themes/hgr3/Content';
+import Hager4Theme from './themes/hgr4/Content';
+
+import Legrand1Theme from './themes/lgrd1/Content';
+import Legrand2Theme from './themes/lgrd2/Content';
+import Legrand3Theme from './themes/lgrd3/Content';
+import Legrand4Theme from './themes/lgrd4/Content';
+
+import Schneider1Theme from './themes/schn1/Content';
+import Schneider2Theme from './themes/schn2/Content';
+import Schneider3Theme from './themes/schn3/Content';
+import Schneider4Theme from './themes/schn4/Content';
+
+import SimpleTheme from './themes/simple/Content';
+import MinimalTheme from './themes/minimal/Content';
 
 /* eslint-disable react/prop-types */
 function Module({
@@ -32,22 +50,36 @@ function Module({
     const [themedModule, setThemedModule] = useState(null);
     const [beforeUpdate, setBeforeUpdate] = useState(null);
 
-    const getThemeFile = useCallback((name) => `./themes/${name}/Content.jsx`, []);
-    const importTheme = useCallback(() => lazy(() => {
-        return import(/* @vite-ignore */ getThemeFile(item.theme.name))
-            .catch((err) => {
-                console.log(err);
-                return import(/* @vite-ignore */ getThemeFile('simple'));
-            })
-    }),
-        [getThemeFile, item.theme.name]
-    );
+    const selectedTheme = useCallback(() => {
+        const availlableThemes = {
+            'hgr1': Hager1Theme,
+            'hgr2': Hager2Theme,
+            'hgr3': Hager3Theme,
+            'hgr4': Hager4Theme,
+            'lgrd1': Legrand1Theme,
+            'lgrd2': Legrand2Theme,
+            'lgrd3': Legrand3Theme,
+            'lgrd4': Legrand4Theme,
+            'schn1': Schneider1Theme,
+            'schn2': Schneider2Theme,
+            'schn3': Schneider3Theme,
+            'schn4': Schneider4Theme,
+            'simple': SimpleTheme,
+            'minimal': MinimalTheme
+        };
+        try {
+            return availlableThemes[item.theme.name] ?? SimpleTheme;
+        } catch (err) {
+            console.log(err);
+            return SimpleTheme;
+        }
+    }, [item.theme.name]);
 
     useEffect(() => {
         try {
             const update = JSON.stringify(item);
             if (item?.theme?.name && beforeUpdate !== update) {
-                const Theme = importTheme();
+                const Theme = selectedTheme();
                 setThemedModule(() => {
                     setBeforeUpdate(update);
                     return (Theme ? (
@@ -61,7 +93,7 @@ function Module({
         } catch (error) {
             console.error(error);
         }
-    }, [beforeUpdate, getThemeFile, importTheme, item, style]);
+    }, [beforeUpdate, item, selectedTheme, style]);
 
     return item && <div className="module" data-row={rowPosition} style={{
         ...style,

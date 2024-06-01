@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1] - 2024-06-01
+
+### Corrections
+
+- Correction d'un bug empechant la modification du thème
+
+
 ## [1.3.0] - 2024-06-01
 
 ### Améliorations

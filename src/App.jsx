@@ -3,7 +3,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import './app.css';
 import * as pkg from '../package.json';
 import swbIcons from './switchboard_icons.json';
-import themesList from './themes/themes.json';
+import themesList from './themes.json';
 
 import Row from "./Row";
 import Popup from "./Popup";
