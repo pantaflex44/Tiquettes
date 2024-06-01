@@ -1,3 +1,5 @@
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+
 import './module.css';
 
 import editIcon from './assets/edit.svg';
@@ -6,7 +8,7 @@ import growIcon from './assets/plus.svg';
 import trashIcon from './assets/trash.svg';
 import leftIcon from './assets/left.svg';
 import rightIcon from './assets/right.svg';
-import { useRef } from 'react';
+import hourglass from './assets/hourglass.svg';
 
 /* eslint-disable react/prop-types */
 function Module({
@@ -26,6 +28,40 @@ function Module({
     onMoveRight = null
 }) {
     const moduleRef = useRef();
+
+    const [themedModule, setThemedModule] = useState(null);
+    const [beforeUpdate, setBeforeUpdate] = useState(null);
+
+    const getThemeFile = useCallback((name) => `./themes/${name}/Content.jsx`, []);
+    const importTheme = useCallback(() => lazy(() => {
+        return import(/* @vite-ignore */ getThemeFile(item.theme.name))
+            .catch((err) => {
+                console.log(err);
+                return import(/* @vite-ignore */ getThemeFile('simple'));
+            })
+    }),
+        [getThemeFile, item.theme.name]
+    );
+
+    useEffect(() => {
+        try {
+            const update = JSON.stringify(item);
+            if (item?.theme?.name && beforeUpdate !== update) {
+                const Theme = importTheme();
+                setThemedModule(() => {
+                    setBeforeUpdate(update);
+                    return (Theme ? (
+                        <Theme
+                            item={item}
+                            style={style}
+                        />
+                    ) : null);
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [beforeUpdate, getThemeFile, importTheme, item, style]);
 
     return item && <div className="module" data-row={rowPosition} style={{
         ...style,
@@ -52,17 +88,11 @@ function Module({
             }
         }}>
 
-        {!item.free && item.showId
-            ? <div className="module_title">{item.id}</div>
-            : <div>&nbsp;</div>
-        }
-
-        {!item.free && item.showIcon && item.icon && <img className="module_icon" src={`${import.meta.env.VITE_APP_BASE}${item.icon}`} style={{ width: `calc(${style['--h']} * 0.25)`, height: `calc(${style['--h']} * 0.25)` }} />}
-        {item.free && <img className="module_iconfree" src={editIcon} title="Editer le module" onClick={() => onEdit(item)} />}
-
-        {!item.free && item.showText
-            ? <div className="module_text" style={{ backgroundColor: item.bgcolor, color: item.fgcolor, height: `calc(${style['--h']} * 0.29)` }} dangerouslySetInnerHTML={{ __html: item.text.replaceAll("\n", "<br />") }}></div>
-            : <div className="module_text">&nbsp;</div>
+        {item.free
+            ? <img className="module_iconfree" src={editIcon} title="Editer le module" onClick={() => onEdit(item)} />
+            : <Suspense fallback={<img src={hourglass} width={20} height={20} style={{ marginTop: `calc(${style['--h']} * 0.3)` }} />}>
+                {themedModule}
+            </Suspense>
         }
 
         {((moveLeftAllowed(item) || moveRightAllowed(item) || shrinkAllowed(item) || growAllowed(item))) && <div className="module_top">

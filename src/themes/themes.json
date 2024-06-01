@@ -1,0 +1,86 @@
+[
+    {
+        "title": "Simple",
+        "name": "simple",
+        "default": false,
+        "group": "Simple"
+    },
+    {
+        "title": "Minimal",
+        "name": "minimal",
+        "default": false,
+        "group": "Minimal"
+    },
+    {
+        "title": "Schneider - Standard",
+        "name": "schn1",
+        "default": true,
+        "group": "Schneider"
+    },
+    {
+        "title": "Schneider - Alternatif",
+        "name": "schn2",
+        "default": false,
+        "group": "Schneider"
+    },
+    {
+        "title": "Schneider - Nouveau format - Logements",
+        "name": "schn4",
+        "default": false,
+        "group": "Schneider"
+    },
+    {
+        "title": "Schneider - Nouveau format - Tertiaire",
+        "name": "schn3",
+        "default": false,
+        "group": "Schneider"
+    },
+    {
+        "title": "Hager - Ancien format - Logements",
+        "name": "hgr1",
+        "default": false,
+        "group": "Hager"
+    },
+    {
+        "title": "Hager - Ancien format - Tertiaire",
+        "name": "hgr2",
+        "default": false,
+        "group": "Hager"
+    },
+    {
+        "title": "Hager - Nouveau format - Logements",
+        "name": "hgr3",
+        "default": false,
+        "group": "Hager"
+    },
+    {
+        "title": "Hager - Nouveau format - Tertiaire",
+        "name": "hgr4",
+        "default": false,
+        "group": "Hager"
+    },
+    {
+        "title": "Legrand - Monochrome - Logements",
+        "name": "lgrd2",
+        "default": false,
+        "group": "Legrand"
+    },
+    {
+        "title": "Legrand - Monochrome - Tertiaire",
+        "name": "lgrd1",
+        "default": false,
+        "group": "Legrand"
+    },
+    {
+        "title": "Legrand - Couleur - Logements",
+        "name": "lgrd4",
+        "default": false,
+        "group": "Legrand"
+    },
+    {
+        "title": "Legrand - Couleur - Tertiaire",
+        "name": "lgrd3",
+        "default": false,
+        "group": "Legrand"
+    }
+]

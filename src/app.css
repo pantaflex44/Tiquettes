@@ -67,6 +67,11 @@ h3 {
     margin-bottom: 2em;
 }
 
+option[disabled] {
+    background-color: #eee;
+    color: #aaa;
+}
+
 @media print {
     h4, h3, .toolbar, .project {
         display: none;

@@ -1,19 +1,22 @@
 .module {
     width: var(--sw);
     min-width: var(--sw);
+    max-width: var(--sw);
     height: var(--h);
     min-height: var(--h);
+    max-height: var(--h);
     position: relative;
     display: inline-flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    padding-top: 2mm;
     border: 0;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
 }
 
 .module:not(:last-of-type) {
@@ -74,6 +77,10 @@
     padding-block: 1.1mm;
     width: calc(100% - 2mm);
     height: 39px;
+}
+
+.module:has(.module_iconfree) {
+    justify-content: center;
 }
 
 .module .module_iconfree {

@@ -61,7 +61,13 @@ h6 {
     gap: 0.1em;
 }
 
-button {
+.icon_group .icon, 
+.icon_group .icon input,
+.icon_group .icon label {
+    cursor: pointer;
+}
+
+button, select {
     padding-block: 0.3em;
     padding-inline: 0.7em;
     min-width: 28px;

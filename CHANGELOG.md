@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.0] - 2024-06-01
+
+### Améliorations
+
+- Meilleurs performances globales
+
+### Ajouts
+
+- Gestion de thèmes en temps réel, applicables aux étiquettes du projet
+
+
 ## [1.2.0] - 2024-05-29
 
 ### Corrections
