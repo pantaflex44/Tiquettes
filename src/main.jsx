@@ -21,7 +21,7 @@ export default function Main() {
                 <h6>by pantaflex44</h6>
                 <h3 className='description'>{pkg.description}</h3>
                 <App />
-                <div style={{ marginTop: '5em', marginBottom: '2em', fontSize: 'small', color: 'darkgray' }} className='footer'>{pkg.title} {pkg.version} | <a href={pkg.repository.url} target="_blank">{pkg.repository.url}</a> | Licence {pkg.license} | {pkg.author} (pantaflex44) | 2024</div>
+                <div style={{ marginTop: '1em', fontSize: 'small', color: 'darkgray' }} className='footer'>{pkg.title} {pkg.version} | <a href={pkg.repository.url} target="_blank">{pkg.repository.url}</a> | Licence {pkg.license} | {pkg.author} (pantaflex44) | 2024</div>
             </main>
         </React.StrictMode>)
         ;

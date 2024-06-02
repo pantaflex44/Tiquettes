@@ -61,11 +61,11 @@ h4 {
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 2em;
-    margin-block: 2em;
-    overflow-x: scroll;
+    margin-top: 2em;
+    overflow-x: auto;
     padding-bottom: 2em;
-    border: 1px solid lightgray;
-    border-radius: 3px;
+    border: 1px solid darkgray;
+    border-radius: 7px;
     padding: 2em;
 }
 

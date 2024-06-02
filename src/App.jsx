@@ -256,7 +256,7 @@ function App() {
         const icon = editor.currentModule.icon;
         const text = editor.currentModule.text.trim();
 
-        if (!(/[a-zA-Z0-9.]{2,}/.test(id))) {
+        if (!(/\w*/.test(id))) {
             setEditor((old) => ({
                 ...old,
                 currentModule: { ...old.currentModule, id: "" },

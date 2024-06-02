@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.4] - 2024-06-02
+
+### Modifications
+
+- Nouvelle règle d'écriture de l'identifiant d'un module: de 0 à 255 caracatères composés de a-Z A-Z 0-9 _
+
+
 ## [1.3.3] - 2024-06-02
 
 ### Améliorations
