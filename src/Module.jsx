@@ -9,25 +9,6 @@ import growIcon from './assets/plus.svg';
 import trashIcon from './assets/trash.svg';
 import leftIcon from './assets/left.svg';
 import rightIcon from './assets/right.svg';
-/*import hourglass from './assets/hourglass.svg';
-
-import Hager1Theme from './themes/hgr1/Content';
-import Hager2Theme from './themes/hgr2/Content';
-import Hager3Theme from './themes/hgr3/Content';
-import Hager4Theme from './themes/hgr4/Content';
-
-import Legrand1Theme from './themes/lgrd1/Content';
-import Legrand2Theme from './themes/lgrd2/Content';
-import Legrand3Theme from './themes/lgrd3/Content';
-import Legrand4Theme from './themes/lgrd4/Content';
-
-import Schneider1Theme from './themes/schn1/Content';
-import Schneider2Theme from './themes/schn2/Content';
-import Schneider3Theme from './themes/schn3/Content';
-import Schneider4Theme from './themes/schn4/Content';
-
-import SimpleTheme from './themes/simple/Content';
-import MinimalTheme from './themes/minimal/Content';*/
 
 /* eslint-disable react/prop-types */
 function Module({
