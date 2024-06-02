@@ -74,7 +74,7 @@ function App() {
             }
             if (themeFound) break;
         }
-        return themeFound ?? defaultModule;
+        return themeFound ?? defaultTheme;
     }
     const [theme, setTheme] = useState(getThemeOfFirstModuleFound());
 

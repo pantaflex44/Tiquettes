@@ -6,12 +6,18 @@
     gap: 0;
     justify-content: start;
     align-items: start;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .row_title {
     color: darkgray;
     font-size: smaller;
     margin-bottom: 60px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 @media print {

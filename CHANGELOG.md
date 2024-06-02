@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3] - 2024-06-02
+
+### Améliorations
+
+- Correction d'un bug altérant la sélection par défaut du thème des étiquettes lors du chargement de l'application
+
+
 ## [1.3.2] - 2024-06-02
 
 ### Améliorations
