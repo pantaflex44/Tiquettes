@@ -11,6 +11,7 @@ import Popup from "./Popup";
 import newProjectIcon from './assets/new_project.svg';
 import importProjectIcon from './assets/import_project.svg';
 import projectIcon from './assets/project.svg';
+import { satisfies } from 'compare-versions';
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
     }
 
     const importRef = useRef();
+    const projectRef = useRef();
+    const switchboardRef = useRef();
 
     const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
@@ -31,12 +34,12 @@ function App() {
     const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX);
 
     const defaultModule = useMemo(() => ({
-        id: import.meta.env.VITE_DEFAULT_ID,
+        id: `${import.meta.env.VITE_DEFAULT_ID}?`,
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
         free: true,
         span: 1,
-        theme: defaultTheme,
+        theme: defaultTheme
     }), [defaultTheme]);
 
     const [npRows, setNpRows] = useState(defaultNpRows);
@@ -44,22 +47,81 @@ function App() {
     const [spr, setSpr] = useState(defaultStepsPerRows);
     const [editor, setEditor] = useState(null);
 
+    const verifyVersion = (swb) => {
+        if (!swb.version) {
+            alert(`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`);
+            return false;
+        }
+
+        const projectVersion = swb.version;
+        if (!satisfies(projectVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
+            alert(`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${projectVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`);
+            return false;
+        }
+
+        return true;
+    };
+
+    const scrollToProject = () => {
+        projectRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "start"
+        });
+    };
+
+    const autoId = (swb, rowIndex = 0, moduleIndex = 0) => {
+        let reIndentedSwb = swb;
+        let jump = 0;
+
+        let rows = reIndentedSwb.rows.map((row, i) => {
+            if (i > 0) {
+                const freeCount = reIndentedSwb.rows[i - 1].filter((r) => r.free).length;
+                const notFreeCount = reIndentedSwb.rows[i - 1].filter((r) => !r.free).length;
+
+                jump += freeCount + (i === rowIndex + 1 ? notFreeCount : 0);
+            }
+
+            if (i >= rowIndex) {
+                return row.map((module, j) => {
+                    if (((i === rowIndex && j >= moduleIndex) || (i > rowIndex)) && module.free) {
+                        return { ...module, id: `${import.meta.env.VITE_DEFAULT_ID}${j + 1 + jump}` };
+                    } else {
+                        return module;
+                    }
+                });
+            } else {
+                return row
+            }
+        });
+
+        return { ...reIndentedSwb, rows };
+    }
+
     const createRow = useCallback((steps, rowsCount = null) => {
         return Array(rowsCount ?? npRows).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
             ...q,
             id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
         })));
-    }, [defaultModule, npRows])
+    }, [defaultModule, npRows]);
+
+    const updates = useMemo(() => ({
+        version: pkg.version
+    }), []);
 
     const defaultProject = useMemo(() => ({
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
         rows: createRow(defaultStepsPerRows),
-    }), [createRow, defaultHRow, defaultStepsPerRows]);
+        ...updates
+    }), [createRow, defaultHRow, defaultStepsPerRows, updates]);
 
     const [switchboard, setSwitchboard] = useState(
         sessionStorage.getItem("tiquettes")
-            ? JSON.parse(sessionStorage.getItem("tiquettes"))
+            ? autoId({
+                ...updates,
+                ...JSON.parse(sessionStorage.getItem("tiquettes"))
+            })
             : { ...defaultProject }
     );
 
@@ -81,12 +143,16 @@ function App() {
     const create = useCallback((stepsPerRows, rowsCount = null, height = null) => {
         importRef.current.value = "";
 
-        setDocumentTitle("Nouveau projet");
         setTheme(defaultTheme);
-        setSwitchboard({ ...defaultProject, height: height ?? hRow, stepsPerRows, rows: createRow(stepsPerRows, rowsCount) });
+        setSwitchboard(() => {
+            return autoId({ ...defaultProject, height: height ?? hRow, stepsPerRows, rows: createRow(stepsPerRows, rowsCount) });
+        });
+
+        setDocumentTitle("Nouveau projet");
+        scrollToProject();
     }, [createRow, defaultProject, defaultTheme, hRow])
 
-    const reset = () => {
+    const reset = useCallback(() => {
         importRef.current.value = "";
 
         setDocumentTitle("Nouveau projet");
@@ -96,7 +162,7 @@ function App() {
         setTheme(defaultTheme);
 
         create(defaultStepsPerRows, defaultNpRows, defaultHRow);
-    }
+    }, [create, defaultHRow, defaultNpRows, defaultStepsPerRows, defaultTheme]);
 
     const grow = (rowIndex, moduleIndex) => {
         const nextModuleIndex = moduleIndex + 1;
@@ -120,7 +186,7 @@ function App() {
                 return r.filter((rr) => rr !== null);
             });
 
-            return { ...old, rows };
+            return autoId({ ...old, rows });
         });
     }
 
@@ -143,7 +209,7 @@ function App() {
                     return r;
                 });
 
-                return { ...old, rows };
+                return autoId({ ...old, rows });
             });
         }
     }
@@ -165,7 +231,7 @@ function App() {
                     return r;
                 });
 
-                return { ...old, rows };
+                return autoId({ ...old, rows });
             });
         }
     }
@@ -173,7 +239,21 @@ function App() {
     const edit = (rowIndex, moduleIndex) => {
         const currentModule = switchboard.rows[rowIndex][moduleIndex];
 
-        setEditor({ rowIndex, moduleIndex, currentModule, theme, errors: [] });
+        let pr = rowIndex;
+        let pm = moduleIndex - 1;
+        if (pm < 0) {
+            pr -= 1;
+            if (pr >= 0) {
+                pm = switchboard.rows[pr].length - 1;
+            }
+        }
+
+        let prevModule = null;
+        if (pr >= 0 && pm >= 0) {
+            prevModule = switchboard.rows[pr][pm];
+        }
+
+        setEditor({ rowIndex, moduleIndex, currentModule, prevModule, theme, errors: [] });
     }
 
     const importProject = (file) => {
@@ -185,9 +265,14 @@ function App() {
                     const swb = JSON.parse(e.target.result);
 
                     setTheme(getThemeOfFirstModuleFound(swb));
-                    setSwitchboard((old) => ({ ...old, ...swb }));
+                    setSwitchboard((old) => autoId({
+                        ...old,
+                        ...updates,
+                        ...swb
+                    }));
 
                     setDocumentTitle(importRef.current.value.replaceAll("\\", "/").split("/").pop());
+                    scrollToProject();
                 } catch (err) {
                     importRef.current.value = "";
                     alert("Impossible d'importer ce projet.");
@@ -218,7 +303,11 @@ function App() {
     const moduleFocus = (rowPosition, modulePosition) => {
         const m = document.querySelector(`[data-id="${rowPosition}-${modulePosition}"]`);
         if (m) {
-            m.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "end" });
+            m.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "nearest"
+            });
             m.focus();
         }
     }
@@ -238,7 +327,7 @@ function App() {
                     return { ...m, theme: selected };
                 })
             });
-            setSwitchboard((old) => ({ ...old, rows }));
+            setSwitchboard((old) => autoId({ ...old, rows }));
         }
     }
 
@@ -293,10 +382,26 @@ function App() {
                 return r;
             });
 
-            return { ...old, rows };
+            return autoId({ ...old, rows });
         });
 
         setEditor(null);
+    }
+
+    const handleScrollRight = () => {
+        if (switchboardRef.current.scrollLeft + 10 < switchboardRef.current.scrollWidth) {
+            switchboardRef.current.scrollLeft += 10;
+        } else {
+            switchboardRef.current.scrollLeft = switchboardRef.current.scrollWidth;
+        }
+    }
+
+    const handleScrollLeft = () => {
+        if (switchboardRef.current.scrollLeft - 10 > 0) {
+            switchboardRef.current.scrollLeft -= 10;
+        } else {
+            switchboardRef.current.scrollLeft = 0;
+        }
     }
 
     const handleModuleGrow = (rowIndex, moduleIndex) => {
@@ -347,7 +452,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex);
-                return { ...old, rows };
+                return autoId({ ...old, rows });
             })
         }
     }
@@ -364,7 +469,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return { ...old, rows };
+                return autoId({ ...old, rows });
             })
         }
     }
@@ -400,22 +505,60 @@ function App() {
         return (!currentModule.free && nextModule?.free === true && nextModule?.span === 1);
     }
 
+    const handleRowAddAfter = (rowIndex) => {
+        let rows = switchboard.rows;
+        if (rows.length >= import.meta.env.VITE_ROWS_MAX) {
+            alert(`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${import.meta.env.VITE_ROWS_MAX} rangées`);
+            return;
+        }
+
+        const newRow = createRow(switchboard.stepsPerRows, 1);
+        rows.splice(rowIndex + 1, 0, ...newRow);
+
+        setSwitchboard((old) => autoId({ ...old, rows }));
+    }
+
+    const handleRowDelete = (rowIndex) => {
+        let rows = switchboard.rows;
+        rows.splice(rowIndex, 1);
+
+        setSwitchboard((old) => autoId({ ...old, rows }));
+    }
+
+    const rowAddAllowed = () => {
+        return switchboard.rows.length < import.meta.env.VITE_ROWS_MAX;
+    }
+
+    const rowDeleteAllowed = () => {
+        return switchboard.rows.length > 1;
+    }
+
     useEffect(() => {
-        const t = setTimeout(() => {
+        let t = null;
+
+        if (!verifyVersion(switchboard)) {
+            reset();
+            return;
+        }
+
+        t = setTimeout(() => {
             const swb = JSON.stringify(switchboard);
             if (sessionStorage.getItem("tiquettes") !== swb) {
                 sessionStorage.setItem("tiquettes", swb);
                 console.log("Saved for this session.");
             }
         }, 1000);
-        return () => { if (t) clearTimeout(t); }
-    }, [switchboard]);
+
+        return () => {
+            if (t) clearTimeout(t);
+        }
+    }, [reset, switchboard]);
 
     return (
         <>
             <div className="projectbox">
                 <div className="newproject">
-                    <h4><img src={newProjectIcon} width={20} height={20} /><span>Nouveau projet</span></h4>
+                    <h4><img src={newProjectIcon} width={20} height={20} alt="Nouveau projet" /><span>Nouveau projet</span></h4>
 
                     <div className="toolbar">
                         {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
@@ -465,7 +608,7 @@ function App() {
                 </div>
 
                 <div className="importproject">
-                    <h4><img src={importProjectIcon} width={20} height={20} /><span>Importer un projet</span></h4>
+                    <h4><img src={importProjectIcon} width={20} height={20} alt="Importer un projet" /><span>Importer un projet</span></h4>
 
                     <div className="toolbar">
                         <input ref={importRef} type="file" onChange={(e) => { if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]); }} />
@@ -473,13 +616,12 @@ function App() {
                 </div>
             </div>
 
-            <h3>
-                <span style={{ display: 'flex', width: '100%', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'start', alignItems: 'center', columnGap: '0.5em', marginBottom: '1em' }}><img src={projectIcon} width={24} height={24} /><span>Projet courant</span></span>
+            <h3 ref={projectRef} style={{ scrollMarginTop: '1em' }}>
+                <span style={{ display: 'flex', width: '100%', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'start', alignItems: 'center', columnGap: '0.5em', marginBottom: '1em' }}><img src={projectIcon} width={24} height={24} alt="Projet courant" /><span>Projet courant</span></span>
 
                 <button style={{ marginLeft: '32px', marginTop: '1em' }} onClick={() => { if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) reset(); }}>Réinitialiser...</button>
                 <button style={{ marginLeft: '4em', marginTop: '1em' }} onClick={() => { exportProject(); }}>Exporter</button>
                 <button style={{ marginLeft: '1em', marginTop: '1em' }} onClick={() => { printProject(); }}>Imprimer</button>
-                <br />
 
                 <select
                     style={{ marginLeft: '32px', marginTop: '1em' }}
@@ -502,12 +644,12 @@ function App() {
                 </li>
             </ul>
 
-            <div className="switchboard">
+            <div ref={switchboardRef} className="switchboard">
                 {switchboard.rows.map((row, i) => (
                     <Row
                         key={i}
-
-                        index={i + 1}
+                        rowIndex={i}
+                        rowPosition={i + 1}
                         items={row.map((m) => ({ ...defaultModule, ...m }))}
                         stepsPerRows={switchboard.stepsPerRows}
                         style={{
@@ -516,6 +658,9 @@ function App() {
                             "--c": switchboard.stepsPerRows,
                             "--sw": `calc(${stepSize}mm + 1px)` // 18mm -> 70.03px
                         }}
+
+                        onScrollLeft={() => handleScrollLeft()}
+                        onScrollRight={() => handleScrollRight()}
 
                         onModuleGrow={(moduleIndex, item, moduleRef) => handleModuleGrow(i, moduleIndex, item, moduleRef)}
                         onModuleShrink={(moduleIndex, item, moduleRef) => handleModuleShrink(i, moduleIndex, item, moduleRef)}
@@ -530,6 +675,12 @@ function App() {
                         moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
                         moduleMoveLeftAllowed={(moduleIndex, item) => moduleMoveLeftAllowed(i, moduleIndex, item)}
                         moduleMoveRightAllowed={(moduleIndex, item) => moduleMoveRightAllowed(i, moduleIndex, item)}
+
+                        onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
+                        onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
+
+                        rowAddAllowed={() => rowAddAllowed()}
+                        rowDeleteAllowed={() => rowDeleteAllowed()}
                     />
                 ))}
 
@@ -553,6 +704,10 @@ function App() {
                                 onChange={(e) => updateEditor({ id: e.target.value })}
                                 autoFocus
                             />
+                        </div>
+                        <div className="popup_row">
+                            <div></div>
+                            <label style={{ fontSize: "small", color: "#777" }}>˫ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
                         </div>
 
                         <div className="popup_row">
@@ -580,62 +735,12 @@ function App() {
                                             onChange={(e) => updateEditor({ icon: e.target.value !== '' ? e.target.value : null })}
                                         />
                                         <label htmlFor={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}>
-                                            {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} /> : icon.title}
+                                            {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} alt={icon.title} /> : icon.title}
                                         </label>
                                     </div>
                                 ))}
                             </div>
                         </div>
-
-                        {/*<div className="popup_row">
-            <label htmlFor={`editor_showid_${editor.currentModule.id.trim()}`}>Afficher l&apos;identifiant</label>
-            <input type="checkbox" name="editor_showid" id={`editor_showid_${editor.currentModule.id.trim()}`} checked={editor.currentModule.showId} onChange={(e) => {
-              const value = e.target.checked;
-              setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, showId: value } }));
-            }} />
-          </div>
-          <div className="popup_row">
-            <label htmlFor={`editor_showicon_${editor.currentModule.id.trim()}`}>Afficher le pictogramme</label>
-            <input type="checkbox" name="editor_showicon" id={`editor_showicon_${editor.currentModule.id.trim()}`} checked={editor.currentModule.showIcon} onChange={(e) => {
-              const value = e.target.checked;
-              setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, showIcon: value } }));
-            }} />
-          </div>
-          <div className="popup_row">
-            <label htmlFor={`editor_showtext_${editor.currentModule.id.trim()}`}>Afficher la description</label>
-            <input type="checkbox" name="editor_showtext" id={`editor_showtext_${editor.currentModule.id.trim()}`} checked={editor.currentModule.showText} onChange={(e) => {
-              const value = e.target.checked;
-              setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, showText: value } }));
-            }} />
-          </div>
-
-          <div className="popup_row">
-            <label htmlFor={`editor_bgcolor_${editor.currentModule.id.trim()}`}>Couleur de fond</label>
-            <datalist id={`editor_bgcolors_${editor.currentModule.id.trim()}`}>
-              {import.meta.env.VITE_FAVORITES_BGCOLORS.split(',').map((color) => {
-                const c = color.trim();
-                return <option key={c} value={c} />
-              })}
-            </datalist>
-            <input type="color" name="editor_bgcolor" id={`editor_bgcolor_${editor.currentModule.id.trim()}`} list={`editor_bgcolors_${editor.currentModule.id.trim()}`} value={editor.currentModule.bgcolor} onChange={(e) => {
-              const value = e.target.value;
-              setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, bgcolor: value } }));
-            }} />
-          </div>
-
-          <div className="popup_row">
-            <label htmlFor={`editor_fgcolor_${editor.currentModule.id.trim()}`}>Couleur du texte</label>
-            <datalist id={`editor_fgcolors_${editor.currentModule.id.trim()}`}>
-              {import.meta.env.VITE_FAVORITES_FGCOLORS.split(',').map((color) => {
-                const c = color.trim();
-                return <option key={c} value={c} />
-              })}
-            </datalist>
-            <input type="color" name="editor_fgcolor" id={`editor_fgcolor_${editor.currentModule.id.trim()}`} list={`editor_fgcolors_${editor.currentModule.id.trim()}`} value={editor.currentModule.fgcolor} onChange={(e) => {
-              const value = e.target.value;
-              setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, fgcolor: value } }));
-            }} />
-          </div>*/}
 
                         {editor.errors.map((error, i) => <div key={i} className="popup_row"><div></div><div className="popup_error">{error}</div></div>)}
                     </Popup >

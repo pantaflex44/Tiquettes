@@ -8,7 +8,7 @@ export default function Popup({ title, children, showCloseButton = true, onCance
         <div className="popup-overflow">
             <div className="popup" tabIndex={0}>
                 <div className="popup_title">{title}</div>
-                {showCloseButton && <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="" width={24} height={24} /></div>}
+                {showCloseButton && <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24} height={24} /></div>}
 
                 <div className='popup_content'>
                     {children}

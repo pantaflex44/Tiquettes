@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0] - 2024-06-02
+
+### Améliorations
+
+- Auto identification des modules libres
+- Affichage de l'identifiant du module précédent lors de l'édition d'un module
+
+### Ajouts
+
+- Ajout, insertion, et suppression de rangées au cours du déroulement d'un projet
+
+
 ## [1.3.4] - 2024-06-02
 
 ### Modifications

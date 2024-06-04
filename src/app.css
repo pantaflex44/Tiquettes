@@ -50,6 +50,12 @@ h4 {
     padding-bottom: 3em;
     margin-bottom: 1em;
     border-bottom: 3px dashed lightgray;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: start;
+    column-gap: 5em;
 }
 
 .projectbox .newproject {
@@ -63,19 +69,19 @@ h4 {
     gap: 2em;
     margin-top: 2em;
     overflow-x: auto;
-    padding-bottom: 2em;
     border: 1px solid darkgray;
     border-radius: 7px;
     padding: 2em;
+    position: relative;
 }
 
 .switchboard_row {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 0.5em;
+    gap: 0.75em;
     width: max-content;
-    margin-bottom: 2em;
+    margin-bottom: 0;
 }
 
 option[disabled] {
@@ -92,7 +98,7 @@ option[disabled] {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
-        gap: 0mm;
+        gap: 0;
         margin-block: 0;
         overflow-x: initial;
         padding-bottom: 0;
@@ -113,7 +119,7 @@ option[disabled] {
     }
 
     .switchboard_row:not(:first-of-type) {
-        padding-top: 10mm;
+        padding-top: 7mm;
     }
 
     .projectbox {

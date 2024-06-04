@@ -46,6 +46,7 @@ function Hager2Theme({ item, style }) {
 
         {item.icon
             ? <div style={styles.iconContainer}><img
+                alt="Pictogramme"
                 style={styles.icon}
                 src={`${import.meta.env.VITE_APP_BASE}${item.icon}`}
             /></div>

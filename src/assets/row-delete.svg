@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-playlist-x" stroke-linejoin="round" stroke-width="2">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path d="m19,8l-14,0" id="svg_2" stroke="#ff0000"/>
+  <path d="m5,12l7,0" id="svg_3" stroke="#ff0000"/>
+  <path d="m12,16l-7,0" id="svg_4" stroke="#ff0000"/>
+  <path d="m16,14l4,4" id="svg_5" stroke="#ff0000"/>
+  <path d="m20,14l-4,4" id="svg_6" stroke="#ff0000"/>
+ </g>
+</svg>

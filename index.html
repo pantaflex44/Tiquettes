@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Tiquettes - Générateur d'étiquettes pour tableaux / armoires électriques.</title>
+    <title>Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques.</title>
     <meta name="description" content="Générateur d'étiquettes pour tableaux / armoires électriques." />
     <meta name="author" content="Christophe LEMOINE" />
     <meta name="robots" content="index,follow" />
 
     <link rel="icon" type="image/svg+xml" href="https://pantaflex44.github.io/Tiquettes/favicon.svg" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
 
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
@@ -40,14 +41,45 @@
         gtag('config', 'G-378MBJK77W');
     </script>
 
-    <h1 style="display: none;">Tiquettes - Générateur d'étiquettes pour tableaux / armoires électriques.</h1>
-    <p style="display: none;">Tiquettes est une application web permettant de créer facilement de belles étiquettes pour
-        les tableaux et armoires électriques.</p>
+    <nav>
+        <ul>
+            <li><a href="https://github.com/pantaflex44/Tiquettes/blob/main/README.md" target="_blank" rel="noopener">
+                <img src="/doc.svg" width="16" height="16" alt="Documentation" />
+                <span>Documentation</span>
+            </a></li>
+            <li><a href="https://github.com/pantaflex44/Tiquettes" target="_blank" rel="noopener">
+                <img src="/src.svg" width="16" height="16" alt="Sources" />
+                <span>Sources</span>
+            </a></li>
+            <li><a href="https://github.com/pantaflex44/Tiquettes/blob/main/LICENSE" target="_blank" rel="noopener">
+                <img src="/license.svg" width="16" height="16" alt="Licence" />
+                <span>Licence</span>
+            </a></li>
+            <li><a href="https://github.com/pantaflex44/Tiquettes/blob/main/CHANGELOG.md" target="_blank" rel="noopener">
+                <img src="/changelog.svg" width="16" height="16" alt="Changelog" />
+                <span>Changelog</span>
+            </a></li>
+            <li><a href="#partenariats">
+                <img src="/partners.svg" width="16" height="16" alt="Partenariats" />
+                <span>Partenariats</span>
+            </a></li>
+            <li><a href="#ressources">
+                <img src="/ressources.svg" width="16" height="16" alt="Ressources" />
+                <span>Ressources</span>
+            </a></li>
+        </ul>
+    </nav>
 
     <div id="content">
-        <div id="root"></div>
+        <main>
+            <h1><img src="./favicon.svg" width="32" height="32" alt="Tiquettes" /><span>Tiquettes</span><sup class="version"></sup></h1>
+            <div class="by">by pantaflex44</div>
+            <div class="description">Générateur d'étiquettes pour tableaux et armoires électriques.</div>
 
-        <div class="box">
+            <div id="root"></div>
+        </main>
+
+        <div class="box" id="partenariats">
             <h4>
                 <img src="./network.svg" width="20" height="20" alt="Un domaine, un réseau, des partenaires" />
                 <span>Un domaine, un réseau, des partenaires</span>
@@ -84,7 +116,7 @@
             </ul>
         </div>
 
-        <div class="box">
+        <div class="box" id="ressources">
             <h4>
                 <img src="./resources.svg" width="20" height="20" alt="Ressources utiles" />
                 <span>Ressources utiles</span>
@@ -113,12 +145,11 @@
                 <li>
                     <div class="box_list_title">NFC 18-510 (France)</div>
                     <div class="box_list_description">
-                        La norme propose des mesuresde prévention en vue d'assurer la sécurité des personnes contre les
+                        La norme propose des mesures de prévention en vue d'assurer la sécurité des personnes contre les
                         dangers d'origine électrique, lorsqu'elles effectuent un travail ou une intervention dans un
                         environement électrique.
                     </div>
-                    <a class="box_list_link"
-                        href="https://www.upf.pf/sites/default/files/inrs_electricitenorme_2.pdf"
+                    <a class="box_list_link" href="https://www.upf.pf/sites/default/files/inrs_electricitenorme_2.pdf"
                         target="_blank" rel="noopener">
                         Le livret (pdf)
                     </a>

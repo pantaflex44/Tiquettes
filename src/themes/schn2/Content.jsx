@@ -40,6 +40,7 @@ function Schneider2Theme({ item, style }) {
 
         {item.icon
             ? <img
+                alt="Pictogramme"
                 style={styles.icon}
                 src={`${import.meta.env.VITE_APP_BASE}${item.icon}`}
             />

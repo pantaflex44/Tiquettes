@@ -37,6 +37,7 @@ function SimpleTheme({ item, style }) {
         <div style={styles.id}>{item.id}</div>
 
         {item.icon && <img
+            alt="Pictogramme"
             style={styles.icon}
             src={`${import.meta.env.VITE_APP_BASE}${item.icon}`}
         />}

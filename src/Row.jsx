@@ -1,10 +1,14 @@
 import './row.css';
+import rowAddIcon from './assets/row-add.svg';
+import rowDeleteIcon from './assets/trash.svg';
+
 
 import Module from "./Module";
 
 /* eslint-disable react/prop-types */
 function Row({
-    index,
+    rowPosition,
+    rowIndex,
     items,
     style = {},
     onModuleGrow = null,
@@ -16,18 +20,26 @@ function Row({
     onModuleClear = null,
     onModuleEdit = null,
     onModuleMoveLeft = null,
-    onModuleMoveRight = null
+    onModuleMoveRight = null,
+    onRowAddAfter = null,
+    onRowDelete = null,
+    rowAddAllowed = null,
+    rowDeleteAllowed = null
 }) {
     return (
-        <div className="switchboard_row">
-            <div className="row_title">Rangée {index}</div>
+        <div className="switchboard_row" id={`row_${rowPosition}`}>
+            
+            <div className="row_title">
+                <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon} width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => { if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex); }} />
+                <span>Rangée {rowPosition}</span>
+            </div>
             <div className="row" style={style}>
                 {items.map((item, i) => (
                     <Module
                         key={i}
                         item={item}
                         modulePosition={i + 1}
-                        rowPosition={index}
+                        rowPosition={rowPosition}
                         style={{
                             "--h": style['--h'],
                             "--sw": style['--sw']
@@ -44,6 +56,14 @@ function Row({
                         onMoveRight={(item, moduleRef) => onModuleMoveRight(i, item, moduleRef)}
                     />
                 ))}
+            </div>
+            <div className={`row_add ${!rowAddAllowed() ? 'disabled' : ''}`} title="Insérer une nouvelle rangée">
+                <img className="row_add_icon" src={rowAddIcon} width={24} height={24} alt="Ajouter une rangée" onClick={() => onRowAddAfter(rowIndex)} />
+                {rowAddAllowed()
+                    ? <div className="row_add_info" onClick={() => onRowAddAfter(rowIndex)}>Insérer une nouvelle rangée ici</div>
+                    : <div className="row_add_info">Nombre de rangées maximum atteint</div>
+                }
+                <div className="row_action_line"></div>
             </div>
         </div>
     );

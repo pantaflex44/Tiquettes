@@ -45,25 +45,54 @@ Pour importer un projet, cliquez sur le bouton ```Choisir un fichier``` puis cha
 
 ## Utilisation
 
+### Descriptif
+
 Un tableau peut comporter de 1 à 15 rangées, 13, 18 ou 24 modules par rangée.
 
 Chaque module peut avoir une largeur et/ou une position réglable en fonction de la place disponible autour de lui. Vous pourrez l'étendre jusqu'à rencontrer, soit le bout de la rangée, soit un autre module déja défini. Vous devrez libérer celui-ci pour pousuivre son expansion. Idem pour le déplacer, seulement possible dans les espaces libres.
 
+### Menu contextuel du haut
+
 ![Menu contextuel du haut](docs/_top.png)
 
-Le symbole ```+``` (ou la touche ```+``` du clavier) vous permet d'agrandir le module d'une largeur sur sa droite.
+Le symbole ```+``` vous permet d'agrandir le module d'une largeur sur sa droite.
 
-Le symbole ```-``` (ou la touche ```-``` du clavier) vous permet de réduire le module d'une largeur.
+Le symbole ```-``` vous permet de réduire le module d'une largeur.
 
-Le symbole ```←``` (ou la ```flèche gauche``` du clavier) vous permet de déplacer le module d'une position sur la gauche.
+Le symbole ```←``` vous permet de déplacer le module d'une position sur la gauche.
 
-Le symbole ```→``` (ou la ```flèche droite``` du clavier) vous permet de déplacer le module d'une position sur la droite.
+Le symbole ```→``` vous permet de déplacer le module d'une position sur la droite.
+
+### Menu contextuel du bas
 
 ![Menu contextuel du bas](docs/_bottom.png)
 
 Le symbole ```Corbeille``` (ou la touche ```Suppr``` du clavier) permet de libérer le module. Il perdra son identifiant, son icône, et sa définition mais conservera sa taille. Il pourra donc de nouveau être englobé dans l'agrandissement des modules précédents.
 
 Le symbole ```Crayon``` (ou la touche ```Entrée``` du clavier) permet d'éditer le module en question.
+
+### Manipuler les rangées
+
+Au cours de l'édition de votre planche d'étiquette, il peut parfois être utile d'insérer et/ou de supprimer une rangée.
+
+Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des rangées éxistantes:
+
+![Insérer une rangée](docs/_add_row.png)
+
+Pour supprimer une rangée, cliquez sur l'icone ```corbeille```, à gauche du nom de la rangée souhaitée:
+
+![Supprimer une rangée](docs/_delete_row.png)
+
+
+### Raccourcies claviers / souris
+
+Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votre clavier pour interagir sur les rangées et les modules.
+
+- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches ```haut``` et ```bas``` de votre clavier, l'ascenseur de la fenètre ou la roulette de votre souris.
+- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenètre ou la roulette de votre souris (en appuyant simultanement sur une des touches ```shift``` de votre clavier).
+- Pour déplacer un module horizontalement, sélectionnez le avec votre souris, puis appuyez sur les flèches ```gauche``` et ```droite``` de votre clavier.
+- Pour redimensionner un module, sélectionnez le avec votre souris, puis appuyez sur les touches ```+``` et ```-``` de votre clavier.
+
 
 ## Edition d'un module
 
@@ -74,11 +103,6 @@ Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s
 - *Identifiant* : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
 - *Description* : Une très courte description du module. Les retours à la ligne sont pris en compte.
 - *Pictogramme* : Une petite image illustrant l'environement du module.
-- *Afficher l'identifiant* : Affiche ou non l'identifiant.
-- *Afficher le pictogramme* : Affiche ou non le pictogramme.
-- *Afficher la description* : Affiche ou non la description.
-- *Couleur de fond* : Couleur de fond de la description.
-- *Couleur du texte*: Couleur du texte de la description.
 
 ## Décorer ses étiquettes
 
