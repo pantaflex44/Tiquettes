@@ -123,7 +123,7 @@ nav ul li a:hover img {
     flex-wrap: nowrap;
     justify-content: start;
     align-items: stretch;
-    gap: 0.5em;
+    gap: 0.75em;
     padding: 1em;
     width: calc(350px - 2em);
     max-width: calc(100% - 2em);
@@ -148,6 +148,7 @@ nav ul li a:hover img {
     color: darkcyan;
     font-size: smaller;
     font-weight: bold;
+    margin-block: 0.25em;
 }
 
 main {

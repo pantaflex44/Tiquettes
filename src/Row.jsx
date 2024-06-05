@@ -10,6 +10,7 @@ function Row({
     rowPosition,
     rowIndex,
     items,
+    theme,
     style = {},
     onModuleGrow = null,
     onModuleShrink = null,
@@ -28,7 +29,7 @@ function Row({
 }) {
     return (
         <div className="switchboard_row" id={`row_${rowPosition}`}>
-            
+
             <div className="row_title">
                 <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon} width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => { if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex); }} />
                 <span>Rangée {rowPosition}</span>
@@ -40,6 +41,7 @@ function Row({
                         item={item}
                         modulePosition={i + 1}
                         rowPosition={rowPosition}
+                        theme={theme}
                         style={{
                             "--h": style['--h'],
                             "--sw": style['--sw']

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.1] - 2024-06-05
+
+### Modifications
+
+- Récriture du système de gestion des thèmes
+
+### Ajouts
+
+- Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA
+- Ajout des fichiers sitemap.xml et robots.txt
+
+
 ## [1.4.0] - 2024-06-02
 
 ### Améliorations

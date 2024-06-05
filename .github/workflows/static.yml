@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -49,3 +51,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Submit sitemap to Google
+        run: |
+          curl https://www.google.com/ping?sitemap=https://pantaflex44.github.io/Tiquettes/sitemap.xml

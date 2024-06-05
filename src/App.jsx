@@ -38,9 +38,8 @@ function App() {
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
         free: true,
-        span: 1,
-        theme: defaultTheme
-    }), [defaultTheme]);
+        span: 1
+    }), []);
 
     const [npRows, setNpRows] = useState(defaultNpRows);
     const [hRow, setHRow] = useState(defaultHRow);
@@ -113,8 +112,9 @@ function App() {
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
         rows: createRow(defaultStepsPerRows),
+        theme: defaultTheme,
         ...updates
-    }), [createRow, defaultHRow, defaultStepsPerRows, updates]);
+    }), [createRow, defaultHRow, defaultStepsPerRows, defaultTheme, updates]);
 
     const [switchboard, setSwitchboard] = useState(
         sessionStorage.getItem("tiquettes")
@@ -138,7 +138,7 @@ function App() {
         }
         return themeFound ?? defaultTheme;
     }
-    const [theme, setTheme] = useState(getThemeOfFirstModuleFound());
+    const [theme, setTheme] = useState((switchboard?.theme ?? defaultTheme));
 
     const create = useCallback((stepsPerRows, rowsCount = null, height = null) => {
         importRef.current.value = "";
@@ -262,9 +262,22 @@ function App() {
             fileReader.readAsText(file, 'UTF-8');
             fileReader.onload = (e) => {
                 try {
-                    const swb = JSON.parse(e.target.result);
+                    let swb = JSON.parse(e.target.result);
+                    
+                    let theme = swb?.theme;
+                    if (!theme) theme = getThemeOfFirstModuleFound(swb);
+                    setTheme(theme);
 
-                    setTheme(getThemeOfFirstModuleFound(swb));
+                    // <=1.4.0 : remove old theme definitions
+                    const rows = swb.rows.map((r) => {
+                        return r.map((m) => {
+                            let nm = { ...m };
+                            if (nm.theme) delete nm['theme'];
+                            return nm;
+                        });
+                    });
+                    swb = { ...swb, rows };
+
                     setSwitchboard((old) => autoId({
                         ...old,
                         ...updates,
@@ -321,13 +334,7 @@ function App() {
         const selected = findThemeByName(name);
         if (selected) {
             setTheme(selected);
-
-            const rows = switchboard.rows.map((row) => {
-                return row.map((m) => {
-                    return { ...m, theme: selected };
-                })
-            });
-            setSwitchboard((old) => autoId({ ...old, rows }));
+            setSwitchboard((old) => autoId({ ...old, theme: selected }));
         }
     }
 
@@ -652,6 +659,8 @@ function App() {
                         rowPosition={i + 1}
                         items={row.map((m) => ({ ...defaultModule, ...m }))}
                         stepsPerRows={switchboard.stepsPerRows}
+                        theme={theme}
+
                         style={{
                             "--w": `${switchboard.stepsPerRows * stepSize}mm`,
                             "--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px

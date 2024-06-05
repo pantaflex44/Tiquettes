@@ -15,6 +15,7 @@ function Module({
     item,
     rowPosition,
     modulePosition,
+    theme,
     style = {},
     shrinkAllowed = null,
     growAllowed = null,
@@ -31,6 +32,19 @@ function Module({
 
     const [themedModule, setThemedModule] = useState(null);
     const [beforeUpdate, setBeforeUpdate] = useState(null);
+
+    const [currentTheme, setCurrentTheme] = useState(theme);
+    const [themeUpdated, setThemeUpdated] = useState(false);
+    useEffect(() => {
+        setCurrentTheme((old) => {
+            if (old.name !== theme.name) {
+                setThemeUpdated(true);
+                return theme;
+            }
+
+            return old;
+        });
+    }, [theme]);
 
     useEffect(() => {
         const defaultThemeName = themesList.filter((t) => t.default)[0].name;
@@ -51,8 +65,9 @@ function Module({
         }
 
 
-        if (item?.theme?.name && beforeUpdate !== update) {
-            getTheme(item.theme.name)
+        if (themeUpdated || beforeUpdate !== update) {
+            if (themeUpdated) setThemeUpdated(false);
+            getTheme(currentTheme.name)
                 .then((selectedTheme) => applyTheme(selectedTheme.default))
                 .catch(() => {
                     getTheme(defaultThemeName)
@@ -63,7 +78,7 @@ function Module({
                 });
         }
 
-    }, [beforeUpdate, item, style]);
+    }, [beforeUpdate, item, style, currentTheme, themeUpdated]);
 
     return item && <div className="module" id={`module_${rowPosition}_${modulePosition}`} data-row={rowPosition} style={{
         ...style,

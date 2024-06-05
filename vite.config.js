@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import ogPlugin from 'vite-plugin-open-graph';
+import Sitemap from 'vite-plugin-sitemap'
 
 import * as pkg from './package.json';
 
@@ -44,7 +45,19 @@ export default ({ mode }) => {
               creator: pkg.author,
             },
           }
-        )
+        ),
+
+        Sitemap({
+          hostname: "https://pantaflex44.github.io",
+          dynamicRoutes: ['/Tiquettes/'],
+          exclude: ['/'],
+          outDir: 'dist',
+          changefreq: 'daily',
+          priority: 1,
+          lastmod: new Date(),
+          generateRobotsTxt: true,
+          robots: [{ userAgent: '*', allow: '/Tiquettes/' }]
+        }),
       ]
     };
   }
