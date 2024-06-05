@@ -40,12 +40,32 @@
         "title": "Alimentation"
     },
     {
+        "filename": "swb_puissance.svg",
+        "title": "Alimentation (Générale)"
+    },
+    {
+        "filename": "swb_ext.svg",
+        "title": "Alimentation (Extension / Divisionnaire)"
+    },
+    {
         "filename": "swb_bec.svg",
         "title": "Ballon d'eau chaude"
     },
     {
+        "filename": "swb_journuit.svg",
+        "title": "Contacteur Jour/Nuit"
+    },
+    {
+        "filename": "swb_blrgas.svg",
+        "title": "Chaudière gaz"
+    },
+    {
         "filename": "swb_chauffage.svg",
         "title": "Chauffage éledctrique"
+    },
+    {
+        "filename": "swb_twldryer.svg",
+        "title": "Sèche serviettes"
     },
     {
         "filename": "swb_clim.svg",
@@ -58,10 +78,6 @@
     {
         "filename": "swb_eau.svg",
         "title": "Compteur d'eau"
-    },
-    {
-        "filename": "swb_ext.svg",
-        "title": "Alimentation (Extension / Divisionnaire)"
     },
     {
         "filename": "swb_four.svg",
@@ -77,7 +93,7 @@
     },
     {
         "filename": "swb_gaz.svg",
-        "title": "Chaudière"
+        "title": "Cuisson gaz"
     },
     {
         "filename": "swb_induction.svg",
@@ -88,20 +104,20 @@
         "title": "Informatique"
     },
     {
-        "filename": "swb_journuit.svg",
-        "title": "Commutateur Jour/Nuit"
+        "filename": "swb_ll.svg",
+        "title": "Lave linge"
     },
     {
-        "filename": "swb_ll.svg",
-        "title": "Lave Linge"
+        "filename": "swb_dryer.svg",
+        "title": "Sèche linge"
     },
     {
         "filename": "swb_lv.svg",
-        "title": "Lave Linge"
+        "title": "Lave vaisselle"
     },
     {
         "filename": "swb_microonde.svg",
-        "title": "Micro Onde"
+        "title": "Micro-onde"
     },
     {
         "filename": "swb_minuterie.svg",
@@ -112,10 +128,6 @@
         "title": "Portail électrique"
     },
     {
-        "filename": "swb_puissance.svg",
-        "title": "Alimentation (Générale)"
-    },
-    {
         "filename": "swb_solaire.svg",
         "title": "Panneaux solaires"
     },
@@ -124,12 +136,20 @@
         "title": "Plancher chauffant"
     },
     {
+        "filename": "swb_volet.svg",
+        "title": "Volets roulants"
+    },
+    {
         "filename": "swb_split.svg",
         "title": "Unité murale"
     },
     {
         "filename": "swb_telec.svg",
         "title": "Télécommande"
+    },
+    {
+        "filename": "swb_ermt.svg",
+        "title": "Télécommande blocs secours"
     },
     {
         "filename": "swb_telephonie.svg",
@@ -176,8 +196,12 @@
         "title": "Véhicules électriques 2"
     },
     {
-        "filename": "swb_volet.svg",
-        "title": "Volets roulants"
+        "filename": "swb_pool.svg",
+        "title": "Piscine / Jacuzzi"
+    },
+    {
+        "filename": "swb_spa.svg",
+        "title": "SPA / Massages"
     },
     {
         "filename": "",
