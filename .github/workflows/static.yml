@@ -51,6 +51,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Submit sitemap to Google
-        run: |
-          curl https://www.google.com/ping?sitemap=https://pantaflex44.github.io/Tiquettes/sitemap.xml
