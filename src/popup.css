@@ -16,7 +16,7 @@
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    width: 500px;
+    width: 440px;
     max-width: 85%;
     max-height: 93%;
     overflow-y: auto;
@@ -48,7 +48,7 @@
     flex-wrap: nowrap;
     justify-content: end;
     align-items: center;
-    gap: 0.5em;
+    gap: 1em;
     margin-inline: 1.1em;
     margin-top: 2em;
 }
@@ -60,13 +60,14 @@
 
 .popup_row {
     display: grid;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: var(--left_column_size) 1fr;
     margin-block: 1em;
     margin-inline: 1.1em;
     align-items: baseline;
     font-size: smaller;
     justify-content: start;
     text-align: left;
+    column-gap: 0.25em;
 }
 
 .popup_row input, .popup_row textarea {
@@ -98,4 +99,8 @@
 .popup_error {
     font-size: small;
     color: red;
+}
+
+.popup_row > label {
+    margin-right: 1em;
 }

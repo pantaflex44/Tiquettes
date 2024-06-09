@@ -80,7 +80,7 @@ function Module({
 
     }, [beforeUpdate, item, style, currentTheme, themeUpdated]);
 
-    return item && <div className="module" id={`module_${rowPosition}_${modulePosition}`} data-row={rowPosition} style={{
+    return item && <div className={`module ${item.free && import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' ? 'noprint' : ''}`} id={`module_${rowPosition}_${modulePosition}`} data-row={rowPosition} style={{
         ...style,
         "--sw": `calc(${style['--sw']} * ${item.span})`,
         color: item.free ? 'darkgray' : 'black'

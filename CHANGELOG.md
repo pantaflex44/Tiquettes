@@ -1,15 +1,29 @@
 # Changelog
 
-## [1.4.1] - 2024-06-05
+## [1.5.0] - 2024-06-08
+
+### Améliorations
+
+- Amélioration de l'expérience utilisateur avec une interface graphique plus ergonomique
+- Léger nettoyage du code
 
 ### Modifications
 
 - Récriture du système de gestion des thèmes
+- Nouvelle documentation
 
 ### Ajouts
 
 - Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA
 - Ajout des fichiers sitemap.xml et robots.txt
+- Il est désormais possible de nommer son projet lors de sa création
+- Ajout d'une date de création, d'une date de modification et d'un numéro de version à chaque projet
+- Une date de modification est automatiquement mise à jour après chaque intervention de l'utilisateur
+- Chaque exportation met à jour la version interne du projet
+
+### Partenariats
+
+- Nouveau partenaire: AZ Reso (Artisan électricien du pays Nantais - https://www.google.com/search?q=az+reso+nantes)
 
 
 ## [1.4.0] - 2024-06-02

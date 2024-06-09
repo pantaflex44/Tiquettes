@@ -6,7 +6,6 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 https://pantaflex44.github.io/Tiquettes/
 
-
 <u>Licence</u>: MIT<br />
 <u>Auteur</u>: Christophe LEMOINE <pantaflex (at) hotmail (dot) fr><br />
 <u>Création</u>: 26/05/2024<br />
@@ -24,24 +23,39 @@ Deux possibilités:
 - Créer un nouveau projet
 - Importer un projet sauvegarder
 
+![Nouveau projet](docs/_project_actions1.png)
 
 ### Créer un nouveau projet par défaut
 
 ![Nouveau projet](docs/_new_project.png)
 
-L'application définit automatiquement un tableau électrique de 4 rangées, 13 modules par rangée avec une hauteur des étiquettes de 30mm.
+L'application définie automatiquement un tableau électrique de 4 rangées, 13 modules par rangée avec une hauteur des étiquettes de 30mm.
 
 Bien évidement vous pouvez modifier ces valeurs en agissant sur les réglages proposés. Commencez par le réglage du nombre de modules, puis de rangées, et finissez avec la hauteur des étiquettes.
 
-Le tableau s'ajustera automatiquement.
+Le nouveau tableau s'ajustera automatiquement.
 
 ### Importer un projet sauvegardé
 
-![Importer un projet](docs/_import.png)
-
 Tiquettes vous propose d'importer et d'exporter votre travail pour l'archiver ou y retravailler ultérieurement. Une sauvegarde automatique de votre session de travail est aussi intégrée au système.
 
-Pour importer un projet, cliquez sur le bouton ```Choisir un fichier``` puis chargez le fichier correspondant à votre projet. Immédiatement, celui-ci s'affichera plus bas!
+Pour importer un projet, cliquez sur le bouton `Importer` puis chargez le fichier correspondant à votre projet. Immédiatement, celui-ci s'affichera dans la zone de travail!
+
+### Résumé du projet
+
+Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au dessus de la zone de travail.
+
+![Nouveau projet](docs/_project_resume.png)
+
+En premier, se regroupe le nom donné au projet ainsi que la version d'exportation. Cette version se met automatiquement à jour au moment de chaque exportation.
+
+> <b>🛈 Bon à savoir</b>
+>
+> Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre clavier. A contrario, la touche `Echap` annule les modifcations.
+>
+> ![Modifier le nom du projet](docs/_edit_project_name.png)
+
+Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
 ## Utilisation
 
@@ -55,21 +69,21 @@ Chaque module peut avoir une largeur et/ou une position réglable en fonction de
 
 ![Menu contextuel du haut](docs/_top.png)
 
-Le symbole ```+``` vous permet d'agrandir le module d'une largeur sur sa droite.
+Le symbole `+` vous permet d'agrandir le module d'une largeur sur sa droite.
 
-Le symbole ```-``` vous permet de réduire le module d'une largeur.
+Le symbole `-` vous permet de réduire le module d'une largeur.
 
-Le symbole ```←``` vous permet de déplacer le module d'une position sur la gauche.
+Le symbole `←` vous permet de déplacer le module d'une position sur la gauche.
 
-Le symbole ```→``` vous permet de déplacer le module d'une position sur la droite.
+Le symbole `→` vous permet de déplacer le module d'une position sur la droite.
 
 ### Menu contextuel du bas
 
 ![Menu contextuel du bas](docs/_bottom.png)
 
-Le symbole ```Corbeille``` (ou la touche ```Suppr``` du clavier) permet de libérer le module. Il perdra son identifiant, son icône, et sa définition mais conservera sa taille. Il pourra donc de nouveau être englobé dans l'agrandissement des modules précédents.
+Le symbole `Corbeille` (ou la touche `Suppr` du clavier) permet de libérer le module. Il perdra son identifiant, son icône, et sa définition mais conservera sa taille. Il pourra donc de nouveau être englobé dans l'agrandissement des modules précédents.
 
-Le symbole ```Crayon``` (ou la touche ```Entrée``` du clavier) permet d'éditer le module en question.
+Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le module en question.
 
 ### Manipuler les rangées
 
@@ -79,20 +93,18 @@ Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des r
 
 ![Insérer une rangée](docs/_add_row.png)
 
-Pour supprimer une rangée, cliquez sur l'icone ```corbeille```, à gauche du nom de la rangée souhaitée:
+Pour supprimer une rangée, cliquez sur l'icone `corbeille`, à gauche du nom de la rangée souhaitée:
 
 ![Supprimer une rangée](docs/_delete_row.png)
-
 
 ### Raccourcies claviers / souris
 
 Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votre clavier pour interagir sur les rangées et les modules.
 
-- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches ```haut``` et ```bas``` de votre clavier, l'ascenseur de la fenètre ou la roulette de votre souris.
-- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenètre ou la roulette de votre souris (en appuyant simultanement sur une des touches ```shift``` de votre clavier).
-- Pour déplacer un module horizontalement, sélectionnez le avec votre souris, puis appuyez sur les flèches ```gauche``` et ```droite``` de votre clavier.
-- Pour redimensionner un module, sélectionnez le avec votre souris, puis appuyez sur les touches ```+``` et ```-``` de votre clavier.
-
+- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches `haut` et `bas` de votre clavier, l'ascenseur de la fenètre ou la roulette de votre souris.
+- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenètre ou la roulette de votre souris (en appuyant simultanement sur une des touches `shift` de votre clavier).
+- Pour déplacer un module horizontalement, sélectionnez le avec votre souris, puis appuyez sur les flèches `gauche` et `droite` de votre clavier.
+- Pour redimensionner un module, sélectionnez le avec votre souris, puis appuyez sur les touches `+` et `-` de votre clavier.
 
 ## Edition d'un module
 
@@ -100,9 +112,9 @@ Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s
 
 ![Edition d'un module](docs/_popup.png)
 
-- *Identifiant* : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
-- *Description* : Une très courte description du module. Les retours à la ligne sont pris en compte.
-- *Pictogramme* : Une petite image illustrant l'environement du module.
+- _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
+- _Description_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
+- _Pictogramme_ : Une petite image illustrant l'environement du module.
 
 ## Décorer ses étiquettes
 
@@ -111,6 +123,8 @@ Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s
 A chacun son style, à chaque coffret sa marque, quoi de mieux que de pouvoir décorer ses étiquettes au style de la marque du matériel installé?
 
 Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes changez en temps réel!
+
+![Sélection du thème](docs/_theme_selector2.png)
 
 - Thème Simple
 
@@ -174,8 +188,12 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 
 Une fois vos étiquettes réalisées, vous pourrez les imprimer en cliquant sur le bouton adéquat.
 
-Sélectionnez le mode ```paysage``` pour simplifier la mise en page.
+Sélectionnez le mode `paysage` pour simplifier la mise en page.
 
-Choisissez d'imprimer le fond et les images pour avoir un rendu tel votre écran.
+> <b>🛈 Bon à savoir</b>
+>
+> Choisissez d'imprimer le fond et les images pour avoir un rendu tel votre écran.
+>
+> Imprimez toujours en taille réelle sans ajustement de la page. Surtout valable si vous souhaitez imprimer un projet préalablement enregistré en PDF. Acrobat Reader, notamment, ajuste par défaut le document au format papier sélectionné.
 
 ## Fin!

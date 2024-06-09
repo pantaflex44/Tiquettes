@@ -187,4 +187,8 @@
     .module .module_iconfree {
         display: none;
     }
+
+    .module.noprint {
+        display: none;
+    }
 }

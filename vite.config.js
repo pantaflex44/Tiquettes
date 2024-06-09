@@ -29,15 +29,15 @@ export default ({ mode }) => {
               url: env.VITE_APP_URL,
               title: pkg.title,
               type: 'website',
-              image: `${env.VITE_APP_URL}og.webp`,
+              image: `${env.VITE_APP_URL}og_1200x630.webp`,
               determiner: 'auto',
               description: pkg.description,
-              locale: 'fr_FR',
-              localeAlternate: ['fr_FR'],
+              locale: env.VITE_APP_LOCALE,
+              localeAlternate: [env.VITE_APP_LOCALE],
               siteName: pkg.title,
             },
             twitter: {
-              image: `${env.VITE_APP_URL}twitter.webp`,
+              image: `${env.VITE_APP_URL}twitter_1280x640.webp`,
               card: 'summary_large_image',
               description: pkg.description,
               title: pkg.title,
@@ -48,15 +48,15 @@ export default ({ mode }) => {
         ),
 
         Sitemap({
-          hostname: "https://pantaflex44.github.io",
-          dynamicRoutes: ['/Tiquettes/'],
+          hostname: env.VITE_APP_HOSTNAME,
+          dynamicRoutes: [env.VITE_APP_BASE],
           exclude: ['/'],
           outDir: 'dist',
           changefreq: 'daily',
           priority: 1,
           lastmod: new Date(),
           generateRobotsTxt: true,
-          robots: [{ userAgent: '*', allow: '/Tiquettes/' }]
+          robots: [{ userAgent: '*', allow: env.VITE_APP_BASE }]
         }),
       ]
     };

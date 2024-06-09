@@ -1,84 +1,84 @@
 [
     {
-        "title": "Simple",
+        "title": "Identifiant, pictogramme et descriptif",
         "name": "simple",
         "default": false,
         "group": "Simple"
     },
     {
-        "title": "Minimal",
+        "title": "Pictogramme et descriptif seulement",
         "name": "minimal",
         "default": false,
         "group": "Minimal"
     },
     {
-        "title": "Schneider - Standard",
+        "title": "Standard",
         "name": "schn1",
         "default": true,
         "group": "Schneider"
     },
     {
-        "title": "Schneider - Alternatif",
+        "title": "Alternatif",
         "name": "schn2",
         "default": false,
         "group": "Schneider"
     },
     {
-        "title": "Schneider - Nouveau format - Logements",
+        "title": "Nouveau format - Logements",
         "name": "schn4",
         "default": false,
         "group": "Schneider"
     },
     {
-        "title": "Schneider - Nouveau format - Tertiaire",
+        "title": "Nouveau format - Tertiaire",
         "name": "schn3",
         "default": false,
         "group": "Schneider"
     },
     {
-        "title": "Hager - Ancien format - Logements",
+        "title": "Ancien format - Logements",
         "name": "hgr1",
         "default": false,
         "group": "Hager"
     },
     {
-        "title": "Hager - Ancien format - Tertiaire",
+        "title": "Ancien format - Tertiaire",
         "name": "hgr2",
         "default": false,
         "group": "Hager"
     },
     {
-        "title": "Hager - Nouveau format - Logements",
+        "title": "Nouveau format - Logements",
         "name": "hgr3",
         "default": false,
         "group": "Hager"
     },
     {
-        "title": "Hager - Nouveau format - Tertiaire",
+        "title": "Nouveau format - Tertiaire",
         "name": "hgr4",
         "default": false,
         "group": "Hager"
     },
     {
-        "title": "Legrand - Monochrome - Logements",
+        "title": "Monochrome - Logements",
         "name": "lgrd2",
         "default": false,
         "group": "Legrand"
     },
     {
-        "title": "Legrand - Monochrome - Tertiaire",
+        "title": "Monochrome - Tertiaire",
         "name": "lgrd1",
         "default": false,
         "group": "Legrand"
     },
     {
-        "title": "Legrand - Couleur - Logements",
+        "title": "Couleur - Logements",
         "name": "lgrd4",
         "default": false,
         "group": "Legrand"
     },
     {
-        "title": "Legrand - Couleur - Tertiaire",
+        "title": "Couleur - Tertiaire",
         "name": "lgrd3",
         "default": false,
         "group": "Legrand"

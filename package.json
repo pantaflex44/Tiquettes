@@ -1,7 +1,7 @@
 {
   "name": "tiquettes",
   "title": "Tiquettes",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
   "keywords": [
     "tableau",
@@ -33,7 +33,8 @@
     "compare-versions": "^6.1.0",
     "process": "^0.11.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

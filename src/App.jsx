@@ -1,4 +1,6 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { satisfies } from 'compare-versions';
+import sanitizeFilename from 'sanitize-filename';
 
 import './app.css';
 import * as pkg from '../package.json';
@@ -9,56 +11,70 @@ import Row from "./Row";
 import Popup from "./Popup";
 
 import newProjectIcon from './assets/new_project.svg';
-import importProjectIcon from './assets/import_project.svg';
+import uploadProjectIcon from './assets/upload.svg';
+import clearProjectIcon from './assets/x.svg';
+import exportProjectIcon from './assets/download.svg';
+import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
-import { satisfies } from 'compare-versions';
+import ContentEditable from "./ContentEditable";
+
 
 function App() {
-
-    function setDocumentTitle(title) {
-        document.title = `${title} - ${pkg.title} ${pkg.version}`
-    }
-
     const importRef = useRef();
     const projectRef = useRef();
     const switchboardRef = useRef();
 
+    const [editor, setEditor] = useState(null);
+    const [newProjectProperties, setNewProjectProperties] = useState(null);
+
     const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
+    const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
     const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
     const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT);
     const defaultStepsPerRows = parseInt(import.meta.env.VITE_DEFAULT_STEPSPERROW);
     const defaultTheme = themesList.filter((t) => t.default)[0];
+    const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
     const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN);
     const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX);
     const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN);
     const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX);
 
     const defaultModule = useMemo(() => ({
-        id: `${import.meta.env.VITE_DEFAULT_ID}?`,
+        id: `${defaultModuleId}?`,
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
         free: true,
         span: 1
-    }), []);
+    }), [defaultModuleId]);
 
-    const [npRows, setNpRows] = useState(defaultNpRows);
-    const [hRow, setHRow] = useState(defaultHRow);
-    const [spr, setSpr] = useState(defaultStepsPerRows);
-    const [editor, setEditor] = useState(null);
+    const defaultProjectProperties = useMemo(() => ({
+        name: defaultProjectName,
+        npRows: defaultNpRows,
+        hRow: defaultHRow,
+        spr: defaultStepsPerRows,
+    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows]);
 
-    const verifyVersion = (swb) => {
-        if (!swb.version) {
-            alert(`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`);
-            return false;
-        }
+    const createRow = useCallback((steps, rowsCount) => {
+        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
+            ...q,
+            id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
+        })));
+    }, [defaultModule]);
 
-        const projectVersion = swb.version;
-        if (!satisfies(projectVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
-            alert(`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${projectVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`);
-            return false;
-        }
+    const defaultProject = useMemo(() => ({
+        prjname: defaultProjectName,
+        prjcreated: new Date(),
+        prjupdated: new Date(),
+        prjversion: 1,
+        theme: defaultTheme,
+        appversion: pkg.version,
+        height: defaultHRow,
+        stepsPerRows: defaultStepsPerRows,
+        rows: createRow(defaultStepsPerRows, defaultNpRows),
+    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
 
-        return true;
+    const setDocumentTitle = (title) => {
+        document.title = `${title} - ${pkg.title} ${pkg.version}`
     };
 
     const scrollToProject = () => {
@@ -69,7 +85,22 @@ function App() {
         });
     };
 
-    const autoId = (swb, rowIndex = 0, moduleIndex = 0) => {
+    const verifyVersion = (swb) => {
+        if (!swb.appversion) {
+            alert(`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`);
+            return false;
+        }
+
+        const appVersion = swb.appversion;
+        if (!satisfies(appVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
+            alert(`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${appVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`);
+            return false;
+        }
+
+        return true;
+    };
+
+    const modulesAutoId = useCallback((swb, rowIndex = 0, moduleIndex = 0) => {
         let reIndentedSwb = swb;
         let jump = 0;
 
@@ -84,7 +115,10 @@ function App() {
             if (i >= rowIndex) {
                 return row.map((module, j) => {
                     if (((i === rowIndex && j >= moduleIndex) || (i > rowIndex)) && module.free) {
-                        return { ...module, id: `${import.meta.env.VITE_DEFAULT_ID}${j + 1 + jump}` };
+                        return {
+                            ...module,
+                            id: `${defaultModuleId}${j + 1 + jump}`
+                        };
                     } else {
                         return module;
                     }
@@ -95,35 +129,32 @@ function App() {
         });
 
         return { ...reIndentedSwb, rows };
-    }
+    }, [defaultModuleId]);
 
-    const createRow = useCallback((steps, rowsCount = null) => {
-        return Array(rowsCount ?? npRows).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
-            ...q,
-            id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
-        })));
-    }, [defaultModule, npRows]);
+    const getSavedSwitchboard = () => {
+        if (sessionStorage.getItem(pkg.name)) {
+            let swb = {
+                ...defaultProject,
+                ...JSON.parse(sessionStorage.getItem(pkg.name))
+            };
 
-    const updates = useMemo(() => ({
-        version: pkg.version
-    }), []);
+            swb = {
+                ...swb,
 
-    const defaultProject = useMemo(() => ({
-        height: defaultHRow,
-        stepsPerRows: defaultStepsPerRows,
-        rows: createRow(defaultStepsPerRows),
-        theme: defaultTheme,
-        ...updates
-    }), [createRow, defaultHRow, defaultStepsPerRows, defaultTheme, updates]);
+                // <1.5.0  : add project metas 
+                // >=1.5.0 : convert data types
+                prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
+                prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
+                prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
+            };
 
-    const [switchboard, setSwitchboard] = useState(
-        sessionStorage.getItem("tiquettes")
-            ? autoId({
-                ...updates,
-                ...JSON.parse(sessionStorage.getItem("tiquettes"))
-            })
-            : { ...defaultProject }
-    );
+            return modulesAutoId({ ...swb });
+        }
+
+        return { ...defaultProject };
+    };
+
+    const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
 
     const getThemeOfFirstModuleFound = (swb = null) => {
         let themeFound = null;
@@ -140,103 +171,105 @@ function App() {
     }
     const [theme, setTheme] = useState((switchboard?.theme ?? defaultTheme));
 
-    const create = useCallback((stepsPerRows, rowsCount = null, height = null) => {
+    const createProject = useCallback((name, stepsPerRows, rowsCount, height) => {
         importRef.current.value = "";
 
         setTheme(defaultTheme);
         setSwitchboard(() => {
-            return autoId({ ...defaultProject, height: height ?? hRow, stepsPerRows, rows: createRow(stepsPerRows, rowsCount) });
+            return modulesAutoId({
+                ...defaultProject,
+                prjname: name,
+                height: height,
+                stepsPerRows,
+                rows: createRow(stepsPerRows, rowsCount)
+            });
         });
 
-        setDocumentTitle("Nouveau projet");
+        setDocumentTitle(name);
         scrollToProject();
-    }, [createRow, defaultProject, defaultTheme, hRow])
+    }, [modulesAutoId, createRow, defaultProject, defaultTheme]);
 
-    const reset = useCallback(() => {
+    const resetProject = useCallback(() => {
         importRef.current.value = "";
 
-        setDocumentTitle("Nouveau projet");
-        setHRow(defaultHRow);
-        setNpRows(defaultNpRows);
-        setSpr(defaultStepsPerRows);
+        setDocumentTitle(defaultProjectName);
         setTheme(defaultTheme);
 
-        create(defaultStepsPerRows, defaultNpRows, defaultHRow);
-    }, [create, defaultHRow, defaultNpRows, defaultStepsPerRows, defaultTheme]);
+        createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
+    }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
 
-    const grow = (rowIndex, moduleIndex) => {
-        const nextModuleIndex = moduleIndex + 1;
+    const importProject = (file) => {
+        if (file) {
+            const fileReader = new FileReader();
+            fileReader.readAsText(file, 'UTF-8');
+            fileReader.onload = (e) => {
+                try {
+                    let swb = JSON.parse(e.target.result);
 
-        setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
-                if (i !== rowIndex) return row;
+                    let theme = swb?.theme;
+                    if (!theme) theme = getThemeOfFirstModuleFound(swb);
+                    setTheme(theme);
 
-                let deleted = false;
-                let r = row.map((module, j) => {
-                    if (j !== moduleIndex) {
-                        if (j === nextModuleIndex && !deleted) {
-                            deleted = true;
-                            return null;
-                        }
-                        return module;
-                    }
-                    return { ...module, span: module.span + 1 };
-                });
-
-                return r.filter((rr) => rr !== null);
-            });
-
-            return autoId({ ...old, rows });
-        });
-    }
-
-    const shrink = (rowIndex, moduleIndex) => {
-        const currentModule = switchboard.rows[rowIndex][moduleIndex];
-
-        if (currentModule.span > 1) {
-            setSwitchboard((old) => {
-                let rows = old.rows.map((row, i) => {
-                    if (i !== rowIndex) return row;
-
-                    let r = row.map((module, j) => {
-                        if (j !== moduleIndex) return module;
-
-                        return { ...module, span: module.span - 1 };
+                    // <=1.4.0 : remove old theme definitions
+                    const rows = swb.rows.map((r) => {
+                        return r.map((m) => {
+                            let nm = { ...m };
+                            if (nm.theme) delete nm['theme'];
+                            return nm;
+                        });
                     });
+                    swb = {
+                        ...defaultProject,
+                        ...swb,
 
-                    r.splice(moduleIndex + 1, 0, { ...defaultModule });
+                        prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
+                        prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
+                        prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
 
-                    return r;
-                });
+                        rows
+                    };
 
-                return autoId({ ...old, rows });
-            });
+                    setSwitchboard(() => modulesAutoId({ ...swb }));
+
+                    //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
+                    //setDocumentTitle(filename);
+
+                    scrollToProject();
+                } catch (err) {
+                    importRef.current.value = "";
+                    alert("Impossible d'importer ce projet.");
+                }
+            };
+        } else {
+            importRef.current.value = "";
+            alert("Aucun projet à importer!");
         }
-    }
+    };
 
-    const clear = (rowIndex, moduleIndex) => {
-        const currentModule = switchboard.rows[rowIndex][moduleIndex];
-
-        if (!currentModule.free) {
-            setSwitchboard((old) => {
-                let rows = old.rows.map((row, i) => {
-                    if (i !== rowIndex) return row;
-
-                    let r = row.map((module, j) => {
-                        if (j !== moduleIndex) return module;
-
-                        return { ...module, ...defaultModule, span: module.span };
-                    });
-
-                    return r;
-                });
-
-                return autoId({ ...old, rows });
-            });
+    const exportProject = () => {
+        let swb = {
+            ...switchboard,
+            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1
         }
-    }
 
-    const edit = (rowIndex, moduleIndex) => {
+        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+        link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? defaultProjectName)} - v${swb.prjversion}.json`;
+        link.click();
+
+        setSwitchboard(swb);
+    };
+
+    const printProject = () => {
+        if (window) {
+            window.print();
+        } else {
+            alert("Cet appareil ne permet pas de lancer une impression.");
+        }
+    };
+
+    const editModule = (rowIndex, moduleIndex) => {
         const currentModule = switchboard.rows[rowIndex][moduleIndex];
 
         let pr = rowIndex;
@@ -254,95 +287,13 @@ function App() {
         }
 
         setEditor({ rowIndex, moduleIndex, currentModule, prevModule, theme, errors: [] });
-    }
+    };
 
-    const importProject = (file) => {
-        if (file) {
-            const fileReader = new FileReader();
-            fileReader.readAsText(file, 'UTF-8');
-            fileReader.onload = (e) => {
-                try {
-                    let swb = JSON.parse(e.target.result);
-                    
-                    let theme = swb?.theme;
-                    if (!theme) theme = getThemeOfFirstModuleFound(swb);
-                    setTheme(theme);
-
-                    // <=1.4.0 : remove old theme definitions
-                    const rows = swb.rows.map((r) => {
-                        return r.map((m) => {
-                            let nm = { ...m };
-                            if (nm.theme) delete nm['theme'];
-                            return nm;
-                        });
-                    });
-                    swb = { ...swb, rows };
-
-                    setSwitchboard((old) => autoId({
-                        ...old,
-                        ...updates,
-                        ...swb
-                    }));
-
-                    setDocumentTitle(importRef.current.value.replaceAll("\\", "/").split("/").pop());
-                    scrollToProject();
-                } catch (err) {
-                    importRef.current.value = "";
-                    alert("Impossible d'importer ce projet.");
-                }
-            };
-        } else {
-            importRef.current.value = "";
-            alert("Aucun projet à importer!");
-        }
-    }
-
-    const exportProject = () => {
-        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(switchboard))}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
-        link.download = "tiquettes.json";
-        link.click();
-    }
-
-    const printProject = () => {
-        if (window) {
-            window.print();
-        } else {
-            alert("Cet appareil ne permet pas de lancer une impression.");
-        }
-    }
-
-    const moduleFocus = (rowPosition, modulePosition) => {
-        const m = document.querySelector(`[data-id="${rowPosition}-${modulePosition}"]`);
-        if (m) {
-            m.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "nearest"
-            });
-            m.focus();
-        }
-    }
-
-    const findThemeByName = (name, all = false) => {
-        const found = themesList.filter((t) => t.name === name);
-        return (all ? found : (found.length > 0 ? found[0] : null));
-    }
-
-    const updateTheme = (name) => {
-        const selected = findThemeByName(name);
-        if (selected) {
-            setTheme(selected);
-            setSwitchboard((old) => autoId({ ...old, theme: selected }));
-        }
-    }
-
-    const updateEditor = (data) => {
+    const updateModuleEditor = (data) => {
         setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, ...data } }));
     }
 
-    const applyEditor = () => {
+    const applyModuleEditor = () => {
         setEditor((old) => ({
             ...old,
             errors: []
@@ -389,11 +340,116 @@ function App() {
                 return r;
             });
 
-            return autoId({ ...old, rows });
+            return modulesAutoId({ ...old, rows });
         });
 
         setEditor(null);
     }
+
+    const moduleGrow = (rowIndex, moduleIndex) => {
+        const nextModuleIndex = moduleIndex + 1;
+
+        setSwitchboard((old) => {
+            let rows = old.rows.map((row, i) => {
+                if (i !== rowIndex) return row;
+
+                let deleted = false;
+                let r = row.map((module, j) => {
+                    if (j !== moduleIndex) {
+                        if (j === nextModuleIndex && !deleted) {
+                            deleted = true;
+                            return null;
+                        }
+                        return module;
+                    }
+                    return { ...module, span: module.span + 1 };
+                });
+
+                return r.filter((rr) => rr !== null);
+            });
+
+            return modulesAutoId({ ...old, rows });
+        });
+    };
+
+    const moduleShrink = (rowIndex, moduleIndex) => {
+        const currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+        if (currentModule.span > 1) {
+            setSwitchboard((old) => {
+                let rows = old.rows.map((row, i) => {
+                    if (i !== rowIndex) return row;
+
+                    let r = row.map((module, j) => {
+                        if (j !== moduleIndex) return module;
+
+                        return { ...module, span: module.span - 1 };
+                    });
+
+                    r.splice(moduleIndex + 1, 0, { ...defaultModule });
+
+                    return r;
+                });
+
+                return modulesAutoId({ ...old, rows });
+            });
+        }
+    };
+
+    const moduleClear = (rowIndex, moduleIndex) => {
+        const currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+        if (!currentModule.free) {
+            setSwitchboard((old) => {
+                let rows = old.rows.map((row, i) => {
+                    if (i !== rowIndex) return row;
+
+                    let r = row.map((module, j) => {
+                        if (j !== moduleIndex) return module;
+
+                        return { ...module, ...defaultModule, span: module.span };
+                    });
+
+                    return r;
+                });
+
+                return modulesAutoId({ ...old, rows });
+            });
+        }
+    };
+
+    const moduleFocus = (rowPosition, modulePosition) => {
+        const m = document.querySelector(`[data-id="${rowPosition}-${modulePosition}"]`);
+        if (m) {
+            m.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "nearest"
+            });
+            m.focus();
+        }
+    }
+
+    const findThemeByName = (name, all = false) => {
+        const found = themesList.filter((t) => t.name === name);
+        return (all ? found : (found.length > 0 ? found[0] : null));
+    }
+
+    const updateTheme = (name) => {
+        const selected = findThemeByName(name);
+        if (selected) {
+            setTheme(selected);
+            setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
+        }
+    }
+
+    const openProjectPropertiesEditor = () => {
+        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+    };
+
+    const updateProjectProperties = (data) => {
+        setNewProjectProperties((old) => ({ ...old, ...data }));
+    };
 
     const handleScrollRight = () => {
         if (switchboardRef.current.scrollLeft + 10 < switchboardRef.current.scrollWidth) {
@@ -417,7 +473,7 @@ function App() {
         const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
 
         if (nextModule?.free === true && nextModule?.span === 1) {
-            grow(rowIndex, moduleIndex);
+            moduleGrow(rowIndex, moduleIndex);
             moduleFocus(rowIndex + 1, moduleIndex + 1);
         }
     }
@@ -427,7 +483,7 @@ function App() {
         const currentModule = row[moduleIndex];
 
         if (currentModule.span > 1) {
-            shrink(rowIndex, moduleIndex);
+            moduleShrink(rowIndex, moduleIndex);
             moduleFocus(rowIndex + 1, moduleIndex + 1);
         }
     }
@@ -437,13 +493,13 @@ function App() {
         const currentModule = row[moduleIndex];
 
         if (!currentModule.free) {
-            clear(rowIndex, moduleIndex);
+            moduleClear(rowIndex, moduleIndex);
             moduleFocus(rowIndex + 1, moduleIndex + 1);
         }
     }
 
     const handleModuleEdit = (rowIndex, moduleIndex) => {
-        edit(rowIndex, moduleIndex);
+        editModule(rowIndex, moduleIndex);
         moduleFocus(rowIndex + 1, moduleIndex + 1);
     }
 
@@ -459,7 +515,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex);
-                return autoId({ ...old, rows });
+                return modulesAutoId({ ...old, rows });
             })
         }
     }
@@ -476,7 +532,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return autoId({ ...old, rows });
+                return modulesAutoId({ ...old, rows });
             })
         }
     }
@@ -514,26 +570,26 @@ function App() {
 
     const handleRowAddAfter = (rowIndex) => {
         let rows = switchboard.rows;
-        if (rows.length >= import.meta.env.VITE_ROWS_MAX) {
-            alert(`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${import.meta.env.VITE_ROWS_MAX} rangées`);
+        if (rows.length >= rowsMax) {
+            alert(`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${rowsMax} rangées`);
             return;
         }
 
         const newRow = createRow(switchboard.stepsPerRows, 1);
         rows.splice(rowIndex + 1, 0, ...newRow);
 
-        setSwitchboard((old) => autoId({ ...old, rows }));
+        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
     }
 
     const handleRowDelete = (rowIndex) => {
         let rows = switchboard.rows;
         rows.splice(rowIndex, 1);
 
-        setSwitchboard((old) => autoId({ ...old, rows }));
+        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
     }
 
     const rowAddAllowed = () => {
-        return switchboard.rows.length < import.meta.env.VITE_ROWS_MAX;
+        return switchboard.rows.length < rowsMax;
     }
 
     const rowDeleteAllowed = () => {
@@ -544,14 +600,23 @@ function App() {
         let t = null;
 
         if (!verifyVersion(switchboard)) {
-            reset();
+            resetProject();
+
+            if (t) clearTimeout(t);
             return;
         }
 
         t = setTimeout(() => {
-            const swb = JSON.stringify(switchboard);
-            if (sessionStorage.getItem("tiquettes") !== swb) {
-                sessionStorage.setItem("tiquettes", swb);
+            const savedProjectIsOutdated = sessionStorage.getItem(pkg.name) !== JSON.stringify(switchboard);
+            if (savedProjectIsOutdated) {
+                let updatedProject = {
+                    ...switchboard,
+                    prjupdated: new Date()
+                };
+
+                sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
+                setSwitchboard(updatedProject);
+
                 console.log("Saved for this session.");
             }
         }, 1000);
@@ -559,95 +624,99 @@ function App() {
         return () => {
             if (t) clearTimeout(t);
         }
-    }, [reset, switchboard]);
+    }, [resetProject, switchboard]);
 
     return (
         <>
-            <div className="projectbox">
-                <div className="newproject">
-                    <h4><img src={newProjectIcon} width={20} height={20} alt="Nouveau projet" /><span>Nouveau projet</span></h4>
+            <nav className="button_group">
+                <button className="button_group-new_project" onClick={() => { openProjectPropertiesEditor(); }} title="Créer un nouveau projet">
+                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
+                    <span>Nouveau projet</span>
+                </button>
 
-                    <div className="toolbar">
-                        {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
-                            const c = parseInt(count.trim());
-                            return <div key={c} style={{ display: 'flex', alignItems: 'center', marginRight: '1em' }}>
-                                <input type="radio" name="spr" id={`spr${c}`} value={c} checked={spr === c} onChange={(e) => { setSpr(parseInt(e.target.value)); }} style={{ margin: 0, marginRight: '0.5em' }} />
-                                <label htmlFor={`spr${c}`}><small>{c} modules</small></label>
-                            </div>;
-                        })}
-                    </div>
+                <div className="button_group-separator"></div>
 
-                    <div className="toolbar">
-                        <button onClick={() => setNpRows((old) => {
-                            if (old > rowsMin) return old - 1;
-                            return old;
-                        })}>-</button>
-                        <input type="range" min={rowsMin} max={rowsMax} step={1} value={npRows} onChange={(e) => {
-                            const value = parseInt(e.target.value);
-                            if (value >= rowsMin) setNpRows(value);
-                        }} />
-                        <span><small>{npRows} rangées</small></span>
-                        <button onClick={() => setNpRows((old) => {
-                            if (old < rowsMax) return old + 1;
-                            return old;
-                        })}>+</button>
-                    </div>
+                <input id="importfile" ref={importRef} type="file" onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
+                }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
+                <label htmlFor="importfile" className="button_group-import_project" title="Importer un projet existant">
+                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => document.getElementById('importfile').click()} />
+                    <span>Importer</span>
+                </label>
 
-                    <div className="toolbar">
-                        <button onClick={() => setHRow((old) => {
-                            if (old > heightMin) return old - 1;
-                            return old;
-                        })}>-</button>
-                        <input type="range" min={heightMin} max={heightMax} step={1} value={hRow} onChange={(e) => {
-                            const value = parseInt(e.target.value);
-                            if (value >= heightMin) setHRow(value);
-                        }} />
-                        <span><small>hauteur {hRow}mm</small></span>
-                        <button onClick={() => setHRow((old) => {
-                            if (old < heightMax) return old + 1;
-                            return old;
-                        })}>+</button>
-                    </div>
+                <button className="button_group-export_project" onClick={() => {
+                    exportProject();
+                }} title="Exporter...">
+                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
+                    <span>Exporter</span>
+                </button>
 
-                    <div className="toolbar">
-                        <button onClick={() => { if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) create(spr); }}>Créer le nouveau projet...</button>
-                    </div>
-                </div>
+                <button className="button_group-print_project" onClick={() => {
+                    printProject();
+                }} title="Imprimer...">
+                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
+                    <span>Imprimer...</span>
+                </button>
 
-                <div className="importproject">
-                    <h4><img src={importProjectIcon} width={20} height={20} alt="Importer un projet" /><span>Importer un projet</span></h4>
+                <div className="button_group-separator"></div>
 
-                    <div className="toolbar">
-                        <input ref={importRef} type="file" onChange={(e) => { if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]); }} />
-                    </div>
-                </div>
-            </div>
+                <button className="button_group-clear_project" onClick={() => {
+                    if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
+                }} title="Réinitialiser le projet" >
+                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
+                    <span>Réinitialiser</span>
+                </button>
 
-            <h3 ref={projectRef} style={{ scrollMarginTop: '1em' }}>
-                <span style={{ display: 'flex', width: '100%', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'start', alignItems: 'center', columnGap: '0.5em', marginBottom: '1em' }}><img src={projectIcon} width={24} height={24} alt="Projet courant" /><span>Projet courant</span></span>
+                <div className="button_group-separator"></div>
+            </nav>
 
-                <button style={{ marginLeft: '32px', marginTop: '1em' }} onClick={() => { if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) reset(); }}>Réinitialiser...</button>
-                <button style={{ marginLeft: '4em', marginTop: '1em' }} onClick={() => { exportProject(); }}>Exporter</button>
-                <button style={{ marginLeft: '1em', marginTop: '1em' }} onClick={() => { printProject(); }}>Imprimer</button>
-
-                <select
-                    style={{ marginLeft: '32px', marginTop: '1em' }}
-                    value={theme?.name ?? defaultTheme}
-                    onChange={(e) => { updateTheme(e.target.value); }}
-                >
-                    {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
-                        const g = e[0];
-                        const l = e[1];
-                        return <Fragment key={`themes_${g}`}>
-                            <option key={`group_${g}`} id={`group_${g}`} style={{ fontSize: "small" }} disabled>- {g} -</option>
-                            {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>Thème {t.title}</option>)}
-                        </Fragment>
-                    })}
-                </select>
+            <h3 ref={projectRef}>
+                <img src={projectIcon} width={24} height={24} alt="Projet courant" />
+                <ContentEditable
+                    value={switchboard.prjname ?? defaultProjectName}
+                    onChange={(value) => {
+                        let v = value.trim();
+                        if (v === "") v = defaultProjectName;
+                        setSwitchboard((old) => ({
+                            ...old,
+                            prjname: v
+                        }));
+                    }}
+                    editableStyle={{
+                        fontSize: '1em',
+                        fontWeight: 'bold',
+                        maxWidth: '100%'
+                    }}
+                    editable={true}
+                />
+                <sup>v{switchboard.prjversion ?? 1}</sup>
             </h3 >
+
             <ul className="project">
                 <li>
-                    <small><b>{switchboard.rows.length}</b> rangée{switchboard.rows.length > 1 ? 's' : ''} de <b>{switchboard.stepsPerRows}</b> module{switchboard.stepsPerRows > 1 ? 's' : ''}. Hauteur des étiquettes: <b>{switchboard.height}mm</b>.</small>
+                    <span><u>Date de création</u>: <b>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</b></span>
+                </li>
+                <li>
+                    <span><u>Dernière modification</u>: <b>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</b></span>
+                </li>
+                <li>
+                    <span><u>Descriptif</u>: <b>{switchboard.rows.length}</b> rangée{switchboard.rows.length > 1 ? 's' : ''} de <b>{switchboard.stepsPerRows}</b> module{switchboard.stepsPerRows > 1 ? 's' : ''}. Hauteur des étiquettes: <b>{switchboard.height}mm</b>.</span>
+                </li>
+                <li className="nobefore">
+                    <span><b>Thème actuel:</b></span>
+                    <select
+                        value={theme?.name ?? defaultTheme}
+                        onChange={(e) => { updateTheme(e.target.value); }}
+                    >
+                        {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
+                            const g = e[0];
+                            const l = e[1];
+                            return <Fragment key={`themes_${g}`}>
+                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>{g} - {t.title}</option>)}
+                            </Fragment>
+                        })}
+                    </select>
                 </li>
             </ul>
 
@@ -701,47 +770,47 @@ function App() {
                         title={"Editer le module"}
                         showCloseButton={true}
                         onCancel={() => setEditor(null)}
-                        onOk={() => applyEditor()}
+                        onOk={() => applyModuleEditor()}
                     >
-                        <div className="popup_row">
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
                             <input
                                 type="text"
                                 name="editor_id"
                                 id={`editor_id_${editor.currentModule.id.trim()}`}
                                 value={editor.currentModule.id}
-                                onChange={(e) => updateEditor({ id: e.target.value })}
+                                onChange={(e) => updateModuleEditor({ id: e.target.value })}
                                 autoFocus
                             />
                         </div>
-                        <div className="popup_row">
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <div></div>
                             <label style={{ fontSize: "small", color: "#777" }}>˫ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
                         </div>
 
-                        <div className="popup_row">
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Description</label>
                             <textarea
                                 name="editor_text"
                                 id={`editor_text_${editor.currentModule.id.trim()}`}
                                 value={editor.currentModule.text}
-                                onChange={(e) => updateEditor({ text: e.target.value })}
+                                onChange={(e) => updateModuleEditor({ text: e.target.value })}
                                 rows={3}
                             />
                         </div>
 
-                        <div className="popup_row">
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label>Pictogramme</label>
-                            <div className="icon_group">
+                            <div className="radio_group">
                                 {swbIcons.map((icon, i) => (
-                                    <div className="icon" title={icon.title} key={i}>
+                                    <div className="radio" title={icon.title} key={i}>
                                         <input
                                             type="radio"
                                             name="editor_icon"
                                             id={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}
                                             value={icon.filename}
                                             checked={(icon.filename !== '' ? icon.filename : null) === editor.currentModule.icon}
-                                            onChange={(e) => updateEditor({ icon: e.target.value !== '' ? e.target.value : null })}
+                                            onChange={(e) => updateModuleEditor({ icon: e.target.value !== '' ? e.target.value : null })}
                                         />
                                         <label htmlFor={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}>
                                             {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} alt={icon.title} /> : icon.title}
@@ -751,7 +820,79 @@ function App() {
                             </div>
                         </div>
 
-                        {editor.errors.map((error, i) => <div key={i} className="popup_row"><div></div><div className="popup_error">{error}</div></div>)}
+                        {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{ '--left_column_size': '100px' }}>
+                            <div></div>
+                            <div className="popup_error">{error}</div>
+                        </div>)}
+                    </Popup >
+                )
+            }
+
+            {
+                newProjectProperties && (
+                    <Popup
+                        title={"Créer un nouveau projet"}
+                        showCloseButton={true}
+                        onCancel={() => setNewProjectProperties(null)}
+                        onOk={() => {
+                            if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) {
+                                createProject(newProjectProperties.name, newProjectProperties.spr, newProjectProperties.npRows, newProjectProperties.hRow);
+                                setNewProjectProperties(null);
+                            }
+                        }}
+                    >
+                        <div className="popup_row" style={{ '--left_column_size': '150px', marginBottom: '3em' }}>
+                            <label htmlFor="newProjectProperties_name">Nom du projet</label>
+                            <input
+                                type="text"
+                                name="newProjectProperties_name"
+                                id="newProjectProperties_name"
+                                value={newProjectProperties.name}
+                                onChange={(e) => updateProjectProperties({ name: e.target.value })}
+                                autoFocus
+                            />
+                        </div>
+
+                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center' }}>
+                            <label htmlFor="newProjectProperties_modules">Nombre de modules par rangée</label>
+                            <div className="radio_group">
+                                {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
+                                    const c = parseInt(count.trim());
+                                    return <div key={c} className="radio">
+                                        <input type="radio" name="spr" id={`newProjectProperties_modules_${c}`} value={c} checked={newProjectProperties.spr === c} onChange={(e) => updateProjectProperties({ spr: parseInt(e.target.value) })} style={{ margin: 0, marginRight: '0.25em' }} />
+                                        <label htmlFor={`newProjectProperties_modules_${c}`}>{c}</label>
+                                    </div>;
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '0.5em' }}>
+                            <label htmlFor="newProjectProperties_modules">Nombre de rangées</label>
+                            <label style={{ fontSize: '1.1em', color: 'darkcyan' }}>˫ <b>{newProjectProperties.npRows}</b> rangées</label>
+                        </div>
+                        <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0 }}>
+                            <div></div>
+                            <div style={{ display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em' }}>
+                                <input type="range" min={rowsMin} max={rowsMax} step={1} value={newProjectProperties.npRows} onChange={(e) => {
+                                    const value = parseInt(e.target.value);
+                                    if (value >= rowsMin) updateProjectProperties({ npRows: value });
+                                }} style={{ minHeight: 0, padding: 0, margin: 0, width: '100%' }} />
+                            </div>
+                        </div>
+
+                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '0.5em' }}>
+                            <label htmlFor="newProjectProperties_modules">Hauteur d&apos;une rangée</label>
+                            <label style={{ fontSize: '1.1em', color: 'darkcyan' }}>˫ <b>{newProjectProperties.hRow}</b>mm</label>
+                        </div>
+                        <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0, marginBottom: '3em' }}>
+                            <div></div>
+                            <div style={{ display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em' }}>
+                                <input type="range" min={heightMin} max={heightMax} step={1} value={newProjectProperties.hRow} onChange={(e) => {
+                                    const value = parseInt(e.target.value);
+                                    if (value >= heightMin) updateProjectProperties({ hRow: value });
+                                }} style={{ minHeight: 0, padding: 0, margin: 0, width: '100%' }} />
+                            </div>
+                        </div>
                     </Popup >
                 )
             }
