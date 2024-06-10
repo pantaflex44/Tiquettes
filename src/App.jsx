@@ -74,7 +74,8 @@ function App() {
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
 
     const setDocumentTitle = (title) => {
-        document.title = `${title} - ${pkg.title} ${pkg.version}`
+        const t = `${title} - ${pkg.title} ${pkg.version}`;
+        document.title = t;
     };
 
     const scrollToProject = () => {
@@ -616,6 +617,7 @@ function App() {
 
                 sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
                 setSwitchboard(updatedProject);
+                setDocumentTitle(updatedProject.prjname);
 
                 console.log("Saved for this session.");
             }
