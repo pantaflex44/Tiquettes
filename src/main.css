@@ -1,5 +1,12 @@
 @media print {
     .footer {
-        padding-top: 10mm;
+        position: absolute;
+        top: 5mm;
+        right: 10mm;
+        font-size: small;
+    }
+
+    .not_printable {
+        display: none;
     }
 }

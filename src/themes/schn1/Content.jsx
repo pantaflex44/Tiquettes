@@ -14,13 +14,13 @@ function Schneider1Theme({ item, style }) {
             marginTop: `calc(${style['--h']} * 0.05)`
         },
         icon: {
-            width: `calc(${style['--h']} * 0.25)`,
-            height: `calc(${style['--h']} * 0.25)`
+            width: `calc(${style['--h']} * 0.22)`,
+            height: `calc(${style['--h']} * 0.22)`
         },
         text: {
             textAlign: "center",
-            fontSize: "2.8mm",
-            fontWeight: "bold",
+            fontSize: "2.6mm",
+            fontWeight: "600",
             inlineSize: "150px",
             overflowWrap: "break-word",
             overflowY: "hidden",

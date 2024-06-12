@@ -17,7 +17,7 @@ export default function Main() {
     return (
         <React.StrictMode>
             <App />
-            <div style={{ marginTop: '1em', fontSize: 'small', color: 'darkgray' }} className='footer'>{pkg.title} {pkg.version} | <a href={pkg.repository.url} style={{ color: 'darkcyan' }} target="_blank">{pkg.repository.url}</a> | Licence {pkg.license} | {pkg.author} (pantaflex44) | 2024</div>
+            <div style={{ marginTop: '1em', fontSize: 'small', color: 'darkgray' }} className='footer'>{pkg.title} {pkg.version}<span className="not_printable"> | <a href={pkg.repository.url} style={{ color: 'darkcyan' }} target="_blank">{pkg.repository.url}</a> | Licence {pkg.license} | {pkg.author} (pantaflex44) | 2024</span></div>
         </React.StrictMode>)
         ;
 }

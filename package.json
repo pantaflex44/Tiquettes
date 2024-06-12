@@ -1,7 +1,7 @@
 {
   "name": "tiquettes",
   "title": "Tiquettes",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
   "keywords": [
     "tableau",
@@ -27,7 +27,8 @@
     "dev": "vite",
     "build": "vite build --mode production",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --port 8080"
+    "preview": "vite preview --port 8080",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
   },
   "dependencies": {
     "compare-versions": "^6.1.0",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
@@ -46,6 +48,7 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "vite": "^5.2.0",
     "vite-plugin-open-graph": "^2.0.4",
+    "vite-plugin-pwa": "^0.20.0",
     "vite-plugin-sitemap": "^0.6.2"
   }
 }

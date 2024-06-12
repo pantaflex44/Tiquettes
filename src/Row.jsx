@@ -25,7 +25,8 @@ function Row({
     onRowAddAfter = null,
     onRowDelete = null,
     rowAddAllowed = null,
-    rowDeleteAllowed = null
+    rowDeleteAllowed = null,
+    printFreeModuleAllowed = null
 }) {
     return (
         <div className="switchboard_row" id={`row_${rowPosition}`}>
@@ -56,6 +57,7 @@ function Row({
                         moveRightAllowed={(item) => moduleMoveRightAllowed(i, item)}
                         onMoveLeft={(item, moduleRef) => onModuleMoveLeft(i, item, moduleRef)}
                         onMoveRight={(item, moduleRef) => onModuleMoveRight(i, item, moduleRef)}
+                        printFreeModuleAllowed={() => printFreeModuleAllowed()}
                     />
                 ))}
             </div>

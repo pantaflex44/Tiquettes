@@ -5,12 +5,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques.</title>
+    <title>Tiquettes - Tableaux et armoires électriques.</title>
     <meta name="description" content="Générateur d'étiquettes pour tableaux / armoires électriques." />
     <meta name="author" content="Christophe LEMOINE" />
     <meta name="robots" content="index,follow" />
 
-    <link rel="icon" type="image/svg+xml" href="https://pantaflex44.github.io/Tiquettes/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#008b8b" />
+    <meta name="msapplication-TileColor" content="#00aba9" />
+    <meta name="theme-color" content="#ffffff" />
+
     <link rel="stylesheet" type="text/css" href="./styles.css" />
 
     <!-- Google Tag Manager -->
@@ -23,6 +31,12 @@
                     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-5RQFTV94');</script>
     <!-- End Google Tag Manager -->
+
+    <script>
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('Installable')
+        });
+    </script>
 </head>
 
 <body>
