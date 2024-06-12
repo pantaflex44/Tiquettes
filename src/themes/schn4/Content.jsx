@@ -12,18 +12,20 @@ function Schneider4Theme({ item, style }) {
             paddingInline: "1mm",
             width: "calc(100% - 2mm)",
             height: `calc(${style['--h']} * 0.12)`,
+            minHeight: `calc(${style['--h']} * 0.12)`,
+            maxHeight: `calc(${style['--h']} * 0.12)`,
             backgroundColor: "#009E4D",
             color: "white",
         },
         icon: {
             width: `calc(${style['--h']} * 0.25)`,
             height: `calc(${style['--h']} * 0.25)`,
-            marginTop: `calc(${style['--h']} * 0.1)`
+            marginTop: `calc((${style['--h']} * 0.1) + 1mm)`
         },
         text: {
             textAlign: "center",
             fontSize: "2.8mm",
-            fontWeight: "bold",
+            fontWeight: "500",
             inlineSize: "150px",
             overflowWrap: "break-word",
             overflowY: "hidden",

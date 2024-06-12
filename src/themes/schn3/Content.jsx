@@ -11,19 +11,20 @@ function Schneider2Theme({ item, style }) {
             overflow: "hidden",
             paddingInline: "1mm",
             width: "calc(100% - 2mm)",
-            paddingBlock: `calc(${style['--h']} * 0.01)`,
+            paddingTop: `calc(${style['--h']} * 0.01)`,
+            paddingBottom: "1.4mm",
             backgroundColor: "#009E4D",
             color: "white",
         },
         icon: {
-            width: `calc(${style['--h']} * 0.25)`,
-            height: `calc(${style['--h']} * 0.25)`,
-            marginTop: `calc(${style['--h']} * 0.1)`
+            width: `calc(${style['--h']} * 0.22)`,
+            height: `calc(${style['--h']} * 0.22)`,
+            marginTop: `calc((${style['--h']} * 0.1) + 0.4mm)`
         },
         text: {
             textAlign: "center",
             fontSize: "2.8mm",
-            fontWeight: "bold",
+            fontWeight: "500",
             inlineSize: "150px",
             overflowWrap: "break-word",
             overflowY: "hidden",

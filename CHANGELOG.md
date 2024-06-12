@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.6.0] - 2024-06-15
+
+### Améliorations
+
+- Amélioration des 4 thèmes Schneider
+
+### Corrections
+
+- Correction du dimensionnement des modules lors de l'impression 
+
+### Ajouts
+
+- Ajout d'une nomenclature automatique aux projets
+- Ajout d'options pour l'impression
+- Compatibilité PWA. Tiquettes est désormais installable, telle une application native, sur les appareils compatibles 
+
+
 ## [1.5.0] - 2024-06-08
 
 ### Améliorations

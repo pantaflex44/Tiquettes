@@ -57,7 +57,7 @@ En premier, se regroupe le nom donné au projet ainsi que la version d'exportati
 
 Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
-## Utilisation
+## L'éditeur
 
 ### Descriptif
 
@@ -181,6 +181,15 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 - Thème Legrand - Couleur - Tertiaire
 
 ![Thème Legrand - Couleur - Tertiaire](docs/_theme_lgd_cter.png)
+
+## Nomenclature / Résumé
+
+Tiquettes vous propose de résumer votre projet.
+
+La nomenclature est générée automatiquement en fonction des définitions indiquées dans l'éditeur.
+
+![Nomenclature](docs/_summary.png)
+
 
 ## Immortaliser son travail
 

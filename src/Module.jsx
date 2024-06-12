@@ -26,7 +26,8 @@ function Module({
     onClear = null,
     onEdit = null,
     onMoveLeft = null,
-    onMoveRight = null
+    onMoveRight = null,
+    printFreeModuleAllowed = null
 }) {
     const moduleRef = useRef();
 
@@ -80,9 +81,9 @@ function Module({
 
     }, [beforeUpdate, item, style, currentTheme, themeUpdated]);
 
-    return item && <div className={`module ${item.free && import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' ? 'noprint' : ''}`} id={`module_${rowPosition}_${modulePosition}`} data-row={rowPosition} style={{
+    return item && <div className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''}`.trim()} id={`module_${rowPosition}_${modulePosition}`} data-row={rowPosition} style={{
         ...style,
-        "--sw": `calc(${style['--sw']} * ${item.span})`,
+        "--sw": `calc((${style['--sw']} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
         color: item.free ? 'darkgray' : 'black'
     }}
         tabIndex="0"

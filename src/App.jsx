@@ -9,6 +9,7 @@ import themesList from './themes.json';
 
 import Row from "./Row";
 import Popup from "./Popup";
+import ContentEditable from "./ContentEditable";
 
 import newProjectIcon from './assets/new_project.svg';
 import uploadProjectIcon from './assets/upload.svg';
@@ -16,7 +17,10 @@ import clearProjectIcon from './assets/x.svg';
 import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
-import ContentEditable from "./ContentEditable";
+import summaryRowIcon from './assets/summary_row.svg';
+import summaryPositionIcon from './assets/summary_position.svg';
+import summaryNoPicto from './assets/summary_nopicto.svg';
+import summaryIcon from './assets/list.svg';
 
 
 function App() {
@@ -24,8 +28,16 @@ function App() {
     const projectRef = useRef();
     const switchboardRef = useRef();
 
+    const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
+
+    const defaultPrintOptions = useMemo(() => ({
+        labels: true,
+        summary: false,
+        freeModules: true,
+    }), []);
+    const [printOptions, setPrintOptions] = useState({ ...defaultPrintOptions });
 
     const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
@@ -186,9 +198,11 @@ function App() {
             });
         });
 
+        setPrintOptions({ ...defaultPrintOptions });
         setDocumentTitle(name);
+        setTab(1);
         scrollToProject();
-    }, [modulesAutoId, createRow, defaultProject, defaultTheme]);
+    }, [defaultTheme, defaultPrintOptions, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
         importRef.current.value = "";
@@ -235,6 +249,8 @@ function App() {
                     //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
                     //setDocumentTitle(filename);
 
+                    setPrintOptions({ ...defaultPrintOptions });
+                    setTab(1);
                     scrollToProject();
                 } catch (err) {
                     importRef.current.value = "";
@@ -441,6 +457,7 @@ function App() {
         if (selected) {
             setTheme(selected);
             setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
+            setTab(1);
         }
     }
 
@@ -597,6 +614,10 @@ function App() {
         return switchboard.rows.length > 1;
     }
 
+    const printFreeModuleAllowed = () => {
+        return printOptions.freeModules;
+    }
+
     useEffect(() => {
         let t = null;
 
@@ -653,11 +674,30 @@ function App() {
                     <span>Exporter</span>
                 </button>
 
-                <button className="button_group-print_project" onClick={() => {
-                    printProject();
-                }} title="Imprimer...">
+                <button className="button_group-print_project dropdown_container" title="Imprimer...">
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
+                    <div className="dropdown">
+                        <div className="dropdown_header">Options</div>
+                        <div className="dropdown_item" title="Imprimer les étiquettes">
+                            <input id="print_labels" name="print_labels" type="checkbox" checked={printOptions.labels} onChange={(e) => setPrintOptions((old) => ({ ...old, labels: e.target.checked }))} />
+                            <label htmlFor="print_labels">Etiquettes</label>
+                        </div>
+                        <div className="dropdown_item" title="Imprimer la nomenclature">
+                            <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({ ...old, summary: e.target.checked }))} />
+                            <label htmlFor="print_summary">Nomenclature</label>
+                        </div>
+                        <div className="dropdown_separator"></div>
+                        <div className="dropdown_item" title="Imprimer les emplacements libres de chaque rangée d'étiquettes">
+                            <input id="print_free" name="print_free" type="checkbox" checked={printOptions.freeModules} onChange={(e) => setPrintOptions((old) => ({ ...old, freeModules: e.target.checked }))} disabled={!printOptions.labels} />
+                            <label htmlFor="print_free">Emplacements libres</label>
+                        </div>
+                        <div className="dropdown_footer">
+                            <button title="Lancer l&apos;impression" onClick={() => {
+                                printProject();
+                            }}>Lancer l&apos;impression...</button>
+                        </div>
+                    </div>
                 </button>
 
                 <div className="button_group-separator"></div>
@@ -672,7 +712,7 @@ function App() {
                 <div className="button_group-separator"></div>
             </nav>
 
-            <h3 ref={projectRef}>
+            <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <img src={projectIcon} width={24} height={24} alt="Projet courant" />
                 <ContentEditable
                     value={switchboard.prjname ?? defaultProjectName}
@@ -722,7 +762,18 @@ function App() {
                 </li>
             </ul>
 
-            <div ref={switchboardRef} className="switchboard">
+            <nav className="tabPages">
+                <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()} onClick={() => setTab(1)}>
+                    <img src={projectIcon} width={20} height={20} alt="Editeur" />
+                    <span>Editeur</span>
+                </div>
+                <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()} onClick={() => setTab(2)}>
+                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
+                    <span>Nomenclature</span>
+                </div>
+            </nav>
+
+            <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 {switchboard.rows.map((row, i) => (
                     <Row
                         key={i}
@@ -761,9 +812,45 @@ function App() {
 
                         rowAddAllowed={() => rowAddAllowed()}
                         rowDeleteAllowed={() => rowDeleteAllowed()}
+
+                        printFreeModuleAllowed={() => printFreeModuleAllowed()}
                     />
                 ))}
+            </div>
 
+            <div className={`summary ${tab === 2 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
+                <table>
+                    <caption>
+                        Nomenclature: {switchboard.prjname}
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '150px', paddingRight: '1em' }}>Rangée</th>
+                            <th style={{ width: '120px', paddingRight: '1em' }}>Position</th>
+                            <th style={{ width: '80px', paddingRight: '1em', textAlign: 'center' }}>Type</th>
+                            <th style={{ width: '150px', paddingRight: '1em' }}>Identifiant</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {switchboard.rows.map((row, i) => {
+                            let li = -1;
+                            return row.map((module, j) => {
+                                if (!module.free) {
+                                    const ret = <tr key={`${i}-${j}`} className={`${li !== i ? 'newrow' : ''}`}>
+                                        <td className="summary_row">{li !== i ? <div><img src={summaryRowIcon} width={16} height={16} alt="Rangée" /><span>Rangée {i + 1}</span></div> : null}</td>
+                                        <td className="summary_position"><div><img src={summaryPositionIcon} width={16} height={16} alt="Position" /><span>P{`${j + 1}`.padStart(2, '0')}</span></div></td>
+                                        <td className="summary_type"><div>{module.icon ? <img src={module.icon} width={16} height={16} alt="Pictogramme" /> : <img src={summaryNoPicto} width={16} height={16} alt="Remplacement" />}</div></td>
+                                        <td className="summary_id"><div>{module.id}</div></td>
+                                        <td className="summary_text"><div>{module.text}</div></td>
+                                    </tr>;
+                                    if (li !== i) li = i;
+                                    return ret;
+                                }
+                            })
+                        })}
+                    </tbody>
+                </table>
             </div>
 
             {
