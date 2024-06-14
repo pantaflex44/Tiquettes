@@ -6,6 +6,8 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 https://pantaflex44.github.io/Tiquettes/
 
+Faire un don: https://www.paypal.com/donate/?hosted_button_id=MCKGAHRE6QE54
+
 <u>Licence</u>: MIT<br />
 <u>Auteur</u>: Christophe LEMOINE <pantaflex (at) hotmail (dot) fr><br />
 <u>Création</u>: 26/05/2024<br />
