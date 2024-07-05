@@ -1,18 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="Calque_2" data-name="Calque 2" viewBox="0 0 81 78.21">
-    <defs>
-        <style>
-            .cls-1 {
-
-            }
-        </style>
-    </defs>
-    <g id="Calque_1-2" data-name="Calque 1">
-        <g>
-            <path class="cls-1"
-                d="m80.99,5.54c0-.43-.03-.87-.12-1.3C80.33,1.71,78.1,0,75.36,0,52.17,0,28.97,0,5.77,0,2.36,0,0,2.28,0,5.59,0,27.93,0,50.26,0,72.6c0,3.34,2.35,5.61,5.8,5.61,11.56,0,23.12,0,34.68,0,11.61,0,23.21,0,34.82,0,3.32,0,5.7-2.31,5.7-5.52,0-22.38,0-44.76,0-67.14Zm-24.4,61.85H24.41l-16.09-27.87L24.41,11.65h32.18l16.09,27.87-16.09,27.87Z" />
-            <ellipse class="cls-1" cx="33.01" cy="30.78" rx="2.91" ry="4.16" />
-            <ellipse class="cls-1" cx="47.99" cy="30.78" rx="2.91" ry="4.16" />
-            <ellipse class="cls-1" cx="40.5" cy="49.09" rx="4.16" ry="2.91" />
-        </g>
-    </g>
-</svg>
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-outlet"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><circle cx="9" cy="12" r=".5" fill="currentColor" /><circle cx="15" cy="12" r=".5" fill="currentColor" /></svg>

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.2] - 2024-07-05
+
+### Améliorations
+
+- Modification des icones pour une amélioration de la qualité d'impression
+
+### Ajouts
+
+- Ajout d'annotations pour chaque module. Seulement visible sur la nomenclature.
+
+
 ## [1.6.0] - 2024-06-15
 
 ### Améliorations

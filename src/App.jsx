@@ -55,6 +55,7 @@ function App() {
         id: `${defaultModuleId}?`,
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
+        desc: import.meta.env.VITE_DEFAULT_DESC,
         free: true,
         span: 1
     }), [defaultModuleId]);
@@ -318,7 +319,8 @@ function App() {
 
         const id = editor.currentModule.id.trim().toUpperCase();
         const icon = editor.currentModule.icon;
-        const text = editor.currentModule.text.trim();
+        const text = (editor.currentModule.text ?? "").trim();
+        const desc = (editor.currentModule.desc ?? "").trim();
 
         if (!(/\w*/.test(id))) {
             setEditor((old) => ({
@@ -338,6 +340,15 @@ function App() {
             return;
         }
 
+        if (!(/\w*/.test(desc))) {
+            setEditor((old) => ({
+                ...old,
+                currentModule: { ...old.currentModule, desc: "" },
+                errors: [...old.errors, "Une description valide est requise."]
+            }));
+            return;
+        }
+
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
                 if (i !== editor.rowIndex) return row;
@@ -350,7 +361,8 @@ function App() {
                         free: false,
                         id,
                         icon,
-                        text
+                        text,
+                        desc
                     };
                 });
 
@@ -825,11 +837,12 @@ function App() {
                     </caption>
                     <thead>
                         <tr>
-                            <th style={{ width: '150px', paddingRight: '1em' }}>Rangée</th>
-                            <th style={{ width: '120px', paddingRight: '1em' }}>Position</th>
-                            <th style={{ width: '80px', paddingRight: '1em', textAlign: 'center' }}>Type</th>
-                            <th style={{ width: '150px', paddingRight: '1em' }}>Identifiant</th>
-                            <th>Description</th>
+                            <th style={{ width: '120px', paddingRight: '1em' }}>Rangée</th>
+                            <th style={{ width: '60px', paddingRight: '1em' }}>Position</th>
+                            <th style={{ width: '70px', paddingRight: '1em', textAlign: 'center' }}>Type</th>
+                            <th style={{ width: '130px', paddingRight: '1em' }}>Identifiant</th>
+                            <th style={{ width: '210px', paddingRight: '1em' }}>Libellé</th>
+                            <th>Annotations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -843,6 +856,7 @@ function App() {
                                         <td className="summary_type"><div>{module.icon ? <img src={module.icon} width={16} height={16} alt="Pictogramme" /> : <img src={summaryNoPicto} width={16} height={16} alt="Remplacement" />}</div></td>
                                         <td className="summary_id"><div>{module.id}</div></td>
                                         <td className="summary_text"><div>{module.text}</div></td>
+                                        <td className="summary_text"><div>{module.desc}</div></td>
                                     </tr>;
                                     if (li !== i) li = i;
                                     return ret;
@@ -878,7 +892,7 @@ function App() {
                         </div>
 
                         <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Description</label>
+                            <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Libellé</label>
                             <textarea
                                 name="editor_text"
                                 id={`editor_text_${editor.currentModule.id.trim()}`}
@@ -907,6 +921,17 @@ function App() {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                            <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br /><span style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
+                            <textarea
+                                name="editor_desc"
+                                id={`editor_desc_${editor.currentModule.id.trim()}`}
+                                value={editor.currentModule.desc}
+                                onChange={(e) => updateModuleEditor({ desc: e.target.value })}
+                                rows={2}
+                            />
                         </div>
 
                         {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{ '--left_column_size': '100px' }}>

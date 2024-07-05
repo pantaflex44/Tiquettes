@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="Calque_2" data-name="Calque 2" viewBox="0 0 68 68">
-    <defs>
-        <style>
-            .cls-1 {
-
-            }
-        </style>
-    </defs>
-    <g id="Calque_1-2" data-name="Calque 1">
-        <path class="cls-1"
-            d="m34,0C15.22,0,0,15.22,0,34s15.22,34,34,34,34-15.22,34-34S52.78,0,34,0Zm0,4.74v29.26L13.51,13.51s8.28-9.26,20.49-8.77Zm-18.31,31h-6.1c-.96,0-1.74-.78-1.74-1.74s.78-1.74,1.74-1.74h6.1c.96,0,1.74.78,1.74,1.74s-.78,1.74-1.74,1.74Zm20.49,23.1c0,.96-.78,1.74-1.74,1.74s-1.74-.78-1.74-1.74v-6.1c0-.96.78-1.74,1.74-1.74s1.74.78,1.74,1.74v6.1Zm20.49-23.1h-6.1c-.96,0-1.74-.78-1.74-1.74s.78-1.74,1.74-1.74h6.1c.96,0,1.74.78,1.74,1.74s-.78,1.74-1.74,1.74Z" />
-    </g>
-</svg>
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" /><path d="M3 10h18" /><path d="M10 3v18" /></svg>
