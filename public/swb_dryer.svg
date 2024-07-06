@@ -1,1 +1,15 @@
-<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wash-dry-3"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0" /><path d="M12 12h.01" /><path d="M9 12h.01" /><path d="M15 12h.01" /></svg>
+<?xml version="1.0"?>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-wash-machine" stroke-linejoin="round" stroke-width="2">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path d="m0,0l24,0l0,24l-24,0l0,-24z" fill="#000000" fill-opacity="0" id="svg_1" stroke="#000000" stroke-opacity="0"/>
+  <path d="m4.18,3m0,2a2.27,2 0 0 1 2.27,-2l11.35,0a2.27,2 0 0 1 2.27,2l0,14a2.27,2 0 0 1 -2.27,2l-11.35,0a2.27,2 0 0 1 -2.27,-2l0,-14z" fill="#000000" fill-opacity="0" id="svg_2" stroke="#000000"/>
+  <path d="m12,14m-4,0a4,4 0 1 0 8,0a4,4 0 1 0 -8,0" fill="#000000" fill-opacity="0" id="svg_3" stroke="#000000"/>
+  <path d="m8,6l0.01,0" fill="#000000" fill-opacity="0" id="svg_4" stroke="#000000"/>
+  <path d="m11,6l0.01,0" fill="#000000" fill-opacity="0" id="svg_5" stroke="#000000"/>
+  <path d="m13.41,6l4.36,0" fill="#000000" fill-opacity="0" id="svg_6" stroke="#000000"/>
+  <path d="m6.57,6.04l2,0" fill="#000000" fill-opacity="0" id="svg_8" stroke="#000000"/>
+  <path d="m9.75,6.04l2,0" fill="#000000" fill-opacity="0" id="svg_9" stroke="#000000"/>
+  <path d="m12.04,14.04m-1.64,0a1.64,1.64 0 1 0 3.29,0a1.64,1.64 0 1 0 -3.29,0" fill="#000000" id="svg_10" stroke="#000000" stroke-opacity="0"/>
+ </g>
+</svg>

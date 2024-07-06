@@ -1,1 +1,12 @@
-<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 11h4a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-2a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-6a1 1 0 0 1 1 -1z" /><path d="M21 12v6a3 3 0 0 1 -2.824 2.995l-.176 .005h-6a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1z" /><path d="M18 3a3 3 0 0 1 2.995 2.824l.005 .176v2a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h6z" /><path d="M9 4v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h2a1 1 0 0 1 1 1z" /></svg>
+<?xml version="1.0"?>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-cooker" stroke-linejoin="round" stroke-width="2">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path d="m0,0l24,0l0,24l-24,0l0,-24z" fill="#000000" fill-opacity="0" id="svg_1"/>
+  <path d="m3.45,3m0,1.99a2.42,1.99 0 0 1 2.42,-1.99l12.11,0a2.42,1.99 0 0 1 2.42,1.99l0,13.92a2.42,1.99 0 0 1 -2.42,1.99l-12.11,0a2.42,1.99 0 0 1 -2.42,-1.99l0,-13.92z" fill="#000000" fill-opacity="0" id="svg_5" stroke="#000000" transform="matrix(1 0 0 1 0 0)"/>
+  <ellipse cx="8.65" cy="8.6" fill="#000000" id="svg_12" rx="2.65" ry="2.65" stroke="#000000" stroke-opacity="0"/>
+  <ellipse cx="15.05" cy="8.6" fill="#000000" id="svg_13" rx="2.65" ry="2.65" stroke="#000000" stroke-opacity="0"/>
+  <ellipse cx="8.65" cy="15.4" fill="#000000" id="svg_15" rx="2.65" ry="2.65" stroke="#000000" stroke-opacity="0" transform="matrix(1 0 0 1 0 0)"/>
+  <ellipse cx="15.05" cy="15.4" fill="#000000" id="svg_14" rx="2.65" ry="2.65" stroke="#000000" stroke-opacity="0" transform="matrix(1 0 0 1 0 0)"/>
+ </g>
+</svg>

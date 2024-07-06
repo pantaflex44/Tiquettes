@@ -1,1 +1,19 @@
-<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-car"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" /></svg>
+<?xml version="1.0"?>
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-car" stroke-linejoin="round" stroke-width="2">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path d="m0,0l24,0l0,24l-24,0l0,-24z" fill="#000000" fill-opacity="0" id="svg_1" stroke="#000000" stroke-opacity="0" transform="matrix(1 0 0 1 0 0)"/>
+  <path d="m21.38,13.89l-2.38,2.38" fill="#000000" id="svg_18" stroke="#ffffff" stroke-width="0"/>
+  <g id="svg_24" transform="matrix(1 0 0 1 0 0)">
+   <path d="m6.53,3.69l6.35,6.35l-1.59,1.59a4.5,4.5 0 1 1 -6.36,-6.36l1.59,-1.59z" fill="#000000" fill-opacity="0" id="svg_25" stroke="#000000"/>
+   <path d="m2.04,14.52l2.71,-2.71" fill="#000000" fill-opacity="0" id="svg_26" stroke="#000000"/>
+   <path d="m10.56,2.14l-2.71,2.71" fill="#000000" fill-opacity="0" id="svg_27" stroke="#000000"/>
+   <path d="m14.43,6.01l-2.71,2.71" fill="#000000" fill-opacity="0" id="svg_28" stroke="#000000"/>
+  </g>
+  <g id="svg_30">
+   <path d="m13.31,20.69m-1.17,0a1.17,1.19 0 1 0 2.33,0a1.17,1.19 0 1 0 -2.33,0" fill="#000000" fill-opacity="0" id="svg_2" stroke="#000000" stroke-width="1.1"/>
+   <path d="m19.13,20.69m-1.17,0a1.17,1.19 0 1 0 2.33,0a1.17,1.19 0 1 0 -2.33,0" fill="#000000" fill-opacity="0" id="svg_3" stroke="#000000" stroke-width="1.1"/>
+   <path d="m12.14,20.69l-1.17,0l0,-3.57l1.17,-2.98l5.24,0l2.33,2.98l0.58,0a1.17,1.19 0 0 1 1.17,1.19l0,2.38l-1.17,0m-2.33,0l-3.5,0m-3.5,-3.57l8.74,0m-3.5,0l0,-2.98" fill="#000000" fill-opacity="0" id="svg_4" stroke="#000000" stroke-width="1.1"/>
+  </g>
+ </g>
+</svg>
