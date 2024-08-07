@@ -63,7 +63,7 @@ h4 {
 }
 
 .project li:not(.nobefore)::before {
-    content: '˫';
+    content: '›';
     margin-right: 0.5em;
 }
 
@@ -256,6 +256,14 @@ option[disabled] {
     font-weight: bold;
 }
 
+.button_group.disabled {
+    pointer-events: none;
+}
+
+.button_group.disabled * {
+    color: darkgray;
+}
+
 .summary table {
     font-size: smaller;
     border-collapse: collapse;
@@ -373,7 +381,7 @@ option[disabled] {
     background-color: rgb(237, 255, 255);
 }
 
-.tabPages .tabPages_page.selected {
+.tabPages:not(.disabled) .tabPages_page.selected {
     background-color: #f0f0f0;
     font-weight: bold;
     color: black;
@@ -383,6 +391,11 @@ option[disabled] {
 .tabPages .tabPages_page.selected img {
     display: block;
     margin-top: -2px;
+}
+
+.tabPages.disabled {
+    pointer-events: none;
+    filter: grayscale(1);
 }
 
 @media screen and (max-width: 640px) {
@@ -457,4 +470,8 @@ option[disabled] {
     .notprintable {
         display: none !important;
     }
+}
+
+.icon_selector_box:focus-within, .icon_selector_box.focused {
+    border-color: darkcyan !important;
 }

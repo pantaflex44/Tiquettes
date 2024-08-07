@@ -32,6 +32,19 @@ function Schneider1Theme({ item, style }) {
             color: "white",
             height: `calc(${style['--h']} * 0.34)`,
             maxHeight: `calc(${style['--h']} * 0.34)`
+        },
+        paste: {
+            textAlign: "center",
+            fontSize: "3mm",
+            fontWeight: "600",
+            inlineSize: "150px",
+            overflowWrap: "break-word",
+            overflowY: "hidden",
+            paddingInline: "1mm",
+            paddingTop: "1mm",
+            paddingBottom: "1.2mm",
+            width: "calc(100% - 2mm)",
+            color: "darkcyan",
         }
     };
 
@@ -49,9 +62,8 @@ function Schneider1Theme({ item, style }) {
         }
 
         <div
-            style={styles.text}
-            dangerouslySetInnerHTML={{ __html: item.text.replaceAll("\n", "<br />") }}
-        ></div>
+                style={styles.text}
+                dangerouslySetInnerHTML={{ __html: item.text.replaceAll("\n", "<br />") }}></div>
 
     </>);
 }

@@ -4,7 +4,7 @@ import sanitizeFilename from 'sanitize-filename';
 
 import './app.css';
 import * as pkg from '../package.json';
-import swbIcons from './switchboard_icons.json';
+/*import swbIcons from './switchboard_icons.json';*/
 import themesList from './themes.json';
 
 import Row from "./Row";
@@ -21,6 +21,8 @@ import summaryRowIcon from './assets/summary_row.svg';
 import summaryPositionIcon from './assets/summary_position.svg';
 import summaryNoPicto from './assets/summary_nopicto.svg';
 import summaryIcon from './assets/list.svg';
+import IconSelector from "./IconSelector";
+import Module from "./Module";
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
+    const [clipboard, setClipboard] = useState(null);
+    const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -199,6 +203,7 @@ function App() {
             });
         });
 
+        setClipboard(null);
         setPrintOptions({ ...defaultPrintOptions });
         setDocumentTitle(name);
         setTab(1);
@@ -208,6 +213,7 @@ function App() {
     const resetProject = useCallback(() => {
         importRef.current.value = "";
 
+        setClipboard(null);
         setDocumentTitle(defaultProjectName);
         setTheme(defaultTheme);
 
@@ -250,6 +256,7 @@ function App() {
                     //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
                     //setDocumentTitle(filename);
 
+                    setClipboard(null);
                     setPrintOptions({ ...defaultPrintOptions });
                     setTab(1);
                     scrollToProject();
@@ -519,13 +526,19 @@ function App() {
     }
 
     const handleModuleClear = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
+        if (confirm("Êtes-vous certain de vouloir libérer ce module?")) {
+            const row = switchboard.rows[rowIndex];
+            const currentModule = row[moduleIndex];
 
-        if (!currentModule.free) {
-            moduleClear(rowIndex, moduleIndex);
-            moduleFocus(rowIndex + 1, moduleIndex + 1);
+            if (!currentModule.free) {
+                moduleClear(rowIndex, moduleIndex);
+                moduleFocus(rowIndex + 1, moduleIndex + 1);
+            }
+
+            return true;
         }
+
+        return false;
     }
 
     const handleModuleEdit = (rowIndex, moduleIndex) => {
@@ -539,7 +552,7 @@ function App() {
         const currentModule = row[moduleIndex];
         const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
 
-        if (!currentModule.free && prevModule?.free === true && prevModule?.span === 1) {
+        if ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && prevModule?.free === true && prevModule?.span === 1) {
             row[moduleIndex - 1] = currentModule;
             row[moduleIndex] = prevModule;
             rows[rowIndex] = row;
@@ -556,7 +569,7 @@ function App() {
         const currentModule = row[moduleIndex];
         const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
 
-        if (!currentModule.free && nextModule?.free === true && nextModule?.span === 1) {
+        if ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && nextModule?.free === true && nextModule?.span === 1) {
             row[moduleIndex + 1] = currentModule;
             row[moduleIndex] = nextModule;
             rows[rowIndex] = row;
@@ -565,6 +578,81 @@ function App() {
                 return modulesAutoId({ ...old, rows });
             })
         }
+    }
+
+    const handleModuleCopy = (rowIndex, moduleIndex) => {
+        const row = switchboard.rows[rowIndex];
+        const currentModule = row[moduleIndex];
+
+        if (!currentModule.free) setClipboard(currentModule);
+    }
+
+    const handleModulePaste = (rowIndex, moduleIndex) => {
+        if (!clipboard) return;
+        if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
+
+        const row = switchboard.rows[rowIndex];
+
+        const currentModule = row[moduleIndex];
+        if (currentModule.span < clipboard.span) {
+            for (let i = 0; i < clipboard.span - 1; i++) moduleGrow(rowIndex, moduleIndex);
+        }
+        if (currentModule.span > clipboard.span) {
+            for (let i = 0; i < (currentModule.span - clipboard.span); i++) moduleShrink(rowIndex, moduleIndex);
+        }
+
+        setSwitchboard((old) => {
+            let rows = old.rows.map((row, i) => {
+                if (i !== rowIndex) return row;
+
+                let r = row.map((module, j) => {
+                    if (j !== moduleIndex) return module;
+
+                    return {
+                        ...module,
+                        free: clipboard.free,
+                        span: clipboard.span,
+                        icon: clipboard.icon,
+                        text: clipboard.text,
+                        desc: clipboard.desc,
+                    };
+                });
+
+                return r;
+            });
+
+            return modulesAutoId({ ...old, rows });
+        });
+
+        setClipboard(null);
+    }
+
+    const modulePasteAllowed = (rowIndex, moduleIndex) => {
+        if (!clipboard) return false;
+
+        const row = switchboard.rows[rowIndex];
+
+        const currentModule = row[moduleIndex];
+        if (currentModule.span >= clipboard.span) return true;
+
+        let allowed = true;
+        let max = clipboard.span;
+        let i = 0;
+        while (max > 0) {
+            const nextModule = (moduleIndex + clipboard.span) < switchboard.stepsPerRows ? row[moduleIndex + i] : null;
+            if (!nextModule || !nextModule.free || nextModule.span !== 1) {
+                allowed = false;
+                break;
+            }
+
+            max -= nextModule.span;
+            i++;
+        }
+        return allowed;
+    }
+
+    const handleCancelPaste = () => {
+        setClipboard(null);
     }
 
     const moduleShrinkAllowed = (rowIndex, moduleIndex) => {
@@ -587,7 +675,7 @@ function App() {
         const currentModule = row[moduleIndex];
         const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
 
-        return (!currentModule.free && prevModule?.free === true && prevModule?.span === 1);
+        return ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && prevModule?.free === true && prevModule?.span === 1);
     }
 
     const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
@@ -595,7 +683,7 @@ function App() {
         const currentModule = row[moduleIndex];
         const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
 
-        return (!currentModule.free && nextModule?.free === true && nextModule?.span === 1);
+        return ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && nextModule?.free === true && nextModule?.span === 1);
     }
 
     const handleRowAddAfter = (rowIndex) => {
@@ -661,9 +749,19 @@ function App() {
         }
     }, [resetProject, switchboard]);
 
+    useEffect(() => {
+        if (window) {
+            window.document.body.style.overflow = editor || newProjectProperties ? 'hidden' : 'auto';
+        }
+    }, [editor, newProjectProperties]);
+
     return (
-        <>
-            <nav className="button_group">
+        <div tabIndex={-1} onKeyUp={(e) => {
+            if (e.key === 'Escape') {
+                setClipboard(null);
+            }
+        }}>
+            <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <button className="button_group-new_project" onClick={() => { openProjectPropertiesEditor(); }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
                     <span>Nouveau projet</span>
@@ -741,7 +839,7 @@ function App() {
                         fontWeight: 'bold',
                         maxWidth: '100%'
                     }}
-                    editable={true}
+                    editable={!UIFrozen}
                 />
                 <sup>v{switchboard.prjversion ?? 1}</sup>
             </h3 >
@@ -761,6 +859,8 @@ function App() {
                     <select
                         value={theme?.name ?? defaultTheme}
                         onChange={(e) => { updateTheme(e.target.value); }}
+                        style={{ maxWidth: '100%' }}
+                        disabled={UIFrozen}
                     >
                         {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
                             const g = e[0];
@@ -774,7 +874,7 @@ function App() {
                 </li>
             </ul>
 
-            <nav className="tabPages">
+            <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()} onClick={() => setTab(1)}>
                     <img src={projectIcon} width={20} height={20} alt="Editeur" />
                     <span>Editeur</span>
@@ -810,6 +910,12 @@ function App() {
 
                         onModuleClear={(moduleIndex, item) => handleModuleClear(i, moduleIndex, item)}
                         onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
+
+                        onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
+                        onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
+                        onModuleCancelPaste={() => handleCancelPaste()}
+                        modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
+                        hasClipboard={clipboard !== null}
 
                         onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
                         onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
@@ -867,6 +973,8 @@ function App() {
                 </table>
             </div>
 
+
+
             {
                 editor && (
                     <Popup
@@ -874,70 +982,107 @@ function App() {
                         showCloseButton={true}
                         onCancel={() => setEditor(null)}
                         onOk={() => applyModuleEditor()}
+                        width={440}
+                        className="popup_flex"
+                        additionalButtons={[
+                            {
+                                text: "Supprimer",
+                                callback: () => { if (handleModuleClear(editor.rowIndex, editor.moduleIndex, editor.currentModule)) { setEditor(null) } },
+                                style: { color: 'red', borderColor: 'red' },
+                                disabled: editor.currentModule.free
+                            }
+                        ]}
                     >
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
-                            <input
-                                type="text"
-                                name="editor_id"
-                                id={`editor_id_${editor.currentModule.id.trim()}`}
-                                value={editor.currentModule.id}
-                                onChange={(e) => updateModuleEditor({ id: e.target.value })}
-                                autoFocus
-                            />
-                        </div>
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <div></div>
-                            <label style={{ fontSize: "small", color: "#777" }}>˫ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
+                        <div style={{ flex: 1 }}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
+                                <input
+                                    type="text"
+                                    name="editor_id"
+                                    id={`editor_id_${editor.currentModule.id.trim()}`}
+                                    value={editor.currentModule.id}
+                                    onChange={(e) => updateModuleEditor({ id: e.target.value })}
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <div></div>
+                                <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
+                            </div>
+
+                            <div className="popup_row" style={{ alignItems: 'center', '--left_column_size': '100px' }}>
+                                <label>Pictogramme</label>
+                                <IconSelector value={editor.currentModule.icon} onChange={(selectedIcon) => updateModuleEditor({ icon: selectedIcon })} />
+                                {/**<div className="radio_group">
+                                    {swbIcons.map((icon, i) => (
+                                        <div className="radio" title={icon.title} key={i}>
+                                            <input
+                                                type="radio"
+                                                name="editor_icon"
+                                                id={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}
+                                                value={icon.filename}
+                                                checked={(icon.filename !== '' ? icon.filename : null) === editor.currentModule.icon}
+                                                onChange={(e) => updateModuleEditor({ icon: e.target.value !== '' ? e.target.value : null })}
+                                            />
+                                            <label htmlFor={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}>
+                                                {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} alt={icon.title} /> : icon.title}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>**/}
+                            </div>
+
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Libellé</label>
+                                <textarea
+                                    name="editor_text"
+                                    id={`editor_text_${editor.currentModule.id.trim()}`}
+                                    value={editor.currentModule.text}
+                                    onChange={(e) => updateModuleEditor({ text: e.target.value })}
+                                    rows={3}
+                                />
+                            </div>
+
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br /><span style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
+                                <textarea
+                                    name="editor_desc"
+                                    id={`editor_desc_${editor.currentModule.id.trim()}`}
+                                    value={editor.currentModule.desc}
+                                    onChange={(e) => updateModuleEditor({ desc: e.target.value })}
+                                    rows={2}
+                                />
+                            </div>
+
+                            {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <div></div>
+                                <div className="popup_error">{error}</div>
+                            </div>)}
                         </div>
 
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Libellé</label>
-                            <textarea
-                                name="editor_text"
-                                id={`editor_text_${editor.currentModule.id.trim()}`}
-                                value={editor.currentModule.text}
-                                onChange={(e) => updateModuleEditor({ text: e.target.value })}
-                                rows={3}
-                            />
-                        </div>
-
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label>Pictogramme</label>
-                            <div className="radio_group">
-                                {swbIcons.map((icon, i) => (
-                                    <div className="radio" title={icon.title} key={i}>
-                                        <input
-                                            type="radio"
-                                            name="editor_icon"
-                                            id={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}
-                                            value={icon.filename}
-                                            checked={(icon.filename !== '' ? icon.filename : null) === editor.currentModule.icon}
-                                            onChange={(e) => updateModuleEditor({ icon: e.target.value !== '' ? e.target.value : null })}
-                                        />
-                                        <label htmlFor={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}>
-                                            {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} alt={icon.title} /> : icon.title}
-                                        </label>
-                                    </div>
-                                ))}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '93%', borderBottom: '1px solid lightgray' }}>
+                            <h5 style={{ color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0 }}>Démonstration</h5>
+                            <div style={{ borderRadius: '5px', border: '1px solid darkgray', width: 'min-content', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', minHeight: `calc(${switchboard.height}mm + 1mm)`, overflowY: 'hidden' }}>
+                                <Module
+                                    isDemo={true}
+                                    item={{
+                                        id: editor.currentModule.id,
+                                        icon: editor.currentModule.icon,
+                                        text: editor.currentModule.text,
+                                        desc: editor.currentModule.desc,
+                                        free: false,
+                                        span: editor.currentModule.span
+                                    }}
+                                    modulePosition={1}
+                                    rowPosition={1}
+                                    theme={theme}
+                                    style={{
+                                        "--h": `calc(${switchboard.height}mm + 1mm)`,
+                                        "--sw": `calc(${stepSize}mm + 1px)`
+                                    }}
+                                />
                             </div>
                         </div>
-
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br /><span style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
-                            <textarea
-                                name="editor_desc"
-                                id={`editor_desc_${editor.currentModule.id.trim()}`}
-                                value={editor.currentModule.desc}
-                                onChange={(e) => updateModuleEditor({ desc: e.target.value })}
-                                rows={2}
-                            />
-                        </div>
-
-                        {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <div></div>
-                            <div className="popup_error">{error}</div>
-                        </div>)}
                     </Popup >
                 )
             }
@@ -1011,7 +1156,7 @@ function App() {
                 )
             }
 
-        </>
+        </div>
     )
 }
 

@@ -81,9 +81,30 @@ Le symbole `→` vous permet de déplacer le module d'une position sur la droite
 
 ![Menu contextuel du bas](docs/_bottom.png)
 
-Le symbole `Corbeille` (ou la touche `Suppr` du clavier) permet de libérer le module. Il perdra son identifiant, son icône, et sa définition mais conservera sa taille. Il pourra donc de nouveau être englobé dans l'agrandissement des modules précédents.
-
 Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le module en question.
+
+#### Copier / Coller
+
+Le symbole suivant permet de copier le module. Celà permet de copier, le libellé, le pictogramme et la description du module pour le duppliquer ailleurs sur le tableau. Une fois le module mis dans le presse papier, l'application vous met en avant les emplacements disponibles en fonction de la largeur initiale du module copié.
+
+![Copier](docs/_copy.png)
+
+Exemple d'emplacements disponibles:
+
+![Coller aux emplacements disponibles](docs/_pasteall.png)
+
+Cliquer sur le bouton pour duppliquer le module à cet emplacement:
+
+![Coller](docs/_paste.png)
+
+Pour annuler, soit, cliquer sur l'icône ci-dessous, soit appuyer sur la touche `Echap`:
+
+![Annuler](docs/_paste_cancel.png)
+
+Et voilà!
+
+![Collé!](docs/_pasted.png)
+
 
 ### Manipuler les rangées
 
@@ -93,11 +114,11 @@ Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des r
 
 ![Insérer une rangée](docs/_add_row.png)
 
-Pour supprimer une rangée, cliquez sur l'icone `corbeille`, à gauche du nom de la rangée souhaitée:
+Pour supprimer une rangée, cliquez sur l'icone `Corbeille`, à gauche du nom de la rangée souhaitée:
 
 ![Supprimer une rangée](docs/_delete_row.png)
 
-### Raccourcies claviers / souris
+#### Raccourcies claviers / souris
 
 Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votre clavier pour interagir sur les rangées et les modules.
 
@@ -110,11 +131,29 @@ Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votr
 
 Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s'ouvre et vous offre la possibilité d'affiner sa définition.
 
+La partie inférieure de la fenètre d'édition comporte une zone de démonstration, mettant en scène vos modifications en temps réel.
+
 ![Edition d'un module](docs/_popup.png)
 
 - _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
-- _Description_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
+- _Libellé_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
 - _Pictogramme_ : Une petite image illustrant l'environement du module.
+
+### Les actions disponibles
+
+- **Supprimer**: Permet de libérer un module. Supprime toutes les données liées à ce module.
+- **Annuler**: Annule les modifications en cours
+- **Valider**: Accepter et appliquer les modifications ne cours
+
+### Les pictogrammes
+
+Une liste de pictogrammes vous est proposée.
+
+![Liste des pictogrammes](docs/_icon_selector.png)
+
+Par ailleurs, vous pouvez aussi rechercher un picto, directement en écrivant une partie de sa description. La liste se mettra automatiquement à jour.
+
+![Rechercher un pictogramme](docs/_icon_selector_search.png)
 
 ## Décorer ses étiquettes
 

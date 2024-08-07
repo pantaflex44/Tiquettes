@@ -46,16 +46,44 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     gap: 1em;
     margin-inline: 1.1em;
-    margin-top: 2em;
+    margin-top: 3em;
+    margin-bottom: 0.5em;
+}
+
+.popup_buttons_box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: end;
+    align-items: center;
+    gap: 1em;
 }
 
 .popup_buttons button {
     padding-block: 0.25em;
     padding-inline: 0.75em;
+}
+
+.popup_buttons button.ok {
+    color: darkcyan;
+    border-color: darkcyan;
+    font-weight: 600;
+    padding-inline: 1.5em;
+}
+
+.popup_buttons button.cancel {
+    color: #333;
+}
+
+.popup_buttons button:disabled {
+    pointer-events: none;
+    border-color: lightgray !important;
+    color: lightgray !important;
+    background-color: #f9f9f9 !important;
 }
 
 .popup_row {
@@ -73,6 +101,7 @@
 .popup_row input, .popup_row textarea {
     padding: 0.5em;
     font: inherit;
+    resize: vertical;
 }
 
 .popup_row input[name="editor_id"] {
@@ -101,6 +130,16 @@
     color: red;
 }
 
-.popup_row > label {
+.popup_row>label {
     margin-right: 1em;
+}
+
+.popup_flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1em;
+    row-gap: 1.5em;
+    justify-content: center;
+    align-items: start;
 }

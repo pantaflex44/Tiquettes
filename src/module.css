@@ -112,7 +112,7 @@
     left: -1px;
     width: calc(100% - 1em);
     height: 60px;
-    background-color: rgb(237, 255, 255);
+    background-color: rgb(240, 255, 255);
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -143,11 +143,13 @@
     position: absolute;
     bottom: -36px;
     left: -1px;
-    width: 100%;
+    width: calc(100% - 1em);
     height: 34px;
-    background-color: rgb(237, 255, 255);
+    background-color: rgb(240, 255, 255);
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    column-gap: 0.5em;
+    padding-inline: 0.5em;
     align-items: center;
     border: 1px solid darkgray;
     border-bottom-left-radius: 5px;
@@ -165,6 +167,26 @@
 .module:focus .module_top,
 .module:focus .module_bottom {
     background-color: #FFFBF0;
+}
+
+.module_top.button {
+    justify-content: center;
+}
+
+.module_top.button .tool {
+    height: initial;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    row-gap: 0.25em;
+    font-weight: 500;
+}
+
+.module.disabled {
+    pointer-events: none;
+    filter: grayscale(1);
 }
 
 @media print {

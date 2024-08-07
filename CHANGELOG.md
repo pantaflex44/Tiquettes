@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.7.0] - 2024-08-02
+
+### Ajouts
+
+- Nouveaux pictogrammes:
+    - Alarme incendie
+    - Lingerie / Repassage
+    - Bateaux / Ponton / Port
+    - Audio / Musique / Multimédia
+    - Télévision / Ecran / Projecteur
+- Ajout d'une prévisualisation (démo) du module en cours d'édition
+- Nouvelle fonctionnalité permettant de duppliquer un module (Copier / Coller) vers un emplacement suffisament grand de n'importe quelle rangée
+
+### Améliorations
+
+- Nouvelle liste de sélection d'un pictogramme (Affichage en liste déroulante, Possibilité de rechercher un pictogramme par sa description)
+
+### Modifications
+
+- Déplacement du bouton permettant de libérer (supprimer les données) un module dans la fenêtre d'édition de celui-ci
+
+
 ## [1.6.2] - 2024-07-05
 
 ### Améliorations

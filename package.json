@@ -1,7 +1,7 @@
 {
   "name": "tiquettes",
   "title": "Tiquettes",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
   "keywords": [
     "tableau",

@@ -20,13 +20,18 @@ function Row({
     moduleMoveRightAllowed = null,
     onModuleClear = null,
     onModuleEdit = null,
+    onModuleCopy = null,
+    onModulePaste = null,
+    onModuleCancelPaste = null,
+    modulePasteAllowed = null,
     onModuleMoveLeft = null,
     onModuleMoveRight = null,
     onRowAddAfter = null,
     onRowDelete = null,
     rowAddAllowed = null,
     rowDeleteAllowed = null,
-    printFreeModuleAllowed = null
+    printFreeModuleAllowed = null,
+    hasClipboard = false
 }) {
     return (
         <div className="switchboard_row" id={`row_${rowPosition}`}>
@@ -47,17 +52,29 @@ function Row({
                             "--h": style['--h'],
                             "--sw": style['--sw']
                         }}
+                        
                         onGrow={(item, moduleRef) => onModuleGrow(i, item, moduleRef)}
                         onShrink={(item, moduleRef) => onModuleShrink(i, item, moduleRef)}
+                        
                         onClear={(item) => onModuleClear(i, item)}
                         onEdit={(item) => onModuleEdit(i, item)}
+                        
+                        onCopy={(item) => onModuleCopy(i, item)}
+                        onPaste={(item) => onModulePaste(i, item)}
+                        cancelPaste={() => onModuleCancelPaste()}
+                        pasteAllowed={(item) => modulePasteAllowed(i, item)}
+                        hasClipboard={hasClipboard}
+                        
                         shrinkAllowed={(item) => moduleShrinkAllowed(i, item)}
                         growAllowed={(item) => moduleGrowAllowed(i, item)}
+                        
                         moveLeftAllowed={(item) => moduleMoveLeftAllowed(i, item)}
                         moveRightAllowed={(item) => moduleMoveRightAllowed(i, item)}
                         onMoveLeft={(item, moduleRef) => onModuleMoveLeft(i, item, moduleRef)}
                         onMoveRight={(item, moduleRef) => onModuleMoveRight(i, item, moduleRef)}
+
                         printFreeModuleAllowed={() => printFreeModuleAllowed()}
+                        
                     />
                 ))}
             </div>

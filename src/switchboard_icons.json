@@ -1,19 +1,23 @@
 [
     {
+        "filename": "",
+        "title": "aucun pictogramme"
+    },
+    {
         "filename": "swb_ecl.svg",
-        "title": "Eclairage 1"
+        "title": "Eclairage (pièce de jour)"
     },
     {
         "filename": "swb_ecl2.svg",
-        "title": "Eclairage 2"
+        "title": "Eclairage (pièce de nuit)"
     },
     {
         "filename": "swb_ecl_cmd.svg",
-        "title": "Eclairage 3"
+        "title": "Eclairage secondaire"
     },
     {
         "filename": "swb_ecl_rgb.svg",
-        "title": "Eclairage 4"
+        "title": "Eclairage commandé"
     },
     {
         "filename": "swb_eclext.svg",
@@ -29,51 +33,27 @@
     },
     {
         "filename": "swb_alim_eco.svg",
-        "title": "Alimentation (Economique)"
+        "title": "Economie d'énergie"
     },
     {
         "filename": "swb_alim_ht.svg",
-        "title": "Alimentation (Puissance)"
+        "title": "Coupure générale"
     },
     {
         "filename": "swb_alim.svg",
-        "title": "Alimentation"
+        "title": "Alimentation commandée"
     },
     {
         "filename": "swb_puissance.svg",
-        "title": "Alimentation (Générale)"
+        "title": "Alimentation principale"
     },
     {
         "filename": "swb_ext.svg",
-        "title": "Alimentation (Extension / Divisionnaire)"
-    },
-    {
-        "filename": "swb_bec.svg",
-        "title": "Ballon d'eau chaude"
-    },
-    {
-        "filename": "swb_journuit.svg",
-        "title": "Contacteur Jour/Nuit"
-    },
-    {
-        "filename": "swb_blrgas.svg",
-        "title": "Chaudière gaz"
-    },
-    {
-        "filename": "swb_chauffage.svg",
-        "title": "Chauffage éledctrique"
-    },
-    {
-        "filename": "swb_twldryer.svg",
-        "title": "Sèche serviettes"
+        "title": "Tableau divisionnaire / Tableau secondaire"
     },
     {
         "filename": "swb_clim.svg",
-        "title": "Pompe à chaleur"
-    },
-    {
-        "filename": "swb_cuissin.svg",
-        "title": "Plaque électrique"
+        "title": "Pompe à chaleur / PAC / Groupe froid"
     },
     {
         "filename": "swb_eau.svg",
@@ -85,23 +65,23 @@
     },
     {
         "filename": "swb_frigo.svg",
-        "title": "Réfrigirateur"
+        "title": "Réfrigirateur / Frigo"
     },
     {
         "filename": "swb_froid.svg",
-        "title": "Congélateur"
+        "title": "Congélateur / Friseur"
     },
     {
         "filename": "swb_gaz.svg",
-        "title": "Cuisson gaz"
+        "title": "Plaque de cuisson au gaz"
+    },
+    {
+        "filename": "swb_cuissin.svg",
+        "title": "Plaque de cuisson électrique"
     },
     {
         "filename": "swb_induction.svg",
-        "title": "Plaque induction"
-    },
-    {
-        "filename": "swb_informatique.svg",
-        "title": "Informatique"
+        "title": "Plaque de cuisson à induction"
     },
     {
         "filename": "swb_ll.svg",
@@ -110,6 +90,10 @@
     {
         "filename": "swb_dryer.svg",
         "title": "Sèche linge"
+    },
+    {
+        "filename": "swb_ironing.svg",
+        "title": "Lingerie / Repassage"
     },
     {
         "filename": "swb_lv.svg",
@@ -128,83 +112,115 @@
         "title": "Portail électrique"
     },
     {
+        "filename": "swb_voitureelectrique.svg",
+        "title": "Borne de rechage"
+    },
+    {
+        "filename": "swb_voitureelectrique2.svg",
+        "title": "Prise de rechage"
+    },
+    {
+        "filename": "swb_ship.svg",
+        "title": "Bateaux / Ponton / Port"
+    },
+    {
         "filename": "swb_solaire.svg",
         "title": "Panneaux solaires"
+    },
+    {
+        "filename": "swb_volet.svg",
+        "title": "Volet roulant / Store / Porte de garage"
+    },
+    {
+        "filename": "swb_split.svg",
+        "title": "Unité murale / Monosplit / Cassette"
+    },
+    {
+        "filename": "swb_telec.svg",
+        "title": "Télécommande / Divers"
+    },
+    {
+        "filename": "swb_ermt.svg",
+        "title": "Télécommande blocs secours / BAES"
+    },
+    {
+        "filename": "swb_fire.svg",
+        "title": "Alarme incendie"
+    },
+    {
+        "filename": "swb_telephonie.svg",
+        "title": "Telephonie / Communication"
+    },
+    {
+        "filename": "swb_informatique.svg",
+        "title": "Informatique"
+    },
+    {
+        "filename": "swb_tv.svg",
+        "title": "Télévision / Ecran / Projecteur"
+    },
+    {
+        "filename": "swb_music.svg",
+        "title": "Audio / Musique / Multimédia"
+    },
+    {
+        "filename": "swb_thermo.svg",
+        "title": "Thermostat / Commande de climatisation"
+    },
+    {
+        "filename": "swb_thermo2.svg",
+        "title": "Thermostat / Commande de chauffage"
+    },
+    {
+        "filename": "swb_thermo3.svg",
+        "title": "Thermostat général"
+    },
+    {
+        "filename": "swb_thermo4.svg",
+        "title": "Thermostat"
+    },
+    {
+        "filename": "swb_bec.svg",
+        "title": "Ballon d'eau chaude"
+    },
+    {
+        "filename": "swb_journuit.svg",
+        "title": "Contacteur Jour / Nuit"
+    },
+    {
+        "filename": "swb_blrgas.svg",
+        "title": "Chaudière gaz"
+    },
+    {
+        "filename": "swb_chauffage.svg",
+        "title": "Chauffage électrique / Convecteur / Radiateur"
+    },
+    {
+        "filename": "swb_twldryer.svg",
+        "title": "Sèche serviettes"
     },
     {
         "filename": "swb_solchauffant.svg",
         "title": "Plancher chauffant"
     },
     {
-        "filename": "swb_volet.svg",
-        "title": "Volets roulants"
-    },
-    {
-        "filename": "swb_split.svg",
-        "title": "Unité murale"
-    },
-    {
-        "filename": "swb_telec.svg",
-        "title": "Télécommande"
-    },
-    {
-        "filename": "swb_ermt.svg",
-        "title": "Télécommande blocs secours"
-    },
-    {
-        "filename": "swb_telephonie.svg",
-        "title": "Communication"
-    },
-    {
-        "filename": "swb_thermo.svg",
-        "title": "Thermostat 1"
-    },
-    {
-        "filename": "swb_thermo2.svg",
-        "title": "Thermostat 2"
-    },
-    {
-        "filename": "swb_thermo3.svg",
-        "title": "Thermostat 3"
-    },
-    {
-        "filename": "swb_thermo4.svg",
-        "title": "Thermostat 4"
-    },
-    {
-        "filename": "swb_tv.svg",
-        "title": "TV"
-    },
-    {
         "filename": "swb_ventil.svg",
-        "title": "Ventilation 1"
+        "title": "Ventilation"
     },
     {
         "filename": "swb_ventil2.svg",
-        "title": "Ventilation 2"
+        "title": "Centrale traitement d'air / CTA"
     },
     {
         "filename": "swb_vmc.svg",
         "title": "VMC"
     },
     {
-        "filename": "swb_voitureelectrique.svg",
-        "title": "Véhicules électriques 1"
-    },
-    {
-        "filename": "swb_voitureelectrique2.svg",
-        "title": "Véhicules électriques 2"
-    },
-    {
         "filename": "swb_pool.svg",
-        "title": "Piscine / Jacuzzi"
+        "title": "Piscine / Jacuzzi / Bassin"
     },
     {
         "filename": "swb_spa.svg",
-        "title": "SPA / Massages"
-    },
-    {
-        "filename": "",
-        "title": "aucun pictogramme"
+        "title": "SPA / Massages / Bien être"
     }
 ]
