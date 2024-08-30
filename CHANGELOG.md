@@ -1,11 +1,5 @@
 # Changelog
 
-## [1.7.1] - 2024-08-27
-
-### Ajouts
-
-- Tiquettes devient bilingue! Français et Anglais sont désormais les 2 langues disponibles!
-
 
 ## [1.7.0] - 2024-08-02
 
