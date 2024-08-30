@@ -728,6 +728,8 @@ function App() {
             return;
         }
 
+        setDocumentTitle(switchboard.prjname);
+
         t = setTimeout(() => {
             const savedProjectIsOutdated = sessionStorage.getItem(pkg.name) !== JSON.stringify(switchboard);
             if (savedProjectIsOutdated) {
