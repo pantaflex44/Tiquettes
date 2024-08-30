@@ -11,13 +11,6 @@ function Footer() {
 }
 
 export default function Main() {
-    useEffect(() => {
-        var _mtm = window._mtm = window._mtm || [];
-        _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start' });
-        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-        g.async = true; g.src = 'https://cdn.matomo.cloud/tiquettes.matomo.cloud/container_pYH6H418.js'; s.parentNode.insertBefore(g, s);
-    }, [])
-
     return (
         <React.StrictMode>
                 <App />
