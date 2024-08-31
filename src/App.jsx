@@ -91,7 +91,7 @@ function App() {
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
 
     const setDocumentTitle = (title) => {
-        const t = `${title} - ${pkg.title} ${pkg.version}`;
+        const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
         document.title = t;
     };
 

@@ -13,8 +13,8 @@ function Footer() {
 export default function Main() {
     return (
         <React.StrictMode>
-                <App />
-                <Footer />
+            <App />
+            <Footer />
         </React.StrictMode>
     );
 }
