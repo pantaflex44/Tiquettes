@@ -1,3 +1,5 @@
+@import url('./vars.css');
+
 .row {
     border: 1px solid darkgray;
     display: flex;
@@ -43,7 +45,7 @@
 
 .row_action_line {
     height: 1px;
-    border-top: 1px dotted darkcyan;
+    border-top: 1px dotted var(--primary-color);
     width: 100%;
 }
 
@@ -55,7 +57,7 @@
 .row_add .row_add_info {
     font-size: small;
     text-wrap: nowrap;
-    color: darkcyan;
+    color: var(--primary-color);
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;

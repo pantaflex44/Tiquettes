@@ -1,6 +1,14 @@
 # Changelog
 
 
+## [1.7.2] - 2024-09-13
+
+### Corrections
+
+- Correction de bugs mineurs
+- Correction d'un bug dans la gestion de l'impression sous Firefox
+
+
 ## [1.7.0] - 2024-08-02
 
 ### Ajouts

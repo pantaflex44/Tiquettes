@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=Griffy&display=swap');
+
+@media print {
+    .halloween {
+        display: none;
+    }
+}
+
+@media only screen {
+    :root:has(.halloween) {
+        /* HALLOWEEN COLORS */
+        --primary-color: #ea5f21;
+        --secondary-color: #F5EEE1;
+        --secondary-color-light: #fffaf4;
+    }
+
+    body:has(.halloween) #content main h1 span {
+        font-family: "Griffy" !important;
+        font-weight: 900;
+        font-size: 130%;
+        display: inline-flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: baseline;
+        column-gap: 0.5em;
+        row-gap: 0.25em;
+        line-height: 1;
+        margin-bottom: 0.25em;
+    }
+
+    body:has(.halloween) #content main h1 span::after {
+        content: 'spécial Halloween';
+        display: inline-block;
+        font-size: 40%;
+    }
+
+    html:has(.halloween):hover .spider {
+        top: -120%;
+    }
+
+    .halloween .spider {
+        position: fixed;
+        display: inline-block;
+        top: 0;
+        left: 60%;
+
+        /* 4. Animatie */
+        animation: swing 2s infinite;
+        transform-origin: top;
+
+        /* Bonus */
+        transition: 0.5s ease-in-out;
+    }
+
+    .halloween .spider .spiderweb {
+        width: 2px;
+        height: 150px;
+        margin-left: 49px;
+        background: rgba(0, 0, 0, .1);
+    }
+
+    .halloween .spider .body {
+        width: 100px;
+        height: 80px;
+        background: radial-gradient(#555, #333);
+        position: relative;
+        border-radius: 50%;
+        box-shadow: 0 0 5px 2px #000;
+    }
+
+    .halloween .spider .body .eye {
+        width: 33px;
+        height: 33px;
+        position: absolute;
+        bottom: 20px;
+        background: #fff;
+        border-radius: 50%;
+    }
+
+    .halloween .spider .body .eye.left {
+        left: 15px;
+    }
+
+    .halloween .spider .body .eye.right {
+        right: 15px;
+    }
+
+    .halloween .spider .body .eye:after {
+        background: #000;
+        width: 7px;
+        height: 7px;
+        content: '';
+        display: block;
+        margin: 55%;
+        border-radius: 50%;
+
+        /* 3. Animatie */
+        animation: look 8s infinite;
+    }
+
+    .halloween .spider .legs .leg {
+        width: 80px;
+        height: 40px;
+        margin-top: -20px;
+        border: 5px solid transparent;
+        border-top-color: #000;
+        border-radius: 40px 40px 0 0;
+    }
+
+    .halloween .spider .legs {
+        position: absolute;
+        bottom: -10%;
+        z-index: -1;
+    }
+
+    .halloween .spider .legs.left {
+        left: -70%;
+    }
+
+    .halloween .spider .legs.right {
+        right: -60%;
+    }
+
+
+    .halloween .legs.left .leg:nth-child(1) {
+        transform: rotate(10deg);
+        margin-left: 10px;
+    }
+
+    .halloween .legs.right .leg:nth-child(1) {
+        transform: rotate(-10deg);
+        margin-left: -10px;
+    }
+
+
+    .halloween .legs.left .leg:nth-child(2) {
+        transform: rotate(-20deg);
+        margin-left: 20px;
+    }
+
+    .halloween .legs.right .leg:nth-child(2) {
+        transform: rotate(20deg);
+        margin-left: -20px;
+    }
+
+
+    .halloween .legs.left .leg:nth-child(3) {
+        transform: rotate(-50deg);
+        margin-left: 30px;
+    }
+
+    .halloween .legs.right .leg:nth-child(3) {
+        transform: rotate(50deg);
+        margin-left: -30px;
+    }
+
+    body:has(.halloween) {
+        background: #fff7ef
+    }
+
+    .halloween .chaud {
+        position: fixed;
+        top: calc(100vh - 315px);
+        left: calc(100vw - 335px);
+        transform: scale(0.4);
+        overflow: hidden;
+    }
+
+    .halloween .group {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 500px;
+        height: 500px;
+    }
+
+    .halloween .group .main {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 200px;
+        width: 200px;
+        border-radius: 100%;
+        background: #6A6561;
+        overflow: hidden;
+    }
+
+    .halloween .group .shade {
+        position: absolute;
+        top: 0;
+        left: 10;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 200px;
+        width: 180px;
+        border-radius: 100%;
+        background: #514c48;
+        opacity: .5;
+    }
+
+    .halloween .group .legs {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 60px;
+        width: 34px;
+        border-radius: 0 0 55% 55%;
+        top: 160px;
+        left: -145px;
+        transform: rotate(24deg);
+        background: #6A6561;
+        z-index: -1;
+    }
+
+    .halloween .group .legs:after {
+        position: absolute;
+        height: 60px;
+        width: 34px;
+        background: #6A6561;
+        border-radius: 0 0 55% 55%;
+        transform: rotate(-48deg);
+        bottom: 60px;
+        left: 131px;
+        content: "";
+    }
+
+    .halloween .group .legs:before {
+        content: "";
+        position: absolute;
+        height: 60px;
+        width: 34px;
+        border-radius: 0 0 55% 55%;
+        opacity: .5;
+        transform: rotate(-48deg);
+        left: 131px;
+        bottom: 60px;
+        background: #514c48;
+        z-index: 1;
+    }
+
+    .halloween .group .rim {
+        position: absolute;
+        height: 20px;
+        width: 160px;
+        left: 170px;
+        top: 150px;
+        border-radius: 20px;
+        background: #6A6561;
+        overflow: hidden;
+    }
+
+    .halloween .group .rim:after {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 130px;
+        left: 30px;
+        opacity: .5;
+        border-radius: 20px;
+        background: #514c48;
+    }
+
+    .halloween .group .bubbles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        top: -190px;
+        right: 55px;
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+        background: #49c399;
+        z-index: -1;
+        animation: bub .6s infinite ease-in-out alternate;
+    }
+
+    .halloween .group .bubbles:after {
+        position: absolute;
+        left: 30px;
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+        background: #66cdaa;
+        content: "";
+        animation: bub .5s infinite ease-in-out alternate;
+    }
+
+    .halloween .group .bubbles:before {
+        position: absolute;
+        left: 60px;
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+        background: #359473;
+        content: "";
+        animation: bub 1.5s infinite ease-in-out alternate;
+    }
+
+    .halloween .group .broom {
+        position: absolute;
+        top: 0;
+        left: 30px;
+        right: 0;
+        bottom: 270px;
+        margin: auto;
+        height: 180px;
+        width: 20px;
+        background: #54260e;
+        border-radius: 5px;
+        transform: rotate(25deg);
+        animation: broom 3s ease-in-out alternate infinite;
+        z-index: -2;
+    }
+
+    /*Shadow*/
+
+    .halloween .group .shadow {
+        position: absolute;
+        bottom: 120px;
+        left: 110px;
+        height: 50px;
+        width: 270px;
+        border-radius: 100%;
+        opacity: .3;
+        background: #F88E25;
+        z-index: -2;
+    }
+
+}
+
+@media only screen and (max-width: 767px) {
+    .halloween .spider {
+        position: absolute;
+        display: inline-block;
+    }
+
+    .halloween .spider .spiderweb {
+        height: 100px;
+    }
+
+    .halloween .chaud {
+        display: none;
+    }
+}
+
+@keyframes bub {
+    0% {
+        transform: translateY(5px);
+    }
+
+    100% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes broom {
+    0% {}
+
+    100% {
+        transform: translateX(-30px);
+        transform: translateY(23px);
+    }
+}
+
+@keyframes look {
+    0%, 40%, 100% {
+        transform: translateX(0) translateY(0);
+    }
+
+    65% {
+        transform: translateY(-130%);
+    }
+
+    20% {
+        transform: translateY(-130%) translateX(-130%);
+    }
+
+    95% {
+        transform: translateX(-130%);
+    }
+}
+
+@keyframes swing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-40px);
+    }
+}

@@ -1,3 +1,5 @@
+@import url('./vars.css');
+
 .toolbar {
     display: flex;
     flex-direction: row;
@@ -49,7 +51,7 @@ h4 {
     list-style: none;
     margin-left: 36px;
     padding-left: 0;
-    color: darkcyan;
+    color: var(--primary-color);
 }
 
 .project li {
@@ -94,7 +96,7 @@ h4 {
     gap: 2em;
     overflow-x: auto;
     /*border: 1px solid darkgray;
-    border-top: 2px solid darkcyan;
+    border-top: 2px solid var(--primary-color);
     border-radius: 7px;
     padding: 2em;*/
     position: relative;
@@ -187,8 +189,8 @@ option[disabled] {
 }
 
 .button_group label:hover {
-    background-color: rgb(237, 255, 255);
-    border-color: darkcyan;
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
 }
 
 .button_group .dropdown_container {
@@ -281,7 +283,7 @@ option[disabled] {
     text-align: left;
     padding-top: 2em;
     padding-bottom: 1em;
-    color: darkcyan;
+    color: var(--primary-color);
 }
 
 .summary table tbody tr:nth-child(2n+1) {
@@ -289,7 +291,7 @@ option[disabled] {
 }
 
 .summary table tbody tr:hover {
-    background-color: rgb(237, 255, 255);
+    background-color: var(--secondary-color);
 }
 
 .summary table tbody tr.newrow {
@@ -378,14 +380,14 @@ option[disabled] {
 }
 
 .tabPages .tabPages_page:hover {
-    background-color: rgb(237, 255, 255);
+    background-color: var(--secondary-color);
 }
 
 .tabPages:not(.disabled) .tabPages_page.selected {
     background-color: #f0f0f0;
     font-weight: bold;
     color: black;
-    border-top-color: darkcyan;
+    border-top-color: var(--primary-color);
 }
 
 .tabPages .tabPages_page.selected img {
@@ -473,5 +475,5 @@ option[disabled] {
 }
 
 .icon_selector_box:focus-within, .icon_selector_box.focused {
-    border-color: darkcyan !important;
+    border-color: var(--primary-color) !important;
 }

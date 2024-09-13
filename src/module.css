@@ -1,3 +1,5 @@
+@import url('./vars.css');
+
 .module {
     width: var(--sw);
     min-width: var(--sw);
@@ -112,7 +114,7 @@
     left: -1px;
     width: calc(100% - 1em);
     height: 60px;
-    background-color: rgb(240, 255, 255);
+    background-color: var(--secondary-color-light);
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -145,7 +147,7 @@
     left: -1px;
     width: calc(100% - 1em);
     height: 34px;
-    background-color: rgb(240, 255, 255);
+    background-color: var(--secondary-color-light);
     display: flex;
     justify-content: space-evenly;
     column-gap: 0.5em;

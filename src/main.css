@@ -1,3 +1,5 @@
+@import url('./vars.css');
+
 @media print {
     .footer {
         position: absolute;

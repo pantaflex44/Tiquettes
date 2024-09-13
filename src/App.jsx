@@ -1129,7 +1129,7 @@ function App() {
 
                         <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '0.5em' }}>
                             <label htmlFor="newProjectProperties_modules">Nombre de rangées</label>
-                            <label style={{ fontSize: '1.1em', color: 'darkcyan' }}>˫ <b>{newProjectProperties.npRows}</b> rangées</label>
+                            <label style={{ fontSize: '1.1em', color: 'var(--primary-color)' }}>˫ <b>{newProjectProperties.npRows}</b> rangées</label>
                         </div>
                         <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0 }}>
                             <div></div>
@@ -1143,7 +1143,7 @@ function App() {
 
                         <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '0.5em' }}>
                             <label htmlFor="newProjectProperties_modules">Hauteur d&apos;une rangée</label>
-                            <label style={{ fontSize: '1.1em', color: 'darkcyan' }}>˫ <b>{newProjectProperties.hRow}</b>mm</label>
+                            <label style={{ fontSize: '1.1em', color: 'var(--primary-color)' }}>˫ <b>{newProjectProperties.hRow}</b>mm</label>
                         </div>
                         <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0, marginBottom: '3em' }}>
                             <div></div>

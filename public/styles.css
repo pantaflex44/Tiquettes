@@ -1,9 +1,11 @@
+@import url('../src/vars.css');
+
 :focus {
     outline: 0 !important;
 }
 
 ::selection {
-    background-color: darkcyan;
+    background-color: var(--primary-color);
     color: white;
     /* border-color: #26a0da; */
 }
@@ -39,7 +41,7 @@ body {
 
 nav.header {
     width: 100%;
-    background-color: darkcyan;
+    background-color: var(--primary-color);
     color: white;
     margin-bottom: 1em;
 }
@@ -67,7 +69,7 @@ nav.header ul li a {
     padding-inline: 1em;
     padding-block: 0.75em;
     text-decoration: none;
-    background-color: darkcyan;
+    background-color: var(--primary-color);
     color: white;
     font-size: smaller;
     font-weight: 500;
@@ -86,7 +88,7 @@ nav.header ul li a:first-of-type {
 }
 
 nav.header ul li a:hover {
-    background-color: lightcyan;
+    background-color: var(--secondary-color);
     color: black;
 }
 
@@ -153,7 +155,7 @@ nav.header ul li a:hover img {
 
 .box .box_list .box_list_link,
 .box .box_list .box_list_link:visited {
-    color: darkcyan;
+    color: var(--primary-color);
     font-size: smaller;
     font-weight: bold;
     margin-block: 0.25em;
@@ -186,7 +188,7 @@ h1 sup {
     margin-top: 0;
     margin-bottom: 3em;
     margin-left: 48px;
-    color: darkcyan;
+    color: var(--primary-color);
     font-size: 0.7em;
     font-weight: bold;
 }
@@ -212,8 +214,8 @@ button, select {
 }
 
 button:hover {
-    background-color: lightcyan;
-    border-color: darkcyan;
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
 }
 
 input[type="file"] {
@@ -244,7 +246,7 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
 textarea:focus {
-    border-color: darkcyan;
+    border-color: var(--primary-color);
 }
 
 input[type="checkbox"], input[type="radio"],
@@ -268,8 +270,8 @@ input[type="range"] {
 }
 
 .file_button .file_label:hover {
-    background-color: lightcyan;
-    border-color: darkcyan;
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
 }
 
 .file_button input[type="file"] {
@@ -324,13 +326,13 @@ input[type="range"] {
 }
 
 .radio_group .radio label:hover {
-    background-color: lightcyan;
-    border-color: darkcyan;
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
 }
 
 .radio_group .radio input:checked+label {
-    background-color: darkcyan;
-    border-color: darkcyan;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     color: white;
 }
 
@@ -341,6 +343,10 @@ input[type="range"] {
 @media print {
     @page {
         size: landscape;
+        margin: 0;
+        -ms-zoom: 100%;
+        zoom: 100%;
+        transform: scale(0);
     }
 
     #content,

@@ -1,3 +1,5 @@
+@import url('./vars.css');
+
 .popup-overflow {
     display: block;
     position: fixed;
@@ -69,8 +71,8 @@
 }
 
 .popup_buttons button.ok {
-    color: darkcyan;
-    border-color: darkcyan;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
     font-weight: 600;
     padding-inline: 1.5em;
 }
