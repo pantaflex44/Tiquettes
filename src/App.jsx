@@ -718,6 +718,13 @@ function App() {
         return printOptions.freeModules;
     }
 
+    const groupedThemesList = () => {
+        return Object.entries(themesList.reduce((x, y) => {
+            (x[y.group] = x[y.group] || []).push(y);
+            return x;
+        }, {}));
+    }
+
     useEffect(() => {
         let t = null;
 
@@ -864,7 +871,17 @@ function App() {
                         style={{ maxWidth: '100%' }}
                         disabled={UIFrozen}
                     >
-                        {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
+
+                        {/*{Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
+                            const g = e[0];
+                            const l = e[1];
+                            return <Fragment key={`themes_${g}`}>
+                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>{g} - {t.title}</option>)}
+                            </Fragment>
+                        })}*/}
+
+                        {groupedThemesList().map((e) => {
                             const g = e[0];
                             const l = e[1];
                             return <Fragment key={`themes_${g}`}>
