@@ -15,7 +15,11 @@
     "hager",
     "legrand"
   ],
-  "author": "Christophe LEMOINE",
+  "author": {
+    "name": "Christophe LEMOINE",
+    "email": "pantaflex@tuta.io",
+    "url": "https://pantaflex44.github.io/Portfolio/"
+  },
   "license": "MIT",
   "homepage": "https://pantaflex44.github.io/Tiquettes/",
   "repository": {

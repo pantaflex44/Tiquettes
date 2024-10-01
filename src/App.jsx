@@ -881,6 +881,7 @@ function App() {
                             </Fragment>
                         })}*/}
 
+                        {/* Compatibilité avec les anciennes versions des navigateurs web */}
                         {groupedThemesList().map((e) => {
                             const g = e[0];
                             const l = e[1];
