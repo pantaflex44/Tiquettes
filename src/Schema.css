@@ -1,0 +1,494 @@
+@page schemaCartbridge {
+    size: landscape;
+    margin: 10mm;
+}
+
+@page schema {
+    size: landscape;
+    margin: 10mm 10mm;
+    padding-top: 10mm;
+}
+
+.schema {
+    page: schema;
+    padding: 0 !important;
+}
+
+.schemaGrid {
+    --symbol-width: 70px;
+    --symbol-height: 100px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 0;
+
+    padding: 40px;
+    /*width: calc(100% - 60px);*/
+    overflow-x: auto;
+
+    background-position: -5px -4px;
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.10) 1px, rgba(0, 0, 0, 0) 1px);
+
+    page-break-before: always;
+    break-before: page;
+}
+
+.schemaItem {
+    display: block;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    position: relative;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.schemaItem.isFirst {
+    padding-inline: calc(var(--symbol-width) / 2);
+    width: calc(100% - 70px);
+}
+
+/*.schemaItem.isFirst::before {
+    content: "répartiteur électrique";
+
+    position: absolute;
+    top: -18px;
+    left: 12px;
+
+    font-size: 80%;
+    color: darkgray;
+}*/
+
+.schemaItemFirstIcon {
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    width: 14px;
+    height: 14px;
+}
+
+.schemaItemChilds {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    row-gap: 80px;
+    margin-right: 60px;
+}
+
+.schemaItemSymbol {
+    position: relative;
+
+    width: var(--symbol-width);
+    min-width: var(--symbol-width);
+    height: var(--symbol-height);
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.schemaItemSymbolImg {
+    position: absolute;
+
+    width: var(--symbol-width);
+    height: var(--symbol-height);
+    top: 0;
+    left: 0;
+}
+
+.schemaItemSymbolImgPole {
+    position: absolute;
+
+    width: 10px;
+    bottom: 10px;
+    left: calc(50% - 5px);
+}
+
+.schemaItemSymbolId,
+.schemaItemSymbolType,
+.schemaItemSymbolCurrent,
+.schemaItemSymbolPole {
+    position: absolute;
+
+    top: 10px;
+    left: 60%;
+
+    font-size: 65%;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.schemaItemSymbolType {
+    top: 25px;
+    font-size: 50%;
+}
+
+.schemaItemSymbolCurrent {
+    top: 43px;
+    font-size: 50%;
+}
+
+.schemaItemSymbolPole {
+    top: 51px;
+    font-size: 50%;
+}
+
+.schemaItemPrevLine {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 2px;
+
+    background-color: #000;
+}
+
+.schemaItemPrevLine.noNext {
+    width: 35px;
+}
+
+.schemaItem.isFirst > .schemaItemPrevLine.noNext {
+    width: var(--symbol-width);
+}
+
+.schemaItemPrevLine.noPrev {
+    width: calc(50% - 35px);
+    left: 35px;
+}
+
+.schemaItem.isFirst > .schemaItemPrevLine.noPrev {
+    left: 0;
+}
+
+.schemaItemPrevLineParentFirst {
+    position: absolute;
+
+    top: 0;
+    left: calc(var(--symbol-width) / 2);
+    width: 50%;
+    height: 2px;
+
+    background-color: #000;
+}
+
+.schemaItemNextLine {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 2px;
+
+    background: repeating-linear-gradient(
+            90deg,
+            #000 0px,
+            #000 1px,
+            transparent 4px,
+            transparent 8px
+    );
+}
+
+.schemaItemNextIcon {
+    position: absolute;
+
+    top: -8px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+}
+
+.schemaItemLast {
+    width: calc(var(--symbol-width) - 10px);
+    height: calc(var(--symbol-height) - 10px - 10px);
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
+    text-align: center;
+    row-gap: 10px;
+
+    padding-inline: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    font-size: 70%;
+}
+
+.schemaItemLastIconContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.schemaItemLastIcon {
+    text-align: center;
+    margin-inline: auto;
+    margin-top: 10px;
+
+
+    max-width: var(--symbol-width);
+}
+
+.schemaItemLastText {
+    margin-top: 10px;
+    font-size: 70%;
+    text-align: center;
+    margin-inline: auto;
+
+    max-width: var(--symbol-width);
+}
+
+.schemaItemSeparator {
+    display: block;
+    width: 100%;
+    height: 80px;
+
+    page-break-before: auto;
+    break-before: auto;
+}
+
+.schemaItemSeparator.first {
+    height: 20px;
+}
+
+.schemaTitle {
+    text-align: center;
+    width: 100%;
+
+    font-size: 200%;
+    font-weight: bold;
+    margin-block: 100px;
+
+    display: none;
+}
+
+.schemaGroundLine {
+    position: relative;
+
+    width: 100%;
+    height: 2px;
+
+    box-sizing: border-box;
+    border-top: 2px dotted #555;
+
+    margin-top: var(--symbol-height);
+    margin-bottom: 40px;
+}
+
+.schemaGroundLine img {
+    position: absolute;
+
+    top: -5px;
+    right: -12px;
+}
+
+/*.schemaGroundLine::before {
+    content: "bornier de terre";
+
+    position: absolute;
+    top: -18px;
+    left: 12px;
+
+    font-size: 80%;
+    color: darkgray;
+}*/
+
+.schemaCartbridgeContainer {
+    page: schemaCartbridge;
+
+    display: none;
+
+    width: 100%;
+    height: 100%;
+
+    page-break-before: always;
+    break-before: page;
+}
+
+.schemaCartbridge {
+    box-sizing: border-box;
+
+    width: 100%;
+    padding: 20px;
+
+    display: grid;
+    grid-template-areas: "a b f c"
+    "d b f e";
+    grid-auto-columns: auto 1fr auto auto;
+    gap: 40px;
+    overflow: hidden;
+
+    font-size: 90%;
+
+    border: 2px solid #000;
+    background-color: var(--secondary-color-light);
+}
+
+.schemaCartbridgeA {
+    grid-area: a;
+    position: relative;
+}
+
+.schemaCartbridgeA::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    right: -20px;
+    height: 1px;
+    background-color: #000;
+}
+
+.schemaCartbridgeB {
+    grid-area: b;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 130%;
+    font-weight: 600;
+    text-align: center;
+}
+
+.schemaCartbridgeBContent {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 1.2em;
+    max-height: 3.6em;
+}
+
+.schemaCartbridgeB::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    left: -20px;
+    width: 1px;
+    background-color: #000;
+}
+
+.schemaCartbridgeC {
+    grid-area: c;
+    position: relative;
+}
+
+.schemaCartbridgeC::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    right: -20px;
+    height: 1px;
+    background-color: #000;
+}
+
+.schemaCartbridgeD {
+    grid-area: d;
+}
+
+.schemaCartbridgeE {
+    grid-area: e;
+}
+
+.schemaCartbridgeF {
+    grid-area: f;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.schemaCartbridgeF::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    left: -20px;
+    width: 1px;
+    background-color: #000;
+}
+
+.schemaCartbridgeF::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    right: -20px;
+    width: 1px;
+    background-color: #000;
+}
+
+@media print {
+    .schema {
+        padding: 0;
+        margin: 0;
+
+        width: 100%;
+    }
+
+    .schemaGrid {
+        overflow-x: hidden;
+        background: none;
+        margin: 0;
+
+        padding: 0;
+        padding-top: 10mm;
+        padding-inline: 10mm;
+
+        width: calc(100% - 20mm);
+    }
+
+    .schemaItem {
+        flex-wrap: wrap;
+    }
+
+    .schemaItemChilds {
+        flex-wrap: wrap;
+    }
+
+    .schemaTitle {
+        display: block;
+    }
+
+    .schemaCartbridgeContainer {
+        display: block;
+
+        width: calc(100% - 20mm);
+        margin-left: 10mm;
+    }
+
+    .schemaCartbridge {
+        font-size: 80%;
+    }
+
+    .schemaItemSeparator {
+        height: calc(var(--symbol-height) / 2);
+    }
+
+    .schemaItemSeparator.first {
+        height: 0;
+    }
+
+    .schemaGroundLine {
+        width: calc(100% - 20mm - 10mm);
+    }
+}

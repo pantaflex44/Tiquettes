@@ -1,5 +1,11 @@
 @import url('./vars.css');
 
+body{
+    accent-color: var(--primary-color);
+}
+
+
+
 @media print {
     .footer {
         position: absolute;

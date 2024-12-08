@@ -89,7 +89,7 @@ h4 {
     margin-bottom: 2em;
 }
 
-.switchboard, .summary {
+.switchboard, .summary, .schema {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -107,7 +107,7 @@ h4 {
     border: 0;
 }
 
-.switchboard.selected, .summary.selected {
+.switchboard.selected, .summary.selected, .schema.selected {
     height: max-content;
     padding: 2em;
     border: 1px solid darkgray;
@@ -142,7 +142,7 @@ option[disabled] {
     margin-bottom: 3em;
 }
 
-.button_group>*:not(.button_group-separator) {
+.button_group > *:not(.button_group-separator) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -155,16 +155,16 @@ option[disabled] {
     padding-block: 0.75em;
 }
 
-.button_group>*:not(.button_group-separator) span {
+.button_group > *:not(.button_group-separator) span {
     line-height: 18px;
 }
 
-.button_group>*:not(.button_group-separator) img {
+.button_group > *:not(.button_group-separator) img {
     height: 16px;
     width: 16px;
 }
 
-.button_group>*:not(.button_group-separator):first-of-type {
+.button_group > *:not(.button_group-separator):first-of-type {
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
 }
@@ -207,11 +207,12 @@ option[disabled] {
     padding: 0.75em;
     border: 1px solid darkgray;
     border-radius: 7px;
-    background-color: white;
+    background: linear-gradient(to bottom, white, #f0f0f0);
     text-align: left;
     flex-direction: column;
     row-gap: 0.5em;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 99;
 }
 
 .button_group .dropdown_container:hover .dropdown {
@@ -237,10 +238,15 @@ option[disabled] {
     background-color: initial;
 }
 
+.button_group .dropdown_container .dropdown .dropdown_item input:disabled + label {
+    color: darkgray;
+}
+
 .button_group .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;
     background-color: lightgray;
+    margin-block: 0.5em;
 }
 
 .button_group .dropdown_container .dropdown .dropdown_header {
@@ -250,12 +256,13 @@ option[disabled] {
 }
 
 .button_group .dropdown_container .dropdown .dropdown_footer {
-    margin-top: 1em;
+    margin-top: 2em;
 }
 
 .button_group .dropdown_container .dropdown .dropdown_footer * {
     width: 100%;
     font-weight: bold;
+    background-color: white;
 }
 
 .button_group.disabled {
@@ -290,7 +297,7 @@ option[disabled] {
     background-color: #f5f5f5;
 }
 
-.summary table tbody tr:hover {
+.summary table tbody tr:hover td:not(:first-child) {
     background-color: var(--secondary-color);
 }
 
@@ -298,10 +305,15 @@ option[disabled] {
     border-top: 1px dotted lightgray;
 }
 
+.summary table tbody tr.otherrow td:not(:first-child) {
+    border-top: 1px dotted lightgray;
+}
+
 .summary table tbody tr td {
     padding-block: 2mm;
     white-space: nowrap;
     padding-right: 1em;
+    padding-left: 0.5em;
     min-height: 7mm;
 }
 
@@ -320,6 +332,16 @@ option[disabled] {
 
 .summary table tbody tr td.summary_id {
     font-weight: bold;
+}
+
+.summary table tbody tr td.summary_func p {
+    font-size: 80%;
+    margin: 0;
+}
+
+.summary table tbody tr td.summary_func p::first-line {
+    font-weight: 500;
+    font-size: 122%;
 }
 
 .summary table tbody tr td.summary_type div {
@@ -400,8 +422,58 @@ option[disabled] {
     filter: grayscale(1);
 }
 
+.editor_tabpages {
+    width: 100%;
+    flex: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.editor_tabpages input[type="checkbox"] {
+    display: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.editor_tabpages input[type="checkbox"] + label {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1em;
+    padding-block: 0.25em;
+    font-size: 90%;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    border-bottom: 2px solid #ccc;
+    column-gap: 0.5em;
+    height: 28px;
+}
+
+.editor_tabpages input[type="checkbox"] + label > img {
+    display: none;
+}
+
+.editor_tabpages input[type="checkbox"]:checked + label {
+    font-weight: bolder;
+    border-bottom-color: var(--primary-color);
+}
+
+.editor_tabpages input[type="checkbox"]:checked + label > img {
+    display: block;
+}
+
 @media screen and (max-width: 640px) {
-    .button_group>*:not(.button_group-separator) {
+    .button_group > *:not(.button_group-separator) {
         align-items: center;
     }
 
@@ -410,7 +482,7 @@ option[disabled] {
         margin-top: 2px;
     }
 
-    .button_group>*:not(.button_group-separator):not(.button_group-new_project) span {
+    .button_group > *:not(.button_group-separator):not(.button_group-new_project) span {
         display: none;
     }
 }
@@ -429,15 +501,14 @@ option[disabled] {
         display: none;
     }
 
-    .switchboard, .summary,
-    .switchboard.selected, .summary.selected {
+    .switchboard, .summary, .schema,
+    .switchboard.selected, .summary.selected, .schema.selected {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         gap: 0;
         margin-block: 0;
         overflow-x: initial;
-        padding-bottom: 0;
         border: 0;
         border-radius: initial;
         padding: 0;
@@ -451,14 +522,21 @@ option[disabled] {
         flex-wrap: nowrap;
         gap: 2mm;
         width: 100%;
+        break-inside: avoid;
         page-break-inside: avoid;
         margin-bottom: 0;
         padding-bottom: 0;
+        overflow: hidden;
     }
 
-    .summary, .summary.selected {
+    .summary, .summary.selected,
+    .schema, .schema.selected {
+        break-inside: avoid;
         page-break-inside: avoid;
+        page-break-before: always;
+        break-before: page;
         padding-block: 2em;
+        overflow: hidden;
     }
 
     .switchboard_row:not(:first-of-type) {

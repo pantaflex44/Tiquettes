@@ -22,11 +22,12 @@
     max-width: 85%;
     max-height: 93%;
     overflow-y: auto;
-    background-color: white;
+    background: linear-gradient(to bottom, #f0f0f0, white);
     border-radius: 5px;
     border: 1px solid black;
     z-index: 9000;
     padding: 1em;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 1);
 }
 
 .popup_title {
@@ -67,13 +68,14 @@
 
 .popup_buttons button {
     padding-block: 0.25em;
-    padding-inline: 0.75em;
+    padding-inline: 1em;
+    font-weight: 600;
+    font-size: 85%;
 }
 
 .popup_buttons button.ok {
     color: var(--primary-color);
     border-color: var(--primary-color);
-    font-weight: 600;
     padding-inline: 1.5em;
 }
 

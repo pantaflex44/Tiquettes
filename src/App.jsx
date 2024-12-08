@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { satisfies } from 'compare-versions';
+import {Fragment, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {satisfies} from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
 import './app.css';
@@ -8,7 +8,6 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 
 import Row from "./Row";
-import Popup from "./Popup";
 import ContentEditable from "./ContentEditable";
 
 import newProjectIcon from './assets/new_project.svg';
@@ -17,12 +16,12 @@ import clearProjectIcon from './assets/x.svg';
 import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
-import summaryRowIcon from './assets/summary_row.svg';
-import summaryPositionIcon from './assets/summary_position.svg';
-import summaryNoPicto from './assets/summary_nopicto.svg';
 import summaryIcon from './assets/list.svg';
-import IconSelector from "./IconSelector";
-import Module from "./Module";
+import schemaIcon from './assets/schema.svg';
+import Editor from "./Editor.jsx";
+import NewProjectEditor from "./NewProjectEditor.jsx";
+import SummaryTab from "./SummaryTab.jsx";
+import SchemaTab from "./SchemaTab.jsx";
 
 
 function App() {
@@ -39,9 +38,10 @@ function App() {
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
         summary: false,
+        schema: false,
         freeModules: true,
     }), []);
-    const [printOptions, setPrintOptions] = useState({ ...defaultPrintOptions });
+    const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
     const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
@@ -60,6 +60,13 @@ function App() {
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
         desc: import.meta.env.VITE_DEFAULT_DESC,
+        func: "",
+        type: "",
+        crb: "",
+        current: "",
+        sensibility: "",
+        pole: "",
+        parentId: "",
         free: true,
         span: 1
     }), [defaultModuleId]);
@@ -69,10 +76,25 @@ function App() {
         npRows: defaultNpRows,
         hRow: defaultHRow,
         spr: defaultStepsPerRows,
+        db: {
+            crb: "",
+            current: "30A-60A",
+            desc: "Disjonteur de branchement",
+            free: false,
+            func: "dd",
+            icon: "swb_puissance.svg",
+            id: "DB",
+            parentId: "",
+            pole: "1P+N",
+            sensibility: "500mA",
+            span: 4,
+            text: "Disjonteur de branchement",
+            type: "S"
+        }
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows]);
 
     const createRow = useCallback((steps, rowsCount) => {
-        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
+        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({...defaultModule}).map((q, j) => ({
             ...q,
             id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
         })));
@@ -88,7 +110,75 @@ function App() {
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
-    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
+        db: {...defaultProjectProperties.db},
+        withDb: false
+    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db]);
+
+    const schemaFunctions = {
+        sw: {
+            name: 'Interrupteur sectionneur',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        id: {
+            name: 'Interrupteur différentiel',
+            hasType: true,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        dd: {
+            name: 'Disjoncteur différentiel',
+            hasType: true,
+            hasCrb: true,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        q: {
+            name: 'Disjoncteur',
+            hasType: false,
+            hasCrb: true,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        i: {
+            name: 'Interrupteur',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        c: {
+            name: 'Commande',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: false,
+        },
+        k: {
+            name: 'Relai (Bobine)',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: false,
+        },
+        kc: {
+            name: 'Relai (Contact)',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: true,
+        },
+        o: {
+            name: 'Autre',
+            hasType: false,
+            hasCrb: false,
+            hasCurrent: true,
+            hasPole: true,
+        },
+    };
 
     const setDocumentTitle = (title) => {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
@@ -146,7 +236,7 @@ function App() {
             }
         });
 
-        return { ...reIndentedSwb, rows };
+        return {...reIndentedSwb, rows};
     }, [defaultModuleId]);
 
     const getSavedSwitchboard = () => {
@@ -164,12 +254,15 @@ function App() {
                 prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
                 prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
                 prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
+                // <2.0.0
+                db: swb.db ?? {...defaultProjectProperties.db},
+                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false
             };
 
-            return modulesAutoId({ ...swb });
+            return modulesAutoId({...swb});
         }
 
-        return { ...defaultProject };
+        return {...defaultProject};
     };
 
     const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
@@ -204,7 +297,7 @@ function App() {
         });
 
         setClipboard(null);
-        setPrintOptions({ ...defaultPrintOptions });
+        setPrintOptions({...defaultPrintOptions});
         setDocumentTitle(name);
         setTab(1);
         scrollToProject();
@@ -235,7 +328,7 @@ function App() {
                     // <=1.4.0 : remove old theme definitions
                     const rows = swb.rows.map((r) => {
                         return r.map((m) => {
-                            let nm = { ...m };
+                            let nm = {...m};
                             if (nm.theme) delete nm['theme'];
                             return nm;
                         });
@@ -244,20 +337,24 @@ function App() {
                         ...defaultProject,
                         ...swb,
 
+                        // <1.5.0
                         prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
                         prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
                         prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
+                        // <2.0.0
+                        db: swb.db ?? {...defaultProjectProperties.db},
+                        withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
 
                         rows
                     };
 
-                    setSwitchboard(() => modulesAutoId({ ...swb }));
+                    setSwitchboard(() => modulesAutoId({...swb}));
 
                     //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
                     //setDocumentTitle(filename);
 
                     setClipboard(null);
-                    setPrintOptions({ ...defaultPrintOptions });
+                    setPrintOptions({...defaultPrintOptions});
                     setTab(1);
                     scrollToProject();
                 } catch (err) {
@@ -311,11 +408,11 @@ function App() {
             prevModule = switchboard.rows[pr][pm];
         }
 
-        setEditor({ rowIndex, moduleIndex, currentModule, prevModule, theme, errors: [] });
+        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, errors: []});
     };
 
     const updateModuleEditor = (data) => {
-        setEditor((old) => ({ ...old, currentModule: { ...old.currentModule, ...data } }));
+        setEditor((old) => ({...old, currentModule: {...old.currentModule, ...data}}));
     }
 
     const applyModuleEditor = () => {
@@ -329,10 +426,18 @@ function App() {
         const text = (editor.currentModule.text ?? "").trim();
         const desc = (editor.currentModule.desc ?? "").trim();
 
+        const parentId = (editor.currentModule.parentId ?? "").trim();
+        const func = (editor.currentModule.func ?? "").trim();
+        const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
+        const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
+        const current = (schemaFunctions[editor.currentModule.func] ? (editor.currentModule.current ?? "") : "").trim();
+        const sensibility = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.sensibility ?? "") : "").trim();
+        const pole = (schemaFunctions[editor.currentModule.func]?.hasPole ? (editor.currentModule.pole ?? "") : "").trim();
+
         if (!(/\w*/.test(id))) {
             setEditor((old) => ({
                 ...old,
-                currentModule: { ...old.currentModule, id: "" },
+                currentModule: {...old.currentModule, id: ""},
                 errors: [...old.errors, "Un identifiant valide est requis."]
             }));
             return;
@@ -341,7 +446,7 @@ function App() {
         if (!(/\w*/.test(text))) {
             setEditor((old) => ({
                 ...old,
-                currentModule: { ...old.currentModule, text: "" },
+                currentModule: {...old.currentModule, text: ""},
                 errors: [...old.errors, "Une description valide est requise."]
             }));
             return;
@@ -350,7 +455,7 @@ function App() {
         if (!(/\w*/.test(desc))) {
             setEditor((old) => ({
                 ...old,
-                currentModule: { ...old.currentModule, desc: "" },
+                currentModule: {...old.currentModule, desc: ""},
                 errors: [...old.errors, "Une description valide est requise."]
             }));
             return;
@@ -369,14 +474,21 @@ function App() {
                         id,
                         icon,
                         text,
-                        desc
+                        desc,
+                        parentId,
+                        func,
+                        crb,
+                        type,
+                        current,
+                        sensibility,
+                        pole,
                     };
                 });
 
                 return r;
             });
 
-            return modulesAutoId({ ...old, rows });
+            return modulesAutoId({...old, rows});
         });
 
         setEditor(null);
@@ -398,13 +510,13 @@ function App() {
                         }
                         return module;
                     }
-                    return { ...module, span: module.span + 1 };
+                    return {...module, span: module.span + 1};
                 });
 
                 return r.filter((rr) => rr !== null);
             });
 
-            return modulesAutoId({ ...old, rows });
+            return modulesAutoId({...old, rows});
         });
     };
 
@@ -419,15 +531,15 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return { ...module, span: module.span - 1 };
+                        return {...module, span: module.span - 1};
                     });
 
-                    r.splice(moduleIndex + 1, 0, { ...defaultModule });
+                    r.splice(moduleIndex + 1, 0, {...defaultModule});
 
                     return r;
                 });
 
-                return modulesAutoId({ ...old, rows });
+                return modulesAutoId({...old, rows});
             });
         }
     };
@@ -443,13 +555,13 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return { ...module, ...defaultModule, span: module.span };
+                        return {...module, ...defaultModule, span: module.span};
                     });
 
                     return r;
                 });
 
-                return modulesAutoId({ ...old, rows });
+                return modulesAutoId({...old, rows});
             });
         }
     };
@@ -475,17 +587,17 @@ function App() {
         const selected = findThemeByName(name);
         if (selected) {
             setTheme(selected);
-            setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
+            setSwitchboard((old) => modulesAutoId({...old, theme: selected}));
             setTab(1);
         }
     }
 
     const openProjectPropertiesEditor = () => {
-        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+        setNewProjectProperties(() => ({...defaultProjectProperties}));
     };
 
     const updateProjectProperties = (data) => {
-        setNewProjectProperties((old) => ({ ...old, ...data }));
+        setNewProjectProperties((old) => ({...old, ...data}));
     };
 
     const handleScrollRight = () => {
@@ -558,7 +670,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex);
-                return modulesAutoId({ ...old, rows });
+                return modulesAutoId({...old, rows});
             })
         }
     }
@@ -575,7 +687,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return modulesAutoId({ ...old, rows });
+                return modulesAutoId({...old, rows});
             })
         }
     }
@@ -615,13 +727,20 @@ function App() {
                         icon: clipboard.icon,
                         text: clipboard.text,
                         desc: clipboard.desc,
+                        parentId: clipboard.parentId,
+                        func: clipboard.func,
+                        crb: clipboard.crb,
+                        type: clipboard.type,
+                        current: clipboard.current,
+                        sensibility: clipboard.sensibility,
+                        pole: clipboard.pole,
                     };
                 });
 
                 return r;
             });
 
-            return modulesAutoId({ ...old, rows });
+            return modulesAutoId({...old, rows});
         });
 
         setClipboard(null);
@@ -696,14 +815,14 @@ function App() {
         const newRow = createRow(switchboard.stepsPerRows, 1);
         rows.splice(rowIndex + 1, 0, ...newRow);
 
-        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+        setSwitchboard((old) => modulesAutoId({...old, rows}));
     }
 
     const handleRowDelete = (rowIndex) => {
         let rows = switchboard.rows;
         rows.splice(rowIndex, 1);
 
-        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+        setSwitchboard((old) => modulesAutoId({...old, rows}));
     }
 
     const rowAddAllowed = () => {
@@ -716,6 +835,32 @@ function App() {
 
     const printFreeModuleAllowed = () => {
         return printOptions.freeModules;
+    }
+
+    const getFilteredModulesBySchemaFuncs = () => {
+        let m = {};
+        switchboard.rows.forEach((row) => {
+            row.forEach((module) => {
+                if (Object.keys(schemaFunctions).includes(module.func)) {
+                    if (!m[module.func]) m[module.func] = [];
+                    m[module.func].push(module);
+                }
+            });
+        });
+        return m;
+    }
+
+    const getModuleById = (moduleId) => {
+        let m = null;
+        for (const row of switchboard.rows) {
+            for (const module of row) {
+                if (module.id === moduleId) {
+                    m = module;
+                    break;
+                }
+            }
+        }
+        return m;
     }
 
     useEffect(() => {
@@ -764,8 +909,10 @@ function App() {
             }
         }}>
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <button className="button_group-new_project" onClick={() => { openProjectPropertiesEditor(); }} title="Créer un nouveau projet">
-                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
+                <button className="button_group-new_project" onClick={() => {
+                    openProjectPropertiesEditor();
+                }} title="Créer un nouveau projet">
+                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
                     <span>Nouveau projet</span>
                 </button>
 
@@ -773,41 +920,49 @@ function App() {
 
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
+                }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
                 <label htmlFor="importfile" className="button_group-import_project" title="Importer un projet existant">
-                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => document.getElementById('importfile').click()} />
+                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => document.getElementById('importfile').click()}/>
                     <span>Importer</span>
                 </label>
 
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();
                 }} title="Exporter...">
-                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
+                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"}/>
                     <span>Exporter</span>
                 </button>
 
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
-                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
+                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"}/>
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
                         <div className="dropdown_item" title="Imprimer les étiquettes">
-                            <input id="print_labels" name="print_labels" type="checkbox" checked={printOptions.labels} onChange={(e) => setPrintOptions((old) => ({ ...old, labels: e.target.checked }))} />
+                            <input id="print_labels" name="print_labels" type="checkbox" checked={printOptions.labels} onChange={(e) => setPrintOptions((old) => ({...old, labels: e.target.checked}))}/>
                             <label htmlFor="print_labels">Etiquettes</label>
                         </div>
+                        <div className="dropdown_item" title="Imprimer les emplacements libres de chaque rangée d'étiquettes" style={{marginLeft: '0.5em'}}>
+                            <input id="print_free" name="print_free" type="checkbox" checked={printOptions.freeModules} onChange={(e) => setPrintOptions((old) => ({...old, freeModules: e.target.checked}))} disabled={!printOptions.labels}/>
+                            <label htmlFor="print_free">Imprimer les emplacements libres</label>
+                        </div>
+
+                        <div className="dropdown_separator"></div>
+
+                        <div className="dropdown_item" title="Imprimer le schéma unifilaire">
+                            <input id="print_schema" name="print_schema" type="checkbox" checked={printOptions.schema} onChange={(e) => setPrintOptions((old) => ({...old, schema: e.target.checked}))}/>
+                            <label htmlFor="print_schema">Schéma unifilaire</label>
+                        </div>
                         <div className="dropdown_item" title="Imprimer la nomenclature">
-                            <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({ ...old, summary: e.target.checked }))} />
+                            <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({...old, summary: e.target.checked}))}/>
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
-                        <div className="dropdown_separator"></div>
-                        <div className="dropdown_item" title="Imprimer les emplacements libres de chaque rangée d'étiquettes">
-                            <input id="print_free" name="print_free" type="checkbox" checked={printOptions.freeModules} onChange={(e) => setPrintOptions((old) => ({ ...old, freeModules: e.target.checked }))} disabled={!printOptions.labels} />
-                            <label htmlFor="print_free">Emplacements libres</label>
-                        </div>
+
                         <div className="dropdown_footer">
                             <button title="Lancer l&apos;impression" onClick={() => {
                                 printProject();
-                            }}>Lancer l&apos;impression...</button>
+                            }}>Lancer l&apos;impression...
+                            </button>
                         </div>
                     </div>
                 </button>
@@ -816,8 +971,8 @@ function App() {
 
                 <button className="button_group-clear_project" onClick={() => {
                     if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
-                }} title="Réinitialiser le projet" >
-                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
+                }} title="Réinitialiser le projet">
+                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"}/>
                     <span>Réinitialiser</span>
                 </button>
 
@@ -825,7 +980,7 @@ function App() {
             </nav>
 
             <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
-                <img src={projectIcon} width={24} height={24} alt="Projet courant" />
+                <img src={projectIcon} width={24} height={24} alt="Projet courant"/>
                 <ContentEditable
                     value={switchboard.prjname ?? defaultProjectName}
                     onChange={(value) => {
@@ -844,7 +999,7 @@ function App() {
                     editable={!UIFrozen}
                 />
                 <sup>v{switchboard.prjversion ?? 1}</sup>
-            </h3 >
+            </h3>
 
             <ul className="project">
                 <li>
@@ -860,11 +1015,13 @@ function App() {
                     <span><b>Thème actuel:</b></span>
                     <select
                         value={theme?.name ?? defaultTheme}
-                        onChange={(e) => { updateTheme(e.target.value); }}
-                        style={{ maxWidth: '100%' }}
+                        onChange={(e) => {
+                            updateTheme(e.target.value);
+                        }}
+                        style={{maxWidth: '100%'}}
                         disabled={UIFrozen}
                     >
-                        {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
+                        {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
                             const g = e[0];
                             const l = e[1];
                             return <Fragment key={`themes_${g}`}>
@@ -876,24 +1033,33 @@ function App() {
                 </li>
             </ul>
 
+            {/** TABPAGES SELECTOR **/}
+
             <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()} onClick={() => setTab(1)}>
-                    <img src={projectIcon} width={20} height={20} alt="Editeur" />
-                    <span>Editeur</span>
+                    <img src={projectIcon} width={20} height={20} alt="Etiquettes"/>
+                    <span>Etiquettes</span>
                 </div>
                 <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()} onClick={() => setTab(2)}>
-                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
+                    <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire"/>
+                    <span>Schéma</span>
+                </div>
+                <div className={`tabPages_page ${tab === 3 ? 'selected' : ''}`.trim()} onClick={() => setTab(3)}>
+                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature"/>
                     <span>Nomenclature</span>
                 </div>
             </nav>
 
+            {/** TABPAGES **/}
+
+            {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 {switchboard.rows.map((row, i) => (
                     <Row
                         key={i}
                         rowIndex={i}
                         rowPosition={i + 1}
-                        items={row.map((m) => ({ ...defaultModule, ...m }))}
+                        items={row.map((m) => ({...defaultModule, ...m}))}
                         stepsPerRows={switchboard.stepsPerRows}
                         theme={theme}
 
@@ -938,226 +1104,48 @@ function App() {
                 ))}
             </div>
 
-            <div className={`summary ${tab === 2 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
-                <table>
-                    <caption>
-                        Nomenclature: {switchboard.prjname}
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th style={{ width: '120px', paddingRight: '1em' }}>Rangée</th>
-                            <th style={{ width: '60px', paddingRight: '1em' }}>Position</th>
-                            <th style={{ width: '70px', paddingRight: '1em', textAlign: 'center' }}>Type</th>
-                            <th style={{ width: '130px', paddingRight: '1em' }}>Identifiant</th>
-                            <th style={{ width: '210px', paddingRight: '1em' }}>Libellé</th>
-                            <th>Annotations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {switchboard.rows.map((row, i) => {
-                            let li = -1;
-                            return row.map((module, j) => {
-                                if (!module.free) {
-                                    const ret = <tr key={`${i}-${j}`} className={`${li !== i ? 'newrow' : ''}`}>
-                                        <td className="summary_row">{li !== i ? <div><img src={summaryRowIcon} width={16} height={16} alt="Rangée" /><span>Rangée {i + 1}</span></div> : null}</td>
-                                        <td className="summary_position"><div><img src={summaryPositionIcon} width={16} height={16} alt="Position" /><span>P{`${j + 1}`.padStart(2, '0')}</span></div></td>
-                                        <td className="summary_type"><div>{module.icon ? <img src={module.icon} width={16} height={16} alt="Pictogramme" /> : <img src={summaryNoPicto} width={16} height={16} alt="Remplacement" />}</div></td>
-                                        <td className="summary_id"><div>{module.id}</div></td>
-                                        <td className="summary_text"><div>{module.text}</div></td>
-                                        <td className="summary_text"><div>{module.desc}</div></td>
-                                    </tr>;
-                                    if (li !== i) li = i;
-                                    return ret;
-                                }
-                            })
-                        })}
-                    </tbody>
-                </table>
-            </div>
+            {/** SCHEMA TAB **/}
+            <SchemaTab
+                tab={tab}
+                switchboard={switchboard}
+                printOptions={printOptions}
+                schemaFunctions={schemaFunctions}
+            />
 
+            {/** SUMMARY TAB **/}
+            <SummaryTab
+                tab={tab}
+                switchboard={switchboard}
+                printOptions={printOptions}
+                schemaFunctions={schemaFunctions}
+            />
 
+            {/** POPUPS **/}
 
-            {
-                editor && (
-                    <Popup
-                        title={"Editer le module"}
-                        showCloseButton={true}
-                        onCancel={() => setEditor(null)}
-                        onOk={() => applyModuleEditor()}
-                        width={440}
-                        className="popup_flex"
-                        additionalButtons={[
-                            {
-                                text: "Supprimer",
-                                callback: () => { if (handleModuleClear(editor.rowIndex, editor.moduleIndex, editor.currentModule)) { setEditor(null) } },
-                                style: { color: 'red', borderColor: 'red' },
-                                disabled: editor.currentModule.free
-                            }
-                        ]}
-                    >
-                        <div style={{ flex: 1 }}>
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
-                                <input
-                                    type="text"
-                                    name="editor_id"
-                                    id={`editor_id_${editor.currentModule.id.trim()}`}
-                                    value={editor.currentModule.id}
-                                    onChange={(e) => updateModuleEditor({ id: e.target.value })}
-                                    autoFocus
-                                />
-                            </div>
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <div></div>
-                                <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
-                            </div>
+            {editor && <Editor
+                theme={theme}
+                switchboard={switchboard}
+                stepSize={stepSize}
+                schemaFunctions={schemaFunctions}
+                getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
+                getModuleById={getModuleById}
+                editor={editor}
+                onSetEditor={setEditor}
+                onApplyModuleEditor={applyModuleEditor}
+                onUpdateModuleEditor={updateModuleEditor}
+                onHandleModuleClear={handleModuleClear}
+            />}
 
-                            <div className="popup_row" style={{ alignItems: 'center', '--left_column_size': '100px' }}>
-                                <label>Pictogramme</label>
-                                <IconSelector value={editor.currentModule.icon} onChange={(selectedIcon) => updateModuleEditor({ icon: selectedIcon })} />
-                                {/**<div className="radio_group">
-                                    {swbIcons.map((icon, i) => (
-                                        <div className="radio" title={icon.title} key={i}>
-                                            <input
-                                                type="radio"
-                                                name="editor_icon"
-                                                id={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}
-                                                value={icon.filename}
-                                                checked={(icon.filename !== '' ? icon.filename : null) === editor.currentModule.icon}
-                                                onChange={(e) => updateModuleEditor({ icon: e.target.value !== '' ? e.target.value : null })}
-                                            />
-                                            <label htmlFor={`editor_icon_${editor.currentModule.id.trim()}_${icon.filename}`}>
-                                                {icon.filename ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} width={24} height={24} alt={icon.title} /> : icon.title}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>**/}
-                            </div>
-
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_text_${editor.currentModule.id.trim()}`}>Libellé</label>
-                                <textarea
-                                    name="editor_text"
-                                    id={`editor_text_${editor.currentModule.id.trim()}`}
-                                    value={editor.currentModule.text}
-                                    onChange={(e) => updateModuleEditor({ text: e.target.value })}
-                                    rows={3}
-                                />
-                            </div>
-
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br /><span style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
-                                <textarea
-                                    name="editor_desc"
-                                    id={`editor_desc_${editor.currentModule.id.trim()}`}
-                                    value={editor.currentModule.desc}
-                                    onChange={(e) => updateModuleEditor({ desc: e.target.value })}
-                                    rows={2}
-                                />
-                            </div>
-
-                            {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <div></div>
-                                <div className="popup_error">{error}</div>
-                            </div>)}
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '93%', borderBottom: '1px solid lightgray' }}>
-                            <h5 style={{ color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0 }}>Démonstration</h5>
-                            <div style={{ borderRadius: '5px', border: '1px solid darkgray', width: 'min-content', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', minHeight: `calc(${switchboard.height}mm + 1mm)`, overflowY: 'hidden' }}>
-                                <Module
-                                    isDemo={true}
-                                    item={{
-                                        id: editor.currentModule.id,
-                                        icon: editor.currentModule.icon,
-                                        text: editor.currentModule.text,
-                                        desc: editor.currentModule.desc,
-                                        free: false,
-                                        span: editor.currentModule.span
-                                    }}
-                                    modulePosition={1}
-                                    rowPosition={1}
-                                    theme={theme}
-                                    style={{
-                                        "--h": `calc(${switchboard.height}mm + 1mm)`,
-                                        "--sw": `calc(${stepSize}mm + 1px)`
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </Popup >
-                )
-            }
-
-            {
-                newProjectProperties && (
-                    <Popup
-                        title={"Créer un nouveau projet"}
-                        showCloseButton={true}
-                        onCancel={() => setNewProjectProperties(null)}
-                        onOk={() => {
-                            if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) {
-                                createProject(newProjectProperties.name, newProjectProperties.spr, newProjectProperties.npRows, newProjectProperties.hRow);
-                                setNewProjectProperties(null);
-                            }
-                        }}
-                    >
-                        <div className="popup_row" style={{ '--left_column_size': '150px', marginBottom: '3em' }}>
-                            <label htmlFor="newProjectProperties_name">Nom du projet</label>
-                            <input
-                                type="text"
-                                name="newProjectProperties_name"
-                                id="newProjectProperties_name"
-                                value={newProjectProperties.name}
-                                onChange={(e) => updateProjectProperties({ name: e.target.value })}
-                                autoFocus
-                            />
-                        </div>
-
-                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center' }}>
-                            <label htmlFor="newProjectProperties_modules">Nombre de modules par rangée</label>
-                            <div className="radio_group">
-                                {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
-                                    const c = parseInt(count.trim());
-                                    return <div key={c} className="radio">
-                                        <input type="radio" name="spr" id={`newProjectProperties_modules_${c}`} value={c} checked={newProjectProperties.spr === c} onChange={(e) => updateProjectProperties({ spr: parseInt(e.target.value) })} style={{ margin: 0, marginRight: '0.25em' }} />
-                                        <label htmlFor={`newProjectProperties_modules_${c}`}>{c}</label>
-                                    </div>;
-                                })}
-                            </div>
-                        </div>
-
-                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '0.5em' }}>
-                            <label htmlFor="newProjectProperties_modules">Nombre de rangées</label>
-                            <label style={{ fontSize: '1.1em', color: 'var(--primary-color)' }}>˫ <b>{newProjectProperties.npRows}</b> rangées</label>
-                        </div>
-                        <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0 }}>
-                            <div></div>
-                            <div style={{ display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em' }}>
-                                <input type="range" min={rowsMin} max={rowsMax} step={1} value={newProjectProperties.npRows} onChange={(e) => {
-                                    const value = parseInt(e.target.value);
-                                    if (value >= rowsMin) updateProjectProperties({ npRows: value });
-                                }} style={{ minHeight: 0, padding: 0, margin: 0, width: '100%' }} />
-                            </div>
-                        </div>
-
-                        <div className="popup_row" style={{ '--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '0.5em' }}>
-                            <label htmlFor="newProjectProperties_modules">Hauteur d&apos;une rangée</label>
-                            <label style={{ fontSize: '1.1em', color: 'var(--primary-color)' }}>˫ <b>{newProjectProperties.hRow}</b>mm</label>
-                        </div>
-                        <div className="popup_row" style={{ '--left_column_size': '150px', marginTop: 0, marginBottom: '3em' }}>
-                            <div></div>
-                            <div style={{ display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em' }}>
-                                <input type="range" min={heightMin} max={heightMax} step={1} value={newProjectProperties.hRow} onChange={(e) => {
-                                    const value = parseInt(e.target.value);
-                                    if (value >= heightMin) updateProjectProperties({ hRow: value });
-                                }} style={{ minHeight: 0, padding: 0, margin: 0, width: '100%' }} />
-                            </div>
-                        </div>
-                    </Popup >
-                )
-            }
-
+            {newProjectProperties && <NewProjectEditor
+                newProjectProperties={newProjectProperties}
+                onSetNewProjectProperties={setNewProjectProperties}
+                rowsMin={rowsMin}
+                rowsMax={rowsMax}
+                heightMin={heightMin}
+                heightMax={{heightMax}}
+                onCreateProject={createProject}
+                onUpdateProjectProperties={updateProjectProperties}
+            />}
         </div>
     )
 }

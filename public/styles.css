@@ -10,7 +10,57 @@
     /* border-color: #26a0da; */
 }
 
+@page {
+    size: landscape;
+    margin: 10mm;
+    -ms-zoom: 100%;
+    zoom: 100%;
+    transform: scale(0);
+    bleed: overlay;
+    marks: cross;
+
+    border: 1px solid #000;
+}
+
+@page :blank {
+    visibility: hidden;
+    display: none;
+    height: 0;
+}
+
+@page :left {
+    @top-center {
+        content: "tiquettes.fr";
+        font-family: sans-serif;
+        font-size: 8pt;
+        color: darkgray;
+    }
+    @bottom-center {
+        content: "Page " counter(page) " / " counter(pages);
+        font-family: sans-serif;
+        font-size: 8pt;
+        color: darkgray;
+    }
+}
+
+@page :right {
+    @top-center {
+        content: "tiquettes.fr";
+        font-family: sans-serif;
+        font-size: 8pt;
+        color: darkgray;
+    }
+    @bottom-center {
+        content: "Page " counter(page) " / " counter(pages);
+        font-family: sans-serif;
+        font-size: 8pt;
+        color: darkgray;
+    }
+}
+
 body {
+
+
     font-family: sans-serif;
     position: relative;
     padding: 0;
@@ -176,6 +226,11 @@ h1 {
     padding: 0;
 }
 
+h1 a {
+    color: inherit;
+    text-decoration: none;
+}
+
 h1 .version {
     font-size: small;
 }
@@ -201,7 +256,7 @@ h1 sup {
     color: darkgray;
 }
 
-button, select {
+button {
     background-color: #f0f0f0;
     border: 1px solid darkgray;
     border-radius: 5px;
@@ -229,7 +284,8 @@ input[type="file"]::-webkit-file-upload-button {
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-textarea {
+textarea,
+select {
     background-color: #f5f5f5;
     border: 1px solid darkgray;
     border-radius: 5px;
@@ -244,13 +300,19 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
     min-width: 19px;
 }
 
+select {
+    min-height: 34px;
+    min-width: 19px;
+}
+
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     border-color: var(--primary-color);
 }
 
 input[type="checkbox"], input[type="radio"],
-input[type="checkbox"]+label, input[type="radio"]+label,
+input[type="checkbox"] + label, input[type="radio"] + label,
 input[type="range"] {
     cursor: pointer;
 }
@@ -330,23 +392,52 @@ input[type="range"] {
     border-color: var(--primary-color);
 }
 
-.radio_group .radio input:checked+label {
+.radio_group .radio input:checked + label {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: white;
 }
 
-.radio_group .radio input:checked+label img {
+.radio_group .radio input:checked + label img {
     filter: invert();
 }
 
+.pageLoader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: var(--primary-color);
+    animation: l15 1s infinite linear;
+    margin-inline: auto;
+    margin-block: 10em;
+}
+
+.pageLoader::before,
+.pageLoader::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+
+.pageLoader::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+
+@keyframes l15 {
+    100% {
+        transform: rotate(1turn)
+    }
+}
+
 @media print {
-    @page {
-        size: landscape;
-        margin: 0;
-        -ms-zoom: 100%;
-        zoom: 100%;
-        transform: scale(0);
+    @page :blank {
+        display: none;
     }
 
     #content,
@@ -358,13 +449,16 @@ input[type="range"] {
     }
 
     main {
-        width: 100%;
         margin: 0;
         padding: 0;
         max-width: initial;
-        width: calc(100% - 10mm);
-        padding-inline: 10mm;
+        width: 100%;
+        padding-inline: 0;
         padding-block: 10mm;
+    }
+
+    .printable {
+        margin-inline: 10mm;
     }
 
     nav,

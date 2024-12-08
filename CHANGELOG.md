@@ -1,6 +1,21 @@
 # Changelog
 
 
+## [2.0.0] - 2024-12-01 - Nouvelles fonctionnalités majeures
+
+### Ajouts
+
+- Ajout de la fonction "schéma unifilaire". Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module.
+
+### Améliorations
+
+- Amélioration globale du style / design.
+
+### Corrections
+
+- Correction de bugs mineurs
+
+
 ## [1.7.2] - 2024-09-13
 
 ### Corrections
@@ -9,7 +24,7 @@
 - Correction d'un bug dans la gestion de l'impression sous Firefox
 
 
-## [1.7.0] - 2024-08-02
+## [1.7.0] - 2024-08-02 - Nouvelles fonctionnalités majeures
 
 ### Ajouts
 
@@ -33,16 +48,22 @@
 
 ## [1.6.2] - 2024-07-05
 
-### Améliorations
-
-- Modification des icones pour une amélioration de la qualité d'impression
-
 ### Ajouts
 
 - Ajout d'annotations pour chaque module. Seulement visible sur la nomenclature.
 
+### Améliorations
 
-## [1.6.0] - 2024-06-15
+- Modification des icones pour une amélioration de la qualité d'impression
+
+
+## [1.6.0] - 2024-06-15 - Nouvelles fonctionnalités majeures
+
+### Ajouts
+
+- Ajout d'une nomenclature automatique aux projets
+- Ajout d'options pour l'impression
+- Compatibilité PWA. Tiquettes est désormais installable, telle une application native, sur les appareils compatibles
 
 ### Améliorations
 
@@ -52,14 +73,17 @@
 
 - Correction du dimensionnement des modules lors de l'impression 
 
-### Ajouts
-
-- Ajout d'une nomenclature automatique aux projets
-- Ajout d'options pour l'impression
-- Compatibilité PWA. Tiquettes est désormais installable, telle une application native, sur les appareils compatibles 
-
 
 ## [1.5.0] - 2024-06-08
+
+### Ajouts
+
+- Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA
+- Ajout des fichiers sitemap.xml et robots.txt
+- Il est désormais possible de nommer son projet lors de sa création
+- Ajout d'une date de création, d'une date de modification et d'un numéro de version à chaque projet
+- Une date de modification est automatiquement mise à jour après chaque intervention de l'utilisateur
+- Chaque exportation met à jour la version interne du projet
 
 ### Améliorations
 
@@ -71,30 +95,22 @@
 - Récriture du système de gestion des thèmes
 - Nouvelle documentation
 
-### Ajouts
-
-- Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA
-- Ajout des fichiers sitemap.xml et robots.txt
-- Il est désormais possible de nommer son projet lors de sa création
-- Ajout d'une date de création, d'une date de modification et d'un numéro de version à chaque projet
-- Une date de modification est automatiquement mise à jour après chaque intervention de l'utilisateur
-- Chaque exportation met à jour la version interne du projet
 
 ### Partenariats
 
 - Nouveau partenaire: AZ Reso (Artisan électricien du pays Nantais - https://www.google.com/search?q=az+reso+nantes)
 
 
-## [1.4.0] - 2024-06-02
+## [1.4.0] - 2024-06-02 - Nouvelle version majeure
+
+### Ajouts
+
+- Ajout, insertion, et suppression de rangées au cours du déroulement d'un projet
 
 ### Améliorations
 
 - Auto identification des modules libres
 - Affichage de l'identifiant du module précédent lors de l'édition d'un module
-
-### Ajouts
-
-- Ajout, insertion, et suppression de rangées au cours du déroulement d'un projet
 
 
 ## [1.3.4] - 2024-06-02
@@ -127,21 +143,16 @@
 
 ## [1.3.0] - 2024-06-01
 
-### Améliorations
-
-- Meilleurs performances globales
-
 ### Ajouts
 
 - Gestion de thèmes en temps réel, applicables aux étiquettes du projet
 
+### Améliorations
+
+- Meilleurs performances globales
+
 
 ## [1.2.0] - 2024-05-29
-
-### Corrections
-
-- Correction d'une erreur empêchant de mettre correctement en page les étiquettes aux formats suprérieurs au A4
-- Correction de la largeur des modules (18mm normalisé / module) lors de l'impression des étiquettes
 
 ### Ajouts
 
@@ -149,6 +160,11 @@
 - Possibilité de déplacer horizontalement un module dans l'espace libre à ses cotés en utilisant les icones flèches
 - Possibilité de sélectionner un module puis de le déplacer ou le redimmensionner en utilisant le clavier [-] [+] [←] [→] [Entrée] [Suppr]
 - Ajout d'un fichier CHANGELOG.md
+
+### Corrections
+
+- Correction d'une erreur empêchant de mettre correctement en page les étiquettes aux formats suprérieurs au A4
+- Correction de la largeur des modules (18mm normalisé / module) lors de l'impression des étiquettes
 
 ### Modifications
 
