@@ -7,9 +7,13 @@
 
 - Ajout de la fonction "schéma unifilaire". Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module.
 
+### Modifications
+
+- Mise à jour de tous les packages de l'application
+
 ### Améliorations
 
-- Amélioration globale du style / design.
+- Amélioration globale du style / design
 
 ### Corrections
 

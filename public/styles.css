@@ -256,7 +256,7 @@ h1 sup {
     color: darkgray;
 }
 
-button {
+button, .fakeButton {
     background-color: #f0f0f0;
     border: 1px solid darkgray;
     border-radius: 5px;
@@ -268,7 +268,20 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.fakeButton {
+    width: calc(100% - 1.6em) !important;
+    min-height: max-content !important;
+    padding-block: 0.6em !important;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.5em;
+}
+
+button:hover, .fakeButton:hover {
     background-color: var(--secondary-color);
     border-color: var(--primary-color);
 }

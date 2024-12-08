@@ -235,10 +235,6 @@ export default function Editor({
                                     <option value={"100A"}>100A</option>
                                     <option value={"160A"}>160A</option>
                                     <option value={"250A"}>250A</option>
-                                    <option value={"10A-30A"}>10A-30A</option>
-                                    <option value={"15A-30A"}>15A-30A</option>
-                                    <option value={"30A-60A"}>30A-60A</option>
-                                    <option value={"60A-90A"}>60A-90A</option>
                                 </select>
                             </div>
                         }

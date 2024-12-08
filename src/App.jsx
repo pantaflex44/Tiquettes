@@ -78,7 +78,7 @@ function App() {
         spr: defaultStepsPerRows,
         db: {
             crb: "",
-            current: "30A-60A",
+            current: "30/60A",
             desc: "Disjonteur de branchement",
             free: false,
             func: "dd",
@@ -111,7 +111,8 @@ function App() {
         stepsPerRows: defaultStepsPerRows,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
         db: {...defaultProjectProperties.db},
-        withDb: false
+        withDb: false,
+        withGroundLine: true,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db]);
 
     const schemaFunctions = {
@@ -256,7 +257,8 @@ function App() {
                 prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
                 // <2.0.0
                 db: swb.db ?? {...defaultProjectProperties.db},
-                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false
+                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+                withGroundLine:swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
             };
 
             return modulesAutoId({...swb});
@@ -344,6 +346,7 @@ function App() {
                         // <2.0.0
                         db: swb.db ?? {...defaultProjectProperties.db},
                         withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+                        withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
 
                         rows
                     };
@@ -959,10 +962,10 @@ function App() {
                         </div>
 
                         <div className="dropdown_footer">
-                            <button title="Lancer l&apos;impression" onClick={() => {
+                            <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
                                 printProject();
                             }}>Lancer l&apos;impression...
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </button>
@@ -1108,6 +1111,7 @@ function App() {
             <SchemaTab
                 tab={tab}
                 switchboard={switchboard}
+                setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
                 schemaFunctions={schemaFunctions}
             />

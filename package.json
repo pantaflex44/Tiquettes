@@ -17,7 +17,7 @@
   ],
   "author": "Christophe LEMOINE",
   "license": "MIT",
-  "homepage": "https://pantaflex44.github.io/Tiquettes/",
+  "homepage": "https://www.tiquettes.fr/app/",
   "repository": {
     "type": "git",
     "url": "https://github.com/pantaflex44/Tiquettes"
@@ -25,30 +25,31 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode production",
+    "build": "vite build --mode ghpages",
+    "build:public": "vite build --mode web",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 8080",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
   },
   "dependencies": {
-    "compare-versions": "^6.1.0",
+    "compare-versions": "^6.1.1",
     "process": "^0.11.10",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@vite-pwa/assets-generator": "^0.2.4",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "5.4.6",
-    "vite-plugin-open-graph": "^2.0.4",
-    "vite-plugin-pwa": "^0.20.0",
-    "vite-plugin-sitemap": "^0.6.2"
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1",
+    "@vite-pwa/assets-generator": "^0.2.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "vite": "6.0.3",
+    "vite-plugin-open-graph": "^2.0.6",
+    "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-sitemap": "^0.7.1"
   }
 }

@@ -12,6 +12,8 @@
 .schema {
     page: schema;
     padding: 0 !important;
+
+    gap: 0;
 }
 
 .schemaGrid {
@@ -437,6 +439,33 @@
     background-color: #000;
 }
 
+.schemaDbSelectors {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+    row-gap: 1em;
+
+    padding-inline: 1em;
+    padding-block: 1em;
+
+    font-size: 80%;
+    background-color: #f0f0f0;
+
+    border-bottom: 1px solid darkgray;
+}
+
+.schemaDbSelectorsCol {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.25em;
+}
+
 @media print {
     .schema {
         padding: 0;
@@ -448,6 +477,7 @@
     .schemaGrid {
         overflow-x: hidden;
         background: none;
+        border-top: 0;
         margin: 0;
 
         padding: 0;

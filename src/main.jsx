@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom/client'
 
 import App from './App.jsx'
@@ -20,6 +20,25 @@ function Footer() {
 }
 
 export default function Main() {
+    useEffect(() => {
+        if (import.meta.env.VITE_APP_MODE !== "development") {
+            const origin = window.location.origin.toLowerCase().trim();
+            if (![
+                'https://tiquettes.fr',
+                'https://www.tiquettes.fr',
+                'https://tiquettes.fr/app/',
+                'https://www.tiquettes.fr/app/'
+            ].includes(origin)) {
+                console.log("Tiquettes url app has moved! Go to https://www.tiquettes.fr");
+                window.location.replace("https://www.tiquettes.fr");
+            }
+        }
+
+        if (import.meta.env.VITE_APP_MODE === "development") {
+            console.log("Developement mode");
+        }
+    }, []);
+
     return (
         <React.StrictMode>
             <App />

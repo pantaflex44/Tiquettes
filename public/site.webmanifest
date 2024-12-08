@@ -4,22 +4,22 @@
     "description": "Générateur d'étiquettes pour tableaux et armoires électriques",
     "icons": [
         {
-            "src": "/Tiquettes/pwa-64x64.png",
+            "src": "./pwa-64x64.png",
             "sizes": "64x64",
             "type": "image/png"
         },
         {
-            "src": "/Tiquettes/pwa-192x192.png",
+            "src": "./pwa-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/Tiquettes/pwa-512x512.png",
+            "src": "./pwa-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         },
         {
-            "src": "/Tiquettes/maskable-icon-512x512.png",
+            "src": "./maskable-icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
@@ -36,12 +36,12 @@
     "start_url": "index.html",
     "screenshots": [
         {
-            "src": "/Tiquettes/github_1280x640.png",
+            "src": "./github_1280x640.png",
             "sizes": "1280x640",
             "type": "image/png"
         },
         {
-            "src": "/Tiquettes/github_1280x640.png",
+            "src": "./github_1280x640.png",
             "sizes": "1280x640",
             "type": "image/png",
             "form_factor": "wide",
