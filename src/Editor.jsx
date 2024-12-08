@@ -3,6 +3,7 @@ import {Fragment, useState} from "react";
 
 import switchboardIcon from './assets/project.svg';
 import schemaIcon from './assets/schema.svg';
+import editIcon from './assets/edit.svg';
 
 import IconSelector from "./IconSelector.jsx";
 import Module from "./Module.jsx";
@@ -10,27 +11,31 @@ import Popup from "./Popup.jsx";
 import SchemaSymbol from "./SchemaSymbol.jsx";
 
 export default function Editor({
-                                  theme,
-                                  switchboard,
-                                  stepSize,
-                                  schemaFunctions,
+                                   theme,
+                                   switchboard,
+                                   stepSize,
+                                   schemaFunctions,
 
-                                  getFilteredModulesBySchemaFuncs,
-                                  getModuleById,
+                                   getFilteredModulesBySchemaFuncs,
+                                   getModuleById,
 
-                                  editor,
-                                  onSetEditor,
+                                   editor,
+                                   onSetEditor,
 
-                                  onApplyModuleEditor,
-                                  onUpdateModuleEditor,
-                                  onHandleModuleClear,
-                              }) {
+                                   onApplyModuleEditor,
+                                   onUpdateModuleEditor,
+                                   onHandleModuleClear,
+                               }) {
     const [editorTab, setEditorTab] = useState("main");
     const prevModule = getModuleById(editor?.prevModule?.parentId);
 
     return editor && (
         <Popup
-            title={"Editer le module"}
+            title={<div className="popup_title_content">
+                <img className="popup_title_content_img" src={editIcon} title="Editer le module" alt="Editer le module"/>
+                <span className="popup_title_content_id">{editor.currentModule.id ?? ""}</span>
+                {editor.currentModule.text ? <span className="popup_title_content_desc">/ {editor.currentModule.text ?? ""}</span> : ""}
+            </div>}
             showCloseButton={true}
             onCancel={() => onSetEditor(null)}
             onOk={() => onApplyModuleEditor()}
@@ -254,12 +259,12 @@ export default function Editor({
 
                         {editor.currentModule.func && (
                             <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', maxWidth: '93%', borderBottom: '1px solid lightgray'}}>
-                            <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
-                            <div style={{width: '100px', minWidth: '70px', height: '100px', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', overflowY: 'hidden'}}>
-                                <SchemaSymbol module={editor.currentModule} schemaFunctions={schemaFunctions} />
+                                <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
+                                <div style={{width: '100px', minWidth: '70px', height: '100px', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', overflowY: 'hidden'}}>
+                                    <SchemaSymbol module={editor.currentModule} schemaFunctions={schemaFunctions}/>
+                                </div>
                             </div>
-                        </div>
-                            )}
+                        )}
                     </>
                 }
 

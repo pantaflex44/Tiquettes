@@ -4,11 +4,14 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 ---
 
-https://pantaflex44.github.io/Tiquettes/
 
-<u>Licence</u>: MIT<br />
-<u>Auteur</u>: Christophe LEMOINE <pantaflex (at) hotmail (dot) fr><br />
-<u>Création</u>: 26/05/2024<br />
+[<img alt="URL" src="https://img.shields.io/badge/🠊-https://www.tiquettes.fr-%3CCOLOR%3E?style=for-the-badge&color=darkcyan&labelColor=darkcyan">](https://www.tiquettes.fr)
+
+<img alt="Licence" src="https://img.shields.io/badge/Licence-MIT-%3CCOLOR%3E?style=flat&color=fff">
+<img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">
+<img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <pantaflex (at) hotmail (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
+
+[<img alt="Website Deployed for Free with FTP Deploy Action" src="https://img.shields.io/badge/Website deployed for free with-FTP DEPLOY ACTION-%3CCOLOR%3E?style=social&color=fff&labelColor=fff">](https://github.com/SamKirkland/FTP-Deploy-Action)
 
 ---
 
@@ -221,6 +224,31 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 
 ![Thème Legrand - Couleur - Tertiaire](docs/_theme_lgd_cter.png)
 
+## Schéma unifilaire
+
+### Edition des caractéristiques
+
+Depuis la version 2.0.0, Tiquettes propose la génération semi-automatique d'un schéma unifilaire représentatif du tableau électrique conçu par vos soins.
+
+La fenètre dédition d'un module possède désormais un nouvel onglet ```Schéma``` permettant de définir les caractèristiques techiniques du module:
+
+![Edition des caractéristiques techniques](docs/_popup_schema.png)
+
+- _Fonction_ : Fonction technique du module: Interrupteur différentiel, Disjoncteur, etc.
+- _Parent_ : Module parent dont dépend le module en cours d'édition. Par exemple, ce disjoncteur dépend d'un module Interrupteur différentiel.
+
+Les autres informations sont dynamiquement adaptées à la fonction choisie précédement.
+
+La zone de démonstration affiche la représentation graphique (Symbole) et les caractéristiques techniques telles qu'elles seront incluses dans le schéma unifilaire global.
+
+### Génération du schéma unifilaire
+
+La génération dépend à 100% des données que vous aurez renseignées lors de l'édition d'un module.
+
+Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du tableau de bord:
+
+![Schéma unifilaire](docs/_schema.png)
+
 ## Nomenclature / Résumé
 
 Tiquettes vous propose de résumer votre projet.
@@ -228,7 +256,6 @@ Tiquettes vous propose de résumer votre projet.
 La nomenclature est générée automatiquement en fonction des définitions indiquées dans l'éditeur.
 
 ![Nomenclature](docs/_summary.png)
-
 
 ## Immortaliser son travail
 

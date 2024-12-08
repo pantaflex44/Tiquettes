@@ -22,7 +22,7 @@
     max-width: 85%;
     max-height: 93%;
     overflow-y: auto;
-    background: linear-gradient(to bottom, #f0f0f0, white);
+    background: linear-gradient(to bottom, white, #f0f0f0);
     border-radius: 5px;
     border: 1px solid black;
     z-index: 9000;
@@ -34,6 +34,32 @@
     font-size: smaller;
     font-weight: bold;
     margin-bottom: 3em;
+}
+
+.popup_title_content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5em;
+
+    margin-right: 1em;
+}
+
+.popup_title_content_img {
+}
+
+.popup_title_content_id {
+    text-transform: uppercase;
+}
+
+.popup_title_content_desc {
+}
+
+.popup_title_content img {
+    width: 18px;
+    height: 18px;
 }
 
 .popup_cancel {
