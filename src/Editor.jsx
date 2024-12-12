@@ -26,7 +26,7 @@ export default function Editor({
                                    onUpdateModuleEditor,
                                    onHandleModuleClear,
                                }) {
-    const [editorTab, setEditorTab] = useState("main");
+    const [editorTab, setEditorTab] = useState(editor?.tabPage ?? "main");
     const prevModule = getModuleById(editor?.prevModule?.parentId);
 
     return editor && (
@@ -89,7 +89,12 @@ export default function Editor({
 
                         <div className="popup_row" style={{alignItems: 'center', '--left_column_size': '100px'}}>
                             <label>Pictogramme</label>
-                            <IconSelector value={editor.currentModule.icon} onChange={(selectedIcon) => onUpdateModuleEditor({icon: selectedIcon})}/>
+                            <IconSelector value={editor.currentModule.icon} onChange={(selectedIcon, selected) => {
+                                onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
+                                if(selected?.func && !editor.currentModule.func) onUpdateModuleEditor({func: selected?.func});
+                                if(selected?.crb && !editor.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
+                                if(selected?.current && !editor.currentModule.current) onUpdateModuleEditor({current: selected?.current});
+                            }}/>
                         </div>
 
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
@@ -114,7 +119,7 @@ export default function Editor({
                             />
                         </div>
 
-                        <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', maxWidth: '93%', borderBottom: '1px solid lightgray'}}>
+                        <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', borderBottom: '1px solid lightgray'}}>
                             <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
                             <div style={{borderRadius: '5px', border: '1px solid darkgray', width: 'min-content', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', minHeight: `calc(${switchboard.height}mm + 1mm)`, overflowY: 'hidden'}}>
                                 <Module
@@ -258,7 +263,7 @@ export default function Editor({
                         }
 
                         {editor.currentModule.func && (
-                            <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', maxWidth: '93%', borderBottom: '1px solid lightgray'}}>
+                            <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', borderBottom: '1px solid lightgray'}}>
                                 <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
                                 <div style={{width: '100px', minWidth: '70px', height: '100px', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', overflowY: 'hidden'}}>
                                     <SchemaSymbol module={editor.currentModule} schemaFunctions={schemaFunctions}/>

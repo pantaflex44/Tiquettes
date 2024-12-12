@@ -47,9 +47,8 @@ h4 {
 
 .project {
     margin-bottom: 2em;
-    margin-top: 1em;
     list-style: none;
-    margin-left: 36px;
+    margin-left: 12px;
     padding-left: 0;
     color: var(--primary-color);
 }
@@ -57,16 +56,19 @@ h4 {
 .project li {
     margin-left: 0;
     padding-left: 0;
+    padding-block: 0.15em;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5em;
 }
 
 .project li.nobefore {
     margin-block: 1em;
     color: black;
-}
-
-.project li:not(.nobefore)::before {
-    content: '›';
-    margin-right: 0.5em;
 }
 
 .project li span {
@@ -109,9 +111,13 @@ h4 {
 
 .switchboard.selected, .summary.selected, .schema.selected {
     height: max-content;
-    padding: 2em;
+    /*padding: 2em;*/
     border: 1px solid darkgray;
     border-radius: 7px;
+}
+
+.summary table {
+    margin: 2em;
 }
 
 .switchboard_row {
@@ -121,6 +127,11 @@ h4 {
     gap: 0.75em;
     width: max-content;
     margin-bottom: 0;
+    margin-inline: 2em;
+}
+
+.switchboard_row:last-of-type {
+    margin-bottom: 2em;
 }
 
 option[disabled] {
@@ -280,13 +291,13 @@ option[disabled] {
 
 .summary table caption {
     text-align: left;
-    font-size: large;
+    font-size: 120%;
     font-weight: bold;
     margin-bottom: 1em;
 }
 
 .summary table thead tr th {
-    font-size: larger;
+    font-size: 110%;
     text-align: left;
     padding-top: 2em;
     padding-bottom: 1em;
@@ -349,7 +360,7 @@ option[disabled] {
 }
 
 .summary table tbody tr td.summary_type div img {
-    margin-top: -2px;
+    margin-top: -0px;
 }
 
 .summary table tbody tr td.summary_text {
@@ -472,6 +483,127 @@ option[disabled] {
     display: block;
 }
 
+.tabPageBand {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    column-gap: 1em;
+    row-gap: 1em;
+
+    padding-inline: 1.25em;
+    padding-block: 1.25em;
+    min-height: calc(60px - 2em);
+
+    font-size: 80%;
+    background-color: var(--secondary-color-light);
+
+    border-bottom: 1px solid darkgray;
+}
+
+.tabPageBand.errors {
+    background-color: #ffe9dd99;
+    padding: 1.5em;
+}
+
+.tabPageBand.errors ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.tabPageBand.errors ul {
+    gap: 1.5em;
+}
+
+.tabPageBand.errors ul ul {
+    gap: 0.5em;
+    margin-left: 0.5em;
+}
+
+.tabPageBand.errors .tabPageErrors div {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: darkgoldenrod;
+}
+
+.tabPageBand.errors .tabPageErrors .tabPageError {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    line-height: 16px;
+}
+
+.tabPageBand.errors .tabPageErrors .tabPageError svg {
+    width: 20px;
+    height: 16px;
+}
+
+.tabPageBandCol {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.25em;
+    min-height: 34px;
+}
+
+.tabPageBandSeparator {
+    width: 1px;
+    min-height: 100%;
+    margin-inline: 0.5em;
+
+    background-color: darkgray;
+}
+
+.tabPageBandCol > input[type="checkbox"] {
+    display: none;
+}
+
+.tabPageBandCol > label {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100% - 2px);
+    margin-block: 2px;
+
+    padding-inline: 1em;
+
+    background-color: #f5f5f5;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+}
+
+.tabPageBandCol > input[type="checkbox"] + label > img  {
+    width: 18px;
+    height: 18px;
+}
+
+.tabPageBandCol > input[type="checkbox"]:checked + label  {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.tabPageBandCol > input[type="checkbox"]:checked + label > img  {
+    filter: invert(94%) sepia(100%) saturate(22%) hue-rotate(48deg) brightness(107%) contrast(106%);
+}
+
 @media screen and (max-width: 640px) {
     .button_group > *:not(.button_group-separator) {
         align-items: center;
@@ -527,6 +659,7 @@ option[disabled] {
         margin-bottom: 0;
         padding-bottom: 0;
         overflow: hidden;
+        margin-inline: 0;
     }
 
     .summary, .summary.selected,
@@ -537,6 +670,10 @@ option[disabled] {
         break-before: page;
         padding-block: 2em;
         overflow: hidden;
+    }
+
+    .summary table {
+        margin: 0;
     }
 
     .switchboard_row:not(:first-of-type) {

@@ -57,7 +57,9 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
         setSearch(selected);
 
         if (onChange) {
-            if (!selected || (selected.filename !== value)) onChange(selected ? selected.filename : null);
+            if (!selected || (selected.filename !== value)) {
+                onChange(selected ? selected.filename : null, selected);
+            }
         }
     }, [selected]);
 
@@ -100,7 +102,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
                 <input type="text" value={search ? search.title : ''} onKeyUp={handleKeyUp} onChange={handleSearchInput} placeholder="Rechercher ..." style={{ border: 0, padding: 0 }} onInput={handleSearchEnter} />
                 <img src={opened ? caretUpIcon : caretDownIcon} width={16} height={16} style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Pictogrammes" title="Liste des pictogrammes" onClick={handleIconListToggler} />
             </div>
-            <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{ visibility: (opened ? 'visible' : 'hidden'), position: 'absolute', border: '1px solid darkgray', borderRadius: '5px', padding: '0.5em', fontWeight: 400, width: 'calc(100% - 1.3em)', margin: 0, marginTop: '0em', height: '16em', overflowY: 'auto', backgroundColor: '#fff', listStyle: 'none' }} onMouseOut={() => setHoveredItem(null)}>
+            <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{ zIndex: 1, visibility: (opened ? 'visible' : 'hidden'), position: 'absolute', border: '1px solid darkgray', borderRadius: '5px', padding: '0.5em', fontWeight: 400, width: 'calc(100% - 1.3em)', margin: 0, marginTop: '0em', height: '16em', overflowY: 'auto', backgroundColor: '#fff', listStyle: 'none' }} onMouseOut={() => setHoveredItem(null)}>
                 {found.map((icon, i) => {
                     return <li key={i} data-value={icon.filename} onClick={() => handleIconListItemSelected(icon)} style={{ borderRadius: '5px', cursor: 'pointer', listStyle: 'none', padding: '0.5em', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'center', justifyContent: 'flex-start', columnGap: '1em', backgroundColor: ((selected && selected.filename === icon.filename && search.filename) ? '#f5f5f5' : (hoveredItem === icon.filename) ? 'var(--secondary-color)' : 'inherit') }} onMouseMove={() => setHoveredItem(icon.filename) } >
                         {icon.filename

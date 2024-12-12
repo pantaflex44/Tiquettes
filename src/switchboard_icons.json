@@ -1,226 +1,438 @@
 [
     {
         "filename": "",
-        "title": "aucun pictogramme"
+        "title": "aucun pictogramme",
+        "coef": 0.5
     },
     {
         "filename": "swb_ecl.svg",
-        "title": "Eclairage (pièce de jour)"
+        "title": "Eclairage (pièce de jour)",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_ecl2.svg",
-        "title": "Eclairage (pièce de nuit)"
+        "title": "Eclairage (pièce de nuit)",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_ecl_cmd.svg",
-        "title": "Eclairage secondaire"
+        "title": "Eclairage secondaire",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_ecl_rgb.svg",
-        "title": "Eclairage commandé"
+        "title": "Eclairage commandé",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_eclext.svg",
-        "title": "Eclairage extérieur"
+        "title": "Eclairage extérieur",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_pc.svg",
-        "title": "Prise de courant murale"
+        "title": "Prise de courant murale",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_pc2.svg",
-        "title": "Appareil sur prise de courant"
+        "title": "Appareil sur prise de courant",
+        "coef": 0.5,
+        "func": "o",
+        "current": "16A"
     },
     {
         "filename": "swb_alim_eco.svg",
-        "title": "Economie d'énergie"
+        "title": "Economie d'énergie",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_alim_ht.svg",
-        "title": "Coupure générale"
+        "title": "Coupure générale",
+        "coef": 0.5,
+        "func": "sw",
+        "current": "63A"
     },
     {
         "filename": "swb_alim.svg",
-        "title": "Alimentation commandée"
+        "title": "Alimentation commandée",
+        "coef": 0.5
     },
     {
         "filename": "swb_puissance.svg",
-        "title": "Alimentation principale"
+        "title": "Alimentation principale",
+        "coef": 0.5
     },
     {
         "filename": "swb_ext.svg",
-        "title": "Tableau divisionnaire / Tableau secondaire"
+        "title": "Tableau divisionnaire / Tableau secondaire",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "40A"
     },
     {
         "filename": "swb_clim.svg",
-        "title": "Pompe à chaleur / PAC / Groupe froid"
+        "title": "Pompe à chaleur / PAC / Groupe froid",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "B",
+        "current": "25A"
     },
     {
         "filename": "swb_eau.svg",
-        "title": "Compteur d'eau"
+        "title": "Compteur d'eau",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_four.svg",
-        "title": "Four"
+        "title": "Four",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_frigo.svg",
-        "title": "Réfrigirateur / Frigo"
+        "title": "Réfrigirateur / Frigo",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_froid.svg",
-        "title": "Congélateur / Friseur"
+        "title": "Congélateur / Friseur",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_gaz.svg",
-        "title": "Plaque de cuisson au gaz"
+        "title": "Plaque de cuisson au gaz",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_cuissin.svg",
-        "title": "Plaque de cuisson électrique"
+        "title": "Plaque de cuisson électrique",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "32A",
+        "requiredIdTypes": ["A"]
     },
     {
         "filename": "swb_induction.svg",
-        "title": "Plaque de cuisson à induction"
+        "title": "Plaque de cuisson à induction",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "32A",
+        "requiredIdTypes": ["A"]
     },
     {
         "filename": "swb_ll.svg",
-        "title": "Lave linge"
+        "title": "Lave linge",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A",
+        "requiredIdTypes": ["A"]
     },
     {
         "filename": "swb_dryer.svg",
-        "title": "Sèche linge"
+        "title": "Sèche linge",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_ironing.svg",
-        "title": "Lingerie / Repassage"
+        "title": "Lingerie / Repassage",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_lv.svg",
-        "title": "Lave vaisselle"
+        "title": "Lave vaisselle",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_microonde.svg",
-        "title": "Micro-onde"
+        "title": "Micro-onde",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_minuterie.svg",
-        "title": "Minuterie"
+        "title": "Minuterie",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_portail.svg",
-        "title": "Portail électrique"
+        "title": "Portail électrique",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_voitureelectrique.svg",
-        "title": "Borne de rechage"
+        "title": "Borne de rechage",
+        "coef": 1,
+        "func": "q",
+        "crb": "B",
+        "current": "32A",
+        "requiredIdTypes": ["A", "F", "HPI"]
     },
     {
         "filename": "swb_voitureelectrique2.svg",
-        "title": "Prise de rechage"
+        "title": "Prise de rechage",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "20A",
+        "requiredIdTypes": ["A", "F", "HPI"]
     },
     {
         "filename": "swb_ship.svg",
-        "title": "Bateaux / Ponton / Port"
+        "title": "Bateaux / Ponton / Port",
+        "coef": 0.5
     },
     {
         "filename": "swb_solaire.svg",
-        "title": "Panneaux solaires"
+        "title": "Panneaux solaires",
+        "coef": 0.5
     },
     {
         "filename": "swb_volet.svg",
-        "title": "Volet roulant / Store / Porte de garage"
+        "title": "Volet roulant / Store / Porte de garage",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_split.svg",
-        "title": "Unité murale / Monosplit / Cassette"
+        "title": "Unité murale / Monosplit / Cassette",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_telec.svg",
-        "title": "Télécommande / Divers"
+        "title": "Télécommande / Divers",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_ermt.svg",
-        "title": "Télécommande blocs secours / BAES"
+        "title": "Télécommande blocs secours / BAES",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_fire.svg",
-        "title": "Alarme incendie"
+        "title": "Alarme incendie",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_telephonie.svg",
-        "title": "Telephonie / Communication"
+        "title": "Telephonie / Communication",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_informatique.svg",
-        "title": "Informatique"
+        "title": "Informatique",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_tv.svg",
-        "title": "Télévision / Ecran / Projecteur"
+        "title": "Télévision / Ecran / Projecteur",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_music.svg",
-        "title": "Audio / Musique / Multimédia"
+        "title": "Audio / Musique / Multimédia",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_thermo.svg",
-        "title": "Thermostat / Commande de climatisation"
+        "title": "Thermostat / Commande de climatisation",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_thermo2.svg",
-        "title": "Thermostat / Commande de chauffage"
+        "title": "Thermostat / Commande de chauffage",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_thermo3.svg",
-        "title": "Thermostat général"
+        "title": "Thermostat général",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_thermo4.svg",
-        "title": "Thermostat"
+        "title": "Thermostat",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_bec.svg",
-        "title": "Ballon d'eau chaude"
+        "title": "Ballon d'eau chaude",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_journuit.svg",
-        "title": "Contacteur Jour / Nuit"
+        "title": "Contacteur Jour / Nuit",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_blrgas.svg",
-        "title": "Chaudière gaz"
+        "title": "Chaudière gaz",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_chauffage.svg",
-        "title": "Chauffage électrique / Convecteur / Radiateur"
+        "title": "Chauffage électrique / Convecteur / Radiateur",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "16A"
     },
     {
         "filename": "swb_twldryer.svg",
-        "title": "Sèche serviettes"
+        "title": "Sèche serviettes",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_solchauffant.svg",
-        "title": "Plancher chauffant"
+        "title": "Plancher chauffant",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_ventil.svg",
-        "title": "Ventilation"
+        "title": "Ventilation",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
     },
     {
         "filename": "swb_ventil2.svg",
-        "title": "Centrale traitement d'air / CTA"
+        "title": "Centrale traitement d'air / CTA",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_vmc.svg",
-        "title": "VMC"
+        "title": "VMC",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_pool.svg",
-        "title": "Piscine / Jacuzzi / Bassin"
+        "title": "Piscine / Jacuzzi / Bassin",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "40A"
     },
     {
         "filename": "swb_spa.svg",
-        "title": "SPA / Massages / Bien être"
+        "title": "SPA / Massages / Bien être",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     }
 ]

@@ -14,6 +14,8 @@ export default function SchemaItem({
                                        isFirst = false,
                                        childs,
                                        schemaFunctions,
+                                       onEditSymbol,
+                                       monitor = {}
                                    }) {
 
     return Object.entries(childs ?? {}).map(([id, item], j) => (
@@ -25,13 +27,13 @@ export default function SchemaItem({
 
                 {item.hasNext && <div className="schemaItemNextLine"></div>}
 
-                <SchemaSymbol isLast={item.isLast} module={item.module} schemaFunctions={schemaFunctions}/>
+                <SchemaSymbol isLast={item.isLast} module={item.module} schemaFunctions={schemaFunctions} onEdit={(module) => onEditSymbol(module)} monitor={monitor}/>
 
                 {item.isLast ? (
                     <SchemaDescription module={item.module}/>
                 ) : (
                     <div className="schemaItemChilds">
-                        <SchemaItem childs={item.childs} schemaFunctions={schemaFunctions} baseId={baseId ?? item.module.id}/>
+                        <SchemaItem childs={item.childs} schemaFunctions={schemaFunctions} baseId={baseId ?? item.module.id} onEditSymbol={(module) => onEditSymbol(module)} monitor={monitor}/>
                     </div>
                 )}
             </div>

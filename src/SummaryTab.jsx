@@ -20,8 +20,8 @@ export default function SummaryTab({
                     <th style={{width: '100px', paddingRight: '1em'}}>Rangée</th>
                     <th style={{width: '60px', paddingRight: '1em'}}>Position</th>
                     <th style={{width: '50px', paddingRight: '1em', textAlign: 'center'}}>Type</th>
-                    <th style={{width: '110px', paddingRight: '1em'}}>Identifiant</th>
-                    <th style={{width: '230px', paddingRight: '1em'}}>Fonction</th>
+                    <th style={{width: '100px', paddingRight: '1em'}}>Identifiant</th>
+                    <th style={{width: '220px', paddingRight: '1em'}}>Fonction</th>
                     <th style={{width: '210px', paddingRight: '1em'}}>Libellé</th>
                     <th>Annotations</th>
                 </tr>
@@ -37,7 +37,7 @@ export default function SummaryTab({
                                     <div><img src={summaryPositionIcon} width={16} height={16} alt="Position"/><span>P{`${j + 1}`.padStart(2, '0')}</span></div>
                                 </td>
                                 <td className="summary_type">
-                                    <div>{module.icon ? <img src={module.icon} width={16} height={16} alt="Pictogramme"/> : <img src={summaryNoPicto} width={16} height={16} alt="Remplacement"/>}</div>
+                                    <div>{module.icon ? <img src={module.icon} width={20} height={20} alt="Pictogramme"/> : <img src={summaryNoPicto} width={20} height={20} alt="Remplacement"/>}</div>
                                 </td>
                                 <td className="summary_id">
                                     <div>{module.id}</div>

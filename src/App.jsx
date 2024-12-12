@@ -18,6 +18,12 @@ import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
 import summaryIcon from './assets/list.svg';
 import schemaIcon from './assets/schema.svg';
+import monitorIcon from "./assets/monitor.svg";
+import nomonitorIcon from "./assets/nomonitor.svg";
+import createdIcon from "./assets/created.svg";
+import updatedIcon from "./assets/updated.svg";
+import infoIcon from "./assets/info.svg";
+
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
@@ -65,6 +71,7 @@ function App() {
         crb: "",
         current: "",
         sensibility: "",
+        coef: 0.5,
         pole: "",
         parentId: "",
         free: true,
@@ -81,16 +88,17 @@ function App() {
             current: "30/60A",
             desc: "Disjonteur de branchement",
             free: false,
-            func: "dd",
+            func: "db",
             icon: "swb_puissance.svg",
             id: "DB",
             parentId: "",
             pole: "1P+N",
             sensibility: "500mA",
+            coef: 1,
             span: 4,
             text: "Disjonteur de branchement",
             type: "S"
-        }
+        },
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows]);
 
     const createRow = useCallback((steps, rowsCount) => {
@@ -112,7 +120,9 @@ function App() {
         rows: createRow(defaultStepsPerRows, defaultNpRows),
         db: {...defaultProjectProperties.db},
         withDb: false,
-        withGroundLine: true,
+        withGroundLine: false,
+        schemaMonitor: false,
+        switchboardMonitor: false,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db]);
 
     const schemaFunctions = {
@@ -258,7 +268,9 @@ function App() {
                 // <2.0.0
                 db: swb.db ?? {...defaultProjectProperties.db},
                 withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
-                withGroundLine:swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
+                withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
+                schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
+                switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
             };
 
             return modulesAutoId({...swb});
@@ -347,6 +359,8 @@ function App() {
                         db: swb.db ?? {...defaultProjectProperties.db},
                         withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
                         withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
+                        schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
+                        switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
 
                         rows
                     };
@@ -360,6 +374,8 @@ function App() {
                     setPrintOptions({...defaultPrintOptions});
                     setTab(1);
                     scrollToProject();
+
+                    // eslint-disable-next-line no-unused-vars
                 } catch (err) {
                     importRef.current.value = "";
                     alert("Impossible d'importer ce projet.");
@@ -394,7 +410,7 @@ function App() {
         }
     };
 
-    const editModule = (rowIndex, moduleIndex) => {
+    const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
         const currentModule = switchboard.rows[rowIndex][moduleIndex];
 
         let pr = rowIndex;
@@ -411,7 +427,7 @@ function App() {
             prevModule = switchboard.rows[pr][pm];
         }
 
-        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, errors: []});
+        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, tabPage, errors: []});
     };
 
     const updateModuleEditor = (data) => {
@@ -435,6 +451,7 @@ function App() {
         const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
         const current = (schemaFunctions[editor.currentModule.func] ? (editor.currentModule.current ?? "") : "").trim();
         const sensibility = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.sensibility ?? "") : "").trim();
+        const coef = editor.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[editor.currentModule.func]?.hasPole ? (editor.currentModule.pole ?? "") : "").trim();
 
         if (!(/\w*/.test(id))) {
@@ -484,6 +501,7 @@ function App() {
                         type,
                         current,
                         sensibility,
+                        coef,
                         pole,
                     };
                 });
@@ -736,6 +754,7 @@ function App() {
                         type: clipboard.type,
                         current: clipboard.current,
                         sensibility: clipboard.sensibility,
+                        coef: clipboard.coef,
                         pole: clipboard.pole,
                     };
                 });
@@ -1005,34 +1024,17 @@ function App() {
             </h3>
 
             <ul className="project">
-                <li>
-                    <span><u>Date de création</u>: <b>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</b></span>
+                <li title="Date de création">
+                    <img src={createdIcon} alt="Date de création" width={16} height={16} />
+                    <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
                 </li>
-                <li>
-                    <span><u>Dernière modification</u>: <b>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</b></span>
+                <li title="Date de modification">
+                    <img src={updatedIcon} alt="Date de modification" width={16} height={16}/>
+                    <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
                 </li>
-                <li>
-                    <span><u>Descriptif</u>: <b>{switchboard.rows.length}</b> rangée{switchboard.rows.length > 1 ? 's' : ''} de <b>{switchboard.stepsPerRows}</b> module{switchboard.stepsPerRows > 1 ? 's' : ''}. Hauteur des étiquettes: <b>{switchboard.height}mm</b>.</span>
-                </li>
-                <li className="nobefore">
-                    <span><b>Thème actuel:</b></span>
-                    <select
-                        value={theme?.name ?? defaultTheme}
-                        onChange={(e) => {
-                            updateTheme(e.target.value);
-                        }}
-                        style={{maxWidth: '100%'}}
-                        disabled={UIFrozen}
-                    >
-                        {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
-                            const g = e[0];
-                            const l = e[1];
-                            return <Fragment key={`themes_${g}`}>
-                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>{g} - {t.title}</option>)}
-                            </Fragment>
-                        })}
-                    </select>
+                <li title="Description">
+                    <img src={infoIcon} alt="Description" width={16} height={16}/>
+                    <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
                 </li>
             </ul>
 
@@ -1057,6 +1059,35 @@ function App() {
 
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+                <div className="tabPageBand notprintable">
+                    <select
+                        value={theme?.name ?? defaultTheme}
+                        onChange={(e) => {
+                            updateTheme(e.target.value);
+                        }}
+                        style={{maxWidth: '100%'}}
+                        disabled={UIFrozen}
+                    >
+                        {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
+                            const g = e[0];
+                            const l = e[1];
+                            return <Fragment key={`themes_${g}`}>
+                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>Thème : {g} - {t.title}</option>)}
+                            </Fragment>
+                        })}
+                    </select>
+
+                    <div className="tabPageBandSeparator"></div>
+
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
+                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance">
+                            <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance" width={24} height={24}/>
+                        </label>
+                    </div>
+                </div>
+
                 {switchboard.rows.map((row, i) => (
                     <Row
                         key={i}
@@ -1114,6 +1145,7 @@ function App() {
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
                 schemaFunctions={schemaFunctions}
+                onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
 
             {/** SUMMARY TAB **/}
