@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --mode ghpages",
-    "build:public": "vite build --mode web",
+    "build:web": "vite build --mode web",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 8080",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"

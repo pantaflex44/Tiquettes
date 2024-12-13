@@ -100,6 +100,8 @@ export default function SchemaTab({
         if (!switchboard.schemaMonitor) return {};
 
         let result = {};
+        let nbIdTypeA30 = 0;
+        let nbIdTypeAC30 = 0;
 
         function id_monitoring(childs, lastId = null) {
             let lid = lastId;
@@ -109,14 +111,12 @@ export default function SchemaTab({
                         let id_errors = (result.errors ?? [])[id] ?? [];
 
                         const maxCurrent = parseInt((data.module?.current ?? "0").replace(/\D/g, '').trim());
-
                         const currents = Object.entries(data.childs).map(([_, cdata]) => {
                             if (cdata.module?.func === 'q') {
                                 const current = parseInt((cdata.module?.current ?? "0").replace(/\D/g, '').trim());
                                 const coef = cdata.module?.coef ?? 0.5;
                                 return (current * coef);
                             }
-
                             return 0;
                         });
                         const total = currents.reduce((partialSum, a) => partialSum + a, 0);
@@ -126,9 +126,17 @@ export default function SchemaTab({
                             if (!id_errors.includes(id_error)) id_errors.push(id_error);
                         }
 
-                        if (id_errors.length > 0) {
-                            result = {...result, errors: {...result.errors, [id]: id_errors}};
+                        const nbChilds = Object.keys(data.childs).length;
+                        if (nbChilds > 8) {
+                            const id_error2 = `La norme NFC 15-100 autorise un maximum de 8 circuits par interrupteur différentiel.`;
+                            if (!id_errors.includes(id_error2)) id_errors.push(id_error2);
                         }
+
+                        const idSensibility = parseInt((data.module?.sensibility ?? '0').replace(/\D/g, ''));
+                        if ((data.module?.type ?? '').toUpperCase() === 'A' && idSensibility === 30) nbIdTypeA30++;
+                        if ((data.module?.type ?? '').toUpperCase() === 'AC' && idSensibility === 30) nbIdTypeAC30++;
+
+                        if (id_errors.length > 0) result = {...result, errors: {...result.errors, [id]: id_errors}};
 
                         lid = data.module;
                     }
@@ -136,9 +144,7 @@ export default function SchemaTab({
                     if (data.module?.func === 'db') {
                         const cs = (data.module?.current ?? "0").split('/');
                         let minCurrent = 0;
-                        if (cs.length > 0) {
-                            minCurrent = parseInt(cs[cs.length - 1].replace(/\D/g, ''));
-                        }
+                        if (cs.length > 0) minCurrent = parseInt(cs[cs.length - 1].replace(/\D/g, ''));
 
                         Object.entries(data.childs).forEach(([cid, cdata]) => {
                             if (cdata.module?.func === 'sw') {
@@ -147,9 +153,7 @@ export default function SchemaTab({
                                     let db_errors = (result.errors ?? [])[cid] ?? [];
                                     const db_error = `Le calibre choisi (${c}A) doit être supérieur au calibre maximum du disjoncteur de branchement: ${minCurrent}A`;
                                     if (!db_errors.includes(db_error)) db_errors.push(db_error);
-                                    if (db_errors.length > 0) {
-                                        result = {...result, errors: {...result.errors, [cid]: db_errors}};
-                                    }
+                                    if (db_errors.length > 0) result = {...result, errors: {...result.errors, [cid]: db_errors}};
                                 }
                             }
                         });
@@ -162,15 +166,14 @@ export default function SchemaTab({
                         const found = swbIcons.filter((i) => i.filename === icon);
                         if (found.length === 1 && found[0].requiredIdTypes) {
                             if (!found[0].requiredIdTypes.includes(lid?.type ?? '')) {
-                                const q_error = `Ce départ doit être couvert par une protection différentiele de type: ${found[0].requiredIdTypes.join(', ')}. Type actuel: ${lid?.type ?? ''}`;
+                                const q_error = `Ce départ doit être couvert par une protection différentielle de type: ${found[0].requiredIdTypes.join(', ')}. Type actuel: ${lid?.type ?? ''}`;
                                 if (!q_errors.includes(q_error)) q_errors.push(q_error);
                             }
                         }
 
-                        if (q_errors.length > 0) {
-                            result = {...result, errors: {...result.errors, [data.module.id]: q_errors}};
-                        }
+                        if (q_errors.length > 0) result = {...result, errors: {...result.errors, [data.module.id]: q_errors}};
                     }
+
 
                     id_monitoring(data.childs, lid);
                 }
@@ -178,6 +181,14 @@ export default function SchemaTab({
         }
 
         id_monitoring(tree.childs);
+
+        let main_errors = (result.errors ?? [])['Global'] ?? [];
+        if (nbIdTypeA30 + nbIdTypeAC30 < 2) {
+            const types_error = `Une installation électrique doit être protégée par au moins 2 interrupteurs différentiels (30mA).`;
+            if (!main_errors.includes(types_error)) main_errors.push(types_error);
+        }
+        if (main_errors.length > 0) result = {...result, errors: {...result.errors, 'Global': main_errors}};
+
         return result;
     }, [tree?.childs, switchboard.schemaMonitor]);
 
@@ -228,7 +239,7 @@ export default function SchemaTab({
 
                 <div className="tabPageBandCol">
                     <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice" checked={switchboard.schemaMonitor} onChange={() => setSwitchboard((old) => ({...old, schemaMonitor: !old.schemaMonitor}))}/>
-                    <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance">
+                    <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance" className={`${monitor.errors ? 'error' : ''}`}>
                         <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance" width={24} height={24}/>
                     </label>
                 </div>
@@ -243,7 +254,7 @@ export default function SchemaTab({
                                     <div>{id}:</div>
                                     <ul>
                                         {errors.map((error, j) => <li key={j} className="tabPageError">
-                                        <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs" width={16} height={16}/>
+                                            <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs" width={16} height={16}/>
                                             <span>{error}</span>
                                         </li>)}
                                     </ul>
@@ -254,7 +265,7 @@ export default function SchemaTab({
                 </div>
             )}
 
-            <div className="schemaCartbridgeContainer">
+            <div  className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
                 <div className="schemaTitle">Schéma Unifilaire Général</div>
                 <div className="schemaCartbridge">
                     <div className="schemaCartbridgeA">

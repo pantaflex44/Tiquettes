@@ -23,6 +23,7 @@ import nomonitorIcon from "./assets/nomonitor.svg";
 import createdIcon from "./assets/created.svg";
 import updatedIcon from "./assets/updated.svg";
 import infoIcon from "./assets/info.svg";
+import versionIcon from "./assets/versions.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -46,6 +47,7 @@ function App() {
         summary: false,
         schema: false,
         freeModules: true,
+        coverPage: true,
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
@@ -98,7 +100,7 @@ function App() {
             span: 4,
             text: "Disjonteur de branchement",
             type: "S"
-        },
+        }
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows]);
 
     const createRow = useCallback((steps, rowsCount) => {
@@ -885,6 +887,26 @@ function App() {
         return m;
     }
 
+    const monitor = useMemo(() => {
+        if (!switchboard.switchboardMonitor) return {};
+
+        let result = {};
+
+        const used = switchboard.rows.map((row) => row.filter((module) => !module.free).reduce((a, b) => a + b.span, 0)).reduce((a, b) => a + b, 0);
+        const total = switchboard.rows.length * switchboard.stepsPerRows;
+        const percentFree = Math.round(100 - ((used / total) * 100));
+        result = {...result, infos: {...result.infos, Enveloppe: `${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`}};
+
+        let e_errors = (result.errors ?? [])['Enveloppe'] ?? [];
+        if (percentFree < 20) {
+            const e_error = `La norme NFC 15-100 impose un minimum de 20% d'emplacements libres. Vous occupez ${used} module${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre).`;
+            if (!e_errors.includes(e_error)) e_errors.push(e_error);
+        }
+        if (e_errors.length > 0) result = {...result, errors: {...result.errors, Enveloppe: e_errors}};
+
+        return result;
+    }, [switchboard.rows, switchboard.switchboardMonitor]);
+
     useEffect(() => {
         let t = null;
 
@@ -930,6 +952,8 @@ function App() {
                 setClipboard(null);
             }
         }}>
+            {/** TOOLBAR **/}
+
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <button className="button_group-new_project" onClick={() => {
                     openProjectPropertiesEditor();
@@ -975,6 +999,13 @@ function App() {
                             <input id="print_schema" name="print_schema" type="checkbox" checked={printOptions.schema} onChange={(e) => setPrintOptions((old) => ({...old, schema: e.target.checked}))}/>
                             <label htmlFor="print_schema">Schéma unifilaire</label>
                         </div>
+                        <div className="dropdown_item" title="Imprimer la page de garde" style={{marginLeft: '0.5em'}}>
+                            <input id="print_cover" name="print_cover" type="checkbox" checked={printOptions.coverPage} onChange={(e) => setPrintOptions((old) => ({...old, coverPage: e.target.checked}))} disabled={!printOptions.schema}/>
+                            <label htmlFor="print_cover">Imprimer la page de garde</label>
+                        </div>
+
+                        <div className="dropdown_separator"></div>
+
                         <div className="dropdown_item" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({...old, summary: e.target.checked}))}/>
                             <label htmlFor="print_summary">Nomenclature</label>
@@ -1001,6 +1032,8 @@ function App() {
                 <div className="button_group-separator"></div>
             </nav>
 
+            {/** PROJECT TITLE **/}
+
             <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <img src={projectIcon} width={24} height={24} alt="Projet courant"/>
                 <ContentEditable
@@ -1020,21 +1053,26 @@ function App() {
                     }}
                     editable={!UIFrozen}
                 />
-                <sup>v{switchboard.prjversion ?? 1}</sup>
             </h3>
 
+            {/** PROJECT DETAILS **/}
+
             <ul className="project">
+                <li title="Révision">
+                    <img src={versionIcon} alt="Révision" width={16} height={16}/>
+                    <span>Révision {switchboard.prjversion ?? 1}</span>
+                </li>
+                <li title="Description">
+                    <img src={infoIcon} alt="Description" width={16} height={16}/>
+                    <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
+                </li>
                 <li title="Date de création">
-                    <img src={createdIcon} alt="Date de création" width={16} height={16} />
+                    <img src={createdIcon} alt="Date de création" width={16} height={16}/>
                     <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
                 </li>
                 <li title="Date de modification">
                     <img src={updatedIcon} alt="Date de modification" width={16} height={16}/>
                     <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
-                </li>
-                <li title="Description">
-                    <img src={infoIcon} alt="Description" width={16} height={16}/>
-                    <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
                 </li>
             </ul>
 
@@ -1082,11 +1120,31 @@ function App() {
 
                     <div className="tabPageBandCol">
                         <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
-                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance">
+                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance" className={`${monitor.errors ? 'error' : ''}`}>
                             <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance" width={24} height={24}/>
                         </label>
                     </div>
                 </div>
+
+                {monitor.errors && (
+                    <div className="tabPageBand notprintable errors">
+                        <div className="tabPageBandCol">
+                            <ul>
+                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                                    <li key={i} className="tabPageErrors">
+                                        <div>{id}:</div>
+                                        <ul>
+                                            {errors.map((error, j) => <li key={j} className="tabPageError">
+                                                <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs" width={16} height={16}/>
+                                                <span>{error}</span>
+                                            </li>)}
+                                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
 
                 {switchboard.rows.map((row, i) => (
                     <Row

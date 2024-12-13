@@ -48,22 +48,28 @@ h4 {
 .project {
     margin-bottom: 2em;
     list-style: none;
-    margin-left: 12px;
     padding-left: 0;
     color: var(--primary-color);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 1em;
+    row-gap: 0.15em;
 }
 
 .project li {
     margin-left: 0;
     padding-left: 0;
-    padding-block: 0.15em;
 
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    column-gap: 0.5em;
+    column-gap: 0.25em;
 }
 
 .project li.nobefore {
@@ -95,7 +101,6 @@ h4 {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 2em;
     overflow-x: auto;
     /*border: 1px solid darkgray;
     border-top: 2px solid var(--primary-color);
@@ -128,6 +133,7 @@ h4 {
     width: max-content;
     margin-bottom: 0;
     margin-inline: 2em;
+    margin-top: 2em;
 }
 
 .switchboard_row:last-of-type {
@@ -600,6 +606,13 @@ option[disabled] {
     color: #fff;
 }
 
+.tabPageBandCol > input[type="checkbox"]:checked + label.error  {
+    background-color: darkgoldenrod;
+    border-color: darkgoldenrod;
+    color: #fff;
+    animation: blinker 1s linear infinite;
+}
+
 .tabPageBandCol > input[type="checkbox"]:checked + label > img  {
     filter: invert(94%) sepia(100%) saturate(22%) hue-rotate(48deg) brightness(107%) contrast(106%);
 }
@@ -626,7 +639,7 @@ option[disabled] {
 
     h3 {
         margin-top: -2mm;
-        margin-bottom: 7mm;
+        margin-bottom: 5mm;
     }
 
     .tabPages {
@@ -660,6 +673,7 @@ option[disabled] {
         padding-bottom: 0;
         overflow: hidden;
         margin-inline: 0;
+        margin-top: 0;
     }
 
     .summary, .summary.selected,
@@ -691,4 +705,11 @@ option[disabled] {
 
 .icon_selector_box:focus-within, .icon_selector_box.focused {
     border-color: var(--primary-color) !important;
+}
+
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }
