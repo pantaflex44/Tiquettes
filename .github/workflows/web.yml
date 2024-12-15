@@ -24,14 +24,14 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
-      - name: Build web 2
+      - name: Build web
         run: npm run build:web
-      - name: Sync files
+      - name: Sync files ${{ secrets.FTPSERVER }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: "${{ secrets.FTPSERVER }}"
-          username: "${{ secrets.FTPUSERNAME }}"
-          password: "${{ secrets.FTPPASSWORD }}"
+          server: ${{ secrets.FTPSERVER }}
+          username: ${{ secrets.FTPUSERNAME }}
+          password: ${{ secrets.FTPPASSWORD }}
           protocol: ftps
           port: 22
           local-dir: "./dist/"
