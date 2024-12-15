@@ -502,7 +502,7 @@ option[disabled] {
     min-height: calc(60px - 2em);
 
     font-size: 80%;
-    background-color: var(--secondary-color-light);
+    background: linear-gradient(to bottom, #fff, var(--secondary-color-light));
 
     border-bottom: 1px solid darkgray;
 }

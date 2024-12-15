@@ -19,6 +19,7 @@ function Footer() {
 
 export default function Main() {
     useEffect(() => {
+        console.log('test');
         if (import.meta.env.VITE_APP_MODE !== "development") {
             const origin = window.location.origin.toLowerCase().trim();
             if (![
@@ -27,8 +28,8 @@ export default function Main() {
                 'https://tiquettes.fr/app/',
                 'https://www.tiquettes.fr/app/'
             ].includes(origin)) {
-                console.log("Tiquettes url app has moved! Go to https://www.tiquettes.fr");
-                window.location.replace("https://www.tiquettes.fr");
+                console.log("Tiquettes url app has moved! Go to https://www.tiquettes.fr/app/");
+                window.location.replace("https://www.tiquettes.fr/app/");
             }
         }
 
