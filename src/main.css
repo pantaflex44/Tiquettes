@@ -1,5 +1,3 @@
-@import url('./vars.css');
-
 body{
     accent-color: var(--primary-color);
 }

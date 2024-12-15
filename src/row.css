@@ -1,5 +1,3 @@
-@import url('./vars.css');
-
 .row {
     border: 1px solid darkgray;
     display: flex;

@@ -6,8 +6,6 @@ import App from './App.jsx'
 import './main.css';
 import * as pkg from '../package.json';
 
-import Halloween from './Halloween.jsx';
-
 function Footer() {
     return (
         <div style={{
@@ -43,9 +41,6 @@ export default function Main() {
         <React.StrictMode>
             <App />
             <Footer />
-
-            <Halloween />
-
         </React.StrictMode>
     );
 }

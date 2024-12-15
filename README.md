@@ -260,7 +260,7 @@ Différents réglages sont disponibles pour s'adapter au mieux à votre besoin.
 
 S'ensuit la possibilité, via un clique sur cette icône ![Bornier de terre](./docs/_icon_ground.svg), d'ajouter un bornier / ligne de terre au schéma.
 
-L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer ou non le <a href="#moniteur">Moniteur de surveillance</a>.
+L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
 ## Moniteur de surveillance
 

@@ -1,5 +1,3 @@
-@import url('./vars.css');
-
 .module {
     width: var(--sw);
     min-width: var(--sw);
