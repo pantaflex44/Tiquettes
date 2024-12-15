@@ -26,13 +26,13 @@ jobs:
         run: npm ci
       - name: Build web
         run: npm run build:web
-      - name: Sync files ${{ secrets.FTPSERVER }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Upload files
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
+          sftp_only: true
           server: ${{ secrets.FTPSERVER }}
           username: ${{ secrets.FTPUSERNAME }}
           password: ${{ secrets.FTPPASSWORD }}
-          protocol: ftps
           port: 22
-          local-dir: "./dist/"
-          server-dir: "./app/"
+          local_path: "./dist/*"
+          remote_path: "./app/"
