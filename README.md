@@ -255,16 +255,16 @@ Pour éditer un module, il suffit juste de cliquer dessus ;-)
 
 Au-dessus du schéma vous retrouverez l'espace ```barre à outils``` vous proposant dans cet onglet, différents réglages.
 
-Pour commencer, vous avez la possibilité d'ajouter un ```Disjoncteur de branchement``` à votre schéma. Vous pouvez l'activer ou le désactiver en utilisant cette icône <img src="data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgd2lkdGg9IjI0IiAgaGVpZ2h0PSIyNCIgIHZpZXdCb3g9IjAgMCAyNCAyNCIgIGZpbGw9Im5vbmUiICBzdHJva2U9ImN1cnJlbnRDb2xvciIgIHN0cm9rZS13aWR0aD0iMiIgIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgIHN0cm9rZS1saW5lam9pbj0icm91bmQiICBjbGFzcz0iaWNvbiBpY29uLXRhYmxlciBpY29ucy10YWJsZXItb3V0bGluZSBpY29uLXRhYmxlci1ib2x0Ij48cGF0aCBzdHJva2U9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTMgM2wwIDdsNiAwbC04IDExbDAgLTdsLTYgMGw4IC0xMSIgLz48L3N2Zz4=" alt="Disjoncteur de branchement" width="24" height="24" style="border: 1px solid #000; border-radius: 5px; padding: 2px; margin-inline: 10px"/>.
+Pour commencer, vous avez la possibilité d'ajouter un ```Disjoncteur de branchement``` à votre schéma. Vous pouvez l'activer ou le désactiver en utilisant cette icône ![Disjoncteur de branchement](./docs/_icon_db.svg).
 Différents réglages sont disponibles pour s'adapter au mieux à votre besoin.
 
-S'en suit la possibilité, via un clique sur cette icône <img src="data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgd2lkdGg9IjI0IiAgaGVpZ2h0PSIyNCIgIHZpZXdCb3g9IjAgMCAyNCAyNCIgIGZpbGw9Im5vbmUiICBzdHJva2U9ImN1cnJlbnRDb2xvciIgIHN0cm9rZS13aWR0aD0iMiIgIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgIHN0cm9rZS1saW5lam9pbj0icm91bmQiICBjbGFzcz0iaWNvbiBpY29uLXRhYmxlciBpY29ucy10YWJsZXItb3V0bGluZSBpY29uLXRhYmxlci1jaXJjdWl0LWdyb3VuZCI+PHBhdGggc3Ryb2tlPSJub25lIiBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTEyIDEzdi04IiAvPjxwYXRoIGQ9Ik00IDEzaDE2IiAvPjxwYXRoIGQ9Ik03IDE2aDEwIiAvPjxwYXRoIGQ9Ik0xMCAxOWg0IiAvPjwvc3ZnPg==" alt="Disjoncteur de branchement" width="24" height="24" style="border: 1px solid #000; border-radius: 5px; padding: 2px; margin-inline: 10px"/>, d'ajouter un bornier / ligne de terre au schéma.
+S'ensuit la possibilité, via un clique sur cette icône ![Bornier de terre](./docs/_icon_ground.svg), d'ajouter un bornier / ligne de terre au schéma.
 
-L'icône <img src="data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgd2lkdGg9IjI0IiAgaGVpZ2h0PSIyNCIgIHZpZXdCb3g9IjAgMCAyNCAyNCIgIGZpbGw9Im5vbmUiICBzdHJva2U9ImN1cnJlbnRDb2xvciIgIHN0cm9rZS13aWR0aD0iMiIgIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgIHN0cm9rZS1saW5lam9pbj0icm91bmQiICBjbGFzcz0iaWNvbiBpY29uLXRhYmxlciBpY29ucy10YWJsZXItb3V0bGluZSBpY29uLXRhYmxlci1leWUtc3BhcmsiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0xMCAxMmEyIDIgMCAxIDAgNCAwYTIgMiAwIDAgMCAtNCAwIiAvPjxwYXRoIGQ9Ik0xMS42NjkgMTcuOTk0cSAtNS4xOCAtLjE4IC04LjY2OSAtNS45OTRxIDMuNiAtNiA5IC02dCA5IDYiIC8+PHBhdGggZD0iTTE5IDIyLjVhNC43NSA0Ljc1IDAgMCAxIDMuNSAtMy41YTQuNzUgNC43NSAwIDAgMSAtMy41IC0zLjVhNC43NSA0Ljc1IDAgMCAxIC0zLjUgMy41YTQuNzUgNC43NSAwIDAgMSAzLjUgMy41IiAvPjwvc3ZnPg==" alt="Disjoncteur de branchement" width="24" height="24" style="border: 1px solid #000; border-radius: 5px; padding: 2px; margin-inline: 10px"/> permet d'activer ou non le <a href="#moniteur">Moniteur de surveillance</a>.
+L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer ou non le <a href="#moniteur">Moniteur de surveillance</a>.
 
 ## Moniteur de surveillance
 
-Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance <img src="data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgd2lkdGg9IjI0IiAgaGVpZ2h0PSIyNCIgIHZpZXdCb3g9IjAgMCAyNCAyNCIgIGZpbGw9Im5vbmUiICBzdHJva2U9ImN1cnJlbnRDb2xvciIgIHN0cm9rZS13aWR0aD0iMiIgIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgIHN0cm9rZS1saW5lam9pbj0icm91bmQiICBjbGFzcz0iaWNvbiBpY29uLXRhYmxlciBpY29ucy10YWJsZXItb3V0bGluZSBpY29uLXRhYmxlci1leWUtc3BhcmsiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0xMCAxMmEyIDIgMCAxIDAgNCAwYTIgMiAwIDAgMCAtNCAwIiAvPjxwYXRoIGQ9Ik0xMS42NjkgMTcuOTk0cSAtNS4xOCAtLjE4IC04LjY2OSAtNS45OTRxIDMuNiAtNiA5IC02dCA5IDYiIC8+PHBhdGggZD0iTTE5IDIyLjVhNC43NSA0Ljc1IDAgMCAxIDMuNSAtMy41YTQuNzUgNC43NSAwIDAgMSAtMy41IC0zLjVhNC43NSA0Ljc1IDAgMCAxIC0zLjUgMy41YTQuNzUgNC43NSAwIDAgMSAzLjUgMy41IiAvPjwvc3ZnPg==" alt="Disjoncteur de branchement" width="24" height="24" style="border: 1px solid #000; border-radius: 5px; padding: 2px; margin-inline: 10px"/>. 
+Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance ![Moniteur](./docs/_icon_monitor.svg). 
 
 Depuis la version 2.0.0 de l'application, Tiquettes vous propose une relative détection des erreurs dans votre projet. Ces "erreurs", correspondent à des règles définies dans la norme NFC 15-100 à l'instant T. Vous pouvez bien évidement désactiver cette surveillance à tout moment.
 
@@ -280,7 +280,7 @@ Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024)
 
 ![Surveillance - Exemple d'erreur](./docs/_monitor_errors_details.png)
 
-La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouterons au fûr et à mesure des prochaines versions!
+La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouterons au fûr et à mesure des prochaines versions !
 
 ## Nomenclature / Résumé
 
