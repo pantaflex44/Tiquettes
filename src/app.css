@@ -122,7 +122,8 @@ h4 {
 }
 
 .summary table {
-    margin: 2em;
+    margin-inline: 2em;
+    margin-bottom: 2em;
 }
 
 .switchboard_row {
@@ -499,11 +500,11 @@ option[disabled] {
     row-gap: 1em;
 
     padding-inline: 1.25em;
-    padding-block: 1.25em;
+    padding-block: 1em;
     min-height: calc(60px - 2em);
 
     font-size: 80%;
-    background-color: var(--secondary-color-light);
+    background-color: #f0f0f0;
 
     border-bottom: 1px solid darkgray;
 }
@@ -593,6 +594,13 @@ option[disabled] {
     background-color: #f5f5f5;
     border: 1px solid darkgray;
     border-radius: 5px;
+
+    transition: all 200ms ease-out;
+}
+
+.tabPageBandCol > label:hover {
+    border-color: var(--primary-color);
+    background-color: var(--secondary-color);
 }
 
 .tabPageBandCol > input[type="checkbox"] + label > img  {
@@ -610,7 +618,7 @@ option[disabled] {
     background-color: darkgoldenrod;
     border-color: darkgoldenrod;
     color: #fff;
-    animation: blinker 1s linear infinite;
+    /*animation: blinker 1s linear infinite;*/
 }
 
 .tabPageBandCol > input[type="checkbox"]:checked + label > img  {
@@ -688,6 +696,11 @@ option[disabled] {
 
     .summary table {
         margin: 0;
+    }
+
+    .summary {
+        padding-top: 0;
+        margin-top: 0;
     }
 
     .switchboard_row:not(:first-of-type) {

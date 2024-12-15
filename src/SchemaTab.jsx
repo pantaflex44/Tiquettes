@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import {useCallback, useMemo} from "react";
+import {useCallback, useMemo, useState} from "react";
 
 import SchemaItem from "./SchemaItem.jsx";
 
@@ -13,6 +13,8 @@ import boltIcon from './assets/bolt.svg';
 import noboltIcon from './assets/nobolt.svg';
 import groundIcon from './assets/ground.svg';
 import nogroundIcon from './assets/noground.svg';
+import caretUpIcon from "./assets/caret-up.svg";
+import caretDownIcon from "./assets/caret-down.svg";
 
 export default function SchemaTab({
                                       tab,
@@ -22,6 +24,8 @@ export default function SchemaTab({
                                       schemaFunctions,
                                       onEditSymbol = null,
                                   }) {
+    const [monitorOpened, setMonitorOpened] = useState(false);
+
     const getModuleById = (moduleId) => {
         let indexes = {row: -1, module: -1};
         let m = {module: null, indexes};
@@ -191,6 +195,7 @@ export default function SchemaTab({
 
         return result;
     }, [tree?.childs, switchboard.schemaMonitor]);
+    const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     return (
         <div className={`schema ${tab === 2 ? 'selected' : ''} ${printOptions.schema ? 'printable' : 'notprintable'}`.trim()}>
@@ -239,13 +244,24 @@ export default function SchemaTab({
 
                 <div className="tabPageBandCol">
                     <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice" checked={switchboard.schemaMonitor} onChange={() => setSwitchboard((old) => ({...old, schemaMonitor: !old.schemaMonitor}))}/>
-                    <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance" className={`${monitor.errors ? 'error' : ''}`}>
-                        <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance" width={24} height={24}/>
+                    <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
+                        <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
                     </label>
                 </div>
+                {switchboard.schemaMonitor && (
+                    <div className="tabPageBandCol">
+                        {monitorWarningsLength > 0
+                            ? <>
+                                <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                <img src={monitorOpened ? caretUpIcon : caretDownIcon} alt="Liste des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                            </>
+                            : <span>Aucune erreur détectée.</span>
+                        }
+                    </div>
+                )}
             </div>
 
-            {monitor.errors && (
+            {switchboard.schemaMonitor && monitorOpened && monitor.errors && (
                 <div className="tabPageBand notprintable errors">
                     <div className="tabPageBandCol">
                         <ul>

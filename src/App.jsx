@@ -24,6 +24,8 @@ import createdIcon from "./assets/created.svg";
 import updatedIcon from "./assets/updated.svg";
 import infoIcon from "./assets/info.svg";
 import versionIcon from "./assets/versions.svg";
+import caretUpIcon from "./assets/caret-up.svg";
+import caretDownIcon from "./assets/caret-down.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -40,6 +42,7 @@ function App() {
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
     const [clipboard, setClipboard] = useState(null);
+    const [monitorOpened, setMonitorOpened] = useState(false);
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const defaultPrintOptions = useMemo(() => ({
@@ -125,6 +128,13 @@ function App() {
         withGroundLine: false,
         schemaMonitor: false,
         switchboardMonitor: false,
+        summaryColumnRow: false,
+        summaryColumnPosition: false,
+        summaryColumnType: true,
+        summaryColumnId: true,
+        summaryColumnFunction: true,
+        summaryColumnLabel: true,
+        summaryColumnDescription: true,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db]);
 
     const schemaFunctions = {
@@ -273,6 +283,13 @@ function App() {
                 withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                 schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
                 switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
+                summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
+                summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
+                summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
+                summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
+                summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
+                summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
+                summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
             };
 
             return modulesAutoId({...swb});
@@ -363,6 +380,13 @@ function App() {
                         withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                         schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
                         switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
+                        summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
+                        summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
+                        summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
+                        summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
+                        summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
+                        summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
+                        summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
 
                         rows
                     };
@@ -906,6 +930,7 @@ function App() {
 
         return result;
     }, [switchboard.rows, switchboard.switchboardMonitor]);
+    const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     useEffect(() => {
         let t = null;
@@ -1120,13 +1145,24 @@ function App() {
 
                     <div className="tabPageBandCol">
                         <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
-                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance" className={`${monitor.errors ? 'error' : ''}`}>
-                            <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance" width={24} height={24}/>
+                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
+                            <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
                         </label>
                     </div>
+                    {switchboard.switchboardMonitor && (
+                        <div className="tabPageBandCol">
+                            {monitorWarningsLength > 0
+                                ? <>
+                                    <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                    <img src={monitorOpened ? caretUpIcon : caretDownIcon} alt="Liste des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                </>
+                                : <span>Aucune erreur détectée.</span>
+                            }
+                        </div>
+                    )}
                 </div>
 
-                {monitor.errors && (
+                {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
                     <div className="tabPageBand notprintable errors">
                         <div className="tabPageBandCol">
                             <ul>
@@ -1210,6 +1246,7 @@ function App() {
             <SummaryTab
                 tab={tab}
                 switchboard={switchboard}
+                setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
                 schemaFunctions={schemaFunctions}
             />

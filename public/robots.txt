@@ -1,2 +1,4 @@
 User-agent: *
+Allow: /
 Allow: /Tiquettes/
+Allow: /app/
