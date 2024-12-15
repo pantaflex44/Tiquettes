@@ -19,7 +19,6 @@ function Footer() {
 
 export default function Main() {
     useEffect(() => {
-        console.log('test');
         if (import.meta.env.VITE_APP_MODE !== "development") {
             const origin = window.location.origin.toLowerCase().trim();
             if (![

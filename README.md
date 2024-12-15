@@ -11,8 +11,6 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 <img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <pantaflex (at) hotmail (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
 
-[<img alt="Website Deployed for Free with FTP Deploy Action" src="https://img.shields.io/badge/Website deployed for free with-FTP DEPLOY ACTION-%3CCOLOR%3E?style=social&color=fff&labelColor=fff">](https://github.com/SamKirkland/FTP-Deploy-Action)
-
 ---
 
 ![Tiquettes](./docs/_sample.png)
