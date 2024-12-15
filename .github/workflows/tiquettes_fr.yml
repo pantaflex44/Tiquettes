@@ -1,14 +1,14 @@
-name: Deploy Tiquettes website
+name: FTP Deploy (tiquettes.fr)
 
 on:
   push:
-    branches: ['dev']
+    branches: ['main']
 
   workflow_dispatch:
 
 jobs:
   web-deploy:
-    name: Web Deploy
+    name: FTP Deploy
 
     runs-on: ubuntu-latest
 
