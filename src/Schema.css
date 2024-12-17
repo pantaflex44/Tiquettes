@@ -125,7 +125,7 @@
     position: absolute;
 
     width: 10px;
-    bottom: 10px;
+    bottom: 5px;
     left: calc(50% - 5px);
 }
 
@@ -236,6 +236,8 @@
             transparent 4px,
             transparent 8px
     );
+
+    overflow-y: hidden;
 }
 
 .schemaItemNextIcon {

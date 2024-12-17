@@ -119,7 +119,9 @@ export default function SchemaTab({
                             if (cdata.module?.func === 'q') {
                                 const current = parseInt((cdata.module?.current ?? "0").replace(/\D/g, '').trim());
                                 const coef = cdata.module?.coef ?? 0.5;
-                                return (current * coef);
+                                const pole = cdata.module?.pole ?? '';
+                                const factor = pole === '3P' ? Math.sqrt(3) : 1;
+                                return (current * coef) / factor;
                             }
                             return 0;
                         });

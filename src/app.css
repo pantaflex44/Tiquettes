@@ -508,6 +508,7 @@ option[disabled] {
 }
 
 .tabPageBand.errors {
+    background: initial;
     background-color: #ffe9dd99;
     padding: 1.5em;
 }

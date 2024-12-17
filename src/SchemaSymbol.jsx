@@ -37,11 +37,14 @@ export default function SchemaSymbol({
 
             <div className="schemaItemSymbolCurrent">{((schemaFunctions[func.name]?.hasCrb && module.crb ? `${module.crb} ` : '') + (schemaFunctions[func.name]?.hasCurrent && module.current ? module.current : '')).trim()}</div>
 
-            {schemaFunctions[func.name]?.hasPole && module.pole && <div className="schemaItemSymbolPole">{module.pole}</div>}
+            {schemaFunctions[func.name]?.hasPole && module.pole && (
+                <>
+                    <div className="schemaItemSymbolPole">{module.pole}</div>
+                    <img className="schemaItemSymbolImgPole" src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole} width={11}/>
+                </>
+            )}
 
-            {isLast && schemaFunctions[func.name]?.hasPole && module.pole && <img className="schemaItemSymbolImgPole" src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole} width={11}/>}
-
-            {monitor.errors && monitor.errors[module.id] && <img className="schemaItemSymbolWarning" src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreur" />}
+            {monitor.errors && monitor.errors[module.id] && <img className="schemaItemSymbolWarning" src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreur"/>}
         </div>
     );
 }
