@@ -15,6 +15,8 @@ import groundIcon from './assets/ground.svg';
 import nogroundIcon from './assets/noground.svg';
 import caretUpIcon from "./assets/caret-up.svg";
 import caretDownIcon from "./assets/caret-down.svg";
+import homeIcon from "./assets/home.svg";
+import compagnyIcon from "./assets/compagny.svg";
 
 export default function SchemaTab({
                                       tab,
@@ -114,21 +116,25 @@ export default function SchemaTab({
                     if (data.module?.func === 'id') {
                         let id_errors = (result.errors ?? [])[id] ?? [];
 
+                        const idPole = data.module?.pole ?? "1P+N";
+                        const isTri = idPole === "3P" || idPole === "4P" || idPole === "3P+N";
+                        const isMono = idPole === "1P+N";
+                        const vmod = switchboard.vref * (isTri ? 3 : (isMono ? 1 : 1));
                         const maxCurrent = parseInt((data.module?.current ?? "0").replace(/\D/g, '').trim());
-                        const currents = Object.entries(data.childs).map(([_, cdata]) => {
+                        const powers = Object.entries(data.childs).map(([_, cdata]) => {
                             if (cdata.module?.func === 'q') {
                                 const current = parseInt((cdata.module?.current ?? "0").replace(/\D/g, '').trim());
-                                const coef = cdata.module?.coef ?? 0.5;
-                                const pole = cdata.module?.pole ?? '';
-                                const factor = pole === '3P' ? Math.sqrt(3) : 1;
-                                return (current * coef) / factor;
+                                const coef = switchboard.projectType === 'R' && isMono ? Math.round((cdata.module?.coef ?? 0.5) * 10) / 10 : 1;
+                                const factor = (cdata.module?.pole ?? '') === '3P' ? Math.sqrt(3) : 1;
+                                return ((current * coef) / factor) * switchboard.vref;
                             }
                             return 0;
                         });
-                        const total = currents.reduce((partialSum, a) => partialSum + a, 0);
-                        result = {...result, infos: {...result.infos, [id]: `Charge courante: ${total}A sur un maximum autorisé de ${maxCurrent}A`}}
+
+                        const total = Math.ceil((powers.reduce((partialSum, a) => partialSum + a, 0)) / vmod);
+                        result = {...result, infos: {...result.infos, [id]: `Charge retenue: ${total}A sur un maximum autorisé de ${maxCurrent}A`}}
                         if (total > maxCurrent) {
-                            const id_error = `La charge courante (${total}A) est supérieure à la limite définie: ${maxCurrent}A`;
+                            const id_error = `La charge retenue (${total}A) est supérieure à la limite définie: ${maxCurrent}A`;
                             if (!id_errors.includes(id_error)) id_errors.push(id_error);
                         }
 
@@ -168,6 +174,18 @@ export default function SchemaTab({
                     if (data.module?.func === 'q' && data.module?.id) {
                         let q_errors = (result.errors ?? [])[data.module.id] ?? [];
 
+                        const current2 = parseInt((data.module?.current ?? "0").replace(/\D/g, '').trim());
+                        const power2 = current2 * switchboard.vref;
+                        const pole2 = data.module?.pole ?? "1P+N";
+                        const isTetra2 = pole2 === "4P" || pole2 === "3P+N";
+                        const round2 = (value) => {
+                            if (value >= 1000) return {value: Math.round((value / 1000) * 100) / 100, unit: 'kW'};
+                            if (value >= 1000000) return {value: Math.round((value / 1000000) * 100) / 100, unit: 'm.W'};
+                            return {value, unit: 'W'};
+                        }
+                        const v = round2(power2 * (isTetra2 ? 3 : 1));
+                        result = {...result, infos: {...result.infos, [id]: `Puissance maximum admissible: ${v.value}${v.unit}`}}
+
                         const icon = data.module?.icon ?? '';
                         const found = swbIcons.filter((i) => i.filename === icon);
                         if (found.length === 1 && found[0].requiredIdTypes) {
@@ -196,12 +214,33 @@ export default function SchemaTab({
         if (main_errors.length > 0) result = {...result, errors: {...result.errors, 'Global': main_errors}};
 
         return result;
-    }, [tree?.childs, switchboard.schemaMonitor]);
+    }, [tree?.childs, switchboard.schemaMonitor, switchboard.projectType, switchboard.vref]);
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     return (
         <div className={`schema ${tab === 2 ? 'selected' : ''} ${printOptions.schema ? 'printable' : 'notprintable'}`.trim()}>
             <div className="tabPageBand notprintable">
+                <div className="tabPageBandCol">
+                    <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR" checked={switchboard.projectType === "R"} onChange={() => setSwitchboard((old) => ({...old, projectType: "R"}))}/>
+                    <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
+                        <img src={homeIcon} alt="Project résidentiel" width={24} height={24}/>
+                    </label>
+                </div>
+                <div className="tabPageBandCol">
+                    <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT" checked={switchboard.projectType === "T"} onChange={() => setSwitchboard((old) => ({...old, projectType: "T"}))}/>
+                    <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
+                        <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24}/>
+                    </label>
+                </div>
+                <div className="tabPageBandCol">
+                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Tension de<br/>référence :</span>
+                </div>
+                <div className="tabPageBandCol">
+                    <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400} value={switchboard.vref} onChange={(e) => setSwitchboard((old) => ({...old, vref: e.target.value}))}/>
+                </div>
+
+                <div className="tabPageBandSeparator"></div>
+
                 <div className="tabPageBandCol">
                     <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice" checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({...old, db: {...old.db, func: 'db'}, withDb: !old.withDb}))}/>
                     <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
@@ -265,7 +304,7 @@ export default function SchemaTab({
 
             {switchboard.schemaMonitor && monitorOpened && monitor.errors && (
                 <div className="tabPageBand notprintable errors">
-                    <div className="tabPageBandCol">
+                    <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
                         <ul>
                             {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
                                 <li key={i} className="tabPageErrors">
@@ -283,7 +322,7 @@ export default function SchemaTab({
                 </div>
             )}
 
-            <div  className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
+            <div className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
                 <div className="schemaTitle">Schéma Unifilaire Général</div>
                 <div className="schemaCartbridge">
                     <div className="schemaCartbridgeA">

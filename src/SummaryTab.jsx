@@ -20,7 +20,7 @@ export default function SummaryTab({
         <div className={`summary ${tab === 3 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
             <div className="tabPageBand notprintable">
                 <div className="tabPageBandCol">
-                    <span>Afficher les colones :</span>
+                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Afficher<br/>les colones :</span>
                 </div>
                 <div className="tabPageBandCol">
                     <input type="checkbox" name="summaryColumnRowChoice" id="summaryColumnRowChoice" checked={switchboard.summaryColumnRow} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnRow: e.target.checked}))}/>

@@ -322,6 +322,11 @@ select {
     min-width: 19px;
 }
 
+input[type="number"] {
+    min-height: 30px !important;
+    min-width: 19px !important;
+}
+
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
 textarea:focus,
 select:focus {

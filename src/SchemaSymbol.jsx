@@ -29,7 +29,7 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={schemaFunctions[func.name].name} onClick={() => handleEdit()}>
+        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={schemaFunctions[func.name].name + (monitor.infos && monitor.infos[module.id] ? "\r\n\r\n" + monitor.infos[module.id] : "")} onClick={() => handleEdit()}>
             <img className="schemaItemSymbolImg" src={`${import.meta.env.BASE_URL}schema_${func.name}.svg`} alt={schemaFunctions[func.name].name} width={70} height={100}/>
             <div className="schemaItemSymbolId">{module.id}</div>
 

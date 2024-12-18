@@ -6,6 +6,7 @@ import './app.css';
 import * as pkg from '../package.json';
 /*import swbIcons from './switchboard_icons.json';*/
 import themesList from './themes.json';
+import swbIcons from './switchboard_icons.json';
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -61,6 +62,8 @@ function App() {
     const defaultStepsPerRows = parseInt(import.meta.env.VITE_DEFAULT_STEPSPERROW);
     const defaultTheme = themesList.filter((t) => t.default)[0];
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
+    const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
+    const defaultVRef = parseInt(import.meta.env.VITE_DEFAULT_VREF);
     const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN);
     const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX);
     const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN);
@@ -88,6 +91,8 @@ function App() {
         npRows: defaultNpRows,
         hRow: defaultHRow,
         spr: defaultStepsPerRows,
+        projectType: defaultProjectType,
+        vref: defaultVRef,
         db: {
             crb: "",
             current: "30/60A",
@@ -104,7 +109,7 @@ function App() {
             text: "Disjonteur de branchement",
             type: "S"
         }
-    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows]);
+    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType, defaultVRef]);
 
     const createRow = useCallback((steps, rowsCount) => {
         return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({...defaultModule}).map((q, j) => ({
@@ -118,6 +123,8 @@ function App() {
         prjcreated: new Date(),
         prjupdated: new Date(),
         prjversion: 1,
+        projectType: defaultProjectType,
+        vref: defaultVRef,
         theme: defaultTheme,
         appversion: pkg.version,
         height: defaultHRow,
@@ -135,7 +142,7 @@ function App() {
         summaryColumnFunction: true,
         summaryColumnLabel: true,
         summaryColumnDescription: true,
-    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db]);
+    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
 
     const schemaFunctions = {
         sw: {
@@ -278,7 +285,9 @@ function App() {
                 prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
                 prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
                 // <2.0.0
-                db: swb.db ?? {...defaultProjectProperties.db},
+                projectType: swb.projectType ?? defaultProjectType,
+                vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
+                db: {...defaultProjectProperties.db, ...(swb.db ?? {...defaultProjectProperties.db})},
                 withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
                 withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                 schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
@@ -358,11 +367,25 @@ function App() {
                     if (!theme) theme = getThemeOfFirstModuleFound(swb);
                     setTheme(theme);
 
-                    // <=1.4.0 : remove old theme definitions
+
                     const rows = swb.rows.map((r) => {
                         return r.map((m) => {
                             let nm = {...m};
+
+                            // <=1.4.0 : remove old theme definitions
                             if (nm.theme) delete nm['theme'];
+
+                            // <=2.0.0 : add module default values for schema definitions
+                            if (nm.icon) {
+                                const sic = swbIcons.filter((si) => si.filename === nm.icon);
+                                if (sic.length === 1) {
+                                    if (!nm.coef) nm = {...nm, coef: sic[0].coef};
+                                    //if (!nm.func) nm = {...nm, func: sic[0].func};
+                                    //if (!nm.crb) nm = {...nm, crb: sic[0].crb};
+                                    //if (!nm.current) nm = {...nm, current: sic[0].current};
+                                }
+                            }
+
                             return nm;
                         });
                     });
@@ -375,7 +398,9 @@ function App() {
                         prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
                         prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
                         // <2.0.0
-                        db: swb.db ?? {...defaultProjectProperties.db},
+                        projectType: swb.projectType ?? defaultProjectType,
+                        vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
+                        db: {...defaultProjectProperties.db, ...(swb.db ?? {...defaultProjectProperties.db})},
                         withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
                         withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                         schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
@@ -1123,23 +1148,29 @@ function App() {
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <div className="tabPageBand notprintable">
-                    <select
-                        value={theme?.name ?? defaultTheme}
-                        onChange={(e) => {
-                            updateTheme(e.target.value);
-                        }}
-                        style={{maxWidth: '100%'}}
-                        disabled={UIFrozen}
-                    >
-                        {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
-                            const g = e[0];
-                            const l = e[1];
-                            return <Fragment key={`themes_${g}`}>
-                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>Thème : {g} - {t.title}</option>)}
-                            </Fragment>
-                        })}
-                    </select>
+                    <div className="tabPageBandCol">
+                        <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant :</span>
+                    </div>
+
+                    <div className="tabPageBandCol">
+                        <select
+                            value={theme?.name ?? defaultTheme}
+                            onChange={(e) => {
+                                updateTheme(e.target.value);
+                            }}
+                            style={{maxWidth: '100%'}}
+                            disabled={UIFrozen}
+                        >
+                            {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
+                                const g = e[0];
+                                const l = e[1];
+                                return <Fragment key={`themes_${g}`}>
+                                    <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                    {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>{g} - {t.title}</option>)}
+                                </Fragment>
+                            })}
+                        </select>
+                    </div>
 
                     <div className="tabPageBandSeparator"></div>
 
@@ -1164,7 +1195,7 @@ function App() {
 
                 {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
                     <div className="tabPageBand notprintable errors">
-                        <div className="tabPageBandCol">
+                        <div className="tabPageBandCol" style={{ height:'max-content', minHeight:'max-content', maxHeight:'max-content'}}>
                             <ul>
                                 {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
                                     <li key={i} className="tabPageErrors">

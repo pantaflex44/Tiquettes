@@ -562,13 +562,15 @@ option[disabled] {
     justify-content: flex-start;
     align-items: center;
     column-gap: 0.25em;
+    height: 34px;
     min-height: 34px;
+    max-height: 34px;
 }
 
 .tabPageBandSeparator {
     width: 1px;
     min-height: 100%;
-    margin-inline: 0.5em;
+    margin-inline: 0.25em;
 
     background-color: darkgray;
 }
