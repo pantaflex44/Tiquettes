@@ -83,24 +83,23 @@ export default function SchemaTab({
     }, [switchboard.rows, switchboard.withDb]);
 
     const tree = useMemo(() => switchboard.withDb
-                ? ({
-                    childs: ({
-                        "DB": {
-                            module: {...switchboard.db},
-                            hasNext: false,
-                            hasPrev: false,
-                            isLast: false,
-                            childs: getRow(head),
-                            hasBrothers: false
-                        }
-                    })
+            ? ({
+                childs: ({
+                    "DB": {
+                        module: {...switchboard.db},
+                        hasNext: false,
+                        hasPrev: false,
+                        isLast: false,
+                        childs: getRow(head),
+                        hasBrothers: false
+                    }
                 })
-                : ({
-                    childs: getRow(head)
-                }),
-            [head, switchboard.withDb, switchboard.db]
-        )
-    ;
+            })
+            : ({
+                childs: getRow(head)
+            }),
+        [head, switchboard.withDb, switchboard.db]
+    );
 
     const monitor = useMemo(() => {
         if (!switchboard.schemaMonitor) return {};
@@ -109,109 +108,146 @@ export default function SchemaTab({
         let nbIdTypeA30 = 0;
         let nbIdTypeAC30 = 0;
 
-        function id_monitoring(childs, lastId = null) {
-            let lid = lastId;
+        function add_error(id, message) {
+            let errors = (result.errors ?? [])[id] ?? [];
+            if (!errors.includes(message)) errors.push(message);
+            if (errors.length > 0) result = {...result, errors: {...result.errors, [id]: errors}};
+        }
+
+        function add_info(id, message) {
+            let infos = (result.infos ?? [])[id] ?? [];
+            if (!infos.includes(message)) infos.push(message);
+            if (infos.length > 0) result = {...result, infos: {...result.infos, [id]: infos}};
+        }
+
+        function monitor_runtime(childs, lastParentModule = null, lastParentModuleId = null) {
+            let _lastParentModuleId = lastParentModuleId;
 
             Object.entries(childs).forEach(([id, data]) => {
-                    if (data.module?.func === 'id') {
-                        let id_errors = (result.errors ?? [])[id] ?? [];
+                    const isTri = (pole) => pole === "3P" || pole === "4P" || pole === "3P+N";
+                    const isTetra = (pole) => pole === "4P" || pole === "3P+N";
+                    const isMono = (pole) => pole === "1P+N";
 
-                        const idPole = data.module?.pole ?? "1P+N";
-                        const isTri = idPole === "3P" || idPole === "4P" || idPole === "3P+N";
-                        const isMono = idPole === "1P+N";
-                        const vmod = switchboard.vref * (isTri ? 3 : (isMono ? 1 : 1));
-                        const maxCurrent = parseInt((data.module?.current ?? "0").replace(/\D/g, '').trim());
-                        const powers = Object.entries(data.childs).map(([_, cdata]) => {
-                            if (cdata.module?.func === 'q') {
-                                const current = parseInt((cdata.module?.current ?? "0").replace(/\D/g, '').trim());
-                                const coef = switchboard.projectType === 'R' && isMono ? Math.round((cdata.module?.coef ?? 0.5) * 10) / 10 : 1;
-                                const factor = (cdata.module?.pole ?? '') === '3P' ? Math.sqrt(3) : 1;
-                                return ((current * coef) / factor) * switchboard.vref;
+                    const getCurrent = (module) => {
+                        const _currentCurrent = (module?.current ?? "0A").split('/');
+                        if (_currentCurrent.length > 0) return parseInt(_currentCurrent[_currentCurrent.length - 1].replace(/\D/g, ''));
+                        return 0;
+                    };
+
+                    const getFunc = (module) => {
+                        return module?.func;
+                    }
+
+                    const getSensibility = (module) => {
+                        return parseInt((module?.sensibility ?? '0').replace(/\D/g, ''));
+                    }
+
+                    const getType = (module) => {
+                        return (module?.type ?? '').toUpperCase();
+                    }
+
+                    const getId = (module) => {
+                        return module?.id;
+                    }
+
+                    const getPole = (module) => {
+                        return module?.pole;
+                    }
+
+                    const getTrueCoef = (module) => {
+                        return switchboard.projectType === 'R' && isMono(currentPole) ? Math.round((module?.coef ?? 0.5) * 10) / 10 : 1;
+                    }
+
+                    const getTrueFactor = (module) => {
+                        return (module?.pole ?? '') === '3P' ? Math.sqrt(3) : 1
+                    }
+
+                    const getIconDetails = (module) => {
+                        const icon = module?.icon ?? '';
+                        const found = swbIcons.filter((i) => i.filename === icon);
+                        return found.length === 1 ? found[0] : null;
+                    }
+
+                    const applyPowerRound = (value) => {
+                        if (value >= 1000) return {value: Math.round((value / 1000) * 100) / 100, unit: 'kW'};
+                        if (value >= 1000000) return {value: Math.round((value / 1000000) * 100) / 100, unit: 'm.W'};
+                        return {value, unit: 'W'};
+                    }
+
+                    const parentPole = lastParentModule?.pole ?? (switchboard.withDb ? switchboard.db?.pole : null);
+                    const currentPole = getPole(data.module);
+                    const currentFunc = getFunc(data.module);
+                    const currentCurrent = getCurrent(data.module);
+                    const currentPower = currentCurrent * switchboard.vref;
+                    const vDivider = switchboard.vref * (isTri(currentPole) ? 3 : (isMono(currentPole) ? 1 : 1));
+
+
+                    // Le module courant est un disjoncteur de branchement
+                    if (currentFunc === 'db') {
+                        Object.entries(data.childs).forEach(([cid, cdata]) => {
+                            if (getFunc(cdata.module) === 'sw') {
+                                const childCurrent = getCurrent(cdata.module);
+                                if (childCurrent < currentCurrent) add_error(cid, `Le calibre choisi (${childCurrent}A) doit être supérieur au calibre maximum du disjoncteur de branchement: ${currentCurrent}A`);
                             }
+                        });
+                    }
+
+                    // Le module courant est un interrupteur différentiel
+                    if (currentFunc === 'id' && getId(data.module)) {
+                        const powers = Object.entries(data.childs).map(([_, cdata]) => {
+                            if (getFunc(cdata.module) === 'q') return ((getCurrent(cdata.module) * getTrueCoef(cdata.module)) / getTrueFactor(cdata.module)) * switchboard.vref;
                             return 0;
                         });
+                        const total = Math.ceil((powers.reduce((partialSum, a) => partialSum + a, 0)) / vDivider);
 
-                        const total = Math.ceil((powers.reduce((partialSum, a) => partialSum + a, 0)) / vmod);
-                        result = {...result, infos: {...result.infos, [id]: `Charge retenue: ${total}A sur un maximum autorisé de ${maxCurrent}A`}}
-                        if (total > maxCurrent) {
-                            const id_error = `La charge retenue (${total}A) est supérieure à la limite définie: ${maxCurrent}A`;
-                            if (!id_errors.includes(id_error)) id_errors.push(id_error);
+                        if (total > currentCurrent) add_error(id, `La charge retenue (${total}A) est supérieure à la limite définie: ${currentCurrent}A`);
+
+                        if (Object.keys(data.childs).length > 8) add_error(id, `La norme NFC 15-100 autorise un maximum de 8 circuits par interrupteur différentiel.`);
+
+                        if (switchboard.projectType === 'R') {
+                            const sensibility = getSensibility(data.module);
+                            if (getType(data.module) === 'A' && sensibility === 30) nbIdTypeA30++;
+                            if (getType(data.module) === 'AC' && sensibility === 30) nbIdTypeAC30++;
                         }
 
-                        const nbChilds = Object.keys(data.childs).length;
-                        if (nbChilds > 8) {
-                            const id_error2 = `La norme NFC 15-100 autorise un maximum de 8 circuits par interrupteur différentiel.`;
-                            if (!id_errors.includes(id_error2)) id_errors.push(id_error2);
-                        }
+                        add_info(id, `Charge retenue: ${total}A sur un maximum autorisé de ${currentCurrent}A`);
 
-                        const idSensibility = parseInt((data.module?.sensibility ?? '0').replace(/\D/g, ''));
-                        if ((data.module?.type ?? '').toUpperCase() === 'A' && idSensibility === 30) nbIdTypeA30++;
-                        if ((data.module?.type ?? '').toUpperCase() === 'AC' && idSensibility === 30) nbIdTypeAC30++;
-
-                        if (id_errors.length > 0) result = {...result, errors: {...result.errors, [id]: id_errors}};
-
-                        lid = data.module;
+                        _lastParentModuleId = data.module;
                     }
 
-                    if (data.module?.func === 'db') {
-                        const cs = (data.module?.current ?? "0").split('/');
-                        let minCurrent = 0;
-                        if (cs.length > 0) minCurrent = parseInt(cs[cs.length - 1].replace(/\D/g, ''));
+                    // Le module courant est un disjoncteur
+                    if (currentFunc === 'q' && getId(data.module)) {
+                        const powerDetails = applyPowerRound(currentPower * (isTetra(data.module) ? 3 : 1));
+                        add_info(id, `Puissance maximum admissible: ${powerDetails.value}${powerDetails.unit}`);
 
-                        Object.entries(data.childs).forEach(([cid, cdata]) => {
-                            if (cdata.module?.func === 'sw') {
-                                const c = parseInt((cdata.module?.current ?? "0").replace(/\D/g, '').trim());
-                                if (c < minCurrent) {
-                                    let db_errors = (result.errors ?? [])[cid] ?? [];
-                                    const db_error = `Le calibre choisi (${c}A) doit être supérieur au calibre maximum du disjoncteur de branchement: ${minCurrent}A`;
-                                    if (!db_errors.includes(db_error)) db_errors.push(db_error);
-                                    if (db_errors.length > 0) result = {...result, errors: {...result.errors, [cid]: db_errors}};
-                                }
-                            }
-                        });
-                    }
-
-                    if (data.module?.func === 'q' && data.module?.id) {
-                        let q_errors = (result.errors ?? [])[data.module.id] ?? [];
-
-                        const current2 = parseInt((data.module?.current ?? "0").replace(/\D/g, '').trim());
-                        const power2 = current2 * switchboard.vref;
-                        const pole2 = data.module?.pole ?? "1P+N";
-                        const isTetra2 = pole2 === "4P" || pole2 === "3P+N";
-                        const round2 = (value) => {
-                            if (value >= 1000) return {value: Math.round((value / 1000) * 100) / 100, unit: 'kW'};
-                            if (value >= 1000000) return {value: Math.round((value / 1000000) * 100) / 100, unit: 'm.W'};
-                            return {value, unit: 'W'};
-                        }
-                        const v = round2(power2 * (isTetra2 ? 3 : 1));
-                        result = {...result, infos: {...result.infos, [id]: `Puissance maximum admissible: ${v.value}${v.unit}`}}
-
-                        const icon = data.module?.icon ?? '';
-                        const found = swbIcons.filter((i) => i.filename === icon);
-                        if (found.length === 1 && found[0].requiredIdTypes) {
-                            if (!found[0].requiredIdTypes.includes(lid?.type ?? '')) {
-                                const q_error = `Ce départ doit être couvert par une protection différentielle de type: ${found[0].requiredIdTypes.join(', ')}. Type actuel: ${lid?.type ?? ''}`;
-                                if (!q_errors.includes(q_error)) q_errors.push(q_error);
+                        const iconDetails = getIconDetails(data.module);
+                        if (iconDetails && iconDetails.requiredIdTypes) {
+                            if (!iconDetails.requiredIdTypes.includes(_lastParentModuleId?.type ?? '')) {
+                                add_error(id, `Ce départ doit être couvert par une protection différentielle de type: ${iconDetails.requiredIdTypes.join(', ')}. Type actuel: ${_lastParentModuleId?.type ?? ''}`)
                             }
                         }
-
-                        if (q_errors.length > 0) result = {...result, errors: {...result.errors, [data.module.id]: q_errors}};
                     }
 
+                    // Vérification du câblage du module courant (cohérence des pôles)
+                    if (currentPole && parentPole && (
+                        (parentPole === '1P+N' && currentPole !== '1P+N')
+                        || (parentPole === '3P' && currentPole !== '3P')
+                        || ((parentPole === '1P+N' || parentPole === '3P') && (currentPole === '4P' || currentPole === '3P+N'))
+                    )) {
+                        add_error(id, `Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`);
+                    }
 
-                    id_monitoring(data.childs, lid);
+                    // Pour finir, on passe aux modules enfants
+                    monitor_runtime(data.childs, data.module, _lastParentModuleId);
                 }
             );
         }
+        monitor_runtime(tree.childs);
 
-        id_monitoring(tree.childs);
-
-        let main_errors = (result.errors ?? [])['Global'] ?? [];
-        if (nbIdTypeA30 + nbIdTypeAC30 < 2) {
-            const types_error = `Une installation électrique doit être protégée par au moins 2 interrupteurs différentiels (30mA).`;
-            if (!main_errors.includes(types_error)) main_errors.push(types_error);
+        // Dans un projet résidentiel, on vérifie le nombre d'interrupteurs différentiels obligatoire
+        if (switchboard.projectType === 'R' && (nbIdTypeA30 + nbIdTypeAC30) < 2) {
+            add_error('Global', `Une installation électrique résidentielle doit être protégée par au moins 2 interrupteurs différentiels de sensibilité: 30mA.`);
         }
-        if (main_errors.length > 0) result = {...result, errors: {...result.errors, 'Global': main_errors}};
 
         return result;
     }, [tree?.childs, switchboard.schemaMonitor, switchboard.projectType, switchboard.vref]);
