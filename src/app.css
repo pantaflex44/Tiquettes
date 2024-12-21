@@ -509,14 +509,47 @@ option[disabled] {
 
 .tabPageBand.errors {
     background: initial;
-    background-color: #ffe9dd99;
+    background-color: #fff0ed;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+
     padding: 1.5em;
+
+    position: absolute;
+    margin: 0.5rem;
+    margin-top: calc(60px - 2.5em);
+    width: calc(100% - 3.5rem);
+    max-height: 500px;
+    overflow-y: auto;
+
+    z-index: 1000;
+}
+
+.tabPageBand.errors .closeButton {
+    position: absolute;
+    z-index: 1001;
+
+    right: 7px;
+    top: 7px;
+    width: 24px;
+    height: 24px;
+
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
 }
 
 .tabPageBand.errors ul {
     list-style: none;
+
     margin: 0;
     padding: 0;
+    width: 100%;
 
     display: flex;
     flex-direction: column;

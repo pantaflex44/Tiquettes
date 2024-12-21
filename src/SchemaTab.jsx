@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 
 import SchemaItem from "./SchemaItem.jsx";
 
@@ -13,10 +13,10 @@ import boltIcon from './assets/bolt.svg';
 import noboltIcon from './assets/nobolt.svg';
 import groundIcon from './assets/ground.svg';
 import nogroundIcon from './assets/noground.svg';
-import caretUpIcon from "./assets/caret-up.svg";
-import caretDownIcon from "./assets/caret-down.svg";
 import homeIcon from "./assets/home.svg";
 import compagnyIcon from "./assets/compagny.svg";
+import info2Icon from "./assets/info2.svg";
+import cancelIcon from "./assets/cancel.svg";
 
 export default function SchemaTab({
                                       tab,
@@ -27,6 +27,11 @@ export default function SchemaTab({
                                       onEditSymbol = null,
                                   }) {
     const [monitorOpened, setMonitorOpened] = useState(false);
+    const monitorRef = useRef(null);
+
+    useEffect(() => {
+        if (monitorOpened) monitorRef.current.focus();
+    }, [monitorOpened]);
 
     const getModuleById = (moduleId) => {
         let indexes = {row: -1, module: -1};
@@ -330,7 +335,7 @@ export default function SchemaTab({
                         {monitorWarningsLength > 0
                             ? <>
                                 <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                <img src={monitorOpened ? caretUpIcon : caretDownIcon} alt="Liste des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={20} height={20} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
                             </>
                             : <span>Aucune erreur détectée.</span>
                         }
@@ -339,7 +344,10 @@ export default function SchemaTab({
             </div>
 
             {switchboard.schemaMonitor && monitorOpened && monitor.errors && (
-                <div className="tabPageBand notprintable errors">
+                <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1} onBlur={() => setMonitorOpened(false)}>
+                    <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
+                        <img src={cancelIcon} width={24} height={24} alt={"Fermer"}/>
+                    </div>
                     <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
                         <ul>
                             {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
@@ -359,7 +367,7 @@ export default function SchemaTab({
             )}
 
             <div className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
-                <div className="schemaTitle">Schéma Unifilaire Général</div>
+            <div className="schemaTitle">Schéma Unifilaire Général</div>
                 <div className="schemaCartbridge">
                     <div className="schemaCartbridgeA">
                         Créé: {new Intl.DateTimeFormat('fr-FR', {

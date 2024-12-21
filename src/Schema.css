@@ -11,6 +11,7 @@
 }
 
 .schema {
+    position: relative;
     page: schema;
     padding: 0 !important;
 

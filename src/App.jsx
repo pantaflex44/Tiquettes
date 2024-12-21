@@ -25,8 +25,8 @@ import createdIcon from "./assets/created.svg";
 import updatedIcon from "./assets/updated.svg";
 import infoIcon from "./assets/info.svg";
 import versionIcon from "./assets/versions.svg";
-import caretUpIcon from "./assets/caret-up.svg";
-import caretDownIcon from "./assets/caret-down.svg";
+import cancelIcon from "./assets/cancel.svg";
+import info2Icon from "./assets/info2.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -45,6 +45,12 @@ function App() {
     const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
+
+    const monitorRef = useRef(null);
+
+    useEffect(() => {
+        if (monitorOpened) monitorRef.current.focus();
+    }, [monitorOpened]);
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -1185,7 +1191,7 @@ function App() {
                             {monitorWarningsLength > 0
                                 ? <>
                                     <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                    <img src={monitorOpened ? caretUpIcon : caretDownIcon} alt="Liste des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                    <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
                                 </>
                                 : <span>Aucune erreur détectée.</span>
                             }
@@ -1194,10 +1200,13 @@ function App() {
                 </div>
 
                 {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
-                    <div className="tabPageBand notprintable errors">
-                        <div className="tabPageBandCol" style={{ height:'max-content', minHeight:'max-content', maxHeight:'max-content'}}>
+                    <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1} onBlur={() => setMonitorOpened(false)}>
+                        <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
+                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"}/>
+                        </div>
+                        <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
                             <ul>
-                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                            {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
                                     <li key={i} className="tabPageErrors">
                                         <div>{id}:</div>
                                         <ul>
