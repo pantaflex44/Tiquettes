@@ -6,8 +6,20 @@
         "group": "Simple"
     },
     {
+        "title": "Identifiant, petit pictogramme et grand descriptif",
+        "name": "medium",
+        "default": false,
+        "group": "Simple"
+    },
+    {
         "title": "Pictogramme et descriptif seulement",
         "name": "minimal",
+        "default": false,
+        "group": "Minimal"
+    },
+    {
+        "title": "Petit pictogramme et grand descriptif",
+        "name": "small",
         "default": false,
         "group": "Minimal"
     },

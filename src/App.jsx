@@ -1172,7 +1172,7 @@ function App() {
                                 const l = e[1];
                                 return <Fragment key={`themes_${g}`}>
                                     <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                    {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>{g} - {t.title}</option>)}
+                                    {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>({g}) {t.title}</option>)}
                                 </Fragment>
                             })}
                         </select>

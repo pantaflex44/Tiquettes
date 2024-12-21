@@ -7,6 +7,7 @@
 
 - Ajout de la fonction "schéma unifilaire". Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module.
 - Ajout du moniteur de surveillance permettant la détection d'erreurs liées à la norme NFC 15-100
+- Ajout de 2 nouveaux thèmes : "Petit pictogramme et grand descriptif" et "Identifiant, petit pictogramme et grand descriptif"
 
 ### Modifications
 
