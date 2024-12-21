@@ -4,7 +4,8 @@ function SmallTheme({ item, style }) {
         icon: {
             marginTop: `calc(${style['--h']} * 0.15)`,
             width: `calc(${style['--h']} * 0.18)`,
-            height: `calc(${style['--h']} * 0.18)`
+            height: `calc(${style['--h']} * 0.18)`,
+            filter: 'invert(38%) sepia(97%) saturate(2333%) hue-rotate(147deg) brightness(96%) contrast(103%)'
         },
         text: {
             textAlign: "center",
