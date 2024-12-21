@@ -26,6 +26,8 @@
     --symbol-width: 70px;
     --symbol-height: 100px;
 
+    flex: 1;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

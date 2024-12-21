@@ -114,6 +114,7 @@ h4 {
 
 .switchboard.selected, .summary.selected, .schema.selected {
     height: max-content;
+    min-height: 410px;
     /*padding: 2em;*/
     border: 1px solid darkgray;
     border-radius: 7px;
