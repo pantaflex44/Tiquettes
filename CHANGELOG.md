@@ -7,20 +7,18 @@
 
 - Ajout de la fonction "schéma unifilaire". Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module.
 - Ajout du moniteur de surveillance permettant la détection d'erreurs liées à la norme NFC 15-100
-- Ajout de 2 nouveaux thèmes : "Petit pictogramme et grand descriptif" et "Identifiant, petit pictogramme et grand descriptif"
+- Ajout de 2 nouveaux thèmes après demande : "Petit pictogramme et grand descriptif" et "Identifiant, petit pictogramme et grand descriptif"
 
 ### Modifications
 
+- Changement de licence. Tiquettes passe désormais à la licence AGPL v3
 - Mise à jour de tous les packages de l'application
 
 ### Améliorations
 
-- Amélioration globale du style / design
+- Amélioration globale de l'UI
 - Amélioration de l'ergonomie
 
-### Corrections
-
-- Correction de bugs mineurs
 
 
 ## [1.7.2] - 2024-09-13

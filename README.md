@@ -7,7 +7,7 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 [<img alt="URL" src="https://img.shields.io/badge/🠊-https://www.tiquettes.fr-%3CCOLOR%3E?style=for-the-badge&color=darkcyan&labelColor=darkcyan">](https://www.tiquettes.fr)
 
-<img alt="Licence" src="https://img.shields.io/badge/Licence-MIT-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
+<img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <pantaflex (at) hotmail (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
 
