@@ -20,6 +20,13 @@
 - Amélioration de l'ergonomie
 
 
+## [1.7.3] - 2024-09-30
+
+### Corrections
+
+- Remplacement de la fonctionnalité Object.groupBy() par une méthode compatible pour les anciens navigateurs web.
+
+
 
 ## [1.7.2] - 2024-09-13
 

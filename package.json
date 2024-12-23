@@ -15,10 +15,14 @@
     "hager",
     "legrand"
   ],
-  "author": "Christophe LEMOINE",
   "license": "AGPL-3.0",
   "homepage": "https://www.tiquettes.fr/app/",
-  "repository": {
+  "author": {
+    "name": "Christophe LEMOINE",
+    "email": "pantaflex@tuta.io",
+    "url": "https://pantaflex44.github.io/Portfolio/"
+  },
+"repository": {
     "type": "git",
     "url": "https://github.com/pantaflex44/Tiquettes"
   },
