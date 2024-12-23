@@ -52,7 +52,6 @@ import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 
-
 function App() {
     const importRef = useRef();
     const projectRef = useRef();
