@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [2.0.1] - 2024-12-24
+
+### Améliorations
+
+- Nouveau design pour les barres à outils
+
+
 ## [2.0.0] - 2024-12-01 - Nouvelles fonctionnalités majeures
 
 ### Ajouts
@@ -18,6 +25,13 @@
 
 - Amélioration globale de l'UI
 - Amélioration de l'ergonomie
+
+
+## [1.7.3] - 2024-09-30
+
+### Corrections
+
+- Remplacement de la fonctionnalité Object.groupBy() par une méthode compatible pour les anciens navigateurs web.
 
 
 
