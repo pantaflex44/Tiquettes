@@ -1172,49 +1172,51 @@ function App() {
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <div className="tabPageBand notprintable">
-                    <div className="tabPageBandCol">
-                        <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant :</span>
-                    </div>
-
-                    <div className="tabPageBandCol">
-                        <select
-                            value={theme?.name ?? defaultTheme}
-                            onChange={(e) => {
-                                updateTheme(e.target.value);
-                            }}
-                            style={{maxWidth: '100%'}}
-                            disabled={UIFrozen}
-                        >
-                            {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
-                                const g = e[0];
-                                const l = e[1];
-                                return <Fragment key={`themes_${g}`}>
-                                    <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                    {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>({g}) {t.title}</option>)}
-                                </Fragment>
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="tabPageBandSeparator"></div>
-
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
-                        <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
-                            <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
-                        </label>
-                    </div>
-                    {switchboard.switchboardMonitor && (
+                    <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                            {monitorWarningsLength > 0
-                                ? <>
-                                    <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                    <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
-                                </>
-                                : <span>Aucune erreur détectée.</span>
-                            }
+                            <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant:</span>
                         </div>
-                    )}
+                        <div className="tabPageBandCol">
+                            <select
+                                value={theme?.name ?? defaultTheme}
+                                onChange={(e) => {
+                                    updateTheme(e.target.value);
+                                }}
+                                style={{maxWidth: '100%', overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}
+                                disabled={UIFrozen}
+                            >
+                                {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
+                                    const g = e[0];
+                                    const l = e[1];
+                                    return <Fragment key={`themes_${g}`}>
+                                        <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                        {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>({g}) {t.title}</option>)}
+                                    </Fragment>
+                                })}
+                            </select>
+                        </div>
+                        <div className="tabPageBandSeparator"></div>
+                    </div>
+
+                    <div className="tabPageBandGroup">
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
+                            <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
+                                <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
+                            </label>
+                        </div>
+                        {switchboard.switchboardMonitor && (
+                            <div className="tabPageBandCol">
+                                {monitorWarningsLength > 0
+                                    ? <>
+                                        <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                        <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                    </>
+                                    : <span>Aucune erreur détectée.</span>
+                                }
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
@@ -1224,7 +1226,7 @@ function App() {
                         </div>
                         <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
                             <ul>
-                            {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
                                     <li key={i} className="tabPageErrors">
                                         <div>{id}:</div>
                                         <ul>
