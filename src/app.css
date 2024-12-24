@@ -534,6 +534,18 @@ option[disabled] {
     z-index: 1;
 }
 
+.tabPageBandGroup {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    column-gap: 1em;
+    row-gap: 1em;
+
+    overflow-x: hidden;
+}
+
 .tabPageBand.errors {
     background: initial;
     background-color: #fff0ed;
@@ -630,7 +642,6 @@ option[disabled] {
 
 .tabPageBandSeparator {
     width: 1px;
-    min-height: 100%;
     margin-inline: 0;
 
     background-color: darkgray;

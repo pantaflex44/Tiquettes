@@ -265,6 +265,7 @@ export default function SchemaTab({
                 }
             );
         }
+
         monitor_runtime(tree.childs);
 
         // Dans un projet résidentiel, on vérifie le nombre d'interrupteurs différentiels obligatoire
@@ -279,86 +280,89 @@ export default function SchemaTab({
     return (
         <div className={`schema ${tab === 2 ? 'selected' : ''} ${printOptions.schema ? 'printable' : 'notprintable'}`.trim()}>
             <div className="tabPageBand notprintable">
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR" checked={switchboard.projectType === "R"} onChange={() => setSwitchboard((old) => ({...old, projectType: "R"}))}/>
-                    <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
-                        <img src={homeIcon} alt="Project résidentiel" width={24} height={24}/>
-                    </label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT" checked={switchboard.projectType === "T"} onChange={() => setSwitchboard((old) => ({...old, projectType: "T"}))}/>
-                    <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
-                        <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24}/>
-                    </label>
-                </div>
-                <div className="tabPageBandCol">
-                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Tension de<br/>référence :</span>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400} value={switchboard.vref} onChange={(e) => setSwitchboard((old) => ({...old, vref: e.target.value}))}/>
-                </div>
-
-                <div className="tabPageBandSeparator"></div>
-
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice" checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({...old, db: {...old.db, func: 'db'}, withDb: !old.withDb}))}/>
-                    <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
-                        <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement" width={24} height={24}/>
-                    </label>
-                </div>
-                <div className="tabPageBandCol">
-                    <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, type: e.target.value}}))} disabled={!switchboard.withDb}>
-                        <option value="">Instantané</option>
-                        <option value="S">Sélectif</option>
-                    </select>
-                </div>
-                <div className="tabPageBandCol">
-                    <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, pole: e.target.value}}))} disabled={!switchboard.withDb}>
-                        <option value="1P+N">Monophasé</option>
-                        <option value="3P+N">Triphasé</option>
-                    </select>
-                </div>
-                <div className="tabPageBandCol">
-                    <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, sensibility: e.target.value}}))} disabled={!switchboard.withDb}>
-                        <option value="500mA">500mA</option>
-                    </select>
-                </div>
-                <div className="tabPageBandCol">
-                    <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, current: e.target.value}}))} disabled={!switchboard.withDb}>
-                        <option value="10/30A">10/30A</option>
-                        <option value="15/45A">15/45A</option>
-                        <option value="30/60A">30/60A</option>
-                        <option value="60/90A">60/90A</option>
-                        <option value="60A">60A mono-calibre</option>
-                    </select>
-                </div>
-
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice" checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({...old, withGroundLine: !old.withGroundLine}))}/>
-                    <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
-                        <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre" width={24} height={24}/>
-                    </label>
-                </div>
-
-                <div className="tabPageBandSeparator"></div>
-
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice" checked={switchboard.schemaMonitor} onChange={() => setSwitchboard((old) => ({...old, schemaMonitor: !old.schemaMonitor}))}/>
-                    <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
-                        <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
-                    </label>
-                </div>
-                {switchboard.schemaMonitor && (
+                <div className="tabPageBandGroup">
                     <div className="tabPageBandCol">
-                        {monitorWarningsLength > 0
-                            ? <>
-                                <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={20} height={20} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
-                            </>
-                            : <span>Aucune erreur détectée.</span>
-                        }
+                        <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR" checked={switchboard.projectType === "R"} onChange={() => setSwitchboard((old) => ({...old, projectType: "R"}))}/>
+                        <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
+                            <img src={homeIcon} alt="Project résidentiel" width={24} height={24}/>
+                        </label>
                     </div>
-                )}
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT" checked={switchboard.projectType === "T"} onChange={() => setSwitchboard((old) => ({...old, projectType: "T"}))}/>
+                        <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
+                            <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24}/>
+                        </label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Tension de<br/>référence:</span>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400} value={switchboard.vref} onChange={(e) => setSwitchboard((old) => ({...old, vref: e.target.value}))}/>
+                    </div>
+                    <div className="tabPageBandSeparator"></div>
+                </div>
+
+                <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice" checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({...old, db: {...old.db, func: 'db'}, withDb: !old.withDb}))}/>
+                        <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
+                            <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement" width={24} height={24}/>
+                        </label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, type: e.target.value}}))} disabled={!switchboard.withDb}>
+                            <option value="">Instantané</option>
+                            <option value="S">Sélectif</option>
+                        </select>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, pole: e.target.value}}))} disabled={!switchboard.withDb}>
+                            <option value="1P+N">Monophasé</option>
+                            <option value="3P+N">Triphasé</option>
+                        </select>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, sensibility: e.target.value}}))} disabled={!switchboard.withDb}>
+                            <option value="500mA">500mA</option>
+                        </select>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({...old, db: {...old.db, current: e.target.value}}))} disabled={!switchboard.withDb}>
+                            <option value="10/30A">10/30A</option>
+                            <option value="15/45A">15/45A</option>
+                            <option value="30/60A">30/60A</option>
+                            <option value="60/90A">60/90A</option>
+                            <option value="60A">60A mono-calibre</option>
+                        </select>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice" checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({...old, withGroundLine: !old.withGroundLine}))}/>
+                        <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
+                            <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre" width={24} height={24}/>
+                        </label>
+                    </div>
+                    <div className="tabPageBandSeparator"></div>
+                </div>
+
+                <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice" checked={switchboard.schemaMonitor} onChange={() => setSwitchboard((old) => ({...old, schemaMonitor: !old.schemaMonitor}))}/>
+                        <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
+                            <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
+                        </label>
+                    </div>
+                    {switchboard.schemaMonitor && (
+                        <div className="tabPageBandCol">
+                            {monitorWarningsLength > 0
+                                ? <>
+                                    <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                    <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={20} height={20} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                </>
+                                : <span>Aucune erreur détectée.</span>
+                            }
+                        </div>
+                    )}
+                </div>
             </div>
 
             {switchboard.schemaMonitor && monitorOpened && monitor.errors && (
@@ -385,7 +389,7 @@ export default function SchemaTab({
             )}
 
             <div className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
-            <div className="schemaTitle">Schéma Unifilaire Général</div>
+                <div className="schemaTitle">Schéma Unifilaire Général</div>
                 <div className="schemaCartbridge">
                     <div className="schemaCartbridgeA">
                         Créé: {new Intl.DateTimeFormat('fr-FR', {
