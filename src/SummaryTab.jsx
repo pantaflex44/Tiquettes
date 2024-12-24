@@ -37,36 +37,38 @@ export default function SummaryTab({
     return (
         <div className={`summary ${tab === 3 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
             <div className="tabPageBand notprintable">
-                <div className="tabPageBandCol">
-                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Afficher<br/>les colones :</span>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnRowChoice" id="summaryColumnRowChoice" checked={switchboard.summaryColumnRow} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnRow: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnRowChoice" title="Colone 'Rangée'">Rangée</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnPositionChoice" id="summaryColumnPositionChoice" checked={switchboard.summaryColumnPosition} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnPosition: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnPositionChoice" title="Colone 'Position'">Position</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnTypeChoice" id="summaryColumnTypeChoice" checked={switchboard.summaryColumnType} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnType: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnTypeChoice" title="Colone 'Type'">Type</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnIdChoice" id="summaryColumnIdChoice" checked={switchboard.summaryColumnId} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnId: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnIdChoice" title="Colone 'Identifiant'">Identifiant</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnFunctionChoice" id="summaryColumnFunctionChoice" checked={switchboard.summaryColumnFunction} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnFunction: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnFunctionChoice" title="Colone 'Fonction'">Fonction</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnLabelChoice" id="summaryColumnLabelChoice" checked={switchboard.summaryColumnLabel} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnLabel: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnLabelChoice" title="Colone 'Libellé'">Libellé</label>
-                </div>
-                <div className="tabPageBandCol">
-                    <input type="checkbox" name="summaryColumnDescriptionChoice" id="summaryColumnDescriptionChoice" checked={switchboard.summaryColumnDescription} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnDescription: e.target.checked}))}/>
-                    <label htmlFor="summaryColumnDescriptionChoice" title="Colone 'Annotations'">Annotations</label>
+                <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Afficher<br/>les colones:</span>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnRowChoice" id="summaryColumnRowChoice" checked={switchboard.summaryColumnRow} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnRow: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnRowChoice" title="Colone 'Rangée'">Rangée</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnPositionChoice" id="summaryColumnPositionChoice" checked={switchboard.summaryColumnPosition} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnPosition: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnPositionChoice" title="Colone 'Position'">Position</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnTypeChoice" id="summaryColumnTypeChoice" checked={switchboard.summaryColumnType} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnType: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnTypeChoice" title="Colone 'Type'">Type</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnIdChoice" id="summaryColumnIdChoice" checked={switchboard.summaryColumnId} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnId: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnIdChoice" title="Colone 'Identifiant'">Identifiant</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnFunctionChoice" id="summaryColumnFunctionChoice" checked={switchboard.summaryColumnFunction} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnFunction: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnFunctionChoice" title="Colone 'Fonction'">Fonction</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnLabelChoice" id="summaryColumnLabelChoice" checked={switchboard.summaryColumnLabel} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnLabel: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnLabelChoice" title="Colone 'Libellé'">Libellé</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnDescriptionChoice" id="summaryColumnDescriptionChoice" checked={switchboard.summaryColumnDescription} onChange={(e) => setSwitchboard((old) => ({...old, summaryColumnDescription: e.target.checked}))}/>
+                        <label htmlFor="summaryColumnDescriptionChoice" title="Colone 'Annotations'">Annotations</label>
+                    </div>
                 </div>
             </div>
 

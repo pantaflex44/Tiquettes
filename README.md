@@ -9,7 +9,7 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 <img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
-<img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <pantaflex (at) hotmail (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
+<img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
 
 ---
 
