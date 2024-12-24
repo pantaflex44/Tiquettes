@@ -52,7 +52,7 @@ function Row({
     hasClipboard = false
 }) {
     return (
-        <div className="switchboard_row" id={`row_${rowPosition}`}>
+        <div className={`switchboard_row row_${rowPosition}`} id={`row_${rowPosition}`}>
 
             <div className="row_title">
                 <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon} width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => { if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex); }} />

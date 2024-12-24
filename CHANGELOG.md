@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [2.0.1] - 2024-12-24
+
+### Améliorations
+
+- Nouveau design pour les barres à outils
+
+
 ## [2.0.0] - 2024-12-01 - Nouvelles fonctionnalités majeures
 
 ### Ajouts

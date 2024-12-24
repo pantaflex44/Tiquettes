@@ -508,6 +508,10 @@ option[disabled] {
 }
 
 .tabPageBand {
+    position: sticky;
+    left: 0.5rem;
+    top: 0.5rem;
+
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -519,11 +523,15 @@ option[disabled] {
     padding-inline: 1.25em;
     padding-block: 1em;
     min-height: calc(60px - 2em);
+    margin: 0.5rem;
 
     font-size: 80%;
     background: linear-gradient(to bottom, #fff, var(--secondary-color-light));
 
-    border-bottom: 1px solid darkgray;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+
+    z-index: 1;
 }
 
 .tabPageBand.errors {
@@ -622,7 +630,7 @@ option[disabled] {
 .tabPageBandSeparator {
     width: 1px;
     min-height: 100%;
-    margin-inline: 0.25em;
+    margin-inline: 0;
 
     background-color: darkgray;
 }
