@@ -1020,6 +1020,20 @@ function App() {
         }
     }, [editor, newProjectProperties]);
 
+    useEffect(() => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const newProjectRequired = urlParams.get('new') !== null;
+        if (newProjectRequired) {
+            urlParams.delete('new');
+            const newCurrentUrl = location.protocol + '//' + location.host + location.pathname + (urlParams.size > 0 ? '?' + urlParams.toString() : '');
+            const currentTitle = document.title;
+            window.history.replaceState({}, currentTitle, newCurrentUrl);
+
+            openProjectPropertiesEditor();
+        }
+    }, []);
+
     return (
         <div tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
