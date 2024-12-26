@@ -43,10 +43,15 @@ export default function Main() {
                 'https://tiquettes.fr',
                 'https://www.tiquettes.fr',
                 'https://tiquettes.fr/app/',
-                'https://www.tiquettes.fr/app/'
+                'https://tiquettes.fr/app/?enjoy',
+                'https://tiquettes.fr/app/?new',
+                'https://tiquettes.fr/app/?wizard',
+                'https://www.tiquettes.fr/app/',
+                'https://www.tiquettes.fr/app/?enjoy',
+                'https://www.tiquettes.fr/app/?new',
+                'https://www.tiquettes.fr/app/?wizard'
             ].includes(origin)) {
-                console.log("Tiquettes url app has moved! Go to https://www.tiquettes.fr/app/");
-                window.location.replace("https://www.tiquettes.fr/app/");
+                window.location.replace("https://www.tiquettes.fr/app/?new");
             }
         }
 

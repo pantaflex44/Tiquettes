@@ -1,0 +1,11 @@
+.wizard {
+    height: max-content;
+    min-height: 410px;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+}
+
+.wizardDescription {
+    margin-bottom: 2em;
+    font-size: smaller;
+}

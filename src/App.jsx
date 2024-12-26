@@ -51,6 +51,8 @@ import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
+import WelcomePopup from "./WelcomePopup.jsx";
+import Wizard from "./Wizard.jsx";
 
 function App() {
     const importRef = useRef();
@@ -62,13 +64,12 @@ function App() {
     const [newProjectProperties, setNewProjectProperties] = useState(null);
     const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
+    const [welcome, setWelcome] = useState(false);
+
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const monitorRef = useRef(null);
 
-    useEffect(() => {
-        if (monitorOpened) monitorRef.current.focus();
-    }, [monitorOpened]);
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -79,6 +80,7 @@ function App() {
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
+    const appWizardAllowed = `${import.meta.env.VITE_APP_WIZARD}`.toLowerCase().trim() === "true";
     const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
     const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
@@ -168,6 +170,11 @@ function App() {
         summaryColumnDescription: true,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
 
+    const defaultWizardProject = useMemo(() => ({
+        ...defaultProject,
+        rows: [],
+    }), [defaultProject]);
+
     const schemaFunctions = {
         sw: {
             name: 'Interrupteur sectionneur',
@@ -240,7 +247,7 @@ function App() {
     };
 
     const scrollToProject = () => {
-        projectRef.current.scrollIntoView({
+        projectRef.current && projectRef.current.scrollIntoView({
             behavior: "smooth",
             block: "start",
             inline: "start"
@@ -266,6 +273,7 @@ function App() {
         let reIndentedSwb = swb;
         let jump = 0;
 
+        // réassignation des identifiants si nécessaire
         let rows = reIndentedSwb.rows.map((row, i) => {
             if (i > 0) {
                 const freeCount = reIndentedSwb.rows[i - 1].filter((r) => r.free).length;
@@ -276,18 +284,43 @@ function App() {
 
             if (i >= rowIndex) {
                 return row.map((module, j) => {
+                    let md = {...module};
+
                     if (((i === rowIndex && j >= moduleIndex) || (i > rowIndex)) && module.free) {
+                        let newModuleId = `${defaultModuleId}${j + 1 + jump}`;
                         return {
-                            ...module,
-                            id: `${defaultModuleId}${j + 1 + jump}`
+                            ...md,
+                            id: newModuleId
                         };
                     } else {
-                        return module;
+                        return md;
                     }
                 });
             } else {
                 return row
             }
+        });
+
+        // correction des identifiants en doublon
+        let ids = [];
+        rows = rows.map((row) => {
+            return row.map((module) => {
+                const currentModuleId = module.id.trim();
+
+                if (ids.includes(currentModuleId)) {
+                    let sup = 1;
+                    while (ids.includes(`${currentModuleId}_${sup}`)) sup++;
+
+                    ids.push(`${currentModuleId}_${sup}`);
+                    return {
+                        ...module,
+                        id: `${currentModuleId}_${sup}`
+                    };
+                }
+
+                ids.push(currentModuleId);
+                return module;
+            });
         });
 
         return {...reIndentedSwb, rows};
@@ -325,13 +358,39 @@ function App() {
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
             };
 
+            console.log("Switchboard loaded from this session.");
+
             return modulesAutoId({...swb});
         }
+
+        //setWelcome(true);
 
         return {...defaultProject};
     };
 
     const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
+
+    const getSavedWizard = () => {
+        if (sessionStorage.getItem(`${pkg.name}_wizard`) !== null) {
+            let wz = {
+                ...defaultWizardProject,
+                ...JSON.parse(sessionStorage.getItem(`${pkg.name}_wizard`))
+            };
+
+            console.log("Wizard loaded from this session.");
+
+            return {...wz};
+        }
+
+        return null;
+    };
+
+    const [wizard, setWizard] = useState(getSavedWizard());
+
+    const closeWizard = () => {
+        sessionStorage.removeItem(`${pkg.name}_wizard`);
+        setWizard(null);
+    };
 
     const getThemeOfFirstModuleFound = (swb = null) => {
         let themeFound = null;
@@ -349,6 +408,8 @@ function App() {
     const [theme, setTheme] = useState((switchboard?.theme ?? defaultTheme));
 
     const createProject = useCallback((name, stepsPerRows, rowsCount, height) => {
+        closeWizard();
+
         importRef.current.value = "";
 
         setTheme(defaultTheme);
@@ -370,6 +431,8 @@ function App() {
     }, [defaultTheme, defaultPrintOptions, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
+        closeWizard();
+
         importRef.current.value = "";
 
         setClipboard(null);
@@ -378,6 +441,10 @@ function App() {
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
+
+    const importProjectChooseFile = () => {
+        document.getElementById('importfile').click();
+    }
 
     const importProject = (file) => {
         if (file) {
@@ -439,6 +506,8 @@ function App() {
 
                         rows
                     };
+
+                    closeWizard();
 
                     setSwitchboard(() => modulesAutoId({...swb}));
 
@@ -981,6 +1050,8 @@ function App() {
     }, [switchboard.rows, switchboard.switchboardMonitor]);
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
+    const openWelcome = () => setWelcome(true);
+
     useEffect(() => {
         let t = null;
 
@@ -1005,7 +1076,7 @@ function App() {
                 setSwitchboard(updatedProject);
                 setDocumentTitle(updatedProject.prjname);
 
-                console.log("Saved for this session.");
+                console.log("Switchboard saved to this session.");
             }
         }, 1000);
 
@@ -1015,22 +1086,60 @@ function App() {
     }, [resetProject, switchboard]);
 
     useEffect(() => {
+        let t = null;
+
+        t = setTimeout(() => {
+            if (wizard !== null) {
+                const savedWizardIsOutdated = sessionStorage.getItem(`${pkg.name}_wizard`) !== JSON.stringify(wizard);
+                if (savedWizardIsOutdated) {
+                    sessionStorage.setItem(`${pkg.name}_wizard`, JSON.stringify(wizard));
+
+                    console.log("Wizard saved to this session.");
+                }
+            }
+        }, 1000);
+
+        return () => {
+            if (t) clearTimeout(t);
+        }
+    }, [resetProject, wizard]);
+
+    useEffect(() => {
         if (window) {
             window.document.body.style.overflow = editor || newProjectProperties ? 'hidden' : 'auto';
         }
     }, [editor, newProjectProperties]);
 
     useEffect(() => {
+        if (monitorOpened) monitorRef.current.focus();
+    }, [monitorOpened]);
+
+    useEffect(() => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const newProjectRequired = urlParams.get('new') !== null;
-        if (newProjectRequired) {
-            urlParams.delete('new');
-            const newCurrentUrl = location.protocol + '//' + location.host + location.pathname + (urlParams.size > 0 ? '?' + urlParams.toString() : '');
-            const currentTitle = document.title;
-            window.history.replaceState({}, currentTitle, newCurrentUrl);
 
+        const enjoyProjectRequired = urlParams.get('enjoy') !== null;
+        const newProjectRequired = urlParams.get('new') !== null;
+        const wizardProjectRequired = urlParams.get('wizard') !== null;
+
+        if (enjoyProjectRequired && !newProjectRequired && !wizardProjectRequired) {
+            resetProject();
+            openWelcome();
+        }
+
+        if (newProjectRequired && !enjoyProjectRequired && !wizardProjectRequired) {
+            resetProject();
             openProjectPropertiesEditor();
+        }
+
+        if (wizardProjectRequired && !enjoyProjectRequired && !newProjectRequired) {
+            resetProject();
+            //openProjectPropertiesEditor();
+        }
+
+        if (enjoyProjectRequired || newProjectRequired || wizardProjectRequired) {
+            const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
+            window.history.replaceState({}, document.title, newCurrentUrl);
         }
     }, []);
 
@@ -1044,7 +1153,11 @@ function App() {
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <button className="button_group-new_project" onClick={() => {
-                    openProjectPropertiesEditor();
+                    if (appWizardAllowed) {
+                        setWelcome(true);
+                    } else {
+                        openProjectPropertiesEditor();
+                    }
                 }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
                     <span>Nouveau projet</span>
@@ -1056,18 +1169,18 @@ function App() {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
                 }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
                 <label htmlFor="importfile" className="button_group-import_project" title="Importer un projet existant">
-                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => document.getElementById('importfile').click()}/>
+                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => importProjectChooseFile()}/>
                     <span>Importer</span>
                 </label>
 
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();
-                }} title="Exporter...">
+                }} title="Exporter..." disabled={wizard !== null}>
                     <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"}/>
                     <span>Exporter</span>
                 </button>
 
-                <button className="button_group-print_project dropdown_container" title="Imprimer...">
+                <button className="button_group-print_project dropdown_container" title="Imprimer..." disabled={wizard !== null}>
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"}/>
                     <span>Imprimer...</span>
                     <div className="dropdown">
@@ -1120,210 +1233,227 @@ function App() {
                 <div className="button_group-separator"></div>
             </nav>
 
-            {/** PROJECT TITLE **/}
+            {/** SWITCHBOARD PROJECT **/}
 
-            <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
-                <img src={projectIcon} width={24} height={24} alt="Projet courant"/>
-                <ContentEditable
-                    value={switchboard.prjname ?? defaultProjectName}
-                    onChange={(value) => {
-                        let v = value.trim();
-                        if (v === "") v = defaultProjectName;
-                        setSwitchboard((old) => ({
-                            ...old,
-                            prjname: v
-                        }));
-                    }}
-                    editableStyle={{
-                        fontSize: '1em',
-                        fontWeight: 'bold',
-                        maxWidth: '100%'
-                    }}
-                    editable={!UIFrozen}
-                />
-            </h3>
+            {wizard === null && (
+                <>
+                    {/** PROJECT TITLE **/}
 
-            {/** PROJECT DETAILS **/}
+                    <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+                        <img src={projectIcon} width={24} height={24} alt="Projet courant"/>
+                        <ContentEditable
+                            value={switchboard.prjname ?? defaultProjectName}
+                            onChange={(value) => {
+                                let v = value.trim();
+                                if (v === "") v = defaultProjectName;
+                                setSwitchboard((old) => ({
+                                    ...old,
+                                    prjname: v
+                                }));
+                            }}
+                            editableStyle={{
+                                fontSize: '1em',
+                                fontWeight: 'bold',
+                                maxWidth: '100%'
+                            }}
+                            editable={!UIFrozen}
+                        />
+                    </h3>
 
-            <ul className="project">
-                <li title="Révision">
-                    <img src={versionIcon} alt="Révision" width={16} height={16}/>
-                    <span>Révision {switchboard.prjversion ?? 1}</span>
-                </li>
-                <li title="Description">
-                    <img src={infoIcon} alt="Description" width={16} height={16}/>
-                    <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
-                </li>
-                <li title="Date de création">
-                    <img src={createdIcon} alt="Date de création" width={16} height={16}/>
-                    <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
-                </li>
-                <li title="Date de modification">
-                    <img src={updatedIcon} alt="Date de modification" width={16} height={16}/>
-                    <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
-                </li>
-            </ul>
+                    {/** PROJECT DETAILS **/}
 
-            {/** TABPAGES SELECTOR **/}
+                    <ul className="project">
+                        <li title="Révision">
+                            <img src={versionIcon} alt="Révision" width={16} height={16}/>
+                            <span>Révision {switchboard.prjversion ?? 1}</span>
+                        </li>
+                        <li title="Description">
+                            <img src={infoIcon} alt="Description" width={16} height={16}/>
+                            <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
+                        </li>
+                        <li title="Date de création">
+                            <img src={createdIcon} alt="Date de création" width={16} height={16}/>
+                            <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
+                        </li>
+                        <li title="Date de modification">
+                            <img src={updatedIcon} alt="Date de modification" width={16} height={16}/>
+                            <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
+                        </li>
+                    </ul>
 
-            <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()} onClick={() => setTab(1)}>
-                    <img src={projectIcon} width={20} height={20} alt="Etiquettes"/>
-                    <span>Etiquettes</span>
-                </div>
-                <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()} onClick={() => setTab(2)}>
-                    <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire"/>
-                    <span>Schéma</span>
-                </div>
-                <div className={`tabPages_page ${tab === 3 ? 'selected' : ''}`.trim()} onClick={() => setTab(3)}>
-                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature"/>
-                    <span>Nomenclature</span>
-                </div>
-            </nav>
+                    {/** TABPAGES SELECTOR **/}
 
-            {/** TABPAGES **/}
-
-            {/** SWITCHBOARD TAB **/}
-            <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
-                <div className="tabPageBand notprintable">
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant:</span>
+                    <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
+                        <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()} onClick={() => setTab(1)}>
+                            <img src={projectIcon} width={20} height={20} alt="Etiquettes"/>
+                            <span>Etiquettes</span>
                         </div>
-                        <div className="tabPageBandCol">
-                            <select
-                                value={theme?.name ?? defaultTheme}
-                                onChange={(e) => {
-                                    updateTheme(e.target.value);
-                                }}
-                                style={{maxWidth: '100%', overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}
-                                disabled={UIFrozen}
-                            >
-                                {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
-                                    const g = e[0];
-                                    const l = e[1];
-                                    return <Fragment key={`themes_${g}`}>
-                                        <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                        {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>({g}) {t.title}</option>)}
-                                    </Fragment>
-                                })}
-                            </select>
+                        <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()} onClick={() => setTab(2)}>
+                            <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire"/>
+                            <span>Schéma</span>
                         </div>
-                        <div className="tabPageBandSeparator"></div>
-                    </div>
+                        <div className={`tabPages_page ${tab === 3 ? 'selected' : ''}`.trim()} onClick={() => setTab(3)}>
+                            <img src={summaryIcon} width={20} height={20} alt="Nomenclature"/>
+                            <span>Nomenclature</span>
+                        </div>
+                    </nav>
 
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
-                            <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
-                                <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
-                            </label>
+                    {/** TABPAGES **/}
+
+                    {/** SWITCHBOARD TAB **/}
+                    <div ref={switchboardRef} className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+                        <div className="tabPageBand notprintable">
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant:</span>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select
+                                        value={theme?.name ?? defaultTheme}
+                                        onChange={(e) => {
+                                            updateTheme(e.target.value);
+                                        }}
+                                        style={{maxWidth: '100%', overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}
+                                        disabled={UIFrozen}
+                                    >
+                                        {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
+                                            const g = e[0];
+                                            const l = e[1];
+                                            return <Fragment key={`themes_${g}`}>
+                                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`} value={t.name}>({g}) {t.title}</option>)}
+                                            </Fragment>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className="tabPageBandSeparator"></div>
+                            </div>
+
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
+                                    <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
+                                        <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon} alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
+                                    </label>
+                                </div>
+                                {switchboard.switchboardMonitor && (
+                                    <div className="tabPageBandCol">
+                                        {monitorWarningsLength > 0
+                                            ? <>
+                                                <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                                <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
+                                            </>
+                                            : <span>Aucune erreur détectée.</span>
+                                        }
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        {switchboard.switchboardMonitor && (
-                            <div className="tabPageBandCol">
-                                {monitorWarningsLength > 0
-                                    ? <>
-                                        <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                        <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs" width={16} height={16} style={{cursor: 'pointer', padding: '4px'}} onClick={() => setMonitorOpened(old => !old)}/>
-                                    </>
-                                    : <span>Aucune erreur détectée.</span>
-                                }
+
+                        {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
+                            <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1} onBlur={() => setMonitorOpened(false)}>
+                                <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
+                                    <img src={cancelIcon} width={24} height={24} alt={"Fermer"}/>
+                                </div>
+                                <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
+                                    <ul>
+                                        {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                                            <li key={i} className="tabPageErrors">
+                                                <div>{id}:</div>
+                                                <ul>
+                                                    {errors.map((error, j) => <li key={j} className="tabPageError">
+                                                        <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs" width={16} height={16}/>
+                                                        <span>{error}</span>
+                                                    </li>)}
+                                                </ul>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
+
+                        {switchboard.rows.map((row, i) => (
+                            <Row
+                                key={i}
+                                rowIndex={i}
+                                rowPosition={i + 1}
+                                items={row.map((m) => ({...defaultModule, ...m}))}
+                                stepsPerRows={switchboard.stepsPerRows}
+                                theme={theme}
+
+                                style={{
+                                    "--w": `${switchboard.stepsPerRows * stepSize}mm`,
+                                    "--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px
+                                    "--c": switchboard.stepsPerRows,
+                                    "--sw": `calc(${stepSize}mm + 1px)` // 18mm -> 70.03px
+                                }}
+
+                                onScrollLeft={() => handleScrollLeft()}
+                                onScrollRight={() => handleScrollRight()}
+
+                                onModuleGrow={(moduleIndex, item, moduleRef) => handleModuleGrow(i, moduleIndex, item, moduleRef)}
+                                onModuleShrink={(moduleIndex, item, moduleRef) => handleModuleShrink(i, moduleIndex, item, moduleRef)}
+
+                                onModuleClear={(moduleIndex, item) => handleModuleClear(i, moduleIndex, item)}
+                                onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
+
+                                onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
+                                onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
+                                onModuleCancelPaste={() => handleCancelPaste()}
+                                modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
+                                hasClipboard={clipboard !== null}
+
+                                onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
+                                onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
+
+                                moduleShrinkAllowed={(moduleIndex, item) => moduleShrinkAllowed(i, moduleIndex, item)}
+                                moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
+                                moduleMoveLeftAllowed={(moduleIndex, item) => moduleMoveLeftAllowed(i, moduleIndex, item)}
+                                moduleMoveRightAllowed={(moduleIndex, item) => moduleMoveRightAllowed(i, moduleIndex, item)}
+
+                                onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
+                                onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
+
+                                rowAddAllowed={() => rowAddAllowed()}
+                                rowDeleteAllowed={() => rowDeleteAllowed()}
+
+                                printFreeModuleAllowed={() => printFreeModuleAllowed()}
+                            />
+                        ))}
                     </div>
-                </div>
 
-                {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
-                    <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1} onBlur={() => setMonitorOpened(false)}>
-                        <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
-                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"}/>
-                        </div>
-                        <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
-                            <ul>
-                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
-                                    <li key={i} className="tabPageErrors">
-                                        <div>{id}:</div>
-                                        <ul>
-                                            {errors.map((error, j) => <li key={j} className="tabPageError">
-                                                <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs" width={16} height={16}/>
-                                                <span>{error}</span>
-                                            </li>)}
-                                        </ul>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )}
-
-                {switchboard.rows.map((row, i) => (
-                    <Row
-                        key={i}
-                        rowIndex={i}
-                        rowPosition={i + 1}
-                        items={row.map((m) => ({...defaultModule, ...m}))}
-                        stepsPerRows={switchboard.stepsPerRows}
-                        theme={theme}
-
-                        style={{
-                            "--w": `${switchboard.stepsPerRows * stepSize}mm`,
-                            "--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px
-                            "--c": switchboard.stepsPerRows,
-                            "--sw": `calc(${stepSize}mm + 1px)` // 18mm -> 70.03px
-                        }}
-
-                        onScrollLeft={() => handleScrollLeft()}
-                        onScrollRight={() => handleScrollRight()}
-
-                        onModuleGrow={(moduleIndex, item, moduleRef) => handleModuleGrow(i, moduleIndex, item, moduleRef)}
-                        onModuleShrink={(moduleIndex, item, moduleRef) => handleModuleShrink(i, moduleIndex, item, moduleRef)}
-
-                        onModuleClear={(moduleIndex, item) => handleModuleClear(i, moduleIndex, item)}
-                        onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
-
-                        onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
-                        onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
-                        onModuleCancelPaste={() => handleCancelPaste()}
-                        modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
-                        hasClipboard={clipboard !== null}
-
-                        onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
-                        onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
-
-                        moduleShrinkAllowed={(moduleIndex, item) => moduleShrinkAllowed(i, moduleIndex, item)}
-                        moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
-                        moduleMoveLeftAllowed={(moduleIndex, item) => moduleMoveLeftAllowed(i, moduleIndex, item)}
-                        moduleMoveRightAllowed={(moduleIndex, item) => moduleMoveRightAllowed(i, moduleIndex, item)}
-
-                        onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
-                        onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
-
-                        rowAddAllowed={() => rowAddAllowed()}
-                        rowDeleteAllowed={() => rowDeleteAllowed()}
-
-                        printFreeModuleAllowed={() => printFreeModuleAllowed()}
+                    {/** SCHEMA TAB **/}
+                    <SchemaTab
+                        tab={tab}
+                        switchboard={switchboard}
+                        setSwitchboard={setSwitchboard}
+                        printOptions={printOptions}
+                        schemaFunctions={schemaFunctions}
+                        onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
                     />
-                ))}
-            </div>
 
-            {/** SCHEMA TAB **/}
-            <SchemaTab
-                tab={tab}
-                switchboard={switchboard}
-                setSwitchboard={setSwitchboard}
-                printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
-                onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
-            />
+                    {/** SUMMARY TAB **/}
+                    <SummaryTab
+                        tab={tab}
+                        switchboard={switchboard}
+                        setSwitchboard={setSwitchboard}
+                        printOptions={printOptions}
+                        schemaFunctions={schemaFunctions}
+                    />
+                </>
+            )}
 
-            {/** SUMMARY TAB **/}
-            <SummaryTab
-                tab={tab}
-                switchboard={switchboard}
-                setSwitchboard={setSwitchboard}
-                printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
-            />
+            {/** WIZARD PROJECT **/}
+
+            {wizard !== null && <Wizard
+                wizard={wizard}
+
+                onCancel={() => closeWizard()}
+                onSave={(newSwitchboard) => {
+                    resetProject();
+                }}
+            />}
 
             {/** POPUPS **/}
 
@@ -1349,7 +1479,30 @@ function App() {
                 heightMin={heightMin}
                 heightMax={{heightMax}}
                 onCreateProject={createProject}
+                onImportProject={() => {
+                    setNewProjectProperties(null);
+                    importProjectChooseFile();
+                }}
                 onUpdateProjectProperties={updateProjectProperties}
+            />}
+
+            {welcome && <WelcomePopup
+                wizard={wizard}
+                onCancel={() => setWelcome(false)}
+                onNewProject={() => {
+                    closeWizard();
+                    setNewProjectProperties(() => ({...defaultProjectProperties}));
+                    setWelcome(false);
+                }}
+                onImportProject={() => {
+                    closeWizard();
+                    importProjectChooseFile();
+                    setWelcome(false);
+                }}
+                onWizard={() => {
+                    setWelcome(false);
+                    setWizard({...defaultWizardProject});
+                }}
             />}
         </div>
     )
