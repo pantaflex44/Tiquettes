@@ -250,7 +250,7 @@ option[disabled] {
     z-index: 99;
 }
 
-.button_group .dropdown_container:hover .dropdown {
+.button_group .dropdown_container:not(:disabled):hover .dropdown {
     display: flex;
 }
 

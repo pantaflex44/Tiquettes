@@ -303,9 +303,17 @@ button, .fakeButton {
     column-gap: 0.5em;
 }
 
-button:hover, .fakeButton:hover {
+button:not(:disabled):hover, .fakeButton:not(:disabled):hover {
     background-color: var(--secondary-color);
     border-color: var(--primary-color);
+}
+
+button:disabled, .fakeButton:disabled {
+    cursor: default;
+}
+
+button:disabled img, .fakeButton:disabled img {
+    filter: opacity(0.4);
 }
 
 input[type="file"] {

@@ -29,6 +29,7 @@ export default function NewProjectEditor({
                                              heightMax,
 
                                              onCreateProject,
+                                             onImportProject,
                                              onUpdateProjectProperties,
                                          }) {
     return newProjectProperties && (
@@ -37,11 +38,18 @@ export default function NewProjectEditor({
             showCloseButton={true}
             onCancel={() => onSetNewProjectProperties(null)}
             onOk={() => {
-                if (confirm("Cette action remplacera le projet courant.\n\nContinuer?")) {
-                    onCreateProject(newProjectProperties.name, newProjectProperties.spr, newProjectProperties.npRows, newProjectProperties.hRow);
-                    onSetNewProjectProperties(null);
-                }
+                onCreateProject(newProjectProperties.name, newProjectProperties.spr, newProjectProperties.npRows, newProjectProperties.hRow);
+                onSetNewProjectProperties(null);
             }}
+            additionalButtons={[
+                {
+                    text: "Importer...",
+                    callback: () => {
+                        onImportProject()
+                    },
+                    style: {}
+                }
+            ]}
         >
             <div className="popup_row" style={{'--left_column_size': '150px', marginBottom: '3em'}}>
                 <label htmlFor="newProjectProperties_name">Nom du projet</label>

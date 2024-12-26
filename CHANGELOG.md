@@ -1,6 +1,18 @@
 # Changelog
 
 
+## [2.0.2] - 2024-12-26
+
+### Améliorations
+
+- Affichage de la boite de dialogue 'Nouveau projet' lorsque l'utilisateur arrive de tiquettes.fr
+- Possibilité d'importer un projet directement depuis la boite de dialogue 'Nouveau projet'
+
+### Corrections
+
+- Correction d'un bug permettant les doublons pour les identifiants de chaque module, cassant la génération du schéma.
+
+
 ## [2.0.1] - 2024-12-24
 
 ### Améliorations
