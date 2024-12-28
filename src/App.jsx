@@ -23,7 +23,6 @@ import sanitizeFilename from 'sanitize-filename';
 
 import './app.css';
 import * as pkg from '../package.json';
-/*import swbIcons from './switchboard_icons.json';*/
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 
@@ -46,6 +45,7 @@ import infoIcon from "./assets/info.svg";
 import versionIcon from "./assets/versions.svg";
 import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
+import numbersIcon from "./assets/numbers.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -96,7 +96,7 @@ function App() {
     const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX);
 
     const defaultModule = useMemo(() => ({
-        id: `${defaultModuleId}?`,
+        id: '',
         icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
         text: import.meta.env.VITE_DEFAULT_TEXT,
         desc: import.meta.env.VITE_DEFAULT_DESC,
@@ -110,7 +110,7 @@ function App() {
         parentId: "",
         free: true,
         span: 1
-    }), [defaultModuleId]);
+    }), []);
 
     const defaultProjectProperties = useMemo(() => ({
         name: defaultProjectName,
@@ -171,9 +171,18 @@ function App() {
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
 
     const defaultWizardProject = useMemo(() => ({
-        ...defaultProject,
-        rows: [],
-    }), [defaultProject]);
+        prjname: defaultProjectName,
+        height: defaultHRow,
+        stepsPerRows: defaultStepsPerRows,
+        withDb: true,
+        rooms: [
+            {name: "Séjour", circuits: []},
+            {name: "Chambre principale", circuits: []},
+            {name: "Cuisine", circuits: []},
+            {name: "Salle de bain", circuits: []},
+            {name: "WC", circuits: []},
+        ]
+    }), [defaultProjectName, defaultHRow]);
 
     const schemaFunctions = {
         sw: {
@@ -269,43 +278,33 @@ function App() {
         return true;
     };
 
-    const modulesAutoId = useCallback((swb, rowIndex = 0, moduleIndex = 0) => {
+    const modulesAutoId = useCallback((swb) => {
         let reIndentedSwb = swb;
-        let jump = 0;
-
-        // réassignation des identifiants si nécessaire
-        let rows = reIndentedSwb.rows.map((row, i) => {
-            if (i > 0) {
-                const freeCount = reIndentedSwb.rows[i - 1].filter((r) => r.free).length;
-                const notFreeCount = reIndentedSwb.rows[i - 1].filter((r) => !r.free).length;
-
-                jump += freeCount + (i === rowIndex + 1 ? notFreeCount : 0);
-            }
-
-            if (i >= rowIndex) {
-                return row.map((module, j) => {
-                    let md = {...module};
-
-                    if (((i === rowIndex && j >= moduleIndex) || (i > rowIndex)) && module.free) {
-                        let newModuleId = `${defaultModuleId}${j + 1 + jump}`;
-                        return {
-                            ...md,
-                            id: newModuleId
-                        };
-                    } else {
-                        return md;
-                    }
-                });
-            } else {
-                return row
-            }
-        });
+        let rows = reIndentedSwb.rows;
 
         // correction des identifiants en doublon
         let ids = [];
         rows = rows.map((row) => {
             return row.map((module) => {
+                if (module.free) {
+                    return {
+                        ...module,
+                        id: ''
+                    };
+                }
+
                 const currentModuleId = module.id.trim();
+
+                if (currentModuleId === '') {
+                    let count = 1;
+                    while (ids.includes(`${defaultModuleId}${count}`)) count++;
+
+                    ids.push(`${defaultModuleId}${count}`);
+                    return {
+                        ...module,
+                        id: `${defaultModuleId}${count}`
+                    };
+                }
 
                 if (ids.includes(currentModuleId)) {
                     let sup = 1;
@@ -325,6 +324,55 @@ function App() {
 
         return {...reIndentedSwb, rows};
     }, [defaultModuleId]);
+
+    const reassignModules = () => {
+        if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
+            const swb = modulesAutoId(switchboard);
+
+            let counters = {};
+
+            let from = {};
+
+            // re-assign modules id
+            let rows = swb.rows.map((row) => {
+                return row.map((module) => {
+                    if (module.free) {
+                        return {
+                            ...module,
+                            id: ''
+                        };
+                    }
+
+                    let func = (module.func ?? '').trim().toUpperCase();
+                    if (func === '') func = defaultModuleId;
+                    counters = {...counters, [func]: (counters[func] ?? 0) + 1};
+
+                    const newModuleId = `${func}${counters[func]}`;
+                    from = {...from, [module.id]: newModuleId};
+
+                    return {
+                        ...module,
+                        id: newModuleId
+                    };
+                });
+            });
+
+            // re-assign parents
+            rows = rows.map((row) => {
+                return row.map((module) => {
+                    if (from[module.parentId]) {
+                        return {
+                            ...module,
+                            parentId: from[module.parentId],
+                        };
+                    }
+                    return module;
+                });
+            });
+
+            setSwitchboard((old) => ({...old, rows}));
+        }
+    }
 
     const getSavedSwitchboard = () => {
         if (sessionStorage.getItem(pkg.name)) {
@@ -391,6 +439,24 @@ function App() {
         sessionStorage.removeItem(`${pkg.name}_wizard`);
         setWizard(null);
     };
+
+    const lastFreeId = useMemo(() => {
+        let rows = switchboard.rows;
+
+        let ids = [];
+        rows.forEach((row) => {
+            return row.forEach((module) => {
+                ids.push(module.id);
+            });
+        });
+
+        let found = '';
+        let count = 1;
+        while (ids.includes(`${defaultModuleId}${count}`)) count++;
+        found = `${defaultModuleId}${count}`;
+
+        return found;
+    }, [switchboard, defaultModuleId]);
 
     const getThemeOfFirstModuleFound = (swb = null) => {
         let themeFound = null;
@@ -555,7 +621,12 @@ function App() {
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
-        const currentModule = switchboard.rows[rowIndex][moduleIndex];
+        let currentModule = switchboard.rows[rowIndex][moduleIndex];
+        let hasBlankId = false;
+        if (!currentModule.id || currentModule.id.trim() === '') {
+            currentModule = {...currentModule, id: lastFreeId};
+            hasBlankId = true;
+        }
 
         let pr = rowIndex;
         let pm = moduleIndex - 1;
@@ -571,7 +642,7 @@ function App() {
             prevModule = switchboard.rows[pr][pm];
         }
 
-        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, tabPage, errors: []});
+        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, tabPage, errors: [], hasBlankId});
     };
 
     const updateModuleEditor = (data) => {
@@ -598,7 +669,7 @@ function App() {
         const coef = editor.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[editor.currentModule.func]?.hasPole ? (editor.currentModule.pole ?? "") : "").trim();
 
-        if (!(/\w*/.test(id))) {
+        if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
                 ...old,
                 currentModule: {...old.currentModule, id: ""},
@@ -1132,9 +1203,9 @@ function App() {
             openProjectPropertiesEditor();
         }
 
-        if (wizardProjectRequired && !enjoyProjectRequired && !newProjectRequired) {
+        if (appWizardAllowed && wizardProjectRequired && !enjoyProjectRequired && !newProjectRequired) {
             resetProject();
-            //openProjectPropertiesEditor();
+            setWizard({...defaultWizardProject});
         }
 
         if (enjoyProjectRequired || newProjectRequired || wizardProjectRequired) {
@@ -1152,12 +1223,8 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <button className="button_group-new_project" onClick={() => {
-                    if (appWizardAllowed) {
-                        setWelcome(true);
-                    } else {
-                        openProjectPropertiesEditor();
-                    }
+                <button className={`button_group-new_project ${wizard === null ? 'active' : ''}`.trim()} onClick={() => {
+                    setWelcome(true);
                 }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
                     <span>Nouveau projet</span>
@@ -1165,72 +1232,89 @@ function App() {
 
                 <div className="button_group-separator"></div>
 
-                <input id="importfile" ref={importRef} type="file" onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
-                <label htmlFor="importfile" className="button_group-import_project" title="Importer un projet existant">
-                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => importProjectChooseFile()}/>
-                    <span>Importer</span>
-                </label>
+                {wizard === null
+                    ? (
+                        <>
+                            <input id="importfile" ref={importRef} type="file" onChange={(e) => {
+                                if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
+                            }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
+                            <label htmlFor="importfile" className="button_group-import_project" title="Importer un projet existant">
+                                <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"} onClick={() => importProjectChooseFile()}/>
+                                <span>Importer</span>
+                            </label>
 
-                <button className="button_group-export_project" onClick={() => {
-                    exportProject();
-                }} title="Exporter..." disabled={wizard !== null}>
-                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"}/>
-                    <span>Exporter</span>
-                </button>
+                            <button className="button_group-export_project" onClick={() => {
+                                exportProject();
+                            }} title="Exporter..." disabled={wizard !== null}>
+                                <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"}/>
+                                <span>Exporter</span>
+                            </button>
 
-                <button className="button_group-print_project dropdown_container" title="Imprimer..." disabled={wizard !== null}>
-                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"}/>
-                    <span>Imprimer...</span>
-                    <div className="dropdown">
-                        <div className="dropdown_header">Options</div>
-                        <div className="dropdown_item" title="Imprimer les étiquettes">
-                            <input id="print_labels" name="print_labels" type="checkbox" checked={printOptions.labels} onChange={(e) => setPrintOptions((old) => ({...old, labels: e.target.checked}))}/>
-                            <label htmlFor="print_labels">Etiquettes</label>
-                        </div>
-                        <div className="dropdown_item" title="Imprimer les emplacements libres de chaque rangée d'étiquettes" style={{marginLeft: '0.5em'}}>
-                            <input id="print_free" name="print_free" type="checkbox" checked={printOptions.freeModules} onChange={(e) => setPrintOptions((old) => ({...old, freeModules: e.target.checked}))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_free">Imprimer les emplacements libres</label>
-                        </div>
+                            <button className="button_group-print_project dropdown_container" title="Imprimer..." disabled={wizard !== null}>
+                                <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"}/>
+                                <span>Imprimer...</span>
+                                <div className="dropdown">
+                                    <div className="dropdown_header">Options</div>
+                                    <div className="dropdown_item" title="Imprimer les étiquettes">
+                                        <input id="print_labels" name="print_labels" type="checkbox" checked={printOptions.labels} onChange={(e) => setPrintOptions((old) => ({...old, labels: e.target.checked}))}/>
+                                        <label htmlFor="print_labels">Etiquettes</label>
+                                    </div>
+                                    <div className="dropdown_item" title="Imprimer les emplacements libres de chaque rangée d'étiquettes" style={{marginLeft: '0.5em'}}>
+                                        <input id="print_free" name="print_free" type="checkbox" checked={printOptions.freeModules} onChange={(e) => setPrintOptions((old) => ({...old, freeModules: e.target.checked}))} disabled={!printOptions.labels}/>
+                                        <label htmlFor="print_free">Imprimer les emplacements libres</label>
+                                    </div>
 
-                        <div className="dropdown_separator"></div>
+                                    <div className="dropdown_separator"></div>
 
-                        <div className="dropdown_item" title="Imprimer le schéma unifilaire">
-                            <input id="print_schema" name="print_schema" type="checkbox" checked={printOptions.schema} onChange={(e) => setPrintOptions((old) => ({...old, schema: e.target.checked}))}/>
-                            <label htmlFor="print_schema">Schéma unifilaire</label>
-                        </div>
-                        <div className="dropdown_item" title="Imprimer la page de garde" style={{marginLeft: '0.5em'}}>
-                            <input id="print_cover" name="print_cover" type="checkbox" checked={printOptions.coverPage} onChange={(e) => setPrintOptions((old) => ({...old, coverPage: e.target.checked}))} disabled={!printOptions.schema}/>
-                            <label htmlFor="print_cover">Imprimer la page de garde</label>
-                        </div>
+                                    <div className="dropdown_item" title="Imprimer le schéma unifilaire">
+                                        <input id="print_schema" name="print_schema" type="checkbox" checked={printOptions.schema} onChange={(e) => setPrintOptions((old) => ({...old, schema: e.target.checked}))}/>
+                                        <label htmlFor="print_schema">Schéma unifilaire</label>
+                                    </div>
+                                    <div className="dropdown_item" title="Imprimer la page de garde" style={{marginLeft: '0.5em'}}>
+                                        <input id="print_cover" name="print_cover" type="checkbox" checked={printOptions.coverPage} onChange={(e) => setPrintOptions((old) => ({...old, coverPage: e.target.checked}))} disabled={!printOptions.schema}/>
+                                        <label htmlFor="print_cover">Imprimer la page de garde</label>
+                                    </div>
 
-                        <div className="dropdown_separator"></div>
+                                    <div className="dropdown_separator"></div>
 
-                        <div className="dropdown_item" title="Imprimer la nomenclature">
-                            <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({...old, summary: e.target.checked}))}/>
-                            <label htmlFor="print_summary">Nomenclature</label>
-                        </div>
+                                    <div className="dropdown_item" title="Imprimer la nomenclature">
+                                        <input id="print_summary" name="print_summary" type="checkbox" checked={printOptions.summary} onChange={(e) => setPrintOptions((old) => ({...old, summary: e.target.checked}))}/>
+                                        <label htmlFor="print_summary">Nomenclature</label>
+                                    </div>
 
-                        <div className="dropdown_footer">
-                            <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
-                                printProject();
-                            }}>Lancer l&apos;impression...
-                            </div>
-                        </div>
-                    </div>
-                </button>
+                                    <div className="dropdown_footer">
+                                        <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
+                                            printProject();
+                                        }}>Lancer l&apos;impression...
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
 
-                <div className="button_group-separator"></div>
+                            <div className="button_group-separator"></div>
 
-                <button className="button_group-clear_project" onClick={() => {
-                    if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
-                }} title="Réinitialiser le projet">
-                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"}/>
-                    <span>Réinitialiser</span>
-                </button>
+                            <button className="button_group-clear_project" onClick={() => {
+                                if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
+                            }} title="Réinitialiser le projet">
+                                <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"}/>
+                                <span>Réinitialiser</span>
+                            </button>
 
-                <div className="button_group-separator"></div>
+                            <div className="button_group-separator"></div>
+                        </>
+                    )
+                    : (
+                        <>
+                            <button className={`button_group-closewizard_project ${wizard !== null ? 'active' : ''}`.trim()} onClick={() => {
+                                if (confirm("Vous êtes sur le point de quitter l'assistant de conception sans sauvegarder votre travail ! Cette action est irreversible.\r\n\r\nÊtes-vous certain de vouloir effectuer cette action ?")) closeWizard();
+                            }} title="Quitter l'assistant">
+                                <img src={clearProjectIcon} width={16} height={16} alt={"Quitter"}/>
+                                <span>Quitter</span>
+                            </button>
+
+                            <div className="button_group-separator"></div>
+                        </>
+                    )}
             </nav>
 
             {/** SWITCHBOARD PROJECT **/}
@@ -1313,7 +1397,7 @@ function App() {
                                         onChange={(e) => {
                                             updateTheme(e.target.value);
                                         }}
-                                        style={{maxWidth: '100%', overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}
+                                        style={{maxWidth: '100%', width: '280px', overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}
                                         disabled={UIFrozen}
                                     >
                                         {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
@@ -1326,10 +1410,31 @@ function App() {
                                         })}
                                     </select>
                                 </div>
-                                <div className="tabPageBandSeparator"></div>
                             </div>
 
                             <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Hauteur des<br/>étiquettes:</span>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <input type="range" min={heightMin} max={heightMax} step={1} value={switchboard.height} onChange={(e) => {
+                                        const value = parseInt(e.target.value);
+                                        if (value >= heightMin) setSwitchboard((old) => ({...old, height: value}));
+                                    }}/>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <span>{switchboard.height}mm</span>
+                                </div>
+                            </div>
+
+                            <div className="tabPageBandNL"></div>
+
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <button style={{height: '34px'}} title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet." onClick={() => reassignModules()}>
+                                        <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22} height={22}/>
+                                    </button>
+                                </div>
                                 <div className="tabPageBandCol">
                                     <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice" checked={switchboard.switchboardMonitor} onChange={() => setSwitchboard((old) => ({...old, switchboardMonitor: !old.switchboardMonitor}))}/>
                                     <label htmlFor="switchboardMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
@@ -1430,6 +1535,7 @@ function App() {
                         setSwitchboard={setSwitchboard}
                         printOptions={printOptions}
                         schemaFunctions={schemaFunctions}
+                        reassignModules={reassignModules}
                         onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
                     />
 
@@ -1450,7 +1556,7 @@ function App() {
                 wizard={wizard}
 
                 onCancel={() => closeWizard()}
-                onSave={(newSwitchboard) => {
+                onSave={(newWizard) => {
                     resetProject();
                 }}
             />}
@@ -1479,10 +1585,6 @@ function App() {
                 heightMin={heightMin}
                 heightMax={{heightMax}}
                 onCreateProject={createProject}
-                onImportProject={() => {
-                    setNewProjectProperties(null);
-                    importProjectChooseFile();
-                }}
                 onUpdateProjectProperties={updateProjectProperties}
             />}
 

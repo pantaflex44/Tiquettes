@@ -35,6 +35,7 @@ import homeIcon from "./assets/home.svg";
 import compagnyIcon from "./assets/compagny.svg";
 import info2Icon from "./assets/info2.svg";
 import cancelIcon from "./assets/cancel.svg";
+import numbersIcon from "./assets/numbers.svg";
 
 export default function SchemaTab({
                                       tab,
@@ -42,6 +43,7 @@ export default function SchemaTab({
                                       setSwitchboard,
                                       printOptions,
                                       schemaFunctions,
+                                      reassignModules,
                                       onEditSymbol = null,
                                   }) {
     const [monitorOpened, setMonitorOpened] = useState(false);
@@ -246,7 +248,10 @@ export default function SchemaTab({
                         const iconDetails = getIconDetails(data.module);
                         if (iconDetails && iconDetails.requiredIdTypes) {
                             if (!iconDetails.requiredIdTypes.includes(_lastParentModuleId?.type ?? '')) {
-                                add_error(id, `Ce départ doit être couvert par une protection différentielle de type: ${iconDetails.requiredIdTypes.join(', ')}. Type actuel: ${_lastParentModuleId?.type ?? ''}`)
+                                const _parentType = (_lastParentModuleId?.type ?? '').trim();
+                                const _hasParentType = _parentType !== '';
+
+                                add_error(id, `Ce départ doit être couvert par une protection différentielle de type: ${iconDetails.requiredIdTypes.join(', ')}. ${_hasParentType ? `Type actuel: ${_parentType}` : `Protection différentielle incompatible.`}`)
                             }
                         }
                     }
@@ -293,14 +298,17 @@ export default function SchemaTab({
                             <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24}/>
                         </label>
                     </div>
+                </div>
+                <div className="tabPageBandGroup">
                     <div className="tabPageBandCol">
                         <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Tension de<br/>référence:</span>
                     </div>
                     <div className="tabPageBandCol">
                         <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400} value={switchboard.vref} onChange={(e) => setSwitchboard((old) => ({...old, vref: e.target.value}))}/>
                     </div>
-                    <div className="tabPageBandSeparator"></div>
                 </div>
+
+                <div className="tabPageBandSeparator"></div>
 
                 <div className="tabPageBandGroup">
                     <div className="tabPageBandCol">
@@ -341,10 +349,17 @@ export default function SchemaTab({
                             <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre" width={24} height={24}/>
                         </label>
                     </div>
-                    <div className="tabPageBandSeparator"></div>
+                    {/**<div className="tabPageBandSeparator"></div>**/}
                 </div>
 
+                <div className="tabPageBandNL"></div>
+
                 <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <button style={{height: '34px'}} title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet." onClick={() => reassignModules()}>
+                            <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22} height={22}/>
+                        </button>
+                    </div>
                     <div className="tabPageBandCol">
                         <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice" checked={switchboard.schemaMonitor} onChange={() => setSwitchboard((old) => ({...old, schemaMonitor: !old.schemaMonitor}))}/>
                         <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)" className={`${monitor.errors ? 'error' : ''}`}>
@@ -372,7 +387,7 @@ export default function SchemaTab({
                     </div>
                     <div className="tabPageBandCol" style={{height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content'}}>
                         <ul>
-                            {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                        {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
                                 <li key={i} className="tabPageErrors">
                                     <div>{id}:</div>
                                     <ul>

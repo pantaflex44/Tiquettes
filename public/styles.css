@@ -279,15 +279,22 @@ h1 sup {
 }
 
 button, .fakeButton {
-    background-color: #f0f0f0;
+    background-color: #f5f5f5;
     border: 1px solid darkgray;
     border-radius: 5px;
-    min-height: 32px;
+    min-height: 34px;
     min-width: 32px;
     font-weight: 500;
     padding-block: 0.4em;
     padding-inline: 0.8em;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.25em;
+    transition: all 0.2s ease;
 }
 
 .fakeButton {
@@ -319,11 +326,13 @@ button:disabled img, .fakeButton:disabled img {
 input[type="file"] {
     min-height: 32px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 input[type="file"]::-webkit-file-upload-button {
     min-height: 32px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
@@ -519,4 +528,52 @@ input[type="range"] {
     .box {
         display: none;
     }
+}
+
+input[type="range"] {
+    -webkit-appearance: none !important;;
+    appearance: none !important;;
+    background: transparent !important;;
+    cursor: pointer !important;;
+    border: none !important;
+    height: 15px !important;
+    padding-inline: 0 !important;
+}
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-runnable-track {
+    background: darkgray;
+    height: 2px;
+}
+
+/******** Firefox ********/
+input[type="range"]::-moz-range-track {
+    background: darkgray;
+    height: 2px;
+}
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -7px; /* Centers thumb on the track */
+    background-color: var(--primary-color);
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    border: 2px solid #f5f5f5;
+}
+
+/***** Firefox *****/
+input[type="range"]::-moz-range-thumb {
+    background-color: var(--primary-color);
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    border: 2px solid #f5f5f5;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+    outline: none;
 }

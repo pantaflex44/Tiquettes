@@ -33,6 +33,8 @@ export default function WelcomePopup({
                                          onWizard,
                                          wizard = null,
                                      }) {
+    const appWizardAllowed = `${import.meta.env.VITE_APP_WIZARD}`.toLowerCase().trim() === "true";
+
     const wizardConfirm = () => {
         if (wizard !== null) {
             return confirm("L'assistant est en cours d'éxécution. Cette action effacera tout votre travail.\r\n\r\nÊtes-vous certain de vouloir quitter l'assistant ?");
@@ -60,15 +62,17 @@ export default function WelcomePopup({
                     <div className="bigList-content_description">Démarrez librement votre nouveau projet. C&#39;est à vous de renseigner toutes les informations requises.</div>
                 </div>
             </li>
-            <li className={wizard !== null ? 'disabled' : ''} onClick={() => {
-                if (newWizardConfirm()) onWizard();
-            }}>
-                <img src={wizardIcon} width={48} height={48} alt="Assistant de conception"/>
-                <div className="bigList-content">
-                    <div className="bigList-content_title">Assistant de conception résidentiel</div>
-                    <div className="bigList-content_description">Utilisez notre assistant de conception pour votre projet résidentiel.<br />A tout moment, vous pouvez revenir au projet libre en cours d&#39;édition, en quittant l&#39;assistant sans sauvegarder votre travail !</div>
-                </div>
-            </li>
+            {appWizardAllowed && (
+                <li className={wizard !== null ? 'disabled' : ''} onClick={() => {
+                    if (newWizardConfirm()) onWizard();
+                }}>
+                    <img src={wizardIcon} width={48} height={48} alt="Assistant de conception"/>
+                    <div className="bigList-content">
+                        <div className="bigList-content_title">Assistant de conception résidentiel</div>
+                        <div className="bigList-content_description">Utilisez notre assistant de conception pour votre projet résidentiel.<br/>A tout moment, vous pouvez revenir au projet libre en cours d&#39;édition, en quittant l&#39;assistant sans sauvegarder votre travail !</div>
+                    </div>
+                </li>
+            )}
             <li onClick={() => {
                 if (wizardConfirm()) onImportProject();
             }}>

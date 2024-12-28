@@ -1,6 +1,24 @@
 # Changelog
 
 
+
+## [2.1.0] - 2024-01-31 - Nouvelles fonctionnalités majeures
+
+### Ajouts
+
+- Introduction d'un assistant de création d'un nouveau projet résidentiel. Assiste l'utilisateur en créant automatiquement un projet en fonction de la structure de son habitation.
+
+### Améliorations
+
+- Nouvelle fenêtre d'accueil lors de la création d'un nouveau projet.
+- Amélioration de la mise en page lors de l'impression du projet.
+
+### Corrections
+
+- Nouvelle routine d'assignation des identifiants des modules avec correction des doublons, et filtrage des modules libres.
+- Possibilité de réassigner automatiquement les identifiants des modules de l'ensemble du projet sur simple action manuelle (nouveau bouton dans la barre à outils des étiquettes).
+
+
 ## [2.0.2] - 2024-12-26
 
 ### Améliorations

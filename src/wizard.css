@@ -1,11 +1,285 @@
+/**
+ Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+ Copyright (C) 2024-2025 Christophe LEMOINE
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 .wizard {
     height: max-content;
     min-height: 410px;
     border: 1px solid darkgray;
     border-radius: 7px;
+
+    display: grid;
+    grid-template-columns: 300px 250px 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "project rooms details";
 }
 
 .wizardDescription {
     margin-bottom: 2em;
     font-size: smaller;
+}
+
+.wizardProject {
+    grid-area: project;
+    border-right: 1px solid lightgray;
+}
+
+.wizardRooms {
+    grid-area: rooms;
+    border-right: 1px solid lightgray;
+}
+
+.wizardDetails {
+    grid-area: details;
+}
+
+.wizardProject::before,
+.wizardRooms::before,
+.wizardDetails::before {
+    height: calc(50px - 2rem);
+    line-height: calc(50px - 2rem);
+    padding-block: 0.75rem;
+    padding-inline: 1rem;
+
+    display: block;
+
+    font-size: smaller;
+    font-weight: 600;
+    border-bottom: 1px solid darkgray;
+    background: linear-gradient(to bottom, white, #f5f5f5);
+}
+
+.wizardProject::before {
+    content: "Mon projet";
+    border-top-left-radius: 7px;
+}
+
+.wizardRooms::before {
+    content: "Ma maison";
+}
+
+.wizardDetails::before {
+    content: "Composition";
+    border-top-right-radius: 7px;
+}
+
+@media screen and (max-width: 950px) {
+    .wizard {
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "project project"
+                             "rooms details";
+    }
+
+    .wizardProject {
+        border-bottom: 1px solid darkgray;
+        border-right: none;
+    }
+
+    .wizardProject::before {
+        border-top-right-radius: 7px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .wizard {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas: "project"
+                             "rooms"
+                             "details";
+    }
+
+    .wizardRooms {
+        border-bottom: 1px solid darkgray;
+        border-right: none;
+    }
+}
+
+.wizardBlock {
+    padding-inline: 1.5rem;
+    padding-block: 1.5rem;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: flex-start;
+    row-gap: 1rem;
+
+    font-size: smaller;
+}
+
+.wizardBlock.nopad {
+    padding: 0;
+}
+
+.wizardBlock_row {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: flex-start;
+    row-gap: 0.5rem;
+}
+
+.wizardBlock_row > * {
+    flex: 1;
+    width: calc(100% - 1rem);
+}
+
+.wizardBlock_row input, .popup_row textarea {
+    padding: 0.5em;
+    font: inherit;
+    resize: vertical;
+}
+
+.wizardBlock_row input[type="checkbox"] {
+    padding: 0;
+    margin: 0;
+    margin-right: auto;
+}
+
+.wizardBlock_row input[type="color"] {
+    padding: 0;
+    margin: 0;
+    width: 48px;
+    height: 24px;
+}
+
+.wizardBlock_row label {
+    font-weight: 600;
+    font-size: 110%;
+}
+
+.wizardBlock_row .sublabel {
+    color: #555;
+}
+
+.wizardBlock_separator {
+    height: 1rem;
+}
+
+.wizardBlock_inline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+
+.wizardBlock_inline > *:first-child {
+    flex: 1;
+}
+
+.wizardRoomsList {
+    counter-reset: roomCounter 0;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    user-select: none;
+}
+
+.wizardRoom {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px dotted lightgray;
+
+    transition: all 0.2s ease;
+}
+
+
+.wizardRoom input[type="radio"] {
+    display: none;
+}
+
+.wizardRoom:has(input[type="text"]) {
+    background-color: #f9f9f9;
+
+    border-bottom-style: solid;
+    border-bottom-color: darkgray;
+}
+
+.wizardRoom input[type="text"] {
+    height: calc(34px - 0.25rem);
+    border: 0 !important;
+    background-color: transparent !important;
+    margin: 0.25rem;
+}
+
+.wizardRoom label {
+    counter-increment: roomCounter;
+
+    flex: 1;
+
+    line-height: 34px;
+    padding-inline: 0.75rem;
+
+    cursor: pointer;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.wizardRoom label:before {
+    content: counter(roomCounter) " :";
+
+    font-size: 70%;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.wizardRoom:hover label {
+    background-color: var(--secondary-color-light);
+}
+
+.wizardRoom label:has(input:checked) {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.wizardRoom img {
+    padding-inline: 0.75rem;
+    padding-block: 0.25rem;
+
+    cursor: pointer;
+}
+
+.wizardRoom img.disabled {
+    cursor: default;
+    filter: opacity(0.4);
+    pointer-events: none;
 }
