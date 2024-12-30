@@ -135,7 +135,7 @@ export default function Editor({
                                     autoFocus
                                 />
                                 <button title="Trouver le prochain identifiant disponible." onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
-                                    <img src={assignIdIcon} width={20} height={20} alt="Trouver le prochain identifiant libre." />
+                                    <img src={assignIdIcon} width={22} height={22} alt="Trouver le prochain identifiant libre." />
                                 </button>
                             </div>
                         </div>

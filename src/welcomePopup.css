@@ -15,7 +15,8 @@
     box-sizing: border-box;
     width: 100%;
     min-height: 94px;
-    padding: 1rem;
+    padding-inline: 1rem;
+    padding-block: 1.25rem;
 
     display: flex;
     flex-direction: row;
@@ -27,8 +28,6 @@
     border: 1px solid darkgray;
     border-radius: 7px;
     cursor: pointer;
-
-    transition: all 200ms ease-out;
 }
 
 .bigList li:not(.disabled):hover {

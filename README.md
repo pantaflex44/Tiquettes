@@ -19,12 +19,16 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 Tout commence par l'initialisation de son projet.
 
-Deux possibilités :
+Deux possibilités proposées dans la barre à outils :
 
 - Créer un nouveau projet
 - Importer un projet sauvegardé
 
 ![Nouveau projet](./docs/_project_actions1.png)
+
+Ou bien même, directement dans la fenêtre de bienvenue :
+
+![Nouveau projet](./docs/_welcome.png)
 
 ### Créer un nouveau projet par défaut
 
@@ -59,6 +63,8 @@ Sous le nom du projet, vous retrouvez le numéro de la dernière version export�
 Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
 ## L'éditeur
+
+![Editeur](./docs/_editeur.png)
 
 ### Descriptif
 
@@ -128,6 +134,13 @@ Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votr
 - Pour déplacer un module horizontalement, sélectionnez le avec votre souris, puis appuyez sur les flèches `gauche` et `droite` de votre clavier.
 - Pour redimensionner un module, sélectionnez le avec votre souris, puis appuyez sur les touches `+` et `-` de votre clavier.
 
+> <b>🛈 Bon à savoir</b>
+>
+> ![Auto ID](./docs/_auto_id.png)
+>
+> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Editeur``` et ```Schéma```.
+
+
 ## Edition d'un module
 
 Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s'ouvre et vous offre la possibilité d'affiner sa définition.
@@ -139,6 +152,12 @@ La partie inférieure de la fenètre d'édition comporte une zone de démonstrat
 - _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
 - _Libellé_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
 - _Pictogramme_ : Une petite image illustrant l'environement du module.
+
+> <b>🛈 Bon à savoir</b>
+>
+> ![Auto Next ID](./docs/_next_id.png)
+> 
+> Il est parfois difficile de suivre les identifiants déja utilisés par les précédents modules, c'est pourquoi un bouton est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module définie dans l'onglet ```Schéma```.
 
 ### Les actions disponibles
 
@@ -247,9 +266,17 @@ Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du
 
 ![Schéma unifilaire](./docs/_schema.png)
 
+> <b>🛈 Bon à savoir</b>
+>
+> ![Auto ID](./docs/_auto_id.png)
+>
+> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Editeur``` et ```Schéma```.
+
+
 Pour éditer un module, il suffit juste de cliquer dessus ;-)
 
 ![Schéma unifilaire](./docs/_schema_editor.png)
+
 
 Au-dessus du schéma vous retrouverez l'espace ```barre à outils``` vous proposant dans cet onglet, différents réglages.
 

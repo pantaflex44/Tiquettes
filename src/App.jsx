@@ -1160,7 +1160,7 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <button className={`button_group-new_project`.trim()}
+                <button className={`button_group-new_project active`.trim()}
                         onClick={() => {
                             setWelcome(true);
                         }} title="Créer un nouveau projet">
