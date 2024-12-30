@@ -2,11 +2,7 @@
 
 
 
-## [2.1.0] - 2024-01-31 - Nouvelles fonctionnalités majeures
-
-### Ajouts
-
-- Introduction d'un assistant de création d'un nouveau projet résidentiel. Assiste l'utilisateur en créant automatiquement un projet en fonction de la structure de son habitation.
+## [2.0.3] - 2024-01-31
 
 ### Améliorations
 
