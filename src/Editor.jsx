@@ -62,7 +62,8 @@ export default function Editor({
             });
         });
 
-        const prefix = (editor.currentModule.func ?? defaultModuleId).trim().toUpperCase();
+        let prefix = (editor.currentModule.func ?? defaultModuleId).trim().toUpperCase();
+        if (prefix === '') prefix = defaultModuleId;
 
         let found = '';
         let count = 1;
