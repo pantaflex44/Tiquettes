@@ -45,13 +45,11 @@ export default function Main() {
                 'https://tiquettes.fr/app/',
                 'https://tiquettes.fr/app/?enjoy',
                 'https://tiquettes.fr/app/?new',
-                'https://tiquettes.fr/app/?wizard',
                 'https://www.tiquettes.fr/app/',
                 'https://www.tiquettes.fr/app/?enjoy',
-                'https://www.tiquettes.fr/app/?new',
-                'https://www.tiquettes.fr/app/?wizard'
+                'https://www.tiquettes.fr/app/?new'
             ].includes(origin)) {
-                window.location.replace("https://www.tiquettes.fr/app/?new");
+                window.location.replace("https://www.tiquettes.fr/app/?enjoy");
             }
         }
 

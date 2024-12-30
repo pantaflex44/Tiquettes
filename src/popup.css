@@ -143,6 +143,20 @@
     column-gap: 0.25em;
 }
 
+.popup_row.span {
+    grid-template-columns: 1fr;
+}
+
+.popup_row.light {
+    font-size: small;
+    color: #555;
+}
+
+.popup_row.dark {
+    color: #000;
+    font-weight: 600;
+}
+
 .popup_row-flex {
     display: flex;
     flex-direction: row;

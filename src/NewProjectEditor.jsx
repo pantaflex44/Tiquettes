@@ -41,8 +41,8 @@ export default function NewProjectEditor({
                 onSetNewProjectProperties(null);
             }}
         >
-            <div className="popup_row" style={{'--left_column_size': '150px', marginBottom: '3em'}}>
-                <label htmlFor="newProjectProperties_name">Nom du projet</label>
+            <div className="popup_row dark" style={{'--left_column_size': '150px', marginBottom: '3em'}}>
+                <label htmlFor="newProjectProperties_name" style={{fontSize: '110%'}}>Nom du projet :</label>
                 <input
                     type="text"
                     name="newProjectProperties_name"
@@ -53,45 +53,78 @@ export default function NewProjectEditor({
                 />
             </div>
 
-            <div className="popup_row" style={{'--left_column_size': '150px', alignItems: 'center'}}>
-                <label htmlFor="newProjectProperties_modules">Nombre de modules par rangée</label>
+
+            <div className="popup_row span dark"
+                 style={{'--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '1em'}}>
+                <label htmlFor="newProjectProperties_modules" style={{fontSize: '110%'}}>Nombre de rangées :</label>
+            </div>
+            <div className="popup_row" style={{'--left_column_size': '150px', marginTop: 0, marginBottom: '3em'}}>
+                <div><label style={{
+                    fontSize: '1.1em',
+                    color: 'var(--primary-color)'
+                }}>˫ <b>{newProjectProperties.npRows}</b> rangées</label></div>
+                <div style={{display: "flex", alignItems: "center", columnGap: '1em'}}>
+                    <input type="range" min={rowsMin} max={rowsMax} step={1} value={newProjectProperties.npRows}
+                           onChange={(e) => {
+                               const value = parseInt(e.target.value);
+                               if (value >= rowsMin) onUpdateProjectProperties({npRows: value});
+                           }} style={{minHeight: 0, padding: 0, margin: 0, width: '100%'}}/>
+                </div>
+            </div>
+
+            <div className="popup_row span dark"
+                 style={{'--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '0em'}}>
+                <label htmlFor="newProjectProperties_modules" style={{fontSize: '110%'}}>Nombre de modules par rangée
+                    :</label>
+            </div>
+            <div className="popup_row span"
+                 style={{'--left_column_size': '150px', alignItems: 'center', marginTop: '0', marginBottom: '3em'}}>
+                <div></div>
                 <div className="radio_group">
                     {import.meta.env.VITE_ALLOWED_MODULES.split(',').map((count) => {
                         const c = parseInt(count.trim());
                         return <div key={c} className="radio">
-                            <input type="radio" name="spr" id={`newProjectProperties_modules_${c}`} value={c} checked={newProjectProperties.spr === c} onChange={(e) => onUpdateProjectProperties({spr: parseInt(e.target.value)})} style={{margin: 0, marginRight: '0.25em'}}/>
-                            <label htmlFor={`newProjectProperties_modules_${c}`}>{c}</label>
+                            <input type="radio" name="spr" id={`newProjectProperties_modules_${c}`} value={c}
+                                   checked={newProjectProperties.spr === c}
+                                   onChange={(e) => onUpdateProjectProperties({spr: parseInt(e.target.value)})}/>
+                            <label htmlFor={`newProjectProperties_modules_${c}`}
+                                   style={{margin: 0, marginRight: '0.5em', paddingInline: '1em'}}>{c} modules</label>
                         </div>;
                     })}
                 </div>
             </div>
 
-            <div className="popup_row" style={{'--left_column_size': '150px', alignItems: 'center', marginTop: 0, marginBottom: '0.5em'}}>
-                <label htmlFor="newProjectProperties_modules">Nombre de rangées</label>
-                <label style={{fontSize: '1.1em', color: 'var(--primary-color)'}}>˫ <b>{newProjectProperties.npRows}</b> rangées</label>
+            <div className="popup_row span dark"
+                 style={{'--left_column_size': '150px', alignItems: 'center', marginBottom: '1em'}}>
+                <label htmlFor="newProjectProperties_modules" style={{fontSize: '110%'}}>Hauteur d&apos;une
+                    rangée :</label>
             </div>
-            <div className="popup_row" style={{'--left_column_size': '150px', marginTop: 0}}>
-                <div></div>
+            <div className="popup_row" style={{'--left_column_size': '150px', marginTop: 0, marginBottom: '-1em'}}>
+                <div><label style={{
+                    fontSize: '1.1em',
+                    color: 'var(--primary-color)'
+                }}>˫ <b>{newProjectProperties.hRow}</b>mm</label></div>
                 <div style={{display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em'}}>
-                    <input type="range" min={rowsMin} max={rowsMax} step={1} value={newProjectProperties.npRows} onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value >= rowsMin) onUpdateProjectProperties({npRows: value});
-                    }} style={{minHeight: 0, padding: 0, margin: 0, width: '100%'}}/>
+                    <input type="range" min={heightMin} max={heightMax} step={1} value={newProjectProperties.hRow}
+                           onChange={(e) => {
+                               const value = parseInt(e.target.value);
+                               if (value >= heightMin) onUpdateProjectProperties({hRow: value});
+                           }} style={{minHeight: 0, padding: 0, margin: 0, width: '100%'}}/>
                 </div>
             </div>
 
-            <div className="popup_row" style={{'--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '0.5em'}}>
-                <label htmlFor="newProjectProperties_modules">Hauteur d&apos;une rangée</label>
-                <label style={{fontSize: '1.1em', color: 'var(--primary-color)'}}>˫ <b>{newProjectProperties.hRow}</b>mm</label>
-            </div>
-            <div className="popup_row" style={{'--left_column_size': '150px', marginTop: 0, marginBottom: '3em'}}>
-                <div></div>
-                <div style={{display: "flex", alignItems: "center", columnGap: '1em', marginBottom: '-0.25em'}}>
-                    <input type="range" min={heightMin} max={heightMax} step={1} value={newProjectProperties.hRow} onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value >= heightMin) onUpdateProjectProperties({hRow: value});
-                    }} style={{minHeight: 0, padding: 0, margin: 0, width: '100%'}}/>
+            <div className="popup_row span light"
+                 style={{'--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '5em'}}>
+                <div>
+                    La hauteur des étiquettes dépend de l&#39;espace disponible proposé par l&#39;enveloppe choisie. Chaque marque / modèle possède ses propres dimensions.<br />Pour garantir une insertion correcte des étiquettes imprimées, il est conseillé de <b>retirer 1mm de la hauteur mesurée</b>.
+                    <ul>
+                        <li><b>Schneider Resi 9</b> : 30mm → 29mm</li>
+                        <li><b>Schneider PrimaSeT S</b> : 24mm → 23mm</li>
+                        <li><b>Hager Gamma</b> : 35mm → 34mm</li>
+                        <li>etc.</li>
+                    </ul>
                 </div>
+
             </div>
         </Popup>
     );
