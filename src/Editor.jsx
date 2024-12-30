@@ -17,11 +17,12 @@
  */
 
 /* eslint-disable react/prop-types */
-import {Fragment, useState} from "react";
+import {Fragment, useEffect, useMemo, useState} from "react";
 
 import switchboardIcon from './assets/project.svg';
 import schemaIcon from './assets/schema.svg';
 import editIcon from './assets/edit.svg';
+import assignIdIcon from './assets/assign-number.svg';
 
 import IconSelector from "./IconSelector.jsx";
 import Module from "./Module.jsx";
@@ -43,9 +44,37 @@ export default function Editor({
                                    onApplyModuleEditor,
                                    onUpdateModuleEditor,
                                    onHandleModuleClear,
+
+                                    hasBlankId = false,
                                }) {
+    const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
+
     const [editorTab, setEditorTab] = useState(editor?.tabPage ?? "main");
     const prevModule = getModuleById(editor?.prevModule?.parentId);
+
+    const lastFreeId = useMemo(() => {
+        let rows = switchboard.rows;
+
+        let ids = [];
+        rows.forEach((row) => {
+            return row.forEach((module) => {
+                ids.push(module.id);
+            });
+        });
+
+        const prefix = (editor.currentModule.func ?? defaultModuleId).trim().toUpperCase();
+
+        let found = '';
+        let count = 1;
+        while (ids.includes(`${prefix}${count}`)) count++;
+        found = `${prefix}${count}`;
+
+        return found;
+    }, [switchboard, defaultModuleId, editor.currentModule.func]);
+
+    useEffect(() => {
+        if (hasBlankId) onUpdateModuleEditor({id: lastFreeId});
+    }, [hasBlankId, editor.currentModule.func]);
 
     return editor && (
         <Popup
@@ -87,18 +116,28 @@ export default function Editor({
                     </label>
                 </div>
 
+                {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{'--left_column_size': '100px'}}>
+                    <div>&nbsp;</div>
+                    <div className="popup_error">{error}</div>
+                </div>)}
+
                 {editorTab === "main" &&
                     <>
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <label htmlFor={`editor_id_${editor.currentModule.id.trim()}`}>Identifiant</label>
-                            <input
-                                type="text"
-                                name="editor_id"
-                                id={`editor_id_${editor.currentModule.id.trim()}`}
-                                value={editor.currentModule.id}
-                                onChange={(e) => onUpdateModuleEditor({id: e.target.value})}
-                                autoFocus
-                            />
+                            <div className="popup_row-flex">
+                                <input
+                                    type="text"
+                                    name="editor_id"
+                                    id={`editor_id_${editor.currentModule.id.trim()}`}
+                                    value={editor.currentModule.id}
+                                    onChange={(e) => onUpdateModuleEditor({id: e.target.value})}
+                                    autoFocus
+                                />
+                                <button title="Trouver le prochain identifiant disponible." onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
+                                    <img src={assignIdIcon} width={20} height={20} alt="Trouver le prochain identifiant libre." />
+                                </button>
+                            </div>
                         </div>
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <div></div>
@@ -109,9 +148,9 @@ export default function Editor({
                             <label>Pictogramme</label>
                             <IconSelector value={editor.currentModule.icon} onChange={(selectedIcon, selected) => {
                                 onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
-                                if(selected?.func && !editor.currentModule.func) onUpdateModuleEditor({func: selected?.func});
-                                if(selected?.crb && !editor.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
-                                if(selected?.current && !editor.currentModule.current) onUpdateModuleEditor({current: selected?.current});
+                                if (selected?.func && !editor.currentModule.func) onUpdateModuleEditor({func: selected?.func});
+                                if (selected?.crb && !editor.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
+                                if (selected?.current && !editor.currentModule.current) onUpdateModuleEditor({current: selected?.current});
                             }}/>
                         </div>
 
@@ -291,10 +330,7 @@ export default function Editor({
                     </>
                 }
 
-                {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{'--left_column_size': '100px'}}>
-                    <div></div>
-                    <div className="popup_error">{error}</div>
-                </div>)}
+
             </div>
         </Popup>
     );

@@ -22,7 +22,6 @@ import "./welcomePopup.css";
 
 import projectIcon from "./assets/project.svg";
 import importIcon from "./assets/upload.svg";
-import wizardIcon from "./assets/hand.svg";
 
 import Popup from "./Popup.jsx";
 
@@ -30,20 +29,7 @@ export default function WelcomePopup({
                                          onCancel,
                                          onNewProject,
                                          onImportProject,
-                                         onWizard,
-                                         wizard = null,
                                      }) {
-    const wizardConfirm = () => {
-        if (wizard !== null) {
-            return confirm("L'assistant est en cours d'éxécution. Cette action effacera tout votre travail.\r\n\r\nÊtes-vous certain de vouloir quitter l'assistant ?");
-        }
-        return true;
-    };
-
-    const newWizardConfirm = () => {
-        return true;
-    };
-
     return <Popup
         title={"Bienvenue sur Tiquettes"}
         showCloseButton={false}
@@ -52,25 +38,18 @@ export default function WelcomePopup({
     >
         <ul className="bigList">
             <li onClick={() => {
-                if (wizardConfirm()) onNewProject();
+                onNewProject();
             }}>
                 <img src={projectIcon} width={48} height={48} alt="Nouveau projet"/>
                 <div className="bigList-content">
                     <div className="bigList-content_title">Nouveau projet libre</div>
-                    <div className="bigList-content_description">Démarrez librement votre nouveau projet. C&#39;est à vous de renseigner toutes les informations requises.</div>
-                </div>
-            </li>
-            <li className={wizard !== null ? 'disabled' : ''} onClick={() => {
-                if (newWizardConfirm()) onWizard();
-            }}>
-                <img src={wizardIcon} width={48} height={48} alt="Assistant de conception"/>
-                <div className="bigList-content">
-                    <div className="bigList-content_title">Assistant de conception résidentiel</div>
-                    <div className="bigList-content_description">Utilisez notre assistant de conception pour votre projet résidentiel.<br />A tout moment, vous pouvez revenir au projet libre en cours d&#39;édition, en quittant l&#39;assistant sans sauvegarder votre travail !</div>
+                    <div className="bigList-content_description">Démarrez librement votre nouveau projet. C&#39;est à
+                        vous de renseigner toutes les informations requises.
+                    </div>
                 </div>
             </li>
             <li onClick={() => {
-                if (wizardConfirm()) onImportProject();
+                onImportProject();
             }}>
                 <img src={importIcon} width={48} height={48} alt="Importer un projet"/>
                 <div className="bigList-content">

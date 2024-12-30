@@ -20,12 +20,6 @@
 import summaryRowIcon from "./assets/summary_row.svg";
 import summaryPositionIcon from "./assets/summary_position.svg";
 import summaryNoPicto from "./assets/summary_nopicto.svg";
-import themesList from "./themes.json";
-import {Fragment} from "react";
-import monitorIcon from "./assets/monitor.svg";
-import nomonitorIcon from "./assets/nomonitor.svg";
-import caretUpIcon from "./assets/caret-up.svg";
-import caretDownIcon from "./assets/caret-down.svg";
 
 export default function SummaryTab({
                                        tab,

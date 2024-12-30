@@ -18,13 +18,13 @@
 
 @page schemaCartbridge {
     size: landscape;
-    margin: 10mm;
+    margin: 7mm;
 }
 
 @page schema {
     size: landscape;
-    margin: 10mm 10mm;
-    margin-top: 10mm;
+    margin: 7mm 7mm;
+    margin-top: 7mm;
     padding-top: 10mm;
 }
 
@@ -77,6 +77,8 @@
     position: relative;
     page-break-inside: avoid;
     break-inside: avoid;
+
+    padding-right: 10px;
 }
 
 .schemaItem.isFirst {
@@ -108,7 +110,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     row-gap: 50px;
-    margin-right: 60px;
+    /*margin-right: 60px;*/
 }
 
 .schemaItemSymbol {

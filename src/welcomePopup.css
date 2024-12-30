@@ -47,6 +47,7 @@
 
 .bigList li.disabled img {
     filter: opacity(0.2);
+    pointer-events: none;
 }
 
 .bigList li .bigList-content {
