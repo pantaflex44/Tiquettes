@@ -577,3 +577,83 @@ input[type="range"]::-moz-range-thumb {
 input[type="range"]:focus {
     outline: none;
 }
+
+.stepper {
+    font-size: 80%;
+    font-weight: bold;
+    position: relative;
+    counter-reset: step 0;
+    width: 100%;
+    margin: 2rem 0;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 0;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.stepper > .step {
+    position: relative;
+    counter-increment: step;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.stepper > .step::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: #f0f0f0;
+    left: 0;
+    top: 1.1rem;
+}
+.stepper > .step > .step-label {
+    position: relative;
+    width: 2.2rem;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    background: white;
+    color: #555;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 2px solid #f0f0f0;
+}
+.stepper > .step > .step-label::before {
+    content: counter(step);
+}
+.stepper > .step.active::before {
+    background: linear-gradient(to right, var(--primary-color), #f0f0f0);
+}
+.stepper > .step.active > .step-label {
+    background: white;
+    color: var(--primary-color);
+    font-weight: bold;
+    border-color: var(--primary-color);
+}
+.stepper > .step.completed::before {
+    background: var(--primary-color);
+}
+.stepper > .step.completed > .step-label {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.stepper > .step > .step-description {
+    font-size: x-small;
+    color: #777;
+    margin-top: 0.5rem;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    text-align: center;
+    text-transform: uppercase;
+}
+.stepper > .step.active > .step-description,
+.stepper > .step.completed > .step-description {
+    color: #555;
+}
+.stepper > .step.active > .step-description {
+    font-weight: bold;
+}

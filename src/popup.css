@@ -16,6 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+body:has(.popup-overflow) {
+    overflow-y: hidden !important;
+}
+
 .popup-overflow {
     display: block;
     position: fixed;
@@ -39,11 +43,11 @@
     max-height: 93%;
     overflow-y: auto;
     background: linear-gradient(to bottom, white, #f0f0f0);
-    border-radius: 5px;
+    border-radius: 7px;
     border: 1px solid black;
     z-index: 9000;
     padding: 1em;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 1);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.7);
 }
 
 .popup_title {

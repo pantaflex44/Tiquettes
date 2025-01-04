@@ -22,6 +22,7 @@ import "./welcomePopup.css";
 
 import projectIcon from "./assets/project.svg";
 import importIcon from "./assets/upload.svg";
+import modelsIcon from "./assets/modelref.svg";
 
 import Popup from "./Popup.jsx";
 
@@ -29,6 +30,8 @@ export default function WelcomePopup({
                                          onCancel,
                                          onNewProject,
                                          onImportProject,
+                                         onWizard,
+                                         wizardAllowed = false
                                      }) {
     return <Popup
         title={"Bienvenue sur Tiquettes"}
@@ -48,6 +51,18 @@ export default function WelcomePopup({
                     </div>
                 </div>
             </li>
+            {wizardAllowed && (
+                <li onClick={() => {
+                    onWizard();
+                }}>
+                    <img src={modelsIcon} width={48} height={48} alt="Models"/>
+                    <div className="bigList-content">
+                        <div className="bigList-content_title">Modèle par référence</div>
+                        <div className="bigList-content_description">Pour vous aider à concevoir votre projet, Tiquettes vous propose des modèles de tableaux pré-conçus.
+                        </div>
+                    </div>
+                </li>
+            )}
             <li onClick={() => {
                 onImportProject();
             }}>

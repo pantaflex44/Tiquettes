@@ -1,0 +1,88 @@
+/**
+    Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+    Copyright (C) 2024-2025 Christophe LEMOINE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.filoche {
+    position: relative;
+
+    height: 600px;
+    margin-block: 4em;
+}
+
+.filoche .stepperImg {
+    position: absolute;
+    bottom: -40px;
+    right: 40px;
+    width: clamp(175px, 25vw, 512px);
+    height: 256px;
+
+    z-index: -1;
+
+    filter: opacity(0.030);
+}
+
+.filoche .stepperTitle {
+    max-width: 600px;
+    margin-inline: auto;
+
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+.filoche section {
+    max-width: 600px;
+    margin-inline: auto;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    margin-top: 5em;
+    margin-bottom: 5em;
+}
+
+.filoche section p {
+    font-size: 110%;
+    line-height: 1.25;
+
+    &.sub {
+        color: #777;
+        font-size: 100%;
+    }
+}
+
+.filoche h3 {
+    margin-bottom: 2em;
+}
+
+.filoche section hr {
+    width: 100%;
+    height: 1px;
+    margin-block: 2em;
+
+    background-color: darkgray;
+    border: 0;
+}
+
+.filoche input[type="text"] {
+    width: calc(100% - 1rem - 2px);
+    height: 39px;
+
+    font-size: 100%;
+    background-color: transparent !important;
+}
