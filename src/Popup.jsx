@@ -20,6 +20,7 @@
 import cancelIcon from './assets/cancel.svg';
 
 import './popup.css';
+import {useMemo} from "react";
 
 export default function Popup({
                                   title,
@@ -30,15 +31,29 @@ export default function Popup({
                                   showCloseButton = true,
                                   showCancelButton = true,
                                   showOkButton = true,
+                                  showPrevButton = false,
+                                  showNextButton = false,
                                   additionalButtons = [],
                                   onCancel = null,
-                                  onOk = null
+                                  onOk = null,
+                                  onPrev = null,
+                                  onNext = null,
                               }) {
+    const buttons = useMemo(() => ({
+        close: showCloseButton,
+        cancel: showCancelButton,
+        ok: showOkButton,
+        prev: showPrevButton,
+        next: showNextButton,
+    }), [showCancelButton, showOkButton, showCloseButton, showPrevButton, showNextButton]);
+
     return (
         <div className="popup-overflow">
             <div className='popup' tabIndex={0} style={{width: `${width}px`}}>
                 <div className="popup_title">{title}</div>
-                {showCloseButton && <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24} height={24}/></div>}
+                {buttons.close &&
+                    <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
+                                                                          height={24}/></div>}
 
                 <div className={`popup_content ${className}`} style={style}>
                     {children}
@@ -54,9 +69,11 @@ export default function Popup({
                             return <button key={i} {...props} onClick={callback}>{text}</button>;
                         })}
                     </div>
-                    {(showCancelButton || showOkButton) && <div className="popup_buttons_box">
-                        {showCancelButton && <button className='cancel' onClick={onCancel}>Annuler</button>}
-                        {showOkButton && <button className='ok' onClick={onOk}>Valider</button>}
+                    {(buttons.cancel || buttons.ok) && <div className="popup_buttons_box">
+                        {buttons.cancel && <button className='cancel' onClick={onCancel}>Annuler</button>}
+                        {buttons.prev && <button className='prev' onClick={onPrev}>Précédent</button>}
+                        {buttons.next && <button className='next' onClick={onNext}>Suivant</button>}
+                        {buttons.ok && <button className='ok' onClick={onOk}>Valider</button>}
                     </div>}
                 </div>
             </div>

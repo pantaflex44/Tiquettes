@@ -52,6 +52,7 @@ import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
+import Models from "./Models.jsx";
 
 function App() {
     const importRef = useRef();
@@ -64,6 +65,7 @@ function App() {
     const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
+    const [wizard, setWizard] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -92,6 +94,7 @@ function App() {
     const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX);
     const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN);
     const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX);
+    const wizardAllowed = (import.meta.env.VITE_APP_WIZARD ?? '').trim().toLowerCase() === 'true';
 
     const defaultModule = useMemo(() => ({
         id: '',
@@ -1569,7 +1572,17 @@ function App() {
                     importProjectChooseFile();
                     setWelcome(false);
                 }}
+                onWizard={() => {
+                    setWizard(true);
+                    setWelcome(false);
+                }}
+                wizardAllowed={wizardAllowed}
             />}
+
+            {wizard && <Models
+                onCancel={() => setWizard(false)}
+            />}
+
         </div>
     )
 }
