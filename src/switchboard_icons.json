@@ -260,8 +260,16 @@
         "current": "10A"
     },
     {
+        "filename": "swb_contact.svg",
+        "title": "Contacteur / Relai",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "25A"
+    },
+    {
         "filename": "swb_telec.svg",
-        "title": "Télécommande / Divers",
+        "title": "Telecommande / Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -269,7 +277,7 @@
     },
     {
         "filename": "swb_ermt.svg",
-        "title": "Télécommande blocs secours / BAES",
+        "title": "Telecommande blocs secours / BAES",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -285,7 +293,7 @@
     },
     {
         "filename": "swb_telephonie.svg",
-        "title": "Telephonie / Communication",
+        "title": "Telephonie / Communication / Fibre",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -293,7 +301,7 @@
     },
     {
         "filename": "swb_informatique.svg",
-        "title": "Informatique",
+        "title": "Informatique / Ordinateur / PC",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -301,7 +309,7 @@
     },
     {
         "filename": "swb_tv.svg",
-        "title": "Télévision / Ecran / Projecteur",
+        "title": "TV / Television / Ecran / Projecteur",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -309,7 +317,7 @@
     },
     {
         "filename": "swb_music.svg",
-        "title": "Audio / Musique / Multimédia",
+        "title": "HiFi / Audio / Musique / Multimédia",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
