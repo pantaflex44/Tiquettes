@@ -107,7 +107,8 @@ function App() {
         pole: "",
         parentId: "",
         free: true,
-        span: 1
+        span: 1,
+        half: "none",
     }), []);
 
     const defaultProjectProperties = useMemo(() => ({
@@ -501,6 +502,9 @@ function App() {
                                 }
                             }
 
+                            // <=2.0.3 : add half module size
+                            if (!nm.half) nm = {...nm, half: "none"};
+
                             return nm;
                         });
                     });
@@ -723,7 +727,9 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return {...module, span: module.span - 1};
+                        const s = module.span - 1;
+                        const h = s <= 1 ? "none" : module.half;
+                        return {...module, span: s, half: h};
                     });
 
                     r.splice(moduleIndex + 1, 0, {...defaultModule});
@@ -965,6 +971,24 @@ function App() {
 
     const handleCancelPaste = () => {
         setClipboard(null);
+    }
+
+    const handleModuleHalf = (rowIndex, moduleIndex, item, mode) => {
+        let rows = switchboard.rows;
+        let row = rows[rowIndex];
+        const currentModule = row[moduleIndex];
+
+        if (!currentModule.free && (mode === "none" || mode === "left" || mode === "right")) {
+            row[moduleIndex] = {
+                ...currentModule,
+                half: mode
+            };
+            rows[rowIndex] = row;
+            setSwitchboard((old) => {
+                moduleFocus(rowIndex + 1, moduleIndex + 2);
+                return modulesAutoId({...old, rows});
+            })
+        }
     }
 
     const moduleShrinkAllowed = (rowIndex, moduleIndex) => {
@@ -1495,6 +1519,8 @@ function App() {
 
                         onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
                         onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
+
+                        onModuleHalf={(moduleIndex, item, mode) => handleModuleHalf(i, moduleIndex, item, mode)}
 
                         moduleShrinkAllowed={(moduleIndex, item) => moduleShrinkAllowed(i, moduleIndex, item)}
                         moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
