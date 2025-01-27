@@ -2,7 +2,19 @@
 
 
 
-## [2.0.3] - 2024-01-31
+## [2.0.4] - 2025-01-27
+
+### Ajouts
+
+- Il est désormais possible de réduire d'une demi taille, un module ayant une taille de plus d'un emplacement (fonctionnalité en cours de test).
+
+### Corrections
+
+- Correction du symbole 'Interrupteur Sectionneur'. Erreur relevée par zoliaaz (https://github.com/zoliaaz)
+
+
+
+## [2.0.3] - 2024-12-31
 
 ### Améliorations
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-function Schneider2Theme({ item, style }) {
+function Schneider3Theme({ item, style }) {
     const styles = {
         id: {
             textAlign: "center",
@@ -31,7 +31,7 @@ function Schneider2Theme({ item, style }) {
             paddingInline: "1mm",
             paddingTop: "1mm",
             paddingBottom: "1.2mm",
-            width: "calc(100% - 2mm)",
+            width: `calc(100% - 2mm)`,
             height: `calc(${style['--h']} * 0.34)`
         }
     };
@@ -57,4 +57,4 @@ function Schneider2Theme({ item, style }) {
     </>);
 }
 
-export default Schneider2Theme;
+export default Schneider3Theme;
