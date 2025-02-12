@@ -2,6 +2,18 @@
 
 
 
+## [2.0.5] - 2025-02-12
+
+### Ajouts
+
+- Pour améliorer la compatibilité avec les anciens tableaux électriques, il est désormais possible de régler la largeur des étiquettes. 17.5mm ou 18mm par module.
+
+### Corrections
+
+- Légère correction de bugs dans l'interface.
+
+
+
 ## [2.0.4] - 2025-01-27
 
 ### Ajouts
