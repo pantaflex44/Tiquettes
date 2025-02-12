@@ -133,7 +133,7 @@ function Module({
             overflowX: isDemo ? 'hidden' : 'initial',
         }}
         tabIndex={!canPaste && !hasClipboard ? 0 : null}
-        title={`(${item.id}) R${rowPosition} | P${modulePosition} | L${item.span}`}
+        title={`${item.id ? '(' + item.id + ') ' : ''}R${rowPosition} | P${modulePosition} | L${item.span}`}
         ref={moduleRef}
         data-id={`${rowPosition}-${modulePosition}`}
         onKeyUp={(e) => {
@@ -160,8 +160,8 @@ function Module({
             : (!isFree && themedModule
                     ? <div className={`module_content half-${item.half}`.trim()} style={{
                         width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                        minWidth:  isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                        maxWidth:  isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                        minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                        maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         marginLeft: item.half === "left" ? `calc(${style['--sw']} / 2)` : '0px',
                         marginRight: item.half === "right" ? `calc(${style['--sw']} / 2)` : '0px',
                         borderLeftWidth: item.half === "left" ? '1px' : '0px',
@@ -222,9 +222,10 @@ function Module({
         }
 
         {
-            canPaste && <div className="module_top button">
-                <div className="tool paste" title="Coller ici ou [Echap] pour annuler" onClick={() => onPaste(item)}><img
-                    src={pasteIcon} alt="Coller" width={18} height={18} style={{marginTop: '2px'}}/><span>Coller ici</span>
+            canPaste && <div className="module_top button" title="Coller ici">
+                <div className="tool paste" onClick={() => onPaste(item)}
+                     style={{width: '100%', height: '100%'}}>
+                    <img src={pasteIcon} alt="Coller" width={18} height={18} style={{marginTop: '2px'}}/>
                 </div>
             </div>
         }
@@ -248,9 +249,11 @@ function Module({
         }
 
         {
-            canPaste && <div className="module_bottom">
-                <div className="tool paste" title="Cliquer ici ou [Echap] pour annuler" onClick={() => cancelPaste()}><img
-                    src={cancelredIcon} alt="Annuler" width={16} height={16} style={{marginTop: '2px'}}/></div>
+            canPaste && <div className="module_bottom" title="Cliquer ici pour annuler">
+                <div className="tool paste" onClick={() => cancelPaste()}
+                     style={{width: '100%', height: '100%', display: 'inline-flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <img src={cancelredIcon} alt="Annuler" width={16} height={16} style={{marginTop: '-4px'}}/>
+                </div>
             </div>
         }
 

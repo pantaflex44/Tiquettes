@@ -154,6 +154,7 @@ function App() {
         appversion: pkg.version,
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
+        stepSize: stepSize,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
         db: {...defaultProjectProperties.db},
         withDb: false,
@@ -389,6 +390,8 @@ function App() {
                 summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
                 summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
+                // <2.0.5
+                stepSize: swb.stepSize ?? stepSize,
             };
 
             console.log("Switchboard loaded from this session.");
@@ -446,6 +449,7 @@ function App() {
                 prjname: name,
                 height: height,
                 stepsPerRows,
+                stepSize,
                 rows: createRow(stepsPerRows, rowsCount)
             });
         });
@@ -531,6 +535,8 @@ function App() {
                         summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
                         summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                         summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
+                        // <2.0.5
+                        stepSize: swb.stepSize ?? stepSize,
 
                         rows
                     };
@@ -1415,6 +1421,38 @@ function App() {
                         </div>
                     </div>
 
+                    <div className="tabPageBandGroup">
+                        <div className="tabPageBandCol">
+                                    <span style={{
+                                        fontSize: 'smaller',
+                                        lineHeight: 1.2
+                                    }}>Largeur des<br/>étiquettes:</span>
+                        </div>
+                        <div className="tabPageBandCol">
+                            <select
+                                value={switchboard.stepSize ?? stepSize}
+                                onChange={(e) => {
+                                    const value = parseFloat(e.target.value);
+                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({...old, stepSize: value}));
+                                }}
+                                style={{
+                                    maxWidth: '100%',
+                                    width: 'max-content',
+                                    overflowX: 'hidden',
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis'
+                                }}
+                                disabled={UIFrozen}
+                            >
+                                <option>17.5</option>
+                                <option>18</option>
+                            </select>
+                        </div>
+                        <div className="tabPageBandCol">
+                            <span>mm</span>
+                        </div>
+                    </div>
+
                     <div className="tabPageBandNL"></div>
 
                     <div className="tabPageBandGroup">
@@ -1496,10 +1534,10 @@ function App() {
                         theme={theme}
 
                         style={{
-                            "--w": `${switchboard.stepsPerRows * stepSize}mm`,
+                            "--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
                             "--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px
                             "--c": switchboard.stepsPerRows,
-                            "--sw": `calc(${stepSize}mm + 1px)` // 18mm -> 70.03px
+                            "--sw": `calc(${switchboard.stepSize}mm + 1px)` // 18mm -> 70.03px
                         }}
 
                         onScrollLeft={() => handleScrollLeft()}
@@ -1563,7 +1601,7 @@ function App() {
             {editor && <Editor
                 theme={theme}
                 switchboard={switchboard}
-                stepSize={stepSize}
+                stepSize={switchboard.stepSize}
                 schemaFunctions={schemaFunctions}
                 getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
                 getModuleById={getModuleById}
