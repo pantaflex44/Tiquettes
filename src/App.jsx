@@ -79,7 +79,7 @@ function App() {
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
-    const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
+    const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
     const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
     const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT);
@@ -154,7 +154,7 @@ function App() {
         appversion: pkg.version,
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
-        stepSize: stepSize,
+        stepSize: defaultStepSize,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
         db: {...defaultProjectProperties.db},
         withDb: false,
@@ -391,7 +391,7 @@ function App() {
                 summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                 // <2.0.5
-                stepSize: swb.stepSize ?? stepSize,
+                stepSize: swb.stepSize ?? defaultStepSize,
             };
 
             console.log("Switchboard loaded from this session.");
@@ -449,7 +449,7 @@ function App() {
                 prjname: name,
                 height: height,
                 stepsPerRows,
-                stepSize,
+                stepSize: defaultStepSize,
                 rows: createRow(stepsPerRows, rowsCount)
             });
         });
@@ -459,7 +459,7 @@ function App() {
         setDocumentTitle(name);
         setTab(1);
         scrollToProject();
-    }, [defaultTheme, defaultPrintOptions, modulesAutoId, defaultProject, createRow]);
+    }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
         importRef.current.value = "";
@@ -536,7 +536,7 @@ function App() {
                         summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                         summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                         // <2.0.5
-                        stepSize: swb.stepSize ?? stepSize,
+                        stepSize: swb.stepSize ?? defaultStepSize,
 
                         rows
                     };
@@ -1411,6 +1411,7 @@ function App() {
                         </div>
                         <div className="tabPageBandCol">
                             <input type="range" min={heightMin} max={heightMax} step={1}
+                                   style={{ width: '100px' }}
                                    value={switchboard.height} onChange={(e) => {
                                 const value = parseInt(e.target.value);
                                 if (value >= heightMin) setSwitchboard((old) => ({...old, height: value}));
@@ -1430,10 +1431,13 @@ function App() {
                         </div>
                         <div className="tabPageBandCol">
                             <select
-                                value={switchboard.stepSize ?? stepSize}
+                                value={switchboard.stepSize ?? defaultStepSize}
                                 onChange={(e) => {
                                     const value = parseFloat(e.target.value);
-                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({...old, stepSize: value}));
+                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({
+                                        ...old,
+                                        stepSize: value
+                                    }));
                                 }}
                                 style={{
                                     maxWidth: '100%',

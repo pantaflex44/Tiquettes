@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [2.0.6] - 2025-02-15
+
+### Ajouts
+
+- Ajout des symboles, "Telerupteur" et "Parafoudre".
+
+
 
 ## [2.0.5] - 2025-02-12
 
