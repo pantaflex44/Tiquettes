@@ -46,12 +46,14 @@ import versionIcon from "./assets/versions.svg";
 import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
+import themeSettingsIcon from "./assets/theme_settings.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
+import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 
 function App() {
     const importRef = useRef();
@@ -64,6 +66,7 @@ function App() {
     const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
+    const [themeEditor, setThemeEditor] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -394,7 +397,7 @@ function App() {
                 stepSize: swb.stepSize ?? defaultStepSize,
             };
 
-            console.log("Switchboard loaded from this session.");
+            //console.log("Switchboard loaded from this session.");
 
             return modulesAutoId({...swb});
         }
@@ -625,7 +628,6 @@ function App() {
         const icon = editor.currentModule.icon;
         const text = (editor.currentModule.text ?? "").trim();
         const desc = (editor.currentModule.desc ?? "").trim();
-
         const parentId = (editor.currentModule.parentId ?? "").trim();
         const func = (editor.currentModule.func ?? "").trim();
         const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
@@ -1139,7 +1141,7 @@ function App() {
                 setSwitchboard(updatedProject);
                 setDocumentTitle(updatedProject.prjname);
 
-                console.log("Switchboard saved to this session.");
+                //console.log("Switchboard saved to this session.");
             }
         }, 1000);
 
@@ -1400,6 +1402,16 @@ function App() {
                                 })}
                             </select>
                         </div>
+                        {theme.name === 'custom' && theme?.data && <div className="tabPageBandCol">
+                            <button style={{height: '34px'}}
+                                    title="Modifier le thème."
+                                    onClick={() => {
+                                        setThemeEditor(true)
+                                    }}>
+                                <img src={themeSettingsIcon} alt="Modifier le thème."
+                                     width={22} height={22}/>
+                            </button>
+                        </div>}
                     </div>
 
                     <div className="tabPageBandGroup">
@@ -1411,7 +1423,7 @@ function App() {
                         </div>
                         <div className="tabPageBandCol">
                             <input type="range" min={heightMin} max={heightMax} step={1}
-                                   style={{ width: '100px' }}
+                                   style={{width: '100px'}}
                                    value={switchboard.height} onChange={(e) => {
                                 const value = parseInt(e.target.value);
                                 if (value >= heightMin) setSwitchboard((old) => ({...old, height: value}));
@@ -1636,6 +1648,20 @@ function App() {
                 onImportProject={() => {
                     importProjectChooseFile();
                     setWelcome(false);
+                }}
+            />}
+
+            {themeEditor && <ThemeEditorPopup
+                switchboard={switchboard}
+                stepSize={switchboard.stepSize}
+                heightMin={heightMin}
+                heightMax={heightMax}
+                theme={theme}
+                onCancel={() => setThemeEditor(false)}
+                onApply={(editedTheme) => {
+                    setTheme(editedTheme);
+                    setSwitchboard((old) => modulesAutoId({...old, theme: editedTheme}));
+                    setThemeEditor(false);
                 }}
             />}
 

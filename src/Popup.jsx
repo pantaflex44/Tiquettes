@@ -17,10 +17,14 @@
  */
 
 /* eslint-disable react/prop-types */
-import cancelIcon from './assets/cancel.svg';
+import {useMemo} from "react";
 
 import './popup.css';
-import {useMemo} from "react";
+
+import cancelIcon from './assets/x.svg';
+import okIcon from './assets/check.svg';
+import prevIcon from './assets/arrow-left.svg';
+import nextIcon from './assets/arrow-right.svg';
 
 export default function Popup({
                                   title,
@@ -38,6 +42,42 @@ export default function Popup({
                                   onOk = null,
                                   onPrev = null,
                                   onNext = null,
+                                  cancelButtonContent = <div style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      columnGap: '0.5rem'
+                                  }} title={"Annuler et fermer"}>
+                                      <img src={cancelIcon} alt={"Annuler"} width={18} height={18}/>
+                                      <span className={'additional_buttons_text'}>Annuler</span>
+                                  </div>,
+                                  prevButtonContent = <div style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      columnGap: '0.5rem'
+                                  }} title={"Précédent"}>
+                                      <img src={prevIcon} alt={"Précédent"} width={18} height={18}/>
+                                      <span className={'additional_buttons_text'}>Précédent</span>
+                                  </div>,
+                                  nextButtonContent = <div style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      columnGap: '0.5rem'
+                                  }} title={"Suivant"}>
+                                      <img src={nextIcon} alt={"Suivant"} width={18} height={18}/>
+                                      <span className={'additional_buttons_text'}>Suivant</span>
+                                  </div>,
+                                  okButtonContent = <div style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      columnGap: '0.5rem'
+                                  }} title={"Valider et fermer"}>
+                                      <img src={okIcon} alt={"Valider"} width={18} height={18}/>
+                                      <span className={'additional_buttons_text'}>Valider</span>
+                                  </div>,
                               }) {
     const buttons = useMemo(() => ({
         close: showCloseButton,
@@ -64,16 +104,16 @@ export default function Popup({
                         {Array.isArray(additionalButtons) && additionalButtons.map((b, i) => {
                             if (!b.text || !b.callback) return null;
                             const {text, callback, ...props} = b;
-                            if (text.trim() === '') return null;
+                            if (typeof text === 'string' && text.trim() === '') return null;
 
-                            return <button key={i} {...props} onClick={callback}>{text}</button>;
+                            return <button key={i} {...props} onClick={callback} title={b.title}>{text}</button>;
                         })}
                     </div>
                     {(buttons.cancel || buttons.ok) && <div className="popup_buttons_box">
-                        {buttons.cancel && <button className='cancel' onClick={onCancel}>Annuler</button>}
-                        {buttons.prev && <button className='prev' onClick={onPrev}>Précédent</button>}
-                        {buttons.next && <button className='next' onClick={onNext}>Suivant</button>}
-                        {buttons.ok && <button className='ok' onClick={onOk}>Valider</button>}
+                        {buttons.cancel && <button className='cancel' onClick={onCancel}>{cancelButtonContent}</button>}
+                        {buttons.prev && <button className='prev' onClick={onPrev}>{prevButtonContent}</button>}
+                        {buttons.next && <button className='next' onClick={onNext}>{nextButtonContent}</button>}
+                        {buttons.ok && <button className='ok' onClick={onOk}>{okButtonContent}</button>}
                     </div>}
                 </div>
             </div>

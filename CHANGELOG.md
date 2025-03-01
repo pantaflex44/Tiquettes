@@ -6,6 +6,7 @@
 ### Ajouts
 
 - Ajout des symboles, "Telerupteur" et "Parafoudre".
+- Ajout d'un éditeur pour personnaliser le thème de ses étiquettes.
 
 
 

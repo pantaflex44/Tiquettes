@@ -112,6 +112,11 @@ body {
     margin-bottom: 1em;
 }
 
+img.disabled {
+    pointer-events: none;
+    filter: invert(95%) sepia(12%) saturate(0%) hue-rotate(167deg) brightness(83%) contrast(98%);
+}
+
 nav.header {
     width: 100%;
     background-color: var(--primary-color);

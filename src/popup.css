@@ -108,7 +108,11 @@ body:has(.popup-overflow) {
     flex-wrap: nowrap;
     justify-content: end;
     align-items: center;
-    gap: 1em;
+    gap: 0.5em;
+}
+
+.popup_buttons_box .additional_buttons_text {
+    display: none;
 }
 
 .popup_buttons button {
@@ -118,14 +122,25 @@ body:has(.popup-overflow) {
     font-size: 85%;
 }
 
+.popup_buttons button div span {
+    margin-top: 2px;
+}
+
 .popup_buttons button.ok {
     color: var(--primary-color);
     border-color: var(--primary-color);
-    padding-inline: 1.5em;
+}
+
+.popup_buttons button.ok img {
+    filter: invert(31%) sepia(83%) saturate(1719%) hue-rotate(156deg) brightness(91%) contrast(104%);
 }
 
 .popup_buttons button.cancel {
     color: #333;
+}
+
+.popup_buttons button.cancel img {
+    filter: invert(10%) sepia(4%) saturate(6%) hue-rotate(318deg) brightness(110%) contrast(77%);
 }
 
 .popup_buttons button:disabled {
@@ -133,6 +148,10 @@ body:has(.popup-overflow) {
     border-color: lightgray !important;
     color: lightgray !important;
     background-color: #f9f9f9 !important;
+}
+
+.popup_buttons button:disabled img {
+    filter: invert(88%) sepia(29%) saturate(1%) hue-rotate(314deg) brightness(88%) contrast(101%);
 }
 
 .popup_row {
@@ -206,7 +225,7 @@ body:has(.popup-overflow) {
     padding: 0.5em;
 }
 
-.popup_row>label {
+.popup_row > label {
     margin-right: 1em;
 }
 
@@ -226,4 +245,11 @@ body:has(.popup-overflow) {
 
 .popup_content {
     margin-inline: 0.5em;
+    overflow-x: hidden;
+}
+
+@media screen and (min-width: 640px) {
+    .popup_buttons_box .additional_buttons_text {
+        display: block;
+    }
 }
