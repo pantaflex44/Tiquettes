@@ -39,8 +39,16 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
-    column-gap: 5rem;
+    column-gap: 3rem;
     row-gap: 3rem;
+}
+
+.tep-border {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .tep-preview {
@@ -105,7 +113,7 @@
     column-gap: 0.5rem;
 }
 
-.tep-settings .tep-settings_row {
+.tep-settings_row {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -116,7 +124,7 @@
     height: 26px;
 }
 
-.tep-settings .tep-settings_row-el {
+.tep-settings_row-el {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -125,28 +133,33 @@
     column-gap: 0.25rem;
 }
 
-.tep-settings .tep-settings_row label {
+.tep-settings_row label {
     font-size: 80%;
     cursor: pointer;
 }
 
-.tep-settings .tep-settings_row input[type="color"] {
-    height: 28px !important;
-    min-height: 28px !important;
-    width: 28px !important;
+.tep-settings_row input[type="color"] {
+    height: 26px !important;
+    min-height: 26px !important;
+    width: 32px !important;
     margin: 0;
-    padding: 2px;
+    padding: 1px;
     cursor: pointer;
 }
 
-.tep-settings .tep-settings_row input[type="number"] {
+.tep-settings_row input[type="color"]:disabled {
+    pointer-events: none;
+    background-color: #f9f9f9;
+}
+
+.tep-settings_row input[type="number"] {
     height: 22px !important;
     min-height: 22px !important;
     width: calc(45px - 6px);
     text-align: center;
 }
 
-.tep-settings .tep-settings_row select {
+.tep-settings_row select {
     height: 26px !important;
     min-height: 26px !important;
     margin: 0;

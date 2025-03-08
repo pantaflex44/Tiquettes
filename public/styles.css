@@ -363,6 +363,14 @@ select {
     min-width: 19px;
 }
 
+select[multiple] {
+    padding-block: 0.5em;
+}
+select[multiple] option {
+    min-height: calc(23px - 0.30em);
+    padding-top: 0.30em;
+}
+
 input[type="number"] {
     min-height: 30px !important;
     min-width: 19px !important;

@@ -18,24 +18,55 @@
 
 /* eslint-disable react/prop-types */
 
+import {useMemo} from "react";
+
 export default function SchemaDescription({
+                                              switchboard,
                                               module
                                           }) {
+    const getModuleById = (moduleId) => {
+        let indexes = {row: -1, module: -1};
+        let m = {module: null, indexes};
+
+        switchboard.rows.forEach((row, ri) => {
+            row.forEach((module, mi) => {
+                if (!m.module && module.id === moduleId && !module.free) {
+                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                }
+            })
+        });
+
+        return m;
+    }
+
+    const infos = useMemo(() => {
+        let icon = module.icon;
+        let text = module.text;
+
+        /*const parentModule = getModuleById(module.parentId).module;
+        if (module.func === 'kc' && parentModule) {
+            icon = parentModule.icon;
+            text = parentModule.text;
+        }*/
+
+        return {text, icon};
+    }, [module]);
+
     return (
         /*<div className="schemaItemLast">*/
         <>
-            {module.icon && (
-                <div className="schemaItemLastIconContainer" title={module.text}>
+            {infos.icon && (
+                <div className="schemaItemLastIconContainer" title={infos.text}>
                     <img
                         alt="Pictogramme"
                         width={24}
                         height={24}
-                        src={`${import.meta.env.VITE_APP_BASE}${module.icon}`}
+                        src={`${import.meta.env.VITE_APP_BASE}${infos.icon}`}
                         className="schemaItemLastIcon"
                     />
                 </div>
             )}
-            <div className="schemaItemLastText">{module.text}</div>
+            <div className="schemaItemLastText">{infos.text}</div>
         </>
         /*</div>*/
     );

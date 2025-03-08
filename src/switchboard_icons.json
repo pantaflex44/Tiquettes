@@ -269,7 +269,7 @@
         "title": "Telerupteur",
         "coef": 1,
         "func": "kc",
-        "current": "20A"
+        "current": "16A"
     },
     {
         "filename": "swb_contact.svg",
@@ -377,10 +377,9 @@
     {
         "filename": "swb_journuit.svg",
         "title": "Contacteur Jour / Nuit",
-        "coef": 0.5,
-        "func": "q",
-        "crb": "C",
-        "current": "2A"
+        "coef": 1,
+        "func": "kc",
+        "current": "20A"
     },
     {
         "filename": "swb_blrgas.svg",

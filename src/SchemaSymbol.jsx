@@ -21,12 +21,13 @@
 import {useMemo} from "react";
 
 export default function SchemaSymbol({
+                                         switchboard,
                                          module,
                                          schemaFunctions,
                                          onEdit = null,
-                                         isLast = false,
                                          monitor = {}
                                      }) {
+
     const func = useMemo(() => {
         if (!module?.func) return null;
 
@@ -36,10 +37,20 @@ export default function SchemaSymbol({
             func = 'dd';
             isDb = true;
         }
+        const isContact = func === 'k';
 
-        if (!schemaFunctions[func]) return null;
+        if (!schemaFunctions[func] && !isContact) return null;
 
-        return {name: func, isDb};
+        let obj = schemaFunctions[func];
+        if (isContact) {
+            obj = {name: "Contacteur", hasPole: true, hasCurrent: true};
+        }
+
+        const name = obj?.name ?? "";
+        const title = name + (monitor.errors && monitor.errors[module.id] ? "\r\n\r\n⚠ : " + monitor.errors[module.id].join("\r\n⚠ : ") : "") + (monitor.infos && monitor.infos[module.id] && !(monitor.errors && monitor.errors[module.id]) ? "\r\n\r\n🛈 " + monitor.infos[module.id].join("\r\n🛈 ") : "");
+        const icon = `${import.meta.env.BASE_URL}schema_${func}.svg`;
+
+        return {obj, name, title, icon, isDb, isContact};
     }, [module]);
 
     const handleEdit = () => {
@@ -47,15 +58,15 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={schemaFunctions[func.name].name + (monitor.errors && monitor.errors[module.id] ? "\r\n\r\n⚠ : " + monitor.errors[module.id].join("\r\n⚠ : ") : "") + (monitor.infos && monitor.infos[module.id] && !(monitor.errors && monitor.errors[module.id]) ? "\r\n\r\n🛈 " + monitor.infos[module.id].join("\r\n🛈 ") : "")} onClick={() => handleEdit()}>
-            <img className="schemaItemSymbolImg" src={`${import.meta.env.BASE_URL}schema_${func.name}.svg`} alt={schemaFunctions[func.name].name} width={70} height={100}/>
+        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={func.title} onClick={() => handleEdit()}>
+            <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100}/>
             <div className="schemaItemSymbolId">{module.id}</div>
 
-            {schemaFunctions[func.name]?.hasType && <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}</div>}
+            {func.obj?.hasType && <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}</div>}
 
-            <div className="schemaItemSymbolCurrent">{((schemaFunctions[func.name]?.hasCrb && module.crb ? `${module.crb} ` : '') + (schemaFunctions[func.name]?.hasCurrent && module.current ? module.current : '')).trim()}</div>
+            <div className="schemaItemSymbolCurrent">{((func.obj?.hasCrb && module.crb ? `${module.crb} ` : '') + (func.obj?.hasCurrent && module.current ? module.current : '')).trim()}</div>
 
-            {schemaFunctions[func.name]?.hasPole && module.pole && (
+            {func.obj?.hasPole && module.pole && (
                 <>
                     <div className="schemaItemSymbolPole">{module.pole}</div>
                     <img className="schemaItemSymbolImgPole" src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole} width={11}/>

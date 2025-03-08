@@ -45,7 +45,7 @@ export default function Editor({
                                    onUpdateModuleEditor,
                                    onHandleModuleClear,
 
-                                    hasBlankId = false,
+                                   hasBlankId = false,
                                }) {
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
 
@@ -77,12 +77,15 @@ export default function Editor({
         if (hasBlankId) onUpdateModuleEditor({id: lastFreeId});
     }, [hasBlankId, editor.currentModule.func]);
 
+
     return editor && (
         <Popup
             title={<div className="popup_title_content">
-                <img className="popup_title_content_img" src={editIcon} title="Editer le module" alt="Editer le module"/>
+                <img className="popup_title_content_img" src={editIcon} title="Editer le module"
+                     alt="Editer le module"/>
                 <span className="popup_title_content_id">{editor.currentModule.id ?? ""}</span>
-                {editor.currentModule.text ? <span className="popup_title_content_desc">/ {editor.currentModule.text ?? ""}</span> : ""}
+                {editor.currentModule.text ?
+                    <span className="popup_title_content_desc">/ {editor.currentModule.text ?? ""}</span> : ""}
             </div>}
             showCloseButton={true}
             onCancel={() => onSetEditor(null)}
@@ -104,20 +107,23 @@ export default function Editor({
         >
             <div style={{flex: 1, minHeight: '540px'}}>
                 <div className={"editor_tabpages"}>
-                    <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"} onChange={() => setEditorTab("main")}/>
+                    <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
+                           onChange={() => setEditorTab("main")}/>
                     <label htmlFor="main_editor_tab">
                         <img src={switchboardIcon} width="20" height="20" alt="Tableau"/>
                         <span>Tableau</span>
                     </label>
 
-                    <input type="checkbox" id="schema_editor_tab" checked={editorTab === "schema"} onChange={() => setEditorTab("schema")}/>
+                    <input type="checkbox" id="schema_editor_tab" checked={editorTab === "schema"}
+                           onChange={() => setEditorTab("schema")}/>
                     <label htmlFor="schema_editor_tab">
                         <img src={schemaIcon} width="20" height="20" alt="Schéma"/>
                         <span>Schéma</span>
                     </label>
                 </div>
 
-                {editor.errors.map((error, i) => <div key={i} className="popup_row" style={{'--left_column_size': '100px'}}>
+                {editor.errors.map((error, i) => <div key={i} className="popup_row"
+                                                      style={{'--left_column_size': '100px'}}>
                     <div>&nbsp;</div>
                     <div className="popup_error">{error}</div>
                 </div>)}
@@ -135,14 +141,17 @@ export default function Editor({
                                     onChange={(e) => onUpdateModuleEditor({id: e.target.value})}
                                     autoFocus
                                 />
-                                <button title="Trouver le prochain identifiant disponible." onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
-                                    <img src={assignIdIcon} width={22} height={22} alt="Trouver le prochain identifiant libre." />
+                                <button title="Trouver le prochain identifiant disponible."
+                                        onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
+                                    <img src={assignIdIcon} width={22} height={22}
+                                         alt="Trouver le prochain identifiant libre."/>
                                 </button>
                             </div>
                         </div>
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <div></div>
-                            <label style={{fontSize: "small", color: "#777"}}>└ Identifiant du module précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
+                            <label style={{fontSize: "small", color: "#777"}}>└ Identifiant du module
+                                précédent: <b>{editor.prevModule?.id ?? "-"}</b></label>
                         </div>
 
                         <div className="popup_row" style={{alignItems: 'center', '--left_column_size': '100px'}}>
@@ -167,7 +176,8 @@ export default function Editor({
                         </div>
 
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                            <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br/><span style={{fontSize: '0.8em', color: 'gray'}}>(nomenclature)</span></label>
+                            <label htmlFor={`editor_desc_${editor.currentModule.id.trim()}`}>Annotations<br/><span
+                                style={{fontSize: '0.8em', color: 'gray'}}>(nomenclature)</span></label>
                             <textarea
                                 name="editor_desc"
                                 id={`editor_desc_${editor.currentModule.id.trim()}`}
@@ -177,9 +187,31 @@ export default function Editor({
                             />
                         </div>
 
-                        <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', borderBottom: '1px solid lightgray'}}>
-                            <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
-                            <div style={{borderRadius: '5px', border: '1px solid darkgray', width: 'min-content', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', minHeight: `calc(${switchboard.height}mm + 1mm)`, overflowY: 'hidden'}}>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginInline: 'auto',
+                            marginTop: '2em',
+                            alignItems: 'center',
+                            width: '100%',
+                            borderBottom: '1px solid lightgray'
+                        }}>
+                            <h5 style={{
+                                color: 'gray',
+                                width: '100%',
+                                borderBottom: '1px solid lightgray',
+                                margin: 0
+                            }}>Démonstration</h5>
+                            <div style={{
+                                borderRadius: '5px',
+                                border: '1px solid darkgray',
+                                width: 'min-content',
+                                maxWidth: '100%',
+                                overflowX: 'auto',
+                                marginBlock: '1em',
+                                minHeight: `calc(${switchboard.height}mm + 1mm)`,
+                                overflowY: 'hidden'
+                            }}>
                                 <Module
                                     isDemo={true}
                                     item={{
@@ -214,39 +246,86 @@ export default function Editor({
                     <>
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <label htmlFor={`editor_func_${editor.currentModule.id.trim()}`}>Fonction</label>
-                            <select value={editor.currentModule.func} onChange={(e) => onUpdateModuleEditor({func: e.target.value})}>
+                            <select value={editor.currentModule.func}
+                                    onChange={(e) => onUpdateModuleEditor({func: e.target.value})}>
                                 <option value={""}>-</option>
-                                {Object.keys(schemaFunctions).map((key, i) => <option key={i} value={key}>{schemaFunctions[key].name}</option>)}
+                                {Object.keys(schemaFunctions).map((key, i) => <option key={i}
+                                                                                      value={key}>{schemaFunctions[key].name}</option>)}
                             </select>
                         </div>
 
                         {editor.currentModule.func && <>
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_schparent_${editor.currentModule.id.trim()}`}>Parent</label>
-                                <select value={editor.currentModule.parentId} onChange={(e) => onUpdateModuleEditor({parentId: e.target.value})}>
+                                <select id={`editor_schparent_${editor.currentModule.id.trim()}`}
+                                        name={`editor_schparent_${editor.currentModule.id.trim()}`}
+                                        value={editor.currentModule.parentId}
+                                        onChange={(e) => onUpdateModuleEditor({parentId: e.target.value})}
+                                >
                                     <option value={""}>- aucun -</option>
-                                    {Object.entries(getFilteredModulesBySchemaFuncs()).map(([k, l]) => {
-                                        return (
-                                            <Fragment key={k}>
-                                                <option value="" disabled={true}>{schemaFunctions[k].name}</option>
-                                                {l.map((module) => <option key={module.id} value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>)}
-                                            </Fragment>
-                                        );
-                                    })}
+                                    {Object.entries(getFilteredModulesBySchemaFuncs())
+                                        .map(([k, l]) => {
+                                            return (
+                                                <Fragment key={k}>
+                                                    <option value="" disabled={true}>{schemaFunctions[k].name}</option>
+                                                    {l
+                                                        .map((module) => (
+                                                            editor.currentModule.id !== module.id
+                                                                ? <option key={module.id}
+                                                                          value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
+                                                                : null
+                                                        ))
+                                                        .filter(f => f !== null)}
+                                                </Fragment>
+                                            )
+                                        })}
                                 </select>
                             </div>
-                            <div className="popup_row" style={{'--left_column_size': '100px', borderBottom: '1px solid lightgray', paddingBottom: '1em'}}>
+                            <div className="popup_row" style={{
+                                '--left_column_size': '100px',
+                                borderBottom: schemaFunctions[editor.currentModule.func]?.supportContacts === true ? 'initial' : '1px solid lightgray',
+                                paddingBottom: schemaFunctions[editor.currentModule.func]?.supportContacts === true ? 'initial' : '1em',
+                                marginBottom: schemaFunctions[editor.currentModule.func]?.supportContacts === true ? 'initial' : '2em'
+                            }}>
                                 <div></div>
                                 <label style={{fontSize: "small", color: "#777"}}>└ Parent du module
                                     précédent: <b>{((prevModule?.id ?? "aucun") + " " + (prevModule && schemaFunctions[prevModule.func] ? "(" + schemaFunctions[prevModule.func].name + ")" : "")).trim()}</b></label>
                             </div>
+
+                            {schemaFunctions[editor.currentModule.func]?.supportContacts === true &&
+                                <div className="popup_row" style={{
+                                    '--left_column_size': '100px',
+                                    borderBottom: '1px solid lightgray',
+                                    paddingBottom: '1em',
+                                    marginBottom: '2em'
+                                }}>
+                                    <label htmlFor={`editor_contacts_${editor.currentModule.id.trim()}`}>Asservi
+                                        par</label>
+                                    <select id={`editor_contacts_${editor.currentModule.id.trim()}`}
+                                            name={`editor_contacts_${editor.currentModule.id.trim()}`}
+                                            value={editor.currentModule.kcId}
+                                            onChange={(e) => onUpdateModuleEditor({kcId: e.target.value})}
+                                    >
+                                        <option value={""}>- aucun contacteur -</option>
+                                        {Object.entries(getFilteredModulesBySchemaFuncs())
+                                            .map(([k, l]) => {
+                                                return (l.map((module) => (
+                                                    editor.currentModule.id !== module.id && k === 'kc'
+                                                        ? <option key={`${k}-${module.id}`}
+                                                                  value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
+                                                        : null
+                                                )).filter(f => f !== null))
+                                            })}
+                                    </select>
+                                </div>}
                         </>
                         }
 
                         {schemaFunctions[editor.currentModule.func]?.hasType &&
-                            <div className="popup_row" style={{'--left_column_size': '100px', marginTop: '2em'}}>
+                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_type_${editor.currentModule.id.trim()}`}>Type</label>
-                                <select value={editor.currentModule.type} onChange={(e) => onUpdateModuleEditor({type: e.target.value})}>
+                                <select value={editor.currentModule.type}
+                                        onChange={(e) => onUpdateModuleEditor({type: e.target.value})}>
                                     <option value={""}>-</option>
                                     <option value={"A"}>A</option>
                                     <option value={"AC"}>AC</option>
@@ -261,7 +340,8 @@ export default function Editor({
                         {schemaFunctions[editor.currentModule.func]?.hasCrb &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_crb_${editor.currentModule.id.trim()}`}>Courbe</label>
-                                <select value={editor.currentModule.crb} onChange={(e) => onUpdateModuleEditor({crb: e.target.value})}>
+                                <select value={editor.currentModule.crb}
+                                        onChange={(e) => onUpdateModuleEditor({crb: e.target.value})}>
                                     <option value={""}>-</option>
                                     <option value={"Z"}>Z</option>
                                     <option value={"B"}>B</option>
@@ -275,7 +355,8 @@ export default function Editor({
                         {schemaFunctions[editor.currentModule.func]?.hasType &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_current_${editor.currentModule.id.trim()}`}>Sensibilité</label>
-                                <select value={editor.currentModule.sensibility} onChange={(e) => onUpdateModuleEditor({sensibility: e.target.value})}>
+                                <select value={editor.currentModule.sensibility}
+                                        onChange={(e) => onUpdateModuleEditor({sensibility: e.target.value})}>
                                     <option value={""}>-</option>
                                     <option value={"10mA"}>10mA</option>
                                     <option value={"30mA"}>30mA</option>
@@ -288,7 +369,8 @@ export default function Editor({
                         {schemaFunctions[editor.currentModule.func]?.hasCurrent &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_current_${editor.currentModule.id.trim()}`}>Calibre</label>
-                                <select value={editor.currentModule.current} onChange={(e) => onUpdateModuleEditor({current: e.target.value})}>
+                                <select value={editor.currentModule.current}
+                                        onChange={(e) => onUpdateModuleEditor({current: e.target.value})}>
                                     <option value={""}>-</option>
                                     <option value={"2A"}>2A</option>
                                     <option value={"6A"}>6A</option>
@@ -310,7 +392,8 @@ export default function Editor({
                         {schemaFunctions[editor.currentModule.func]?.hasPole &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_pole_${editor.currentModule.id.trim()}`}>Pôles</label>
-                                <select value={editor.currentModule.pole} onChange={(e) => onUpdateModuleEditor({pole: e.target.value})}>
+                                <select value={editor.currentModule.pole}
+                                        onChange={(e) => onUpdateModuleEditor({pole: e.target.value})}>
                                     <option value={""}>-</option>
                                     <option value={"1P+N"}>Monophasé (1P+N)</option>
                                     <option value={"3P"}>Triphasé (3P)</option>
@@ -321,9 +404,30 @@ export default function Editor({
                         }
 
                         {editor.currentModule.func && (
-                            <div style={{display: 'flex', flexDirection: 'column', marginInline: 'auto', marginTop: '2em', alignItems: 'center', width: '100%', borderBottom: '1px solid lightgray'}}>
-                                <h5 style={{color: 'gray', width: '100%', borderBottom: '1px solid lightgray', margin: 0}}>Démonstration</h5>
-                                <div style={{width: '100px', minWidth: '70px', height: '100px', maxWidth: '100%', overflowX: 'auto', marginBlock: '1em', overflowY: 'hidden'}}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginInline: 'auto',
+                                marginTop: '2em',
+                                alignItems: 'center',
+                                width: '100%',
+                                borderBottom: '1px solid lightgray'
+                            }}>
+                                <h5 style={{
+                                    color: 'gray',
+                                    width: '100%',
+                                    borderBottom: '1px solid lightgray',
+                                    margin: 0
+                                }}>Démonstration</h5>
+                                <div style={{
+                                    width: '100px',
+                                    minWidth: '70px',
+                                    height: '100px',
+                                    maxWidth: '100%',
+                                    overflowX: 'auto',
+                                    marginBlock: '1em',
+                                    overflowY: 'hidden'
+                                }}>
                                     <SchemaSymbol module={editor.currentModule} schemaFunctions={schemaFunctions}/>
                                 </div>
                             </div>

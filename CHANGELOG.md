@@ -1,12 +1,18 @@
 # Changelog
 
 
-## [2.0.6] - 2025-02-15
+## [2.0.6] - 2025-03-07
 
 ### Ajouts
 
 - Ajout des symboles, "Telerupteur" et "Parafoudre".
 - Ajout d'un éditeur pour personnaliser le thème de ses étiquettes.
+
+### Corrections
+
+- Prise en compte de la règle de l'amont dans le monitoring des interrupteurs différentiels. (Issue #9 by karimLG - https://github.com/karimLG)
+- Modification de la représentation des contacteurs (J/N, télérupteurs, minuteries, etc). Il est désormais possible d'asservir un départ avec un contacteur précédement ajouté. (Issue #10 by karimLG - https://github.com/karimLG)
+- Correction d'un bug empêchant le réassignement automatique des identifiants parents lors du changement de l'identifiant d'un module.
 
 
 
@@ -30,7 +36,7 @@
 
 ### Corrections
 
-- Correction du symbole 'Interrupteur Sectionneur'. Erreur relevée par zoliaaz (https://github.com/zoliaaz)
+- Correction du symbole 'Interrupteur Sectionneur'. (Issue #7 by zoliaaz - https://github.com/zoliaaz)
 
 
 

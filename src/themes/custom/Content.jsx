@@ -84,6 +84,11 @@ function CustomTheme({item, data, style}) {
             paddingBottom: positions.id.order === shownCount - 1 ? "2mm" : "1mm",
             flex: (data?.id?.fullHeight === true ? 1 : "initial"),
             backgroundColor: (data?.id?.backgroundColor ?? "transparent"),
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "center",
+            alignItems: "center",
         },
         idContent: {
             "--idlh": "1.2em",
@@ -105,6 +110,7 @@ function CustomTheme({item, data, style}) {
             fontFamily: (data?.id?.fontFamily ?? "sans-serif"),
             color: (data?.id?.color ?? "#000000"),
             backgroundColor: (data?.id?.backgroundColor ?? "transparent"),
+            width: "100%",
         },
         icon: {
             ...positions.icon,
@@ -137,6 +143,11 @@ function CustomTheme({item, data, style}) {
             paddingBottom: positions.text.order === shownCount - 1 ? "2mm" : "1mm",
             flex: (data?.text?.fullHeight === true ? 1 : "initial"),
             backgroundColor: (data?.text?.backgroundColor ?? "transparent"),
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "center",
+            alignItems: "center",
         },
         textContent: {
             "--textlh": "1.2em",
@@ -158,6 +169,7 @@ function CustomTheme({item, data, style}) {
             fontFamily: (data?.text?.fontFamily ?? "sans-serif"),
             color: (data?.text?.color ?? "#000000"),
             backgroundColor: (data?.text?.backgroundColor ?? "transparent"),
+            width: "100%",
         }
     }), [data, positions]);
 

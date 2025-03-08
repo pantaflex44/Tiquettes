@@ -23,24 +23,18 @@ import Popup from "./Popup.jsx";
 import Module from "./Module.jsx";
 import VerticalRule from "./VerticalRule.jsx";
 import IconSelector from "./IconSelector.jsx";
+import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
 
 import importIcon from './assets/upload.svg';
 import exportIcon from './assets/download.svg';
 import undoIcon from './assets/undo.svg';
-import upIcon from './assets/caret-up.svg';
-import downIcon from './assets/caret-down.svg';
-import textColorIcon from './assets/text-color.svg';
-import iconColorIcon from './assets/icon-color.svg';
-import backColorIcon from './assets/paint.svg';
-import boldIcon from './assets/bold.svg';
-import italicIcon from './assets/italic.svg';
-import alignLeftIcon from './assets/align-left.svg';
-import alignCenterIcon from './assets/align-center.svg';
-import alignRightIcon from './assets/align-right.svg';
+import borderNoneIcon from './assets/border-none.svg';
+import borderBottomIcon from './assets/border-bottom.svg';
+
+import sanitizeFilename from "sanitize-filename";
 
 import './themeEditorPopup.css';
-import * as pkg from "../package.json";
-import sanitizeFilename from "sanitize-filename";
+import alignLeftIcon from "./assets/align-left.svg";
 
 export default function ThemeEditorPopup({
                                              switchboard,
@@ -93,6 +87,12 @@ export default function ThemeEditorPopup({
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
                 "color": "#000000"
+            },
+            "top": {
+                "border": "none",
+            },
+            "bottom": {
+                "border": "none",
             }
         }
     };
@@ -154,8 +154,8 @@ export default function ThemeEditorPopup({
         id: (editedTheme.data.id?.shown ?? true) === true,
         icon: (editedTheme.data.icon?.shown ?? true) === true,
         text: (editedTheme.data.text?.shown ?? true) === true
-    }), [editedTheme.data]);
-    const shownCount = useMemo(() => ([shown.id ? 1 : 0, shown.icon ? 1 : 0, shown.text ? 1 : 0].reduce((acc, cur) => acc + cur, 0)), [shown]);
+    }), [editedTheme.data.icon?.shown, editedTheme.data.id?.shown, editedTheme.data.text?.shown]);
+    const shownCount = useMemo(() => ([shown.id ? 1 : 0, shown.icon ? 1 : 0, shown.text ? 1 : 0].reduce((acc, cur) => acc + cur, 0)), [shown.icon, shown.id, shown.text]);
     const positions = useMemo(() => {
         let idPosition = (editedTheme.data.id?.position ?? 'top');
         let iconPosition = (editedTheme.data.icon?.position ?? 'middle');
@@ -181,7 +181,7 @@ export default function ThemeEditorPopup({
         if (!pos.text) pos = {...pos, text: {shown: false}};
 
         return pos;
-    }, [editedTheme.data, shown]);
+    }, [editedTheme.data.icon?.position, editedTheme.data.id?.position, editedTheme.data.text?.position, shown]);
 
     const prepareTheme = (t) => Object.keys(defaultTheme)
         .reduce(function (accumulator, key) {
@@ -190,7 +190,7 @@ export default function ThemeEditorPopup({
         }, {});
 
     return <Popup
-        title={editedTheme?.title ?? "Créer mon thème"}
+        title={theme?.title ?? "Créer mon thème"}
         showCloseButton={true}
         onCancel={() => onCancel()}
         onOk={() => onApply(editedTheme)}
@@ -299,6 +299,72 @@ export default function ThemeEditorPopup({
         <div className={'tep-grid'}>
             <h5>Données de démonstration</h5>
             <div className={'tep-top'}>
+                <div className={'tep-border'} style={{
+                    minHeight: `calc(${sample.height}mm + 1mm)`,
+                    height: `calc(${sample.height}mm + 1mm)`,
+                    maxHeight: `calc(${sample.height}mm + 1mm)`,
+                }}>
+                    <div className={'tep-settings_row'} style={{width: '100%'}}>
+                        <div className={'tep-settings_row-el'}>
+                            <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16}/>
+                            <input type={'checkbox'}
+                                   checked={(editedTheme.data.top?.border ?? 'none') !== 'none'}
+                                   id={'tep-top-border'}
+                                   name={'tep-top-border'}
+                                   onChange={(e) => setEditedTheme(old => ({
+                                       ...old,
+                                       data: {
+                                           ...old.data,
+                                           top: {
+                                               ...(old.data.top ?? {}),
+                                               border: e.target.checked ? '' : 'none'
+                                           },
+                                       }
+                                   }))}
+                                   title={"Ajouter un séparateur haut"}
+                            />
+                        </div>
+                        <div className={'tep-settings_row-el'}>
+                            <input type={'color'} value={((editedTheme.data.top?.border ?? 'none') === 'none') ? '#eeeeee' : (editedTheme.data.top?.borderColor ?? '#000000')} disabled={(editedTheme.data.top?.border ?? 'none') === 'none'}
+                                   id={'tep-top-borderColor'}
+                                   name={'tep-top-borderColor'}
+                                   onChange={(e) => setEditedTheme(old => ({
+                                       ...old,
+                                       data: {
+                                           ...old.data,
+                                           top: {
+                                               ...(old.data.top ?? {}),
+                                               borderColor: e.target.value
+                                           },
+                                       }
+                                   }))}
+                                   title={"Couleur de la bordure"}
+                            />
+                        </div>
+                        <div className={'tep-settings_row-el'}>
+                            <select id={'tep-top-borderSize'}  disabled={(editedTheme.data.top?.border ?? 'none') === 'none'}
+                                    name={'tep-top-borderSize'}
+                                    value={editedTheme.data.top?.borderSize ?? 1}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                borderSize: e.target.value
+                                            },
+                                        }
+                                    }))}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div className={'tep-preview'} style={{width: `calc(${sample.width}mm + 1px + 50px)`}}>
                     <div className={'tep-module'} style={{
                         width: `calc(${sample.width}mm + 1px)`,
@@ -388,555 +454,31 @@ export default function ThemeEditorPopup({
                     </div>
                 </div>
             </div>
-            <div style={{}} className={'tep-settings'}>
-                <div className={'tep-settings_column'}>
-                    <h5>
-                        <input type={'checkbox'} checked={positions.id.shown}
-                               title={"Afficher l'identifiant"}
-                               onChange={(e) => setEditedTheme(old => ({
-                                   ...old,
-                                   data: {...old.data, id: {...(old.data.id ?? {}), shown: e.target.checked}}
-                               }))}/>
-                        <img src={upIcon} alt={"Remonter"} width={16} height={16}
-                             className={!positions.id.shown || positions.id.order <= 0 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => up('id')}/>
-                        <img src={downIcon} alt={"Descendre"} width={16} height={16}
-                             className={!positions.id.shown || positions.id.order >= shownCount - 1 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => down('id')}/>
-                        <span>Identifiant</span>
-                    </h5>
-
-                    {!positions.id.shown ? <span className={'tep-settings_hidden'}>Masqué</span> : <>
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-id-fullheight'}>Utiliser toute la hauteur disponible:</label>
-                            <input type={'checkbox'} checked={editedTheme.data.id?.fullHeight ?? false}
-                                   id={'tep-id-fullheight'}
-                                   name={'tep-id-fullheight'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {...old.data, id: {...(old.data.id ?? {}), fullHeight: e.target.checked}}
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-id-lineCount'}>Nombre de lignes:</label>
-                            <input type={'number'} value={editedTheme.data.id?.lineCount ?? 1} min={1} max={5} step={1}
-                                   id={'tep-id-lineCount'}
-                                   name={'tep-id-lineCount'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {...old.data, id: {...(old.data.id ?? {}), lineCount: e.target.value}}
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignLeftIcon} alt={"Alignement à gauche"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.id?.horizontalAlignment ?? 'center') === 'left'}
-                                       id={'tep-id-horizontalAlignmentLeft'}
-                                       name={'tep-id-horizontalAlignmentLeft'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {
-                                                   ...(old.data.id ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'left' : old.data.id?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à gauche"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignCenterIcon} alt={"Alignement au centre"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.id?.horizontalAlignment ?? 'center') === 'center'}
-                                       id={'tep-id-horizontalAlignmentCenter'}
-                                       name={'tep-id-horizontalAlignmentCenter'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {
-                                                   ...(old.data.id ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'center' : old.data.id?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement au centre"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignRightIcon} alt={"Alignement à droite"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.id?.horizontalAlignment ?? 'center') === 'right'}
-                                       id={'tep-id-horizontalAlignmentRight'}
-                                       name={'tep-id-horizontalAlignmentRight'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {
-                                                   ...(old.data.id ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'right' : old.data.id?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à droite"}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <select id={'tep-id-fontFamily'}
-                                    name={'tep-id-fontFamily'}
-                                    value={editedTheme.data.id?.fontFamily ?? 'sans-serif'}
-                                    onChange={(e) => setEditedTheme(old => ({
-                                        ...old,
-                                        data: {
-                                            ...old.data,
-                                            id: {...(old.data.id ?? {}), fontFamily: e.target.value}
-                                        }
-                                    }))}
-                                    style={{flex: 1}}
-                            >
-                                <option>serif</option>
-                                <option>sans-serif</option>
-                                <option>monospace</option>
-                                <option>cursive</option>
-                            </select>
-                            <input type={'number'}
-                                   value={(editedTheme.data.id?.fontSize ?? '2.4mm').replaceAll('mm', '')} min={2.0}
-                                   max={4.0} step={0.1}
-                                   id={'tep-id-fontSize'}
-                                   name={'tep-id-fontSize'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           id: {...(old.data.id ?? {}), fontSize: `${e.target.value}mm`}
-                                       }
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={backColorIcon} alt={"Couleur du fond"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.id?.backgroundColor ?? '#ffffff'}
-                                       id={'tep-id-backgroundColor'}
-                                       name={'tep-id-backgroundColor'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {...(old.data.id ?? {}), backgroundColor: e.target.value}
-                                           }
-                                       }))}
-                                       title={"Couleur du fond"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={textColorIcon} alt={"Couleur du texte"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.id?.color ?? '#000000'}
-                                       id={'tep-id-color'}
-                                       name={'tep-id-color'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {...old.data, id: {...(old.data.id ?? {}), color: e.target.value}}
-                                       }))}
-                                       title={"Couleur du texte"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={boldIcon} alt={"Texte gras"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.id?.fontWeight ?? 'normal') === 'bold'}
-                                       id={'tep-id-fontWeight'}
-                                       name={'tep-id-fontWeight'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {
-                                                   ...(old.data.id ?? {}),
-                                                   fontWeight: e.target.checked ? 'bold' : 'normal'
-                                               }
-                                           }
-                                       }))}
-                                       title={"Texte gras"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={italicIcon} alt={"Texte italique"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.id?.fontStyle ?? 'normal') === 'italic'}
-                                       id={'tep-id-fontStyle'}
-                                       name={'tep-id-fontStyle'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               id: {
-                                                   ...(old.data.id ?? {}),
-                                                   fontStyle: e.target.checked ? 'italic' : 'normal'
-                                               }
-                                           }
-                                       }))}
-                                       title={"Texte italique"}
-                                />
-                            </div>
-                        </div>
-                    </>}
-
-
-                </div>
-                <div className={'tep-settings_column'}>
-                    <h5>
-                        <input type={'checkbox'} checked={positions.icon.shown}
-                               title={"Afficher le pictogramme"}
-                               onChange={(e) => setEditedTheme(old => ({
-                                   ...old,
-                                   data: {...old.data, icon: {...(old.data.icon ?? {}), shown: e.target.checked}}
-                               }))}/>
-                        <img src={upIcon} alt={"Remonter"} width={16} height={16}
-                             className={!positions.icon.shown || positions.icon.order <= 0 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => up('icon')}/>
-                        <img src={downIcon} alt={"Descendre"} width={16} height={16}
-                             className={!positions.icon.shown || positions.icon.order >= shownCount - 1 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => down('icon')}/>
-                        <span>Pictogramme</span>
-                    </h5>
-
-                    {!positions.icon.shown ? <span className={'tep-settings_hidden'}>Masqué</span> : <>
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-icon-fullheight'}>Utiliser toute la hauteur disponible:</label>
-                            <input type={'checkbox'} checked={editedTheme.data.icon?.fullHeight ?? false}
-                                   id={'tep-icon-fullheight'}
-                                   name={'tep-icon-fullheight'}
-                                   title={"Afficher l'identifiant"}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           icon: {...(old.data.icon ?? {}), fullHeight: e.target.checked}
-                                       }
-                                   }))}/>
-                        </div>
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-icon-fullheight'}>Taille:</label>
-                            <input type={'range'} value={editedTheme.data.icon?.sizePercent ?? 50} min={0} max={100}
-                                   id={'tep-icon-sizePercent'}
-                                   name={'tep-icon-sizePercent'}
-                                   title={"Taille de l'icone"}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           icon: {...(old.data.icon ?? {}), sizePercent: parseInt(e.target.value)}
-                                       }
-                                   }))}/>
-                            <span style={{fontSize: 'small'}}>{`${editedTheme.data.icon?.sizePercent ?? 50}%`}</span>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignLeftIcon} alt={"Alignement à gauche"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.icon?.horizontalAlignment ?? 'center') === 'left'}
-                                       id={'tep-icon-horizontalAlignmentLeft'}
-                                       name={'tep-icon-horizontalAlignmentLeft'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               icon: {
-                                                   ...(old.data.icon ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'left' : old.data.icon?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à gauche"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignCenterIcon} alt={"Alignement au centre"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.icon?.horizontalAlignment ?? 'center') === 'center'}
-                                       id={'tep-icon-horizontalAlignmentCenter'}
-                                       name={'tep-icon-horizontalAlignmentCenter'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               icon: {
-                                                   ...(old.data.icon ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'center' : old.data.icon?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement au centre"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignRightIcon} alt={"Alignement à droite"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.icon?.horizontalAlignment ?? 'center') === 'right'}
-                                       id={'tep-icon-horizontalAlignmentRight'}
-                                       name={'tep-icon-horizontalAlignmentRight'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               icon: {
-                                                   ...(old.data.icon ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'right' : old.data.icon?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à droite"}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={backColorIcon} alt={"Couleur du fond"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.icon?.backgroundColor ?? '#ffffff'}
-                                       id={'tep-icon-backgroundColor'}
-                                       name={'tep-icon-backgroundColor'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               icon: {...(old.data.icon ?? {}), backgroundColor: e.target.value}
-                                           }
-                                       }))}
-                                       title={"Couleur du fond"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={iconColorIcon} alt={"Couleur de l'icône"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.icon?.color ?? '#000000'}
-                                       id={'tep-icon-color'}
-                                       name={'tep-icon-color'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {...old.data, icon: {...(old.data.icon ?? {}), color: e.target.value}}
-                                       }))}
-                                       title={"Couleur de l'icône"}
-                                />
-                            </div>
-                        </div>
-                    </>}
-                </div>
-                <div className={'tep-settings_column'}>
-                    <h5>
-                        <input type={'checkbox'} checked={positions.text.shown}
-                               title={"Afficher le libellé"}
-                               onChange={(e) => setEditedTheme(old => ({
-                                   ...old,
-                                   data: {...old.data, text: {...(old.data.text ?? {}), shown: e.target.checked}}
-                               }))}/>
-                        <img src={upIcon} alt={"Remonter"} width={16} height={16}
-                             className={!positions.text.shown || positions.text.order <= 0 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => up('text')}/>
-                        <img src={downIcon} alt={"Descendre"} width={16} height={16}
-                             className={!positions.text.shown || positions.text.order >= shownCount - 1 ? 'disabled' : null}
-                             style={{cursor: 'pointer'}} onClick={() => down('text')}/>
-                        <span>Libellé</span>
-                    </h5>
-
-                    {!positions.text.shown ? <span className={'tep-settings_hidden'}>Masqué</span> : <>
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-text-fullheight'}>Utiliser toute la hauteur disponible:</label>
-                            <input type={'checkbox'} checked={editedTheme.data.text?.fullHeight ?? false}
-                                   id={'tep-text-fullheight'}
-                                   name={'tep-text-fullheight'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           text: {...(old.data.text ?? {}), fullHeight: e.target.checked}
-                                       }
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <label htmlFor={'tep-text-lineCount'}>Nombre de lignes:</label>
-                            <input type={'number'} value={editedTheme.data.text?.lineCount ?? 1} min={1} max={5}
-                                   step={1}
-                                   id={'tep-text-lineCount'}
-                                   name={'tep-text-lineCount'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {...old.data, text: {...(old.data.text ?? {}), lineCount: e.target.value}}
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignLeftIcon} alt={"Alignement à gauche"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.text?.horizontalAlignment ?? 'center') === 'left'}
-                                       id={'tep-text-horizontalAlignmentLeft'}
-                                       name={'tep-text-horizontalAlignmentLeft'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {
-                                                   ...(old.data.text ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'left' : old.data.text?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à gauche"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignCenterIcon} alt={"Alignement au centre"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.text?.horizontalAlignment ?? 'center') === 'center'}
-                                       id={'tep-text-horizontalAlignmentCenter'}
-                                       name={'tep-text-horizontalAlignmentCenter'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {
-                                                   ...(old.data.text ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'center' : old.data.text?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement au centre"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={alignRightIcon} alt={"Alignement à droite"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.text?.horizontalAlignment ?? 'center') === 'right'}
-                                       id={'tep-text-horizontalAlignmentRight'}
-                                       name={'tep-text-horizontalAlignmentRight'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {
-                                                   ...(old.data.text ?? {}),
-                                                   horizontalAlignment: e.target.checked ? 'right' : old.data.text?.horizontalAlignment
-                                               }
-                                           }
-                                       }))}
-                                       title={"Alignement à droite"}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <select id={'tep-text-fontFamily'}
-                                    name={'tep-text-fontFamily'}
-                                    value={editedTheme.data.text?.fontFamily ?? 'sans-serif'}
-                                    onChange={(e) => setEditedTheme(old => ({
-                                        ...old,
-                                        data: {
-                                            ...old.data,
-                                            text: {...(old.data.text ?? {}), fontFamily: e.target.value}
-                                        }
-                                    }))}
-                                    style={{flex: 1}}
-                            >
-                                <option>serif</option>
-                                <option>sans-serif</option>
-                                <option>monospace</option>
-                                <option>cursive</option>
-                            </select>
-                            <input type={'number'}
-                                   value={(editedTheme.data.text?.fontSize ?? '2.4mm').replaceAll('mm', '')} min={2.0}
-                                   max={4.0} step={0.1}
-                                   id={'tep-text-fontSize'}
-                                   name={'tep-text-fontSize'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           text: {...(old.data.text ?? {}), fontSize: `${e.target.value}mm`}
-                                       }
-                                   }))}/>
-                        </div>
-
-                        <div className={'tep-settings_row'}>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={backColorIcon} alt={"Couleur du fond"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.text?.backgroundColor ?? '#ffffff'}
-                                       id={'tep-text-backgroundColor'}
-                                       name={'tep-text-backgroundColor'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {...(old.data.text ?? {}), backgroundColor: e.target.value}
-                                           }
-                                       }))}
-                                       title={"Couleur du fond"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={textColorIcon} alt={"Couleur du texte"} width={16} height={16}/>
-                                <input type={'color'} value={editedTheme.data.text?.color ?? '#000000'}
-                                       id={'tep-text-color'}
-                                       name={'tep-text-color'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {...old.data, text: {...(old.data.text ?? {}), color: e.target.value}}
-                                       }))}
-                                       title={"Couleur du texte"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={boldIcon} alt={"Texte gras"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.text?.fontWeight ?? 'normal') === 'bold'}
-                                       id={'tep-text-fontWeight'}
-                                       name={'tep-text-fontWeight'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {
-                                                   ...(old.data.text ?? {}),
-                                                   fontWeight: e.target.checked ? 'bold' : 'normal'
-                                               }
-                                           }
-                                       }))}
-                                       title={"Texte gras"}
-                                />
-                            </div>
-                            <div className={'tep-settings_row-el'}>
-                                <img src={italicIcon} alt={"Texte italique"} width={16} height={16}/>
-                                <input type={'checkbox'}
-                                       checked={(editedTheme.data.text?.fontStyle ?? 'normal') === 'italic'}
-                                       id={'tep-text-fontStyle'}
-                                       name={'tep-text-fontStyle'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               text: {
-                                                   ...(old.data.text ?? {}),
-                                                   fontStyle: e.target.checked ? 'italic' : 'normal'
-                                               }
-                                           }
-                                       }))}
-                                       title={"Texte italique"}
-                                />
-                            </div>
-                        </div>
-                    </>}
-
-                </div>
+            <div className={'tep-settings'}>
+                <ThemeEditorPartColumn propName={'id'}
+                                       title={"Identifiant"}
+                                       editedTheme={editedTheme}
+                                       setEditedTheme={setEditedTheme}
+                                       positions={positions}
+                                       shownCount={shownCount}
+                                       down={down}
+                                       up={up}/>
+                <ThemeEditorPartColumn propName={'icon'}
+                                       title={"Pictogramme"}
+                                       editedTheme={editedTheme}
+                                       setEditedTheme={setEditedTheme}
+                                       positions={positions}
+                                       shownCount={shownCount}
+                                       down={down}
+                                       up={up}/>
+                <ThemeEditorPartColumn propName={'text'}
+                                       title={"Libellé"}
+                                       editedTheme={editedTheme}
+                                       setEditedTheme={setEditedTheme}
+                                       positions={positions}
+                                       shownCount={shownCount}
+                                       down={down}
+                                       up={up}/>
             </div>
         </div>
     </Popup>

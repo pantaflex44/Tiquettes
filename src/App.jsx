@@ -109,6 +109,7 @@ function App() {
         coef: 0.5,
         pole: "",
         parentId: "",
+        kcId: "",
         free: true,
         span: 1,
         half: "none",
@@ -130,12 +131,13 @@ function App() {
             icon: "swb_puissance.svg",
             id: "DB",
             parentId: "",
+            kcId: "",
             pole: "1P+N",
             sensibility: "500mA",
             coef: 1,
             span: 4,
             text: "Disjonteur de branchement",
-            type: "S"
+            type: "S",
         }
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType, defaultVRef]);
 
@@ -180,6 +182,8 @@ function App() {
             hasCrb: false,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: true,
         },
         id: {
             name: 'Interrupteur différentiel',
@@ -187,6 +191,8 @@ function App() {
             hasCrb: false,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: true,
         },
         dd: {
             name: 'Disjoncteur différentiel',
@@ -194,6 +200,8 @@ function App() {
             hasCrb: true,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: true,
         },
         q: {
             name: 'Disjoncteur',
@@ -201,6 +209,8 @@ function App() {
             hasCrb: true,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: true,
         },
         i: {
             name: 'Interrupteur',
@@ -208,6 +218,8 @@ function App() {
             hasCrb: false,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: true,
         },
         c: {
             name: 'Commande',
@@ -215,20 +227,17 @@ function App() {
             hasCrb: false,
             hasCurrent: true,
             hasPole: false,
+            hasContacts: false,
+            supportContacts: false,
         },
-        k: {
-            name: 'Relai (Bobine)',
+        kc: {
+            name: 'Contacteur',
             hasType: false,
             hasCrb: false,
             hasCurrent: true,
             hasPole: false,
-        },
-        kc: {
-            name: 'Relai (Contact)',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
+            hasContacts: true,
+            supportContacts: false,
         },
         o: {
             name: 'Autre',
@@ -236,6 +245,8 @@ function App() {
             hasCrb: false,
             hasCurrent: true,
             hasPole: true,
+            hasContacts: false,
+            supportContacts: false,
         },
     };
 
@@ -314,6 +325,27 @@ function App() {
         return {...reIndentedSwb, rows};
     }, [defaultModuleId]);
 
+    const reassignAllParents = (originalId, newId) => {
+        if (originalId && originalId !== newId) {
+            setSwitchboard((old) => {
+                let rows = old.rows.map((row) => {
+                    return row.map((module) => {
+                        let mm = {...module};
+                        if (module.parentId === originalId) {
+                            mm = {...mm, parentId: newId};
+                        }
+                        if (module.kcId === originalId) {
+                            mm = {...mm, kcId: newId};
+                        }
+                        return mm;
+                    });
+                });
+
+                return modulesAutoId({...old, rows});
+            });
+        }
+    };
+
     const reassignModules = () => {
         if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
             const swb = modulesAutoId(switchboard);
@@ -349,13 +381,26 @@ function App() {
             // re-assign parents
             rows = rows.map((row) => {
                 return row.map((module) => {
+                    let mm = {...module};
                     if (from[module.parentId]) {
-                        return {
-                            ...module,
+                        mm = {
+                            ...mm,
                             parentId: from[module.parentId],
                         };
                     }
-                    return module;
+
+                    mm = {
+                        ...mm,
+                        kcId: (mm.kcId ?? "").split('|')
+                            .map(k => {
+                                if (from[k]) return k;
+                                return null
+                            })
+                            .filter(k => k !== null)
+                            .join('|'),
+                    };
+
+                    return mm;
                 });
             });
 
@@ -611,7 +656,17 @@ function App() {
             prevModule = switchboard.rows[pr][pm];
         }
 
-        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, tabPage, errors: [], hasBlankId});
+        setEditor({
+            rowIndex,
+            moduleIndex,
+            originalModule: {...currentModule},
+            currentModule,
+            prevModule,
+            theme,
+            tabPage,
+            errors: [],
+            hasBlankId
+        });
     };
 
     const updateModuleEditor = (data) => {
@@ -629,6 +684,7 @@ function App() {
         const text = (editor.currentModule.text ?? "").trim();
         const desc = (editor.currentModule.desc ?? "").trim();
         const parentId = (editor.currentModule.parentId ?? "").trim();
+        const kcId = (editor.currentModule.kcId ?? "").trim();
         const func = (editor.currentModule.func ?? "").trim();
         const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
         const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
@@ -664,6 +720,7 @@ function App() {
             return;
         }
 
+        // applique les modifications
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
                 if (i !== editor.rowIndex) return row;
@@ -679,6 +736,7 @@ function App() {
                         text,
                         desc,
                         parentId,
+                        kcId,
                         func,
                         crb,
                         type,
@@ -694,6 +752,9 @@ function App() {
 
             return modulesAutoId({...old, rows});
         });
+
+        // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
+        reassignAllParents(editor.originalModule?.id, id);
 
         setEditor(null);
     }
@@ -934,6 +995,7 @@ function App() {
                         text: clipboard.text,
                         desc: clipboard.desc,
                         parentId: clipboard.parentId,
+                        kcId: clipboard.kcId,
                         func: clipboard.func,
                         crb: clipboard.crb,
                         type: clipboard.type,
