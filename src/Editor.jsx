@@ -28,6 +28,14 @@ import IconSelector from "./IconSelector.jsx";
 import Module from "./Module.jsx";
 import Popup from "./Popup.jsx";
 import SchemaSymbol from "./SchemaSymbol.jsx";
+import EditorCurrentSelector from "./EditorCurrentSelector.jsx";
+import EditorPoleSelector from "./EditorPoleSelector.jsx";
+import EditorSensibilitySelector from "./EditorSensibilitySelector.jsx";
+import EditorCrbSelector from "./EditorCrbSelector.jsx";
+import EditorTypeSelector from "./EditorTypeSelector.jsx";
+import EditorContactSelector from "./EditorContactSelector.jsx";
+import EditorParentSelector from "./EditorParentSelector.jsx";
+import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
 
 export default function Editor({
                                    theme,
@@ -51,6 +59,7 @@ export default function Editor({
 
     const [editorTab, setEditorTab] = useState(editor?.tabPage ?? "main");
     const prevModule = getModuleById(editor?.prevModule?.parentId);
+    const prevModuleTitle = ((prevModule?.id ?? "-") + " " + (prevModule && schemaFunctions[prevModule.func] ? "(" + schemaFunctions[prevModule.func].name + ")" : "")).trim();
 
     const lastFreeId = useMemo(() => {
         let rows = switchboard.rows;
@@ -246,40 +255,21 @@ export default function Editor({
                     <>
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <label htmlFor={`editor_func_${editor.currentModule.id.trim()}`}>Fonction</label>
-                            <select value={editor.currentModule.func}
-                                    onChange={(e) => onUpdateModuleEditor({func: e.target.value})}>
-                                <option value={""}>-</option>
-                                {Object.keys(schemaFunctions).map((key, i) => <option key={i}
-                                                                                      value={key}>{schemaFunctions[key].name}</option>)}
-                            </select>
+                            <EditorFunctionSelector id={`editor_func_${editor.currentModule.id.trim()}`}
+                                                    value={editor.currentModule.func}
+                                                    onChange={(value) => onUpdateModuleEditor({func: value})}
+                                                    schemaFunctions={schemaFunctions}/>
                         </div>
 
                         {editor.currentModule.func && <>
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_schparent_${editor.currentModule.id.trim()}`}>Parent</label>
-                                <select id={`editor_schparent_${editor.currentModule.id.trim()}`}
-                                        name={`editor_schparent_${editor.currentModule.id.trim()}`}
-                                        value={editor.currentModule.parentId}
-                                        onChange={(e) => onUpdateModuleEditor({parentId: e.target.value})}
-                                >
-                                    <option value={""}>- aucun -</option>
-                                    {Object.entries(getFilteredModulesBySchemaFuncs())
-                                        .map(([k, l]) => {
-                                            return (
-                                                <Fragment key={k}>
-                                                    <option value="" disabled={true}>{schemaFunctions[k].name}</option>
-                                                    {l
-                                                        .map((module) => (
-                                                            editor.currentModule.id !== module.id
-                                                                ? <option key={module.id}
-                                                                          value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
-                                                                : null
-                                                        ))
-                                                        .filter(f => f !== null)}
-                                                </Fragment>
-                                            )
-                                        })}
-                                </select>
+                                <EditorParentSelector id={`editor_schparent_${editor.currentModule.id.trim()}`}
+                                                      value={editor.currentModule.parentId}
+                                                      currentModuleId={editor.currentModule.id}
+                                                      filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                      onChange={(value) => onUpdateModuleEditor({parentId: value})}
+                                                      schemaFunctions={schemaFunctions}/>
                             </div>
                             <div className="popup_row" style={{
                                 '--left_column_size': '100px',
@@ -289,7 +279,7 @@ export default function Editor({
                             }}>
                                 <div></div>
                                 <label style={{fontSize: "small", color: "#777"}}>└ Parent du module
-                                    précédent: <b>{((prevModule?.id ?? "aucun") + " " + (prevModule && schemaFunctions[prevModule.func] ? "(" + schemaFunctions[prevModule.func].name + ")" : "")).trim()}</b></label>
+                                    précédent: <b>{prevModuleTitle !== "" ? prevModuleTitle : "-"}</b></label>
                             </div>
 
                             {schemaFunctions[editor.currentModule.func]?.supportContacts === true &&
@@ -301,22 +291,11 @@ export default function Editor({
                                 }}>
                                     <label htmlFor={`editor_contacts_${editor.currentModule.id.trim()}`}>Asservi
                                         par</label>
-                                    <select id={`editor_contacts_${editor.currentModule.id.trim()}`}
-                                            name={`editor_contacts_${editor.currentModule.id.trim()}`}
-                                            value={editor.currentModule.kcId}
-                                            onChange={(e) => onUpdateModuleEditor({kcId: e.target.value})}
-                                    >
-                                        <option value={""}>- aucun contacteur -</option>
-                                        {Object.entries(getFilteredModulesBySchemaFuncs())
-                                            .map(([k, l]) => {
-                                                return (l.map((module) => (
-                                                    editor.currentModule.id !== module.id && k === 'kc'
-                                                        ? <option key={`${k}-${module.id}`}
-                                                                  value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
-                                                        : null
-                                                )).filter(f => f !== null))
-                                            })}
-                                    </select>
+                                    <EditorContactSelector id={`editor_contacts_${editor.currentModule.id.trim()}`}
+                                                           value={editor.currentModule.kcId}
+                                                           currentModuleId={editor.currentModule.id}
+                                                           filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                           onChange={(value) => onUpdateModuleEditor({kcId: value})}/>
                                 </div>}
                         </>
                         }
@@ -324,82 +303,46 @@ export default function Editor({
                         {schemaFunctions[editor.currentModule.func]?.hasType &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_type_${editor.currentModule.id.trim()}`}>Type</label>
-                                <select value={editor.currentModule.type}
-                                        onChange={(e) => onUpdateModuleEditor({type: e.target.value})}>
-                                    <option value={""}>-</option>
-                                    <option value={"A"}>A</option>
-                                    <option value={"AC"}>AC</option>
-                                    <option value={"B"}>B</option>
-                                    <option value={"F"}>F</option>
-                                    <option value={"HPI"}>HPI</option>
-                                    <option value={"S"}>S</option>
-                                </select>
+                                <EditorTypeSelector id={`editor_type_${editor.currentModule.id.trim()}`}
+                                                    value={editor.currentModule.type}
+                                                    onChange={(value) => onUpdateModuleEditor({type: value})}/>
                             </div>
                         }
 
                         {schemaFunctions[editor.currentModule.func]?.hasCrb &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_crb_${editor.currentModule.id.trim()}`}>Courbe</label>
-                                <select value={editor.currentModule.crb}
-                                        onChange={(e) => onUpdateModuleEditor({crb: e.target.value})}>
-                                    <option value={""}>-</option>
-                                    <option value={"Z"}>Z</option>
-                                    <option value={"B"}>B</option>
-                                    <option value={"C"}>C</option>
-                                    <option value={"D"}>D</option>
-                                    <option value={"MA"}>MA</option>
-                                </select>
+                                <EditorCrbSelector id={`editor_crb_${editor.currentModule.id.trim()}`}
+                                                   value={editor.currentModule.crb}
+                                                   onChange={(value) => onUpdateModuleEditor({crb: value})}/>
                             </div>
                         }
 
                         {schemaFunctions[editor.currentModule.func]?.hasType &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                                <label htmlFor={`editor_current_${editor.currentModule.id.trim()}`}>Sensibilité</label>
-                                <select value={editor.currentModule.sensibility}
-                                        onChange={(e) => onUpdateModuleEditor({sensibility: e.target.value})}>
-                                    <option value={""}>-</option>
-                                    <option value={"10mA"}>10mA</option>
-                                    <option value={"30mA"}>30mA</option>
-                                    <option value={"300mA"}>300mA</option>
-                                    <option value={"500mA"}>500mA</option>
-                                </select>
+                                <label
+                                    htmlFor={`editor_sensibility_${editor.currentModule.id.trim()}`}>Sensibilité</label>
+                                <EditorSensibilitySelector id={`editor_sensibility_${editor.currentModule.id.trim()}`}
+                                                           value={editor.currentModule.sensibility}
+                                                           onChange={(value) => onUpdateModuleEditor({sensibility: value})}/>
                             </div>
                         }
 
                         {schemaFunctions[editor.currentModule.func]?.hasCurrent &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_current_${editor.currentModule.id.trim()}`}>Calibre</label>
-                                <select value={editor.currentModule.current}
-                                        onChange={(e) => onUpdateModuleEditor({current: e.target.value})}>
-                                    <option value={""}>-</option>
-                                    <option value={"2A"}>2A</option>
-                                    <option value={"6A"}>6A</option>
-                                    <option value={"10A"}>10A</option>
-                                    <option value={"16A"}>16A</option>
-                                    <option value={"20A"}>20A</option>
-                                    <option value={"25A"}>25A</option>
-                                    <option value={"32A"}>32A</option>
-                                    <option value={"40A"}>40A</option>
-                                    <option value={"63A"}>63A</option>
-                                    <option value={"80A"}>80A</option>
-                                    <option value={"100A"}>100A</option>
-                                    <option value={"160A"}>160A</option>
-                                    <option value={"250A"}>250A</option>
-                                </select>
+                                <EditorCurrentSelector id={`editor_current_${editor.currentModule.id.trim()}`}
+                                                       value={editor.currentModule.current}
+                                                       onChange={(value) => onUpdateModuleEditor({current: value})}/>
                             </div>
                         }
 
                         {schemaFunctions[editor.currentModule.func]?.hasPole &&
                             <div className="popup_row" style={{'--left_column_size': '100px'}}>
                                 <label htmlFor={`editor_pole_${editor.currentModule.id.trim()}`}>Pôles</label>
-                                <select value={editor.currentModule.pole}
-                                        onChange={(e) => onUpdateModuleEditor({pole: e.target.value})}>
-                                    <option value={""}>-</option>
-                                    <option value={"1P+N"}>Monophasé (1P+N)</option>
-                                    <option value={"3P"}>Triphasé (3P)</option>
-                                    <option value={"3P+N"}>Triphasé (3P+N)</option>
-                                    <option value={"4P"}>Tétrapolaire (4P)</option>
-                                </select>
+                                <EditorPoleSelector id={`editor_pole_${editor.currentModule.id.trim()}`}
+                                                    value={editor.currentModule.pole}
+                                                    onChange={(value) => onUpdateModuleEditor({pole: value})}/>
                             </div>
                         }
 
