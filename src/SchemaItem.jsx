@@ -42,17 +42,22 @@ export default function SchemaItem({
             <div className={`schemaItem ${isFirst ? 'isFirst' : ''} ${item.isLast ? 'isLast' : ''}`.trim()}>
                 {isFirst && <img className="schemaItemFirstIcon" src={firstIcon}/>}
 
-                {(isFirst || (item.hasPrev || item.hasNext)) && <div className={`schemaItemPrevLine ${!item.hasNext ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}
+                {(isFirst || (item.hasPrev || item.hasNext)) && <div
+                    className={`schemaItemPrevLine ${!item.hasNext ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}
 
                 {item.hasNext && <div className="schemaItemNextLine"></div>}
 
-                <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module} schemaFunctions={schemaFunctions} onEdit={(module) => onEditSymbol(module)} monitor={monitor}/>
+                <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module}
+                              schemaFunctions={schemaFunctions} onEdit={(module) => onEditSymbol(module)}
+                              monitor={monitor}/>
 
                 {item.isLast ? (
                     <SchemaDescription switchboard={switchboard} module={item.module}/>
                 ) : (
                     <div className="schemaItemChilds">
-                        <SchemaItem switchboard={switchboard} childs={item.childs} schemaFunctions={schemaFunctions} baseId={baseId ?? item.module.id} onEditSymbol={(module) => onEditSymbol(module)} monitor={monitor}/>
+                        <SchemaItem switchboard={switchboard} childs={item.childs} schemaFunctions={schemaFunctions}
+                                    baseId={baseId ?? item.module.id} onEditSymbol={(module) => onEditSymbol(module)}
+                                    monitor={monitor}/>
                     </div>
                 )}
             </div>

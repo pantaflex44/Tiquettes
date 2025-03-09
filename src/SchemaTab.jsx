@@ -97,6 +97,7 @@ export default function SchemaTab({
                 moduleList.forEach((module, i) => {
                     let _childs = getChilds(module.id);
 
+                    // si un module est asservi par un contacteur, on ajoute les contacts sous ce module pour indiquer l'asservissement
                     const kcId = (module.kcId ?? "");
                     const kcModule = getModuleById(kcId).module;
                     if (kcModule) {
@@ -224,6 +225,7 @@ export default function SchemaTab({
                     }
 
                     const parentPole = lastParentModule?.pole ?? (switchboard.withDb ? switchboard.db?.pole : null);
+                    const parentCurrent = getCurrent(lastParentModule);
                     const currentPole = getPole(data.module);
                     const currentFunc = getFunc(data.module);
                     const currentCurrent = getCurrent(data.module);
@@ -295,6 +297,13 @@ export default function SchemaTab({
                         || ((parentPole === '1P+N' || parentPole === '3P') && (currentPole === '4P' || currentPole === '3P+N'))
                     )) {
                         add_error(id, `Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`);
+                    }
+
+                    // Vérification du calibre de la protection en tète des contacts d'asservissements
+                    if (currentFunc === 'k' && getId(data.module) && lastParentModule) {
+                        if (currentCurrent < parentCurrent) {
+                            add_error(lastParentModule.id, `Le calibre est incohérent avec la capacité du contacteur d'asservissement (${lastParentModule.id}: ${parentCurrent}A / ${id}: ${currentCurrent}A).`);
+                        }
                     }
 
                     // Pour finir, on passe aux modules enfants

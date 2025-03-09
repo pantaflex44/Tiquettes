@@ -47,7 +47,9 @@ export default function SchemaSymbol({
         }
 
         const name = obj?.name ?? "";
-        const title = name + (monitor.errors && monitor.errors[module.id] ? "\r\n\r\n⚠ : " + monitor.errors[module.id].join("\r\n⚠ : ") : "") + (monitor.infos && monitor.infos[module.id] && !(monitor.errors && monitor.errors[module.id]) ? "\r\n\r\n🛈 " + monitor.infos[module.id].join("\r\n🛈 ") : "");
+        const titleErrors = monitor.errors && monitor.errors[module.id] ? "\r\n\r\n⚠ : " + monitor.errors[module.id].join("\r\n⚠ : ") : "";
+        const titleInfos = monitor.infos && monitor.infos[module.id] ? "\r\n\r\n🛈 " + monitor.infos[module.id].join("\r\n🛈 ") : "";
+        const title = `${module.id} / ${name}: ${module.text}${titleErrors}${titleInfos}`.trim();
         const icon = `${import.meta.env.BASE_URL}schema_${func}.svg`;
 
         return {obj, name, title, icon, isDb, isContact};
@@ -58,22 +60,30 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={func.title} onClick={() => handleEdit()}>
+        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={func.title}
+             onClick={() => handleEdit()}>
             <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100}/>
             <div className="schemaItemSymbolId">{module.id}</div>
 
-            {func.obj?.hasType && <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}</div>}
+            {func.obj?.hasType &&
+                <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}
+                </div>}
 
-            <div className="schemaItemSymbolCurrent">{((func.obj?.hasCrb && module.crb ? `${module.crb} ` : '') + (func.obj?.hasCurrent && module.current ? module.current : '')).trim()}</div>
+            <div
+                className="schemaItemSymbolCurrent">{((func.obj?.hasCrb && module.crb ? `${module.crb} ` : '') + (func.obj?.hasCurrent && module.current ? module.current : '')).trim()}</div>
 
             {func.obj?.hasPole && module.pole && (
                 <>
                     <div className="schemaItemSymbolPole">{module.pole}</div>
-                    <img className="schemaItemSymbolImgPole" src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole} width={11}/>
+                    <img className="schemaItemSymbolImgPole"
+                         src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole}
+                         width={11}/>
                 </>
             )}
 
-            {monitor.errors && monitor.errors[module.id] && <img className="schemaItemSymbolWarning" src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreur"/>}
+            {monitor.errors && monitor.errors[module.id] &&
+                <img className="schemaItemSymbolWarning notprintable" src={`${import.meta.env.BASE_URL}schema_warning.svg`}
+                     alt="Erreur"/>}
         </div>
     );
 }
