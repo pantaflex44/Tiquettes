@@ -636,12 +636,15 @@ function App() {
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
         let currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+        // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
         let hasBlankId = false;
         if (!currentModule.id || currentModule.id.trim() === '') {
             currentModule = {...currentModule, id: lastFreeId};
             hasBlankId = true;
         }
 
+        // récupère le module précédent
         let pr = rowIndex;
         let pm = moduleIndex - 1;
         if (pm < 0) {
@@ -650,12 +653,17 @@ function App() {
                 pm = switchboard.rows[pr].length - 1;
             }
         }
-
         let prevModule = null;
         if (pr >= 0 && pm >= 0) {
             prevModule = switchboard.rows[pr][pm];
         }
 
+        // si le parent du module à éditer est inconnu, on propose celui du module précédent
+        if (!currentModule.parentId) {
+            currentModule = {...currentModule, parentId: prevModule?.parentId};
+        }
+
+        // edition du module
         setEditor({
             rowIndex,
             moduleIndex,
