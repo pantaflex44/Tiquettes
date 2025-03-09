@@ -243,6 +243,16 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 
 ![Thème Legrand - Couleur - Tertiaire](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_lgd_cter.png?raw=true)
 
+### Personnaliser la décoration
+
+Tiquettes vous propose de décorer plus finement vos étiquettes en créeant votre propre thème!
+
+![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_button.png?raw=true)
+
+![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_editor.png?raw=true)
+
+Vous pouvez exporter vos thèmes, et même importer les créations d'autruis !
+
 ## Schéma unifilaire
 
 ### Edition des caractéristiques
