@@ -175,11 +175,11 @@ function CustomTheme({item, data, style}) {
 
     return (<>
 
-        {shown.id && <div style={styles.id}>
+        {shown.id && <div style={styles.id} data-order={positions.id.order === 0 ? 'top' : (positions.id.order === shownCount - 1 ? 'bottom' : 'middle')}>
             <p style={styles.idContent}>{item.id}</p>
         </div>}
 
-        {shown.icon && <div style={styles.icon}>
+        {shown.icon && <div style={styles.icon} data-order={positions.icon.order === 0 ? 'top' : (positions.icon.order === shownCount - 1 ? 'bottom' : 'middle')}>
             {item.icon && <img
                 style={styles.iconImg}
                 alt="Pictogramme"
@@ -187,7 +187,7 @@ function CustomTheme({item, data, style}) {
             />}
         </div>}
 
-        {shown.text && <div style={styles.text}>
+        {shown.text && <div style={styles.text} data-order={positions.text.order === 0 ? 'top' : (positions.text.order === shownCount - 1 ? 'bottom' : 'middle')}>
             <p
                 style={styles.textContent}
                 dangerouslySetInnerHTML={{__html: item.text.replaceAll("\n", "<br />")}}

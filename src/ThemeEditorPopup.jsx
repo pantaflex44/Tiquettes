@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import {useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 
 import Popup from "./Popup.jsx";
 import Module from "./Module.jsx";
@@ -28,13 +28,12 @@ import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
 import importIcon from './assets/upload.svg';
 import exportIcon from './assets/download.svg';
 import undoIcon from './assets/undo.svg';
-import borderNoneIcon from './assets/border-none.svg';
+import borderTopIcon from './assets/border-top.svg';
 import borderBottomIcon from './assets/border-bottom.svg';
 
 import sanitizeFilename from "sanitize-filename";
 
 import './themeEditorPopup.css';
-import alignLeftIcon from "./assets/align-left.svg";
 
 export default function ThemeEditorPopup({
                                              switchboard,
@@ -89,10 +88,10 @@ export default function ThemeEditorPopup({
                 "color": "#000000"
             },
             "top": {
-                "border": "none",
+                "border": false,
             },
             "bottom": {
-                "border": "none",
+                "border": false,
             }
         }
     };
@@ -189,6 +188,45 @@ export default function ThemeEditorPopup({
             return accumulator
         }, {});
 
+    const uuidV4 = () => {
+        const uuid = new Array(36);
+        for (let i = 0; i < 36; i++) {
+            uuid[i] = Math.floor(Math.random() * 16);
+        }
+        uuid[14] = 4; // set bits 12-15 of time-high-and-version to 0100
+        uuid[19] = uuid[19] &= ~(1 << 2); // set bit 6 of clock-seq-and-reserved to zero
+        uuid[19] = uuid[19] |= (1 << 3); // set bit 7 of clock-seq-and-reserved to one
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+        return uuid.map((x) => x.toString(16)).join('');
+    };
+
+    useEffect(() => {
+        if (shownCount < 1 && editedTheme.data.top?.border !== false) {
+            setEditedTheme(old => ({
+                ...old,
+                data: {
+                    ...old.data,
+                    top: {
+                        ...(old.data.top ?? {}),
+                        border: false
+                    },
+                }
+            }))
+        }
+        if (shownCount < 2 && editedTheme.data.bottom?.border !== false) {
+            setEditedTheme(old => ({
+                ...old,
+                data: {
+                    ...old.data,
+                    bottom: {
+                        ...(old.data.bottom ?? {}),
+                        border: false
+                    },
+                }
+            }))
+        }
+    }, [shownCount]);
+
     return <Popup
         title={theme?.title ?? "Créer mon thème"}
         showCloseButton={true}
@@ -264,8 +302,10 @@ export default function ThemeEditorPopup({
                         title = title.trim();
                         if (title === "") title = defaultTitle;
 
+                        const name = `custom|${uuidV4()}`;
+
                         setEditedTheme(old => {
-                            const et = prepareTheme({...old, title});
+                            const et = prepareTheme({...old, name, title});
 
                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(et))}`;
                             const link = document.createElement("a");
@@ -304,66 +344,181 @@ export default function ThemeEditorPopup({
                     height: `calc(${sample.height}mm + 1mm)`,
                     maxHeight: `calc(${sample.height}mm + 1mm)`,
                 }}>
-                    <div className={'tep-settings_row'} style={{width: '100%'}}>
-                        <div className={'tep-settings_row-el'}>
-                            <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16}/>
-                            <input type={'checkbox'}
-                                   checked={(editedTheme.data.top?.border ?? 'none') !== 'none'}
-                                   id={'tep-top-border'}
-                                   name={'tep-top-border'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           top: {
-                                               ...(old.data.top ?? {}),
-                                               border: e.target.checked ? '' : 'none'
-                                           },
-                                       }
-                                   }))}
-                                   title={"Ajouter un séparateur haut"}
-                            />
+                    {shownCount > 0 && <>
+                    {/* Top border */}
+                        <div className={'tep-settings_row'} style={{width: '100%'}}>
+                            <div className={'tep-settings_row-el'}>
+                                <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16}/>
+                                <input type={'checkbox'}
+                                       checked={(editedTheme.data.top?.border ?? false) === true}
+                                       id={'tep-top-border'}
+                                       name={'tep-top-border'}
+                                       onChange={(e) => setEditedTheme(old => ({
+                                           ...old,
+                                           data: {
+                                               ...old.data,
+                                               top: {
+                                                   ...(old.data.top ?? {}),
+                                                   border: e.target.checked
+                                               },
+                                           }
+                                       }))}
+                                       title={"Ajouter un séparateur haut"}
+                                />
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <input type={'color'}
+                                       value={((editedTheme.data.top?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.top?.borderColor ?? '#000000')}
+                                       disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                       id={'tep-top-borderColor'}
+                                       name={'tep-top-borderColor'}
+                                       onChange={(e) => setEditedTheme(old => ({
+                                           ...old,
+                                           data: {
+                                               ...old.data,
+                                               top: {
+                                                   ...(old.data.top ?? {}),
+                                                   borderColor: e.target.value
+                                               },
+                                           }
+                                       }))}
+                                       title={"Couleur de la bordure"}
+                                />
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <select id={'tep-top-borderSize'}
+                                        disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                        name={'tep-top-borderSize'}
+                                        value={editedTheme.data.top?.borderSize ?? 1}
+                                        onChange={(e) => setEditedTheme(old => ({
+                                            ...old,
+                                            data: {
+                                                ...old.data,
+                                                top: {
+                                                    ...(old.data.top ?? {}),
+                                                    borderSize: parseInt(e.target.value)
+                                                },
+                                            }
+                                        }))}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <select id={'tep-top-borderStyle'}
+                                        disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                        name={'tep-top-borderStyle'}
+                                        value={editedTheme.data.top?.borderStyle ?? 'solid'}
+                                        onChange={(e) => setEditedTheme(old => ({
+                                            ...old,
+                                            data: {
+                                                ...old.data,
+                                                top: {
+                                                    ...(old.data.top ?? {}),
+                                                    borderStyle: e.target.value
+                                                },
+                                            }
+                                        }))}
+                                >
+                                    <option value={'solid'}>—</option>
+                                    <option value={'dotted'}>…</option>
+                                    <option value={'dashed'}>┄</option>
+                                </select>
+                            </div>
                         </div>
-                        <div className={'tep-settings_row-el'}>
-                            <input type={'color'} value={((editedTheme.data.top?.border ?? 'none') === 'none') ? '#eeeeee' : (editedTheme.data.top?.borderColor ?? '#000000')} disabled={(editedTheme.data.top?.border ?? 'none') === 'none'}
-                                   id={'tep-top-borderColor'}
-                                   name={'tep-top-borderColor'}
-                                   onChange={(e) => setEditedTheme(old => ({
-                                       ...old,
-                                       data: {
-                                           ...old.data,
-                                           top: {
-                                               ...(old.data.top ?? {}),
-                                               borderColor: e.target.value
-                                           },
-                                       }
-                                   }))}
-                                   title={"Couleur de la bordure"}
-                            />
+                    </>}
+
+                    {shownCount > 1 && <>
+                    {/* Botttom border */}
+                        <div className={'tep-settings_row'} style={{width: '100%'}}>
+                            <div className={'tep-settings_row-el'}>
+                                <img src={borderTopIcon} alt={"Ajouter un séparateur bas"} width={16} height={16}/>
+                                <input type={'checkbox'}
+                                       checked={(editedTheme.data.bottom?.border ?? false) === true}
+                                       id={'tep-bottom-border'}
+                                       name={'tep-bottom-border'}
+                                       onChange={(e) => setEditedTheme(old => ({
+                                           ...old,
+                                           data: {
+                                               ...old.data,
+                                               bottom: {
+                                                   ...(old.data.bottom ?? {}),
+                                                   border: e.target.checked
+                                               },
+                                           }
+                                       }))}
+                                       title={"Ajouter un séparateur haut"}
+                                />
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <input type={'color'}
+                                       value={((editedTheme.data.bottom?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.bottom?.borderColor ?? '#000000')}
+                                       disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                       id={'tep-bottom-borderColor'}
+                                       name={'tep-bottom-borderColor'}
+                                       onChange={(e) => setEditedTheme(old => ({
+                                           ...old,
+                                           data: {
+                                               ...old.data,
+                                               bottom: {
+                                                   ...(old.data.bottom ?? {}),
+                                                   borderColor: e.target.value
+                                               },
+                                           }
+                                       }))}
+                                       title={"Couleur de la bordure"}
+                                />
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <select id={'tep-bottom-borderSize'}
+                                        disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                        name={'tep-bottom-borderSize'}
+                                        value={editedTheme.data.bottom?.borderSize ?? 1}
+                                        onChange={(e) => setEditedTheme(old => ({
+                                            ...old,
+                                            data: {
+                                                ...old.data,
+                                                bottom: {
+                                                    ...(old.data.bottom ?? {}),
+                                                    borderSize: parseInt(e.target.value)
+                                                },
+                                            }
+                                        }))}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                            <div className={'tep-settings_row-el'}>
+                                <select id={'tep-bottom-borderStyle'}
+                                        disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                        name={'tep-bottom-borderStyle'}
+                                        value={editedTheme.data.bottom?.borderStyle ?? 'solid'}
+                                        onChange={(e) => setEditedTheme(old => ({
+                                            ...old,
+                                            data: {
+                                                ...old.data,
+                                                bottom: {
+                                                    ...(old.data.bottom ?? {}),
+                                                    borderStyle: e.target.value
+                                                },
+                                            }
+                                        }))}
+                                >
+                                    <option value={'solid'}>—</option>
+                                    <option value={'dotted'}>…</option>
+                                    <option value={'dashed'}>┄</option>
+                                </select>
+                            </div>
                         </div>
-                        <div className={'tep-settings_row-el'}>
-                            <select id={'tep-top-borderSize'}  disabled={(editedTheme.data.top?.border ?? 'none') === 'none'}
-                                    name={'tep-top-borderSize'}
-                                    value={editedTheme.data.top?.borderSize ?? 1}
-                                    onChange={(e) => setEditedTheme(old => ({
-                                        ...old,
-                                        data: {
-                                            ...old.data,
-                                            top: {
-                                                ...(old.data.top ?? {}),
-                                                borderSize: e.target.value
-                                            },
-                                        }
-                                    }))}
-                            >
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                        </div>
-                    </div>
+                    </>}
                 </div>
                 <div className={'tep-preview'} style={{width: `calc(${sample.width}mm + 1px + 50px)`}}>
                     <div className={'tep-module'} style={{

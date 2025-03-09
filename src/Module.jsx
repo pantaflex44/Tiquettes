@@ -163,14 +163,20 @@ function Module({
             ? <img className="module_iconfree" src={editIcon} title="Editer le module" alt="Editer le module"
                    onClick={() => onEdit(item)}/>
             : (!isFree && themedModule
-                    ? <div className={`module_content half-${item.half}`.trim()} style={{
+                    ? <div className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''}`.trim()} style={{
                         width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         marginLeft: item.half === "left" ? `calc(${style['--sw']} / 2)` : '0px',
                         marginRight: item.half === "right" ? `calc(${style['--sw']} / 2)` : '0px',
                         borderLeftWidth: item.half === "left" ? '1px' : '0px',
-                        borderRightWidth: item.half === "right" ? '1px' : '0px'
+                        borderRightWidth: item.half === "right" ? '1px' : '0px',
+                        '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
+                        '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
+                        '--topSeparatorColor': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderColor ?? '#000000') : 'initial',
+                        '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
+                        '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
+                        '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderColor ?? '#000000') : 'initial',
                     }}>{
                         cloneElement(themedModule,
                             {

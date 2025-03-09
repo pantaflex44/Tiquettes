@@ -20,6 +20,7 @@
 
 import ThemeEditorPartColumnTitle from "./ThemeEditorPartColumnTitle.jsx";
 import TextPartStyleEditor from "./TextPartStyleEditor.jsx";
+import IconPartStyleEditor from "./IconPartStyleEditor.jsx";
 
 export default function ThemeEditorPartColumn({
                                                   propName,
@@ -40,11 +41,18 @@ export default function ThemeEditorPartColumn({
                                         shownCount={shownCount}
                                         down={down}
                                         up={up}
-            />
-            <TextPartStyleEditor propName={propName}
-                                 editedTheme={editedTheme}
-                                 setEditedTheme={setEditedTheme}
-                                 positions={positions}/>
+            />{
+            propName === 'icon'
+                ? <IconPartStyleEditor propName={propName}
+                                       editedTheme={editedTheme}
+                                       setEditedTheme={setEditedTheme}
+                                       positions={positions}/>
+                : <TextPartStyleEditor propName={propName}
+                                       editedTheme={editedTheme}
+                                       setEditedTheme={setEditedTheme}
+                                       positions={positions}/>
+        }
         </div>
-    </>;
+    </>
+        ;
 }
