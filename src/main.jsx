@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react'
+import {useEffect} from 'react'
 import ReactDOM from 'react-dom/client'
 
 import App from './App.jsx'
