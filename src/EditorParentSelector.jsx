@@ -20,7 +20,9 @@
 
 import {Fragment} from "react";
 
-export default function EditorParentSelector({id, value, currentModuleId, filteredModulesListBySchemaFuncs, schemaFunctions, onChange = null}) {
+import schemaFunctions from './schema_functions.json';
+
+export default function EditorParentSelector({id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null}) {
     return <select id={id} name={id} value={value}
                    onChange={(e) => {
                        if (onChange) onChange(e.target.value)

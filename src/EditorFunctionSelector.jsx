@@ -17,8 +17,9 @@
  */
 
 /* eslint-disable react/prop-types */
+import schemaFunctions from './schema_functions.json';
 
-export default function EditorFunctionSelector({id, value, schemaFunctions, onChange = null}) {
+export default function EditorFunctionSelector({id, value, onChange = null}) {
     return <select id={id} name={id} value={value}
                    onChange={(e) => {
                        if (onChange) onChange(e.target.value)

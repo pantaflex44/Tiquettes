@@ -20,10 +20,11 @@
 
 import {useMemo} from "react";
 
+import schemaFunctions from './schema_functions.json';
+
 export default function SchemaSymbol({
                                          switchboard,
                                          module,
-                                         schemaFunctions,
                                          onEdit = null,
                                          monitor = {}
                                      }) {

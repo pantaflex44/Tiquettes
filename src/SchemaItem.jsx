@@ -22,6 +22,8 @@ import "./Schema.css";
 
 import {Fragment} from "react";
 
+import schemaFunctions from './schema_functions.json';
+
 import SchemaSymbol from "./SchemaSymbol.jsx";
 import SchemaDescription from "./SchemaDescription.jsx";
 
@@ -32,7 +34,6 @@ export default function SchemaItem({
                                        baseId = null,
                                        isFirst = false,
                                        childs,
-                                       schemaFunctions,
                                        onEditSymbol,
                                        monitor = {}
                                    }) {
@@ -48,14 +49,14 @@ export default function SchemaItem({
                 {item.hasNext && <div className="schemaItemNextLine"></div>}
 
                 <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module}
-                              schemaFunctions={schemaFunctions} onEdit={(module) => onEditSymbol(module)}
+                              onEdit={(module) => onEditSymbol(module)}
                               monitor={monitor}/>
 
                 {item.isLast ? (
                     <SchemaDescription switchboard={switchboard} module={item.module}/>
                 ) : (
                     <div className="schemaItemChilds">
-                        <SchemaItem switchboard={switchboard} childs={item.childs} schemaFunctions={schemaFunctions}
+                        <SchemaItem switchboard={switchboard} childs={item.childs}
                                     baseId={baseId ?? item.module.id} onEditSymbol={(module) => onEditSymbol(module)}
                                     monitor={monitor}/>
                     </div>

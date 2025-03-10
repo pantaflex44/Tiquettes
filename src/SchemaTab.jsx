@@ -42,7 +42,6 @@ export default function SchemaTab({
                                       switchboard,
                                       setSwitchboard,
                                       printOptions,
-                                      schemaFunctions,
                                       reassignModules,
                                       onEditSymbol = null,
                                   }) {
@@ -524,7 +523,7 @@ export default function SchemaTab({
 
             <div className="schemaGrid">
                 <div className="schemaItemSeparator first"></div>
-                <SchemaItem switchboard={switchboard} childs={tree.childs} schemaFunctions={schemaFunctions}
+                <SchemaItem switchboard={switchboard} childs={tree.childs}
                             isFirst={true} parentIsFirst={true} onEditSymbol={(module) => handleEditSymbol(module)}
                             monitor={monitor}/>
 

@@ -17,7 +17,9 @@
  */
 
 /* eslint-disable react/prop-types */
-import {Fragment, useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+
+import schemaFunctions from './schema_functions.json';
 
 import switchboardIcon from './assets/project.svg';
 import schemaIcon from './assets/schema.svg';
@@ -41,7 +43,6 @@ export default function Editor({
                                    theme,
                                    switchboard,
                                    stepSize,
-                                   schemaFunctions,
 
                                    getFilteredModulesBySchemaFuncs,
                                    getModuleById,
@@ -257,8 +258,7 @@ export default function Editor({
                             <label htmlFor={`editor_func_${editor.currentModule.id.trim()}`}>Fonction</label>
                             <EditorFunctionSelector id={`editor_func_${editor.currentModule.id.trim()}`}
                                                     value={editor.currentModule.func}
-                                                    onChange={(value) => onUpdateModuleEditor({func: value})}
-                                                    schemaFunctions={schemaFunctions}/>
+                                                    onChange={(value) => onUpdateModuleEditor({func: value})} />
                         </div>
 
                         {editor.currentModule.func && <>
@@ -268,8 +268,7 @@ export default function Editor({
                                                       value={editor.currentModule.parentId}
                                                       currentModuleId={editor.currentModule.id}
                                                       filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                      onChange={(value) => onUpdateModuleEditor({parentId: value})}
-                                                      schemaFunctions={schemaFunctions}/>
+                                                      onChange={(value) => onUpdateModuleEditor({parentId: value})}/>
                             </div>
                             <div className="popup_row" style={{
                                 '--left_column_size': '100px',
@@ -371,7 +370,7 @@ export default function Editor({
                                     marginBlock: '1em',
                                     overflowY: 'hidden'
                                 }}>
-                                    <SchemaSymbol module={editor.currentModule} schemaFunctions={schemaFunctions}/>
+                                    <SchemaSymbol module={editor.currentModule} />
                                 </div>
                             </div>
                         )}

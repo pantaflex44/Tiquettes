@@ -25,6 +25,7 @@ import './app.css';
 import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
+import schemaFunctions from './schema_functions.json';
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -67,6 +68,7 @@ function App() {
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
+    const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -174,81 +176,6 @@ function App() {
         summaryColumnLabel: true,
         summaryColumnDescription: true,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
-
-    const schemaFunctions = {
-        sw: {
-            name: 'Interrupteur sectionneur',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: true,
-        },
-        id: {
-            name: 'Interrupteur différentiel',
-            hasType: true,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: true,
-        },
-        dd: {
-            name: 'Disjoncteur différentiel',
-            hasType: true,
-            hasCrb: true,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: true,
-        },
-        q: {
-            name: 'Disjoncteur',
-            hasType: false,
-            hasCrb: true,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: true,
-        },
-        i: {
-            name: 'Interrupteur',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: true,
-        },
-        c: {
-            name: 'Commande',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: false,
-            hasContacts: false,
-            supportContacts: false,
-        },
-        kc: {
-            name: 'Contacteur',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: false,
-            hasContacts: true,
-            supportContacts: false,
-        },
-        o: {
-            name: 'Autre',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-            hasContacts: false,
-            supportContacts: false,
-        },
-    };
 
     const setDocumentTitle = (title) => {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
@@ -1166,13 +1093,8 @@ function App() {
         const used = switchboard.rows.map((row) => row.filter((module) => !module.free).reduce((a, b) => a + b.span, 0)).reduce((a, b) => a + b, 0);
         const total = switchboard.rows.length * switchboard.stepsPerRows;
         const percentFree = Math.round(100 - ((used / total) * 100));
-        result = {
-            ...result,
-            infos: {
-                ...result.infos,
-                Enveloppe: `${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`
-            }
-        };
+
+        setFreeSpaceMessage(`${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`);
 
         let e_errors = (result.errors ?? [])['Enveloppe'] ?? [];
         if (percentFree < 20) {
@@ -1440,7 +1362,8 @@ function App() {
 
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef}
-                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
+                 title={freeSpaceMessage}>
                 <div className="tabPageBand notprintable">
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
@@ -1668,7 +1591,6 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
                 reassignModules={reassignModules}
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
@@ -1679,7 +1601,6 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
             />
 
             {/** POPUPS **/}
@@ -1688,7 +1609,6 @@ function App() {
                 theme={theme}
                 switchboard={switchboard}
                 stepSize={switchboard.stepSize}
-                schemaFunctions={schemaFunctions}
                 getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
                 getModuleById={getModuleById}
                 editor={editor}
