@@ -79,7 +79,7 @@ function Module({
     const [themeUpdated, setThemeUpdated] = useState(false);
     useEffect(() => {
         setCurrentTheme((old) => {
-            if (old.name !== theme.name) {
+            if (JSON.stringify(old) !== JSON.stringify(theme)) {
                 setThemeUpdated(true);
                 return theme;
             }
@@ -89,17 +89,22 @@ function Module({
     }, [theme]);
 
     useEffect(() => {
-        const defaultThemeName = themesList.filter((t) => t.default)[0].name;
+        const defaultThemeObj = themesList.filter((t) => t.default)[0];
+        const defaultThemeName = defaultThemeObj.name;
         const update = JSON.stringify(item);
 
-        const getTheme = (name) => import(`./themes/${name}/Content.jsx`);
-        const applyTheme = (Content) => {
+        const getTheme = (name) => {
+            const n = name.split('|');
+            return import(`./themes/${n[0]}/Content.jsx`);
+        };
+        const applyTheme = (Content, data) => {
             setThemedModule(() => {
                 setBeforeUpdate(update);
 
                 return (Content ? (
                     <Content
                         item={item}
+                        data={data}
                     />
                 ) : null);
             });
@@ -109,10 +114,10 @@ function Module({
         if (themeUpdated || beforeUpdate !== update) {
             if (themeUpdated) setThemeUpdated(false);
             getTheme(currentTheme.name)
-                .then((selectedTheme) => applyTheme(selectedTheme.default))
+                .then((selectedTheme) => applyTheme(selectedTheme.default, currentTheme.data))
                 .catch(() => {
                     getTheme(defaultThemeName)
-                        .then((defaultTheme) => applyTheme(defaultTheme.default))
+                        .then((defaultTheme) => applyTheme(defaultTheme.default, defaultThemeObj.data))
                         .catch((err) => {
                             console.error(err);
                         });
@@ -122,7 +127,7 @@ function Module({
     }, [beforeUpdate, item, style, currentTheme, themeUpdated, canPaste]);
 
     return item && <div
-        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${hasClipboard && !canPaste ? 'disabled' : ''}`.trim()}
+        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo ? 'demo' : ''} ${hasClipboard && !canPaste ? 'disabled' : ''}`.trim()}
         id={`module_${rowPosition}_${modulePosition}`}
         data-row={rowPosition}
         style={{
@@ -130,10 +135,10 @@ function Module({
             "--sw": `calc((${style['--sw']} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
             "--nsw": style['--sw'],
             color: item.free ? 'darkgray' : 'black',
-            overflowX: isDemo ? 'hidden' : 'initial',
+            overflowX: isDemo ? 'hidden' : 'initial'
         }}
         tabIndex={!canPaste && !hasClipboard ? 0 : null}
-        title={`${item.id ? '(' + item.id + ') ' : ''}R${rowPosition} | P${modulePosition} | L${item.span}`}
+        title={!isDemo ? `${item.id ? '(' + item.id + ') ' : ''}R${rowPosition} | P${modulePosition} | L${item.span}` : "Module de démonstration"}
         ref={moduleRef}
         data-id={`${rowPosition}-${modulePosition}`}
         onKeyUp={(e) => {
@@ -158,20 +163,24 @@ function Module({
             ? <img className="module_iconfree" src={editIcon} title="Editer le module" alt="Editer le module"
                    onClick={() => onEdit(item)}/>
             : (!isFree && themedModule
-                    ? <div className={`module_content half-${item.half}`.trim()} style={{
+                    ? <div className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''}`.trim()} style={{
                         width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                         marginLeft: item.half === "left" ? `calc(${style['--sw']} / 2)` : '0px',
                         marginRight: item.half === "right" ? `calc(${style['--sw']} / 2)` : '0px',
                         borderLeftWidth: item.half === "left" ? '1px' : '0px',
-                        borderRightWidth: item.half === "right" ? '1px' : '0px'
+                        borderRightWidth: item.half === "right" ? '1px' : '0px',
+                        '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
+                        '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
+                        '--topSeparatorColor': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderColor ?? '#000000') : 'initial',
+                        '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
+                        '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
+                        '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderColor ?? '#000000') : 'initial',
                     }}>{
                         cloneElement(themedModule,
                             {
-                                style: {
-                                    ...style,
-                                }
+                                style: {...style},
                             }
                         )
                     }</div>
@@ -233,17 +242,19 @@ function Module({
         {
             !hasClipboard && (canEdit || canCopy) && <div className="module_bottom">
                 {onCopy &&
-                    <div className="tool copy" title="Copier ce module" onClick={() => onCopy(item)}><img src={copyIcon}
-                                                                                                          alt="Copier"
-                                                                                                          width={14}
-                                                                                                          height={14}
-                                                                                                          style={{marginTop: '2px'}}/>
+                    <div className="tool copy" title="Copier ce module" onClick={() => onCopy(item)}>
+                        <img src={copyIcon}
+                             alt="Copier"
+                             width={14}
+                             height={14}
+                             style={{marginTop: '2px'}}/>
                     </div>}
                 {canEdit &&
-                    <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}><img src={editIcon}
-                                                                                                         alt="Editer"
-                                                                                                         width={20}
-                                                                                                         height={20}/>
+                    <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}>
+                        <img src={editIcon}
+                             alt="Editer"
+                             width={20}
+                             height={20}/>
                     </div>}
             </div>
         }
@@ -251,7 +262,14 @@ function Module({
         {
             canPaste && <div className="module_bottom" title="Cliquer ici pour annuler">
                 <div className="tool paste" onClick={() => cancelPaste()}
-                     style={{width: '100%', height: '100%', display: 'inline-flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                     style={{
+                         width: '100%',
+                         height: '100%',
+                         display: 'inline-flex',
+                         flexDirection: 'row',
+                         justifyContent: 'center',
+                         alignItems: 'center'
+                     }}>
                     <img src={cancelredIcon} alt="Annuler" width={16} height={16} style={{marginTop: '-4px'}}/>
                 </div>
             </div>

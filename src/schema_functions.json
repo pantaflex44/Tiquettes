@@ -1,0 +1,74 @@
+{
+    "sw": {
+        "name": "Interrupteur sectionneur",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": true
+    },
+    "id": {
+        "name": "Interrupteur différentiel",
+        "hasType": true,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": true
+    },
+    "dd": {
+        "name": "Disjoncteur différentiel",
+        "hasType": true,
+        "hasCrb": true,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": true
+    },
+    "q": {
+        "name": "Disjoncteur",
+        "hasType": false,
+        "hasCrb": true,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": true
+    },
+    "i": {
+        "name": "Interrupteur",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": true
+    },
+    "c": {
+        "name": "Commande",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasContacts": false,
+        "supportContacts": false
+    },
+    "kc": {
+        "name": "Contacteur",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasContacts": true,
+        "supportContacts": false
+    },
+    "o": {
+        "name": "Autre",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasContacts": false,
+        "supportContacts": false
+    }
+}

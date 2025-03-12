@@ -1,6 +1,21 @@
 # Changelog
 
 
+## [2.1.0] - 2025-03-12
+
+### Ajouts
+
+- Ajout des symboles, "Telerupteur" et "Parafoudre".
+- Ajout d'un éditeur pour personnaliser le thème de ses étiquettes.
+- Ajout de 2 nouveaux thèmes personnalisés dans la rubrique "Créations": "GoldenWine", "Orange is the new dark".
+
+### Corrections
+
+- Prise en compte de la règle de l'amont dans le monitoring des interrupteurs différentiels. ([Issue #9](https://github.com/pantaflex44/Tiquettes/issues/9) par [karimLG](https://github.com/karimLG))
+- Modification de la représentation des contacteurs (J/N, télérupteurs, minuteries, etc). Il est désormais possible d'asservir un départ avec un contacteur précédement ajouté. ([Issue #10](https://github.com/pantaflex44/Tiquettes/issues/10) par [karimLG](https://github.com/karimLG))
+- Correction d'un bug empêchant le ré-assignement automatique des identifiants parents lors de la modification de l'identifiant d'un module.
+
+
 
 ## [2.0.5] - 2025-02-12
 
@@ -22,7 +37,7 @@
 
 ### Corrections
 
-- Correction du symbole 'Interrupteur Sectionneur'. Erreur relevée par zoliaaz (https://github.com/zoliaaz)
+- Correction du symbole 'Interrupteur Sectionneur'. ([Issue #7](https://github.com/pantaflex44/Tiquettes/issues/7) par [zoliaaz](https://github.com/zoliaaz))
 
 
 

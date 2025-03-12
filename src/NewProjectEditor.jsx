@@ -116,7 +116,9 @@ export default function NewProjectEditor({
             <div className="popup_row span light"
                  style={{'--left_column_size': '150px', alignItems: 'center', marginTop: '2em', marginBottom: '5em'}}>
                 <div>
-                    La hauteur des étiquettes dépend de l&#39;espace disponible proposé par l&#39;enveloppe choisie. Chaque marque / modèle possède ses propres dimensions.<br />Pour garantir une insertion correcte des étiquettes imprimées, il est conseillé de <b>retirer 1mm de la hauteur mesurée</b>.
+                    La hauteur des étiquettes dépend de l&#39;espace disponible proposé par l&#39;enveloppe choisie.
+                    Chaque marque / modèle possède ses propres dimensions.<br/>Pour garantir une insertion correcte des
+                    étiquettes imprimées, il est conseillé de <b>retirer 1mm de la hauteur mesurée</b>.
                     <ul>
                         <li><b>Schneider Resi 9</b> : 30mm → 29mm</li>
                         <li><b>Schneider PrimaSeT S</b> : 24mm → 23mm</li>

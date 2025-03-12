@@ -1,5 +1,144 @@
 [
     {
+        "title": "Mon thème personnalisé...",
+        "name": "custom",
+        "default": false,
+        "group": "Créations",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 2,
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
+    },
+    {
+        "title": "Orange is the new dark",
+        "name": "custom|f20c18fd-b850-4f2d-9cb2-31be424d2632",
+        "default": false,
+        "group": "Créations",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "gray",
+                "color": "white"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 50,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "white",
+                "color": "#333333"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 2,
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "darkorange",
+                "color": "white"
+            }
+        }
+    },
+    {
+        "title": "GoldenWine",
+        "name": "custom|312358a8-8334-46d5-8a15-d5c8fc8d2665",
+        "default": false,
+        "group": "Créations",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#6e1111",
+                "color": "#ffffff"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000",
+                "backgroundColor": "#fff5f5"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 2,
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#fff5f5",
+                "color": "#000000"
+            },
+            "bottom": {
+                "border": false
+            },
+            "top": {
+                "border": true,
+                "borderSize": 3,
+                "borderStyle": "solid",
+                "borderColor": "#c4c700"
+            }
+        }
+    },
+    {
         "title": "Identifiant, pictogramme et descriptif",
         "name": "simple",
         "default": false,
@@ -15,13 +154,13 @@
         "title": "Pictogramme et descriptif seulement",
         "name": "minimal",
         "default": false,
-        "group": "Minimal"
+        "group": "Simple"
     },
     {
         "title": "Petit pictogramme et grand descriptif",
         "name": "small",
         "default": false,
-        "group": "Minimal"
+        "group": "Simple"
     },
     {
         "title": "Standard",

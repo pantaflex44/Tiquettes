@@ -22,7 +22,6 @@ import "./welcomePopup.css";
 
 import projectIcon from "./assets/project.svg";
 import importIcon from "./assets/upload.svg";
-import modelsIcon from "./assets/modelref.svg";
 
 import Popup from "./Popup.jsx";
 

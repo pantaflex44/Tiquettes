@@ -36,6 +36,7 @@
     font-family: Arial, sans-serif;
     font-weight: 500;
     transition: all 0.1s ease-in-out;
+    background-color: #fff;
 }
 
 .module .module_content {
@@ -58,6 +59,14 @@
     font-family: Arial, sans-serif;
     font-weight: 500;
     transition: all 0.1s ease-in-out;
+    overflow: hidden;
+
+    --topSeparatorSize: 1px;
+    --topSeparatorColor: #000000;
+    --topSeparatorStyle: solid;
+    --bottomSeparatorSize: 1px;
+    --bottomSeparatorColor: #000000;
+    --bottomSeparatorStyle: solid;
 }
 
 .module .module_content.half-left {
@@ -72,11 +81,23 @@
     border-right-color: darkgray;
 }
 
+.module .module_content.withTopSeparator >*[data-order="top"] {
+    border-bottom-width: var(--topSeparatorSize);
+    border-bottom-color: var(--topSeparatorColor);
+    border-bottom-style: var(--topSeparatorStyle);
+}
+
+.module .module_content.withBottomSeparator >*[data-order="bottom"] {
+    border-top-width: var(--bottomSeparatorSize);
+    border-top-color: var(--bottomSeparatorColor);
+    border-top-style: var(--bottomSeparatorStyle);
+}
+
 .module:not(:last-of-type) {
     border-right: 1px solid darkgray;
 }
 
-.module:hover {
+.module:not(.demo):hover {
     background-color: #f5f5f5;
 }
 

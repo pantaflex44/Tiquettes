@@ -25,6 +25,7 @@ import './app.css';
 import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
+import schemaFunctions from './schema_functions.json';
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -46,12 +47,14 @@ import versionIcon from "./assets/versions.svg";
 import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
+import themeSettingsIcon from "./assets/theme_settings.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
 import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
+import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 
 function App() {
     const importRef = useRef();
@@ -64,6 +67,8 @@ function App() {
     const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
+    const [themeEditor, setThemeEditor] = useState(false);
+    const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -79,7 +84,7 @@ function App() {
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
-    const stepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
+    const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
     const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
     const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT);
@@ -106,6 +111,7 @@ function App() {
         coef: 0.5,
         pole: "",
         parentId: "",
+        kcId: "",
         free: true,
         span: 1,
         half: "none",
@@ -127,12 +133,13 @@ function App() {
             icon: "swb_puissance.svg",
             id: "DB",
             parentId: "",
+            kcId: "",
             pole: "1P+N",
             sensibility: "500mA",
             coef: 1,
             span: 4,
             text: "Disjonteur de branchement",
-            type: "S"
+            type: "S",
         }
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType, defaultVRef]);
 
@@ -154,7 +161,7 @@ function App() {
         appversion: pkg.version,
         height: defaultHRow,
         stepsPerRows: defaultStepsPerRows,
-        stepSize: stepSize,
+        stepSize: defaultStepSize,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
         db: {...defaultProjectProperties.db},
         withDb: false,
@@ -169,72 +176,6 @@ function App() {
         summaryColumnLabel: true,
         summaryColumnDescription: true,
     }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
-
-    const schemaFunctions = {
-        sw: {
-            name: 'Interrupteur sectionneur',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        id: {
-            name: 'Interrupteur différentiel',
-            hasType: true,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        dd: {
-            name: 'Disjoncteur différentiel',
-            hasType: true,
-            hasCrb: true,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        q: {
-            name: 'Disjoncteur',
-            hasType: false,
-            hasCrb: true,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        i: {
-            name: 'Interrupteur',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        c: {
-            name: 'Commande',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: false,
-        },
-        k: {
-            name: 'Relai (Bobine)',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: false,
-        },
-        kc: {
-            name: 'Relai (Contact)',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-        },
-        o: {
-            name: 'Autre',
-            hasType: false,
-            hasCrb: false,
-            hasCurrent: true,
-            hasPole: true,
-        },
-    };
 
     const setDocumentTitle = (title) => {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
@@ -311,6 +252,27 @@ function App() {
         return {...reIndentedSwb, rows};
     }, [defaultModuleId]);
 
+    const reassignAllParents = (originalId, newId) => {
+        if (originalId && originalId !== newId) {
+            setSwitchboard((old) => {
+                let rows = old.rows.map((row) => {
+                    return row.map((module) => {
+                        let mm = {...module};
+                        if (module.parentId === originalId) {
+                            mm = {...mm, parentId: newId};
+                        }
+                        if (module.kcId === originalId) {
+                            mm = {...mm, kcId: newId};
+                        }
+                        return mm;
+                    });
+                });
+
+                return modulesAutoId({...old, rows});
+            });
+        }
+    };
+
     const reassignModules = () => {
         if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
             const swb = modulesAutoId(switchboard);
@@ -346,13 +308,26 @@ function App() {
             // re-assign parents
             rows = rows.map((row) => {
                 return row.map((module) => {
+                    let mm = {...module};
                     if (from[module.parentId]) {
-                        return {
-                            ...module,
+                        mm = {
+                            ...mm,
                             parentId: from[module.parentId],
                         };
                     }
-                    return module;
+
+                    mm = {
+                        ...mm,
+                        kcId: (mm.kcId ?? "").split('|')
+                            .map(k => {
+                                if (from[k]) return k;
+                                return null
+                            })
+                            .filter(k => k !== null)
+                            .join('|'),
+                    };
+
+                    return mm;
                 });
             });
 
@@ -391,10 +366,10 @@ function App() {
                 summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                 // <2.0.5
-                stepSize: swb.stepSize ?? stepSize,
+                stepSize: swb.stepSize ?? defaultStepSize,
             };
 
-            console.log("Switchboard loaded from this session.");
+            //console.log("Switchboard loaded from this session.");
 
             return modulesAutoId({...swb});
         }
@@ -449,7 +424,7 @@ function App() {
                 prjname: name,
                 height: height,
                 stepsPerRows,
-                stepSize,
+                stepSize: defaultStepSize,
                 rows: createRow(stepsPerRows, rowsCount)
             });
         });
@@ -459,7 +434,7 @@ function App() {
         setDocumentTitle(name);
         setTab(1);
         scrollToProject();
-    }, [defaultTheme, defaultPrintOptions, modulesAutoId, defaultProject, createRow]);
+    }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
         importRef.current.value = "";
@@ -536,7 +511,7 @@ function App() {
                         summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
                         summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                         // <2.0.5
-                        stepSize: swb.stepSize ?? stepSize,
+                        stepSize: swb.stepSize ?? defaultStepSize,
 
                         rows
                     };
@@ -588,12 +563,15 @@ function App() {
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
         let currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+        // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
         let hasBlankId = false;
         if (!currentModule.id || currentModule.id.trim() === '') {
             currentModule = {...currentModule, id: lastFreeId};
             hasBlankId = true;
         }
 
+        // récupère le module précédent
         let pr = rowIndex;
         let pm = moduleIndex - 1;
         if (pm < 0) {
@@ -602,13 +580,28 @@ function App() {
                 pm = switchboard.rows[pr].length - 1;
             }
         }
-
         let prevModule = null;
         if (pr >= 0 && pm >= 0) {
             prevModule = switchboard.rows[pr][pm];
         }
 
-        setEditor({rowIndex, moduleIndex, currentModule, prevModule, theme, tabPage, errors: [], hasBlankId});
+        // si le parent du module à éditer est inconnu, on propose celui du module précédent
+        if (!currentModule.parentId) {
+            currentModule = {...currentModule, parentId: prevModule?.parentId};
+        }
+
+        // edition du module
+        setEditor({
+            rowIndex,
+            moduleIndex,
+            originalModule: {...currentModule},
+            currentModule,
+            prevModule,
+            theme,
+            tabPage,
+            errors: [],
+            hasBlankId
+        });
     };
 
     const updateModuleEditor = (data) => {
@@ -625,8 +618,8 @@ function App() {
         const icon = editor.currentModule.icon;
         const text = (editor.currentModule.text ?? "").trim();
         const desc = (editor.currentModule.desc ?? "").trim();
-
         const parentId = (editor.currentModule.parentId ?? "").trim();
+        const kcId = (editor.currentModule.kcId ?? "").trim();
         const func = (editor.currentModule.func ?? "").trim();
         const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
         const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
@@ -662,6 +655,7 @@ function App() {
             return;
         }
 
+        // applique les modifications
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
                 if (i !== editor.rowIndex) return row;
@@ -677,6 +671,7 @@ function App() {
                         text,
                         desc,
                         parentId,
+                        kcId,
                         func,
                         crb,
                         type,
@@ -692,6 +687,9 @@ function App() {
 
             return modulesAutoId({...old, rows});
         });
+
+        // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
+        reassignAllParents(editor.originalModule?.id, id);
 
         setEditor(null);
     }
@@ -932,6 +930,7 @@ function App() {
                         text: clipboard.text,
                         desc: clipboard.desc,
                         parentId: clipboard.parentId,
+                        kcId: clipboard.kcId,
                         func: clipboard.func,
                         crb: clipboard.crb,
                         type: clipboard.type,
@@ -1094,13 +1093,8 @@ function App() {
         const used = switchboard.rows.map((row) => row.filter((module) => !module.free).reduce((a, b) => a + b.span, 0)).reduce((a, b) => a + b, 0);
         const total = switchboard.rows.length * switchboard.stepsPerRows;
         const percentFree = Math.round(100 - ((used / total) * 100));
-        result = {
-            ...result,
-            infos: {
-                ...result.infos,
-                Enveloppe: `${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`
-            }
-        };
+
+        setFreeSpaceMessage(`${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`);
 
         let e_errors = (result.errors ?? [])['Enveloppe'] ?? [];
         if (percentFree < 20) {
@@ -1139,7 +1133,7 @@ function App() {
                 setSwitchboard(updatedProject);
                 setDocumentTitle(updatedProject.prjname);
 
-                console.log("Switchboard saved to this session.");
+                //console.log("Switchboard saved to this session.");
             }
         }, 1000);
 
@@ -1368,7 +1362,8 @@ function App() {
 
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef}
-                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
+                 title={freeSpaceMessage}>
                 <div className="tabPageBand notprintable">
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
@@ -1400,6 +1395,16 @@ function App() {
                                 })}
                             </select>
                         </div>
+                        {theme.name === 'custom' && theme?.data && <div className="tabPageBandCol">
+                            <button style={{height: '34px'}}
+                                    title="Modifier le thème."
+                                    onClick={() => {
+                                        setThemeEditor(true)
+                                    }}>
+                                <img src={themeSettingsIcon} alt="Modifier le thème."
+                                     width={22} height={22}/>
+                            </button>
+                        </div>}
                     </div>
 
                     <div className="tabPageBandGroup">
@@ -1411,6 +1416,7 @@ function App() {
                         </div>
                         <div className="tabPageBandCol">
                             <input type="range" min={heightMin} max={heightMax} step={1}
+                                   style={{width: '100px'}}
                                    value={switchboard.height} onChange={(e) => {
                                 const value = parseInt(e.target.value);
                                 if (value >= heightMin) setSwitchboard((old) => ({...old, height: value}));
@@ -1430,10 +1436,13 @@ function App() {
                         </div>
                         <div className="tabPageBandCol">
                             <select
-                                value={switchboard.stepSize ?? stepSize}
+                                value={switchboard.stepSize ?? defaultStepSize}
                                 onChange={(e) => {
                                     const value = parseFloat(e.target.value);
-                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({...old, stepSize: value}));
+                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({
+                                        ...old,
+                                        stepSize: value
+                                    }));
                                 }}
                                 style={{
                                     maxWidth: '100%',
@@ -1582,7 +1591,6 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
                 reassignModules={reassignModules}
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
@@ -1593,7 +1601,6 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
-                schemaFunctions={schemaFunctions}
             />
 
             {/** POPUPS **/}
@@ -1602,7 +1609,6 @@ function App() {
                 theme={theme}
                 switchboard={switchboard}
                 stepSize={switchboard.stepSize}
-                schemaFunctions={schemaFunctions}
                 getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
                 getModuleById={getModuleById}
                 editor={editor}
@@ -1632,6 +1638,20 @@ function App() {
                 onImportProject={() => {
                     importProjectChooseFile();
                     setWelcome(false);
+                }}
+            />}
+
+            {themeEditor && <ThemeEditorPopup
+                switchboard={switchboard}
+                stepSize={switchboard.stepSize}
+                heightMin={heightMin}
+                heightMax={heightMax}
+                theme={theme}
+                onCancel={() => setThemeEditor(false)}
+                onApply={(editedTheme) => {
+                    setTheme(editedTheme);
+                    setSwitchboard((old) => modulesAutoId({...old, theme: editedTheme}));
+                    setThemeEditor(false);
                 }}
             />}
 

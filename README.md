@@ -11,6 +11,8 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 <img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T61BPPX0)
+
 ---
 
 ![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_sample.png?raw=true)
@@ -240,6 +242,16 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 - Thème Legrand - Couleur - Tertiaire
 
 ![Thème Legrand - Couleur - Tertiaire](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_lgd_cter.png?raw=true)
+
+### Personnaliser la décoration
+
+Tiquettes vous propose de décorer plus finement vos étiquettes en créeant votre propre thème!
+
+![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_button.png?raw=true)
+
+![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_editor.png?raw=true)
+
+Vous pouvez exporter vos thèmes, et même importer les créations d'autruis !
 
 ## Schéma unifilaire
 

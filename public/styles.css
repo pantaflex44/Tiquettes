@@ -112,6 +112,11 @@ body {
     margin-bottom: 1em;
 }
 
+img.disabled {
+    pointer-events: none;
+    filter: invert(95%) sepia(12%) saturate(0%) hue-rotate(167deg) brightness(83%) contrast(98%);
+}
+
 nav.header {
     width: 100%;
     background-color: var(--primary-color);
@@ -356,6 +361,14 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
 select {
     min-height: 34px;
     min-width: 19px;
+}
+
+select[multiple] {
+    padding-block: 0.5em;
+}
+select[multiple] option {
+    min-height: calc(23px - 0.30em);
+    padding-top: 0.30em;
 }
 
 input[type="number"] {
