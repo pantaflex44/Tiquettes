@@ -503,65 +503,6 @@
     background-color: #000;
 }
 
-
-
-@media print {
-    .schema {
-        padding: 0;
-        margin: 0;
-
-        width: 100%;
-    }
-
-    .schemaGrid {
-        overflow-x: hidden;
-        background: none;
-        border-top: 0;
-        margin: 0;
-
-        padding: 0;
-        padding-top: 10mm;
-        padding-inline: 10mm;
-
-        width: calc(100% - 20mm);
-    }
-
-    .schemaItem {
-        flex-wrap: wrap;
-    }
-
-    .schemaItemChilds {
-        flex-wrap: wrap;
-    }
-
-    .schemaTitle {
-        display: block;
-    }
-
-    .schemaCartbridgeContainer {
-        display: block;
-
-        width: calc(100% - 20mm);
-        margin-left: 10mm;
-    }
-
-    .schemaCartbridge {
-        font-size: 80%;
-    }
-
-    .schemaItemSeparator {
-        height: calc(var(--symbol-height) / 2);
-    }
-
-    .schemaItemSeparator.first {
-        height: 0;
-    }
-
-    .schemaGroundLine {
-        width: calc(100% - 20mm - 10mm);
-    }
-}
-
 @keyframes blinker {
     50% {
         opacity: 0;

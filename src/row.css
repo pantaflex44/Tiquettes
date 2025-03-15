@@ -67,7 +67,7 @@
 }
 
 .row_add.disabled {
-    filter: grayscale() opacity(0.3);
+    filter: grayscale(1) opacity(0.3);
     pointer-events: none;
 }
 
@@ -86,33 +86,6 @@
 }
 
 .row_delete_icon.disabled {
-    filter: grayscale() opacity(0.5);
+    filter: grayscale(1) opacity(0.5);
     pointer-events: none;
-}
-
-@media print {
-    .row {
-        width: calc(100% - 10mm);
-        border: 0;
-        border-left: 1px solid lightgray;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0;
-        row-gap: 5mm;
-        justify-content: start;
-        align-items: start;
-    }
-
-    .row_title {
-        margin-bottom: 0;
-        font-weight: normal;
-        color: darkgray;
-    }
-
-    .row_add, .row_delete_icon {
-        display: none;
-    }
-
-
 }

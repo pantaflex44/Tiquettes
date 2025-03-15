@@ -16,21 +16,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-body{
+body {
     accent-color: var(--primary-color);
 }
 
+.footer {
+    margin-top: 1em;
+    font-size: small;
+    color: darkgray
+}
 
-
-@media print {
-    .footer {
-        position: absolute;
-        top: 5mm;
-        right: 10mm;
-        font-size: small;
-    }
-
-    .not_printable {
-        display: none;
-    }
+.footer a {
+    color: var(--primary-color);
 }

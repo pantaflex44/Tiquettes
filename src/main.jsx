@@ -22,21 +22,17 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 
 import './main.css';
+import './print.css';
+
 import * as pkg from '../package.json';
 
 function Footer() {
     return (
-        <div style={{
-            marginTop: '1em',
-            fontSize: 'small',
-            color: 'darkgray',
-        }} className='footer'>{pkg.title} {pkg.version}<span className="not_printable"> | <a href={pkg.repository.url}
-                                                                                             style={{color: 'var(--primary-color)'}}
-                                                                                             target="_blank">{pkg.repository.url}</a> | <a
-            href="https://www.gnu.org/licenses/agpl-3.0.fr.html" style={{color: 'var(--primary-color)'}}
-            target="_blank">{`Licence ${pkg.license}`}</a> | <a href="https://pantaflex44.github.io/Portfolio/"
-                                                                style={{color: 'var(--primary-color)'}}
-                                                                target="_blank">{pkg.author} (pantaflex44)</a> | 2024-2025</span>
+        <div className='footer'>{pkg.title} {pkg.version}<span className="notprintable"> | <a href={pkg.repository.url}
+                                                                                              target="_blank">{pkg.repository.url}</a> | <a
+            href="https://www.gnu.org/licenses/agpl-3.0.fr.html" target="_blank">{`Licence ${pkg.license}`}</a> | <a
+            href="https://pantaflex44.github.io/Portfolio/"
+            target="_blank">{pkg.author} (pantaflex44)</a> | 2024-2025</span>
         </div>
     );
 }
@@ -45,6 +41,7 @@ export default function Main() {
     useEffect(() => {
         if (import.meta.env.VITE_APP_MODE !== "development") {
             const origin = window.location.origin.toLowerCase().trim();
+
             if (![
                 'https://tiquettes.fr',
                 'https://www.tiquettes.fr',

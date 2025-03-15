@@ -1,0 +1,255 @@
+/**
+    Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+    Copyright (C) 2024-2025 Christophe LEMOINE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+@media print {
+
+    /* STYLES.CSS */
+    @page :blank {
+        display: none;
+    }
+
+    #content,
+    #root {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        max-width: initial;
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+        max-width: initial;
+        width: 100%;
+        padding-inline: 0;
+        padding-block: 10mm;
+    }
+
+    .printable {
+        margin-inline: 10mm;
+    }
+
+    nav,
+    h1,
+    .by,
+    .description {
+        display: none;
+    }
+
+    .box {
+        display: none;
+    }
+
+
+    /* APP.CSS */
+    .notprintable {
+        display: none !important;
+    }
+
+    h4, .toolbar, .project {
+        display: none;
+    }
+
+    h3 {
+        margin-top: -2mm;
+        margin-bottom: 5mm;
+    }
+
+    .tabPages {
+        display: none;
+    }
+
+    .switchboard, .summary, .schema,
+    .switchboard.selected, .summary.selected, .schema.selected {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0;
+        margin-block: 0;
+        overflow-x: initial;
+        border: 0;
+        border-radius: initial;
+        padding: 0;
+        height: max-content;
+        opacity: 1;
+    }
+
+    .switchboard_row {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 2mm;
+        width: 100%;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        overflow: hidden;
+        margin-inline: 0;
+        margin-top: 0;
+    }
+
+    .summary, .summary.selected,
+    .schema, .schema.selected {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        page-break-before: always;
+        break-before: page;
+        padding-block: 2em;
+        overflow: hidden;
+    }
+
+    .summary table {
+        margin: 0;
+    }
+
+    .summary {
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .switchboard_row:not(:first-of-type) {
+        padding-top: 7mm;
+    }
+
+    .projectbox, .button_group {
+        display: none;
+    }
+
+    /* MAIN.CSS */
+    .footer {
+        position: absolute;
+        top: 5mm;
+        right: 10mm;
+        font-size: small;
+    }
+
+    /* MODULE.CSS */
+    .module:not(:last-of-type) {
+        border-right: 1px solid lightgray;
+    }
+
+    .module:last-of-type {
+        border-right: 1px solid lightgray;
+    }
+
+    .module {
+        border: 0;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .module .module_content.half-left {
+        border-left-color: lightgray;
+    }
+
+    .module .module_content.half-right {
+        border-right-color: lightgray;
+    }
+
+    .module .module_top,
+    .module .module_bottom,
+    .module .module_iconfree {
+        display: none;
+    }
+
+    .module.noprint {
+        display: none;
+    }
+
+    /* ROW.CSS */
+    .row {
+        width: calc(100% - 10mm);
+        border: 0;
+        border-left: 1px solid lightgray;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+        row-gap: 5mm;
+        justify-content: start;
+        align-items: start;
+    }
+
+    .row_title {
+        margin-bottom: 0;
+        font-weight: normal;
+        color: darkgray;
+    }
+
+    .row_add, .row_delete_icon {
+        display: none;
+    }
+
+    /* SCHEMA.CSS */
+    .schema {
+        padding: 0;
+        margin: 0;
+
+        width: 100%;
+    }
+
+    .schemaGrid {
+        overflow-x: hidden;
+        background: none;
+        border-top: 0;
+        margin: 0;
+
+        padding: 0;
+        padding-top: 10mm;
+        padding-inline: 10mm;
+
+        width: calc(100% - 20mm);
+    }
+
+    .schemaItem {
+        flex-wrap: wrap;
+    }
+
+    .schemaItemChilds {
+        flex-wrap: wrap;
+    }
+
+    .schemaTitle {
+        display: block;
+    }
+
+    .schemaCartbridgeContainer {
+        display: block;
+
+        width: calc(100% - 20mm);
+        margin-left: 10mm;
+    }
+
+    .schemaCartbridge {
+        font-size: 80%;
+    }
+
+    .schemaItemSeparator {
+        height: calc(var(--symbol-height) / 2);
+    }
+
+    .schemaItemSeparator.first {
+        height: 0;
+    }
+
+    .schemaGroundLine {
+        width: calc(100% - 20mm - 10mm);
+    }
+
+}

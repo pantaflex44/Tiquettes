@@ -683,25 +683,25 @@ option[disabled] {
     background-color: var(--secondary-color);
 }
 
-.tabPageBandCol > input[type="checkbox"] + label > img  {
+.tabPageBandCol > input[type="checkbox"] + label > img {
     width: 18px;
     height: 18px;
 }
 
-.tabPageBandCol > input[type="checkbox"]:checked + label  {
+.tabPageBandCol > input[type="checkbox"]:checked + label {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: #fff;
 }
 
-.tabPageBandCol > input[type="checkbox"]:checked + label.error  {
+.tabPageBandCol > input[type="checkbox"]:checked + label.error {
     background-color: darkgoldenrod;
     border-color: darkgoldenrod;
     color: #fff;
     /*animation: blinker 1s linear infinite;*/
 }
 
-.tabPageBandCol > input[type="checkbox"]:checked + label > img  {
+.tabPageBandCol > input[type="checkbox"]:checked + label > img {
     filter: invert(94%) sepia(100%) saturate(22%) hue-rotate(48deg) brightness(107%) contrast(106%);
 }
 
@@ -720,82 +720,6 @@ option[disabled] {
     }
 }
 
-@media print {
-    h4, .toolbar, .project {
-        display: none;
-    }
-
-    h3 {
-        margin-top: -2mm;
-        margin-bottom: 5mm;
-    }
-
-    .tabPages {
-        display: none;
-    }
-
-    .switchboard, .summary, .schema,
-    .switchboard.selected, .summary.selected, .schema.selected {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        gap: 0;
-        margin-block: 0;
-        overflow-x: initial;
-        border: 0;
-        border-radius: initial;
-        padding: 0;
-        height: max-content;
-        opacity: 1;
-    }
-
-    .switchboard_row {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        gap: 2mm;
-        width: 100%;
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin-bottom: 0;
-        padding-bottom: 0;
-        overflow: hidden;
-        margin-inline: 0;
-        margin-top: 0;
-    }
-
-    .summary, .summary.selected,
-    .schema, .schema.selected {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        page-break-before: always;
-        break-before: page;
-        padding-block: 2em;
-        overflow: hidden;
-    }
-
-    .summary table {
-        margin: 0;
-    }
-
-    .summary {
-        padding-top: 0;
-        margin-top: 0;
-    }
-
-    .switchboard_row:not(:first-of-type) {
-        padding-top: 7mm;
-    }
-
-    .projectbox, .button_group {
-        display: none;
-    }
-
-    .notprintable {
-        display: none !important;
-    }
-}
-
 .icon_selector_box:focus-within, .icon_selector_box.focused {
     border-color: var(--primary-color) !important;
 }
@@ -805,4 +729,11 @@ option[disabled] {
     50% {
         opacity: 0;
     }
+}
+
+#importfile {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: -500000px
 }
