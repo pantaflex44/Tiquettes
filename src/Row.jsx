@@ -30,6 +30,7 @@ function Row({
                  items,
                  theme,
                  clipboard,
+                 clipboardMode,
                  style = {},
                  onModuleGrow = null,
                  onModuleShrink = null,
@@ -40,6 +41,7 @@ function Row({
                  onModuleClear = null,
                  onModuleEdit = null,
                  onModuleCopy = null,
+                 onModuleCut = null,
                  onModulePaste = null,
                  onModuleCancelPaste = null,
                  modulePasteAllowed = null,
@@ -72,6 +74,7 @@ function Row({
                         rowPosition={rowPosition}
                         theme={theme}
                         clipboard={clipboard}
+                        clipboardMode={clipboardMode}
 
                         style={{
                             "--h": style['--h'],
@@ -85,6 +88,7 @@ function Row({
                         onEdit={(item) => onModuleEdit(i, item)}
 
                         onCopy={(item) => onModuleCopy(i, item)}
+                        onCut={(item) => onModuleCut(i, item)}
                         onPaste={(item) => onModulePaste(i, item)}
                         cancelPaste={() => onModuleCancelPaste()}
                         pasteAllowed={(item) => modulePasteAllowed(i, item)}

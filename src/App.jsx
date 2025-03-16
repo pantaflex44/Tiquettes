@@ -70,6 +70,7 @@ function App() {
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
 
     const [clipboard, setClipboard] = useState(null);
+    const [clipboardMode, setClipboardMode] = useState(null);
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -430,6 +431,7 @@ function App() {
         });
 
         setClipboard(null);
+        setClipboardMode(null);
         setPrintOptions({...defaultPrintOptions});
         setDocumentTitle(name);
         setTab(1);
@@ -440,6 +442,7 @@ function App() {
         importRef.current.value = "";
 
         setClipboard(null);
+        setClipboardMode(null);
         setDocumentTitle(defaultProjectName);
         setTheme(defaultTheme);
 
@@ -522,6 +525,7 @@ function App() {
                     //setDocumentTitle(filename);
 
                     setClipboard(null);
+                    setClipboardMode(null);
                     setPrintOptions({...defaultPrintOptions});
                     setTab(1);
                     scrollToProject();
@@ -757,14 +761,19 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return {...module, ...defaultModule, span: module.span};
+                        return {...defaultModule, span: 1};
                     });
+
+                    for (let o = 0; o < currentModule.span - 1; o++) {
+                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                    }
 
                     return r;
                 });
 
                 return modulesAutoId({...old, rows});
             });
+
         }
     };
 
@@ -894,11 +903,22 @@ function App() {
         }
     }
 
-    const handleModuleCopy = (rowIndex, moduleIndex) => {
+    const handleModuleCopyCut = (rowIndex, moduleIndex, mode) => {
         const row = switchboard.rows[rowIndex];
         const currentModule = row[moduleIndex];
 
-        if (!currentModule.free) setClipboard(currentModule);
+        if (!currentModule.free) {
+            setClipboard(currentModule);
+            setClipboardMode({rowIndex, moduleIndex, mode});
+        }
+    }
+
+    const handleModuleCopy = (rowIndex, moduleIndex) => {
+        handleModuleCopyCut(rowIndex, moduleIndex, 'copy');
+    }
+
+    const handleModuleCut = (rowIndex, moduleIndex) => {
+        handleModuleCopyCut(rowIndex, moduleIndex, 'cut');
     }
 
     const handleModulePaste = (rowIndex, moduleIndex) => {
@@ -909,12 +929,17 @@ function App() {
             let addLength = 0;
 
             let rows = old.rows.map((row, i) => {
-                if (i !== rowIndex) return row;
-
                 let r = row.map((module, j) => {
+
+                    if (clipboardMode.mode === 'cut' && i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+                        return {...defaultModule, span: module.span};
+                    }
+
+                    if (i !== rowIndex) return module;
+
                     if (j === moduleIndex) {
                         deleteLength = clipboard.span - module.span;
-                        addLength = module.span - clipboard.span;
+                        addLength += module.span - clipboard.span;
                     }
 
                     // si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
@@ -961,6 +986,7 @@ function App() {
         });
 
         setClipboard(null);
+        setClipboardMode(null);
     }
 
     const modulePasteAllowed = (rowIndex, moduleIndex) => {
@@ -989,6 +1015,7 @@ function App() {
 
     const handleCancelPaste = () => {
         setClipboard(null);
+        setClipboardMode(null);
     }
 
     const handleModuleHalf = (rowIndex, moduleIndex, item, mode) => {
@@ -1192,6 +1219,7 @@ function App() {
         <div tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
                 setClipboard(null);
+                setClipboardMode(null);
             }
         }}>
             {/** TOOLBAR **/}
@@ -1555,6 +1583,7 @@ function App() {
                         stepsPerRows={switchboard.stepsPerRows}
                         theme={theme}
                         clipboard={clipboard}
+                        clipboardMode={clipboardMode}
 
                         style={{
                             "--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
@@ -1573,6 +1602,7 @@ function App() {
                         onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
 
                         onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
+                        onModuleCut={(moduleIndex, item) => handleModuleCut(i, moduleIndex, item)}
                         onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
                         onModuleCancelPaste={() => handleCancelPaste()}
                         modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}

@@ -41,6 +41,7 @@ function Module({
                     modulePosition = 1,
                     theme,
                     clipboard,
+                    clipboardMode,
                     style = {},
                     shrinkAllowed = null,
                     growAllowed = null,
@@ -51,6 +52,7 @@ function Module({
                     onShrink = null,
                     onClear = null,
                     onCopy = null,
+                    onCut = null,
                     onEdit = null,
                     onPaste = null,
                     onHalf = null,
@@ -263,14 +265,21 @@ function Module({
                              height={14}
                              style={{marginTop: '2px', marginLeft: '2px'}}/>
                     </div>}
-                {canEdit && <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}>
+                {/*canEdit && <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}>
                     <img src={editIcon}
                          alt="Editer"
                          width={20}
                          height={20}
                          style={{marginTop: '-1px'}}/>
-                </div>}
-
+                </div>*/}
+                {onCopy &&
+                    <div className="tool cut" title="Couper" onClick={() => onCut(item)}>
+                        <img src={cutIcon}
+                             alt="Couper"
+                             width={16}
+                             height={16}
+                             style={{marginTop: '2px', marginLeft: '2px'}}/>
+                    </div>}
             </div>
         }
 
