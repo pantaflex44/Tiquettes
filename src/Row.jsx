@@ -29,6 +29,7 @@ function Row({
                  rowIndex,
                  items,
                  theme,
+                 clipboard,
                  style = {},
                  onModuleGrow = null,
                  onModuleShrink = null,
@@ -70,6 +71,8 @@ function Row({
                         modulePosition={i + 1}
                         rowPosition={rowPosition}
                         theme={theme}
+                        clipboard={clipboard}
+
                         style={{
                             "--h": style['--h'],
                             "--sw": style['--sw']

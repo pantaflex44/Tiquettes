@@ -25,6 +25,7 @@ import editIcon from './assets/edit.svg';
 import shrinkIcon from './assets/minus.svg';
 import growIcon from './assets/plus.svg';
 import copyIcon from './assets/copy.svg';
+import cutIcon from './assets/cut.svg';
 import pasteIcon from './assets/paste.svg';
 import leftIcon from './assets/left.svg';
 import rightIcon from './assets/right.svg';
@@ -39,6 +40,7 @@ function Module({
                     rowPosition = 1,
                     modulePosition = 1,
                     theme,
+                    clipboard,
                     style = {},
                     shrinkAllowed = null,
                     growAllowed = null,
@@ -59,7 +61,7 @@ function Module({
                     isDemo = false,
                     hasClipboard = false
                 }) {
-    const moduleRef = useRef();
+    const moduleRef = useRef(null);
 
     const isFree = useMemo(() => !isDemo && item.free, [isDemo, item.free]);
     const canPaste = useMemo(() => !isDemo && item.free && hasClipboard && (pasteAllowed && pasteAllowed(item)), [hasClipboard, isDemo, item, pasteAllowed]);
@@ -126,8 +128,11 @@ function Module({
 
     }, [beforeUpdate, item, style, currentTheme, themeUpdated, canPaste]);
 
+    // DND
+
+
     return item && <div
-        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo ? 'demo' : ''} ${hasClipboard && !canPaste ? 'disabled' : ''}`.trim()}
+        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo ? 'demo' : ''}${hasClipboard && item.free && !canPaste ? 'disabled' : ''}`.trim()}
         id={`module_${rowPosition}_${modulePosition}`}
         data-row={rowPosition}
         style={{
@@ -135,10 +140,11 @@ function Module({
             "--sw": `calc((${style['--sw']} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
             "--nsw": style['--sw'],
             color: item.free ? 'darkgray' : 'black',
-            overflowX: isDemo ? 'hidden' : 'initial'
+            overflowX: isDemo ? 'hidden' : 'initial',
+            cursor: canPaste ? 'pointer' : 'default',
         }}
         tabIndex={!canPaste && !hasClipboard ? 0 : null}
-        title={!isDemo ? `${item.id ? '(' + item.id + ') ' : ''}R${rowPosition} | P${modulePosition} | L${item.span}` : "Module de démonstration"}
+        title={!isDemo ? (canPaste ? "Coller ici" : "Cliquer sur le crayon pour éditer ce module...") : "Module de démonstration"}
         ref={moduleRef}
         data-id={`${rowPosition}-${modulePosition}`}
         onKeyUp={(e) => {
@@ -157,40 +163,57 @@ function Module({
                     onEdit(item);
                 }
             }
-        }}>
+        }}
+        onClick={() => {
+            if (canPaste) onPaste(item);
+        }}
+    >
 
-        {isFree && !canPaste && !hasClipboard
-            ? <img className="module_iconfree" src={editIcon} title="Editer le module" alt="Editer le module"
-                   onClick={() => onEdit(item)}/>
-            : (!isFree && themedModule
-                    ? <div className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''}`.trim()} style={{
-                        width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                        minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                        maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                        marginLeft: item.half === "left" ? `calc(${style['--sw']} / 2)` : '0px',
-                        marginRight: item.half === "right" ? `calc(${style['--sw']} / 2)` : '0px',
-                        borderLeftWidth: item.half === "left" ? '1px' : '0px',
-                        borderRightWidth: item.half === "right" ? '1px' : '0px',
-                        '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
-                        '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
-                        '--topSeparatorColor': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderColor ?? '#000000') : 'initial',
-                        '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
-                        '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
-                        '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderColor ?? '#000000') : 'initial',
-                    }}>{
-                        cloneElement(themedModule,
-                            {
-                                style: {...style},
-                            }
-                        )
-                    }</div>
-                    : <div style={{
-                        backgroundImage: 'radial-gradient(circle at 1px 1px, #f0f0f0 1px, transparent 0)',
-                        backgroundPosition: '4px 2px',
-                        backgroundSize: '6px 6px',
-                        width: '100%',
-                        height: '100%'
-                    }}></div>
+        {canPaste
+            ?
+            <img className="module_iconfree" src={pasteIcon} style={{width: '50%'}} title="Coller ici" alt="Coller ici"
+                 onClick={() => onPaste(item)}/>
+            : (isFree && !canPaste && !hasClipboard
+                    ? <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
+                           alt="Editer ce module"
+                           onClick={() => onEdit(item)}/>
+                    : (!isFree && themedModule
+                        ? <div
+                            className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''} ${hasClipboard && !canPaste ? 'disabled' : ''}`.trim()}
+                            style={{
+                                width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                                minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                                maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                                marginLeft: item.half === "left" ? `calc(${style['--sw']} / 2)` : '0px',
+                                marginRight: item.half === "right" ? `calc(${style['--sw']} / 2)` : '0px',
+                                borderLeftWidth: item.half === "left" ? '1px' : '0px',
+                                borderRightWidth: item.half === "right" ? '1px' : '0px',
+                                cursor: canEdit ? 'pointer' : 'default',
+                                '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
+                                '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
+                                '--topSeparatorColor': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderColor ?? '#000000') : 'initial',
+                                '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
+                                '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
+                                '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderColor ?? '#000000') : 'initial',
+                            }}
+                            onClick={() => {
+                                if (canEdit) onEdit(item)
+                            }}
+                            title={"Cliquer pour éditer ce module..."}
+                        >{
+                            cloneElement(themedModule,
+                                {
+                                    style: {...style},
+                                }
+                            )
+                        }</div>
+                        : <div style={{
+                            backgroundImage: 'radial-gradient(circle at 1px 1px, #f0f0f0 1px, transparent 0)',
+                            backgroundPosition: '4px 2px',
+                            backgroundSize: '6px 6px',
+                            width: '100%',
+                            height: '100%'
+                        }}></div>)
             )
         }
 
@@ -231,37 +254,47 @@ function Module({
         }
 
         {
-            canPaste && <div className="module_top button" title="Coller ici">
-                <div className="tool paste" onClick={() => onPaste(item)}
-                     style={{width: '100%', height: '100%'}}>
-                    <img src={pasteIcon} alt="Coller" width={18} height={18} style={{marginTop: '2px'}}/>
-                </div>
-            </div>
-        }
-
-        {
             !hasClipboard && (canEdit || canCopy) && <div className="module_bottom">
                 {onCopy &&
-                    <div className="tool copy" title="Copier ce module" onClick={() => onCopy(item)}>
+                    <div className="tool copy" title="Copier" onClick={() => onCopy(item)}>
                         <img src={copyIcon}
                              alt="Copier"
                              width={14}
                              height={14}
-                             style={{marginTop: '2px'}}/>
+                             style={{marginTop: '2px', marginLeft: '2px'}}/>
                     </div>}
-                {canEdit &&
-                    <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}>
-                        <img src={editIcon}
-                             alt="Editer"
-                             width={20}
-                             height={20}/>
-                    </div>}
+                {canEdit && <div className="tool edit" title="Editer [Entrée]" onClick={() => onEdit(item)}>
+                    <img src={editIcon}
+                         alt="Editer"
+                         width={20}
+                         height={20}
+                         style={{marginTop: '-1px'}}/>
+                </div>}
+
             </div>
         }
 
+        {/*
+            canPaste &&
+            <div className="module_bottom button paste" title="Coller ici">
+                <div className="tool paste" onClick={() => onPaste(item)}
+                     style={{
+                         width: '100%',
+                         height: '100%',
+                         display: 'inline-flex',
+                         flexDirection: 'row',
+                         justifyContent: 'center',
+                         alignItems: 'center'
+                     }}>
+                    <img src={pasteIcon} alt="Coller" width={18} height={18} style={{marginTop: '-2px'}}/>
+                </div>
+            </div>
+        */}
+
         {
-            canPaste && <div className="module_bottom" title="Cliquer ici pour annuler">
-                <div className="tool paste" onClick={() => cancelPaste()}
+            hasClipboard && clipboard?.id === item.id &&
+            <div className="module_bottom paste" title="Cliquer ici pour annuler">
+                <div className="tool paste cancel" onClick={() => cancelPaste()}
                      style={{
                          width: '100%',
                          height: '100%',

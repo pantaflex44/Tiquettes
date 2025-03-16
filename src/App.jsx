@@ -64,16 +64,16 @@ function App() {
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
-    const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
 
+    const [clipboard, setClipboard] = useState(null);
+
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const monitorRef = useRef(null);
-
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -698,7 +698,7 @@ function App() {
         const nextModuleIndex = moduleIndex + 1;
 
         setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
+            const rows = old.rows.map((row, i) => {
                 if (i !== rowIndex) return row;
 
                 let deleted = false;
@@ -839,8 +839,8 @@ function App() {
         }
     }
 
-    const handleModuleClear = (rowIndex, moduleIndex) => {
-        if (confirm("Êtes-vous certain de vouloir libérer ce module?")) {
+    const handleModuleClear = (rowIndex, moduleIndex, noConfirm = false) => {
+        if (noConfirm === true || confirm("Êtes-vous certain de vouloir libérer ce module?")) {
             const row = switchboard.rows[rowIndex];
             const currentModule = row[moduleIndex];
 
@@ -902,24 +902,27 @@ function App() {
     }
 
     const handleModulePaste = (rowIndex, moduleIndex) => {
-        if (!clipboard) return;
         if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
 
-        const row = switchboard.rows[rowIndex];
-
-        const currentModule = row[moduleIndex];
-        if (currentModule.span < clipboard.span) {
-            for (let i = 0; i < clipboard.span - 1; i++) moduleGrow(rowIndex, moduleIndex);
-        }
-        if (currentModule.span > clipboard.span) {
-            for (let i = 0; i < (currentModule.span - clipboard.span); i++) moduleShrink(rowIndex, moduleIndex);
-        }
-
         setSwitchboard((old) => {
+            let deleteLength = 0;
+            let addLength = 0;
+
             let rows = old.rows.map((row, i) => {
                 if (i !== rowIndex) return row;
 
                 let r = row.map((module, j) => {
+                    if (j === moduleIndex) {
+                        deleteLength = clipboard.span - module.span;
+                        addLength = module.span - clipboard.span;
+                    }
+
+                    // si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
+                    if (j > moduleIndex && deleteLength > 0 && module.free) {
+                        deleteLength--;
+                        return null;
+                    }
+
                     if (j !== moduleIndex) return module;
 
                     return {
@@ -940,6 +943,16 @@ function App() {
                         pole: clipboard.pole,
                     };
                 });
+
+                r = r.filter((rr) => rr !== null);
+
+                // si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
+                if (addLength > 0) {
+                    for (let al = 0; al < addLength; al++) {
+                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                    }
+                    addLength = 0;
+                }
 
                 return r;
             });
@@ -1541,6 +1554,7 @@ function App() {
                         items={row.map((m) => ({...defaultModule, ...m}))}
                         stepsPerRows={switchboard.stepsPerRows}
                         theme={theme}
+                        clipboard={clipboard}
 
                         style={{
                             "--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
