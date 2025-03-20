@@ -35,7 +35,6 @@
     user-select: none;
     font-family: Arial, sans-serif;
     font-weight: 500;
-    /*transition: all 0.1s ease-in-out;*/
     background-color: #fff;
 }
 
@@ -58,7 +57,6 @@
     user-select: none;
     font-family: Arial, sans-serif;
     font-weight: 500;
-    /*transition: all 0.1s ease-in-out;*/
     overflow: hidden;
 
     --topSeparatorSize: 1px;
@@ -97,7 +95,7 @@
     border-right: 1px solid darkgray;
 }
 
-.module:not(.demo):not(:has(.module_iconfree)):hover {
+.module:not(.demo):not(:has(.module_iconfree)):not(:has(.disabled)):hover {
     background-color: #f5f5f5;
 }
 
@@ -229,7 +227,6 @@
     bottom: -36px;
     left: -1px;
     width: calc(100% - 1em - 0px);
-    height: 34px;
     background-color: var(--secondary-color-light-light);
     display: flex;
     justify-content: space-evenly;
@@ -237,9 +234,6 @@
     padding-right: 0.55em;
     padding-left: 0.45em;
     align-items: center;
-    border-bottom: 1px solid lightgray;
-    border-left: 1px solid lightgray;
-    border-right: 1px solid lightgray;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-user-select: none;
@@ -247,6 +241,11 @@
     user-select: none;
     overflow: hidden;
     transition: all 0.1s ease-in-out;
+    height: 0;
+    border-bottom: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    visibility: hidden;
 }
 
 .module .module_bottom .bottom_row {
@@ -270,6 +269,12 @@
     height: 84px;
 }
 
+.module:hover .module_bottom,
+.module_bottom.force_visible {
+    height: 34px;
+    visibility: visible;
+}
+
 .module:focus .module_top,
 .module:focus .module_bottom {
     background-color: #FFFBF0;
@@ -290,7 +295,7 @@
     font-weight: 500;
 }
 
-.module.disabled {
+.module:has(.module_content.disabled:not(.clipboard_me)) {
     pointer-events: none;
     filter: grayscale(1);
 }

@@ -598,7 +598,7 @@ function App() {
         setEditor({
             rowIndex,
             moduleIndex,
-            originalModule: {...currentModule},
+            /*originalModule: {...currentModule},*/
             currentModule,
             prevModule,
             theme,
@@ -608,29 +608,25 @@ function App() {
         });
     };
 
-    const updateModuleEditor = (data) => {
-        setEditor((old) => ({...old, currentModule: {...old.currentModule, ...data}}));
-    }
-
-    const applyModuleEditor = () => {
+    const applyModuleEditor = (data) => {
         setEditor((old) => ({
             ...old,
             errors: []
         }));
 
-        const id = editor.currentModule.id.trim().toUpperCase();
-        const icon = editor.currentModule.icon;
-        const text = (editor.currentModule.text ?? "").trim();
-        const desc = (editor.currentModule.desc ?? "").trim();
-        const parentId = (editor.currentModule.parentId ?? "").trim();
-        const kcId = (editor.currentModule.kcId ?? "").trim();
-        const func = (editor.currentModule.func ?? "").trim();
-        const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
-        const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
-        const current = (schemaFunctions[editor.currentModule.func] ? (editor.currentModule.current ?? "") : "").trim();
-        const sensibility = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.sensibility ?? "") : "").trim();
-        const coef = editor.currentModule.coef ?? 0.5;
-        const pole = (schemaFunctions[editor.currentModule.func]?.hasPole ? (editor.currentModule.pole ?? "") : "").trim();
+        const id = data.currentModule.id.trim().toUpperCase();
+        const icon = data.currentModule.icon;
+        const text = (data.currentModule.text ?? "").trim();
+        const desc = (data.currentModule.desc ?? "").trim();
+        const parentId = (data.currentModule.parentId ?? "").trim();
+        const kcId = (data.currentModule.kcId ?? "").trim();
+        const func = (data.currentModule.func ?? "").trim();
+        const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
+        const crb = (schemaFunctions[data.currentModule.func]?.hasCrb ? (data.currentModule.crb ?? "") : "").trim();
+        const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
+        const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
+        const coef = data.currentModule.coef ?? 0.5;
+        const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -662,10 +658,10 @@ function App() {
         // applique les modifications
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
-                if (i !== editor.rowIndex) return row;
+                if (i !== data.rowIndex) return row;
 
-                let r = row.map((module, j) => {
-                    if (j !== editor.moduleIndex) return module;
+                return row.map((module, j) => {
+                    if (j !== data.moduleIndex) return module;
 
                     return {
                         ...module,
@@ -685,15 +681,13 @@ function App() {
                         pole,
                     };
                 });
-
-                return r;
             });
 
             return modulesAutoId({...old, rows});
         });
 
         // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
-        reassignAllParents(editor.originalModule?.id, id);
+        reassignAllParents(data.originalModule?.id, id);
 
         setEditor(null);
     }
@@ -1184,7 +1178,8 @@ function App() {
 
     useEffect(() => {
         if (window) {
-            window.document.body.style.overflow = editor || newProjectProperties ? 'hidden' : 'auto';
+            const ovf = editor || newProjectProperties ? 'hidden' : 'auto';
+            if (window.document.body.style.overflow !== ovf) window.document.body.style.overflow = ovf;
         }
     }, [editor, newProjectProperties]);
 
@@ -1658,7 +1653,6 @@ function App() {
                 editor={editor}
                 onSetEditor={setEditor}
                 onApplyModuleEditor={applyModuleEditor}
-                onUpdateModuleEditor={updateModuleEditor}
                 onHandleModuleClear={handleModuleClear}
             />}
 
