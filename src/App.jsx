@@ -64,16 +64,17 @@ function App() {
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
-    const [clipboard, setClipboard] = useState(null);
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
 
+    const [clipboard, setClipboard] = useState(null);
+    const [clipboardMode, setClipboardMode] = useState(null);
+
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const monitorRef = useRef(null);
-
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -430,6 +431,7 @@ function App() {
         });
 
         setClipboard(null);
+        setClipboardMode(null);
         setPrintOptions({...defaultPrintOptions});
         setDocumentTitle(name);
         setTab(1);
@@ -440,6 +442,7 @@ function App() {
         importRef.current.value = "";
 
         setClipboard(null);
+        setClipboardMode(null);
         setDocumentTitle(defaultProjectName);
         setTheme(defaultTheme);
 
@@ -522,6 +525,7 @@ function App() {
                     //setDocumentTitle(filename);
 
                     setClipboard(null);
+                    setClipboardMode(null);
                     setPrintOptions({...defaultPrintOptions});
                     setTab(1);
                     scrollToProject();
@@ -594,7 +598,7 @@ function App() {
         setEditor({
             rowIndex,
             moduleIndex,
-            originalModule: {...currentModule},
+            /*originalModule: {...currentModule},*/
             currentModule,
             prevModule,
             theme,
@@ -604,29 +608,25 @@ function App() {
         });
     };
 
-    const updateModuleEditor = (data) => {
-        setEditor((old) => ({...old, currentModule: {...old.currentModule, ...data}}));
-    }
-
-    const applyModuleEditor = () => {
+    const applyModuleEditor = (data) => {
         setEditor((old) => ({
             ...old,
             errors: []
         }));
 
-        const id = editor.currentModule.id.trim().toUpperCase();
-        const icon = editor.currentModule.icon;
-        const text = (editor.currentModule.text ?? "").trim();
-        const desc = (editor.currentModule.desc ?? "").trim();
-        const parentId = (editor.currentModule.parentId ?? "").trim();
-        const kcId = (editor.currentModule.kcId ?? "").trim();
-        const func = (editor.currentModule.func ?? "").trim();
-        const type = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.type ?? "") : "").trim();
-        const crb = (schemaFunctions[editor.currentModule.func]?.hasCrb ? (editor.currentModule.crb ?? "") : "").trim();
-        const current = (schemaFunctions[editor.currentModule.func] ? (editor.currentModule.current ?? "") : "").trim();
-        const sensibility = (schemaFunctions[editor.currentModule.func]?.hasType ? (editor.currentModule.sensibility ?? "") : "").trim();
-        const coef = editor.currentModule.coef ?? 0.5;
-        const pole = (schemaFunctions[editor.currentModule.func]?.hasPole ? (editor.currentModule.pole ?? "") : "").trim();
+        const id = data.currentModule.id.trim().toUpperCase();
+        const icon = data.currentModule.icon;
+        const text = (data.currentModule.text ?? "").trim();
+        const desc = (data.currentModule.desc ?? "").trim();
+        const parentId = (data.currentModule.parentId ?? "").trim();
+        const kcId = (data.currentModule.kcId ?? "").trim();
+        const func = (data.currentModule.func ?? "").trim();
+        const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
+        const crb = (schemaFunctions[data.currentModule.func]?.hasCrb ? (data.currentModule.crb ?? "") : "").trim();
+        const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
+        const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
+        const coef = data.currentModule.coef ?? 0.5;
+        const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -658,10 +658,10 @@ function App() {
         // applique les modifications
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
-                if (i !== editor.rowIndex) return row;
+                if (i !== data.rowIndex) return row;
 
-                let r = row.map((module, j) => {
-                    if (j !== editor.moduleIndex) return module;
+                return row.map((module, j) => {
+                    if (j !== data.moduleIndex) return module;
 
                     return {
                         ...module,
@@ -681,15 +681,13 @@ function App() {
                         pole,
                     };
                 });
-
-                return r;
             });
 
             return modulesAutoId({...old, rows});
         });
 
         // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
-        reassignAllParents(editor.originalModule?.id, id);
+        reassignAllParents(data.originalModule?.id, id);
 
         setEditor(null);
     }
@@ -698,7 +696,7 @@ function App() {
         const nextModuleIndex = moduleIndex + 1;
 
         setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
+            const rows = old.rows.map((row, i) => {
                 if (i !== rowIndex) return row;
 
                 let deleted = false;
@@ -757,14 +755,19 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return {...module, ...defaultModule, span: module.span};
+                        return {...defaultModule, span: 1};
                     });
+
+                    for (let o = 0; o < currentModule.span - 1; o++) {
+                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                    }
 
                     return r;
                 });
 
                 return modulesAutoId({...old, rows});
             });
+
         }
     };
 
@@ -839,8 +842,8 @@ function App() {
         }
     }
 
-    const handleModuleClear = (rowIndex, moduleIndex) => {
-        if (confirm("Êtes-vous certain de vouloir libérer ce module?")) {
+    const handleModuleClear = (rowIndex, moduleIndex, noConfirm = false) => {
+        if (noConfirm === true || confirm("Êtes-vous certain de vouloir libérer ce module?")) {
             const row = switchboard.rows[rowIndex];
             const currentModule = row[moduleIndex];
 
@@ -894,32 +897,51 @@ function App() {
         }
     }
 
-    const handleModuleCopy = (rowIndex, moduleIndex) => {
+    const handleModuleCopyCut = (rowIndex, moduleIndex, mode) => {
         const row = switchboard.rows[rowIndex];
         const currentModule = row[moduleIndex];
 
-        if (!currentModule.free) setClipboard(currentModule);
+        if (!currentModule.free) {
+            setClipboard(currentModule);
+            setClipboardMode({rowIndex, moduleIndex, mode});
+        }
+    }
+
+    const handleModuleCopy = (rowIndex, moduleIndex) => {
+        handleModuleCopyCut(rowIndex, moduleIndex, 'copy');
+    }
+
+    const handleModuleCut = (rowIndex, moduleIndex) => {
+        handleModuleCopyCut(rowIndex, moduleIndex, 'cut');
     }
 
     const handleModulePaste = (rowIndex, moduleIndex) => {
-        if (!clipboard) return;
         if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
 
-        const row = switchboard.rows[rowIndex];
-
-        const currentModule = row[moduleIndex];
-        if (currentModule.span < clipboard.span) {
-            for (let i = 0; i < clipboard.span - 1; i++) moduleGrow(rowIndex, moduleIndex);
-        }
-        if (currentModule.span > clipboard.span) {
-            for (let i = 0; i < (currentModule.span - clipboard.span); i++) moduleShrink(rowIndex, moduleIndex);
-        }
-
         setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
-                if (i !== rowIndex) return row;
+            let deleteLength = 0;
+            let addLength = 0;
 
+            let rows = old.rows.map((row, i) => {
                 let r = row.map((module, j) => {
+
+                    if (clipboardMode.mode === 'cut' && i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+                        return {...defaultModule, span: module.span};
+                    }
+
+                    if (i !== rowIndex) return module;
+
+                    if (j === moduleIndex) {
+                        deleteLength = clipboard.span - module.span;
+                        addLength += module.span - clipboard.span;
+                    }
+
+                    // si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
+                    if (j > moduleIndex && deleteLength > 0 && module.free) {
+                        deleteLength--;
+                        return null;
+                    }
+
                     if (j !== moduleIndex) return module;
 
                     return {
@@ -941,6 +963,16 @@ function App() {
                     };
                 });
 
+                r = r.filter((rr) => rr !== null);
+
+                // si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
+                if (addLength > 0) {
+                    for (let al = 0; al < addLength; al++) {
+                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                    }
+                    addLength = 0;
+                }
+
                 return r;
             });
 
@@ -948,6 +980,7 @@ function App() {
         });
 
         setClipboard(null);
+        setClipboardMode(null);
     }
 
     const modulePasteAllowed = (rowIndex, moduleIndex) => {
@@ -976,6 +1009,7 @@ function App() {
 
     const handleCancelPaste = () => {
         setClipboard(null);
+        setClipboardMode(null);
     }
 
     const handleModuleHalf = (rowIndex, moduleIndex, item, mode) => {
@@ -1144,7 +1178,8 @@ function App() {
 
     useEffect(() => {
         if (window) {
-            window.document.body.style.overflow = editor || newProjectProperties ? 'hidden' : 'auto';
+            const ovf = editor || newProjectProperties ? 'hidden' : 'auto';
+            if (window.document.body.style.overflow !== ovf) window.document.body.style.overflow = ovf;
         }
     }, [editor, newProjectProperties]);
 
@@ -1179,6 +1214,7 @@ function App() {
         <div tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
                 setClipboard(null);
+                setClipboardMode(null);
             }
         }}>
             {/** TOOLBAR **/}
@@ -1541,6 +1577,8 @@ function App() {
                         items={row.map((m) => ({...defaultModule, ...m}))}
                         stepsPerRows={switchboard.stepsPerRows}
                         theme={theme}
+                        clipboard={clipboard}
+                        clipboardMode={clipboardMode}
 
                         style={{
                             "--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
@@ -1559,6 +1597,7 @@ function App() {
                         onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
 
                         onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
+                        onModuleCut={(moduleIndex, item) => handleModuleCut(i, moduleIndex, item)}
                         onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
                         onModuleCancelPaste={() => handleCancelPaste()}
                         modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
@@ -1614,7 +1653,6 @@ function App() {
                 editor={editor}
                 onSetEditor={setEditor}
                 onApplyModuleEditor={applyModuleEditor}
-                onUpdateModuleEditor={updateModuleEditor}
                 onHandleModuleClear={handleModuleClear}
             />}
 

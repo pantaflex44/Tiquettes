@@ -1,6 +1,20 @@
 # Changelog
 
 
+## [2.1.1] - 2025-03-21
+
+### Améliorations
+
+- Amélioration des performances dans l'éditeur de modules.
+- Amélioration légère de l'ergonomie.
+- Réécriture partielle du système de Copier / Coller et intégration de la fonction Couper.
+
+### Corrections
+
+- Correction de divers bugs lors de la manipulation des modules.
+
+
+
 ## [2.1.0] - 2025-03-12
 
 ### Ajouts

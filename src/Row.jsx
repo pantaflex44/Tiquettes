@@ -25,33 +25,36 @@ import Module from "./Module";
 
 /* eslint-disable react/prop-types */
 function Row({
-                 rowPosition,
-                 rowIndex,
-                 items,
-                 theme,
-                 style = {},
-                 onModuleGrow = null,
-                 onModuleShrink = null,
-                 moduleGrowAllowed = null,
-                 moduleShrinkAllowed = null,
-                 moduleMoveLeftAllowed = null,
-                 moduleMoveRightAllowed = null,
-                 onModuleClear = null,
-                 onModuleEdit = null,
-                 onModuleCopy = null,
-                 onModulePaste = null,
-                 onModuleCancelPaste = null,
-                 modulePasteAllowed = null,
-                 onModuleMoveLeft = null,
-                 onModuleMoveRight = null,
-                 onModuleHalf = null,
-                 onRowAddAfter = null,
-                 onRowDelete = null,
-                 rowAddAllowed = null,
-                 rowDeleteAllowed = null,
-                 printFreeModuleAllowed = null,
-                 hasClipboard = false
-             }) {
+                                  rowPosition,
+                                  rowIndex,
+                                  items,
+                                  theme,
+                                  clipboard,
+                                  clipboardMode,
+                                  style = {},
+                                  onModuleGrow = null,
+                                  onModuleShrink = null,
+                                  moduleGrowAllowed = null,
+                                  moduleShrinkAllowed = null,
+                                  moduleMoveLeftAllowed = null,
+                                  moduleMoveRightAllowed = null,
+                                  onModuleClear = null,
+                                  onModuleEdit = null,
+                                  onModuleCopy = null,
+                                  onModuleCut = null,
+                                  onModulePaste = null,
+                                  onModuleCancelPaste = null,
+                                  modulePasteAllowed = null,
+                                  onModuleMoveLeft = null,
+                                  onModuleMoveRight = null,
+                                  onModuleHalf = null,
+                                  onRowAddAfter = null,
+                                  onRowDelete = null,
+                                  rowAddAllowed = null,
+                                  rowDeleteAllowed = null,
+                                  printFreeModuleAllowed = null,
+                                  hasClipboard = false
+                              }) {
     return (
         <div className={`switchboard_row row_${rowPosition}`} id={`row_${rowPosition}`}>
 
@@ -70,6 +73,9 @@ function Row({
                         modulePosition={i + 1}
                         rowPosition={rowPosition}
                         theme={theme}
+                        clipboard={clipboard}
+                        clipboardMode={clipboardMode}
+
                         style={{
                             "--h": style['--h'],
                             "--sw": style['--sw']
@@ -82,6 +88,7 @@ function Row({
                         onEdit={(item) => onModuleEdit(i, item)}
 
                         onCopy={(item) => onModuleCopy(i, item)}
+                        onCut={(item) => onModuleCut(i, item)}
                         onPaste={(item) => onModulePaste(i, item)}
                         cancelPaste={() => onModuleCancelPaste()}
                         pasteAllowed={(item) => modulePasteAllowed(i, item)}
