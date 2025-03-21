@@ -92,7 +92,7 @@ Le symbole `→` vous permet de déplacer le module d'une position sur la droite
 
 Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le module en question.
 
-#### Copier / Coller
+#### Copier / Couper / Coller
 
 Le symbole suivant permet de copier le module. Celà permet de copier, le libellé, le pictogramme et la description du module pour le duppliquer ailleurs sur le tableau. Une fois le module mis dans le presse papier, l'application vous met en avant les emplacements disponibles en fonction de la largeur initiale du module copié.
 
@@ -102,9 +102,7 @@ Exemple d'emplacements disponibles :
 
 ![Coller aux emplacements disponibles](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_pasteall.png?raw=true)
 
-Cliquer sur le bouton pour duppliquer le module à cet emplacement :
-
-![Coller](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_paste.png?raw=true)
+Cliquer sur l'icône pour duppliquer / d&placer le module à cet emplacement.
 
 Pour annuler, soit, cliquer sur l'icône ci-dessous, soit appuyer sur la touche `Echap`:
 
@@ -242,6 +240,16 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 - Thème Legrand - Couleur - Tertiaire
 
 ![Thème Legrand - Couleur - Tertiaire](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_lgd_cter.png?raw=true)
+
+- Thème Créations - Orange is the new dark
+
+![Thème Créations - Orange is the new dark](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_crea_orange.png?raw=true)
+
+- Thème Créations - GoldenWine
+
+![Thème Créations - GoldenWine](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_crea_golden.png?raw=true)
+
+
 
 ### Personnaliser la décoration
 
