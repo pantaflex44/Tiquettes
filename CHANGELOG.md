@@ -1,6 +1,14 @@
 # Changelog
 
 
+## [2.1.2] - 2025-03-23
+
+### Corrections
+
+- Correction d'un bug affectant la sélection d'un pictogramme dans l'éditeur de module.
+
+
+
 ## [2.1.1] - 2025-03-21
 
 ### Améliorations
