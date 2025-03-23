@@ -106,7 +106,9 @@ export default function Editor({
             </div>}
             showCloseButton={true}
             onCancel={() => onSetEditor(null)}
-            onOk={() => onApplyModuleEditor({...ed})}
+            onOk={() => {
+                onApplyModuleEditor({...ed})
+            }}
             width={440}
             className="popup_flex"
             additionalButtons={[
@@ -175,7 +177,7 @@ export default function Editor({
                             <label>Pictogramme</label>
                             <Suspense fallback={<div style={{lineHeight: '40px'}}>...</div>}>
                                 <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
-                                    if (ed.currentModule.icon && selectedIcon && ed.currentModule.icon !== selectedIcon) {
+                                    if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
                                         onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
                                         if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
                                         if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
