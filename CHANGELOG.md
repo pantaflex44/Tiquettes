@@ -5,7 +5,7 @@
 
 ### Corrections
 
-- Correction d'un bug affectant la sélection d'un pictogramme dans l'éditeur de module.
+- Correction d'un bug affectant la sélection d'un pictogramme dans l'éditeur de module. ([Issue #11](https://github.com/pantaflex44/Tiquettes/issues/11) par [dough29](https://github.com/dough29))
 
 
 
