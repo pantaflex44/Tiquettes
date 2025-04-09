@@ -21,7 +21,7 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 Tout commence par l'initialisation de son projet.
 
-Deux possibilités proposées dans la barre à outils :
+Deux possibilités proposées dans la barre à outils :
 
 - Créer un nouveau projet
 - Importer un projet sauvegardé
@@ -50,7 +50,7 @@ Pour importer un projet, cliquez sur le bouton `Importer` puis chargez le fichie
 
 ### Résumé du projet
 
-Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au dessus de la zone de travail.
+Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
 
 ![Nouveau projet](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_project_resume.png?raw=true)
 
@@ -58,7 +58,7 @@ Sous le nom du projet, vous retrouvez le numéro de la dernière version export�
 
 > <b>🛈 Bon à savoir</b>
 >
-> Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre clavier. A contrario, la touche `Echap` annule les modifcations.
+> Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre clavier. A contrario, la touche `Echap` annule les modifications.
 >
 > ![Modifier le nom du projet](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_edit_project_name.png?raw=true)
 
@@ -66,13 +66,13 @@ Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
 ## L'éditeur
 
-![Editeur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_editeur.png?raw=true)
+![Éditeur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_editeur.png?raw=true)
 
 ### Descriptif
 
 Un tableau peut comporter de 1 à 15 rangées, 13, 18 ou 24 modules par rangée.
 
-Chaque module peut avoir une largeur et/ou une position réglable en fonction de la place disponible autour de lui. Vous pourrez l'étendre jusqu'à rencontrer, soit le bout de la rangée, soit un autre module déja défini. Vous devrez libérer celui-ci pour pousuivre son expansion. Idem pour le déplacer, seulement possible dans les espaces libres.
+Chaque module peut avoir une largeur et/ou une position réglable en fonction de la place disponible autour de lui. Vous pourrez l'étendre jusqu'à rencontrer, soit le bout de la rangée, soit un autre module déjà défini. Vous devrez libérer celui-ci pour poursuivre son expansion. Idem pour le déplacer, seulement possible dans les espaces libres.
 
 ### Menu contextuel du haut
 
@@ -94,15 +94,15 @@ Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le modu
 
 #### Copier / Couper / Coller
 
-Le symbole suivant permet de copier le module. Celà permet de copier, le libellé, le pictogramme et la description du module pour le duppliquer ailleurs sur le tableau. Une fois le module mis dans le presse papier, l'application vous met en avant les emplacements disponibles en fonction de la largeur initiale du module copié.
+Le symbole suivant permet de copier le module. Cela permet de copier, le libellé, le pictogramme et la description du module pour le dupliquer ailleurs sur le tableau. Une fois le module mis dans le presse papier, l'application vous met en avant les emplacements disponibles en fonction de la largeur initiale du module copié.
 
 ![Copier](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_copy.png?raw=true)
 
-Exemple d'emplacements disponibles :
+Exemple d'emplacements disponibles :
 
 ![Coller aux emplacements disponibles](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_pasteall.png?raw=true)
 
-Cliquer sur l'icône pour duppliquer / d&placer le module à cet emplacement.
+Cliquer sur l'icône pour dupliquer / d&placer le module à cet emplacement.
 
 Pour annuler, soit, cliquer sur l'icône ci-dessous, soit appuyer sur la touche `Echap`:
 
@@ -117,11 +117,11 @@ Et voilà!
 
 Au cours de l'édition de votre planche d'étiquette, il peut parfois être utile d'insérer et/ou de supprimer une rangée.
 
-Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des rangées éxistantes:
+Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des rangées existantes:
 
 ![Insérer une rangée](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_add_row.png?raw=true)
 
-Pour supprimer une rangée, cliquez sur l'icone `Corbeille`, à gauche du nom de la rangée souhaitée:
+Pour supprimer une rangée, cliquez sur l'icône `Corbeille`, à gauche du nom de la rangée souhaitée:
 
 ![Supprimer une rangée](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_delete_row.png?raw=true)
 
@@ -129,35 +129,35 @@ Pour supprimer une rangée, cliquez sur l'icone `Corbeille`, à gauche du nom de
 
 Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votre clavier pour interagir sur les rangées et les modules.
 
-- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches `haut` et `bas` de votre clavier, l'ascenseur de la fenètre ou la roulette de votre souris.
-- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenètre ou la roulette de votre souris (en appuyant simultanement sur une des touches `shift` de votre clavier).
-- Pour déplacer un module horizontalement, sélectionnez le avec votre souris, puis appuyez sur les flèches `gauche` et `droite` de votre clavier.
-- Pour redimensionner un module, sélectionnez le avec votre souris, puis appuyez sur les touches `+` et `-` de votre clavier.
+- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches `haut` et `bas` de votre clavier, l'ascenseur de la fenêtre ou la roulette de votre souris.
+- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenêtre ou la roulette de votre souris (en appuyant simultanément sur une des touches `shift` de votre clavier).
+- Pour déplacer un module horizontalement, sélectionnez-le avec votre souris, puis appuyez sur les flèches `gauche` et `droite` de votre clavier.
+- Pour redimensionner un module, sélectionnez-le avec votre souris, puis appuyez sur les touches `+` et `-` de votre clavier.
 
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto ID](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_auto_id.png?raw=true)
 >
-> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Editeur``` et ```Schéma```.
+> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Éditeur``` et ```Schéma```.
 
 
-## Edition d'un module
+## Édition d'un module
 
 Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s'ouvre et vous offre la possibilité d'affiner sa définition.
 
-La partie inférieure de la fenètre d'édition comporte une zone de démonstration, mettant en scène vos modifications en temps réel.
+La partie inférieure de la fenêtre d'édition comporte une zone de démonstration, mettant en scène vos modifications en temps réel.
 
-![Edition d'un module](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_popup.png?raw=true)
+![Édition d'un module](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_popup.png?raw=true)
 
-- _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point son acceptés.
+- _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point sont acceptés.
 - _Libellé_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
-- _Pictogramme_ : Une petite image illustrant l'environement du module.
+- _Pictogramme_ : Une petite image illustrant l'environnement du module.
 
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto Next ID](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_next_id.png?raw=true)
-> 
-> Il est parfois difficile de suivre les identifiants déja utilisés par les précédents modules, c'est pourquoi un bouton est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module définie dans l'onglet ```Schéma```.
+>
+> Il est parfois difficile de suivre les identifiants déjà utilisés par les précédents modules, c'est pourquoi un bouton est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module définie dans l'onglet ```Schéma```.
 
 ### Les actions disponibles
 
@@ -253,28 +253,28 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 
 ### Personnaliser la décoration
 
-Tiquettes vous propose de décorer plus finement vos étiquettes en créeant votre propre thème!
+Tiquettes vous propose de décorer plus finement vos étiquettes en créant votre propre thème!
 
 ![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_button.png?raw=true)
 
 ![Thème personnalisé](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_theme_custom_editor.png?raw=true)
 
-Vous pouvez exporter vos thèmes, et même importer les créations d'autruis !
+Vous pouvez exporter vos thèmes, et même importer les créations d'autrui !
 
 ## Schéma unifilaire
 
-### Edition des caractéristiques
+### Édition des caractéristiques
 
 Depuis la version 2.0.0, Tiquettes propose la génération semi-automatique d'un schéma unifilaire représentatif du tableau électrique conçu par vos soins.
 
-La fenètre dédition d'un module possède désormais un nouvel onglet ```Schéma``` permettant de définir les caractèristiques techiniques du module:
+La fenêtre d’édition d'un module possède désormais un nouvel onglet ```Schéma``` permettant de définir les caractéristiques techniques du module:
 
-![Edition des caractéristiques techniques](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_popup_schema.png?raw=true)
+![Édition des caractéristiques techniques](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_popup_schema.png?raw=true)
 
-- _Fonction_ : Fonction technique du module : Interrupteur différentiel, Disjoncteur, etc.
+- _Fonction_ : Fonction technique du module : Interrupteur différentiel, Disjoncteur, etc.
 - _Parent_ : Module parent dont dépend le module en cours d'édition. Par exemple, ce disjoncteur dépend d'un module Interrupteur différentiel.
 
-Les autres informations sont dynamiquement adaptées à la fonction choisie précédement.
+Les autres informations sont dynamiquement adaptées à la fonction choisie précédemment.
 
 La zone de démonstration affiche la représentation graphique (Symbole) et les caractéristiques techniques telles qu'elles seront incluses dans le schéma unifilaire global.
 
@@ -282,7 +282,7 @@ La zone de démonstration affiche la représentation graphique (Symbole) et les 
 
 La génération dépend à 100% des données que vous aurez renseignées lors de l'édition d'un module.
 
-Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du tableau de bord :
+Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du tableau de bord :
 
 ![Schéma unifilaire](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_schema.png?raw=true)
 
@@ -290,7 +290,7 @@ Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du
 >
 > ![Auto ID](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_auto_id.png?raw=true)
 >
-> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Editeur``` et ```Schéma```.
+> A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible dans l'onglet ```Éditeur``` et ```Schéma```.
 
 
 Pour éditer un module, il suffit juste de cliquer dessus ;-)
@@ -303,29 +303,29 @@ Au-dessus du schéma vous retrouverez l'espace ```barre à outils``` vous propos
 Pour commencer, vous avez la possibilité d'ajouter un ```Disjoncteur de branchement``` à votre schéma. Vous pouvez l'activer ou le désactiver en utilisant cette icône ![Disjoncteur de branchement](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_db.svg?raw=true).
 Différents réglages sont disponibles pour s'adapter au mieux à votre besoin.
 
-S'ensuit la possibilité, via un clique sur cette icône ![Bornier de terre](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_ground.svg?raw=true), d'ajouter un bornier / ligne de terre au schéma.
+S'ensuit la possibilité, via un clic sur cette icône ![Bornier de terre](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_ground.svg?raw=true), d'ajouter un bornier / ligne de terre au schéma.
 
 L'icône ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true) permet d'activer ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
 ## Moniteur de surveillance
 
-Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true). 
+Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true).
 
 Depuis la version 2.0.0 de l'application, Tiquettes vous propose une relative détection des erreurs dans votre projet. Ces "erreurs", correspondent à des règles définies dans la norme NFC 15-100 à l'instant T. Vous pouvez bien évidement désactiver cette surveillance à tout moment.
 
 ![Surveillance - Aucun problème détecté](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_monitor_ok.png?raw=true) ![Surveillance - Erreur détectés](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_monitor_errors.png?raw=true)
 
-Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024) :
-- ```Etiquettes```: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
-- ```Schéma```: Le nombre de circuits associés à un interrupteur différentiel : 8.
-- ```Schéma```: Le nombre minimum d'interrupteurs différentiels : 2.
+Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024) :
+- ```Étiquettes```: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
+- ```Schéma```: Le nombre de circuits associés à un interrupteur différentiel : 8.
+- ```Schéma```: Le nombre minimum d'interrupteurs différentiels : 2.
 - ```Schéma```: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et Bornes/Prises de recharge : Type A.
 - ```Schéma```: Le calibre de l'interrupteur sectionneur en fonction du calibre du disjoncteur de branchement (si ajouté au schéma).
 - etc.
 
 ![Surveillance - Exemple d'erreur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_monitor_errors_details.png?raw=true)
 
-La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouterons au fûr et à mesure des prochaines versions !
+La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouteront au fur et à mesure des prochaines versions !
 
 ## Nomenclature / Résumé
 
@@ -335,7 +335,7 @@ La nomenclature est générée automatiquement en fonction des définitions indi
 
 ![Nomenclature](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_summary.png?raw=true)
 
-La barre à outils regroupe cette fois, la liste des colones que vous souhaitez afficher. Ce paramètre est automatiquement associé à votre projet, ce qui signifie qu'il sera, lui aussi, exporté.
+La barre à outils regroupe cette fois, la liste des colonnes que vous souhaitez afficher. Ce paramètre est automatiquement associé à votre projet, ce qui signifie qu'il sera, lui aussi, exporté.
 
 ## Immortaliser son travail
 
@@ -343,7 +343,7 @@ La barre à outils regroupe cette fois, la liste des colones que vous souhaitez 
 
 Une fois vos étiquettes réalisées, vous pourrez les imprimer en cliquant sur le bouton adéquat.
 
-Le mode `paysage` ainsi que le format A4 sont sélectionnés par défault.
+Le mode `paysage` ainsi que le format A4 sont sélectionnés par défaut.
 
 > <b>🛈 Bon à savoir</b>
 >
