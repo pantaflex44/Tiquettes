@@ -1,6 +1,22 @@
 # Changelog
 
 
+## [2.1.3] - 2025-04-09
+
+### Corrections
+
+- Correction du fichier README.md. ([PR #12](https://github.com/pantaflex44/Tiquettes/pull/12) par [jlecour](https://github.com/jlecour))
+
+### Ajouts
+
+- Nouveaux pictogrammes : ([Issue #13](https://github.com/pantaflex44/Tiquettes/issues/13) par [jlecour](https://github.com/jlecour))
+  - Détecteur de fumées
+  - Sonnette / Carillon
+  - Alarme intrusion
+  - Transformateur
+
+
+
 ## [2.1.2] - 2025-03-23
 
 ### Corrections

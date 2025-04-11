@@ -85,6 +85,14 @@
         "coef": 1
     },
     {
+        "filename": "swb_transformer.svg",
+        "title": "Transformateur",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
         "filename": "swb_surgeprotector.svg",
         "title": "Parafoudre / Protection",
         "coef": 1
@@ -301,6 +309,30 @@
         "func": "q",
         "crb": "C",
         "current": "10A"
+    },
+    {
+        "filename": "swb_homeshield.svg",
+        "title": "Alarme intrusion",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_smoke.svg",
+        "title": "Détecteur de fumées",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
+    },
+    {
+        "filename": "swb_bell.svg",
+        "title": "Sonnette / Carillon",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "2A"
     },
     {
         "filename": "swb_telephonie.svg",
