@@ -156,7 +156,7 @@ La partie inférieure de la fenêtre d'édition comporte une zone de démonstrat
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto Next ID](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_next_id.png?raw=true)
->
+> 
 > Il est parfois difficile de suivre les identifiants déjà utilisés par les précédents modules, c'est pourquoi un bouton est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module définie dans l'onglet ```Schéma```.
 
 ### Les actions disponibles
@@ -309,7 +309,7 @@ L'icône ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_ic
 
 ## Moniteur de surveillance
 
-Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true).
+Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de surveillance ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true). 
 
 Depuis la version 2.0.0 de l'application, Tiquettes vous propose une relative détection des erreurs dans votre projet. Ces "erreurs", correspondent à des règles définies dans la norme NFC 15-100 à l'instant T. Vous pouvez bien évidement désactiver cette surveillance à tout moment.
 
