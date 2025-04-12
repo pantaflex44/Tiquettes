@@ -31,7 +31,7 @@ Retrouvez **Tiquettes** directement sur **[sa page Facebook](https://www.faceboo
 
 ---
 
-# Bienvenue sur la documentation de Tiquettes
+# Bienvenue dans la documentation de Tiquettes
 
 ![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_sample.png?raw=true)
 
