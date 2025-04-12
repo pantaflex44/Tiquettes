@@ -15,6 +15,24 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 ---
 
+## 📢 Bon à savoir
+
+### Une question ? Des idées à partager / proposer ?
+
+Venez dans le nouvel **[espace de discussions](https://github.com/pantaflex44/Tiquettes/discussions)** !
+
+### A contrario, vous avez découvert un bug, un défaut de fonctionnement ?
+
+Venez plutôt le déclarer dans **[l'espace dédié](https://github.com/pantaflex44/Tiquettes/issues)** :-)
+
+### Vous êtes plus "réseaux sociaux" ?
+
+Retrouvez **Tiquettes** directement sur **[sa page Facebook](https://www.facebook.com/profile.php?id=61563821616548)** !
+
+---
+
+# Bienvenue sur la documentation de Tiquettes
+
 ![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_sample.png?raw=true)
 
 ## Le projet
