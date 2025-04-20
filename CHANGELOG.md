@@ -1,6 +1,14 @@
 # Changelog
 
 
+## [2.1.4] - 2025-04-20
+
+### Corrections
+
+- Correction d'un bug affectant la représentation correcte d'un contacteur si son parent et le disjoncteur asservi sont les mêmes (télérupteur par exemple asservissant son disjoncteur parent). ([Discussions #17](https://github.com/pantaflex44/Tiquettes/discussions/17) par [Trinakria23](https://github.com/Trinakria23))
+
+
+
 ## [2.1.3] - 2025-04-11
 
 ### Corrections

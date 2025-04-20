@@ -81,7 +81,7 @@ function App() {
         summary: false,
         schema: false,
         freeModules: true,
-        coverPage: true,
+        pdf: false
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
@@ -176,7 +176,7 @@ function App() {
         summaryColumnFunction: true,
         summaryColumnLabel: true,
         summaryColumnDescription: true,
-    }), [createRow, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultProjectProperties.db, defaultProjectType, defaultVRef]);
+    }), [defaultProjectName, defaultProjectType, defaultVRef, defaultTheme, defaultHRow, defaultStepsPerRows, defaultStepSize, createRow, defaultNpRows, defaultProjectProperties.db]);
 
     const setDocumentTitle = (title) => {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
@@ -548,7 +548,7 @@ function App() {
             prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1
         }
 
-        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
+        const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
         const link = document.createElement("a");
         link.href = jsonString;
         link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? defaultProjectName)} - v${swb.prjversion}.json`;
@@ -558,11 +558,21 @@ function App() {
     };
 
     const printProject = () => {
-        if (window) {
+        if (printOptions.pdf) {
+            toPdf();
+        } else if (window) {
             window.print();
         } else {
             alert("Cet appareil ne permet pas de lancer une impression.");
         }
+    };
+
+    const toPdf = () => {
+        const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.click();
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
@@ -1273,9 +1283,7 @@ function App() {
                             <label htmlFor="print_free">Imprimer les emplacements libres</label>
                         </div>
 
-                        <div className="dropdown_separator"></div>
-
-                        <div className="dropdown_item" title="Imprimer le schéma unifilaire">
+                        <div className="dropdown_item" title="Imprimer le schéma unifilaire" style={{marginTop: '1em'}}>
                             <input id="print_schema" name="print_schema" type="checkbox"
                                    checked={printOptions.schema}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1284,18 +1292,6 @@ function App() {
                                    }))}/>
                             <label htmlFor="print_schema">Schéma unifilaire</label>
                         </div>
-                        <div className="dropdown_item" title="Imprimer la page de garde"
-                             style={{marginLeft: '0.5em'}}>
-                            <input id="print_cover" name="print_cover" type="checkbox"
-                                   checked={printOptions.coverPage}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       coverPage: e.target.checked
-                                   }))} disabled={!printOptions.schema}/>
-                            <label htmlFor="print_cover">Imprimer la page de garde</label>
-                        </div>
-
-                        <div className="dropdown_separator"></div>
 
                         <div className="dropdown_item" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
@@ -1306,6 +1302,19 @@ function App() {
                                    }))}/>
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
+
+                        {/**<div className="dropdown_separator"></div>
+
+                        <div className="dropdown_item"
+                             title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
+                            <input id="print_pdf" name="print_pdf" type="checkbox"
+                                   checked={printOptions.pdf}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdf: e.target.checked
+                                   }))}/>
+                            <label htmlFor="print_pdf">Imprimer au format PDF</label>
+                        </div>**/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

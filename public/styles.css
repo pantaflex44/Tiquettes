@@ -42,7 +42,7 @@
     bleed: overlay;
     marks: cross;
 
-    border: 1px solid #000;
+    /*border: 1px solid #000;*/
 }
 
 @page :blank {
@@ -503,6 +503,45 @@ input[type="range"] {
 @keyframes l15 {
     100% {
         transform: rotate(1turn)
+    }
+}
+
+@media print {
+    @page :blank {
+        display: none;
+    }
+
+    #content,
+    #root {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        max-width: initial;
+        display: block;
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+        max-width: initial;
+        width: 100%;
+        padding-inline: 0;
+        padding-block: 10mm;
+    }
+
+    .printable {
+        margin-inline: 10mm;
+    }
+
+    nav,
+    h1,
+    .by,
+    .description {
+        display: none;
+    }
+
+    .box {
+        display: none;
     }
 }
 
