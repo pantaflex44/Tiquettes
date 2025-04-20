@@ -275,14 +275,14 @@
     {
         "filename": "swb_remswitch.svg",
         "title": "Telerupteur",
-        "coef": 1,
+        "coef": 0.5,
         "func": "kc",
         "current": "16A"
     },
     {
         "filename": "swb_contact.svg",
         "title": "Contacteur / Relai",
-        "coef": 1,
+        "coef": 0.5,
         "func": "kc",
         "current": "25A"
     },
@@ -409,7 +409,7 @@
     {
         "filename": "swb_journuit.svg",
         "title": "Contacteur Jour / Nuit",
-        "coef": 1,
+        "coef": 0.5,
         "func": "kc",
         "current": "20A"
     },

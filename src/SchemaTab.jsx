@@ -100,10 +100,10 @@ export default function SchemaTab({
                     const kcId = (module.kcId ?? "");
                     const kcModule = getModuleById(kcId).module;
                     if (kcModule) {
-                        _childs.unshift({
+                        _childs.push({
                             ...kcModule,
                             kcId: '',
-                            /*id: `${kcModule.id}_${module.id}`,*/
+                            id: `¤_${kcModule.id}`,
                             parentId: module.id,
                             func: 'k',
                             icon: module.icon,
@@ -484,42 +484,6 @@ export default function SchemaTab({
                     </div>
                 </div>
             )}
-
-            <div
-                className={`schemaCartbridgeContainer ${printOptions.coverPage ? 'printable' : 'notprintable'}`.trim()}>
-                <div className="schemaTitle">Schéma Unifilaire Général</div>
-                <div className="schemaCartbridge">
-                    <div className="schemaCartbridgeA">
-                        Créé: {new Intl.DateTimeFormat('fr-FR', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                        timeZone: 'Europe/Paris',
-                    }).format(switchboard.prjcreated ?? (new Date()))}
-                    </div>
-                    <div className="schemaCartbridgeB">
-                        <div className="schemaCartbridgeBContent">
-                            {switchboard.prjname ?? import.meta.env.VITE_DEFAULT_PROJECT_NAME}
-                        </div>
-                    </div>
-                    <div className="schemaCartbridgeC">
-                        Révision {switchboard.prjversion ?? 1}
-                    </div>
-                    <div className="schemaCartbridgeD">
-                        Modifié: {new Intl.DateTimeFormat('fr-FR', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                        timeZone: 'Europe/Paris',
-                    }).format(switchboard.prjupdated ?? (new Date()))}
-                    </div>
-                    <div className="schemaCartbridgeE">
-                        {pkg.title} {pkg.version}
-                    </div>
-                    <div className="schemaCartbridgeF">
-                        <img src={`${import.meta.env.VITE_APP_BASE}favicon.svg`} width="64" height="64"
-                             alt="Tiquettes"/>
-                    </div>
-                </div>
-            </div>
 
             <div className="schemaGrid">
                 <div className="schemaItemSeparator first"></div>

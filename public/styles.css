@@ -42,7 +42,7 @@
     bleed: overlay;
     marks: cross;
 
-    border: 1px solid #000;
+    /*border: 1px solid #000;*/
 }
 
 @page :blank {
@@ -517,6 +517,7 @@ input[type="range"] {
         margin: 0;
         padding: 0;
         max-width: initial;
+        display: block;
     }
 
     main {

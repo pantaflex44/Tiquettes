@@ -514,6 +514,8 @@
     }
 
     .schemaGrid {
+        display: block;
+
         overflow-x: hidden;
         background: none;
         border-top: 0;
@@ -524,9 +526,12 @@
         padding-inline: 10mm;
 
         width: calc(100% - 20mm);
+
+        break-inside: avoid;
     }
 
     .schemaItem {
+display: block;
         flex-wrap: wrap;
     }
 
@@ -540,6 +545,8 @@
 
     .schemaCartbridgeContainer {
         display: block;
+
+        break-inside: avoid;
 
         width: calc(100% - 20mm);
         margin-left: 10mm;

@@ -292,7 +292,13 @@ option[disabled] {
 }
 
 .button_group .dropdown_container .dropdown .dropdown_footer {
-    margin-top: 2em;
+    margin-top: 1.5em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5em;
 }
 
 .button_group .dropdown_container .dropdown .dropdown_footer * {
