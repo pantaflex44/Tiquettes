@@ -6,6 +6,11 @@
 ### Corrections
 
 - Correction d'un bug affectant la représentation correcte d'un contacteur si son parent et le disjoncteur asservi sont les mêmes (télérupteur par exemple asservissant son disjoncteur parent). ([Discussions #17](https://github.com/pantaflex44/Tiquettes/discussions/17) par [Trinakria23](https://github.com/Trinakria23))
+- Correction de fautes d'orthographes dans les noms des icônes. ([PR #18](https://github.com/pantaflex44/Tiquettes/pull/18) par [Trinakria23](https://github.com/Trinakria23))
+
+### Améliorations
+
+- Séparation des icônes "Volet roulant / Store / Porte de garage" en 3 icônes indépendantes. ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
 
 
 
