@@ -258,7 +258,23 @@
     },
     {
         "filename": "swb_volet.svg",
-        "title": "Volet roulant / Store / Porte de garage",
+        "title": "Volet roulant",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_store.svg",
+        "title": "Store Banne",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_garage.svg",
+        "title": "Porte de garage / Porte sectionnelle",
         "coef": 0.5,
         "func": "q",
         "crb": "C",

@@ -7,7 +7,7 @@ header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 setlocale(LC_ALL, "fr_FR.UTF-8");
 date_default_timezone_set('Europe/Paris');
 
-require('./libs/fpdf186/fpdf.php');
+require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
 if (!isset($_POST['switchboard']) || !isset($_POST['printOptions'])) {
@@ -227,6 +227,7 @@ class TiquettesPDF extends FPDF
 }
 
 $pdf = new TiquettesPDF();
+
 $pdf->SetAuthor('tiquettes.fr' . ' ' . $switchboard->appversion, true);
 $pdf->SetCreator('tiquettes.fr' . ' ' . $switchboard->appversion, true);
 $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);

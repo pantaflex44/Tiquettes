@@ -577,13 +577,13 @@ function App() {
         form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
         form.target = '_blank';
 
-        const _s = document.createElement("input");
+        let _s = document.createElement("input");
         _s.type = "hidden";
         _s.name = "switchboard";
         _s.value = JSON.stringify(switchboard);
         form.appendChild(_s);
 
-        const _p = document.createElement("input");
+        let _p = document.createElement("input");
         _p.type = "hidden";
         _p.name = "printOptions";
         _p.value = JSON.stringify(printOptions);
@@ -591,6 +591,10 @@ function App() {
 
         form.submit();
 
+        form.removeChild(_s);
+        _s = null;
+        form.removeChild(_p);
+        _p = null;
         document.body.removeChild(form);
         form = null;
 
