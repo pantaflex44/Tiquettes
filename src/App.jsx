@@ -1333,7 +1333,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        <div className="dropdown_separator"></div>
+                        {/*<div className="dropdown_separator"></div>
 
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
@@ -1344,7 +1344,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>
+                        </div>*/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
