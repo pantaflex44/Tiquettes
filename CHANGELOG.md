@@ -12,6 +12,11 @@
 
 - Séparation des icônes "Volet roulant / Store / Porte de garage" en 3 icônes indépendantes. ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
 
+### Ajouts
+
+- Nouveaux pictogrammes : 
+  - Pompe de relevage ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
+
 
 
 ## [2.1.3] - 2025-04-11

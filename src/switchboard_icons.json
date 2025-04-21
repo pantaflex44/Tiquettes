@@ -110,12 +110,20 @@
         "title": "Pompe a chaleur / PAC / Groupe froid",
         "coef": 0.5,
         "func": "q",
-        "crb": "B",
+        "crb": "D",
         "current": "25A"
     },
     {
         "filename": "swb_eau.svg",
         "title": "Compteur d'eau",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_pompe1.svg",
+        "title": "Pompe de relevage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",

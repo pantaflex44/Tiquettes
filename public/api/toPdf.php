@@ -160,9 +160,7 @@ class TiquettesPDF extends FPDF
     {
         global $switchboard, $printOptions;
 
-        $theme = $switchboard->theme->name;
-        require_once './libs/toPdf/themes/' . $theme . '.php';
-        $theme = 'theme_' . $theme;
+        require_once './libs/toPdf/themes/engine.php';
 
         $this->AddPage('L', 'A4', 0);
 
@@ -207,7 +205,7 @@ class TiquettesPDF extends FPDF
                     'h' => $box->h,
                 ];
 
-                $theme::render($this, $workBox, $module);
+                Theme::render($this, $workBox, $switchboard->theme->data, $module);
 
                 $this->SetFillColor(255, 255, 255);
                 $this->SetDrawColor(170, 170, 170);
