@@ -6,8 +6,8 @@
    viewBox="0 0 1000 1000"
    xml:space="preserve"
    id="svg192"
-   sodipodi:docname="swb_volet.svg"
-   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   sodipodi:docname="swb_garage.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -21,19 +21,41 @@
    inkscape:pagecheckerboard="0"
    inkscape:deskcolor="#d1d1d1"
    showgrid="false"
-   inkscape:zoom="0.060777532"
-   inkscape:cx="-1135.288"
-   inkscape:cy="3356.5035"
-   inkscape:window-width="2048"
-   inkscape:window-height="1261"
-   inkscape:window-x="284"
-   inkscape:window-y="25"
-   inkscape:window-maximized="0"
+   inkscape:zoom="0.17190482"
+   inkscape:cx="698.06071"
+   inkscape:cy="904.57033"
+   inkscape:window-width="1920"
+   inkscape:window-height="1009"
+   inkscape:window-x="1912"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
    inkscape:current-layer="svg192"
    showguides="true"
-   inkscape:lockguides="false" />&#10;<desc
-   id="desc163">Created with Fabric.js 3.5.0</desc>&#10;<defs
-   id="defs165">&#10;&#10;&#10;&#10;		&#10;		&#10;		&#10;		&#10;		&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;</defs>&#10;<rect
+   inkscape:lockguides="false" />
+<desc
+   id="desc163">Created with Fabric.js 3.5.0</desc>
+<defs
+   id="defs165">
+
+
+
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+</defs>
+<rect
    x="0"
    y="0"
    width="100%"
@@ -42,59 +64,43 @@
    id="rect167"
    style="fill:none;stroke:none"
    inkscape:label="Fond"
-   sodipodi:insensitive="true" />&#10;<path
+   sodipodi:insensitive="true" />
+<path
    style="display:inline;fill:none;fill-rule:nonzero;stroke:none;stroke-width:75.7576;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
    d="M 954.5455,45.4545 V 954.5457 H 45.4543 V 45.4545 Z"
    stroke-linecap="round"
    id="path169"
-   inkscape:label="path169" />&#10;<g
-   id="g33"
-   inkscape:label="Volet_roulant"
-   style="display:inline"><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 140,139.99992 V 860.00008"
-     id="path26"
-     sodipodi:nodetypes="cc"
-     inkscape:label="CoulisseG" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 860.00011,139.99992 V 860.00008"
-     id="path27"
-     sodipodi:nodetypes="cc"
-     inkscape:label="CoulisseD" /><rect
-     style="display:inline;stroke:none;stroke-width:18.2817;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     id="rect27"
-     width="720"
-     height="120"
-     x="140"
-     y="120"
-     inkscape:label="Coffre" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,300 H 790.00014"
-     id="path28"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,390 H 790.00014"
-     id="path29"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,480 H 790.00014"
-     id="path30"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,570 H 790.00014"
-     id="path31"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,660 H 790.00014"
-     id="path32"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /><path
-     style="stroke:#000000;stroke-width:39.9999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-     d="M 209.99986,750 H 790.00014"
-     id="path33"
-     sodipodi:nodetypes="cc"
-     inkscape:label="Lames" /></g></svg>
+   inkscape:label="path169" />
+<path
+   style="stroke:#000000;stroke-width:80;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;fill:none"
+   d="M 140,139.99992 V 860.00008"
+   id="path26"
+   sodipodi:nodetypes="cc"
+   inkscape:label="CoulisseG" /><path
+   style="stroke:#000000;stroke-width:80;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;fill:none"
+   d="M 860.00011,139.99992 V 860.00008"
+   id="path27"
+   sodipodi:nodetypes="cc"
+   inkscape:label="CoulisseD" /><rect
+   style="display:inline;stroke:none;stroke-width:18.2817;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+   id="rect27"
+   width="720"
+   height="120"
+   x="140"
+   y="98"
+   inkscape:label="Coffre" /><path
+   style="stroke:#000000;stroke-width:63.0773;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+   d="M 271.34459,428.07602 H 728.65541"
+   id="path29"
+   sodipodi:nodetypes="cc"
+   inkscape:label="Lames" /><path
+   style="stroke:#000000;stroke-width:63.0773;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+   d="M 271.34459,570 H 728.65541"
+   id="path31"
+   sodipodi:nodetypes="cc"
+   inkscape:label="Lames" /><path
+   style="stroke:#000000;stroke-width:63.0773;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+   d="M 271.34459,711.92398 H 728.65541"
+   id="path33"
+   sodipodi:nodetypes="cc"
+   inkscape:label="Lames" /></svg>
