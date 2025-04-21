@@ -568,11 +568,37 @@ function App() {
     };
 
     const toPdf = () => {
-        const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+        let form = document.createElement("form");
+        document.body.appendChild(form);
+        form.style.display = "none";
+        form.name = "toPdfForm";
+
+        form.method = 'POST';
+        form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
+        form.target = '_blank';
+
+        const _s = document.createElement("input");
+        _s.type = "hidden";
+        _s.name = "switchboard";
+        _s.value = JSON.stringify(switchboard);
+        form.appendChild(_s);
+
+        const _p = document.createElement("input");
+        _p.type = "hidden";
+        _p.name = "printOptions";
+        _p.value = JSON.stringify(printOptions);
+        form.appendChild(_p);
+
+        form.submit();
+
+        document.body.removeChild(form);
+        form = null;
+
+        /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
         const link = document.createElement("a");
         link.href = url;
         link.target = "_blank";
-        link.click();
+        link.click();*/
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
@@ -1303,7 +1329,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {/**<div className="dropdown_separator"></div>
+                        <div className="dropdown_separator"></div>
 
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
@@ -1314,7 +1340,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>**/}
+                        </div>
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

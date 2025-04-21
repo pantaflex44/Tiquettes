@@ -140,98 +140,722 @@
     },
     {
         "title": "Identifiant, pictogramme et descriptif",
-        "name": "simple",
+        "name": "custom|cf19293b-8458-4a84-a0af-76059b5776bd",
         "default": false,
-        "group": "Simple"
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 80,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 2,
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Identifiant, petit pictogramme et grand descriptif",
-        "name": "medium",
+        "name": "custom|bd194263-d85c-4ed1-af8d-5c4827386bb8",
         "default": false,
-        "group": "Simple"
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.2mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#008b8b"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 30,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "5",
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Pictogramme et descriptif seulement",
-        "name": "minimal",
+        "name": "custom|3fb88a4d-11e9-44fa-b13e-eec32033188f",
         "default": false,
-        "group": "Simple"
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 80,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": "4",
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Petit pictogramme et grand descriptif",
-        "name": "small",
+        "name": "custom|a1961f21-b730-4805-84a9-23c09cfe26fd",
         "default": false,
-        "group": "Simple"
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#008b8b"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "5",
+                "horizontalAlignment": "center",
+                "fontSize": "2.5mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Standard",
-        "name": "schn1",
+        "name": "custom|f83761bc-7210-4719-870d-cb713635299f",
         "default": true,
-        "group": "Schneider"
+        "group": "Schneider",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#009e4d",
+                "color": "#ffffff"
+            }
+        }
     },
     {
         "title": "Alternatif",
-        "name": "schn2",
+        "name": "custom|f71a2a56-9e3c-42b3-9ef2-e20525526ee2",
         "default": false,
-        "group": "Schneider"
+        "group": "Schneider",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#009e4d",
+                "color": "#ffffff"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.9mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Nouveau format - Logements",
-        "name": "schn4",
+        "name": "custom|98c073ae-0172-46c2-aad6-2e7371087cbc",
         "default": false,
-        "group": "Schneider"
+        "group": "Schneider",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "0.5mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#009e4d",
+                "color": "#009e4d"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 55,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Nouveau format - Tertiaire",
-        "name": "schn3",
+        "name": "custom|142e4bed-c7a2-427c-8daf-03fb272f349d",
         "default": false,
-        "group": "Schneider"
+        "group": "Schneider",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.2mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#009e4d",
+                "color": "#ffffff"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 40,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Ancien format - Logements",
-        "name": "hgr1",
+        "name": "custom|bfc07996-f09c-4f84-8e38-c4949c5e761b",
         "default": false,
-        "group": "Hager"
+        "group": "Hager",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 60,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#ffffff",
+                "backgroundColor": "#00689e"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Ancien format - Tertiaire",
-        "name": "hgr2",
+        "name": "custom|4773301c-6db9-42d2-9601-8bb8deadd33b",
         "default": false,
-        "group": "Hager"
+        "group": "Hager",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.6mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#ffffff",
+                "backgroundColor": "#00689e"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.7mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Nouveau format - Logements",
-        "name": "hgr3",
+        "name": "custom|e119b875-3cec-4d0b-b989-1167696cac30",
         "default": false,
-        "group": "Hager"
+        "group": "Hager",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 70,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#00aae1"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Nouveau format - Tertiaire",
-        "name": "hgr4",
+        "name": "custom|ea68a654-3d7a-4fe2-8656-97210204bf8a",
         "default": false,
-        "group": "Hager"
+        "group": "Hager",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#00aae1"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            }
+        }
     },
     {
         "title": "Monochrome - Logements",
-        "name": "lgrd2",
+        "name": "custom|042b44e6-abf2-47b1-8121-0d8cdd84dd1a",
         "default": false,
-        "group": "Legrand"
+        "group": "Legrand",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 70,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 4,
+                "borderColor": "#464646"
+            }
+        }
     },
     {
         "title": "Monochrome - Tertiaire",
-        "name": "lgrd1",
+        "name": "custom|6aed3726-364e-41ac-b51f-46f949556ba8",
         "default": false,
-        "group": "Legrand"
+        "group": "Legrand",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 1,
+                "borderColor": "#000000"
+            },
+            "bottom": {
+                "border": true,
+                "borderColor": "#464646",
+                "borderSize": 4
+            }
+        }
     },
     {
         "title": "Couleur - Logements",
-        "name": "lgrd4",
+        "name": "custom|a5bb3a49-2440-49e8-afc1-20fa968af737",
         "default": false,
-        "group": "Legrand"
+        "group": "Legrand",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 70,
+                "fullHeight": true,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 4,
+                "borderColor": "#ef3341"
+            }
+        }
     },
     {
         "title": "Couleur - Tertiaire",
-        "name": "lgrd3",
+        "name": "custom|38977d37-9a8d-4d0a-860e-4e44f2d35214",
         "default": false,
-        "group": "Legrand"
+        "group": "Legrand",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 1,
+                "borderColor": "#000000"
+            },
+            "bottom": {
+                "border": true,
+                "borderColor": "#ef3341",
+                "borderSize": 4
+            }
+        }
     }
 ]

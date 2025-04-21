@@ -150,7 +150,7 @@ function CustomTheme({item, data, style}) {
             alignItems: "center",
         },
         textContent: {
-            "--textlh": "1.2em",
+            "--textlh": "1.1em",
             "--textnbl": textLineCount,
             margin: 0,
             padding: 0,
