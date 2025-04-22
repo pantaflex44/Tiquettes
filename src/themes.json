@@ -140,7 +140,7 @@
     },
     {
         "title": "Identifiant, pictogramme et descriptif",
-        "name": "custom|cf19293b-8458-4a84-a0af-76059b5776bd",
+        "name": "custom|simple",
         "default": false,
         "group": "Simple",
         "data": {
@@ -183,7 +183,7 @@
     },
     {
         "title": "Identifiant, petit pictogramme et grand descriptif",
-        "name": "custom|bd194263-d85c-4ed1-af8d-5c4827386bb8",
+        "name": "custom|medium",
         "default": false,
         "group": "Simple",
         "data": {
@@ -226,7 +226,7 @@
     },
     {
         "title": "Pictogramme et descriptif seulement",
-        "name": "custom|3fb88a4d-11e9-44fa-b13e-eec32033188f",
+        "name": "custom|minimal",
         "default": false,
         "group": "Simple",
         "data": {
@@ -269,7 +269,7 @@
     },
     {
         "title": "Petit pictogramme et grand descriptif",
-        "name": "custom|a1961f21-b730-4805-84a9-23c09cfe26fd",
+        "name": "custom|small",
         "default": false,
         "group": "Simple",
         "data": {
@@ -312,7 +312,7 @@
     },
     {
         "title": "Standard",
-        "name": "custom|f83761bc-7210-4719-870d-cb713635299f",
+        "name": "custom|schn1",
         "default": true,
         "group": "Schneider",
         "data": {
@@ -355,7 +355,7 @@
     },
     {
         "title": "Alternatif",
-        "name": "custom|f71a2a56-9e3c-42b3-9ef2-e20525526ee2",
+        "name": "custom|schn2",
         "default": false,
         "group": "Schneider",
         "data": {
@@ -398,7 +398,7 @@
     },
     {
         "title": "Nouveau format - Logements",
-        "name": "custom|98c073ae-0172-46c2-aad6-2e7371087cbc",
+        "name": "custom|schn4",
         "default": false,
         "group": "Schneider",
         "data": {
@@ -441,7 +441,7 @@
     },
     {
         "title": "Nouveau format - Tertiaire",
-        "name": "custom|142e4bed-c7a2-427c-8daf-03fb272f349d",
+        "name": "custom|schn3",
         "default": false,
         "group": "Schneider",
         "data": {
@@ -484,7 +484,7 @@
     },
     {
         "title": "Ancien format - Logements",
-        "name": "custom|bfc07996-f09c-4f84-8e38-c4949c5e761b",
+        "name": "custom|hgr1",
         "default": false,
         "group": "Hager",
         "data": {
@@ -528,7 +528,7 @@
     },
     {
         "title": "Ancien format - Tertiaire",
-        "name": "custom|4773301c-6db9-42d2-9601-8bb8deadd33b",
+        "name": "custom|hgr2",
         "default": false,
         "group": "Hager",
         "data": {
@@ -572,7 +572,7 @@
     },
     {
         "title": "Nouveau format - Logements",
-        "name": "custom|e119b875-3cec-4d0b-b989-1167696cac30",
+        "name": "custom|hgr3",
         "default": false,
         "group": "Hager",
         "data": {
@@ -615,7 +615,7 @@
     },
     {
         "title": "Nouveau format - Tertiaire",
-        "name": "custom|ea68a654-3d7a-4fe2-8656-97210204bf8a",
+        "name": "custom|hgr4",
         "default": false,
         "group": "Hager",
         "data": {
@@ -658,7 +658,7 @@
     },
     {
         "title": "Monochrome - Logements",
-        "name": "custom|042b44e6-abf2-47b1-8121-0d8cdd84dd1a",
+        "name": "custom|lgrd2",
         "default": false,
         "group": "Legrand",
         "data": {
@@ -706,7 +706,7 @@
     },
     {
         "title": "Monochrome - Tertiaire",
-        "name": "custom|6aed3726-364e-41ac-b51f-46f949556ba8",
+        "name": "custom|lgrd1",
         "default": false,
         "group": "Legrand",
         "data": {
@@ -759,7 +759,7 @@
     },
     {
         "title": "Couleur - Logements",
-        "name": "custom|a5bb3a49-2440-49e8-afc1-20fa968af737",
+        "name": "custom|lgrd4",
         "default": false,
         "group": "Legrand",
         "data": {
@@ -807,7 +807,7 @@
     },
     {
         "title": "Couleur - Tertiaire",
-        "name": "custom|38977d37-9a8d-4d0a-860e-4e44f2d35214",
+        "name": "custom|lgrd3",
         "default": false,
         "group": "Legrand",
         "data": {

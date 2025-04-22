@@ -266,7 +266,7 @@
     },
     {
         "filename": "swb_volet.svg",
-        "title": "Volet roulant",
+        "title": "Volet roulant / Velux",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -282,7 +282,7 @@
     },
     {
         "filename": "swb_garage.svg",
-        "title": "Porte de garage / Porte sectionnelle",
+        "title": "Porte de garage motorisee",
         "coef": 0.5,
         "func": "q",
         "crb": "C",

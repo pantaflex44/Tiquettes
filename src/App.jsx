@@ -336,12 +336,33 @@ function App() {
         }
     }
 
+    const themeEngineCompatibility = (swb) => {
+        let theme = swb?.theme;
+        if (!theme) theme = getThemeOfFirstModuleFound(swb);
+
+        if (!theme.name.startsWith('custom|')) {
+            theme = {
+                ...theme,
+                name: `custom|${theme.name}`
+            };
+        }
+        if (!theme.data) {
+            theme = {
+                ...theme,
+                data: themesList.filter((t) => t.name === theme.name)[0].data
+            };
+        }
+        return theme;
+    }
+
     const getSavedSwitchboard = () => {
         if (sessionStorage.getItem(pkg.name)) {
             let swb = {
                 ...defaultProject,
                 ...JSON.parse(sessionStorage.getItem(pkg.name))
             };
+
+            const theme = themeEngineCompatibility(swb);
 
             swb = {
                 ...swb,
@@ -368,6 +389,8 @@ function App() {
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                 // <2.0.5
                 stepSize: swb.stepSize ?? defaultStepSize,
+                // <2.1.4
+                theme
             };
 
             //console.log("Switchboard loaded from this session.");
@@ -461,10 +484,8 @@ function App() {
                 try {
                     let swb = JSON.parse(e.target.result);
 
-                    let theme = swb?.theme;
-                    if (!theme) theme = getThemeOfFirstModuleFound(swb);
+                    const theme = themeEngineCompatibility(swb);
                     setTheme(theme);
-
 
                     const rows = swb.rows.map((r) => {
                         return r.map((m) => {
@@ -515,6 +536,8 @@ function App() {
                         summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                         // <2.0.5
                         stepSize: swb.stepSize ?? defaultStepSize,
+                        // <2.1.4
+                        theme,
 
                         rows
                     };
@@ -1333,7 +1356,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {/*<div className="dropdown_separator"></div>
+                        <div className="dropdown_separator"></div>
 
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
@@ -1344,7 +1367,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>*/}
+                        </div>
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
