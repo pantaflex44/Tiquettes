@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.1.4] - 2025-04-20
+## [2.1.4] - 2025-04-22
 
 ### Corrections
 
@@ -11,6 +11,7 @@
 ### Améliorations
 
 - Séparation des icônes "Volet roulant / Store / Porte de garage" en 3 icônes indépendantes. ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
+- Adaptation des anciens projets au nouveau système de thème.
 
 ### Ajouts
 

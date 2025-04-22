@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import {useMemo} from "react";
-import Color, {hexToRgb} from "../../color.js";
-import Solver from "../../colorSolver.js";
+import Color, {hexToRgb} from "./color.js";
+import Solver from "./colorSolver.js";
 
 function CustomTheme({item, data, style}) {
     const shown = useMemo(() => ({
