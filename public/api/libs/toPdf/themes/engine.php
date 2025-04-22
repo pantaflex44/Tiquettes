@@ -9,15 +9,6 @@ class Theme
         return array($r, $g, $b);
     }
 
-    private static function computeMargins($data, $count)
-    {
-        $marginsMM = ['top' => 1, 'bottom' => 1, 'left' => 1, 'right' => 1];
-        if ($data['position'] === 0) $marginsMM['top'] = 2;
-        if ($data['position'] === $count - 1) $marginsMM['bottom'] = 2;
-
-        return $marginsMM;
-    }
-
     private static function setBgColor($pdf, $data)
     {
         if (array_key_exists('backgoundColor', $data)
@@ -33,7 +24,6 @@ class Theme
 
     private static function renderIcon($pdf, $workBox, $data, $module, $count)
     {
-        $marginsMM = self::computeMargins($data, $count);
         $sizeMm = array_key_exists('sizePercent', $data) ? ((50 + ($data['sizePercent'] / 2)) / 100) * 10 : 10;
 
         self::setBgColor($pdf, $data);
@@ -49,10 +39,20 @@ class Theme
         );
         if (count($data) === 0) return;
 
-        $data = array_map(fn($k) => array_merge($k, ['position' => $k['position'] === 'top' ? 0 : ($k['position'] === 'middle' ? 1 : 2)]), $data);
+        $data = array_map(fn($k) => array_merge($k, [
+            'position' => $k['position'] === 'top' ? 0 : ($k['position'] === 'middle' ? 1 : 2),
+        ]), $data);
+        $count = count(array_keys($data));
+        $data = array_map(fn($k) => array_merge($k, [
+            'margins' => [
+                'top' => $k['position'] === 0 ? 2 : 1,
+                'bottom' => $k['position'] === $count - 1 ? 2 : 1,
+                'left' => 1,
+                'right' => 1,
+            ],
+        ]), $data);
         array_multisort(array_column($data, 'position'), SORT_ASC, $data);
 
-        $count = count(array_keys($data));
         foreach ($data as $key => $val) {
             if ($key === 'icon') self::renderIcon($pdf, $workBox, $val, $module, $count);
         }
