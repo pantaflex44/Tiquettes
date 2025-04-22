@@ -1,7 +1,7 @@
 [
     {
         "filename": "",
-        "title": "aucun pictogramme",
+        "title": "Aucun pictogramme",
         "coef": 0.5
     },
     {
@@ -110,12 +110,20 @@
         "title": "Pompe a chaleur / PAC / Groupe froid",
         "coef": 0.5,
         "func": "q",
-        "crb": "B",
+        "crb": "D",
         "current": "25A"
     },
     {
         "filename": "swb_eau.svg",
         "title": "Compteur d'eau",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_pompe1.svg",
+        "title": "Pompe de relevage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -131,7 +139,7 @@
     },
     {
         "filename": "swb_frigo.svg",
-        "title": "Refrigirateur / Frigo",
+        "title": "Refrigerateur / Frigo",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -139,7 +147,7 @@
     },
     {
         "filename": "swb_froid.svg",
-        "title": "Congelateur / Friseur",
+        "title": "Congelateur / Freezer",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -206,7 +214,7 @@
     },
     {
         "filename": "swb_microonde.svg",
-        "title": "Micro-onde",
+        "title": "Micro-ondes",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
@@ -230,7 +238,7 @@
     },
     {
         "filename": "swb_voitureelectrique.svg",
-        "title": "Borne de rechage",
+        "title": "Borne de recharge",
         "coef": 1,
         "func": "q",
         "crb": "B",
@@ -239,7 +247,7 @@
     },
     {
         "filename": "swb_voitureelectrique2.svg",
-        "title": "Prise de rechage",
+        "title": "Prise de recharge",
         "coef": 1,
         "func": "q",
         "crb": "C",
@@ -258,7 +266,23 @@
     },
     {
         "filename": "swb_volet.svg",
-        "title": "Volet roulant / Store / Porte de garage",
+        "title": "Volet roulant / Velux",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_store.svg",
+        "title": "Store Banne",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A"
+    },
+    {
+        "filename": "swb_garage.svg",
+        "title": "Porte de garage motorisee",
         "coef": 0.5,
         "func": "q",
         "crb": "C",

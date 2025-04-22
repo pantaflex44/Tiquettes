@@ -336,12 +336,33 @@ function App() {
         }
     }
 
+    const themeEngineCompatibility = (swb) => {
+        let theme = swb?.theme;
+        if (!theme) theme = getThemeOfFirstModuleFound(swb);
+
+        if (!theme.name.startsWith('custom|')) {
+            theme = {
+                ...theme,
+                name: `custom|${theme.name}`
+            };
+        }
+        if (!theme.data) {
+            theme = {
+                ...theme,
+                data: themesList.filter((t) => t.name === theme.name)[0].data
+            };
+        }
+        return theme;
+    }
+
     const getSavedSwitchboard = () => {
         if (sessionStorage.getItem(pkg.name)) {
             let swb = {
                 ...defaultProject,
                 ...JSON.parse(sessionStorage.getItem(pkg.name))
             };
+
+            const theme = themeEngineCompatibility(swb);
 
             swb = {
                 ...swb,
@@ -368,6 +389,8 @@ function App() {
                 summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                 // <2.0.5
                 stepSize: swb.stepSize ?? defaultStepSize,
+                // <2.1.4
+                theme
             };
 
             //console.log("Switchboard loaded from this session.");
@@ -461,10 +484,8 @@ function App() {
                 try {
                     let swb = JSON.parse(e.target.result);
 
-                    let theme = swb?.theme;
-                    if (!theme) theme = getThemeOfFirstModuleFound(swb);
+                    const theme = themeEngineCompatibility(swb);
                     setTheme(theme);
-
 
                     const rows = swb.rows.map((r) => {
                         return r.map((m) => {
@@ -515,6 +536,8 @@ function App() {
                         summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
                         // <2.0.5
                         stepSize: swb.stepSize ?? defaultStepSize,
+                        // <2.1.4
+                        theme,
 
                         rows
                     };
@@ -568,11 +591,41 @@ function App() {
     };
 
     const toPdf = () => {
-        const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+        let form = document.createElement("form");
+        document.body.appendChild(form);
+        form.style.display = "none";
+        form.name = "toPdfForm";
+
+        form.method = 'POST';
+        form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
+        form.target = '_blank';
+
+        let _s = document.createElement("input");
+        _s.type = "hidden";
+        _s.name = "switchboard";
+        _s.value = JSON.stringify(switchboard);
+        form.appendChild(_s);
+
+        let _p = document.createElement("input");
+        _p.type = "hidden";
+        _p.name = "printOptions";
+        _p.value = JSON.stringify(printOptions);
+        form.appendChild(_p);
+
+        form.submit();
+
+        form.removeChild(_s);
+        _s = null;
+        form.removeChild(_p);
+        _p = null;
+        document.body.removeChild(form);
+        form = null;
+
+        /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
         const link = document.createElement("a");
         link.href = url;
         link.target = "_blank";
-        link.click();
+        link.click();*/
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
@@ -1303,7 +1356,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {/**<div className="dropdown_separator"></div>
+                        {/*<div className="dropdown_separator"></div>
 
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
@@ -1314,7 +1367,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>**/}
+                        </div>*/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

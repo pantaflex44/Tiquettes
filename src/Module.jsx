@@ -94,13 +94,8 @@ function Module({
 
     useEffect(() => {
         const defaultThemeObj = themesList.filter((t) => t.default)[0];
-        const defaultThemeName = defaultThemeObj.name;
         const update = JSON.stringify(item);
 
-        const getTheme = (name) => {
-            const n = name.split('|');
-            return import(`./themes/${n[0]}/Content.jsx`);
-        };
         const applyTheme = (Content, data) => {
             setThemedModule(() => {
                 setBeforeUpdate(update);
@@ -112,19 +107,24 @@ function Module({
                     />
                 ) : null);
             });
-        }
+        };
+
+        const themeImport = (data) => {
+            import(`./ThemeEngine.jsx`)
+                .then((selectedTheme) => applyTheme(selectedTheme.default, data))
+                .catch(() => {
+                    console.log(`Theme '${currentTheme.name}' error. Default theme will be used.`);
+                    import(`./ThemeEngine.jsx`)
+                        .then((selectedTheme) => applyTheme(selectedTheme.default, defaultThemeObj.data))
+                        .catch((err2) => {
+                            console.error(`Unable to load default theme. Error: ${err2}`);
+                        });
+                });
+        };
 
         if (themeUpdated || beforeUpdate !== update) {
             if (themeUpdated) setThemeUpdated(false);
-            getTheme(currentTheme.name)
-                .then((selectedTheme) => applyTheme(selectedTheme.default, currentTheme.data))
-                .catch(() => {
-                    getTheme(defaultThemeName)
-                        .then((defaultTheme) => applyTheme(defaultTheme.default, defaultThemeObj.data))
-                        .catch((err) => {
-                            console.error(err);
-                        });
-                });
+            themeImport(currentTheme.data);
         }
 
     }, [beforeUpdate, item, style, currentTheme, themeUpdated, canPaste]);

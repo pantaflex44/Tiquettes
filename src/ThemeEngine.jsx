@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import {useMemo} from "react";
-import Color, {hexToRgb} from "../../color.js";
-import Solver from "../../colorSolver.js";
+import Color, {hexToRgb} from "./color.js";
+import Solver from "./colorSolver.js";
 
 function CustomTheme({item, data, style}) {
     const shown = useMemo(() => ({
@@ -128,6 +128,7 @@ function CustomTheme({item, data, style}) {
             backgroundColor: (data?.icon?.backgroundColor ?? "transparent"),
         },
         iconImg: {
+            height: `calc(${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15})`, // min 0.15 max 0.30
             minHeight: `calc(${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15})`, // min 0.15 max 0.30
             maxHeight: `calc(${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15})`, // min 0.15 max 0.30
             width: `calc(${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15})`, // min 0.15 max 0.30
@@ -150,7 +151,7 @@ function CustomTheme({item, data, style}) {
             alignItems: "center",
         },
         textContent: {
-            "--textlh": "1.2em",
+            "--textlh": "1.1em",
             "--textnbl": textLineCount,
             margin: 0,
             padding: 0,
@@ -180,11 +181,11 @@ function CustomTheme({item, data, style}) {
         </div>}
 
         {shown.icon && <div style={styles.icon} data-order={positions.icon.order === 0 ? 'top' : (positions.icon.order === shownCount - 1 ? 'bottom' : 'middle')}>
-            {item.icon && <img
+            <img
                 style={styles.iconImg}
                 alt="Pictogramme"
-                src={`${import.meta.env.VITE_APP_BASE}${item.icon}`}
-            />}
+                src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
+            />
         </div>}
 
         {shown.text && <div style={styles.text} data-order={positions.text.order === 0 ? 'top' : (positions.text.order === shownCount - 1 ? 'bottom' : 'middle')}>

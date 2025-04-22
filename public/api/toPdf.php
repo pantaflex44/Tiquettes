@@ -7,16 +7,16 @@ header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 setlocale(LC_ALL, "fr_FR.UTF-8");
 date_default_timezone_set('Europe/Paris');
 
-require('./libs/fpdf186/fpdf.php');
+require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
-if (!isset($_GET['switchboard']) || !isset($_GET['printOptions'])) {
+if (!isset($_POST['switchboard']) || !isset($_POST['printOptions'])) {
     echo 'Missing parameters';
     exit;
 }
 
-$switchboard = json_decode($_GET['switchboard']);
-$printOptions = json_decode($_GET['printOptions']);
+$switchboard = json_decode($_POST['switchboard']);
+$printOptions = json_decode($_POST['printOptions']);
 
 //var_dump($switchboard);
 //var_dump($printOptions);
@@ -160,9 +160,7 @@ class TiquettesPDF extends FPDF
     {
         global $switchboard, $printOptions;
 
-        $theme = $switchboard->theme->name;
-        require_once './libs/toPdfThemes/' . $theme . '.php';
-        $theme = 'theme_' . $theme;
+        require_once './libs/toPdf/themes/engine.php';
 
         $this->AddPage('L', 'A4', 0);
 
@@ -207,7 +205,7 @@ class TiquettesPDF extends FPDF
                     'h' => $box->h,
                 ];
 
-                $theme::render($this, $workBox, $module);
+                Theme::render($this, $workBox, $switchboard->theme->data, $module);
 
                 $this->SetFillColor(255, 255, 255);
                 $this->SetDrawColor(170, 170, 170);
@@ -227,6 +225,7 @@ class TiquettesPDF extends FPDF
 }
 
 $pdf = new TiquettesPDF();
+
 $pdf->SetAuthor('tiquettes.fr' . ' ' . $switchboard->appversion, true);
 $pdf->SetCreator('tiquettes.fr' . ' ' . $switchboard->appversion, true);
 $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
