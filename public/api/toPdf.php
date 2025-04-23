@@ -192,17 +192,17 @@ class TiquettesPDF extends FPDF
                     $this->SetY($this->pageMargin + 10);
                 }
 
-                $box = (object)[
+                $box = [
                     'x' => $x,
                     'y' => $this->GetY(),
                     'w' => $w * $module->span,
                     'h' => $h,
                 ];
-                $workBox = (object)[
-                    'x' => $module->half === 'left' ? $box->x + ($w / 2) : $box->x,
-                    'y' => $box->y,
-                    'w' => $module->half === 'right' ? $box->w - ($w / 2) : $box->w,
-                    'h' => $box->h,
+                $workBox = [
+                    'x' => $module->half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
+                    'y' => $box['y'],
+                    'w' => $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
+                    'h' => $box['h'],
                 ];
 
                 Theme::render($this, $workBox, $switchboard->theme->data, $module);

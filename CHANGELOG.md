@@ -1,6 +1,21 @@
 # Changelog
 
 
+## [2.1.5] - 2025-04-23
+
+### Ajouts
+
+- Nouveaux pictogrammes : ([PR #21](https://github.com/pantaflex44/Tiquettes/pull/21) par [cruzfabien](https://github.com/cruzfabien))
+    - Horloge Journaliere
+    - Horloge Hebdomadaire
+    - Moteur Electrique
+    - Chargeur
+    - Maison / Dépendance / Extension
+    - Onduleur
+    - Interrupteur différentiel
+
+
+
 ## [2.1.4] - 2025-04-22
 
 ### Corrections
@@ -20,7 +35,7 @@
 ### Ajouts
 
 - Nouveaux pictogrammes : 
-  - Pompe de relevage ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
+    - Pompe de relevage ([Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19) par [Trinakria23](https://github.com/Trinakria23))
 
 
 
