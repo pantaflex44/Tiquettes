@@ -320,7 +320,7 @@
     },
     {
         "filename": "swb_ermt.svg",
-        "title": "Telecommande blocs secours / BAES",
+        "title": "Telecommande blocs secours / BAES / BS",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
