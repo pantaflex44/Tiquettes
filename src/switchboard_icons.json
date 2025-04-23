@@ -60,12 +60,26 @@
         "current": "16A"
     },
     {
+        "filename": "swb_pctri.svg",
+        "title": "Prise de courant triphase",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
+    },
+    {
         "filename": "swb_alim_eco.svg",
         "title": "Economie d'energie",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
         "current": "10A"
+    },
+    {
+        "filename": "swb_differential-circuit-breaker.svg",
+        "title": "Interrupteur différentiel",
+        "coef": 1,
+        "func": "id"
     },
     {
         "filename": "swb_alim_ht.svg",
@@ -85,12 +99,28 @@
         "coef": 1
     },
     {
+        "filename": "swb_home.svg",
+        "title": "Maison / Dependance / Extension",
+        "coef": 1,
+        "func": "q",
+        "crb": "C",
+        "current": "63A"
+    },
+    {
         "filename": "swb_transformer.svg",
         "title": "Transformateur",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
         "current": "10A"
+    },
+    {
+        "filename": "swb_battery.svg",
+        "title": "Chargeur",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A"
     },
     {
         "filename": "swb_surgeprotector.svg",
@@ -108,6 +138,14 @@
     {
         "filename": "swb_clim.svg",
         "title": "Pompe a chaleur / PAC / Groupe froid",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "D",
+        "current": "25A"
+    },
+    {
+        "filename": "swb_inverter.svg",
+        "title": "Onduleur",
         "coef": 0.5,
         "func": "q",
         "crb": "D",
@@ -311,6 +349,20 @@
         "current": "25A"
     },
     {
+        "filename": "swb_clock.svg",
+        "title": "Horloge journaliere",
+        "coef": 0.5,
+        "func": "kc",
+        "current": "16A"
+    },
+    {
+        "filename": "swb_calendar-clock.svg",
+        "title": "Horloge hebdomadaire",
+        "coef": 0.5,
+        "func": "kc",
+        "current": "16A"
+    },
+    {
         "filename": "swb_telec.svg",
         "title": "Telecommande / Divers",
         "coef": 0.5,
@@ -508,5 +560,12 @@
         "func": "q",
         "crb": "C",
         "current": "20A"
+    },
+    {
+        "filename": "swb_electric-motor.svg",
+        "title": "Moteur electrique",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "D"
     }
 ]
