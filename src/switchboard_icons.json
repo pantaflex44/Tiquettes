@@ -508,5 +508,55 @@
         "func": "q",
         "crb": "C",
         "current": "20A"
+    },
+    {
+        "filename": "swb_clock.svg",
+        "title": "Horloge Journaliere",
+        "coef": 0.5,
+        "func": "kc",
+        "current": "16A"
+    },
+    {
+        "filename": "swb_calendar-clock.svg",
+        "title": "Horloge Hebdomadaire",
+        "coef": 0.5,
+        "func": "kc",
+        "current": "16A"
+    },
+    {
+        "filename": "swb_electric-motor.svg",
+        "title": "Moteur Electrique",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "D"
+    },
+    {
+        "filename": "swb_battery.svg",
+        "title": "Batterie",
+        "coef": 0.5
+    },
+    {
+        "filename": "swb_home.svg",
+        "title": "Maison / Dépendance",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "40A"
+    },
+    {
+        "filename": "swb_inverter.svg",
+        "title": "Onduleur",
+        "coef": 0.5
+    },
+    {
+        "filename": "swb_differential-circuit-breaker.svg",
+        "title": "Interrupteur différentiel",
+        "coef": 0.5,
+        "func": "sw"
+    },
+    {
+        "filename": "swb_ground.svg",
+        "title": "Mise à la terre",
+        "coef": 0.5
     }
 ]
