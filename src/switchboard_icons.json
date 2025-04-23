@@ -53,14 +53,6 @@
         "current": "16A"
     },
     {
-        "filename": "swb_pctri.svg",
-        "title": "Prise de courant triphasé",
-        "coef": 0.5,
-        "func": "q",
-        "crb": "C",
-        "current": "20A"
-    },
-    {
         "filename": "swb_pc2.svg",
         "title": "Appareil sur prise de courant",
         "coef": 0.5,
