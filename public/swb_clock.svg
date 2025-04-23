@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-history"
+   version="1.1"
+   id="svg824"
+   sodipodi:docname="swb_clock.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs828" />
+  <sodipodi:namedview
+     id="namedview826"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="8.71875"
+     inkscape:cx="14.681004"
+     inkscape:cy="31.598566"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg824" />
+  <g
+     id="g1"
+     transform="translate(-0.01433563,0.29165268)">
+    <path
+       d="m 32.014337,17.015521 v 14.998816 l 7.174856,7.28304"
+       id="path820"
+       sodipodi:nodetypes="ccc"
+       style="stroke-width:5.33572" />
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:5.23434;stroke-dasharray:none;stroke-opacity:1"
+       id="path999"
+       cx="32.014336"
+       cy="31.708347"
+       r="23.934292" />
+  </g>
+</svg>
