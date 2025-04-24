@@ -1357,7 +1357,6 @@ function App() {
                         </div>
 
                         {/*<div className="dropdown_separator"></div>
-
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
                             <input id="print_pdf" name="print_pdf" type="checkbox"
