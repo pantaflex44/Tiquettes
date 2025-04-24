@@ -35,19 +35,6 @@ class Theme
         }
     }
 
-    private static function renderIcon($pdf, $workBox, $data, $module, $count)
-    {
-
-
-        self::setBgColor($pdf, $data);
-    }
-
-    private static function renderText($pdf, $workBox, $data, $module, $count)
-    {
-
-
-    }
-
     public static function render($pdf, $workBox, $themeData, $module)
     {
         $data = json_decode(json_encode($themeData), true);
@@ -65,7 +52,12 @@ class Theme
         array_multisort(array_column($data, 'position'), SORT_ASC, $data);
         $pos = 0;
         $np = $workBox['y'];
+        $nbFh = [];
         foreach (array_keys($data) as $key) {
+            if ($data[$key]['fullHeight'] === true) {
+                $nbFh[] = $key;
+            }
+
             $data[$key]['margins'] = [
                 'top' => $pos === 0 ? 2 : 1,
                 'bottom' => $pos === $count - 1 ? 2 : 1,
@@ -115,6 +107,13 @@ class Theme
             ];
             $np = $data[$key]['bgPlace']['y'] + $data[$key]['bgPlace']['h'];
         }
+
+        $diffNp = $workBox['h'] - $np;
+        if (count($nbFh) > 0) {
+            $diffNp = $diffNp / count($nbFh);
+            foreach ($nbFh as $key) $data[$key]['bgPlace']['h'] += $diffNp;
+        }
+
 
         var_dump($data);
 
