@@ -210,9 +210,9 @@ class TiquettesPDF extends FPDF
                 $this->SetFillColor(255, 255, 255);
                 $this->SetDrawColor(170, 170, 170);
                 $this->SetLineWidth(0.1);
-                $this->Rect($box->x, $box->y, $box->w, $box->h, 'DF');
-                $this->Line($workBox->x, $workBox->y, $workBox->x, $workBox->y + $workBox->h);
-                $this->Line($workBox->x + $workBox->w, $workBox->y, $workBox->x + $workBox->w, $workBox->y + $workBox->h);
+                $this->Rect($box['x'], $box['y'], $box['w'], $box['h'], 'DF');
+                $this->Line($workBox['x'], $workBox['y'], $workBox['x'], $workBox['y'] + $workBox['h']);
+                $this->Line($workBox['x'] + $workBox['w'], $workBox['y'], $workBox['x'] + $workBox['w'], $workBox['y'] + $workBox['h']);
 
                 $x += $w * $module->span;
             }
