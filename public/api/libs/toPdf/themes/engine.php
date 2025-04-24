@@ -11,11 +11,11 @@ class Theme
 
     private static function setBgColor($pdf, $data)
     {
-        if (array_key_exists('backgoundColor', $data)
-            && preg_match('/^#[a-f0-9]{6}$/i', $data['backgoundColor'])
-            && strlen($data['backgoundColor']) === 7
+        if (array_key_exists('backgroundColor', $data)
+            && preg_match('/^#[a-f0-9]{6}$/i', $data['backgroundColor'])
+            && strlen($data['backgroundColor']) === 7
         ) {
-            $color = self::computeColor($data['backgoundColor']);
+            $color = self::computeColor($data['backgroundColor']);
             $pdf->SetFillColor($color[0], $color[1], $color[2]);
         } else {
             $pdf->SetFillColor(255, 255, 255);
@@ -35,12 +35,25 @@ class Theme
         }
     }
 
+    private static function setBdrColor($pdf, $data)
+    {
+        if (array_key_exists('borderColor', $data)
+            && preg_match('/^#[a-f0-9]{6}$/i', $data['borderColor'])
+            && strlen($data['borderColor']) === 7
+        ) {
+            $color = self::computeColor($data['borderColor']);
+            $pdf->SetFillColor($color[0], $color[1], $color[2]);
+        } else {
+            $pdf->SetFillColor(0, 0, 0);
+        }
+    }
+
     public static function render($pdf, $workBox, $themeData, $module)
     {
-        $data = json_decode(json_encode($themeData), true);
+        $originalData = json_decode(json_encode($themeData), true);
         $data = array_filter(
-            $data,
-            fn($val, $key) => array_key_exists('shown', $val) && $val['shown'] === true,
+            $originalData,
+            fn($val, $key) => array_key_exists('shown', $val) && $val['shown'] === true && $key !== 'top' && $key !== 'bottom',
             ARRAY_FILTER_USE_BOTH
         );
         $count = count(array_keys($data));
@@ -53,6 +66,13 @@ class Theme
         $pos = 0;
         $np = $workBox['y'];
         $nbFh = [];
+        $keys = array_keys($data);
+        $firstKey = count($keys) > 0 ? array_shift($keys) : '';
+        $lastKey = count($keys) > 0 ? array_pop($keys) : '';
+        $hasBottomBorder = array_key_exists('bottom', $originalData) && ($originalData['bottom']['border'] ?? false) === true;
+        $hasTopBorder = array_key_exists('top', $originalData) && ($originalData['top']['border'] ?? false) === true;
+        $borderBottomSize = $hasBottomBorder ? $originalData['bottom']['borderSize'] * 0.2645833333 : 0;
+        $borderTopSize = $hasTopBorder ? $originalData['top']['borderSize'] * 0.2645833333 : 0;
         foreach (array_keys($data) as $key) {
             if ($data[$key]['fullHeight'] === true) {
                 $nbFh[] = $key;
@@ -65,8 +85,6 @@ class Theme
                 'right' => 1,
             ];
             $data[$key]['position'] = $pos++;
-
-            self::setBgColor($pdf, $data);
 
             if ($key === 'id' || $key === 'text') {
                 self::setFgColor($pdf, $data);
@@ -105,17 +123,55 @@ class Theme
                 'w' => $workBox['w'],
                 'h' => $data[$key]['place']['h'] + $data[$key]['margins']['top'] + $data[$key]['margins']['bottom'],
             ];
+
+            if ($firstKey === $key && $hasTopBorder) {
+                $data[$key]['bgPlace']['h'] += $borderTopSize;
+            }
+            if ($lastKey === $key && $hasBottomBorder) {
+                $data[$key]['bgPlace']['h'] += $borderBottomSize;
+            }
+
             $np = $data[$key]['bgPlace']['y'] + $data[$key]['bgPlace']['h'];
         }
 
-        $diffNp = $workBox['h'] - $np;
         if (count($nbFh) > 0) {
+            $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
+            $diffNp = $workBox['h'] - $hs;
             $diffNp = $diffNp / count($nbFh);
             foreach ($nbFh as $key) $data[$key]['bgPlace']['h'] += $diffNp;
+            $np = $workBox['y'];
+            foreach (array_keys($data) as $key) {
+                $data[$key]['bgPlace']['y'] = $np;
+                $np = $data[$key]['bgPlace']['y'] + $data[$key]['bgPlace']['h'];
+            }
         }
 
+        if ($count - 1 > 0) {
+            $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
+            $freeHs = ($workBox['h'] - $hs) / ($count - 1);
+            $keys = array_keys($data);
+            array_shift($keys);
+            $cnt = 0;
+            foreach ($keys as $key) $data[$key]['bgPlace']['y'] += $freeHs + ($cnt++ * $freeHs);
+        }
 
-        var_dump($data);
+        foreach (array_keys($data) as $key) {
+            self::setBgColor($pdf, $data[$key]);
+            $r = $data[$key]['bgPlace'];
+            $pdf->Rect($r['x'], $r['y'], $r['w'], $r['h'], 'F');
+        }
+
+        if ($firstKey !== '' && $hasTopBorder) {
+            self::setBdrColor($pdf, $originalData['top']);
+            $r = $data[$firstKey]['bgPlace'];
+            $pdf->Rect($r['x'], $r['y'] + $r['h'] - $borderTopSize, $r['w'], $borderTopSize, 'F');
+        }
+        if ($lastKey !== '' && $hasBottomBorder) {
+            self::setBdrColor($pdf, $originalData['bottom']);
+            $r = $data[$lastKey]['bgPlace'];
+            $pdf->Rect($r['x'], $r['y'], $r['w'], $borderBottomSize, 'F');
+        }
+
 
     }
 
