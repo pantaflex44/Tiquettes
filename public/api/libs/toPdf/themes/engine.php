@@ -74,9 +74,7 @@ class Theme
         $borderBottomSize = $hasBottomBorder ? $originalData['bottom']['borderSize'] * 0.2645833333 : 0;
         $borderTopSize = $hasTopBorder ? $originalData['top']['borderSize'] * 0.2645833333 : 0;
         foreach (array_keys($data) as $key) {
-            if ($data[$key]['fullHeight'] === true) {
-                $nbFh[] = $key;
-            }
+            if ($data[$key]['fullHeight'] === true) $nbFh[] = $key;
 
             $data[$key]['margins'] = [
                 'top' => $pos === 0 ? 2 : 1,
@@ -87,7 +85,7 @@ class Theme
             $data[$key]['position'] = $pos++;
 
             if ($key === 'id' || $key === 'text') {
-                self::setFgColor($pdf, $data);
+
 
                 $data[$key]['fontFamily'] = strtolower(trim($data[$key]['fontFamily'] ?? 'sans-serif'));
                 if ($data[$key]['fontFamily'] === 'serif') $data[$key]['fontFamily'] = 'Times';
@@ -102,7 +100,6 @@ class Theme
                 $s .= $data[$key]['fontWeight'] === 'bold' ? 'B' : '';
                 $data[$key]['fontStyle'] = $s;
                 $data[$key]['fontWeight'] = '';
-                $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
 
                 $data[$key]['lineCount'] = (int)($data[$key]['lineCount'] ?? 1);
                 $data[$key]['place'] = [
@@ -111,10 +108,10 @@ class Theme
                 ];
             }
             if ($key === 'icon') {
-                $sizeMm = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
+                $data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
                 $data[$key]['place'] = [
-                    'w' => $sizeMm,
-                    'h' => $sizeMm,
+                    'w' => $data[$key]['sizeMm'],
+                    'h' => $data[$key]['sizeMm'],
                 ];
             }
             $data[$key]['bgPlace'] = [
@@ -134,6 +131,7 @@ class Theme
             $np = $data[$key]['bgPlace']['y'] + $data[$key]['bgPlace']['h'];
         }
 
+        // full height
         if (count($nbFh) > 0) {
             $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
             $diffNp = $workBox['h'] - $hs;
@@ -146,6 +144,7 @@ class Theme
             }
         }
 
+        // space between
         if ($count - 1 > 0) {
             $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
             $freeHs = ($workBox['h'] - $hs) / ($count - 1);
@@ -155,12 +154,23 @@ class Theme
             foreach ($keys as $key) $data[$key]['bgPlace']['y'] += $freeHs + ($cnt++ * $freeHs);
         }
 
+        // draw background color
         foreach (array_keys($data) as $key) {
             self::setBgColor($pdf, $data[$key]);
             $r = $data[$key]['bgPlace'];
             $pdf->Rect($r['x'], $r['y'], $r['w'], $r['h'], 'F');
+
+            if ($key === 'id' || $key === 'text') {
+                self::setFgColor($pdf, $data);
+                $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
+
+                
+            } else if ($key === 'icon') {
+
+            }
         }
 
+        // draw borders
         if ($firstKey !== '' && $hasTopBorder) {
             self::setBdrColor($pdf, $originalData['top']);
             $r = $data[$firstKey]['bgPlace'];
