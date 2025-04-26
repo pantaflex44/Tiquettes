@@ -80,7 +80,7 @@ function App() {
         labels: true,
         summary: false,
         schema: false,
-        freeModules: true,
+        freeModules: false,
         pdf: false
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
@@ -595,29 +595,29 @@ function App() {
         document.body.appendChild(form);
         form.style.display = "none";
         form.name = "toPdfForm";
-
         form.method = 'POST';
         form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
         form.target = '_blank';
 
-        let _s = document.createElement("input");
-        _s.type = "hidden";
-        _s.name = "switchboard";
-        _s.value = JSON.stringify(switchboard);
-        form.appendChild(_s);
-
-        let _p = document.createElement("input");
-        _p.type = "hidden";
-        _p.name = "printOptions";
-        _p.value = JSON.stringify(printOptions);
-        form.appendChild(_p);
+        let params = Object.fromEntries(Object.entries({
+            switchboard: {value: JSON.stringify(switchboard)},
+            printOptions: {value: JSON.stringify(printOptions)},
+            tv: {value: JSON.stringify(pkg.version)}
+        }).map(([key, value]) => {
+            const i = document.createElement("input");
+            i.type = "hidden";
+            i.name = key;
+            i.value = value.value;
+            return [key, {...value, input: form.appendChild(i)}];
+        }));
 
         form.submit();
 
-        form.removeChild(_s);
-        _s = null;
-        form.removeChild(_p);
-        _p = null;
+        Object.entries(params).forEach(([_, value]) => {
+            form.removeChild(value.input);
+        });
+        params = null;
+
         document.body.removeChild(form);
         form = null;
 
@@ -1325,7 +1325,7 @@ function App() {
                             <label htmlFor="print_labels">Etiquettes</label>
                         </div>
                         <div className="dropdown_item"
-                             title="Imprimer les emplacements libres de chaque rangée d'étiquettes"
+                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes"
                              style={{marginLeft: '0.5em'}}>
                             <input id="print_free" name="print_free" type="checkbox"
                                    checked={printOptions.freeModules}
@@ -1333,7 +1333,7 @@ function App() {
                                        ...old,
                                        freeModules: e.target.checked
                                    }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_free">Imprimer les emplacements libres</label>
+                            <label htmlFor="print_free">Décorer les emplacements libres</label>
                         </div>
 
                         <div className="dropdown_item" title="Imprimer le schéma unifilaire" style={{marginTop: '1em'}}>
@@ -1356,7 +1356,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        <div className="dropdown_separator"></div>
+                        {/*<div className="dropdown_separator"></div>
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
                             <input id="print_pdf" name="print_pdf" type="checkbox"
@@ -1366,7 +1366,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>
+                        </div>*/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

@@ -10,13 +10,14 @@ date_default_timezone_set('Europe/Paris');
 require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
-if (!isset($_POST['switchboard']) || !isset($_POST['printOptions'])) {
+if (!isset($_POST['switchboard']) || !isset($_POST['printOptions']) || !isset($_POST['tv'])) {
     echo 'Missing parameters';
     exit;
 }
 
 $switchboard = json_decode($_POST['switchboard']);
 $printOptions = json_decode($_POST['printOptions']);
+$tv = json_decode($_POST['tv']);
 
 //var_dump($switchboard);
 //var_dump($printOptions);
@@ -51,9 +52,118 @@ class TiquettesPDF extends FPDF
     public $pageMargin = 10;
     public $pageBottomMargin = 12;
 
+    function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0)
+    {
+        // Output text with automatic or explicit line breaks, at most $maxline lines
+        if (!isset($this->CurrentFont))
+            $this->Error('No font has been set');
+        $cw = $this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', (string)$txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
+            $nb--;
+        $b = 0;
+        if ($border) {
+            if ($border == 1) {
+                $border = 'LTRB';
+                $b = 'LRT';
+                $b2 = 'LR';
+            } else {
+                $b2 = '';
+                if (is_int(strpos($border, 'L')))
+                    $b2 .= 'L';
+                if (is_int(strpos($border, 'R')))
+                    $b2 .= 'R';
+                $b = is_int(strpos($border, 'T')) ? $b2 . 'T' : $b2;
+            }
+        }
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $ns = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            // Get next character
+            $c = $s[$i];
+            if ($c == "\n") {
+                // Explicit line break
+                if ($this->ws > 0) {
+                    $this->ws = 0;
+                    $this->_out('0 Tw');
+                }
+                $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+                continue;
+            }
+            if ($c == ' ') {
+                $sep = $i;
+                $ls = $l;
+                $ns++;
+            }
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                // Automatic line break
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                    if ($this->ws > 0) {
+                        $this->ws = 0;
+                        $this->_out('0 Tw');
+                    }
+                    $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                } else {
+                    if ($align == 'J') {
+                        $this->ws = ($ns > 1) ? ($wmax - $ls) / 1000 * $this->FontSize / ($ns - 1) : 0;
+                        $this->_out(sprintf('%.3F Tw', $this->ws * $this->k));
+                    }
+                    $this->Cell($w, $h, substr($s, $j, $sep - $j), $b, 2, $align, $fill);
+                    $i = $sep + 1;
+                }
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline) {
+                    if ($this->ws > 0) {
+                        $this->ws = 0;
+                        $this->_out('0 Tw');
+                    }
+                    return substr($s, $i);
+                }
+            } else
+                $i++;
+        }
+        // Last chunk
+        if ($this->ws > 0) {
+            $this->ws = 0;
+            $this->_out('0 Tw');
+        }
+        if ($border && is_int(strpos($border, 'B')))
+            $b .= 'B';
+        $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+        $this->x = $this->lMargin;
+        return '';
+    }
+
     function Header()
     {
-        global $switchboard;
+        global $switchboard, $tv;
 
         $this->SetY(1.5);
 
@@ -63,7 +173,7 @@ class TiquettesPDF extends FPDF
 
         $this->SetTextColor(170, 170, 170);
         $this->SetFont('Arial', '', 8);
-        $this->Cell(0, 10, str('tiquettes.fr' . ' ' . $switchboard->appversion), 0, 0, 'R');
+        $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' (php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / imagick ' . phpversion('imagick') . ')'), 0, 0, 'R');
         $this->Ln($this->pageMargin + 1);
 
         $this->SetDrawColor(0, 0, 0);
@@ -124,7 +234,7 @@ class TiquettesPDF extends FPDF
         $this->Ln(2);
         $infos = [
             "Nom du projet :" => cutStr($switchboard->prjname, 100),
-            "Version :" => $switchboard->prjversion,
+            "Version :" => $switchboard->prjversion . " (" . $switchboard->appversion . ")",
             "Créé le :" => toFrenchDate($switchboard->prjcreated),
             "Modifié le :" => toFrenchDate($switchboard->prjupdated),
             "" => "",
@@ -205,7 +315,7 @@ class TiquettesPDF extends FPDF
                     'h' => $box['h'],
                 ];
 
-                Theme::render($this, $workBox, $switchboard->theme->data, $module);
+                Theme::render($this, $workBox, $switchboard->theme->data, $module, $printOptions);
 
                 $this->SetDrawColor(170, 170, 170);
                 $this->SetLineWidth(0.1);
@@ -220,6 +330,7 @@ class TiquettesPDF extends FPDF
         }
 
     }
+
 
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="64"
-   height="64"
+   width="1000"
+   height="1000"
    class="icon icon-tabler icons-tabler-outline icon-tabler-wash-machine"
    stroke-linejoin="round"
    stroke-width="2"
@@ -9,6 +9,7 @@
    id="svg18095"
    sodipodi:docname="swb_lv.svg"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   viewBox="0 0 64 64"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,10 +28,10 @@
      showgrid="false"
      inkscape:zoom="2.5172265"
      inkscape:cx="-99.117024"
-     inkscape:cy="50.253721"
+     inkscape:cy="49.856459"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="-8"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg18095" />

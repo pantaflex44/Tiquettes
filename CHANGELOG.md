@@ -1,6 +1,14 @@
 # Changelog
 
 
+## [2.1.6] - 2025-04-25
+
+### Améliorations
+
+- Il est désormais possible d'éditer tous les thèmes proposés !
+
+
+
 ## [2.1.5] - 2025-04-23
 
 ### Ajouts

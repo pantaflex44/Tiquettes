@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="64"
-   height="64"
+   width="1000"
+   height="1000"
    class="icon icon-tabler icons-tabler-outline icon-tabler-outlet"
    stroke-linejoin="round"
    stroke-width="2"
@@ -9,6 +9,7 @@
    id="svg52308"
    sodipodi:docname="swb_pc.svg"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   viewBox="0 0 64 64"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +27,7 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="3.1782977"
-     inkscape:cx="22.024369"
+     inkscape:cx="22.181685"
      inkscape:cy="48.925562"
      inkscape:window-width="1920"
      inkscape:window-height="1009"

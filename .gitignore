@@ -27,3 +27,4 @@ dist-ssr
 google205542c04daca98b.html
 
 public/api/.idea/*
+public/api/libs/toPdf/themes/icons

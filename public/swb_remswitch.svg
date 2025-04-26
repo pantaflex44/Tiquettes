@@ -1,18 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg 
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path d="M7 11L7 13H17V11H7Z" fill="#000000" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="1000"
+   height="1000"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="swb_remswitch.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.13134766"
+     inkscape:cx="-1488.4164"
+     inkscape:cy="-2112.7137"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
   <path
-    d="M7.75732 18L9.17154 16.5858L11 18.4143V14H13V18.4142L14.8284 16.5858L16.2426 18L12 22.2427L7.75732 18Z"
-    fill="#000000"
-  />
+     d="m 7,11 v 2 h 10 v -2 z"
+     fill="#000000"
+     id="path1" />
   <path
-    d="M16.2427 5.99996L14.8285 7.41418L13 5.58572V9.99996H11L11 5.58579L9.17161 7.41418L7.75739 5.99996L12 1.75732L16.2427 5.99996Z"
-    fill="#000000"
-  />
+     d="M 7.75732,18 9.17154,16.5858 11,18.4143 V 14 h 2 v 4.4142 L 14.8284,16.5858 16.2426,18 12,22.2427 Z"
+     fill="#000000"
+     id="path2" />
+  <path
+     d="M 16.2427,5.99996 14.8285,7.41418 13,5.58572 V 9.99996 H 11 V 5.58579 L 9.17161,7.41418 7.75739,5.99996 12,1.75732 Z"
+     fill="#000000"
+     id="path3" />
 </svg>
