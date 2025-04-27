@@ -48,7 +48,14 @@ export default ({mode}) => {
                     ]
                 },
             })
-        ]
+        ],
+        build: {
+            rollupOptions: {
+                external: [
+                    "sharp"
+                ]
+            }
+        }
     };
 
     if (mode === 'production') {

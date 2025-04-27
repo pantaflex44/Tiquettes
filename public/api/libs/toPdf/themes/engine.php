@@ -48,54 +48,6 @@ class Theme
         }
     }
 
-    private static function getIcon(string $name, string|false $color = false, int $iconSize = 48): string
-    {
-        if ($color === false) $color = '#000000';
-        $color = strtolower(trim($color));
-        if (!preg_match('/^#[a-f0-9A-Z]{6}$/i', $color)) $color = '#000000';
-        if ($color === '#ffffff') $color = '#fefefe';
-
-        $path = __DIR__ . '/../../../../';
-        $name = trim(strtolower($name));
-        $pi = pathinfo($name);
-
-        $pngname = $pi['filename'] . '.png';
-        $pngpath = __DIR__ . '/icons/' . $color . '/';
-        if (!is_dir($pngpath)) mkdir($pngpath, 0777, true);
-        if (file_exists($pngpath . $pngname)) {
-            $diff = time() - filemtime($pngpath . $pngname);
-            $days = round($diff / 86400);
-            if ($days < 1) return $pngpath . $pngname;
-        }
-
-        if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
-            $svg = file_get_contents($path . $name);
-
-            foreach ([3, 4, 8, 6] as $size) {
-                $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
-
-                $svg = preg_replace("/\"(\s*){$colorPattern}(\s*)\"/i", "\"{$color}\"", $svg);
-                $svg = preg_replace('/\"(\s*)currentColor(\s*)\"/i', "\"{$color}\"", $svg);
-
-                foreach (['color', 'fill', 'stroke'] as $key) {
-                    $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
-                }
-            }
-
-            $image = new Imagick();
-            $image->newImage($iconSize, $iconSize, new ImagickPixel('transparent'));
-            $image->readImageBlob($svg);
-            $image->transparentPaintImage('#ffffff', 0, 10, false);
-            $image->thumbnailImage($iconSize, $iconSize, true);
-            $image->setImageFormat('png64');
-            $image->writeImage($pngpath . $pngname);
-
-            return $pngpath . $pngname;
-        }
-
-        return '';
-    }
-
     public static function render($pdf, $workBox, $themeData, $module, $printOptions)
     {
         if ($printOptions->freeModules === true || (!$printOptions->freeModules && !$module->free)) {
@@ -230,7 +182,7 @@ class Theme
                         && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
                         && strlen($data[$key]['color']) === 7
                     ) ? $data[$key]['color'] : '#000000';
-                    $icon = self::getIcon($module->icon, $color, 100);
+                    $icon = $pdf->getIcon($module->icon, $color, 100);
                     if ($icon !== '') {
                         $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['h'], 'PNG');
                     }

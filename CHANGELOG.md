@@ -1,11 +1,19 @@
 # Changelog
 
 
-## [2.1.6] - 2025-04-25
+## [2.2.0] - 2025-04-27 - Nouvelles fonctionnalités majeures
+
+### Ajouts
+
+- Grosse nouveauté, ajout de la fonction "Imprimer au format PDF" dans le menu d'impression d'un projet. Cette nouvelle fonctionnalité permet de résoudre les problèmes de compatibilité avec certains navigateurs basés sur Gecko (Firefox, etc.) et Webkit (Safari, etc.). Une fois la case cochée, le projet est converti en un fichier PDF pour être imprimé correctement en toutes circonstances !
+- Nouveau service externe de conversion d'un projet Tiquettes en document PDF.
+- Mise à disposition d'une bibliothèque de thèmes à télécharger pour embellir ses étiquettes.
 
 ### Améliorations
 
-- Il est désormais possible d'éditer tous les thèmes proposés !
+- Mise à jour de toutes les dépendances.
+- Nette amélioration de la qualité visuelle des pictogrammes.
+- Possibilité d'éditer tous les thèmes proposés !
 
 
 
@@ -56,10 +64,10 @@
 ### Ajouts
 
 - Nouveaux pictogrammes : ([Issue #13](https://github.com/pantaflex44/Tiquettes/issues/13) par [jlecour](https://github.com/jlecour))
-  - Détecteur de fumées
-  - Sonnette / Carillon
-  - Alarme intrusion
-  - Transformateur
+    - Détecteur de fumées
+    - Sonnette / Carillon
+    - Alarme intrusion
+    - Transformateur
 
 
 
@@ -189,7 +197,7 @@
 
 ### Ajouts
 
-- Nouveaux pictogrammes:
+- Nouveaux pictogrammes :
     - Alarme incendie
     - Lingerie / Repassage
     - Bateaux / Ponton / Port
