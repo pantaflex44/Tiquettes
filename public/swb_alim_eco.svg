@@ -44,10 +44,12 @@
      id="path1" />
   <path
      d="M 4,9 A 2,2 0 0 1 6,7 h 11 a 2,2 0 0 1 2,2 v 0.5 a 0.5,0.5 0 0 0 0.5,0.5 0.5,0.5 0 0 1 0.5,0.5 v 3 A 0.5,0.5 0 0 1 19.5,14 0.5,0.5 0 0 0 19,14.5 V 15 a 2,2 0 0 1 -2,2 h -5.5"
-     id="path2" />
+     id="path2"
+     style="fill:none;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
   <path
      d="M 3,16.143 C 3,13.303 5.09,11 7.667,11 H 10 v 0.857 C 10,14.697 7.91,17 5.333,17 H 3 Z"
-     id="path3" />
+     id="path3"
+     style="stroke:#000000;stroke-opacity:1;fill:none" />
   <path
      d="M 3,20 V 17"
      id="path4" />

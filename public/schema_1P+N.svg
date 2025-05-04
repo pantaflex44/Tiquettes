@@ -3,11 +3,11 @@
 
 <svg
    width="11"
-   height="11"
-   viewBox="0 0 2.9104166 2.9104167"
+   height="17"
+   viewBox="0 0 2.9104166 4.4979167"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="schema_1P+N.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,18 +24,23 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="34.751878"
-     inkscape:cx="11.423843"
-     inkscape:cy="6.8341631"
+     inkscape:zoom="1.5358305"
+     inkscape:cx="-227.56417"
+     inkscape:cy="-93.434787"
      inkscape:window-width="1920"
-     inkscape:window-height="1010"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
        type="xygrid"
-       id="grid265" />
+       id="grid265"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <defs
      id="defs2" />

@@ -591,45 +591,46 @@ function App() {
     };
 
     const toPdf = () => {
-        alert("ATTENTION\n\nLe document PDF va s'ouvrir dans un nouvel onglet.\n\n" +
-            "Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.");
+        if (confirm("Le document s'ouvrira dans un nouvel onglet.\n\nImprimer en PDF permet, notamment,  de contourner certains problèmes d'impressions.\n\n" +
+            "ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
 
-        let form = document.createElement("form");
-        document.body.appendChild(form);
-        form.style.display = "none";
-        form.name = "toPdfForm";
-        form.method = 'POST';
-        form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
-        form.target = '_blank';
+            let form = document.createElement("form");
+            document.body.appendChild(form);
+            form.style.display = "none";
+            form.name = "toPdfForm";
+            form.method = 'POST';
+            form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
+            form.target = '_blank';
 
-        let params = Object.fromEntries(Object.entries({
-            switchboard: {value: JSON.stringify(switchboard)},
-            printOptions: {value: JSON.stringify(printOptions)},
-            tv: {value: JSON.stringify(pkg.version)},
-            auto: 0
-        }).map(([key, value]) => {
-            const i = document.createElement("input");
-            i.type = "hidden";
-            i.name = key;
-            i.value = value.value;
-            return [key, {...value, input: form.appendChild(i)}];
-        }));
+            let params = Object.fromEntries(Object.entries({
+                switchboard: {value: JSON.stringify(switchboard)},
+                printOptions: {value: JSON.stringify(printOptions)},
+                tv: {value: JSON.stringify(pkg.version)},
+                auto: 0
+            }).map(([key, value]) => {
+                const i = document.createElement("input");
+                i.type = "hidden";
+                i.name = key;
+                i.value = value.value;
+                return [key, {...value, input: form.appendChild(i)}];
+            }));
 
-        form.submit();
+            form.submit();
 
-        Object.entries(params).forEach(([_, value]) => {
-            form.removeChild(value.input);
-        });
-        params = null;
+            Object.entries(params).forEach(([_, value]) => {
+                form.removeChild(value.input);
+            });
+            params = null;
 
-        document.body.removeChild(form);
-        form = null;
+            document.body.removeChild(form);
+            form = null;
 
-        /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
-        const link = document.createElement("a");
-        link.href = url;
-        link.target = "_blank";
-        link.click();*/
+            /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank";
+            link.click();*/
+        }
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
@@ -1360,7 +1361,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        <div className="dropdown_separator"></div>
+                        {/*<div className="dropdown_separator"></div>
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
                             <input id="print_pdf" name="print_pdf" type="checkbox"
@@ -1370,7 +1371,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>
+                        </div>*/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

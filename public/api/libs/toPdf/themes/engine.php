@@ -109,7 +109,7 @@ class Theme
                 if ($key === 'icon') {
                     $data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
                     $data[$key]['place'] = [
-                        'w' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']),
+                        'w' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
                         'h' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
                     ];
                 }
@@ -184,7 +184,7 @@ class Theme
                     ) ? $data[$key]['color'] : '#000000';
                     $icon = $pdf->getIcon($module->icon, $color, 100);
                     if ($icon !== '') {
-                        $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['h'], 'PNG');
+                        $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
                     }
                 }
 

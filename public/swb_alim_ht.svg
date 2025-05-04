@@ -29,7 +29,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.52539063"
-     inkscape:cx="471.07807"
+     inkscape:cx="471.07806"
      inkscape:cy="436.81784"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
@@ -44,5 +44,6 @@
      id="path1" />
   <path
      d="m 13,3 v 7 h 6 L 11,21 V 14 H 5 L 13,3"
-     id="path2" />
+     id="path2"
+     style="fill:none;stroke:#000000;stroke-opacity:1" />
 </svg>

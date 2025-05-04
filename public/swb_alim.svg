@@ -44,8 +44,10 @@
      id="path1" />
   <path
      d="M 7,6 A 7.75,7.75 0 1 0 17,6"
-     id="path2" />
+     id="path2"
+     style="stroke:#000000;stroke-opacity:1;fill:none" />
   <path
      d="m 12,4 v 8"
-     id="path3" />
+     id="path3"
+     style="fill:none;stroke:#000000;stroke-opacity:1" />
 </svg>
