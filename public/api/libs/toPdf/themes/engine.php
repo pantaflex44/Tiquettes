@@ -43,8 +43,10 @@ class Theme
         ) {
             $color = self::computeColor($data['borderColor']);
             $pdf->SetFillColor($color[0], $color[1], $color[2]);
+            $pdf->SetDrawColor($color[0], $color[1], $color[2]);
         } else {
             $pdf->SetFillColor(0, 0, 0);
+            $pdf->SetDrawColor(0, 0, 0);
         }
     }
 
@@ -72,8 +74,10 @@ class Theme
             $lastKey = count($keys) > 0 ? array_pop($keys) : '';
             $hasBottomBorder = array_key_exists('bottom', $originalData) && ($originalData['bottom']['border'] ?? false) === true;
             $hasTopBorder = array_key_exists('top', $originalData) && ($originalData['top']['border'] ?? false) === true;
-            $borderBottomSize = $hasBottomBorder ? $originalData['bottom']['borderSize'] * 0.2645833333 : 0;
-            $borderTopSize = $hasTopBorder ? $originalData['top']['borderSize'] * 0.2645833333 : 0;
+            $borderBottomSize = $hasBottomBorder ? ($originalData['bottom']['borderSize'] ?? 1) * 0.2645833333 : 0;
+            $borderTopSize = $hasTopBorder ? ($originalData['top']['borderSize'] ?? 1) * 0.2645833333 : 0;
+            $borderBottomStyle = $hasBottomBorder ? ($originalData['bottom']['borderStyle'] ?? 'normal') : 'normal';
+            $borderTopStyle = $hasTopBorder ? ($originalData['top']['borderStyle'] ?? 'normal') : 'normal';
             foreach (array_keys($data) as $key) {
                 if ($data[$key]['fullHeight'] === true) $nbFh[] = $key;
 
@@ -194,13 +198,36 @@ class Theme
             // draw borders
             if ($firstKey !== '' && $hasTopBorder) {
                 self::setBdrColor($pdf, $originalData['top']);
+
                 $r = $data[$firstKey]['bgPlace'];
-                $pdf->Rect($r['x'], $r['y'] + $r['h'] - $borderTopSize, $r['w'], $borderTopSize, 'F');
+                //$pdf->Rect($r['x'], $r['y'] + $r['h'] - $borderTopSize, $r['w'], $borderTopSize, 'F');
+                $pdf->SetLineWidth($borderTopSize);
+                if ($borderTopStyle === 'dashed') {
+                    $pdf->SetDash(1, 0.6);
+                } elseif ($borderTopStyle === 'dotted') {
+                    $pdf->SetDash(0.5, 0.5);
+                } else {
+                    $pdf->SetDash(null, null);
+                }
+                $pdf->Line($r['x'], $r['y'] + $r['h'] - $borderTopSize + 0.4, $r['x'] + $r['w'], $r['y'] + $r['h'] - $borderTopSize + 0.4);
+                $pdf->SetDash(null, null);
+                $pdf->SetLineWidth(0.2);
             }
             if ($lastKey !== '' && $hasBottomBorder) {
                 self::setBdrColor($pdf, $originalData['bottom']);
                 $r = $data[$lastKey]['bgPlace'];
-                $pdf->Rect($r['x'], $r['y'], $r['w'], $borderBottomSize, 'F');
+                //$pdf->Rect($r['x'], $r['y'], $r['w'], $borderBottomSize, 'F');
+                $pdf->SetLineWidth($borderBottomSize);
+                if ($borderBottomStyle === 'dashed') {
+                    $pdf->SetDash(1, 0.6);
+                } elseif ($borderBottomStyle === 'dotted') {
+                    $pdf->SetDash(0.5, 0.5);
+                } else {
+                    $pdf->SetDash(null, null);
+                }
+                $pdf->Line($r['x'], $r['y'] , $r['x'] + $r['w'], $r['y']);
+                $pdf->SetDash(null, null);
+                $pdf->SetLineWidth(0.2);
             }
         }
 

@@ -163,7 +163,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    function SetDash(int|null $black = null, int|null $white = null): void
+    function SetDash(float|null $black = null, float|null $white = null): void
     {
         if ($black !== null)
             $s = sprintf('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
@@ -850,6 +850,7 @@ class TiquettesPDF extends FPDF
             $this->Line($this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 2.5, $this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 2.5);
             $this->Line($this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 1.5, $this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 1.5);
             $this->Line($this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 0.5, $this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 0.5);
+            $this->SetLineWidth(0.2);
         }
     }
 
