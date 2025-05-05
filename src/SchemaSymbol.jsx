@@ -61,7 +61,8 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`} title={func.title}
+        <div style={{"--symbol-width": '70px',"--symbol-height": '100px'}} className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`}
+             title={func.title}
              onClick={() => handleEdit()}>
             <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100}/>
             <div className="schemaItemSymbolId">{module.id}</div>
@@ -83,7 +84,8 @@ export default function SchemaSymbol({
             )}
 
             {monitor.errors && monitor.errors[module.id] &&
-                <img className="schemaItemSymbolWarning notprintable" src={`${import.meta.env.BASE_URL}schema_warning.svg`}
+                <img className="schemaItemSymbolWarning notprintable"
+                     src={`${import.meta.env.BASE_URL}schema_warning.svg`}
                      alt="Erreur"/>}
         </div>
     );
