@@ -1,21 +1,21 @@
 <?php
 
 /**
-    Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
-    Copyright (C) 2024-2025 Christophe LEMOINE
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+ * Copyright (C) 2024-2025 Christophe LEMOINE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 header('Access-Control-Allow-Origin: *');
@@ -28,8 +28,16 @@ date_default_timezone_set('Europe/Paris');
 require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
-if (!isset($_POST['switchboard']) || !isset($_POST['printOptions']) || !isset($_POST['tv'])) {
-    echo 'Missing parameters';
+if (!isset($_POST['switchboard'])) {
+    echo 'Missing switchboard parameter';
+    exit;
+}
+if (!isset($_POST['printOptions'])) {
+    echo 'Missing printOptions parameter';
+    exit;
+}
+if (!isset($_POST['tv'])) {
+    echo 'Missing tv parameter';
     exit;
 }
 
@@ -560,7 +568,7 @@ class TiquettesPDF extends FPDF
         if ($this->PageNo() > 1) {
             $this->SetTextColor(0, 0, 0);
             $this->SetFont('Arial', 'B', 9);
-            $this->Cell(0, 10, str($switchboard->prjname . ' - rev '  . $switchboard->prjversion), 0, 0, 'R');
+            $this->Cell(0, 10, str($switchboard->prjname . ' - rev ' . $switchboard->prjversion), 0, 0, 'R');
         }
 
         if ($this->PageNo() === 1) {
@@ -1110,7 +1118,7 @@ class TiquettesPDF extends FPDF
                 $columnPositionText = str_pad($columnPosition, strlen(strval(count($switchboard->rows[$i]))), '0', STR_PAD_LEFT);
 
                 $module = $switchboard->rows[$i][$j];
-                if (!$module->free) {
+                if (!$module->free && ($module->func ?? '') !== '') {
                     if ($module->func === 'k') $module->func = 'kc';
 
                     if ($j === 0) {
@@ -1187,7 +1195,7 @@ $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
 $pdf->SetCompression(true);
 $pdf->SetDisplayMode('real', 'default');
 $pdf->SetMargins(10, 10);
-$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin);
+$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin + 1);
 $pdf->AliasNbPages();
 
 $hasSchema = $printOptions->schema === true;

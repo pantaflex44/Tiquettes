@@ -568,7 +568,8 @@ function App() {
     const exportProject = () => {
         let swb = {
             ...switchboard,
-            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1
+            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1,
+            appversion: pkg.version,
         }
 
         const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
