@@ -126,9 +126,9 @@ class TiquettesPDF extends FPDF
 
     protected $grid = false;
     protected $gridOrientation = 'L';
-    protected $gridColor = [230, 230, 230];
-    protected $schemaLineWidth = 0.4;
-    protected $schemaLineColor = [97, 97, 97];
+    protected $gridColor = [200, 200, 200];
+    protected $schemaLineWidth = 0.27;
+    protected $schemaLineColor = [0, 0, 0];
     protected $schemaSymbolSize = ['w' => 20.1200833333, 'h' => 25.058333333];
     protected $schemaInitialPos = ['x' => 0, 'y' => 0];
     protected $schemaCurrentPosX = 0;
@@ -465,7 +465,7 @@ class TiquettesPDF extends FPDF
         $image->newImage($width, $height, new ImagickPixel('transparent'));
         $image->readImageBlob($svgContent);
         $image->transparentPaintImage('#ffffff', 0, 10, false);
-        $image->thumbnailImage($width, $height, true);
+        //$image->thumbnailImage($width, $height, true);
         $image->setImageFormat('png64');
         $image->writeImage($pngFilepath);
     }
@@ -991,7 +991,7 @@ class TiquettesPDF extends FPDF
 
         if ($level < $this->grid[$this->gridOrientation]['schemaMaxLevels']) {
             $symbol = $this->getSymbol($module->func);
-            $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
+            $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
 
             $this->SetTextColor(0, 0, 0);
             $this->SetFont('Arial', 'B', 7);
@@ -1010,7 +1010,7 @@ class TiquettesPDF extends FPDF
 
             if ($module->pole) {
                 $pole = $this->getPoleSymbol($module->pole);
-                $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 0, 0, 'PNG');
+                $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
             }
         } else {
             $symbol = $this->getSymbol('blank');

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="11"
-   height="17"
-   viewBox="0 0 2.9104166 4.4979167"
+   width="647.05884"
+   height="1000"
+   viewBox="0 0 18.487395 28.571428"
    version="1.1"
    id="svg5"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="1.5358305"
-     inkscape:cx="-227.56417"
-     inkscape:cy="-93.434787"
+     inkscape:zoom="0.38395763"
+     inkscape:cx="-178.4051"
+     inkscape:cy="365.9258"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -49,18 +49,18 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#020202;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
-       d="M 0.27085351,1.8500799 2.6462646,0.25885891"
+       style="fill:none;stroke:#020202;stroke-width:1.89075;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       d="M 0.81496009,12.305474 17.789985,0.9343833"
        id="path939" />
     <path
-       style="fill:none;stroke:#020202;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
-       d="M 0.25562652,2.6418836 2.6462646,1.0506627"
+       style="fill:none;stroke:#020202;stroke-width:1.89075;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       d="M 0.70614586,17.963816 17.789985,6.5927254"
        id="path941" />
     <circle
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.387751;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.77092;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
        id="path995"
-       cx="2.4216666"
-       cy="1.1915123"
-       r="0.32357362" />
+       cx="16.184975"
+       cy="7.599257"
+       r="2.3123031" />
   </g>
 </svg>

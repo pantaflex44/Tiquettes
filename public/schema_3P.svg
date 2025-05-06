@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="11"
-   height="17"
-   viewBox="0 0 2.9104166 4.4979169"
+   width="647.05902"
+   height="1000.0002"
+   viewBox="0 0 18.487401 28.571436"
    version="1.1"
    id="svg5"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="34.751878"
-     inkscape:cx="11.438231"
-     inkscape:cy="11.438231"
+     inkscape:zoom="0.38395764"
+     inkscape:cx="-87.249209"
+     inkscape:cy="423.22378"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -43,7 +43,7 @@
        spacingx="1"
        units="px" />
     <sodipodi:guide
-       position="2.7230707,3.5280016"
+       position="2.7230707,263.61342"
        orientation="1,0"
        id="guide2608"
        inkscape:locked="false" />
@@ -55,16 +55,16 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#020202;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
-       d="M 0.27085351,1.8500799 2.6462646,0.25885891"
+       style="fill:none;stroke:#020202;stroke-width:1.90092;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       d="M 0.72619996,12.370901 17.792584,0.93861051"
        id="path939" />
     <path
-       style="fill:none;stroke:#020202;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
-       d="M 0.27408596,2.5391014 2.6494971,0.94788041"
+       style="fill:none;stroke:#020202;stroke-width:1.90092;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       d="M 0.74942383,17.321246 17.815808,5.888956"
        id="path939-3" />
     <path
-       style="fill:none;stroke:#020202;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
-       d="M 0.27408594,3.2395432 2.6494971,1.6483222"
+       style="fill:none;stroke:#020202;stroke-width:1.90092;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:20;stroke-dasharray:none"
+       d="M 0.74942369,22.353642 17.815808,10.921352"
        id="path939-3-6" />
   </g>
 </svg>
