@@ -462,6 +462,7 @@ class TiquettesPDF extends FPDF
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): void
     {
         $image = new Imagick();
+
         $image->newImage($width, $height, new ImagickPixel('transparent'));
         $image->readImageBlob($svgContent);
         $image->transparentPaintImage('#ffffff', 0, 10, false);
@@ -480,6 +481,7 @@ class TiquettesPDF extends FPDF
         $path = '../';
         $name = trim(strtolower($name));
         $pi = pathinfo($name);
+
         $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
 
         $pngname = $pi['filename'] . '.png';
@@ -500,6 +502,7 @@ class TiquettesPDF extends FPDF
                     $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
                 }
             }
+
 
             $this->svg2png($svg, $pngpath . $pngname, $iconSize, $iconSize);
 
@@ -724,71 +727,77 @@ class TiquettesPDF extends FPDF
 
     function AddLabelsPage()
     {
-        global $switchboard, $printOptions;
+        try {
 
-        require_once './libs/toPdf/themes/engine.php';
-        $h = $switchboard->height;
-        $w = $switchboard->stepSize;
+            global $switchboard, $printOptions;
 
-        $this->grid = false;
-        $rowsCount = count($switchboard->rows);
-        $modulesCount = $switchboard->stepsPerRows;
-        $this->subTitle = "Etiquettes à découper: {$rowsCount} x {$modulesCount} module" . ($modulesCount > 1 ? "s" : "") . "  /  largeur {$w}mm  /  hauteur {$h}mm";
-        $this->StartPageGroup();
-        $this->AddPage('L', 'A4', 0);
-        $this->SetVisibility('all');
+            require_once './libs/toPdf/themes/engine.php';
+            $h = $switchboard->height;
+            $w = $switchboard->stepSize;
 
-        $this->SetY($this->pageMargin + 5);
+            $this->grid = false;
+            $rowsCount = count($switchboard->rows);
+            $modulesCount = $switchboard->stepsPerRows;
+            $this->subTitle = "Etiquettes à découper: {$rowsCount} x {$modulesCount} module" . ($modulesCount > 1 ? "s" : "") . "  /  largeur {$w}mm  /  hauteur {$h}mm";
+            $this->StartPageGroup();
+            $this->AddPage('L', 'A4', 0);
+            $this->SetVisibility('all');
 
-        for ($i = 0; $i < count($switchboard->rows); $i++) {
-            $row = $switchboard->rows[$i];
+            $this->SetY($this->pageMargin + 5);
 
-            $this->SetTextColor(170, 170, 170);
-            $this->SetFont('Arial', '', 10);
-            $this->Cell(0, 7, str("Rangée " . ($i + 1)), 0, 0, 'L');
-            $this->Ln(7);
+            for ($i = 0; $i < count($switchboard->rows); $i++) {
+                $row = $switchboard->rows[$i];
 
-            $x = $this->pageMargin;
-            for ($j = 0; $j < count($row); $j++) {
-                $module = $row[$j];
+                $this->SetTextColor(170, 170, 170);
+                $this->SetFont('Arial', '', 10);
+                $this->Cell(0, 7, str("Rangée " . ($i + 1)), 0, 0, 'L');
+                $this->Ln(7);
 
-                if ($x + $w * $module->span > $this->GetPageWidth() - $this->pageMargin) {
-                    $this->SetY($this->GetY() + $h + 3);
-                    $x = $this->pageMargin;
+                $x = $this->pageMargin;
+
+                for ($j = 0; $j < count($row); $j++) {
+                    $module = $row[$j];
+
+                    if ($x + $w * $module->span > $this->GetPageWidth() - $this->pageMargin) {
+                        $this->SetY($this->GetY() + $h + 3);
+                        $x = $this->pageMargin;
+                    }
+
+                    if ($this->GetY() + $h > $this->GetPageHeight() - ($this->pageBottomMargin)) {
+                        $this->AddPage('L', 'A4', 0);
+                        $this->SetY($this->pageMargin + 10);
+                    }
+
+                    $box = [
+                        'x' => $x,
+                        'y' => $this->GetY(),
+                        'w' => $w * $module->span,
+                        'h' => $h,
+                    ];
+                    $workBox = [
+                        'x' => $module->half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
+                        'y' => $box['y'],
+                        'w' => $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
+                        'h' => $box['h'],
+                    ];
+
+                    Theme::render($this, $workBox, $switchboard->theme->data, $module, $printOptions);
+
+                    $this->SetDrawColor(170, 170, 170);
+                    $this->SetLineWidth(0.1);
+                    $this->Rect($box['x'], $box['y'], $box['w'], $box['h'], 'D');
+                    $this->Line($workBox['x'], $workBox['y'], $workBox['x'], $workBox['y'] + $workBox['h']);
+                    $this->Line($workBox['x'] + $workBox['w'], $workBox['y'], $workBox['x'] + $workBox['w'], $workBox['y'] + $workBox['h']);
+
+                    $x += $w * $module->span;
                 }
 
-                if ($this->GetY() + $h > $this->GetPageHeight() - ($this->pageBottomMargin)) {
-                    $this->AddPage('L', 'A4', 0);
-                    $this->SetY($this->pageMargin + 10);
-                }
-
-                $box = [
-                    'x' => $x,
-                    'y' => $this->GetY(),
-                    'w' => $w * $module->span,
-                    'h' => $h,
-                ];
-                $workBox = [
-                    'x' => $module->half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
-                    'y' => $box['y'],
-                    'w' => $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
-                    'h' => $box['h'],
-                ];
-
-                Theme::render($this, $workBox, $switchboard->theme->data, $module, $printOptions);
-
-                $this->SetDrawColor(170, 170, 170);
-                $this->SetLineWidth(0.1);
-                $this->Rect($box['x'], $box['y'], $box['w'], $box['h'], 'D');
-                $this->Line($workBox['x'], $workBox['y'], $workBox['x'], $workBox['y'] + $workBox['h']);
-                $this->Line($workBox['x'] + $workBox['w'], $workBox['y'], $workBox['x'] + $workBox['w'], $workBox['y'] + $workBox['h']);
-
-                $x += $w * $module->span;
+                $this->SetY($this->GetY() + $h + 6);
             }
-
-            $this->SetY($this->GetY() + $h + 6);
+        } catch (\Exception $e) {
+            var_dump($e);
+            die();
         }
-
     }
 
     function AddSchemaPage()
@@ -1198,15 +1207,20 @@ $pdf->SetMargins(10, 10);
 $pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin + 1);
 $pdf->AliasNbPages();
 
+
 $hasSchema = $printOptions->schema === true;
 $hasSummary = $printOptions->summary === true;
 $hasLabels = $printOptions->labels === true;
 $hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary;
 
 if (!$hasOnlyLabels) $pdf->AddFirstPage();
+
 if ($printOptions->schema === true) $pdf->AddSchemaPage();
+
 if ($printOptions->summary === true) $pdf->AddSummaryPage();
+
 if ($printOptions->labels === true) $pdf->AddLabelsPage();
 
 if ($auto) $pdf->AutoPrint(true);
+
 echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - tiquettes " . $tv . ".pdf", true);
