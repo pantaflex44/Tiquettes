@@ -1,1 +1,60 @@
-<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-alarm-smoke"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 8l-.8 3a1.25 1.25 0 0 1 -1.2 1h-8a1.25 1.25 0 0 1 -1.2 -1l-.8 -3" /><path d="M3 4m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z" /><path d="M12 16c.643 .288 1.017 .756 1 1.25c.017 .494 -.357 .962 -1 1.25s-1.017 .756 -1 1.25c-.017 .494 .357 .962 1 1.25" /><path d="M7 16c.643 .288 1.017 .756 1 1.25c.017 .494 -.357 .962 -1 1.25s-1.017 .756 -1 1.25c-.017 .494 .357 .962 1 1.25" /><path d="M17 16c.643 .288 1.017 .756 1 1.25c.017 .494 -.357 .962 -1 1.25s-1.017 .756 -1 1.25c-.017 .494 .357 .962 1 1.25" /></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1000"
+   height="1000"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-alarm-smoke"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="swb_smoke.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.13134766"
+     inkscape:cx="-3391.7621"
+     inkscape:cy="-1823.4052"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     stroke="none"
+     d="M 0,0 H 24 V 24 H 0 Z"
+     fill="none"
+     id="path1" />
+  <path
+     d="m 18,8 -0.8,3 A 1.25,1.25 0 0 1 16,12 H 8 A 1.25,1.25 0 0 1 6.8,11 L 6,8"
+     id="path2" />
+  <path
+     d="M 3,4 M 3,5 A 1,1 0 0 1 4,4 h 16 a 1,1 0 0 1 1,1 V 7 A 1,1 0 0 1 20,8 H 4 A 1,1 0 0 1 3,7 Z"
+     id="path3" />
+  <path
+     d="m 12,16 c 0.643,0.288 1.017,0.756 1,1.25 0.017,0.494 -0.357,0.962 -1,1.25 -0.643,0.288 -1.017,0.756 -1,1.25 -0.017,0.494 0.357,0.962 1,1.25"
+     id="path4" />
+  <path
+     d="m 7,16 c 0.643,0.288 1.017,0.756 1,1.25 0.017,0.494 -0.357,0.962 -1,1.25 -0.643,0.288 -1.017,0.756 -1,1.25 -0.017,0.494 0.357,0.962 1,1.25"
+     id="path5" />
+  <path
+     d="m 17,16 c 0.643,0.288 1.017,0.756 1,1.25 0.017,0.494 -0.357,0.962 -1,1.25 -0.643,0.288 -1.017,0.756 -1,1.25 -0.017,0.494 0.357,0.962 1,1.25"
+     id="path6" />
+</svg>

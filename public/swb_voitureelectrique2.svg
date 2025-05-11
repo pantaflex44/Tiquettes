@@ -1,19 +1,107 @@
-<?xml version="1.0"?>
-<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="icon icon-tabler icons-tabler-outline icon-tabler-car" stroke-linejoin="round" stroke-width="2">
- <g class="layer">
-  <title>Layer 1</title>
-  <path d="m0,0l24,0l0,24l-24,0l0,-24z" fill="#000000" fill-opacity="0" id="svg_1" stroke="#000000" stroke-opacity="0" transform="matrix(1 0 0 1 0 0)"/>
-  <path d="m21.38,13.89l-2.38,2.38" fill="#000000" id="svg_18" stroke="#ffffff" stroke-width="0"/>
-  <g id="svg_24" transform="matrix(1 0 0 1 0 0)">
-   <path d="m6.53,3.69l6.35,6.35l-1.59,1.59a4.5,4.5 0 1 1 -6.36,-6.36l1.59,-1.59z" fill="#000000" fill-opacity="0" id="svg_25" stroke="#000000"/>
-   <path d="m2.04,14.52l2.71,-2.71" fill="#000000" fill-opacity="0" id="svg_26" stroke="#000000"/>
-   <path d="m10.56,2.14l-2.71,2.71" fill="#000000" fill-opacity="0" id="svg_27" stroke="#000000"/>
-   <path d="m14.43,6.01l-2.71,2.71" fill="#000000" fill-opacity="0" id="svg_28" stroke="#000000"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1000"
+   height="1000"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-car"
+   stroke-linejoin="round"
+   stroke-width="2"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="swb_voitureelectrique2.svg"
+   viewBox="0 0 24 24"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="33.625"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <g
+     class="layer"
+     id="g1">
+    <title
+       id="title1">Layer 1</title>
+    <path
+       d="M 0,0 H 24 V 24 H 0 Z"
+       fill="#000000"
+       fill-opacity="0"
+       id="svg_1"
+       stroke="#000000"
+       stroke-opacity="0" />
+    <path
+       d="M 21.38,13.89 19,16.27"
+       fill="#000000"
+       id="svg_18"
+       stroke="#ffffff"
+       stroke-width="0" />
+    <g
+       id="svg_24">
+      <path
+         d="m 6.53,3.69 6.35,6.35 -1.59,1.59 A 4.5,4.5 0 1 1 4.93,5.27 L 6.52,3.68 Z"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_25"
+         stroke="#000000" />
+      <path
+         d="M 2.04,14.52 4.75,11.81"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_26"
+         stroke="#000000" />
+      <path
+         d="M 10.56,2.14 7.85,4.85"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_27"
+         stroke="#000000" />
+      <path
+         d="M 14.43,6.01 11.72,8.72"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_28"
+         stroke="#000000" />
+    </g>
+    <g
+       id="svg_30">
+      <path
+         d="m 13.31,20.69 m -1.17,0 a 1.17,1.19 0 1 0 2.33,0 1.17,1.19 0 1 0 -2.33,0"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_2"
+         stroke="#000000"
+         stroke-width="1.1" />
+      <path
+         d="m 19.13,20.69 m -1.17,0 a 1.17,1.19 0 1 0 2.33,0 1.17,1.19 0 1 0 -2.33,0"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_3"
+         stroke="#000000"
+         stroke-width="1.1" />
+      <path
+         d="m 12.14,20.69 h -1.17 v -3.57 l 1.17,-2.98 h 5.24 l 2.33,2.98 h 0.58 a 1.17,1.19 0 0 1 1.17,1.19 v 2.38 h -1.17 m -2.33,0 h -3.5 m -3.5,-3.57 h 8.74 m -3.5,0 v -2.98"
+         fill="#000000"
+         fill-opacity="0"
+         id="svg_4"
+         stroke="#000000"
+         stroke-width="1.1" />
+    </g>
   </g>
-  <g id="svg_30">
-   <path d="m13.31,20.69m-1.17,0a1.17,1.19 0 1 0 2.33,0a1.17,1.19 0 1 0 -2.33,0" fill="#000000" fill-opacity="0" id="svg_2" stroke="#000000" stroke-width="1.1"/>
-   <path d="m19.13,20.69m-1.17,0a1.17,1.19 0 1 0 2.33,0a1.17,1.19 0 1 0 -2.33,0" fill="#000000" fill-opacity="0" id="svg_3" stroke="#000000" stroke-width="1.1"/>
-   <path d="m12.14,20.69l-1.17,0l0,-3.57l1.17,-2.98l5.24,0l2.33,2.98l0.58,0a1.17,1.19 0 0 1 1.17,1.19l0,2.38l-1.17,0m-2.33,0l-3.5,0m-3.5,-3.57l8.74,0m-3.5,0l0,-2.98" fill="#000000" fill-opacity="0" id="svg_4" stroke="#000000" stroke-width="1.1"/>
-  </g>
- </g>
 </svg>

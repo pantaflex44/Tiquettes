@@ -80,8 +80,8 @@ function App() {
         labels: true,
         summary: false,
         schema: false,
-        freeModules: true,
-        pdf: false
+        freeModules: false,
+        pdf: true
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
@@ -568,7 +568,8 @@ function App() {
     const exportProject = () => {
         let swb = {
             ...switchboard,
-            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1
+            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1,
+            appversion: pkg.version,
         }
 
         const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
@@ -591,41 +592,46 @@ function App() {
     };
 
     const toPdf = () => {
-        let form = document.createElement("form");
-        document.body.appendChild(form);
-        form.style.display = "none";
-        form.name = "toPdfForm";
+        if (confirm("Le document s'ouvrira dans un nouvel onglet.\n\nImprimer en PDF permet, notamment,  de contourner certains problèmes d'impressions.\n\n" +
+            "ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
 
-        form.method = 'POST';
-        form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
-        form.target = '_blank';
+            let form = document.createElement("form");
+            document.body.appendChild(form);
+            form.style.display = "none";
+            form.name = "toPdfForm";
+            form.method = 'POST';
+            form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
+            form.target = '_blank';
 
-        let _s = document.createElement("input");
-        _s.type = "hidden";
-        _s.name = "switchboard";
-        _s.value = JSON.stringify(switchboard);
-        form.appendChild(_s);
+            let params = Object.fromEntries(Object.entries({
+                switchboard: {value: JSON.stringify(switchboard)},
+                printOptions: {value: JSON.stringify(printOptions)},
+                tv: {value: JSON.stringify(pkg.version)},
+                auto: 0
+            }).map(([key, value]) => {
+                const i = document.createElement("input");
+                i.type = "hidden";
+                i.name = key;
+                i.value = value.value;
+                return [key, {...value, input: form.appendChild(i)}];
+            }));
 
-        let _p = document.createElement("input");
-        _p.type = "hidden";
-        _p.name = "printOptions";
-        _p.value = JSON.stringify(printOptions);
-        form.appendChild(_p);
+            form.submit();
 
-        form.submit();
+            Object.entries(params).forEach(([_, value]) => {
+                form.removeChild(value.input);
+            });
+            params = null;
 
-        form.removeChild(_s);
-        _s = null;
-        form.removeChild(_p);
-        _p = null;
-        document.body.removeChild(form);
-        form = null;
+            document.body.removeChild(form);
+            form = null;
 
-        /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
-        const link = document.createElement("a");
-        link.href = url;
-        link.target = "_blank";
-        link.click();*/
+            /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank";
+            link.click();*/
+        }
     };
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
@@ -1325,7 +1331,7 @@ function App() {
                             <label htmlFor="print_labels">Etiquettes</label>
                         </div>
                         <div className="dropdown_item"
-                             title="Imprimer les emplacements libres de chaque rangée d'étiquettes"
+                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes"
                              style={{marginLeft: '0.5em'}}>
                             <input id="print_free" name="print_free" type="checkbox"
                                    checked={printOptions.freeModules}
@@ -1333,7 +1339,7 @@ function App() {
                                        ...old,
                                        freeModules: e.target.checked
                                    }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_free">Imprimer les emplacements libres</label>
+                            <label htmlFor="print_free">Décorer les emplacements libres</label>
                         </div>
 
                         <div className="dropdown_item" title="Imprimer le schéma unifilaire" style={{marginTop: '1em'}}>
@@ -1356,7 +1362,7 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {/*<div className="dropdown_separator"></div>
+                        <div className="dropdown_separator"></div>
                         <div className="dropdown_item"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
                             <input id="print_pdf" name="print_pdf" type="checkbox"
@@ -1366,7 +1372,7 @@ function App() {
                                        pdf: e.target.checked
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>*/}
+                        </div>
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
@@ -1492,7 +1498,7 @@ function App() {
                                 })}
                             </select>
                         </div>
-                        {theme.name === 'custom' && theme?.data && <div className="tabPageBandCol">
+                        {theme.name.startsWith('custom') && theme?.data && <div className="tabPageBandCol">
                             <button style={{height: '34px'}}
                                     title="Modifier le thème."
                                     onClick={() => {
