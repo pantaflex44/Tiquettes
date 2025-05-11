@@ -18,74 +18,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 
 setlocale(LC_ALL, "fr_FR.UTF-8");
 date_default_timezone_set('Europe/Paris');
-
 require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
-if (!isset($_POST['switchboard'])) {
-    echo 'Missing switchboard parameter';
-    exit;
-}
-if (!isset($_POST['printOptions'])) {
-    echo 'Missing printOptions parameter';
-    exit;
-}
-if (!isset($_POST['tv'])) {
-    echo 'Missing tv parameter';
-    exit;
-}
 
-$switchboard = json_decode($_POST['switchboard']);
-$printOptions = json_decode($_POST['printOptions']);
-$tv = json_decode($_POST['tv']);
-$auto = intval(trim(($_POST['auto'] ?? '0'))) === 1;
 
-$flattenModules = [];
-foreach ($switchboard->rows as $row) {
-    foreach ($row as $module) {
-        if (!$module->free && !is_null($module->id) && ($module->func ?? '') !== '') {
-            $flattenModules[] = $module;
-        }
-    }
-}
-if ($switchboard->withDb) {
-    $flattenModules = array_map(function ($module) {
-        return (object)array_merge((array)$module, [
-            'parentId' => $module->parentId === '' ? 'DB' : $module->parentId,
-        ]);
-    }, $flattenModules);
-    $flattenModules[] = (object)array_merge((array)$switchboard->db, [
-        'id' => 'DB',
-        'parentId' => '',
-        'func' => 'dd'
-    ]);
-}
-foreach ($flattenModules as $module) {
-    $kcId = trim($module->kcId ?? '');
-    if ($kcId !== '') {
-        $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === $kcId));
-        if (count($kcModule) === 1) {
-            $kcModule = $kcModule[0];
-            $flattenModules[] = (object)array_merge((array)$kcModule, [
-                'kcId' => '',
-                'id' => '¤_' . $kcModule->id,
-                'parentId' => $module->id,
-                'func' => 'k',
-                'icon' => $module->icon,
-                'text' => $module->text,
-                'desc' => $module->desc,
-                'pole' => $module->pole
-
-            ]);
-        }
-    }
-}
 
 function str(string $str): string|false
 {
@@ -140,6 +86,39 @@ class TiquettesPDF extends FPDF
     public $pageMargin = 10;
     public $pageBottomMargin = 12;
     public $schemaFunctions = null;
+
+    public static function requirements()
+    {
+        $ret = [
+            'modules' => [
+                'php' => version_compare(phpversion(), '8.3', '>='),
+                'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
+                'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
+                'php_imagick' => extension_loaded('imagick'),
+                'convert' => false,
+                'magick' => false,
+            ],
+            'ok' => false
+        ];
+
+        try {
+            $ret['modules']['convert'] = exec('convert -help') !== false;
+        } catch (\Exception $ex) {
+        }
+
+        try {
+            $ret['modules']['magick'] = exec('magick -help') !== false;
+        } catch (\Exception $ex) {
+        }
+
+        $ret['ok'] = $ret['modules']['php']
+            && $ret['modules']['fpdf']
+            && $ret['modules']['schema_functions.json']
+            && ($ret['modules']['php_imagick'] || $ret['modules']['convert'] || $ret['modules']['magick']);
+
+        return $ret;
+    }
+
 
     function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
     {
@@ -459,16 +438,28 @@ class TiquettesPDF extends FPDF
         $this->IncludeJS($script);
     }
 
-    function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): void
+    function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        $image = new Imagick();
+        if (self::requirements()['modules']['php_imagick'] === true) {
+            $image = new Imagick();
 
-        $image->newImage($width, $height, new ImagickPixel('transparent'));
-        $image->readImageBlob($svgContent);
-        $image->transparentPaintImage('#ffffff', 0, 10, false);
-        //$image->thumbnailImage($width, $height, true);
-        $image->setImageFormat('png64');
-        $image->writeImage($pngFilepath);
+            $image->newImage($width, $height, new ImagickPixel('transparent'));
+            $image->readImageBlob($svgContent);
+            $image->transparentPaintImage('#ffffff', 0, 10, false);
+            //$image->thumbnailImage($width, $height, true);
+            $image->setImageFormat('png64');
+            $image->writeImage($pngFilepath);
+
+            return file_exists($pngFilepath);
+        } else if (self::requirements()['modules']['convert'] === true) {
+
+            return true;
+        } else if (self::requirements()['modules']['convert'] === true) {
+
+            return true;
+        }
+
+        return false;
     }
 
     function getIcon(string $name, string|false $color = false, int $iconSize = 100): string
@@ -490,6 +481,8 @@ class TiquettesPDF extends FPDF
         if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime) return $pngpath . $pngname;
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
+            copy($path . $name, $pngpath . $name);
+
             $svg = file_get_contents($path . $name);
 
             foreach ([3, 4, 8, 6] as $size) {
@@ -502,7 +495,6 @@ class TiquettesPDF extends FPDF
                     $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
                 }
             }
-
 
             $this->svg2png($svg, $pngpath . $pngname, $iconSize, $iconSize);
 
@@ -1195,6 +1187,79 @@ class TiquettesPDF extends FPDF
 
 
 }
+
+
+
+
+if (isset($_GET['require'])) {
+    header('Content-Type: application/json; charset=utf-8');
+    $requirements = TiquettesPDF::requirements();
+    echo json_encode($requirements);
+    exit();
+}
+
+
+if (!isset($_POST['switchboard'])) {
+    echo 'Missing switchboard parameter';
+    exit;
+}
+if (!isset($_POST['printOptions'])) {
+    echo 'Missing printOptions parameter';
+    exit;
+}
+if (!isset($_POST['tv'])) {
+    echo 'Missing tv parameter';
+    exit;
+}
+
+$switchboard = json_decode($_POST['switchboard']);
+$printOptions = json_decode($_POST['printOptions']);
+$tv = json_decode($_POST['tv']);
+$auto = intval(trim(($_POST['auto'] ?? '0'))) === 1;
+
+$flattenModules = [];
+foreach ($switchboard->rows as $row) {
+    foreach ($row as $module) {
+        if (!$module->free && !is_null($module->id) && ($module->func ?? '') !== '') {
+            $flattenModules[] = $module;
+        }
+    }
+}
+if ($switchboard->withDb) {
+    $flattenModules = array_map(function ($module) {
+        return (object)array_merge((array)$module, [
+            'parentId' => $module->parentId === '' ? 'DB' : $module->parentId,
+        ]);
+    }, $flattenModules);
+    $flattenModules[] = (object)array_merge((array)$switchboard->db, [
+        'id' => 'DB',
+        'parentId' => '',
+        'func' => 'dd'
+    ]);
+}
+foreach ($flattenModules as $module) {
+    $kcId = trim($module->kcId ?? '');
+    if ($kcId !== '') {
+        $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === $kcId));
+        if (count($kcModule) === 1) {
+            $kcModule = $kcModule[0];
+            $flattenModules[] = (object)array_merge((array)$kcModule, [
+                'kcId' => '',
+                'id' => '¤_' . $kcModule->id,
+                'parentId' => $module->id,
+                'func' => 'k',
+                'icon' => $module->icon,
+                'text' => $module->text,
+                'desc' => $module->desc,
+                'pole' => $module->pole
+
+            ]);
+        }
+    }
+}
+
+
+
 
 $pdf = new TiquettesPDF();
 
