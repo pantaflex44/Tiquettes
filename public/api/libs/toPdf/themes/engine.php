@@ -227,7 +227,7 @@ class Theme
                 } else {
                     $pdf->SetDash(null, null);
                 }
-                $pdf->Line($r['x'], $r['y'] + $r['h'] - $borderTopSize + 0.4, $r['x'] + $r['w'], $r['y'] + $r['h'] - $borderTopSize + 0.4);
+                $pdf->Line($r['x'] + ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4, $r['x'] + $r['w'] - ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4);
                 $pdf->SetDash(null, null);
                 $pdf->SetLineWidth(0.2);
             }
@@ -243,7 +243,7 @@ class Theme
                 } else {
                     $pdf->SetDash(null, null);
                 }
-                $pdf->Line($r['x'], $r['y'] , $r['x'] + $r['w'], $r['y']);
+                $pdf->Line($r['x'] + ($borderBottomSize / 2), $r['y'] , $r['x'] + $r['w'] - ($borderBottomSize / 2), $r['y']);
                 $pdf->SetDash(null, null);
                 $pdf->SetLineWidth(0.2);
             }

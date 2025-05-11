@@ -81,7 +81,7 @@ function App() {
         summary: false,
         schema: false,
         freeModules: false,
-        pdf: false
+        pdf: true
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 

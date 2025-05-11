@@ -5,14 +5,14 @@
 
 ### Ajouts
 
-- Grosse nouveauté, ajout de la fonction "Imprimer au format PDF" dans le menu d'impression d'un projet. Cette nouvelle fonctionnalité permet de résoudre les problèmes de compatibilité avec certains navigateurs basés sur Gecko (Firefox, etc.) et Webkit (Safari, etc.). Une fois la case cochée, le projet est converti en un fichier PDF pour être imprimé correctement en toutes circonstances !
-- Nouveau service externe de conversion d'un projet Tiquettes en document PDF.
-- Mise à disposition d'une bibliothèque de thèmes à télécharger pour embellir ses étiquettes.
+- Grosse nouveauté, ajout de la fonction "Imprimer au format PDF" dans le menu d'impression d'un projet. Cette nouvelle fonctionnalité permet de résoudre les problèmes de compatibilité avec certains navigateurs basés sur Gecko (Firefox, etc.) et Webkit (Safari, etc.). Une fois la case cochée, le projet est converti en un fichier PDF pour être imprimé correctement en toutes circonstances ! ([Issue #8](https://github.com/pantaflex44/Tiquettes/issues/8) par [plouflechien](https://github.com/plouflechien))
+- Nouveau service externe de conversion d'un projet Tiquettes (>= 2.1.5) en document PDF accessible à l'adresse : https://www.tiquettes.fr/pdf.php
+- Mise à disposition d'une bibliothèque de thèmes à télécharger pour embellir ses étiquettes (https://www.tiquettes.fr/themes.php).
 
 ### Améliorations
 
 - Mise à jour de toutes les dépendances.
-- Nette amélioration de la qualité visuelle des pictogrammes.
+- Nette amélioration de la qualité visuelle des pictogrammes et symboles électriques.
 - Possibilité d'éditer tous les thèmes proposés !
 
 

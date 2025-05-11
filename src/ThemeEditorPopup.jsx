@@ -345,7 +345,7 @@ export default function ThemeEditorPopup({
                     maxHeight: `calc(${sample.height}mm + 1mm)`,
                 }}>
                     {shownCount > 0 && <>
-                    {/* Top border */}
+                        {/* Top border */}
                         <div className={'tep-settings_row'} style={{width: '100%'}}>
                             <div className={'tep-settings_row-el'}>
                                 <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16}/>
@@ -433,7 +433,7 @@ export default function ThemeEditorPopup({
                     </>}
 
                     {shownCount > 1 && <>
-                    {/* Botttom border */}
+                        {/* Botttom border */}
                         <div className={'tep-settings_row'} style={{width: '100%'}}>
                             <div className={'tep-settings_row-el'}>
                                 <img src={borderTopIcon} alt={"Ajouter un séparateur bas"} width={16} height={16}/>
@@ -634,6 +634,10 @@ export default function ThemeEditorPopup({
                                        shownCount={shownCount}
                                        down={down}
                                        up={up}/>
+            </div>
+
+            <div className="tep-extras">
+                <b>⁛</b> Télécharger de <a href="https://www.tiquettes.fr/themes.php" target={'_blank'} rel={'noopener'}>nouveaux thèmes</a> pour embellir ses étiquettes !
             </div>
         </div>
     </Popup>
