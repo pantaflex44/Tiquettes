@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.2.0] - 2025-04-27 - Nouvelles fonctionnalités majeures
+## [2.2.0] - 2025-05-11 - Nouvelles fonctionnalités majeures
 
 ### Ajouts
 
