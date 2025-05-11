@@ -36,7 +36,6 @@
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
     },
     "dependencies": {
-        "@img/sharp-win32-x64": "^0.34.1",
         "compare-versions": "^6.1.1",
         "cpx2": "^8.0.0",
         "process": "^0.11.10",
