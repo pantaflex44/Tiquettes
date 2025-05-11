@@ -2,7 +2,7 @@
 <svg
    width="1000"
    height="1000"
-   class="icon icon-tabler icons-tabler-outline icon-tabler-wash-machine"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-cooker"
    stroke-linejoin="round"
    stroke-width="2"
    version="1.1"
@@ -25,375 +25,54 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.13134766"
-     inkscape:cx="-2143.1673"
-     inkscape:cy="-1298.0818"
+     inkscape:zoom="0.37150727"
+     inkscape:cx="-257.06092"
+     inkscape:cy="146.69969"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1" />
+     inkscape:current-layer="svg1"
+     showguides="true" />
+  <rect
+     style="display:inline;fill:none;stroke:#000000;stroke-width:2.20524;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="rect1"
+     width="15.911222"
+     height="17.340881"
+     x="4.0280037"
+     y="3.4746783" />
+  <rect
+     style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.879496;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     id="rect2-7"
+     width="1.420427"
+     height="1.5387956"
+     x="6.5642481"
+     y="16.873062" />
+  <rect
+     style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.879496;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     id="rect2-7-1"
+     width="1.420427"
+     height="1.5387956"
+     x="15.952062"
+     y="16.872349" />
+  <rect
+     style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.14126;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     id="rect2-7-9"
+     width="15.120318"
+     height="0.24340914"
+     x="4.4335341"
+     y="14.603585" />
+  <rect
+     style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.3744;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     id="rect2-7-7"
+     width="4.0986934"
+     height="1.3023014"
+     x="9.9021063"
+     y="3.7340806" />
   <path
-     d="M 0,0 H 24 V 24 H 0 Z"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_1"
-     stroke="#000000"
-     stroke-opacity="0" />
-  <path
-     d="m 4.18,3 m 0,2 A 2.27,2 0 0 1 6.45,3 H 17.8 a 2.27,2 0 0 1 2.27,2 V 19 A 2.27,2 0 0 1 17.8,21 H 6.45 A 2.27,2 0 0 1 4.18,19 Z"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_2"
-     stroke="#000000" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_13"
-     stroke="#000000"
-     x1="9.2799997"
-     x2="15.14"
-     y1="4.5700002"
-     y2="4.5700002" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_18"
-     stroke="#000000"
-     x1="4.1199999"
-     x2="19.790001"
-     y1="14.45"
-     y2="14.45" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_19"
-     stroke="#000000"
-     x1="6.2800002"
-     x2="8.7299995"
-     y1="17.33"
-     y2="17.33" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_20"
-     stroke="#000000"
-     x1="15.45"
-     x2="17.9"
-     y1="17.379999"
-     y2="17.379999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_21"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.299999"
-     y2="17.299999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_22"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.35"
-     y2="17.35" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_23"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.389999"
-     y2="17.389999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_24"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.440001"
-     y2="17.440001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_25"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.48"
-     y2="17.48" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_26"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.530001"
-     y2="17.530001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_27"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.57"
-     y2="17.57" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_28"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.620001"
-     y2="17.620001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_29"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.66"
-     y2="17.66" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_30"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.709999"
-     y2="17.709999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_31"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.75"
-     y2="17.75" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_32"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.799999"
-     y2="17.799999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_33"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.84"
-     y2="17.84" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_34"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.889999"
-     y2="17.889999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_35"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.93"
-     y2="17.93" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_36"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.98"
-     y2="17.98" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_37"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.030001"
-     y2="18.030001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_38"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.07"
-     y2="18.07" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_39"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.120001"
-     y2="18.120001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_40"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.16"
-     y2="18.16" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_41"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.209999"
-     y2="18.209999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_42"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.25"
-     y2="18.25" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_43"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.299999"
-     y2="18.299999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_44"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.25"
-     y2="18.25" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_45"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.209999"
-     y2="18.209999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_46"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.16"
-     y2="18.16" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_47"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.120001"
-     y2="18.120001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_48"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.07"
-     y2="18.07" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_49"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="18.030001"
-     y2="18.030001" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_50"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.98"
-     y2="17.98" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_51"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.93"
-     y2="17.93" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_52"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.889999"
-     y2="17.889999" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_53"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.84"
-     y2="17.84" />
-  <line
-     fill="none"
-     fill-opacity="0"
-     id="svg_54"
-     stroke="#000000"
-     x1="9.9200001"
-     x2="14.36"
-     y1="17.799999"
-     y2="17.799999" />
-  <path
-     d="m 12.17,9.37 c 0.54,-0.79 0,-1.88 -0.27,-2.14 0,0.81 -0.47,1.27 -0.8,1.61 -0.33,0.34 -0.54,0.87 -0.54,1.34 a 1.61,1.61 0 1 0 3.21,0 c 0,-0.41 -0.28,-1.06 -0.54,-1.34 -0.48,0.8 -0.75,0.8 -1.07,0.54 z"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_55"
-     stroke="#000000"
-     stroke-width="0.8" />
+     class="cls-1"
+     d="m 11.49646,13.245418 c -0.08084,-0.310901 -0.174105,-0.606257 -0.230066,-0.90783 -0.121246,-0.68398 -0.05596,-1.333762 0.534748,-1.797005 0.105698,-0.08084 0.3793,-0.08084 0.485005,0 0.637347,0.475678 0.730616,1.137897 0.547184,1.865404 -0.07151,0.27981 -0.161668,0.556511 -0.242502,0.833213 0.04043,0.0311 0.08084,0.06218 0.118137,0.09327 0.273592,-0.21763 0.600038,-0.394845 0.817669,-0.662219 0.786579,-0.976227 0.942029,-2.111013 0.391734,-3.2053841 C 13.402275,8.4357865 12.690312,7.5093028 12.077838,6.5579468 11.552417,7.2792358 11.048757,7.9694356 10.545098,8.6627432 9.9512784,9.4835211 9.7554107,10.39446 9.9264058,11.389341 c 0.1554502,0.917157 0.8114512,1.706844 1.5669392,1.862294 z"
+     id="path3"
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.621802;stroke-opacity:1" />
 </svg>

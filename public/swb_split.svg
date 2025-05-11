@@ -28,9 +28,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.625"
-     inkscape:cx="12"
-     inkscape:cy="12"
+     inkscape:zoom="0.52539063"
+     inkscape:cx="566.24535"
+     inkscape:cy="452.04461"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -48,12 +48,16 @@
   <path
      d="m 16,16 a 3,3 0 0 0 3,3"
      id="path3" />
+  <rect
+     style="display:inline;fill:none;stroke:#000000;stroke-width:1.67427;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="rect1"
+     width="17.327768"
+     height="8.2854614"
+     x="3.4162347"
+     y="5.0095663" />
   <path
      d="m 12,16 v 4"
      id="path4" />
-  <path
-     d="M 3,5 M 3,7 A 2,2 0 0 1 5,5 h 14 a 2,2 0 0 1 2,2 v 4 a 2,2 0 0 1 -2,2 H 5 A 2,2 0 0 1 3,11 Z"
-     id="path5" />
   <path
      d="M 7,13 V 10 A 1,1 0 0 1 8,9 h 8 a 1,1 0 0 1 1,1 v 3"
      id="path6" />
