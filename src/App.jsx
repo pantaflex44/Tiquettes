@@ -61,6 +61,7 @@ function App() {
     const projectRef = useRef();
     const switchboardRef = useRef();
 
+    const [testMode, setTestMode] = useState(false);
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
@@ -1263,6 +1264,8 @@ function App() {
         const enjoyProjectRequired = urlParams.get('enjoy') !== null;
         const newProjectRequired = urlParams.get('new') !== null;
 
+        setTestMode(urlParams.get('test') !== null);
+
         if (enjoyProjectRequired && !newProjectRequired) {
             resetProject();
             openWelcome();
@@ -1362,17 +1365,19 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {/*<div className="dropdown_separator"></div>
-                        <div className="dropdown_item"
-                             title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
-                            <input id="print_pdf" name="print_pdf" type="checkbox"
-                                   checked={printOptions.pdf}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdf: e.target.checked
-                                   }))}/>
-                            <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>*/}
+                        {testMode && <>
+                            <div className="dropdown_separator"></div>
+                            <div className="dropdown_item"
+                                 title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
+                                <input id="print_pdf" name="print_pdf" type="checkbox"
+                                       checked={printOptions.pdf}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           pdf: e.target.checked
+                                       }))}/>
+                                <label htmlFor="print_pdf">Imprimer au format PDF</label>
+                            </div>
+                        </>}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

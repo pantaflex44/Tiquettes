@@ -194,8 +194,6 @@ class Theme
                     $posY = $r['y'] + $largeMarginTop - $largeMarginBottom + (($r['h'] - $data[$key]['place']['h']) / 2) + $borderBottomMargin - $borderTopMargin;
                     $pdf->SetXY($posX, $posY);
 
-
-
                     if ($key === 'id' || $key === 'text') { // draw text
                         self::setFgColor($pdf, $data[$key]);
                         $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
@@ -206,8 +204,6 @@ class Theme
 
                     } else if ($key === 'icon' && $module->icon) { // draw icons
 
-
-
                         $color = (array_key_exists('color', $data[$key])
                             && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
                             && strlen($data[$key]['color']) === 7
@@ -215,21 +211,13 @@ class Theme
 
                         $icon = $pdf->getIcon($module->icon, $color, 100);
 
-
-
                         if ($icon !== '') {
                             $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
                         }
                     }
 
-
-
                     $pdf->SetXY($oldX, $oldY);
-
-
                 }
-
-                var_dump("bg"); die();
 
                 // draw borders
                 if ($firstKey !== '' && $hasTopBorder) {
