@@ -25,66 +25,78 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.625"
-     inkscape:cx="12"
-     inkscape:cy="12"
+     inkscape:zoom="0.74301454"
+     inkscape:cx="400.39593"
+     inkscape:cy="442.11786"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1" />
-  <g
-     class="layer"
-     id="g1">
-    <title
-       id="title1">Layer 1</title>
-    <path
-       d="M 0,0 H 24 V 24 H 0 Z"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_1" />
-    <path
-       d="m 3.45,3 m 0,1.99 A 2.42,1.99 0 0 1 5.87,3 H 17.98 A 2.42,1.99 0 0 1 20.4,4.99 V 18.91 A 2.42,1.99 0 0 1 17.98,20.9 H 5.87 A 2.42,1.99 0 0 1 3.45,18.91 Z"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_5"
-       stroke="#000000" />
-    <circle
-       cx="8.3299999"
-       cy="8.2700005"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_12"
-       stroke="#000000"
-       stroke-width="0.8"
-       r="2.3199999" />
-    <circle
-       cx="15.25"
-       cy="8.25"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_16"
-       stroke="#000000"
-       stroke-width="0.8"
-       r="2.3199999" />
-    <circle
-       cx="8.3400002"
-       cy="15.91"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_18"
-       stroke="#000000"
-       stroke-width="0.8"
-       r="2.3199999" />
-    <circle
-       cx="15.26"
-       cy="15.88"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_17"
-       stroke="#000000"
-       stroke-width="0.8"
-       r="2.3199999" />
-  </g>
+     inkscape:current-layer="svg1"
+     showguides="true">
+    <sodipodi:guide
+       position="10.110166,18.185847"
+       orientation="0,-1"
+       id="guide1"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="6.0725595,12.791606"
+       orientation="1,0"
+       id="guide2"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="18.056174,12.694703"
+       orientation="1,0"
+       id="guide3"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="11.466801,5.8469232"
+       orientation="0,-1"
+       id="guide4"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <rect
+     style="display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.98678;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="rect1"
+     width="17.898869"
+     height="17.922703"
+     x="3.1462831"
+     y="3.0877237" />
+  <circle
+     cx="8.842001"
+     cy="8.6000004"
+     fill="#000000"
+     id="svg_12"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.254936"
+     style="fill:none;stroke:#000000;stroke-width:1.0211;stroke-dasharray:none;stroke-opacity:1" />
+  <circle
+     cx="15.290002"
+     cy="8.6000004"
+     fill="#000000"
+     id="svg_13"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.254936"
+     style="fill:none;stroke:#000000;stroke-width:1.0211;stroke-dasharray:none;stroke-opacity:1" />
+  <circle
+     cx="8.842001"
+     cy="15.4"
+     fill="#000000"
+     id="svg_15"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.254936"
+     style="fill:none;stroke:#000000;stroke-width:1.0211;stroke-dasharray:none;stroke-opacity:1" />
+  <circle
+     cx="15.290002"
+     cy="15.4"
+     fill="#000000"
+     id="svg_14"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.254936"
+     style="fill:none;stroke:#000000;stroke-width:1.0211;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

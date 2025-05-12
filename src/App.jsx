@@ -82,7 +82,7 @@ function App() {
         summary: false,
         schema: false,
         freeModules: false,
-        pdf: false
+        pdf: true
     }), []);
     const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
 
@@ -593,7 +593,7 @@ function App() {
     };
 
     const toPdf = () => {
-        if (confirm("Le document s'ouvrira dans un nouvel onglet.\n\nImprimer en PDF permet, notamment,  de contourner certains problèmes d'impressions.\n\n" +
+        if (confirm("Le document va s'ouvrir dans un nouvel onglet.\n\nImprimer en PDF permet, notamment, de contourner certains problèmes d'impressions.\n\n" +
             "ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
 
             let form = document.createElement("form");
@@ -1365,19 +1365,17 @@ function App() {
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
-                        {testMode && <>
-                            <div className="dropdown_separator"></div>
-                            <div className="dropdown_item"
-                                 title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
-                                <input id="print_pdf" name="print_pdf" type="checkbox"
-                                       checked={printOptions.pdf}
-                                       onChange={(e) => setPrintOptions((old) => ({
-                                           ...old,
-                                           pdf: e.target.checked
-                                       }))}/>
-                                <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                            </div>
-                        </>}
+                        <div className="dropdown_separator"></div>
+                        <div className="dropdown_item"
+                             title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
+                            <input id="print_pdf" name="print_pdf" type="checkbox"
+                                   checked={printOptions.pdf}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdf: e.target.checked
+                                   }))}/>
+                            <label htmlFor="print_pdf">Imprimer au format PDF</label>
+                        </div>
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

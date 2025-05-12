@@ -28,9 +28,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1"
-     inkscape:cx="11.5"
-     inkscape:cy="11.5"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="436.28488"
+     inkscape:cy="422.14275"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -45,7 +45,11 @@
   <path
      d="M 3,19 H 21"
      id="path2" />
-  <path
-     d="M 5,6 M 5,7 A 1,1 0 0 1 6,6 h 12 a 1,1 0 0 1 1,1 v 8 a 1,1 0 0 1 -1,1 H 6 A 1,1 0 0 1 5,15 Z"
-     id="path3" />
+  <rect
+     style="display:inline;fill:none;stroke:#000000;stroke-width:1.92;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+     id="rect1"
+     width="14.526801"
+     height="9.9447498"
+     x="4.7178164"
+     y="5.9736381" />
 </svg>

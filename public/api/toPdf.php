@@ -31,8 +31,6 @@ require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
 
-
-
 function str(string $str): string|false
 {
     return iconv('UTF-8', 'windows-1252', $str);
@@ -87,41 +85,41 @@ class TiquettesPDF extends FPDF
     public $pageBottomMargin = 12;
     public $schemaFunctions = null;
 
+    public array $required = [];
+
     public static function requirements()
     {
-        $ret = [
+        $response = [
             'modules' => [
                 'php' => version_compare(phpversion(), '8.3', '>='),
                 'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
                 'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
                 'php_imagick' => extension_loaded('imagick'),
                 'convert' => false,
-                'magick' => false,
             ],
             'ok' => false
         ];
 
         try {
-            $ret['modules']['convert'] = exec('convert -help') !== false;
+            $retval = 0;
+            $ret = exec('convert -version', result_code:  $retval);
+            $response['modules']['convert'] = $ret !== false && $retval === 0;
         } catch (\Exception $ex) {
         }
 
-        try {
-            $ret['modules']['magick'] = exec('magick -help') !== false;
-        } catch (\Exception $ex) {
-        }
+        $response['ok'] = $response['modules']['php']
+            && $response['modules']['fpdf']
+            && $response['modules']['schema_functions.json']
+            && ($response['modules']['php_imagick'] || $response['modules']['convert']);
 
-        $ret['ok'] = $ret['modules']['php']
-            && $ret['modules']['fpdf']
-            && $ret['modules']['schema_functions.json']
-            && ($ret['modules']['php_imagick'] || $ret['modules']['convert'] || $ret['modules']['magick']);
-
-        return $ret;
+        return $response;
     }
 
 
     function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
     {
+        $this->required = self::requirements();
+
         $this->schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
         $this->schemaLevelsCounterRecursive();
 
@@ -440,7 +438,7 @@ class TiquettesPDF extends FPDF
 
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        if (self::requirements()['modules']['php_imagick'] === true) {
+        if ($this->required['modules']['php_imagick'] === true) {
             $image = new Imagick();
 
             $image->newImage($width, $height, new ImagickPixel('transparent'));
@@ -451,12 +449,24 @@ class TiquettesPDF extends FPDF
             $image->writeImage($pngFilepath);
 
             return file_exists($pngFilepath);
-        } else if (self::requirements()['modules']['convert'] === true) {
 
-            return true;
-        } else if (self::requirements()['modules']['convert'] === true) {
+        } else if ($this->required['modules']['convert'] === true) {
+            $f = basename($pngFilepath, '.png');
+            $d = dirname($pngFilepath);
+            $s = "{$d}/{$f}.svg";
+            file_put_contents($s, $svgContent);
 
-            return true;
+            $cmd = "convert {$s} -size 100x100 -transparent white png24:{$pngFilepath}";
+
+            try {
+                $retval = 0;
+                $output = [];
+                $ret = exec($cmd, $output, $retval);
+
+                return $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+                return false;
+            }
         }
 
         return false;
@@ -481,8 +491,6 @@ class TiquettesPDF extends FPDF
         if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime) return $pngpath . $pngname;
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
-            copy($path . $name, $pngpath . $name);
-
             $svg = file_get_contents($path . $name);
 
             foreach ([3, 4, 8, 6] as $size) {
@@ -496,7 +504,9 @@ class TiquettesPDF extends FPDF
                 }
             }
 
-            $this->svg2png($svg, $pngpath . $pngname, $iconSize, $iconSize);
+            if (!$this->svg2png($svg, $pngpath . $pngname, $iconSize, $iconSize)) {
+                copy(__DIR__ . '/libs/toPdf/assets/blank.png', $pngpath . $pngname);
+            }
 
             touch($pngpath . $pngname, $mtime);
 
@@ -521,7 +531,9 @@ class TiquettesPDF extends FPDF
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
             $svg = file_get_contents($path . $name);
-            $this->svg2png($svg, $pngpath . $pngname, $width, $height);
+            if (!$this->svg2png($svg, $pngpath . $pngname, $width, $height)) {
+                copy(__DIR__ . '/libs/toPdf/assets/blank.png', $pngpath . $pngname);
+            }
             touch($pngpath . $pngname, $mtime);
 
             return $pngpath . $pngname;
@@ -534,7 +546,7 @@ class TiquettesPDF extends FPDF
     {
         $name = "schema_{$pole}.svg";
         $path = '../';
-        $name = trim(strtolower($name));
+        $name = trim($name);
         $pi = pathinfo($name);
         $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
 
@@ -545,7 +557,9 @@ class TiquettesPDF extends FPDF
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
             $svg = file_get_contents($path . $name);
-            $this->svg2png($svg, $pngpath . $pngname, $width, $height);
+            if (!$this->svg2png($svg, $pngpath . $pngname, $width, $height)) {
+                copy(__DIR__ . '/libs/toPdf/assets/blank.png', $pngpath . $pngname);
+            }
             touch($pngpath . $pngname, $mtime);
 
             return $pngpath . $pngname;
@@ -569,7 +583,7 @@ class TiquettesPDF extends FPDF
         if ($this->PageNo() === 1) {
             $this->SetTextColor(170, 170, 170);
             $this->SetFont('Arial', '', 8);
-            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / imagick ' . phpversion('imagick')), 0, 0, 'R');
+            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI')), 0, 0, 'R');
         }
 
         if ($this->subTitle !== "" && $this->PageNo() > 1) {
@@ -828,6 +842,7 @@ class TiquettesPDF extends FPDF
             'y' => $this->grid[$this->gridOrientation]['top'] + $this->grid[$this->gridOrientation]['step'],
         ];
         $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
+
         $this->schemaDrawChilds('', 0);
     }
 
@@ -967,7 +982,7 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
+    protected function  schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
     {
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
@@ -1013,6 +1028,7 @@ class TiquettesPDF extends FPDF
                 $pole = $this->getPoleSymbol($module->pole);
                 $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
             }
+
         } else {
             $symbol = $this->getSymbol('blank');
             $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
@@ -1189,8 +1205,6 @@ class TiquettesPDF extends FPDF
 }
 
 
-
-
 if (isset($_GET['require'])) {
     header('Content-Type: application/json; charset=utf-8');
     $requirements = TiquettesPDF::requirements();
@@ -1257,8 +1271,6 @@ foreach ($flattenModules as $module) {
         }
     }
 }
-
-
 
 
 $pdf = new TiquettesPDF();

@@ -28,9 +28,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.625"
-     inkscape:cx="12"
-     inkscape:cy="12"
+     inkscape:zoom="0.37150727"
+     inkscape:cx="14.804555"
+     inkscape:cy="502.00901"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -43,9 +43,6 @@
      fill="none"
      id="path1" />
   <path
-     d="m 12,13 m -3,0 a 3,3 0 1 0 6,0 3,3 0 1 0 -6,0"
-     id="path2" />
-  <path
      d="M 14.167,10.5 C 14.889,8.962 15.323,7.457 15.47,5.986 15.69,4.356 14.708,3 12,3 9.292,3 8.31,4.357 8.53,5.986 8.677,7.457 9.111,8.962 9.833,10.5"
      id="path3" />
   <path
@@ -54,4 +51,10 @@
   <path
      d="m 8.664,13 c -1.693,0.143 -3.213,0.52 -4.56,1.128 -1.522,0.623 -2.206,2.153 -0.852,4.498 1.354,2.345 3.02,2.517 4.321,1.512 1.2,-0.863 2.287,-1.991 3.258,-3.386"
      id="path5" />
+  <circle
+     style="display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.92;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill"
+     id="path6"
+     cx="12.015916"
+     cy="13.049543"
+     r="2.9716783" />
 </svg>

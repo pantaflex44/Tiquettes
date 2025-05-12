@@ -25,62 +25,56 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.26269531"
-     inkscape:cx="-534.84015"
-     inkscape:cy="-241.72491"
+     inkscape:zoom="0.52539062"
+     inkscape:cx="263.61339"
+     inkscape:cy="486.30484"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1" />
-  <g
-     class="layer"
-     id="g1">
-    <title
-       id="title1">Layer 1</title>
-    <path
-       d="M 0,0 H 24 V 24 H 0 Z"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_1" />
-    <path
-       d="m 3.45,3 m 0,1.99 A 2.42,1.99 0 0 1 5.87,3 H 17.98 A 2.42,1.99 0 0 1 20.4,4.99 V 18.91 A 2.42,1.99 0 0 1 17.98,20.9 H 5.87 A 2.42,1.99 0 0 1 3.45,18.91 Z"
-       fill="#000000"
-       fill-opacity="0"
-       id="svg_5"
-       stroke="#000000" />
-    <circle
-       cx="8.6499996"
-       cy="8.6000004"
-       fill="#000000"
-       id="svg_12"
-       stroke="#000000"
-       stroke-opacity="0"
-       r="2.6500001" />
-    <circle
-       cx="15.05"
-       cy="8.6000004"
-       fill="#000000"
-       id="svg_13"
-       stroke="#000000"
-       stroke-opacity="0"
-       r="2.6500001" />
-    <circle
-       cx="8.6499996"
-       cy="15.4"
-       fill="#000000"
-       id="svg_15"
-       stroke="#000000"
-       stroke-opacity="0"
-       r="2.6500001" />
-    <circle
-       cx="15.05"
-       cy="15.4"
-       fill="#000000"
-       id="svg_14"
-       stroke="#000000"
-       stroke-opacity="0"
-       r="2.6500001" />
-  </g>
+  <rect
+     style="display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.98678;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="rect1"
+     width="17.898869"
+     height="17.922703"
+     x="3.1462831"
+     y="3.0877237" />
+  <circle
+     cx="8.842001"
+     cy="8.6000004"
+     fill="#000000"
+     id="svg_12"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.6500001"
+     style="stroke:none" />
+  <circle
+     cx="15.290002"
+     cy="8.6000004"
+     fill="#000000"
+     id="svg_13"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.6500001"
+     style="fill:#000000;fill-opacity:1;stroke:none" />
+  <circle
+     cx="8.842001"
+     cy="15.4"
+     fill="#000000"
+     id="svg_15"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.6500001"
+     style="stroke:none" />
+  <circle
+     cx="15.290002"
+     cy="15.4"
+     fill="#000000"
+     id="svg_14"
+     stroke="#000000"
+     stroke-opacity="0"
+     r="2.6500001"
+     style="stroke:none" />
 </svg>
