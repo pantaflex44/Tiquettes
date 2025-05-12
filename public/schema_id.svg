@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="0.38395764"
-     inkscape:cx="-199.24073"
-     inkscape:cy="363.32133"
+     inkscape:zoom="2.1719924"
+     inkscape:cx="348.75813"
+     inkscape:cy="359.34748"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -69,13 +69,13 @@
        cy="6.5894718"
        r="0.55988979" />
     <rect
-       style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:0.249966;stroke-opacity:1"
+       style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:0.253139;stroke-opacity:1"
        id="rect1148"
-       width="0.26458332"
-       height="9.3026867"
-       x="0.5464958"
-       y="7.8748999"
-       transform="rotate(-30)" />
+       width="0.26824394"
+       height="9.4101744"
+       x="0.5304293"
+       y="7.8750744"
+       transform="matrix(0.86699798,-0.49831165,0.50169026,0.86504733,0,0)" />
     <path
        id="rect1462"
        style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"

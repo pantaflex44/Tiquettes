@@ -18,8 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -85,9 +85,11 @@ class TiquettesPDF extends FPDF
     public $pageBottomMargin = 12;
     public $schemaFunctions = null;
 
+    public array $required = [];
+
     public static function requirements()
     {
-        $ret = [
+        $response = [
             'modules' => [
                 'php' => version_compare(phpversion(), '8.3', '>='),
                 'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
@@ -100,23 +102,24 @@ class TiquettesPDF extends FPDF
 
         try {
             $retval = 0;
-            $output = [];
-            $ret = exec('convert -version', $output, $retval);
-            $ret['modules']['convert'] = $ret !== false && $retval === 0;
+            $ret = exec('convert -version', result_code:  $retval);
+            $response['modules']['convert'] = $ret !== false && $retval === 0;
         } catch (\Exception $ex) {
         }
 
-        $ret['ok'] = $ret['modules']['php']
-            && $ret['modules']['fpdf']
-            && $ret['modules']['schema_functions.json']
-            && ($ret['modules']['php_imagick'] || $ret['modules']['convert']);
+        $response['ok'] = $response['modules']['php']
+            && $response['modules']['fpdf']
+            && $response['modules']['schema_functions.json']
+            && ($response['modules']['php_imagick'] || $response['modules']['convert']);
 
-        return $ret;
+        return $response;
     }
 
 
     function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
     {
+        $this->required = self::requirements();
+
         $this->schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
         $this->schemaLevelsCounterRecursive();
 
@@ -435,7 +438,7 @@ class TiquettesPDF extends FPDF
 
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        if (self::requirements()['modules']['php_imagick'] === true) {
+        if ($this->required['modules']['php_imagick'] === true) {
             $image = new Imagick();
 
             $image->newImage($width, $height, new ImagickPixel('transparent'));
@@ -447,7 +450,7 @@ class TiquettesPDF extends FPDF
 
             return file_exists($pngFilepath);
 
-        } else if (self::requirements()['modules']['convert'] === true) {
+        } else if ($this->required['modules']['convert'] === true) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
@@ -543,7 +546,7 @@ class TiquettesPDF extends FPDF
     {
         $name = "schema_{$pole}.svg";
         $path = '../';
-        $name = trim(strtolower($name));
+        $name = trim($name);
         $pi = pathinfo($name);
         $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
 
@@ -839,6 +842,7 @@ class TiquettesPDF extends FPDF
             'y' => $this->grid[$this->gridOrientation]['top'] + $this->grid[$this->gridOrientation]['step'],
         ];
         $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
+
         $this->schemaDrawChilds('', 0);
     }
 
@@ -978,7 +982,7 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
+    protected function  schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
     {
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
@@ -1024,6 +1028,7 @@ class TiquettesPDF extends FPDF
                 $pole = $this->getPoleSymbol($module->pole);
                 $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
             }
+
         } else {
             $symbol = $this->getSymbol('blank');
             $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
