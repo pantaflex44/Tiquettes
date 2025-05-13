@@ -70,7 +70,7 @@ class TiquettesPDF extends FPDF
 
     protected $grid = false;
     protected $gridOrientation = 'L';
-    protected $gridColor = [200, 200, 200];
+    protected $gridColor = [230, 230, 230];
     protected $schemaLineWidth = 0.27;
     protected $schemaLineColor = [0, 0, 0];
     protected $schemaSymbolSize = ['w' => 20.1200833333, 'h' => 25.058333333];
@@ -102,7 +102,7 @@ class TiquettesPDF extends FPDF
 
         try {
             $retval = 0;
-            $ret = exec('convert -version', result_code:  $retval);
+            $ret = exec('convert -version', result_code: $retval);
             $response['modules']['convert'] = $ret !== false && $retval === 0;
         } catch (\Exception $ex) {
         }
@@ -783,7 +783,7 @@ class TiquettesPDF extends FPDF
                     $workBox = [
                         'x' => $module->half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
                         'y' => $box['y'],
-                        'w' => $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
+                        'w' => $module->half === 'left' || $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
                         'h' => $box['h'],
                     ];
 
@@ -982,7 +982,7 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    protected function  schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
+    protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
     {
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
