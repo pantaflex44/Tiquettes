@@ -1,6 +1,15 @@
 # Changelog
 
 
+## [2.2.2] - 2025-05-15
+
+### Ajouts
+
+- Ajout de lignes de coupe pour les massicots
+- Ajout de nouvelles propriétés d'impression
+
+
+
 ## [2.2.1] - 2025-05-12
 
 ### Corrections
@@ -8,6 +17,7 @@
 - Gros correctif suite à la dernière mise à jour majeure.
   - Téléchargement des thèmes : corrigé
   - Impression au format PDF : corrigé
+
 
 
 ## [2.2.0] - 2025-05-11 - Nouvelles fonctionnalités majeures

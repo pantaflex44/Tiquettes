@@ -33,6 +33,13 @@ export function hexToRgb(hex) {
         : null;
 }
 
+export function rgbToHex(rgb) {
+    return '#' + rgb.map(x => {
+        const hex = x.toString(16)
+        return hex.length === 1 ? '0' + hex : hex
+    }).join('');
+}
+
 class Color {
     constructor(r, g, b) { this.set(r, g, b); }
     toString() { return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`; }
