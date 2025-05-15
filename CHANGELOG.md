@@ -5,8 +5,8 @@
 
 ### Ajouts
 
-- Ajout de lignes de coupe pour les massicots
-- Ajout de nouvelles propriétés d'impression
+- Ajout de lignes de coupe pour les massicots.
+- Ajout de nouvelles propriétés d'impression.
 
 
 

@@ -20,6 +20,7 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+set_time_limit(120); // 2 min
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -27,6 +28,7 @@ header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 
 setlocale(LC_ALL, "fr_FR.UTF-8");
 date_default_timezone_set('Europe/Paris');
+
 require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
