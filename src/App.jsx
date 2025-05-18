@@ -603,13 +603,16 @@ function App() {
     };
 
     const printProject = () => {
+        let type = 'std';
+
         if (printOptions.pdf) {
+            type = 'pdf';
             toPdf();
-        } else if (window) {
-            window.print();
         } else {
-            alert("Cet appareil ne permet pas de lancer une impression.");
+            window.print();
         }
+
+        fetch(import.meta.env.VITE_APP_API_URL + 'stats_print.php?type=' + type);
     };
 
     const toPdf = () => {
@@ -1371,7 +1374,7 @@ function App() {
                             <label htmlFor="print_free">Décorer les emplacements libres</label>
                         </div>
                         <div className="dropdown_item"
-                             title="Imprimer les lignes de découpes">
+                             title="Imprimer les lignes de coupe pour cisailles et massicots">
                             <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
                                    checked={printOptions.pdfOptions.labelsCutLines}
                                    onChange={(e) => setPrintOptions((old) => ({
