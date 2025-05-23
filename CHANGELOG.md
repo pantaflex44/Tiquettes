@@ -1,12 +1,13 @@
 # Changelog
 
 
-## [2.2.2] - 2025-05-15
+## [2.2.2] - 2025-05-23
 
 ### Ajouts
 
 - Ajout de lignes de coupe pour les massicots.
 - Ajout de nouvelles propriétés d'impression.
+- Ajout de quelques statistiques.
 
 
 
