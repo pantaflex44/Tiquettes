@@ -55,7 +55,7 @@ import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
-import {hexToRgb, rgbToHex} from "./color.js";
+import {stats_count, stats_visit} from "../public/api/stats.js";
 
 function App() {
     const importRef = useRef();
@@ -479,6 +479,9 @@ function App() {
         setDocumentTitle(name);
         setTab(1);
         scrollToProject();
+
+        stats_count('new');
+
     }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
@@ -574,6 +577,8 @@ function App() {
                     setTab(1);
                     scrollToProject();
 
+                    stats_count('import');
+
                     // eslint-disable-next-line no-unused-vars
                 } catch (err) {
                     importRef.current.value = "";
@@ -600,10 +605,12 @@ function App() {
         link.click();
 
         setSwitchboard(swb);
+
+        stats_count('export');
     };
 
     const printProject = () => {
-        let type = 'std';
+        let type = 'print';
 
         if (printOptions.pdf) {
             type = 'pdf';
@@ -612,7 +619,7 @@ function App() {
             window.print();
         }
 
-        fetch(import.meta.env.VITE_APP_API_URL + 'stats_print.php?type=' + type);
+        stats_count(type);
     };
 
     const toPdf = () => {
@@ -1310,6 +1317,8 @@ function App() {
             const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
             window.history.replaceState({}, document.title, newCurrentUrl);
         }
+
+        stats_visit();
     }, []);
 
     return (

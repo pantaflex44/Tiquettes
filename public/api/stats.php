@@ -35,27 +35,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once('./libs/config.php');
 
-if (!isset($_GET['type'])) {
-    header("HTTP/1.1 400 Bad Request");
-    exit;
-}
-
-$type = strtolower(trim($_GET['type']));
-if ($type !== 'pdf' && $type !== 'std') {
-    header("HTTP/1.1 400 Bad Request");
-    exit;
-}
-
 $date = date('Y-m-d');
+$archiveDelay = '3 years';
 
-$stmt = DB->prepare("SELECT * FROM stats_print WHERE date = :date");
-$stmt->execute([':date' => $date]);
-$found = $stmt->fetch(\PDO::FETCH_ASSOC);
+$stmt = DB->prepare("DELETE FROM stats WHERE date < date('now','-{$archiveDelay}')");
+$stmt->execute();
 
-$pdf = is_array($found) && isset($found['pdf']) ? $found['pdf'] : 0;
-$std = is_array($found) && isset($found['std']) ? $found['std'] : 0;
-if ($type === 'pdf') $pdf++;
-elseif ($type === 'std') $std++;
+$stmt = DB->prepare("SELECT * FROM stats WHERE date = ?");
+$stmt->execute([$date]);
+$statsData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-$stmt = DB->prepare("INSERT OR REPLACE INTO stats_print (date, pdf, std) VALUES(:date, :pdf, :std)");
-$stmt->execute([':date' => $date, ':pdf' => $pdf, ':std' => $std]);
+if (!is_array($statsData)) {
+    $statsData = [];
+    $stmt = DB->prepare("PRAGMA table_info('stats')");
+    $stmt->execute();
+    while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+        if ($row['name'] === 'date') continue;
+        $statsData[$row['name']] = $row['dflt_value'] ?? null;
+    }
+    $statsData['date'] = $date;
+}
+
+function stats_by_type($type)
+{
+    global $statsData;
+
+    if (isset($statsData[$type]) && $type !== 'date') {
+        if (str_starts_with($type, 'count_')) {
+            $statsData[$type] = intval($statsData[$type] ?? '0') + 1;
+        }
+    }
+
+    $keys = join(',', array_keys($statsData));
+    $tokens = join(',', array_fill(0, count($statsData), '?'));
+    $values = array_values($statsData);
+    $stmt = DB->prepare("INSERT OR REPLACE INTO stats ({$keys}) VALUES({$tokens})");
+    $stmt->execute($values);
+}
+
+if (isset($_GET['type'])) stats_by_type(strtolower(trim($_GET['type'])));

@@ -1341,7 +1341,7 @@ $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
 $pdf->SetCompression(true);
 $pdf->SetDisplayMode('real', 'default');
 $pdf->SetMargins(10, 10);
-$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin + 1);
+$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin - 1);
 $pdf->AliasNbPages();
 $pdf->SetGridColor($schemaGridColor);
 $pdf->SetShowCutLines($labelsCutLines);
