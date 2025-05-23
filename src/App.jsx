@@ -55,6 +55,7 @@ import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
+import {stats_count, stats_visit} from "../public/api/stats.js";
 
 function App() {
     const importRef = useRef();
@@ -82,9 +83,27 @@ function App() {
         summary: false,
         schema: false,
         freeModules: false,
-        pdf: true
+        pdf: true,
+        pdfOptions: {
+            openWindow: true,
+            autoPrint: false,
+            schemaGridColor: [230, 230, 230],
+            labelsCutLines: false
+        }
     }), []);
-    const [printOptions, setPrintOptions] = useState({...defaultPrintOptions});
+    const getSavedPrintOptions = () => {
+        if (sessionStorage.getItem(pkg.name + '_printOptions')) {
+            let po = {
+                ...defaultPrintOptions,
+                ...JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions'))
+            };
+
+            return po;
+        }
+
+        return {...defaultPrintOptions};
+    }
+    const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
 
     const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
@@ -460,6 +479,9 @@ function App() {
         setDocumentTitle(name);
         setTab(1);
         scrollToProject();
+
+        stats_count('new');
+
     }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
@@ -468,6 +490,7 @@ function App() {
         setClipboard(null);
         setClipboardMode(null);
         setDocumentTitle(defaultProjectName);
+        setPrintOptions({...defaultPrintOptions});
         setTheme(defaultTheme);
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
@@ -554,6 +577,8 @@ function App() {
                     setTab(1);
                     scrollToProject();
 
+                    stats_count('import');
+
                     // eslint-disable-next-line no-unused-vars
                 } catch (err) {
                     importRef.current.value = "";
@@ -580,16 +605,21 @@ function App() {
         link.click();
 
         setSwitchboard(swb);
+
+        stats_count('export');
     };
 
     const printProject = () => {
+        let type = 'print';
+
         if (printOptions.pdf) {
+            type = 'pdf';
             toPdf();
-        } else if (window) {
-            window.print();
         } else {
-            alert("Cet appareil ne permet pas de lancer une impression.");
+            window.print();
         }
+
+        stats_count(type);
     };
 
     const toPdf = () => {
@@ -602,13 +632,15 @@ function App() {
             form.name = "toPdfForm";
             form.method = 'POST';
             form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
-            form.target = '_blank';
+            if (printOptions.pdfOptions.openWindow) form.target = '_blank';
 
             let params = Object.fromEntries(Object.entries({
                 switchboard: {value: JSON.stringify(switchboard)},
                 printOptions: {value: JSON.stringify(printOptions)},
                 tv: {value: JSON.stringify(pkg.version)},
-                auto: 0
+                auto: {value: printOptions.pdfOptions.autoPrint ? "1" : "0"},
+                schemaGridColor: {value: printOptions.pdfOptions.schemaGridColor.join(",")},
+                labelsCutLines: {value: printOptions.pdfOptions.labelsCutLines ? "1" : "0"},
             }).map(([key, value]) => {
                 const i = document.createElement("input");
                 i.type = "hidden";
@@ -1239,12 +1271,17 @@ function App() {
 
                 //console.log("Switchboard saved to this session.");
             }
+
+            const printOptionsIsOutdated = sessionStorage.getItem(pkg.name + '_printOptions') !== JSON.stringify(printOptions);
+            if (printOptionsIsOutdated) {
+                sessionStorage.setItem(pkg.name + '_printOptions', JSON.stringify(printOptions));
+            }
         }, 1000);
 
         return () => {
             if (t) clearTimeout(t);
         }
-    }, [resetProject, switchboard]);
+    }, [resetProject, switchboard, printOptions]);
 
     useEffect(() => {
         if (window) {
@@ -1280,6 +1317,8 @@ function App() {
             const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
             window.history.replaceState({}, document.title, newCurrentUrl);
         }
+
+        stats_visit();
     }, []);
 
     return (
@@ -1324,7 +1363,7 @@ function App() {
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
-                        <div className="dropdown_item" title="Imprimer les étiquettes">
+                        <div className="dropdown_item head" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
                                    checked={printOptions.labels}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1334,8 +1373,7 @@ function App() {
                             <label htmlFor="print_labels">Etiquettes</label>
                         </div>
                         <div className="dropdown_item"
-                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes"
-                             style={{marginLeft: '0.5em'}}>
+                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
                             <input id="print_free" name="print_free" type="checkbox"
                                    checked={printOptions.freeModules}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1344,8 +1382,19 @@ function App() {
                                    }))} disabled={!printOptions.labels}/>
                             <label htmlFor="print_free">Décorer les emplacements libres</label>
                         </div>
+                        <div className="dropdown_item"
+                             title="Imprimer les lignes de coupe pour cisailles et massicots">
+                            <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
+                                   checked={printOptions.pdfOptions.labelsCutLines}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
+                                   }))} disabled={!printOptions.labels || !printOptions.pdf}/>
+                            <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
+                        </div>
 
-                        <div className="dropdown_item" title="Imprimer le schéma unifilaire" style={{marginTop: '1em'}}>
+                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire"
+                             style={{marginTop: '1em'}}>
                             <input id="print_schema" name="print_schema" type="checkbox"
                                    checked={printOptions.schema}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1354,8 +1403,18 @@ function App() {
                                    }))}/>
                             <label htmlFor="print_schema">Schéma unifilaire</label>
                         </div>
+                        {/*<div className="dropdown_item"
+                             title="Couleur de la grille de fond">
+                            <label htmlFor="print_pdf_schemaGridColor">Couleur de la grille de fond</label>
+                            <input id="print_pdf_schemaGridColor" name="print_pdf_schemaGridColor" type="color"
+                                   value={rgbToHex(printOptions.pdfOptions.schemaGridColor)}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdfOptions: {...old.pdfOptions, schemaGridColor: hexToRgb(e.target.value)}
+                                   }))} disabled={!printOptions.schema || !printOptions.pdf}/>
+                        </div>*/}
 
-                        <div className="dropdown_item" title="Imprimer la nomenclature">
+                        <div className="dropdown_item head" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
                                    checked={printOptions.summary}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1366,7 +1425,7 @@ function App() {
                         </div>
 
                         <div className="dropdown_separator"></div>
-                        <div className="dropdown_item"
+                        <div className="dropdown_item head"
                              title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
                             <input id="print_pdf" name="print_pdf" type="checkbox"
                                    checked={printOptions.pdf}
@@ -1376,6 +1435,30 @@ function App() {
                                    }))}/>
                             <label htmlFor="print_pdf">Imprimer au format PDF</label>
                         </div>
+
+                        <div className="dropdown_item"
+                             title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
+                            <input id="print_pdf_openWindow" name="print_pdf_openWindow" type="checkbox"
+                                   checked={printOptions.pdfOptions.openWindow}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdfOptions: {...old.pdfOptions, openWindow: e.target.checked}
+                                   }))} disabled={!printOptions.pdf}/>
+                            <label htmlFor="print_pdf_openWindow">Ouvrir le document dans un nouvel onglet</label>
+                        </div>
+                        <div className="dropdown_item"
+                             title="Ouvrir automatiquement les propriétés d'impressions">
+                            <input id="print_pdf_autoPrint" name="print_pdf_autoPrint" type="checkbox"
+                                   checked={printOptions.pdfOptions.autoPrint}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdfOptions: {...old.pdfOptions, autoPrint: e.target.checked}
+                                   }))} disabled={!printOptions.pdf}/>
+                            <label htmlFor="print_pdf_autoPrint">Ouvrir automatiquement les propriétés
+                                d&#39;impressions</label>
+                        </div>
+
+                        {/*<div className="dropdown_separator2"></div>*/}
 
                         <div className="dropdown_footer">
                             <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {

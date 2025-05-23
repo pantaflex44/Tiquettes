@@ -237,16 +237,16 @@ option[disabled] {
     position: absolute;
     display: none;
     top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 170px;
-    padding: 0.75em;
+    left: 35%;
+    transform: translateX(-65%);
+    min-width: 250px;
+    padding: 1.5em;
     border: 1px solid darkgray;
     border-radius: 7px;
     background: linear-gradient(to bottom, white, #f5f5f5);
     text-align: left;
     flex-direction: column;
-    row-gap: 0.5em;
+    row-gap: 0.75em;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 99;
 }
@@ -268,6 +268,9 @@ option[disabled] {
 .button_group .dropdown_container .dropdown .dropdown_item label {
     width: 100%;
     background-color: initial;
+    color: #000;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .button_group .dropdown_container .dropdown .dropdown_item label:hover {
@@ -278,11 +281,31 @@ option[disabled] {
     color: darkgray;
 }
 
+.button_group .dropdown_container .dropdown .dropdown_item:not(.head)  {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid #ddd;
+}
+
+.button_group .dropdown_container .dropdown .dropdown_item:not(.head) label {
+    color: #444;
+    font-size: smaller;
+    font-weight: 300;
+}
+
 .button_group .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;
-    background-color: lightgray;
+    background-color: #bbb;
     margin-block: 0.5em;
+}
+
+.button_group .dropdown_container .dropdown .dropdown_separator2 {
+    width: calc(100% - 1rem);
+    height: 1px;
+    background-color: #ddd;
+    margin-block: 0.5em;
+    margin-left: 1rem;
 }
 
 .button_group .dropdown_container .dropdown .dropdown_header {

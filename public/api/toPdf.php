@@ -18,15 +18,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+/*error_reporting(E_ALL);
+ini_set('display_errors', '1');*/
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+set_time_limit(120); // 2 min
 
-setlocale(LC_ALL, "fr_FR.UTF-8");
-date_default_timezone_set('Europe/Paris');
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header("Access-Control-Allow-Origin: *");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+}
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
+
+
+
 require('./libs/fpdf186/fpdf.php');;
 define('EURO', chr(128));
 
@@ -79,6 +92,7 @@ class TiquettesPDF extends FPDF
     protected $schemaLastPos = [];
     protected $schemaCurrentFolio = 1;
     protected $schemaLevelsCount = 0;
+    protected $showLabelsCutLines = false;
 
 
     public $pageMargin = 10;
@@ -113,6 +127,16 @@ class TiquettesPDF extends FPDF
             && ($response['modules']['php_imagick'] || $response['modules']['convert']);
 
         return $response;
+    }
+
+    public function SetGridColor(array $color): void
+    {
+        $this->gridColor = $color;
+    }
+
+    public function SetShowCutLines(bool $show): void
+    {
+        $this->showLabelsCutLines = $show;
     }
 
 
@@ -731,6 +755,21 @@ class TiquettesPDF extends FPDF
         $this->SetDrawColor(0, 0, 0);
     }
 
+    function drawCutLines(array &$cutLines): void
+    {
+        if ($this->showLabelsCutLines) {
+            foreach ($cutLines as $cutLine) {
+                $this->SetDrawColor(170, 170, 170);
+                $this->SetLineWidth(0.075);
+                $this->SetDash(1, 1);
+                $this->Line($cutLine[0], $cutLine[1], $cutLine[2], $cutLine[3]);
+                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');;
+            }
+            $this->SetDash();
+            $cutLines = [];
+        }
+    }
+
     function AddLabelsPage()
     {
         try {
@@ -748,6 +787,8 @@ class TiquettesPDF extends FPDF
             $this->StartPageGroup();
             $this->AddPage('L', 'A4', 0);
             $this->SetVisibility('all');
+
+            $cutLines = [];
 
             $this->SetY($this->pageMargin + 5);
 
@@ -770,8 +811,14 @@ class TiquettesPDF extends FPDF
                     }
 
                     if ($this->GetY() + $h > $this->GetPageHeight() - ($this->pageBottomMargin)) {
+                        $this->drawCutLines($cutLines);
                         $this->AddPage('L', 'A4', 0);
                         $this->SetY($this->pageMargin + 10);
+                    }
+
+                    if ($x === $this->pageMargin) {
+                        $cutLines[] = [$this->pageMargin - 8, $this->GetY(), $this->GetPageWidth() - $this->pageMargin + 8, $this->GetY()];
+                        $cutLines[] = [$this->pageMargin - 8, $this->GetY() + $h, $this->GetPageWidth() - $this->pageMargin + 8, $this->GetY() + $h];
                     }
 
                     $box = [
@@ -800,6 +847,8 @@ class TiquettesPDF extends FPDF
 
                 $this->SetY($this->GetY() + $h + 6);
             }
+
+            $this->drawCutLines($cutLines);
         } catch (\Exception $e) {
             var_dump($e);
             die();
@@ -1230,6 +1279,17 @@ $switchboard = json_decode($_POST['switchboard']);
 $printOptions = json_decode($_POST['printOptions']);
 $tv = json_decode($_POST['tv']);
 $auto = intval(trim(($_POST['auto'] ?? '0'))) === 1;
+$schemaGridColor = explode(',', trim($_POST['schemaGridColor'] ?? ''));
+if (!is_array($schemaGridColor) || count($schemaGridColor) !== 3) $schemaGridColor = [230, 230, 230];
+if ($schemaGridColor[0] < 0 || $schemaGridColor[0] > 255) $schemaGridColor[0] = 230;
+if ($schemaGridColor[1] < 0 || $schemaGridColor[1] > 255) $schemaGridColor[1] = 230;
+if ($schemaGridColor[2] < 0 || $schemaGridColor[2] > 255) $schemaGridColor[2] = 230;
+$labelsCutLines = intval(trim(($_POST['labelsCutLines'] ?? '0'))) === 1;
+
+$hasSchema = $printOptions->schema === true;
+$hasSummary = $printOptions->summary === true;
+$hasLabels = $printOptions->labels === true;
+$hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary;
 
 $flattenModules = [];
 foreach ($switchboard->rows as $row) {
@@ -1281,23 +1341,15 @@ $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
 $pdf->SetCompression(true);
 $pdf->SetDisplayMode('real', 'default');
 $pdf->SetMargins(10, 10);
-$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin + 1);
+$pdf->SetAutoPageBreak('auto', $pdf->pageBottomMargin - 1);
 $pdf->AliasNbPages();
-
-
-$hasSchema = $printOptions->schema === true;
-$hasSummary = $printOptions->summary === true;
-$hasLabels = $printOptions->labels === true;
-$hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary;
+$pdf->SetGridColor($schemaGridColor);
+$pdf->SetShowCutLines($labelsCutLines);
 
 if (!$hasOnlyLabels) $pdf->AddFirstPage();
-
 if ($printOptions->schema === true) $pdf->AddSchemaPage();
-
 if ($printOptions->summary === true) $pdf->AddSummaryPage();
-
 if ($printOptions->labels === true) $pdf->AddLabelsPage();
-
 if ($auto) $pdf->AutoPrint(true);
 
-echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - tiquettes " . $tv . ".pdf", true);
+echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - Tiquettes " . $tv . ".pdf", true);
