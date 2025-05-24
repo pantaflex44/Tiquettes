@@ -896,9 +896,12 @@ function App() {
             setTheme(selected);
             setSwitchboard((old) => modulesAutoId({...old, theme: selected}));
             setTab(1);
-        }
 
-        stats_count_json('themes', name);
+            stats_count_json('themes', {
+                name: selected.name,
+                title: selected.group + " - " + selected.title
+            });
+        }
     }
 
     const openProjectPropertiesEditor = () => {
@@ -1845,6 +1848,11 @@ function App() {
                     setTheme(editedTheme);
                     setSwitchboard((old) => modulesAutoId({...old, theme: editedTheme}));
                     setThemeEditor(false);
+
+                    stats_count_json('themes', {
+                        name: editedTheme.name,
+                        title: editedTheme.group + " - " + editedTheme.title
+                    });
                 }}
             />}
 

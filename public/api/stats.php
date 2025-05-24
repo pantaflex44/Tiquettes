@@ -73,16 +73,19 @@ function stats_by_type($type)
     $stmt->execute($values);
 }
 
-function stats_by_json($type, $key)
+function stats_by_json($type, $key, $params = [])
 {
     global $statsData;
 
     if (isset($statsData[$type]) && $type !== 'date') {
-        if (str_starts_with($type, 'count_')) {
+        if (str_starts_with($type, 'count_') && !is_null($key)) {
             $json = json_decode($statsData[$type], true);
-            if (!array_key_exists($key, $json)) $json[$key] = 0;
-            $json[$key] = intval($json[$key] ?? '0') + 1;
-            $statsData[$type] = json_encode($json);
+            if (!array_key_exists($key, $json)) $json[$key] = ['title' => $params['title'] ?? $key, 'count' => 0];
+            $json[$key]['count'] = intval($json[$key]['count'] ?? '0') + 1;
+            $encoded = json_encode($json);
+            if (is_string($encoded) && $encoded !== '') {
+                $statsData[$type] = $encoded;
+            }
         }
     }
 
@@ -94,9 +97,17 @@ function stats_by_json($type, $key)
 }
 
 $type = null;
-if (isset($_GET['type'])) $type = strtolower(trim($_GET['type']));
-$key = null;
-if (isset($_GET['key'])) $key = strtolower(trim($_GET['key']));
+if (isset($_GET['type'])) {
+    $type = strtolower(trim($_GET['type']));
+}
 
-if (!is_null($type) && is_null($key)) stats_by_type($type);
-if (!is_null($type) && !is_null($key)) stats_by_json($type, $key);
+if (!is_null($type) && isset($_GET['key'])) {
+    $key_decoded = base64_decode($_GET['key']);
+    $key = json_decode($key_decoded, true);
+    if (is_array($key) && isset($key['name']) && isset($key['title'])) {
+        $k = base64_encode($key['name'] . "|" . $key['title']);
+        stats_by_json($type, $k, ['title' => $key['title']]);
+    }
+} else if (!is_null($type)) {
+    stats_by_type($type);
+}
