@@ -620,6 +620,10 @@ function App() {
         }
 
         stats_count(type);
+        stats_count_json('themes', {
+            name: theme.name,
+            title: theme.group + " - " + theme.title
+        });
     };
 
     const toPdf = () => {
@@ -897,10 +901,7 @@ function App() {
             setSwitchboard((old) => modulesAutoId({...old, theme: selected}));
             setTab(1);
 
-            stats_count_json('themes', {
-                name: selected.name,
-                title: selected.group + " - " + selected.title
-            });
+
         }
     }
 
@@ -1849,10 +1850,7 @@ function App() {
                     setSwitchboard((old) => modulesAutoId({...old, theme: editedTheme}));
                     setThemeEditor(false);
 
-                    stats_count_json('themes', {
-                        name: editedTheme.name,
-                        title: editedTheme.group + " - " + editedTheme.title
-                    });
+
                 }}
             />}
 
