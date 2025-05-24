@@ -7,3 +7,8 @@ export function stats_count(type) {
     fetch(import.meta.env.VITE_APP_API_URL + 'stats.php?type=count_' + type)
         .catch((error) => console.error(error));
 }
+
+export function stats_count_json(type, key) {
+    fetch(import.meta.env.VITE_APP_API_URL + 'stats.php?type=count_' + type + '&key=' + key)
+        .catch((error) => console.error(error));
+}

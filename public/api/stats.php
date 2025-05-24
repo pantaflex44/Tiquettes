@@ -73,4 +73,30 @@ function stats_by_type($type)
     $stmt->execute($values);
 }
 
-if (isset($_GET['type'])) stats_by_type(strtolower(trim($_GET['type'])));
+function stats_by_json($type, $key)
+{
+    global $statsData;
+
+    if (isset($statsData[$type]) && $type !== 'date') {
+        if (str_starts_with($type, 'count_')) {
+            $json = json_decode($statsData[$type], true);
+            if (!array_key_exists($key, $json)) $json[$key] = 0;
+            $json[$key] = intval($json[$key] ?? '0') + 1;
+            $statsData[$type] = json_encode($json);
+        }
+    }
+
+    $keys = join(',', array_keys($statsData));
+    $tokens = join(',', array_fill(0, count($statsData), '?'));
+    $values = array_values($statsData);
+    $stmt = DB->prepare("INSERT OR REPLACE INTO stats ({$keys}) VALUES({$tokens})");
+    $stmt->execute($values);
+}
+
+$type = null;
+if (isset($_GET['type'])) $type = strtolower(trim($_GET['type']));
+$key = null;
+if (isset($_GET['key'])) $key = strtolower(trim($_GET['key']));
+
+if (!is_null($type) && is_null($key)) stats_by_type($type);
+if (!is_null($type) && !is_null($key)) stats_by_json($type, $key);
