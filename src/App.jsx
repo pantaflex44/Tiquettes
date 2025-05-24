@@ -55,7 +55,7 @@ import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
-import {stats_count, stats_visit} from "../public/api/stats.js";
+import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
 
 function App() {
     const importRef = useRef();
@@ -897,6 +897,8 @@ function App() {
             setSwitchboard((old) => modulesAutoId({...old, theme: selected}));
             setTab(1);
         }
+
+        stats_count_json('themes', name);
     }
 
     const openProjectPropertiesEditor = () => {
