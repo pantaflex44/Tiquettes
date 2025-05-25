@@ -7,7 +7,7 @@
 
 - Ajout de lignes de coupe pour les massicots.
 - Ajout de nouvelles propriétés d'impression.
-- Ajout de quelques statistiques.
+- Ajout de quelques statistiques accessibles publiquement à l'adresse : https://www.tiquettes.fr/stats.php
 
 
 

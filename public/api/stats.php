@@ -68,7 +68,7 @@ function stats_by_type($type)
 {
     global $statsData;
 
-    if (is_string($type) && $type !== '') $type=[$type];
+    if (is_string($type) && $type !== '') $type = [$type];
     if (!is_array($type)) return;
 
     foreach ($type as $t) {
@@ -90,15 +90,20 @@ function stats_by_json($type, $key, $params = [])
 {
     global $statsData;
 
-    if (isset($statsData[$type]) && $type !== 'date') {
-        if (str_starts_with($type, 'count_') && !is_null($key)) {
-            $json = json_decode($statsData[$type], true);
-            if (is_null($json)) $json = [];
-            if (!array_key_exists($key, $json)) $json[$key] = ['title' => $params['title'] ?? $key, 'count' => 0];
-            $json[$key]['count'] = intval($json[$key]['count'] ?? '0') + 1;
-            $encoded = json_encode($json);
-            if (is_string($encoded) && $encoded !== '') {
-                $statsData[$type] = $encoded;
+    if (is_string($type) && $type !== '') $type = [$type];
+    if (!is_array($type)) return;
+
+    foreach ($type as $t) {
+        if (isset($statsData[$t]) && $t !== 'date') {
+            if (str_starts_with($t, 'count_') && !is_null($key)) {
+                $json = json_decode($statsData[$t], true);
+                if (is_null($json)) $json = [];
+                if (!array_key_exists($key, $json)) $json[$key] = ['title' => $params['title'] ?? $key, 'count' => 0];
+                $json[$key]['count'] = intval($json[$key]['count'] ?? '0') + 1;
+                $encoded = json_encode($json);
+                if (is_string($encoded) && $encoded !== '') {
+                    $statsData[$t] = $encoded;
+                }
             }
         }
     }
