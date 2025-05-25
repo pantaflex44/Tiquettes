@@ -1332,10 +1332,6 @@ foreach ($flattenModules as $module) {
     }
 }
 
-require_once './stats.php';
-stats_by_type('count_topdf');
-
-
 $pdf = new TiquettesPDF();
 
 $pdf->SetAuthor('tiquettes.fr' . ' ' . $tv, true);
