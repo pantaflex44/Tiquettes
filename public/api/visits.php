@@ -934,14 +934,11 @@ if (is_bot($_SERVER['HTTP_USER_AGENT'])) {
 
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $found['lastvisit'], new \DateTimeZone('UTC'));
-        $modified = (clone $date)->add(new \DateInterval("PT2H"));
+        $modified = (clone $date)->add(new \DateInterval("PT1H"));
+        if ($modified < $now) $knownUser = true;
 
-        if ($modified < $now) {
-            $knownUser = true;
-
-            $stmt = DB->prepare("UPDATE visits SET lastvisit = datetime('now') WHERE ip = ?");
-            $stmt->execute([$ip]);
-        }
+        $stmt = DB->prepare("UPDATE visits SET lastvisit = datetime('now') WHERE ip = ?");
+        $stmt->execute([$ip]);
     } else {
         $stmt = DB->prepare("INSERT INTO visits (ip, startvisit, lastvisit) VALUES(?, datetime('now'), datetime('now'))");
         $stmt->execute([$ip]);

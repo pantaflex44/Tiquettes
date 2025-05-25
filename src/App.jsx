@@ -619,7 +619,12 @@ function App() {
             window.print();
         }
 
-        stats_count(type);
+        let types = [type];
+        if (printOptions.labels) types.push('print_labels');
+        if (printOptions.schema) types.push('print_schema');
+        if (printOptions.summary) types.push('print_summary');
+        stats_count(types);
+
         stats_count_json('themes', {
             name: theme.name,
             title: theme.group + " - " + theme.title
