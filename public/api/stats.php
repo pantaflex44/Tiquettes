@@ -19,17 +19,25 @@
  */
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-    //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Access-Control-Allow-Origin: *");
     header('Access-Control-Allow-Credentials: true');
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Methods: GET, OPTIONS");
 }
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: GET, OPTIONS");
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 
+    exit(0);
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET'
+    || (stripos($_SERVER['HTTP_HOST'], 'localhost') === false
+        && stripos($_SERVER['HTTP_HOST'], '127.0.0.1') === false
+        && stripos($_SERVER['HTTP_HOST'], 'tiquettes.fr') === false)
+) {
+    header("HTTP/1.1 401 Unauthorized");
     exit(0);
 }
 
@@ -80,6 +88,7 @@ function stats_by_json($type, $key, $params = [])
     if (isset($statsData[$type]) && $type !== 'date') {
         if (str_starts_with($type, 'count_') && !is_null($key)) {
             $json = json_decode($statsData[$type], true);
+            if (is_null($json)) $json = [];
             if (!array_key_exists($key, $json)) $json[$key] = ['title' => $params['title'] ?? $key, 'count' => 0];
             $json[$key]['count'] = intval($json[$key]['count'] ?? '0') + 1;
             $encoded = json_encode($json);
@@ -96,18 +105,16 @@ function stats_by_json($type, $key, $params = [])
     $stmt->execute($values);
 }
 
-$type = null;
-if (isset($_GET['type'])) {
-    $type = strtolower(trim($_GET['type']));
-}
-
-if (!is_null($type) && isset($_GET['key'])) {
-    $key_decoded = base64_decode($_GET['key']);
-    $key = json_decode($key_decoded, true);
-    if (is_array($key) && isset($key['name']) && isset($key['title'])) {
-        $k = base64_encode($key['name'] . "|" . $key['title']);
-        stats_by_json($type, $k, ['title' => $key['title']]);
+$type = isset($_GET['type']) ? strtolower(trim($_GET['type'])) : null;
+if (!is_null($type)) {
+    if (isset($_GET['key'])) {
+        $key_decoded = base64_decode($_GET['key']);
+        $key = json_decode($key_decoded, true);
+        if (is_array($key) && isset($key['name']) && isset($key['title'])) {
+            $k = base64_encode($key['name'] . "|" . $key['title']);
+            stats_by_json($type, $k, ['title' => $key['title']]);
+        }
+    } else {
+        stats_by_type($type);
     }
-} else if (!is_null($type)) {
-    stats_by_type($type);
 }
