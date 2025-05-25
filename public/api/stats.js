@@ -1,5 +1,5 @@
-export function stats_visit() {
-    fetch(import.meta.env.VITE_APP_API_URL + 'visits.php')
+export function stats_visit(isPing = false) {
+    fetch(import.meta.env.VITE_APP_API_URL + 'visits.php' + (isPing ? "?ping" : ""))
         /*.then((response) => response.text())
         .then((data) => console.log(data))*/
         .catch((error) => console.error(error));

@@ -1324,7 +1324,15 @@ function App() {
             window.history.replaceState({}, document.title, newCurrentUrl);
         }
 
-        stats_visit();
+        stats_visit(false);
+        const visitTimeout = setTimeout(function () {
+            stats_visit(true);
+        }, 60000);
+
+        return () => {
+            clearTimeout(visitTimeout);
+        }
+
     }, []);
 
     return (
