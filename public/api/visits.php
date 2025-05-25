@@ -943,12 +943,14 @@ if (is_bot($_SERVER['HTTP_USER_AGENT'])) {
             $stmt->execute([$ip]);
         }
     } else {
-        $stmt = DB->prepare("INSERT INTO visits (ip, lastvisit) VALUES(?, datetime('now'))");
+        $stmt = DB->prepare("INSERT INTO visits (ip, startvisit, lastvisit) VALUES(?, datetime('now'), datetime('now'))");
         $stmt->execute([$ip]);
     }
 
-    if ($firstTime) $stats[] = 'count_firstvisit';
-    if ($knownUser) $stats[] = 'count_knownusers';
+    if (!isset($_GET['ping'])) {
+        if ($firstTime) $stats[] = 'count_firstvisit';
+        if ($knownUser) $stats[] = 'count_knownusers';
+    }
 }
 
 $url = dirname((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
