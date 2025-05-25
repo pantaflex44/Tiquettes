@@ -56,11 +56,13 @@ import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
+import useDocumentVisibility from "./useVisibilityChange.jsx";
 
 function App() {
     const importRef = useRef();
     const projectRef = useRef();
     const switchboardRef = useRef();
+    const monitorRef = useRef(null);
 
     const [testMode, setTestMode] = useState(false);
     const [tab, setTab] = useState(1);
@@ -70,13 +72,12 @@ function App() {
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
-
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
-    const monitorRef = useRef(null);
+    const tabIsActive = useDocumentVisibility();
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -1331,7 +1332,7 @@ function App() {
 
         stats_visit(false);
         const visitTimeout = setTimeout(function () {
-            stats_visit(true);
+            if (tabIsActive) stats_visit(true);
         }, 60000);
 
         return () => {
@@ -1339,6 +1340,10 @@ function App() {
         }
 
     }, []);
+
+    useEffect(() => {
+        if (tabIsActive) stats_visit(true);
+    }, [tabIsActive]);
 
     return (
         <div tabIndex={-1} onKeyUp={(e) => {
