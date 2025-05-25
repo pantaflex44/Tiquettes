@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 
 
-require('./libs/fpdf186/fpdf.php');;
+require('./libs/fpdf186/fpdf.php');
 define('EURO', chr(128));
 
 
@@ -1331,6 +1331,9 @@ foreach ($flattenModules as $module) {
         }
     }
 }
+
+require_once './stats.php';
+stats_by_type('count_topdf');
 
 
 $pdf = new TiquettesPDF();
