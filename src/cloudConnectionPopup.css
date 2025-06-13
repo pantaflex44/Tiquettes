@@ -1,0 +1,68 @@
+.popup .connectBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+}
+
+.popup .connectBox .subtitle {
+    display: block;
+    font-size: 100%;
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.popup .connectBox .subtitle.black {
+    font-weight: bold;
+}
+
+.popup .connectBox .form_row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.popup .connectBox .form_row:first-of-type {
+    margin-top: 1rem;
+}
+
+.popup .connectBox .form_row * {
+    width: calc(100% - 1rem);
+    flex: 1;
+}
+
+.popup .connectBox .form_row label {
+    font-size: smaller;
+    font-weight: bold;
+}
+
+.popup .connectBox .form_error {
+    color: red;
+    font-size: 90%;
+}
+
+.password_form_row {
+    width: 100% !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.password_form_row input[type="password"] {
+    flex: 1 !important;
+    width: 100% !important;
+}
+
+.password_form_row img {
+    width: max-content !important;
+    flex: initial !important;
+    cursor: pointer;
+}

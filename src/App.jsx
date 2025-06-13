@@ -17,7 +17,7 @@
  */
 
 
-import {Fragment, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {satisfies} from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
@@ -26,6 +26,7 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
+import {AccountContext} from "./AccountContext.jsx";
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -48,6 +49,8 @@ import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
+import cloudDataConnectionIcon from "./assets/cloud-data-connection.svg";
+import settingsIcon from "./assets/settings.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -57,6 +60,8 @@ import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
 import useDocumentVisibility from "./useVisibilityChange.jsx";
+import CloudConnectionPopup from "./CoudConnectionPopup.jsx";
+
 
 function App() {
     const importRef = useRef();
@@ -71,6 +76,7 @@ function App() {
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
+    const [connect, setConnect] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
@@ -78,6 +84,7 @@ function App() {
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const tabIsActive = useDocumentVisibility();
+    const account = useContext(AccountContext);
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
@@ -1355,12 +1362,49 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
+                <button className={`button_group-account dropdown_container`}
+                        onClick={() => {
+                            if (account.currentUser) {
+                            } else {
+                                setConnect(true);
+                            }
+                        }} title={account.currentUser ? "Mon compte" : "Connexion à mon espace dans le cloud"}>
+                    <img src={cloudDataConnectionIcon} width={16} height={16} alt={"Mon compte"}/>
+                    <span>{account.currentUser ? "Mon compte" : "Connexion"}</span>
+                    {account.currentUser && (
+                        <div className="dropdown"
+                             style={{left: 0, transform: 'none', rowGap: '0rem', paddingBottom: '1em'}}>
+                            <div className="dropdown_header">{account.currentUser.display_name}</div>
+
+
+                            <div className="dropdown_separator"></div>
+                            <div className="dropdown_item menuitem" title="Mes préférences" style={{paddingBlock: 0}}>
+                                <div className="menuitem_content" onClick={() => {
+                                }}>
+                                    <img src={settingsIcon} width={18} height={18} alt={"Préférences"}/>
+                                    <span>Préférences...</span>
+                                </div>
+                            </div>
+                            <div className="dropdown_item menuitem" title="Se déconnecter" style={{paddingBlock: 0}}>
+                                <div className="menuitem_content" onClick={() => {
+                                    if (confirm("Êtes-vous certain de vouloir vous déconnecter ?")) account.logout();
+                                }}>
+                                    <img src={cancelIcon} width={18} height={18} alt={"Se déconnecter"}/>
+                                    <span>Se déconnecter</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </button>
+
+                <div className="button_group-separator"></div>
+
                 <button className={`button_group-new_project active`.trim()}
                         onClick={() => {
                             setWelcome(true);
                         }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
-                    <span>Nouveau projet</span>
+                    <span className={'responsive'}>Nouveau</span> <span>projet</span>
                 </button>
 
                 <div className="button_group-separator"></div>
@@ -1854,6 +1898,11 @@ function App() {
                     importProjectChooseFile();
                     setWelcome(false);
                 }}
+            />}
+
+            {connect && <CloudConnectionPopup
+                onCancel={() => setConnect(false)}
+                onConnected={() => setConnect(false)}
             />}
 
             {themeEditor && <ThemeEditorPopup

@@ -1,0 +1,8 @@
+{
+    "directoryAccountsLimit": 31500,
+    "directoryLevelsCount": 3,
+    "directoryPathes": [
+        "./"
+    ],
+    "directoryCurrentIndexByPath": []
+}

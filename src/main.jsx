@@ -23,6 +23,7 @@ import App from './App.jsx'
 
 import './main.css';
 import * as pkg from '../package.json';
+import AccountProvider from "./AccountProvider.jsx";
 
 function Footer() {
     return (
@@ -67,12 +68,11 @@ export default function Main() {
     }, []);
 
     return (
-        <>
+        <AccountProvider>
             <App/>
             <Footer/>
-        </>
-    )
-        ;
+        </AccountProvider>
+    );
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Main/>);
