@@ -26,7 +26,7 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
-import {AccountContext} from "./AccountContext.jsx";
+import {UserContext} from "./UserContext.jsx";
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -49,8 +49,6 @@ import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
-import cloudDataConnectionIcon from "./assets/cloud-data-connection.svg";
-import settingsIcon from "./assets/settings.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -60,7 +58,6 @@ import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
 import useDocumentVisibility from "./useVisibilityChange.jsx";
-import CloudConnectionPopup from "./CoudConnectionPopup.jsx";
 
 
 function App() {
@@ -84,19 +81,19 @@ function App() {
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const tabIsActive = useDocumentVisibility();
-    const account = useContext(AccountContext);
+    const user = useContext(UserContext);
 
     const defaultPrintOptions = useMemo(() => ({
         labels: true,
         summary: false,
         schema: false,
         freeModules: false,
-        pdf: true,
         pdfOptions: {
             openWindow: true,
             autoPrint: false,
             schemaGridColor: [230, 230, 230],
-            labelsCutLines: false
+            labelsCutLines: true,
+            printCurrents: false,
         }
     }), []);
     const getSavedPrintOptions = () => {
@@ -135,10 +132,12 @@ function App() {
         func: "",
         type: "",
         crb: "",
+        modtype: "",
         current: "",
         sensibility: "",
         coef: 0.5,
         pole: "",
+        wire: "",
         parentId: "",
         kcId: "",
         free: true,
@@ -164,6 +163,7 @@ function App() {
             parentId: "",
             kcId: "",
             pole: "1P+N",
+            wire: "16",
             sensibility: "500mA",
             coef: 1,
             span: 4,
@@ -179,7 +179,23 @@ function App() {
         })));
     }, [defaultModule]);
 
+    const generateUUID = () => {
+        let lut = [];
+        for (var i = 0; i < 256; i++) {
+            lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
+        }
+        const d0 = Math.random() * 0xffffffff | 0;
+        const d1 = Math.random() * 0xffffffff | 0;
+        const d2 = Math.random() * 0xffffffff | 0;
+        const d3 = Math.random() * 0xffffffff | 0;
+        return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] + lut[d0 >> 24 & 0xff] + '-' +
+            lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' + lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' +
+            lut[d2 & 0x3f | 0x80] + lut[d2 >> 8 & 0xff] + '-' + lut[d2 >> 16 & 0xff] + lut[d2 >> 24 & 0xff] +
+            lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
+    };
+
     const defaultProject = useMemo(() => ({
+        prjid: generateUUID(),
         prjname: defaultProjectName,
         prjcreated: new Date(),
         prjupdated: new Date(),
@@ -418,7 +434,10 @@ function App() {
                 // <2.0.5
                 stepSize: swb.stepSize ?? defaultStepSize,
                 // <2.1.4
-                theme
+                theme,
+                // <2.2.2
+                prjid: swb.prjid ?? generateUUID(),
+
             };
 
             //console.log("Switchboard loaded from this session.");
@@ -473,6 +492,7 @@ function App() {
         setSwitchboard(() => {
             return modulesAutoId({
                 ...defaultProject,
+                prjid: generateUUID(),
                 prjname: name,
                 height: height,
                 stepsPerRows,
@@ -526,7 +546,7 @@ function App() {
                             // <=1.4.0 : remove old theme definitions
                             if (nm.theme) delete nm['theme'];
 
-                            // <=2.0.0 : add module default values for schema definitions
+                            // <=2.0.0 : add module default values fors schema definitions
                             if (nm.icon) {
                                 const sic = swbIcons.filter((si) => si.filename === nm.icon);
                                 if (sic.length === 1) {
@@ -539,6 +559,9 @@ function App() {
 
                             // <=2.0.3 : add half module size
                             if (!nm.half) nm = {...nm, half: "none"};
+
+                            // <=2.2.3 : add modtype property
+                            if (!nm.modtype) nm = {...nm, modtype: ""};
 
                             return nm;
                         });
@@ -570,6 +593,8 @@ function App() {
                         stepSize: swb.stepSize ?? defaultStepSize,
                         // <2.1.4
                         theme,
+                        // <2.2.2
+                        prjid: swb.prjid ?? generateUUID(),
 
                         rows
                     };
@@ -618,16 +643,9 @@ function App() {
     };
 
     const printProject = () => {
-        let type = 'print';
+        toPdf();
 
-        if (printOptions.pdf) {
-            type = 'pdf';
-            toPdf();
-        } else {
-            window.print();
-        }
-
-        let types = [type];
+        let types = ['pdf'];
         if (printOptions.labels) types.push('print_labels');
         if (printOptions.schema) types.push('print_schema');
         if (printOptions.summary) types.push('print_summary');
@@ -640,8 +658,7 @@ function App() {
     };
 
     const toPdf = () => {
-        if (confirm("Le document va s'ouvrir dans un nouvel onglet.\n\nImprimer en PDF permet, notamment, de contourner certains problèmes d'impressions.\n\n" +
-            "ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
+        if (confirm("ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
 
             let form = document.createElement("form");
             document.body.appendChild(form);
@@ -740,12 +757,14 @@ function App() {
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
         const func = (data.currentModule.func ?? "").trim();
+        const modtype = (data.currentModule.modtype ?? "").trim();
         const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
         const crb = (schemaFunctions[data.currentModule.func]?.hasCrb ? (data.currentModule.crb ?? "") : "").trim();
         const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
         const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
         const coef = data.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
+        const wire = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.wire ?? "") : "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -793,11 +812,13 @@ function App() {
                         kcId,
                         func,
                         crb,
+                        modtype,
                         type,
                         current,
                         sensibility,
                         coef,
                         pole,
+                        wire,
                     };
                 });
             });
@@ -1076,11 +1097,13 @@ function App() {
                         kcId: clipboard.kcId,
                         func: clipboard.func,
                         crb: clipboard.crb,
+                        modtype: clipboard.modtype,
                         type: clipboard.type,
                         current: clipboard.current,
                         sensibility: clipboard.sensibility,
                         coef: clipboard.coef,
                         pole: clipboard.pole,
+                        wire: clipboard.wire,
                     };
                 });
 
@@ -1362,7 +1385,7 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <button className={`button_group-account dropdown_container`}
+                {/*<button className={`button_group-account dropdown_container`}
                         onClick={() => {
                             if (account.currentUser) {
                             } else {
@@ -1379,8 +1402,7 @@ function App() {
 
                             <div className="dropdown_separator"></div>
                             <div className="dropdown_item menuitem" title="Mes préférences" style={{paddingBlock: 0}}>
-                                <div className="menuitem_content" onClick={() => {
-                                }}>
+                                <div className="menuitem_content" onClick={() => setAccountSettings(true)}>
                                     <img src={settingsIcon} width={18} height={18} alt={"Préférences"}/>
                                     <span>Préférences...</span>
                                 </div>
@@ -1395,7 +1417,7 @@ function App() {
                             </div>
                         </div>
                     )}
-                </button>
+                </button>*/}
 
                 <div className="button_group-separator"></div>
 
@@ -1404,7 +1426,7 @@ function App() {
                             setWelcome(true);
                         }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
-                    <span className={'responsive'}>Nouveau</span> <span>projet</span>
+                    <span className={'responsive'}>Projets...</span>
                 </button>
 
                 <div className="button_group-separator"></div>
@@ -1412,12 +1434,12 @@ function App() {
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
                 }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
-                <label htmlFor="importfile" className="button_group-import_project"
+                {/*<label htmlFor="importfile" className="button_group-import_project"
                        title="Importer un projet existant">
                     <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"}
                          onClick={() => importProjectChooseFile()}/>
                     <span>Importer</span>
-                </label>
+                </label>*/}
 
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();
@@ -1457,8 +1479,19 @@ function App() {
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
-                                   }))} disabled={!printOptions.labels || !printOptions.pdf}/>
+                                   }))} disabled={!printOptions.labels}/>
                             <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
+                        </div>
+                        <div className="dropdown_item"
+                             title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
+                            <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
+                                   checked={printOptions.pdfOptions.printCurrents}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       pdfOptions: {...old.pdfOptions, printCurrents: e.target.checked}
+                                   }))} disabled={!printOptions.labels}/>
+                            <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour aider à
+                                leur installation</label>
                         </div>
 
                         <div className="dropdown_item head" title="Imprimer le schéma unifilaire"
@@ -1479,7 +1512,7 @@ function App() {
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, schemaGridColor: hexToRgb(e.target.value)}
-                                   }))} disabled={!printOptions.schema || !printOptions.pdf}/>
+                                   }))} disabled={!printOptions.schema}/>
                         </div>*/}
 
                         <div className="dropdown_item head" title="Imprimer la nomenclature">
@@ -1494,34 +1527,23 @@ function App() {
 
                         <div className="dropdown_separator"></div>
                         <div className="dropdown_item head"
-                             title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
-                            <input id="print_pdf" name="print_pdf" type="checkbox"
-                                   checked={printOptions.pdf}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdf: e.target.checked
-                                   }))}/>
-                            <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>
-
-                        <div className="dropdown_item"
                              title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
                             <input id="print_pdf_openWindow" name="print_pdf_openWindow" type="checkbox"
                                    checked={printOptions.pdfOptions.openWindow}
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, openWindow: e.target.checked}
-                                   }))} disabled={!printOptions.pdf}/>
+                                   }))}/>
                             <label htmlFor="print_pdf_openWindow">Ouvrir le document dans un nouvel onglet</label>
                         </div>
-                        <div className="dropdown_item"
+                        <div className="dropdown_item head"
                              title="Ouvrir automatiquement les propriétés d'impressions">
                             <input id="print_pdf_autoPrint" name="print_pdf_autoPrint" type="checkbox"
                                    checked={printOptions.pdfOptions.autoPrint}
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, autoPrint: e.target.checked}
-                                   }))} disabled={!printOptions.pdf}/>
+                                   }))}/>
                             <label htmlFor="print_pdf_autoPrint">Ouvrir automatiquement les propriétés
                                 d&#39;impressions</label>
                         </div>
@@ -1898,11 +1920,6 @@ function App() {
                     importProjectChooseFile();
                     setWelcome(false);
                 }}
-            />}
-
-            {connect && <CloudConnectionPopup
-                onCancel={() => setConnect(false)}
-                onConnected={() => setConnect(false)}
             />}
 
             {themeEditor && <ThemeEditorPopup

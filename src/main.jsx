@@ -23,7 +23,7 @@ import App from './App.jsx'
 
 import './main.css';
 import * as pkg from '../package.json';
-import AccountProvider from "./AccountProvider.jsx";
+import UserProvider from "./UserProvider.jsx";
 
 function Footer() {
     return (
@@ -68,10 +68,10 @@ export default function Main() {
     }, []);
 
     return (
-        <AccountProvider>
+        <UserProvider>
             <App/>
             <Footer/>
-        </AccountProvider>
+        </UserProvider>
     );
 }
 

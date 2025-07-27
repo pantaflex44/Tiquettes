@@ -74,6 +74,11 @@ function CustomTheme({item, data, style}) {
         }
     }, [data]);
 
+    const useNamedFunction = useMemo(() => {
+        const ret = (data?.icon?.type ?? 'icon') === 'text';
+        return ret;
+    }, [data]);
+
     const styles = useMemo(() => ({
         id: {
             ...positions.id,
@@ -115,7 +120,7 @@ function CustomTheme({item, data, style}) {
         icon: {
             ...positions.icon,
             width: "calc(100% - 2mm)",
-            height: `calc((${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15}))`, // min 0.15 max 0.30
+            height: `calc(((${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * (data?.icon?.type === 'text' ? 0.08 : 0.15)) / 100) + (data?.icon?.type === 'text' ? 0.08 : 0.15)})) )`, // min 0.15 max 0.30
             padding: "1mm",
             paddingTop: positions.icon.order === 0 ? "2mm" : "1mm",
             paddingBottom: positions.icon.order === shownCount - 1 ? "2mm" : "1mm",
@@ -134,6 +139,27 @@ function CustomTheme({item, data, style}) {
             width: `calc(${style['--h']} * ${(((data?.icon?.sizePercent ?? 50) * 0.15) / 100) + 0.15})`, // min 0.15 max 0.30
             aspectRatio: "auto",
             filter: iconColor,
+        },
+        iconText: {
+            "--icontextlh": "1.1em",
+            "--icontextnbl": 1,
+            margin: 0,
+            padding: 0,
+            display: "-webkit-box",
+            WebkitLineClamp: "var(--icontextnbl)",
+            WebkitBoxOrient: "vertical",
+            /*"-webkit-line-clamp": "var(--icontextnbl)",
+            "-webkit-box-orient": "vertical",*/   /* Orientation vertical de la boite */
+            overflow: "hidden",
+            lineHeight: "var(--icontextlh)",
+            height: "calc(var(--icontextlh) * var(--icontextnbl))",
+            textAlign: (data?.icon?.horizontalAlignment ?? "center"),
+            fontSize: (((data?.icon?.sizePercent ?? 50) * 0.95) / 100) + "em",
+            fontWeight: "bold",
+            fontStyle: "normal",
+            fontFamily: "sans-serif",
+            color: data?.icon?.color ?? "#000000",
+            width: "100%",
         },
         text: {
             ...positions.text,
@@ -156,7 +182,7 @@ function CustomTheme({item, data, style}) {
             margin: 0,
             padding: 0,
             display: "-webkit-box",
-            WebkitLineClamp: "var(--textnbl)",
+            /*WebkitLineClamp: "var(--textnbl)",*/
             WebkitBoxOrient: "vertical",
             /*"-webkit-line-clamp": "var(--textnbl)",
             "-webkit-box-orient": "vertical",*/   /* Orientation vertical de la boite */
@@ -176,19 +202,24 @@ function CustomTheme({item, data, style}) {
 
     return (<>
 
-        {shown.id && <div style={styles.id} data-order={positions.id.order === 0 ? 'top' : (positions.id.order === shownCount - 1 ? 'bottom' : 'middle')}>
+        {shown.id && <div style={styles.id}
+                          data-order={positions.id.order === 0 ? 'top' : (positions.id.order === shownCount - 1 ? 'bottom' : 'middle')}>
             <p style={styles.idContent}>{item.id}</p>
         </div>}
 
-        {shown.icon && <div style={styles.icon} data-order={positions.icon.order === 0 ? 'top' : (positions.icon.order === shownCount - 1 ? 'bottom' : 'middle')}>
-            <img
-                style={styles.iconImg}
-                alt="Pictogramme"
-                src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
-            />
+        {shown.icon && <div style={styles.icon}
+                            data-order={positions.icon.order === 0 ? 'top' : (positions.icon.order === shownCount - 1 ? 'bottom' : 'middle')}>
+            {useNamedFunction
+                ? <p style={styles.iconText}>{item.modtype ?? ""}</p>
+                : <img
+                    style={styles.iconImg}
+                    alt="Pictogramme"
+                    src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
+                />}
         </div>}
 
-        {shown.text && <div style={styles.text} data-order={positions.text.order === 0 ? 'top' : (positions.text.order === shownCount - 1 ? 'bottom' : 'middle')}>
+        {shown.text && <div style={styles.text}
+                            data-order={positions.text.order === 0 ? 'top' : (positions.text.order === shownCount - 1 ? 'bottom' : 'middle')}>
             <p
                 style={styles.textContent}
                 dangerouslySetInnerHTML={{__html: item.text.replaceAll("\n", "<br />")}}

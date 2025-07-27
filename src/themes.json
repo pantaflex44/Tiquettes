@@ -215,6 +215,54 @@
         }
     },
     {
+        "title": "Type et Description seulement",
+        "name": "custom|6f115fc8-f557-4738-bb14-0f54823c23f2",
+        "default": false,
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "middle",
+                "sizePercent": 70,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000",
+                "type": "text"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "5",
+                "horizontalAlignment": "center",
+                "fontSize": "3mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderColor": "#999999"
+            }
+        }
+    },
+    {
         "title": "Standard",
         "name": "custom|schn1",
         "default": true,

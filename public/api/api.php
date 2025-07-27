@@ -25,6 +25,15 @@ require_once(__DIR__ . '/libs/config.php');
 require_once(__DIR__ . '/libs/php-jwt-main/src/JWT.php');
 require_once(__DIR__ . '/libs/php-jwt-main/src/Key.php');
 
+function log_mail_connection(array $user): bool
+{
+    return send_mail(
+        [$user['email'], $user['display_name']],
+        "Nouvelle connexion détectée",
+        "<p><b>Bonjour,</b></p><p>Cet email vous informe d'une <b>nouvelle connexion à votre espace personnel</b>.</p><p><u>Adresse IP</u> : " . CLIENT_IP . "<br /><u>Horodatage</u> : " . (new \DateTimeImmutable("now", new \DateTimeZone("Europe/Paris")))->format("r") . "</p>"
+    );
+}
+
 
 function generateUUID(): string
 {
@@ -192,16 +201,71 @@ function refreshToken(string $domainName = "www.tiquettes.fr"): array
     return generateToken($user['id']);
 }
 
+function retryMinusOne(): int
+{
+    $stmt = DB->prepare("SELECT * FROM connection_retries WHERE ip = ?");
+    $stmt->execute([CLIENT_IP]);
+    $client = $stmt->fetch(\PDO::FETCH_ASSOC);
+    $attempts = is_array($client) ? $client['count'] : CONNECTION_MAX_RETRIES;
+    $attempts--;
+    if ($attempts < 0) $attempts = 0;
+    if (!is_array($client)) {
+        $stmt = DB->prepare("INSERT INTO connection_retries (ip, count, after) VALUES(?, ?, datetime('now'))");
+        $stmt->execute([CLIENT_IP, $attempts]);
+    } else if ($attempts > 0) {
+        $stmt = DB->prepare("UPDATE connection_retries SET count = ?, after = datetime('now') WHERE ip = ?");
+        $stmt->execute([$attempts, CLIENT_IP]);
+    } else {
+        $stmt = DB->prepare("UPDATE connection_retries SET count = 0, after = datetime('now', '" . CONNECTION_RETRY_DELAY . "') WHERE ip = ?");
+        $stmt->execute([CLIENT_IP]);
+    }
+    return $attempts;
+}
+
+function isRetryAllowed(): bool
+{
+    $stmt = DB->prepare("SELECT * FROM connection_retries WHERE ip = ? AND after <= datetime('now')");
+    $stmt->execute([CLIENT_IP]);
+    $client = $stmt->fetch(\PDO::FETCH_ASSOC);
+    if (!is_array($client)) return true;
+    return $client['count'] > 0;
+}
+
+function clearRetries(): void
+{
+    $stmt = DB->prepare("DELETE FROM connection_retries WHERE ip = ?");
+    $stmt->execute([CLIENT_IP]);
+}
+
 header('Content-Type: application/json');
 
-$action = isset($_GET['action']) ? trim($_GET['action']) : '';
-switch ($action) {
+$category = isset($_GET['c']) ? trim(rawurldecode($_GET['c']) : '';
+$action = isset($_GET['a']) ? trim(rawurldecode($_GET['a']) : '';
+$params = array_reduce(array_map(function ($p) {
+    $ep = explode('=', $p);
+    $key = trim($ep[0]);
+    $value = count($ep > 1) ? trim($ep[1]) : '';
+    return [$key, $value];
+} , explode('|', isset($_GET['p']) ? trim(rawurldecode($_GET['p']) : ''))), function ($result, $item) {
+    if (is_array($item) && count($item) === 2) $result[$item[0]] = $item[1];
+});
+
+/*switch ($action) {
     case 'login':
+        if (!isRetryAllowed()) {
+            write_json([
+                'errors' => [
+                    'main' => "Oups! Nombre d'essai restant épuisé! Veuillez patienter un certain temps avant de recommencer.",
+                ]
+            ]);
+        }
+
         $email = isset($_POST['email']) ? trim($_POST['email']) : '';
         $password = isset($_POST['password']) ? trim($_POST['password']) : '';
         if ($email === '' || $password === '') {
             write_json([
                 'errors' => [
+                    'main' => "Essai(s) restant(s): " . retryMinusOne(),
                     'email' => "Adresse email requise",
                     'password' => "Mot de passe requis",
                 ]
@@ -213,6 +277,7 @@ switch ($action) {
         if (!$user) {
             write_json([
                 'errors' => [
+                    'main' => "Essai(s) restant(s): " . retryMinusOne(),
                     'email' => "Adresse email ou mot de passe incorrect",
                 ]
             ]);
@@ -221,16 +286,20 @@ switch ($action) {
             if ($user['active'] !== 1) {
                 write_json([
                     'errors' => [
+                        'main' => "Essai(s) restant(s): " . retryMinusOne(),
                         'email' => "Ce compte utilisateur est désactivé !",
                     ]
                 ]);
             }
 
-            $stmt = DB->prepare("UPDATE users SET last_login = datetime('now') WHERE id = ?");
-            $stmt->execute([$user['id']]);
+            $stmt = DB->prepare("UPDATE users SET last_login = datetime('now'), last_ip = ? WHERE id = ?");
+            $stmt->execute([CLIENT_IP, $user['id']]);
             [$token, $expireAt] = generateToken($user['id']);
 
             unset($user['password']);
+            clearRetries();
+
+            log_mail_connection($user);
 
             write_json([
                 'token' => $token,
@@ -240,6 +309,7 @@ switch ($action) {
         }
         write_json([
             'errors' => [
+                'main' => "Essai(s) restant(s): " . retryMinusOne(),
                 'email' => "Adresse email ou mot de passe incorrect",
             ]
         ]);
@@ -347,3 +417,4 @@ switch ($action) {
             'displayName' => $displayName,
         ]);
 }
+*/

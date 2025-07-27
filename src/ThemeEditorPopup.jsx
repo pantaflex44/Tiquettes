@@ -66,6 +66,7 @@ export default function ThemeEditorPopup({
                 "color": "#000000"
             },
             "icon": {
+                "type": "icon",
                 "shown": true,
                 "position": "middle",
                 "sizePercent": 50,
@@ -103,6 +104,7 @@ export default function ThemeEditorPopup({
         id: 'Q01',
         icon: 'swb_ecl.svg',
         text: "Eclairage chambres",
+        modtype: "Eclairage",
         height: switchboard.height,
         width: stepSize
     });
@@ -533,6 +535,7 @@ export default function ThemeEditorPopup({
                                 id: sample.id,
                                 icon: sample.icon,
                                 text: sample.text,
+                                modtype: sample.modtype,
                                 free: false,
                                 span: 1
                             }}
@@ -569,11 +572,28 @@ export default function ThemeEditorPopup({
                         alignItems: 'center',
                         '--left_column_size': '100px',
                     }}>
-                        <label>Pictogramme</label>
+                        <label>Fonction</label>
                         <IconSelector value={sample.icon} onChange={(selectedIcon, selected) => {
                             setSample(old => ({...old, icon: selectedIcon}));
                         }}
                         />
+                    </div>
+                    <div className="tep-row" style={{
+                        '--left_column_size': '100px',
+                        marginTop: 0
+                    }}>
+                        <label htmlFor={'sample_type'}>Type</label>
+                        <div className="popup_row-flex">
+                            <input
+                                type="text"
+                                name="sample_type"
+                                id={'sample_type'}
+                                value={sample.modtype}
+                                onChange={(e) => {
+                                    setSample(old => ({...old, modtype: e.target.value}));
+                                }}
+                            />
+                        </div>
                     </div>
                     <div className="tep-row" style={{
                         '--left_column_size': '100px',
@@ -619,7 +639,7 @@ export default function ThemeEditorPopup({
                                        down={down}
                                        up={up}/>
                 <ThemeEditorPartColumn propName={'icon'}
-                                       title={"Pictogramme"}
+                                       title={"Fonction"}
                                        editedTheme={editedTheme}
                                        setEditedTheme={setEditedTheme}
                                        positions={positions}
@@ -637,7 +657,8 @@ export default function ThemeEditorPopup({
             </div>
 
             <div className="tep-extras">
-                <b>⁛</b> Télécharger de <a href="https://www.tiquettes.fr/themes.php" target={'_blank'} rel={'noopener'}>nouveaux thèmes</a> pour embellir ses étiquettes !
+                <b>⁛</b> Télécharger de <a href="https://www.tiquettes.fr/themes.php" target={'_blank'}
+                                           rel={'noopener'}>nouveaux thèmes</a> pour embellir ses étiquettes !
             </div>
         </div>
     </Popup>

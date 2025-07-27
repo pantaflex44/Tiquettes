@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import {Fragment, lazy, Suspense, useEffect, useMemo, useState} from "react";
+import {lazy, Suspense, useEffect, useMemo, useState} from "react";
 
 import schemaFunctions from './schema_functions.json';
 
@@ -37,6 +37,7 @@ import EditorTypeSelector from "./EditorTypeSelector.jsx";
 import EditorContactSelector from "./EditorContactSelector.jsx";
 import EditorParentSelector from "./EditorParentSelector.jsx";
 import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
+import EditorWireSelector from "./EditorWireSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -58,6 +59,7 @@ export default function Editor({
                                }) {
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
     const [ed, setEd] = useState(editor);
+    const [isCustomFunction, setIsCustomFunction] = useState(false);
 
     const [editorTab, setEditorTab] = useState(ed?.tabPage ?? "main");
     const prevModule = useMemo(() => getModuleById(ed?.prevModule?.parentId), [ed?.prevModule?.parentId]);
@@ -124,7 +126,7 @@ export default function Editor({
                 }
             ]}
         >
-            <div style={{flex: 1, minHeight: '540px'}}>
+            <div style={{flex: 1, minHeight: '621px'}}>
                 <div className={"editor_tabpages"}>
                     <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
                            onChange={() => setEditorTab("main")}/>
@@ -173,19 +175,6 @@ export default function Editor({
                                 précédent: <b>{ed.prevModule?.id ?? "-"}</b></label>
                         </div>
 
-                        <div className="popup_row" style={{alignItems: 'center', '--left_column_size': '100px'}}>
-                            <label>Pictogramme</label>
-                            <Suspense fallback={<div style={{lineHeight: '40px'}}>...</div>}>
-                                <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
-                                    if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
-                                        onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
-                                        if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
-                                        if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
-                                        if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
-                                    }
-                                }}/>
-                            </Suspense>
-                        </div>
 
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <label htmlFor={`editor_text_${ed.currentModule.id.trim()}`}>Libellé</label>
@@ -198,6 +187,56 @@ export default function Editor({
                             />
                         </div>
 
+
+                        <div className="popup_row" style={{
+                            alignItems: 'center', '--left_column_size': '100px',
+                            borderTop: '1px solid lightgray',
+                            paddingTop: '1em',
+                            marginTop: '2em'
+                        }}>
+                            <label>Fonction</label>
+                            <Suspense fallback={<div style={{lineHeight: '40px'}}>...</div>}>
+                                <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
+                                    if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
+                                        onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
+                                        if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
+                                        if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
+                                        if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
+                                        if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({modtype: selected?.modtype});
+                                    }
+                                    if (!selected || !selectedIcon) {
+                                        onUpdateModuleEditor({icon: null});
+                                    }
+                                }}/>
+                            </Suspense>
+                        </div>
+
+                        <div className="popup_row" style={{
+                            '--left_column_size': '100px',
+                            borderBottom: '1px solid lightgray',
+                            paddingBottom: '1em',
+                            marginBottom: '2em'
+                        }}>
+                            <label htmlFor={`editor_modtype_${ed.currentModule.modtype.trim()}`}>Type</label>
+                            <input
+                                type="text"
+                                name="editor_modtype"
+                                id={`editor_modtype_${ed.currentModule.modtype.trim()}`}
+                                value={ed.currentModule.modtype}
+                                onChange={(e) => {
+                                    onUpdateModuleEditor({modtype: e.target.value})
+                                    setIsCustomFunction(old => {
+                                        const isCF = old && e.target.value.trim() !== "";
+                                        return isCF;
+                                    });
+                                }}
+                                onInput={(e) => {
+                                    setIsCustomFunction(e.target.value.trim() !== "");
+                                }}
+                            />
+                        </div>
+
+
                         <div className="popup_row" style={{'--left_column_size': '100px'}}>
                             <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>Annotations<br/><span
                                 style={{fontSize: '0.8em', color: 'gray'}}>(nomenclature)</span></label>
@@ -209,6 +248,7 @@ export default function Editor({
                                 rows={2}
                             />
                         </div>
+
 
                         <div style={{
                             display: 'flex',
@@ -250,7 +290,8 @@ export default function Editor({
                                         sensibility: ed.currentModule.sensibility,
                                         pole: ed.currentModule.pole,
                                         free: false,
-                                        span: ed.currentModule.span
+                                        span: ed.currentModule.span,
+                                        modtype: ed.currentModule.modtype,
                                     }}
                                     modulePosition={1}
                                     rowPosition={1}
@@ -350,12 +391,24 @@ export default function Editor({
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasPole &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                                <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
-                                <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.pole}
-                                                    onChange={(value) => onUpdateModuleEditor({pole: value})}/>
-                            </div>
+                            <>
+                                <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                                    <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
+                                    <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
+                                                        value={ed.currentModule.wire}
+                                                        onChange={(value) => {
+                                                            console.log(value)
+                                                            onUpdateModuleEditor({wire: value})
+                                                        }}
+                                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}/>
+                                </div>
+                                <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                                    <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
+                                    <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
+                                                        value={ed.currentModule.pole}
+                                                        onChange={(value) => onUpdateModuleEditor({pole: value})}/>
+                                </div>
+                            </>
                         }
 
                         {ed.currentModule.func && (

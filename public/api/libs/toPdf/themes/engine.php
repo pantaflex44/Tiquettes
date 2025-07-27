@@ -116,7 +116,7 @@ class Theme
                     else if ($data[$key]['fontFamily'] === 'cursive') $data[$key]['fontFamily'] = 'Symbol';
                     else $data[$key]['fontFamily'] = 'Helvetica';
                     $data[$key]['fontSize'] = (float)($data[$key]['fontSize'] ?? 2.4);
-                    $data[$key]['fontSizePt'] = $data[$key]['fontSize'] / 0.35277777777778; // mm to pt
+                    $data[$key]['fontSizePt'] = $data[$key]['fontSize'] / 0.36; // mm to pt
                     $data[$key]['fontStyle'] = strtolower(trim($data[$key]['fontStyle'] ?? 'normal'));
                     $data[$key]['fontWeight'] = strtolower(trim($data[$key]['fontWeight'] ?? 'normal'));
                     $s = $data[$key]['fontStyle'] === 'italic' ? 'I' : '';
@@ -132,11 +132,27 @@ class Theme
                 }
 
                 if ($key === 'icon') {
+                    $data[$key]['type'] = strtolower(trim($data[$key]['type'] ?? 'icon'));
+                    if ($data[$key]['type'] !== 'icon' && $data[$key]['type'] !== 'text') $data[$key]['type'] = 'icon';
+
                     $data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
                     $data[$key]['place'] = [
                         'w' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
                         'h' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
                     ];
+
+                    if ($data[$key]['type'] === 'text') {
+                        $data[$key]['modtypeParams']['sizePercent'] = (array_key_exists('sizePercent', $data[$key]) ? floatval($data[$key]['sizePercent']) : 100.0) / 100;
+                        $data[$key]['modtypeParams']['fontSize'] = $data[$key]['modtypeParams']['sizePercent'] * 4;
+                        $data[$key]['modtypeParams']['fontSizePt'] = $data[$key]['modtypeParams']['fontSize'] / 0.36; // mm to pt
+                        $data[$key]['modtypeParams']['fontFamily'] = 'Helvetica';
+                        $data[$key]['modtypeParams']['fontStyle'] = 'B';
+                        $data[$key]['modtypeParams']['lineCount'] = 1;
+                        $data[$key]['place'] = [
+                            'w' => $workBox['w'] + 0.1,
+                            'h' => ($data[$key]['modtypeParams']['lineCount'] * $data[$key]['modtypeParams']['fontSize']) + (($data[$key]['modtypeParams']['lineCount'] - 1) * 0.5373) + 0.75,
+                        ];
+                    }
                 }
                 $data[$key]['bgPlace'] = [
                     'x' => $workBox['x'],
@@ -186,6 +202,7 @@ class Theme
 
                 $oldX = $pdf->GetX();
                 $oldY = $pdf->GetY();
+
                 $posX = $r['x'] + (($r['w'] - $data[$key]['place']['w']) / 2);
                 $largeMarginTop = ($firstKey === $key ? 0.5 : 0);
                 $largeMarginBottom = ($lastKey === $key ? 0.5 : 0);
@@ -202,17 +219,30 @@ class Theme
                     $align = $align === 'left' ? 'L' : ($align === 'right' ? 'R' : 'C');
                     $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
 
-                } else if ($key === 'icon' && $module->icon) { // draw icons
+                } else if ($key === 'icon') { // draw icons
+                    if ($data[$key]['type'] === 'icon'  && $module->icon) { // icon format
+                        $color = (array_key_exists('color', $data[$key])
+                            && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
+                            && strlen($data[$key]['color']) === 7
+                        ) ? $data[$key]['color'] : '#000000';
+                        $icon = $pdf->getIcon($module->icon, $color, 100);
+                        if ($icon !== '') {
+                            $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
+                        }
+                    } else if ($data[$key]['type'] === 'text') { // text format
+                        $modtype = trim($module->modtype ?? "");
+                        if ($modtype !== "") {
+                            $ox = $pdf->GetX();
+                            $oy = $pdf->GetY();
+                            $pdf->SetXY($ox, $oy + 0.5);
 
-                    $color = (array_key_exists('color', $data[$key])
-                        && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
-                        && strlen($data[$key]['color']) === 7
-                    ) ? $data[$key]['color'] : '#000000';
-
-                    $icon = $pdf->getIcon($module->icon, $color, 100);
-
-                    if ($icon !== '') {
-                        $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
+                            self::setFgColor($pdf, $data[$key]);
+                            $pdf->SetFont($data[$key]['modtypeParams']['fontFamily'], $data[$key]['modtypeParams']['fontStyle'], $data[$key]['modtypeParams']['fontSizePt']);
+                            $txt = mb_convert_encoding($modtype, 'windows-1252', 'UTF-8');
+                            $align = strtolower(trim(($data[$key]['horizontalAlignment'] ?? 'center')));
+                            $align = $align === 'left' ? 'L' : ($align === 'right' ? 'R' : 'C');
+                            $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['modtypeParams']['fontSize'], $txt, 0, $align, false, $data[$key]['modtypeParams']['lineCount']);
+                        }
                     }
                 }
 

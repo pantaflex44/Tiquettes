@@ -49,12 +49,12 @@ function useApi() {
     }, [expireAt]);
 
 
-
-    return async (method, action, getParams = {}, formData = null) => {
+    return async (method, category, action, getParams = {}, formData = null) => {
         try {
             if (tokenExpired()) throw new Error('Expired token');
 
-            const urlBase = import.meta.env.VITE_APP_API_URL + 'accounts.php?action=';
+            let url = import.meta.env.VITE_APP_API_URL + 'api.php?c=' + encodeURIComponent(category.trim()) + '&a=' + encodeURIComponent(action.trim());
+
             let options = {
                 method,
                 mode: 'cors',
@@ -65,7 +65,6 @@ function useApi() {
             const t = (token ?? '').trim();
             if (t !== '') options = {...options, headers: {...options.headers, 'Authorization': `Bearer ${t}`}}
 
-            let url = urlBase + action;
             const params = Object.entries(getParams).map(([key, value]) => {
                 return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
             }).join('&').trim();
@@ -98,23 +97,30 @@ function useApi() {
                 throw new Error(response.status + " " + message);
             }
 
-            if (action === 'logout') {
+            if (category === 'user' && action === 'logout') {
                 clearToken();
                 return true;
             }
 
             try {
-                const json = await response.json();
-                if (json.token) setToken(json.token);
-                if (json.expireAt) setExpireAt(json.expireAt * 1000);
-                return json;
-            } catch {
-                const txt = await response.text();
-                throw new Error(txt);
+                const content = await response.text();
+                const contentType = response.headers.get("content-type");
+                const isJSON = (contentType && contentType.indexOf("application/json") !== -1);
+                //console.log(content);
+                if (isJSON) {
+                    const json = JSON.parse(content);
+                    if (json.token) setToken(json.token);
+                    if (json.expireAt) setExpireAt(json.expireAt * 1000);
+                    return json;
+                } else {
+                    throw new Error(content);
+                }
+            } catch (err) {
+                throw new Error(err);
             }
 
         } catch (error) {
-            //console.error(`API ${action}`, error);
+            console.error(`API ${action}`, error);
             throw new Error(error);
         }
     }

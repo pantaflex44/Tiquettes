@@ -20,11 +20,20 @@
 
 declare(strict_types=1);
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require __DIR__ . '/PHPMailer-master/src/Exception.php';
+require __DIR__ . '/PHPMailer-master/src/PHPMailer.php';
+require __DIR__ . '/PHPMailer-master/src/SMTP.php';
+
 /*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
  */
+
+define('CLIENT_IP', $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']));
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: *");
@@ -62,13 +71,65 @@ $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 define('DB', $pdo);
 
-define('JWT_SECRET_KEY', '154ba2c38d864dd44f9ef20ced9deaa932e84df8bda3dde95c1ed7565150de29a23926ac6f5f13e41133d35973eae17e909542fe8ad905d1b38b023b37f613fe25447eee8b1fbecc61562f99b4eb631d7e73ce65ce5826b1bbe4186e673cd253543ae7a12e1c80b34df7902fa2ab26d6916c051af1f6a229a2e3dabdba9195d067ca7c856127bb03f9ccbd5d6eb72e69405ce1fe4686face249edc64b4ad67885fa4d6430e4efa215f76677fae161bbb2cc2dedf60a6ce86c7168c6ec276e9d5e34b9b6a9c6847ec31b7a55f26b4531fcef99e145902cd696c308cf0cea37d90dbd9432e6288bb26ebb9b0df092ee3f97479faa28dc957cdaef17e0f9f680d94');
+include_once __DIR__ . '/constants.php';
 
-function dd_json($content) {
-    die(json_encode($content));
+function dd_json(mixed $content): void
+{
+    header('Content-Type: application/json');
+    write_json([
+        'errors' => [
+            'main' => $content,
+        ]
+    ]);
 }
 
-function write_json($content) {
+function write_json(mixed $content): void
+{
     echo json_encode($content);
     exit;
+}
+
+function send_Mail(array|string $to, string $subject, string $body): bool
+{
+    $mail = new PHPMailer(true);
+    try {
+        $mail->setLanguage('fr');
+        $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64';
+        $mail->isSMTP();
+        $mail->isHTML(true);
+
+        if (defined('SMTP_DEBUG')) $mail->SMTPDebug = SMTP_DEBUG;
+        if (defined('SMTP_HOST')) $mail->Host = SMTP_HOST;
+        if (defined('SMTP_AUTH')) $mail->SMTPAuth = SMTP_AUTH;
+        if (defined('SMTP_USERNAME')) $mail->Username = SMTP_USERNAME;
+        if (defined('SMTP_PASSWORD')) $mail->Password = SMTP_PASSWORD;
+        if (defined('SMTP_SECURE')) $mail->SMTPSecure = SMTP_SECURE;
+        if (defined('SMTP_PORT')) $mail->Port = SMTP_PORT;
+        if (defined('SMTP_FROM')) {
+            if (is_array(SMTP_FROM) && count(SMTP_FROM) === 2) {
+                $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);
+                $mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
+            } else if (is_string(SMTP_FROM)) {
+                $mail->setFrom(SMTP_FROM);
+                $mail->addReplyTo(SMTP_FROM);
+            }
+        }
+        if (is_array($to) && count($to) === 2) {
+            $mail->addAddress($to[0], $to[1]);
+        } else if (is_string($to)) {
+            $mail->addAddress($to);
+        }
+
+        $mail->Subject = (defined('SMTP_SUBJECT_PREFIX') ? SMTP_SUBJECT_PREFIX : '') . $subject;
+        $mail->Body = $body;
+        $mail->AltBody = $body;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        // $mail->ErrorInfo
+        dd_json($mail->ErrorInfo);
+        return false;
+    }
 }

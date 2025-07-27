@@ -1,6 +1,25 @@
 # Changelog
 
 
+## [2.2.3] - 2025-07-18
+
+### Ajouts
+
+- Ajout de la propriété "Fonction" pour chaque module. Représentation textuelle de la fonction d'un module (Type). Permets de réaliser des étiquettes où l'icône est remplacée par sa fonction textuelle.
+- Création d'un nouveau thème pour l'occasion : "Type et Description seulement".
+- Ajout d'une option d'impression permettant d'indiquer, hors zone de coupe, le calibre sous chaque module pour faciliter l'installation de ceux-ci.
+- Ajout de la propriété "Section des conducteurs" pour chaque module.
+
+### Améliorations
+
+- Retour du raccourci pour supprimer rapidement un module.
+
+### Modifications
+
+- Retrait du système d'impression standard. L'impression PDF est devenue le seul mode disponible.
+
+
+
 ## [2.2.2] - 2025-05-23
 
 ### Ajouts
