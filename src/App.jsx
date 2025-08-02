@@ -48,6 +48,8 @@ import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
+import caretDownIcon from "./assets/caret-down.svg";
+import caretUpIcon from "./assets/caret-up.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -76,6 +78,7 @@ function App() {
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
+    const [subMenus, setSubMenus] = useState({printLabelsOpened: false});
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -508,6 +511,7 @@ function App() {
         setPrintOptions({...defaultPrintOptions});
         setDocumentTitle(name);
         setTab(1);
+        setSubMenus(old => ({...old, printLabelsOpened: false}));
         scrollToProject();
 
         stats_count('new');
@@ -522,6 +526,7 @@ function App() {
         setDocumentTitle(defaultProjectName);
         setPrintOptions({...defaultPrintOptions});
         setTheme(defaultTheme);
+        setSubMenus(old => ({...old, printLabelsOpened: false}));
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
@@ -610,6 +615,7 @@ function App() {
                     setClipboardMode(null);
                     setPrintOptions({...defaultPrintOptions});
                     setTab(1);
+                    setSubMenus(old => ({...old, printLabelsOpened: false}));
                     scrollToProject();
 
                     stats_count('import');
@@ -1465,7 +1471,7 @@ function App() {
                                    }))}/>
                             <label htmlFor="print_firstPage">Page de garde</label>
                         </div>
-                        <div className="dropdown_item head" title="Imprimer les étiquettes">
+                        <div className="dropdown_item head parent" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
                                    checked={printOptions.labels}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1473,41 +1479,49 @@ function App() {
                                        labels: e.target.checked
                                    }))}/>
                             <label htmlFor="print_labels">Etiquettes</label>
+                            {printOptions.labels &&
+                                <img src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon} width={16}
+                                     height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
+                                    ...old,
+                                    printLabelsOpened: !old.printLabelsOpened
+                                }))}/>}
                         </div>
-                        <div className="dropdown_item"
-                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
-                            <input id="print_free" name="print_free" type="checkbox"
-                                   checked={printOptions.freeModules}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       freeModules: e.target.checked
-                                   }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_free">Décorer les emplacements libres</label>
-                        </div>
-                        <div className="dropdown_item"
-                             title="Imprimer les lignes de coupe pour cisailles et massicots">
-                            <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
-                                   checked={printOptions.pdfOptions.labelsCutLines}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
-                                   }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
-                        </div>
-                        <div className="dropdown_item"
-                             title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
-                            <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
-                                   checked={printOptions.pdfOptions.printCurrents}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, printCurrents: e.target.checked}
-                                   }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour aider à
-                                leur installation</label>
-                        </div>
+                        {subMenus.printLabelsOpened && printOptions.labels && <>
+                            <div className="dropdown_item"
+                                 title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
+                                <input id="print_free" name="print_free" type="checkbox"
+                                       checked={printOptions.freeModules}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           freeModules: e.target.checked
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_free">Décorer les emplacements libres</label>
+                            </div>
+                            <div className="dropdown_item"
+                                 title="Imprimer les lignes de coupe pour cisailles et massicots">
+                                <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
+                                       checked={printOptions.pdfOptions.labelsCutLines}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
+                            </div>
+                            <div className="dropdown_item" style={{marginBottom: '1em'}}
+                                 title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
+                                <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
+                                       checked={printOptions.pdfOptions.printCurrents}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           pdfOptions: {...old.pdfOptions, printCurrents: e.target.checked}
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour
+                                    aider à
+                                    leur installation</label>
+                            </div>
+                        </>}
 
-                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire"
-                             style={{marginTop: '1em'}}>
+                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
                                    checked={printOptions.schema}
                                    onChange={(e) => setPrintOptions((old) => ({

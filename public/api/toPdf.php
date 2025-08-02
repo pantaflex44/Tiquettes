@@ -1378,7 +1378,7 @@ foreach ($flattenModules as $module) {
                 'text' => $module->text,
                 'desc' => $module->desc,
                 'pole' => $module->pole,
-                'wire' => $module->wire
+                'wire' => $module->wire ?? ''
             ]);
         }
     }

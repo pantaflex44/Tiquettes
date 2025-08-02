@@ -396,7 +396,6 @@ export default function Editor({
                                 <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.wire}
                                                     onChange={(value) => {
-                                                        console.log(value)
                                                         onUpdateModuleEditor({wire: value})
                                                     }}
                                                     current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}/>

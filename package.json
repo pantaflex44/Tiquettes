@@ -31,6 +31,8 @@
         "build": "cross-env NODE_ENV=ghpages vite build --mode ghpages",
         "prebuild:web": "concurrently \"npm run copies\"",
         "build:web": "cross-env NODE_ENV=web vite build --mode web",
+        "prebuild:dev": "concurrently \"npm run copies\"",
+        "build:dev": "cross-env NODE_ENV=dev vite build --mode dev",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"

@@ -339,6 +339,11 @@ option[disabled] {
     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(309deg) brightness(103%) contrast(102%);
 }
 
+.button_group .dropdown_container .dropdown .dropdown_item.parent img {
+    cursor: pointer;
+    padding-inline: 0.25em;
+}
+
 .button_group .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;
