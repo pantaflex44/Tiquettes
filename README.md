@@ -29,6 +29,10 @@ Venez plutôt le déclarer dans **[l'espace dédié](https://github.com/pantafle
 
 Retrouvez **Tiquettes** directement sur **[sa page Facebook](https://www.facebook.com/profile.php?id=61563821616548)** !
 
+### Tester en avant première
+
+Vous pouvez tester Tiquettes en cours de développement avant la sortie officielle de sa nouvelle version en utilisant ce lien: **https://www.tiquettes.fr/dev/** ;-)
+
 ---
 
 # Bienvenue dans la documentation de Tiquettes
