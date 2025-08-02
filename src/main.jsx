@@ -31,7 +31,7 @@ function Footer() {
             marginTop: '1em',
             fontSize: 'small',
             color: 'darkgray',
-        }} className='footer'>{pkg.title} {pkg.version}<span className="not_printable"> | <a href={pkg.repository.url}
+        }} className='footer'>{pkg.title} {pkg.version} {import.meta.env.VITE_APP_MODE && "(DEV)"}<span className="not_printable"> | <a href={pkg.repository.url}
                                                                                              style={{color: 'var(--primary-color)'}}
                                                                                              target="_blank">{pkg.repository.url}</a> | <a
             href="https://www.gnu.org/licenses/agpl-3.0.fr.html" style={{color: 'var(--primary-color)'}}
@@ -69,6 +69,10 @@ export default function Main() {
 
     return (
         <UserProvider>
+            {import.meta.env.VITE_APP_MODE && <>
+                <p className={"devmode blink"}>Version {pkg.version} en cours de développement</p>
+                <p className={"devmode"}>Version stable disponible ici: <a href={"https://www.tiquettes.fr/app/"}>https://www.tiquettes.fr/app/</a></p>
+            </>}
             <App/>
             <Footer/>
         </UserProvider>

@@ -1,4 +1,4 @@
-name: FTP Deploy (tiquettes.fr)
+name: FTP Deploy (tiquettes.fr - DEV)
 
 on:
   push:

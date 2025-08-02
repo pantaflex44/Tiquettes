@@ -20,6 +20,25 @@ body{
     accent-color: var(--primary-color);
 }
 
+p.devmode {
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 3em;
+}
+
+p.devmode.blink {
+    color: red;
+    margin-bottom: 0;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
 
 
 @media print {
