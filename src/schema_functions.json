@@ -5,8 +5,10 @@
         "hasCrb": false,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": true
+        "supportContacts": true,
+        "selectable": true
     },
     "id": {
         "name": "Interrupteur différentiel",
@@ -14,8 +16,10 @@
         "hasCrb": false,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": true
+        "supportContacts": true,
+        "selectable": true
     },
     "dd": {
         "name": "Disjoncteur différentiel",
@@ -23,8 +27,10 @@
         "hasCrb": true,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": true
+        "supportContacts": true,
+        "selectable": true
     },
     "q": {
         "name": "Disjoncteur",
@@ -32,8 +38,21 @@
         "hasCrb": true,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": true
+        "supportContacts": true,
+        "selectable": true
+    },
+    "fus": {
+        "name": "Fusible",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasWire": true,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
     },
     "i": {
         "name": "Interrupteur",
@@ -41,17 +60,10 @@
         "hasCrb": false,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": true
-    },
-    "c": {
-        "name": "Commande",
-        "hasType": false,
-        "hasCrb": false,
-        "hasCurrent": true,
-        "hasPole": false,
-        "hasContacts": false,
-        "supportContacts": false
+        "supportContacts": true,
+        "selectable": true
     },
     "kc": {
         "name": "Contacteur",
@@ -59,8 +71,21 @@
         "hasCrb": false,
         "hasCurrent": true,
         "hasPole": false,
+        "hasWire": false,
         "hasContacts": true,
-        "supportContacts": false
+        "supportContacts": true,
+        "selectable": true
+    },
+    "cpt": {
+        "name": "Sous-comptage",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasWire": true,
+        "hasContacts": false,
+        "supportContacts": false,
+        "selectable": true
     },
     "o": {
         "name": "Autre",
@@ -68,7 +93,97 @@
         "hasCrb": false,
         "hasCurrent": true,
         "hasPole": true,
+        "hasWire": true,
         "hasContacts": false,
-        "supportContacts": false
+        "supportContacts": true,
+        "selectable": true
+    },
+    "c": {
+        "name": "Commande",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": false
+    },
+    "cno": {
+        "name": "Commande NO",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "cnf": {
+        "name": "Commande NF",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "bpno": {
+        "name": "Bouton poussoir NO",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "bpnf": {
+        "name": "Bouton poussoir NF",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "led": {
+        "name": "Voyant",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": false,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "son": {
+        "name": "Carillon",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": false,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
+    "telec": {
+        "name": "Télécommande",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
     }
 }

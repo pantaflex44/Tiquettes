@@ -32,7 +32,6 @@ import Row from "./Row";
 import ContentEditable from "./ContentEditable";
 
 import newProjectIcon from './assets/new_project.svg';
-import uploadProjectIcon from './assets/upload.svg';
 import clearProjectIcon from './assets/x.svg';
 import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
@@ -84,6 +83,7 @@ function App() {
     const user = useContext(UserContext);
 
     const defaultPrintOptions = useMemo(() => ({
+        firstPage: true,
         labels: true,
         summary: false,
         schema: false,
@@ -98,12 +98,14 @@ function App() {
     }), []);
     const getSavedPrintOptions = () => {
         if (sessionStorage.getItem(pkg.name + '_printOptions')) {
-            let po = {
-                ...defaultPrintOptions,
-                ...JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions'))
-            };
-
-            return po;
+            const merge = (a, b) => [a, b].reduce((r, o) => Object
+                    .entries(o)
+                    .reduce((q, [k, v]) => ({
+                        ...q,
+                        [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
+                    }), r),
+                {});
+            return merge(defaultPrintOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions')));
         }
 
         return {...defaultPrintOptions};
@@ -673,7 +675,7 @@ function App() {
                 printOptions: {value: JSON.stringify(printOptions)},
                 tv: {value: JSON.stringify(pkg.version)},
                 auto: {value: printOptions.pdfOptions.autoPrint ? "1" : "0"},
-                schemaGridColor: {value: printOptions.pdfOptions.schemaGridColor.join(",")},
+                schemaGridColor: {value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",")},
                 labelsCutLines: {value: printOptions.pdfOptions.labelsCutLines ? "1" : "0"},
             }).map(([key, value]) => {
                 const i = document.createElement("input");
@@ -1453,6 +1455,16 @@ function App() {
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
+                        <div className="dropdown_item head"
+                             title="Imprimer la page de garde">
+                            <input id="print_firstPage" name="print_firstPage" type="checkbox"
+                                   checked={printOptions.firstPage}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       firstPage: e.target.checked
+                                   }))}/>
+                            <label htmlFor="print_firstPage">Page de garde</label>
+                        </div>
                         <div className="dropdown_item head" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
                                    checked={printOptions.labels}

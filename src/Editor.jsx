@@ -390,25 +390,26 @@ export default function Editor({
                             </div>
                         }
 
+                        {schemaFunctions[ed.currentModule.func]?.hasWire &&
+                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                                <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
+                                <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.wire}
+                                                    onChange={(value) => {
+                                                        console.log(value)
+                                                        onUpdateModuleEditor({wire: value})
+                                                    }}
+                                                    current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}/>
+                            </div>
+                        }
+
                         {schemaFunctions[ed.currentModule.func]?.hasPole &&
-                            <>
-                                <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                                    <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
-                                    <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
-                                                        value={ed.currentModule.wire}
-                                                        onChange={(value) => {
-                                                            console.log(value)
-                                                            onUpdateModuleEditor({wire: value})
-                                                        }}
-                                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}/>
-                                </div>
-                                <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                                    <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
-                                    <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
-                                                        value={ed.currentModule.pole}
-                                                        onChange={(value) => onUpdateModuleEditor({pole: value})}/>
-                                </div>
-                            </>
+                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                                <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
+                                <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.pole}
+                                                    onChange={(value) => onUpdateModuleEditor({pole: value})}/>
+                            </div>
                         }
 
                         {ed.currentModule.func && (

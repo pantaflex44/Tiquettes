@@ -1076,7 +1076,7 @@ class TiquettesPDF extends FPDF
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
         } else {
-            $sf = ['hasType' => false];
+            $sf = ['hasType' => false, 'hasCrb' => false, 'hasCurrent' => true];
         }
 
         $isNew = ($this->schemaCurrentPosX + $this->schemaSymbolSize['w']) > $this->grid[$this->gridOrientation]['right'];
@@ -1106,7 +1106,7 @@ class TiquettesPDF extends FPDF
             $lines = [
                 $sf['hasType'] && $module->type ? str("Type " . $module->type ?? '') : '',
                 $sf['hasType'] && $module->type ? str($module->sensibility ?? '') : '',
-                str(trim(($module->crb ?? '') . ' ' . ($module->current ?? ''))),
+                str(trim(($sf['hasCrb'] && $module->crb ? ($module->crb ?? '') : '') . ' ' . ($sf['hasCurrent'] && $module->current ? ($module->current ?? '') : ''))),
                 str($module->pole ?? '')
             ];
             for ($i = 0; $i < count($lines); $i++) {
@@ -1196,7 +1196,7 @@ class TiquettesPDF extends FPDF
         $this->AddPage('L', 'A4', 0);
         $this->SetVisibility('all');
 
-        $this->SetY($this->pageMargin + 5);
+        $this->SetY($this->pageMargin + 3);
         $this->SetFont('Arial', 'B', 11);
         $this->SetTextColor(0, 0, 0);
         $oldPosX = $this->pageMargin;
@@ -1294,11 +1294,11 @@ class TiquettesPDF extends FPDF
                     $this->MultiCell($columns[6]['w'], 4, str(trim($module->desc ?? '')), 0, $columns[6]['align'], false, 3);
                     $oldPosX += $columns[6]['w'];
 
-                    $this->Ln(13);
+                    $this->Ln(11);
                 }
             }
 
-            $this->Ln(5);
+            $this->Ln(3);
         }
     }
 
@@ -1377,8 +1377,8 @@ foreach ($flattenModules as $module) {
                 'icon' => $module->icon,
                 'text' => $module->text,
                 'desc' => $module->desc,
-                'pole' => $module->pole
-
+                'pole' => $module->pole,
+                'wire' => $module->wire
             ]);
         }
     }
@@ -1397,7 +1397,7 @@ $pdf->AliasNbPages();
 $pdf->SetGridColor($schemaGridColor);
 $pdf->SetShowCutLines($labelsCutLines);
 
-if (!$hasOnlyLabels) $pdf->AddFirstPage();
+if (!$hasOnlyLabels && $printOptions->firstPage === true) $pdf->AddFirstPage();
 if ($printOptions->schema === true) $pdf->AddSchemaPage();
 if ($printOptions->summary === true) $pdf->AddSummaryPage();
 if ($printOptions->labels === true) $pdf->AddLabelsPage();

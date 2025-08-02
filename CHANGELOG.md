@@ -1,18 +1,20 @@
 # Changelog
 
 
-## [2.2.3] - 2025-07-27
+## [2.2.3] - 2025-08-02
 
 ### Ajouts
 
-- Ajout de la propriété "Fonction" pour chaque module. Représentation textuelle de la fonction d'un module (Type). Permets de réaliser des étiquettes où l'icône est remplacée par sa fonction textuelle.
-- Création d'un nouveau thème pour l'occasion : "Type et Description seulement".
-- Ajout d'une option d'impression permettant d'indiquer, hors zone de coupe, le calibre sous chaque module pour faciliter l'installation de ceux-ci.
-- Ajout de la propriété "Section des conducteurs" pour chaque module.
-
+- Ajout de la propriété "_Fonction_" pour chaque module. Représentation textuelle de la fonction d'un module (Type). Permets de réaliser des étiquettes où l'icône est remplacée par sa fonction textuelle. (Suggestion de [zoliaaz](https://github.com/zoliaaz))
+- Création d'un nouveau thème pour l'occasion : "_Type et Description seulement_". (Suggestion de [zoliaaz](https://github.com/zoliaaz))
+- Ajout d'une option d'impression permettant d'indiquer, hors zone de coupe, le calibre sous chaque module pour faciliter l'installation de ceux-ci. (Suggestion de [zoliaaz](https://github.com/zoliaaz))
+- Ajout de la propriété "_Section des conducteurs_" pour chaque module. (Suggestion de [zoliaaz](https://github.com/zoliaaz))
+- Possibilité d'imprimer ou non la page de garde. ([Discussion #29](https://github.com/pantaflex44/Tiquettes/discussions/29#discussioncomment-13903864) par [Boubigloubi](https://github.com/Boubigloubi))
+- Ajout de nouveaux types de modules pour le schéma unifilaire : "_Fusible_", "_Carillon_", "_Voyant_", "_Commande NO et NF_", "_Bouton poussoir NO et NF_"
+  
 ### Améliorations
 
-- Retour du raccourci pour supprimer rapidement un module.
+- Retour du raccourci pour supprimer rapidement un module. (Suggestion de [zoliaaz](https://github.com/zoliaaz))
 
 ### Modifications
 

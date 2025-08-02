@@ -44,7 +44,7 @@ export default function SchemaSymbol({
 
         let obj = schemaFunctions[func];
         if (isContact) {
-            obj = {name: "Contacteur", hasPole: true, hasCurrent: true};
+            obj = {name: "Contacteur", hasPole: true, hasCurrent: true, hasWire: true};
         }
 
         const name = obj?.name ?? "";

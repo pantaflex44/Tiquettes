@@ -25,16 +25,25 @@ export default function EditorWireSelector({id, value, onChange = null, current 
         2: 1,
         6: 1.5,
         10: 1.5,
+        15: 1.5,
         16: 1.5,
         20: 2.5,
         25: 4,
+        30: 6,
         32: 6,
         40: 10,
+        45: 10,
+        50: 16,
+        60: 16,
         63: 16,
         80: 25,
+        90: 25,
         100: 35,
-        160: 50,
-        250: 75,
+        125: 50,
+        160: 75,
+        180: 75,
+        240: 150,
+        250: 150,
     };
     const [list, setList] = useState([]);
     const [cur, setCur] = useState(0);
@@ -42,11 +51,17 @@ export default function EditorWireSelector({id, value, onChange = null, current 
     useEffect(() => {
         const cc = rules[current] ?? 0;
         setCur(cc);
-        const l = [0.75, 1, 1.5, 2.5, 4, 6, 10, 16, 35, 50, 75, 150, 180, 240].filter((c) => c >= cc);
+
+        const l = [...new Set(Object.values(rules))];
         setList(old => (JSON.stringify(old) !== JSON.stringify(l) ? l : old));
-        const v = l.length > 0 ? l[0] : 0;
+
+        /*let lmin = [...new Set(Object.values(rules))].filter((c) => c >= cc);
+        lmin = (lmin.length > 0) ? lmin[0] : (l.length > 0 ? l[0] : 0);
+        //const v = lmin;
         const vv = value ?? 0;
-        if (cc > 0 && vv < v) onChange(`${v}`)
+        //if (cc > 0 && vv < v) onChange(`${v}`)
+        const v = value ?? lmin;
+        if (cc > 0  && vv !== v) onChange(`${v}`);*/
     }, [current, onChange, rules, value]);
 
 

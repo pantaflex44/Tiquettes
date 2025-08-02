@@ -45,11 +45,20 @@ export default function SchemaDescription({
         let wire = module.wire ?? "";
         let pole = module.pole ?? "";
 
-        /*const parentModule = getModuleById(module.parentId).module;
-        if (module.func === 'kc' && parentModule) {
+        const parentModule = getModuleById(module.parentId).module;
+        /*if (module.func === 'kc' && parentModule) {
             icon = parentModule.icon;
             text = parentModule.text;
+            pole = parentModule.pole;
+            wire = parentModule.wire;
         }*/
+
+        if (module.func === 'k' && parentModule) {
+            icon = parentModule.icon;
+            text = parentModule.text;
+            pole = parentModule.pole;
+            wire = parentModule.wire;
+        }
 
         return {text, icon, wire, pole};
     }, [module]);
@@ -57,7 +66,7 @@ export default function SchemaDescription({
     return (
         /*<div className="schemaItemLast">*/
         <>
-            <div className="schemaItemLastWire">{infos.wire ? `${infos.wire} mm²` : "-"}</div>
+            <div className="schemaItemLastWire">{infos.wire ? `${infos.wire} mm²` : ""}</div>
             {infos.icon && (
                 <div className="schemaItemLastIconContainer" title={infos.text}>
                     <img

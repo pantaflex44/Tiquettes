@@ -25,7 +25,9 @@ export default function EditorFunctionSelector({id, value, onChange = null}) {
                        if (onChange) onChange(e.target.value)
                    }}>
         <option value={""}>-</option>
-        {Object.keys(schemaFunctions).map((key, i) => <option key={i}
-                                                              value={key}>{schemaFunctions[key].name}</option>)}
+        {Object.keys(schemaFunctions)
+            .filter(key => (schemaFunctions[key].selectable ?? false) === true)
+            .map((key, i) => <option key={i}
+                                     value={key}>{schemaFunctions[key].name}</option>)}
     </select>
 }
