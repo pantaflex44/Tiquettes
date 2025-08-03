@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
  * Copyright (C) 2024-2025 Christophe LEMOINE
@@ -17,7 +16,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 require_once(__DIR__ . '/libs/config.php');
 
 $date = date('Y-m-d');
