@@ -238,6 +238,7 @@ function App() {
             block: "start",
             inline: "start"
         });
+        //window.scrollTo(0, 0);
     };
 
     const verifyVersion = (swb) => {
@@ -1619,6 +1620,7 @@ function App() {
                         maxWidth: '100%'
                     }}
                     editable={!UIFrozen}
+                    className={"contentEditable"}
                 />
             </h3>
 
@@ -1909,6 +1911,7 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
+                onEdit={(rowIndex, moduleIndex, tab) => editModule(rowIndex, moduleIndex, tab)}
             />
 
             {/** POPUPS **/}

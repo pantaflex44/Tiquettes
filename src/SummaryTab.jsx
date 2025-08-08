@@ -28,7 +28,30 @@ export default function SummaryTab({
                                        switchboard,
                                        setSwitchboard,
                                        printOptions,
+                                       onEdit = null,
                                    }) {
+    const getModuleById = (moduleId) => {
+        let indexes = {row: -1, module: -1};
+        let m = {module: null, indexes};
+
+        switchboard.rows.forEach((row, ri) => {
+            row.forEach((module, mi) => {
+                if (!m.module && module.id === moduleId && !module.free) {
+                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                }
+            })
+        });
+
+        return m;
+    }
+
+    const handleEdit = (module, tab) => {
+        const m = getModuleById(module.id);
+        if (!m?.module) return;
+
+        onEdit(m.indexes.row, m.indexes.module, tab);
+    }
+
     return (
         <div
             className={`summary ${tab === 3 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
@@ -130,19 +153,19 @@ export default function SummaryTab({
                                     </td>
                                 )}
                                 {switchboard.summaryColumnType && (
-                                    <td className="summary_type">
+                                    <td className="summary_type" onClick={() => handleEdit(module, 'main')} title={"Cliquer pour éditer"}>
                                         <div>{module.icon ?
                                             <img src={module.icon} width={20} height={20} alt="Pictogramme"/> :
                                             <img src={summaryNoPicto} width={20} height={20} alt="Remplacement"/>}</div>
                                     </td>
                                 )}
                                 {switchboard.summaryColumnId && (
-                                    <td className="summary_id">
+                                    <td className="summary_id" onClick={() => handleEdit(module, 'main')} title={"Cliquer pour éditer"}>
                                         <div>{module.id}</div>
                                     </td>
                                 )}
                                 {switchboard.summaryColumnFunction && (
-                                    <td className="summary_func">
+                                    <td className="summary_func" onClick={() => handleEdit(module, 'schema')} title={"Cliquer pour éditer"}>
                                         {schemaFunctions[module.func] && <p>
                                             {schemaFunctions[module.func]?.name ?? ""}
                                             <br/>
@@ -154,12 +177,12 @@ export default function SummaryTab({
                                     </td>
                                 )}
                                 {switchboard.summaryColumnLabel && (
-                                    <td className="summary_text">
+                                    <td className="summary_text" onClick={() => handleEdit(module, 'main')} title={"Cliquer pour éditer"}>
                                         <div>{module.text}</div>
                                     </td>
                                 )}
                                 {switchboard.summaryColumnDescription && (
-                                    <td className="summary_text">
+                                    <td className="summary_text" onClick={() => handleEdit(module, 'main')} title={"Cliquer pour éditer"}>
                                         <div>{module.desc}</div>
                                     </td>
                                 )}

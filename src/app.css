@@ -424,7 +424,7 @@ option[disabled] {
     background-color: #f5f5f5;
 }
 
-.summary table tbody tr:hover td:not(:first-child) {
+.summary table tbody tr:hover td:not(.summary_row):not(.summary_position) {
     background-color: var(--secondary-color);
 }
 
@@ -442,6 +442,14 @@ option[disabled] {
     padding-right: 1em;
     padding-left: 0.5em;
     min-height: 7mm;
+    cursor: default;
+}
+
+.summary table tbody tr td.summary_type,
+.summary table tbody tr td.summary_id,
+.summary table tbody tr td.summary_func,
+.summary table tbody tr td.summary_text {
+    cursor: pointer;
 }
 
 .summary table tbody tr td div {
@@ -794,6 +802,17 @@ option[disabled] {
 
 .tabPageBandCol > input[type="checkbox"]:checked + label > img  {
     filter: invert(94%) sepia(100%) saturate(22%) hue-rotate(48deg) brightness(107%) contrast(106%);
+}
+
+.contentEditable {
+    border: 1px dashed transparent;
+    width: 100%;
+    flex: 1;
+    padding-inline: 0.5em;
+}
+
+.contentEditable:hover {
+    border-bottom-color: var(--primary-color);
 }
 
 @media screen and (max-width: 640px) {
