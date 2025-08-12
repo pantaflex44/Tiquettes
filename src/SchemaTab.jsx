@@ -56,7 +56,6 @@ export default function SchemaTab({
 
     const handleEditSymbol = (module) => {
         const m = getModuleById(module.id);
-        console.log(m)
         if (!m?.module) return;
 
         onEditSymbol(m.indexes.row, m.indexes.module);

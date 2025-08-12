@@ -411,6 +411,7 @@ export default function Editor({
                                 <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
                                 <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.pole}
+                                                    db={switchboard.withDb ? switchboard.db : null}
                                                     onChange={(value) => onUpdateModuleEditor({pole: value})}/>
                             </div>
                         }
