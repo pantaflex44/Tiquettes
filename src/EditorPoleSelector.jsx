@@ -39,7 +39,6 @@ export default function EditorPoleSelector({id, value, db, onChange = null}) {
         if (p === 3 && currentPole.key.includes('+N')) p = 4;
         return p <= dbPole;
     });
-    console.log(allowedPoles);
 
     return <select id={id} name={id} value={value}
                    onChange={(e) => {

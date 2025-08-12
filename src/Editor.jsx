@@ -91,10 +91,31 @@ export default function Editor({
     }
 
     useEffect(() => {
-        if (hasBlankId) {
-            onUpdateModuleEditor({id: lastFreeId});
+            if (hasBlankId) {
+                onUpdateModuleEditor({id: lastFreeId});
+            }
+
+            let dbPole = 4;
+            if (switchboard.withDb) {
+                let pole = switchboard.db.pole.trim().toUpperCase();
+                dbPole = parseInt(pole.replace(/\D/g, ''));
+                if (dbPole === 3 && pole.includes('+N')) dbPole = 4;
+            }
+
+            let currentPole = 0;
+            if (ed.currentModule.pole) {
+                let pole = ed.currentModule.pole.trim().toUpperCase();
+                currentPole = parseInt(pole.replace(/\D/g, ''));
+                if (currentPole === 3 && pole.includes('+N')) currentPole = 4;
+            }
+
+            if (dbPole === 1 && currentPole !== 1) onUpdateModuleEditor({pole: switchboard.db.pole});
+
         }
-    }, [hasBlankId, ed.currentModule.func]);
+        ,
+        [hasBlankId, ed.currentModule.func]
+    )
+    ;
 
 
     return ed && (
