@@ -43,6 +43,7 @@ export default function SchemaTab({
                                       setSwitchboard,
                                       printOptions,
                                       reassignModules,
+                                      getModuleById,
                                       onEditSymbol = null,
                                   }) {
     const [monitorOpened, setMonitorOpened] = useState(false);
@@ -53,23 +54,9 @@ export default function SchemaTab({
         if (monitorOpened) monitorRef.current.focus();
     }, [monitorOpened]);
 
-    const getModuleById = (moduleId) => {
-        let indexes = {row: -1, module: -1};
-        let m = {module: null, indexes};
-
-        switchboard.rows.forEach((row, ri) => {
-            row.forEach((module, mi) => {
-                if (!m.module && module.id === moduleId && !module.free) {
-                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
-                }
-            })
-        });
-
-        return m;
-    }
-
     const handleEditSymbol = (module) => {
         const m = getModuleById(module.id);
+        console.log(m)
         if (!m?.module) return;
 
         onEditSymbol(m.indexes.row, m.indexes.module);

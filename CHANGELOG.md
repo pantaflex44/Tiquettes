@@ -15,6 +15,7 @@
 ### Améliorations
 
 - Retour du raccourci pour supprimer rapidement un module. (Suggestion de [zoliaaz](https://github.com/zoliaaz))
+- Edition d'un module en cliquant sur ses propriétés depuis la nomenclature
 
 ### Modifications
 

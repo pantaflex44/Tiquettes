@@ -470,7 +470,7 @@ option[disabled] {
 }
 
 .summary table tbody tr td.summary_func p {
-    font-size: 80%;
+    font-size: 85%;
     margin: 0;
 }
 
@@ -488,6 +488,10 @@ option[disabled] {
 }
 
 .summary table tbody tr td.summary_text {
+    white-space: pre;
+}
+
+.summary table tbody tr td.summary_text2 {
     white-space: pre;
 }
 
@@ -907,6 +911,13 @@ option[disabled] {
 
     .notprintable {
         display: none !important;
+    }
+
+    .summary_text2 textarea {
+        user-select: none;
+        border: 0;
+        padding: 0;
+        background-color: transparent;
     }
 }
 

@@ -160,7 +160,7 @@ export default function Editor({
                                     id={`editor_id_${ed.currentModule.id.trim()}`}
                                     value={ed.currentModule.id}
                                     onChange={(e) => onUpdateModuleEditor({id: e.target.value})}
-                                    autoFocus
+                                    autoFocus={!!(ed?.focusedInputName === "id")}
                                 />
                                 <button title="Trouver le prochain identifiant disponible."
                                         onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
@@ -184,6 +184,7 @@ export default function Editor({
                                 value={ed.currentModule.text}
                                 onChange={(e) => onUpdateModuleEditor({text: e.target.value})}
                                 rows={3}
+                                autoFocus={!!(ed?.focusedInputName === "text")}
                             />
                         </div>
 
@@ -207,7 +208,8 @@ export default function Editor({
                                     if (!selected || !selectedIcon) {
                                         onUpdateModuleEditor({icon: null});
                                     }
-                                }}/>
+                                }}
+                                              autoFocus={!!(ed?.focusedInputName === "icon")}/>
                             </Suspense>
                         </div>
 
@@ -233,6 +235,7 @@ export default function Editor({
                                 onInput={(e) => {
                                     setIsCustomFunction(e.target.value.trim() !== "");
                                 }}
+                                autoFocus={!!(ed?.focusedInputName === "type")}
                             />
                         </div>
 
@@ -246,6 +249,7 @@ export default function Editor({
                                 value={ed.currentModule.desc}
                                 onChange={(e) => onUpdateModuleEditor({desc: e.target.value})}
                                 rows={2}
+                                autoFocus={!!(ed?.focusedInputName === "desc")}
                             />
                         </div>
 

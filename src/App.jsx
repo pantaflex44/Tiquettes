@@ -710,7 +710,8 @@ function App() {
         }
     };
 
-    const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
+    const editModule = (rowIndex, moduleIndex, tabPage = 'main', focus = null) => {
+        let focusedInputName = focus ?? 'id';
         let currentModule = switchboard.rows[rowIndex][moduleIndex];
 
         // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
@@ -738,7 +739,6 @@ function App() {
         if (!currentModule.parentId) {
             currentModule = {...currentModule, parentId: prevModule?.parentId};
         }
-
         // edition du module
         setEditor({
             rowIndex,
@@ -748,6 +748,7 @@ function App() {
             prevModule,
             theme,
             tabPage,
+            focusedInputName,
             errors: [],
             hasBlankId
         });
@@ -1269,6 +1270,21 @@ function App() {
                 }
             }
         }
+        return m;
+    }
+
+    const getModuleById2 = (moduleId) => {
+        let indexes = {row: -1, module: -1};
+        let m = {module: null, indexes};
+
+        switchboard.rows.forEach((row, ri) => {
+            row.forEach((module, mi) => {
+                if (!m.module && module.id === moduleId && !module.free) {
+                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                }
+            })
+        });
+
         return m;
     }
 
@@ -1902,6 +1918,7 @@ function App() {
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
                 reassignModules={reassignModules}
+                getModuleById={getModuleById2}
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
 
@@ -1911,7 +1928,9 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
-                onEdit={(rowIndex, moduleIndex, tab) => editModule(rowIndex, moduleIndex, tab)}
+                reassignModules={reassignModules}
+                getModuleById={getModuleById2}
+                onEdit={(rowIndex, moduleIndex, tab, focus) => editModule(rowIndex, moduleIndex, tab, focus)}
             />
 
             {/** POPUPS **/}
