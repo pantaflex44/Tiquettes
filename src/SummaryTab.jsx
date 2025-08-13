@@ -23,8 +23,6 @@ import summaryRowIcon from "./assets/summary_row.svg";
 import summaryPositionIcon from "./assets/summary_position.svg";
 import summaryNoPicto from "./assets/summary_nopicto.svg";
 import numbersIcon from "./assets/numbers.svg";
-import editIcon from "./assets/edit.svg";
-import {useMemo, useState} from "react";
 
 export default function SummaryTab({
                                        tab,
@@ -49,7 +47,6 @@ export default function SummaryTab({
 
         return m;
     }*/
-    const [editMode, setEditMode] = useState(false);
 
     const handleEdit = (module, tab, focus = null) => {
         const m = getModuleById(module.id);
@@ -70,15 +67,6 @@ export default function SummaryTab({
                             <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
                                  height={22}/>
                         </button>
-                    </div>
-                    <div className="tabPageBandCol">
-
-                        <input type="checkbox" name="summaryEditMode" id="summaryEditMode"
-                               checked={editMode} onChange={() => setEditMode(old => !old)}/>
-                        <label htmlFor="summaryEditMode" title="Editer les informations">
-                            <img src={editIcon} alt="Editer les informations" width={22} height={22}/>
-                            Edition
-                        </label>
                     </div>
                 </div>
                 <div className="tabPageBandGroup">
