@@ -22,8 +22,8 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 
 import SchemaItem from "./SchemaItem.jsx";
 
-import * as pkg from '../package.json';
 import swbIcons from './switchboard_icons.json';
+import schemaFunctions from './schema_functions.json';
 
 import monitorIcon from './assets/monitor.svg';
 import nomonitorIcon from './assets/nomonitor.svg';
@@ -78,44 +78,41 @@ export default function SchemaTab({
     }, [switchboard.rows, switchboard.withDb]);
 
     const getRow = useCallback((moduleList) => {
-                let l = {};
-                moduleList.forEach((module, i) => {
-                    let _childs = getChilds(module.id);
+            let l = {};
+            moduleList.forEach((module, i) => {
+                let _childs = getChilds(module.id);
 
-                    // si un module est asservi par un contacteur, on ajoute les contacts sous ce module pour indiquer l'asservissement
-                    const kcId = (module.kcId ?? "");
-                    const kcModule = getModuleById(kcId).module;
-                    if (kcModule) {
-                        _childs.push({
-                            ...kcModule,
-                            kcId: '',
-                            id: `¤_${kcModule.id}`,
-                            parentId: module.id,
-                            func: 'k',
-                            icon: module.icon,
-                            text: module.text,
-                            desc: module.desc,
-                            pole: module.pole
-                        })
-                    }
+                // si un module est asservi par un contacteur, on ajoute les contacts sous ce module pour indiquer l'asservissement
+                const kcId = (module.kcId ?? "");
+                const kcModule = getModuleById(kcId).module;
+                if (kcModule) {
+                    _childs.push({
+                        ...kcModule,
+                        kcId: '',
+                        id: `¤_${kcModule.id}`,
+                        parentId: module.id,
+                        func: 'k',
+                        icon: module.icon,
+                        text: module.text,
+                        desc: module.desc,
+                        pole: module.pole
+                    })
+                }
 
-                    const childs = getRow(_childs);
+                const childs = getRow(_childs);
 
-                    l[module.id] = {
-                        module,
-                        childs,
-                        isLast: Object.keys(childs).length === 0,
-                        hasPrev: i > 0,
-                        hasNext: i < moduleList.length - 1,
-                        hasBrothers: Object.keys(getChilds(module.parentId) ?? {}).length > 0,
-                    };
-                })
-                return l;
-            }
-            ,
-            [switchboard.rows, switchboard.withDb]
-        )
-    ;
+                l[module.id] = {
+                    module,
+                    childs,
+                    isLast: Object.keys(childs).length === 0,
+                    hasPrev: i > 0,
+                    hasNext: i < moduleList.length - 1,
+                    hasBrothers: Object.keys(getChilds(module.parentId) ?? {}).length > 0,
+                };
+            })
+            return l;
+        }, [switchboard.rows, switchboard.withDb]
+    );
 
     const tree = useMemo(() => switchboard.withDb
             ? ({
@@ -366,10 +363,26 @@ export default function SchemaTab({
                         </select>
                     </div>
                     <div className="tabPageBandCol">
-                        <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => ({
-                            ...old,
-                            db: {...old.db, pole: e.target.value}
-                        }))} disabled={!switchboard.withDb}>
+                        <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => {
+                            let sw = {
+                                ...old,
+                                db: {...old.db, pole: e.target.value}
+                            };
+
+                            if (e.target.value === "1P+N") {
+                                sw = {
+                                    ...sw,
+                                    rows: sw.rows.map((row) => row.map((module) => {
+                                        if (module.pole && module.pole !== e.target.value) {
+                                            return {...module, pole: e.target.value};
+                                        }
+                                        return module;
+                                    }))
+                                };
+                            }
+
+                            return sw;
+                        })} disabled={!switchboard.withDb}>
                             <option value="1P+N">Monophasé</option>
                             <option value="3P+N">Triphasé</option>
                         </select>

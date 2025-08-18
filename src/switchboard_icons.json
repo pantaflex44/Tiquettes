@@ -12,7 +12,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ecl2.svg",
@@ -21,7 +22,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ecl_cmd.svg",
@@ -30,7 +32,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_ecl_rgb.svg",
@@ -39,7 +42,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_eclext.svg",
@@ -48,7 +52,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_pc.svg",
@@ -57,7 +62,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_pc2.svg",
@@ -65,7 +71,8 @@
         "modtype": "Prises",
         "coef": 0.5,
         "func": "o",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_pctri.svg",
@@ -74,7 +81,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_alim_eco.svg",
@@ -83,7 +91,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_differential-circuit-breaker.svg",
@@ -98,7 +107,8 @@
         "modtype": "Alim",
         "coef": 1,
         "func": "sw",
-        "current": "63A"
+        "current": "63A",
+        "wire": "16"
     },
     {
         "filename": "swb_alim.svg",
@@ -119,7 +129,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "63A"
+        "current": "63A",
+        "wire": "16"
     },
     {
         "filename": "swb_transformer.svg",
@@ -128,7 +139,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_battery.svg",
@@ -137,7 +149,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_surgeprotector.svg",
@@ -152,7 +165,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "40A"
+        "current": "40A",
+        "wire": "10"
     },
     {
         "filename": "swb_clim.svg",
@@ -161,7 +175,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "D",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_inverter.svg",
@@ -170,7 +185,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "D",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_eau.svg",
@@ -179,7 +195,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_pompe1.svg",
@@ -188,7 +205,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_four.svg",
@@ -197,7 +215,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_frigo.svg",
@@ -206,7 +225,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_froid.svg",
@@ -215,7 +235,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_gaz.svg",
@@ -224,7 +245,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_cuissin.svg",
@@ -234,7 +256,8 @@
         "func": "q",
         "crb": "C",
         "current": "32A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "6"
     },
     {
         "filename": "swb_induction.svg",
@@ -244,7 +267,8 @@
         "func": "q",
         "crb": "C",
         "current": "32A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "6"
     },
     {
         "filename": "swb_ll.svg",
@@ -254,7 +278,8 @@
         "func": "q",
         "crb": "C",
         "current": "20A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "2.5"
     },
     {
         "filename": "swb_dryer.svg",
@@ -263,7 +288,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_ironing.svg",
@@ -272,7 +298,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_lv.svg",
@@ -281,7 +308,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_microonde.svg",
@@ -290,7 +318,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_minuterie.svg",
@@ -299,7 +328,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_portail.svg",
@@ -308,7 +338,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_voitureelectrique.svg",
@@ -318,7 +349,8 @@
         "func": "q",
         "crb": "B",
         "current": "32A",
-        "requiredIdTypes": ["A", "F", "HPI"]
+        "requiredIdTypes": ["A", "F", "HPI"],
+        "wire": "6"
     },
     {
         "filename": "swb_voitureelectrique2.svg",
@@ -328,7 +360,8 @@
         "func": "q",
         "crb": "C",
         "current": "20A",
-        "requiredIdTypes": ["A", "F", "HPI"]
+        "requiredIdTypes": ["A", "F", "HPI"],
+        "wire": "2.5"
     },
     {
         "filename": "swb_ship.svg",
@@ -349,7 +382,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_store.svg",
@@ -358,7 +392,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_garage.svg",
@@ -367,7 +402,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_split.svg",
@@ -376,7 +412,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_remswitch.svg",
@@ -384,7 +421,8 @@
         "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_contact.svg",
@@ -392,7 +430,8 @@
         "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_clock.svg",
@@ -400,7 +439,8 @@
         "modtype": "Comptage",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_calendar-clock.svg",
@@ -408,7 +448,8 @@
         "modtype": "Comptage",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_telec.svg",
@@ -417,7 +458,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ermt.svg",
@@ -426,7 +468,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_fire.svg",
@@ -435,7 +478,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_homeshield.svg",
@@ -444,7 +488,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_smoke.svg",
@@ -453,7 +498,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_bell.svg",
@@ -462,7 +508,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_telephonie.svg",
@@ -471,7 +518,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_informatique.svg",
@@ -480,7 +528,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_tv.svg",
@@ -489,7 +538,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_music.svg",
@@ -498,7 +548,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_thermo.svg",
@@ -507,7 +558,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo2.svg",
@@ -516,7 +568,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo3.svg",
@@ -525,7 +578,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo4.svg",
@@ -534,7 +588,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_bec.svg",
@@ -543,7 +598,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_journuit.svg",
@@ -551,7 +607,8 @@
         "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_blrgas.svg",
@@ -560,7 +617,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_chauffage.svg",
@@ -569,7 +627,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_twldryer.svg",
@@ -578,7 +637,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_solchauffant.svg",
@@ -587,7 +647,8 @@
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_ventil.svg",
@@ -596,7 +657,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ventil2.svg",
@@ -605,7 +667,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_vmc.svg",
@@ -614,7 +677,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_pool.svg",
@@ -623,7 +687,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "40A"
+        "current": "40A",
+        "wire": "10"
     },
     {
         "filename": "swb_spa.svg",
@@ -632,7 +697,8 @@
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_electric-motor.svg",

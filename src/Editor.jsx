@@ -221,10 +221,20 @@ export default function Editor({
                                 <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
                                     if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
                                         onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
+                                        /*
                                         if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
                                         if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
                                         if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
+                                        if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
+                                         */
+
+                                        if (selected?.func) onUpdateModuleEditor({func: selected?.func});
+                                        if (selected?.crb) onUpdateModuleEditor({crb: selected?.crb});
+                                        if (selected?.current) onUpdateModuleEditor({current: selected?.current});
+                                        if (selected?.wire) onUpdateModuleEditor({wire: selected?.wire});
+
                                         if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({modtype: selected?.modtype});
+
                                     }
                                     if (!selected || !selectedIcon) {
                                         onUpdateModuleEditor({icon: null});
@@ -314,6 +324,7 @@ export default function Editor({
                                         crb: ed.currentModule.crb,
                                         sensibility: ed.currentModule.sensibility,
                                         pole: ed.currentModule.pole,
+                                        wire: ed.currentModule.wire,
                                         free: false,
                                         span: ed.currentModule.span,
                                         modtype: ed.currentModule.modtype,
