@@ -926,6 +926,8 @@ if (is_bot($_SERVER['HTTP_USER_AGENT'])) {
     $firstTime = true;
     $knownUser = false;
 
+
+
     $stmt = DB->prepare("SELECT * FROM visits WHERE ip = ?");
     $stmt->execute([$ip]);
     $found = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -936,6 +938,9 @@ if (is_bot($_SERVER['HTTP_USER_AGENT'])) {
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $found['lastvisit'], new \DateTimeZone('UTC'));
         $modified = (clone $date)->add(new \DateInterval("PT1H"));
         if ($modified < $now) $knownUser = true;
+
+        $stmt = DB->prepare("UPDATE visits SET startvisit = datetime('nom') WHERE lastvisit < datetime('now', '-1 hour') AND ip = ?");
+        $stmt->execute([$ip]);
 
         $stmt = DB->prepare("UPDATE visits SET lastvisit = datetime('now') WHERE ip = ?");
         $stmt->execute([$ip]);

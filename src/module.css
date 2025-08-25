@@ -95,8 +95,11 @@
     border-right: 1px solid darkgray;
 }
 
-.module:not(.demo):not(:has(.module_iconfree)):not(:has(.disabled)):hover {
-    background-color: #f5f5f5;
+.module:not(.demo):not(:has(.module_iconfree)):not(:has(.disabled)):hover .module_content {
+    border: 1px solid var(--primary-color);
+    z-index: 1000;
+    background-color: var(--secondary-color-light-light);
+    top: -1px;
 }
 
 .module .tool {
@@ -224,7 +227,7 @@
 
 .module .module_bottom {
     position: absolute;
-    bottom: -36px;
+    bottom: -70px;
     left: -1px;
     width: calc(100% - 1em - 0px);
     background-color: var(--secondary-color-light-light);
@@ -262,6 +265,8 @@
 .module:hover .module_bottom,
 .module:hover .module_top {
     background-color: #fbfbfb;
+    border: 1px solid var(--primary-color);
+    z-index: 1000;
 }
 
 .module:hover .module_top:not(.paste) {
@@ -271,7 +276,7 @@
 
 .module:hover .module_bottom,
 .module_bottom.force_visible {
-    height: 34px;
+    height: 68px;
     visibility: visible;
 }
 
@@ -303,4 +308,44 @@
 .module .module_content.disabled {
     pointer-events: none;
     filter: grayscale(1);
+}
+
+.module:hover,
+.module:hover .module_top,
+.module:hover .module_bottom {
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+}
+
+@media print {
+    .module:not(:last-of-type) {
+        border-right: 1px solid lightgray;
+    }
+
+    .module:last-of-type {
+        border-right: 1px solid lightgray;
+    }
+
+    .module {
+        border: 0;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .module .module_content.half-left {
+        border-left-color: lightgray;
+    }
+
+    .module .module_content.half-right {
+        border-right-color: lightgray;
+    }
+
+    .module .module_top,
+    .module .module_bottom,
+    .module .module_iconfree {
+        display: none;
+    }
+
+    .module.noprint {
+        display: none;
+    }
 }

@@ -18,11 +18,9 @@
 
 /* eslint-disable react/prop-types */
 
-import "./Schema.css";
+import "./schema.css";
 
 import {Fragment} from "react";
-
-import schemaFunctions from './schema_functions.json';
 
 import SchemaSymbol from "./SchemaSymbol.jsx";
 import SchemaDescription from "./SchemaDescription.jsx";

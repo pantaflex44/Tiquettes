@@ -41,20 +41,32 @@ export default function SchemaDescription({
 
     const infos = useMemo(() => {
         let icon = module.icon;
-        let text = module.text;
+        let text = module.text ?? "";
+        let wire = module.wire ?? "";
+        let pole = module.pole ?? "";
 
-        /*const parentModule = getModuleById(module.parentId).module;
-        if (module.func === 'kc' && parentModule) {
+        const parentModule = getModuleById(module.parentId).module;
+        /*if (module.func === 'kc' && parentModule) {
             icon = parentModule.icon;
             text = parentModule.text;
+            pole = parentModule.pole;
+            wire = parentModule.wire;
         }*/
 
-        return {text, icon};
+        if (module.func === 'k' && parentModule) {
+            icon = parentModule.icon;
+            text = parentModule.text;
+            pole = parentModule.pole;
+            wire = parentModule.wire;
+        }
+
+        return {text, icon, wire, pole};
     }, [module]);
 
     return (
         /*<div className="schemaItemLast">*/
         <>
+            <div className="schemaItemLastWire">{infos.wire ? `${infos.wire} mm²` : ""}</div>
             {infos.icon && (
                 <div className="schemaItemLastIconContainer" title={infos.text}>
                     <img

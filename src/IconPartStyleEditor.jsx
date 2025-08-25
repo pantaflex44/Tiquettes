@@ -30,7 +30,10 @@ export default function IconPartStyleEditor({
                                                 setEditedTheme,
                                                 propName
                                             }) {
+
     return (!positions[propName].shown ? <span className={'tep-settings_hidden'}>Masqué</span> : <>
+
+
         <div className={'tep-settings_row'}>
             <label htmlFor={'tep-icon-fullheight'}>Utiliser toute la hauteur disponible:</label>
             <input type={'checkbox'} checked={editedTheme.data[propName]?.fullHeight ?? false}
@@ -44,6 +47,23 @@ export default function IconPartStyleEditor({
                            [propName]: {...(old.data[propName] ?? {}), fullHeight: e.target.checked}
                        }
                    }))}/>
+        </div>
+        <div className={'tep-settings_row'}>
+            <label htmlFor={'tep-icon-fullheight'}>Format:</label>
+            <select name="sample_modtype" id={'sample_modtype'} value={editedTheme.data[propName]?.type ?? 'icon'}
+                    onChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: {
+                                ...(old.data[propName] ?? {}),
+                                type: e.target.value
+                            },
+                        }
+                    }))} style={{flex: "1 1 0%"}}>
+                <option value={'icon'}>Pictogramme</option>
+                <option value={'text'}>Texte (Type)</option>
+            </select>
         </div>
         <div className={'tep-settings_row'}>
             <label htmlFor={'tep-icon-fullheight'}>Taille:</label>

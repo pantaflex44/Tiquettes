@@ -1,7 +1,7 @@
 {
     "name": "tiquettes",
     "title": "Tiquettes",
-    "version": "2.2.2",
+    "version": "2.2.3",
     "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
     "keywords": [
         "tableau",
@@ -26,11 +26,13 @@
     "scripts": {
         "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\"",
         "predev": "concurrently \"npm run copies\"",
-        "dev": "concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
+        "dev": "cross-env NODE_ENV=dev concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
         "prebuild": "concurrently \"npm run copies\"",
-        "build": "vite build --mode ghpages",
+        "build": "cross-env NODE_ENV=ghpages vite build --mode ghpages",
         "prebuild:web": "concurrently \"npm run copies\"",
-        "build:web": "vite build --mode web",
+        "build:web": "cross-env NODE_ENV=web vite build --mode web",
+        "prebuild:dev": "concurrently \"npm run copies\"",
+        "build:dev": "cross-env NODE_ENV=dev vite build --mode dev",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
@@ -42,7 +44,8 @@
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "sanitize-filename": "^1.6.3",
-        "sharp": "^0.34.1"
+        "sharp": "^0.34.1",
+        "use-debounce": "^10.0.4"
     },
     "devDependencies": {
         "@types/react": "^19.1.2",
@@ -50,6 +53,7 @@
         "@vite-pwa/assets-generator": "^1.0.0",
         "@vitejs/plugin-react": "^4.4.1",
         "concurrently": "^9.1.2",
+        "cross-env": "^7.0.3",
         "eslint": "^9.25.1",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^5.2.0",

@@ -16,16 +16,40 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-body {
+body{
     accent-color: var(--primary-color);
 }
 
-.footer {
-    margin-top: 1em;
-    font-size: small;
-    color: darkgray
+p.devmode {
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 3em;
 }
 
-.footer a {
-    color: var(--primary-color);
+p.devmode.blink {
+    color: red;
+    margin-bottom: 0;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+
+@media print {
+    .footer {
+        position: absolute;
+        top: 5mm;
+        right: 10mm;
+        font-size: small;
+    }
+
+    .not_printable {
+        display: none;
+    }
 }

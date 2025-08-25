@@ -1,0 +1,38 @@
+name: FTP Deploy (tiquettes.fr - DEV)
+
+on:
+  push:
+    branches: ['dev']
+
+  workflow_dispatch:
+
+jobs:
+  web-deploy:
+    name: FTP Deploy
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build dev
+        run: npm run build:dev
+      - name: Upload files
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          sftp_only: true
+          server: ${{ secrets.FTPSERVER }}
+          username: ${{ secrets.FTPUSERNAME }}
+          password: ${{ secrets.FTPPASSWORD }}
+          port: 22
+          local_path: "./dist/*"
+          remote_path: "./dev/"

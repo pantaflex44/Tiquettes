@@ -1,0 +1,33 @@
+Options All -Indexes
+IndexIgnore *
+
+<Files ~ "^.ht">
+    require all denied
+    require host localhost
+    require host www.tiquettes.fr
+    require host tiquettes.fr
+    require ip 127.0.0.1
+    Order deny,allow
+    Deny from all
+</Files>
+
+<Files "*.db">
+    require all denied
+    require host localhost
+    require host www.tiquettes.fr
+    require host tiquettes.fr
+    require ip 127.0.0.1
+    Order deny,allow
+    Deny from all
+</Files>
+
+<Files "*.json">
+    require all denied
+    require host localhost
+    require host www.tiquettes.fr
+    require host tiquettes.fr
+    require ip 127.0.0.1
+    Order deny,allow
+    Deny from all
+</Files>
+

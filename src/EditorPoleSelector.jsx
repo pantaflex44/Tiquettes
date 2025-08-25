@@ -18,15 +18,33 @@
 
 /* eslint-disable react/prop-types */
 
-export default function EditorPoleSelector({id, value, onChange = null}) {
+import {useMemo} from "react";
+
+export default function EditorPoleSelector({id, value, db, onChange = null}) {
+    const dbPole = useMemo(() => {
+        if (!db || !db?.pole) return 4;
+        let pole = db.pole.trim().toUpperCase();
+        let p = parseInt(pole.replace(/\D/g, ''));
+        if (p === 3 && pole.includes('+N')) p = 4;
+        return p;
+    }, [db]);
+
+    const allowedPoles = [
+        {key: "1P+N", name: "Monophasé (1P+N)"},
+        {key: "3P", name: "Triphasé (3P)"},
+        {key: "3P+N", name: "Triphasé (3P+N)"},
+        {key: "4P", name: "Tétrapolaire (4P)"}
+    ].filter(currentPole => {
+        let p = parseInt(currentPole.key.replace(/\D/g, ''));
+        if (p === 3 && currentPole.key.includes('+N')) p = 4;
+        return p <= dbPole;
+    });
+
     return <select id={id} name={id} value={value}
                    onChange={(e) => {
                        if (onChange) onChange(e.target.value)
                    }}>
         <option value={""}>-</option>
-        <option value={"1P+N"}>Monophasé (1P+N)</option>
-        <option value={"3P"}>Triphasé (3P)</option>
-        <option value={"3P+N"}>Triphasé (3P+N)</option>
-        <option value={"4P"}>Tétrapolaire (4P)</option>
+        {allowedPoles.map((pole, i) => <option key={i} value={pole.key}>{pole.name}</option>)}
     </select>
 }

@@ -41,11 +41,12 @@
 
 .bigList li.disabled {
     cursor: default;
-    color: darkgray;
+    color: #ccc;
+    border-color: #ccc;
 }
 
 .bigList li.disabled img {
-    filter: opacity(0.2);
+    filter: opacity(0.1);
     pointer-events: none;
 }
 

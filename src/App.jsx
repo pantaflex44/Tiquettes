@@ -17,7 +17,7 @@
  */
 
 
-import {Fragment, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {satisfies} from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
@@ -26,12 +26,12 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
+import {UserContext} from "./UserContext.jsx";
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
 
 import newProjectIcon from './assets/new_project.svg';
-import uploadProjectIcon from './assets/upload.svg';
 import clearProjectIcon from './assets/x.svg';
 import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
@@ -48,6 +48,8 @@ import cancelIcon from "./assets/cancel.svg";
 import info2Icon from "./assets/info2.svg";
 import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
+import caretDownIcon from "./assets/caret-down.svg";
+import caretUpIcon from "./assets/caret-up.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -57,6 +59,7 @@ import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
 import useDocumentVisibility from "./useVisibilityChange.jsx";
+
 
 function App() {
     const importRef = useRef();
@@ -71,35 +74,41 @@ function App() {
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
+    const [connect, setConnect] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
+    const [subMenus, setSubMenus] = useState({printLabelsOpened: false});
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const tabIsActive = useDocumentVisibility();
+    const user = useContext(UserContext);
 
     const defaultPrintOptions = useMemo(() => ({
+        firstPage: true,
         labels: true,
         summary: false,
         schema: false,
         freeModules: false,
-        pdf: true,
         pdfOptions: {
             openWindow: true,
             autoPrint: false,
             schemaGridColor: [230, 230, 230],
-            labelsCutLines: false
+            labelsCutLines: true,
+            printCurrents: false,
         }
     }), []);
     const getSavedPrintOptions = () => {
         if (sessionStorage.getItem(pkg.name + '_printOptions')) {
-            let po = {
-                ...defaultPrintOptions,
-                ...JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions'))
-            };
-
-            return po;
+            const merge = (a, b) => [a, b].reduce((r, o) => Object
+                    .entries(o)
+                    .reduce((q, [k, v]) => ({
+                        ...q,
+                        [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
+                    }), r),
+                {});
+            return merge(defaultPrintOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions')));
         }
 
         return {...defaultPrintOptions};
@@ -128,10 +137,12 @@ function App() {
         func: "",
         type: "",
         crb: "",
+        modtype: "",
         current: "",
         sensibility: "",
         coef: 0.5,
         pole: "",
+        wire: "",
         parentId: "",
         kcId: "",
         free: true,
@@ -157,6 +168,7 @@ function App() {
             parentId: "",
             kcId: "",
             pole: "1P+N",
+            wire: "16",
             sensibility: "500mA",
             coef: 1,
             span: 4,
@@ -172,7 +184,23 @@ function App() {
         })));
     }, [defaultModule]);
 
+    const generateUUID = () => {
+        let lut = [];
+        for (var i = 0; i < 256; i++) {
+            lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
+        }
+        const d0 = Math.random() * 0xffffffff | 0;
+        const d1 = Math.random() * 0xffffffff | 0;
+        const d2 = Math.random() * 0xffffffff | 0;
+        const d3 = Math.random() * 0xffffffff | 0;
+        return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] + lut[d0 >> 24 & 0xff] + '-' +
+            lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' + lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' +
+            lut[d2 & 0x3f | 0x80] + lut[d2 >> 8 & 0xff] + '-' + lut[d2 >> 16 & 0xff] + lut[d2 >> 24 & 0xff] +
+            lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
+    };
+
     const defaultProject = useMemo(() => ({
+        prjid: generateUUID(),
         prjname: defaultProjectName,
         prjcreated: new Date(),
         prjupdated: new Date(),
@@ -210,6 +238,7 @@ function App() {
             block: "start",
             inline: "start"
         });
+        //window.scrollTo(0, 0);
     };
 
     const verifyVersion = (swb) => {
@@ -411,7 +440,10 @@ function App() {
                 // <2.0.5
                 stepSize: swb.stepSize ?? defaultStepSize,
                 // <2.1.4
-                theme
+                theme,
+                // <2.2.2
+                prjid: swb.prjid ?? generateUUID(),
+
             };
 
             //console.log("Switchboard loaded from this session.");
@@ -466,6 +498,7 @@ function App() {
         setSwitchboard(() => {
             return modulesAutoId({
                 ...defaultProject,
+                prjid: generateUUID(),
                 prjname: name,
                 height: height,
                 stepsPerRows,
@@ -479,6 +512,7 @@ function App() {
         setPrintOptions({...defaultPrintOptions});
         setDocumentTitle(name);
         setTab(1);
+        setSubMenus(old => ({...old, printLabelsOpened: false}));
         scrollToProject();
 
         stats_count('new');
@@ -493,6 +527,7 @@ function App() {
         setDocumentTitle(defaultProjectName);
         setPrintOptions({...defaultPrintOptions});
         setTheme(defaultTheme);
+        setSubMenus(old => ({...old, printLabelsOpened: false}));
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
@@ -519,7 +554,7 @@ function App() {
                             // <=1.4.0 : remove old theme definitions
                             if (nm.theme) delete nm['theme'];
 
-                            // <=2.0.0 : add module default values for schema definitions
+                            // <=2.0.0 : add module default values fors schema definitions
                             if (nm.icon) {
                                 const sic = swbIcons.filter((si) => si.filename === nm.icon);
                                 if (sic.length === 1) {
@@ -532,6 +567,9 @@ function App() {
 
                             // <=2.0.3 : add half module size
                             if (!nm.half) nm = {...nm, half: "none"};
+
+                            // <=2.2.3 : add modtype property
+                            if (!nm.modtype) nm = {...nm, modtype: ""};
 
                             return nm;
                         });
@@ -563,6 +601,8 @@ function App() {
                         stepSize: swb.stepSize ?? defaultStepSize,
                         // <2.1.4
                         theme,
+                        // <2.2.2
+                        prjid: swb.prjid ?? generateUUID(),
 
                         rows
                     };
@@ -576,6 +616,7 @@ function App() {
                     setClipboardMode(null);
                     setPrintOptions({...defaultPrintOptions});
                     setTab(1);
+                    setSubMenus(old => ({...old, printLabelsOpened: false}));
                     scrollToProject();
 
                     stats_count('import');
@@ -611,16 +652,9 @@ function App() {
     };
 
     const printProject = () => {
-        let type = 'print';
+        toPdf();
 
-        if (printOptions.pdf) {
-            type = 'pdf';
-            toPdf();
-        } else {
-            window.print();
-        }
-
-        let types = [type];
+        let types = ['pdf'];
         if (printOptions.labels) types.push('print_labels');
         if (printOptions.schema) types.push('print_schema');
         if (printOptions.summary) types.push('print_summary');
@@ -633,8 +667,7 @@ function App() {
     };
 
     const toPdf = () => {
-        if (confirm("Le document va s'ouvrir dans un nouvel onglet.\n\nImprimer en PDF permet, notamment, de contourner certains problèmes d'impressions.\n\n" +
-            "ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
+        if (confirm("ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
 
             let form = document.createElement("form");
             document.body.appendChild(form);
@@ -649,7 +682,7 @@ function App() {
                 printOptions: {value: JSON.stringify(printOptions)},
                 tv: {value: JSON.stringify(pkg.version)},
                 auto: {value: printOptions.pdfOptions.autoPrint ? "1" : "0"},
-                schemaGridColor: {value: printOptions.pdfOptions.schemaGridColor.join(",")},
+                schemaGridColor: {value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",")},
                 labelsCutLines: {value: printOptions.pdfOptions.labelsCutLines ? "1" : "0"},
             }).map(([key, value]) => {
                 const i = document.createElement("input");
@@ -677,7 +710,8 @@ function App() {
         }
     };
 
-    const editModule = (rowIndex, moduleIndex, tabPage = 'main') => {
+    const editModule = (rowIndex, moduleIndex, tabPage = 'main', focus = null) => {
+        let focusedInputName = focus ?? 'id';
         let currentModule = switchboard.rows[rowIndex][moduleIndex];
 
         // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
@@ -705,7 +739,6 @@ function App() {
         if (!currentModule.parentId) {
             currentModule = {...currentModule, parentId: prevModule?.parentId};
         }
-
         // edition du module
         setEditor({
             rowIndex,
@@ -715,6 +748,7 @@ function App() {
             prevModule,
             theme,
             tabPage,
+            focusedInputName,
             errors: [],
             hasBlankId
         });
@@ -733,12 +767,14 @@ function App() {
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
         const func = (data.currentModule.func ?? "").trim();
+        const modtype = (data.currentModule.modtype ?? "").trim();
         const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
         const crb = (schemaFunctions[data.currentModule.func]?.hasCrb ? (data.currentModule.crb ?? "") : "").trim();
         const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
         const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
         const coef = data.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
+        const wire = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.wire ?? "") : "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -786,11 +822,13 @@ function App() {
                         kcId,
                         func,
                         crb,
+                        modtype,
                         type,
                         current,
                         sensibility,
                         coef,
                         pole,
+                        wire,
                     };
                 });
             });
@@ -1069,11 +1107,13 @@ function App() {
                         kcId: clipboard.kcId,
                         func: clipboard.func,
                         crb: clipboard.crb,
+                        modtype: clipboard.modtype,
                         type: clipboard.type,
                         current: clipboard.current,
                         sensibility: clipboard.sensibility,
                         coef: clipboard.coef,
                         pole: clipboard.pole,
+                        wire: clipboard.wire,
                     };
                 });
 
@@ -1233,6 +1273,21 @@ function App() {
         return m;
     }
 
+    const getModuleById2 = (moduleId) => {
+        let indexes = {row: -1, module: -1};
+        let m = {module: null, indexes};
+
+        switchboard.rows.forEach((row, ri) => {
+            row.forEach((module, mi) => {
+                if (!m.module && module.id === moduleId && !module.free) {
+                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                }
+            })
+        });
+
+        return m;
+    }
+
     const monitor = useMemo(() => {
         if (!switchboard.switchboardMonitor) return {};
 
@@ -1355,25 +1410,61 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
+                {/*<button className={`button_group-account dropdown_container`}
+                        onClick={() => {
+                            if (account.currentUser) {
+                            } else {
+                                setConnect(true);
+                            }
+                        }} title={account.currentUser ? "Mon compte" : "Connexion à mon espace dans le cloud"}>
+                    <img src={cloudDataConnectionIcon} width={16} height={16} alt={"Mon compte"}/>
+                    <span>{account.currentUser ? "Mon compte" : "Connexion"}</span>
+                    {account.currentUser && (
+                        <div className="dropdown"
+                             style={{left: 0, transform: 'none', rowGap: '0rem', paddingBottom: '1em'}}>
+                            <div className="dropdown_header">{account.currentUser.display_name}</div>
+
+
+                            <div className="dropdown_separator"></div>
+                            <div className="dropdown_item menuitem" title="Mes préférences" style={{paddingBlock: 0}}>
+                                <div className="menuitem_content" onClick={() => setAccountSettings(true)}>
+                                    <img src={settingsIcon} width={18} height={18} alt={"Préférences"}/>
+                                    <span>Préférences...</span>
+                                </div>
+                            </div>
+                            <div className="dropdown_item menuitem" title="Se déconnecter" style={{paddingBlock: 0}}>
+                                <div className="menuitem_content" onClick={() => {
+                                    if (confirm("Êtes-vous certain de vouloir vous déconnecter ?")) account.logout();
+                                }}>
+                                    <img src={cancelIcon} width={18} height={18} alt={"Se déconnecter"}/>
+                                    <span>Se déconnecter</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </button>*/}
+
+                <div className="button_group-separator"></div>
+
                 <button className={`button_group-new_project active`.trim()}
                         onClick={() => {
                             setWelcome(true);
                         }} title="Créer un nouveau projet">
                     <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
-                    <span>Nouveau projet</span>
+                    <span className={'responsive'}>Projets...</span>
                 </button>
 
                 <div className="button_group-separator"></div>
 
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }}/>
-                <label htmlFor="importfile" className="button_group-import_project"
+                }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
+                {/*<label htmlFor="importfile" className="button_group-import_project"
                        title="Importer un projet existant">
                     <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"}
                          onClick={() => importProjectChooseFile()}/>
                     <span>Importer</span>
-                </label>
+                </label>*/}
 
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();
@@ -1387,7 +1478,17 @@ function App() {
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
-                        <div className="dropdown_item head" title="Imprimer les étiquettes">
+                        <div className="dropdown_item head"
+                             title="Imprimer la page de garde">
+                            <input id="print_firstPage" name="print_firstPage" type="checkbox"
+                                   checked={printOptions.firstPage}
+                                   onChange={(e) => setPrintOptions((old) => ({
+                                       ...old,
+                                       firstPage: e.target.checked
+                                   }))}/>
+                            <label htmlFor="print_firstPage">Page de garde</label>
+                        </div>
+                        <div className="dropdown_item head parent" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
                                    checked={printOptions.labels}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1395,30 +1496,49 @@ function App() {
                                        labels: e.target.checked
                                    }))}/>
                             <label htmlFor="print_labels">Etiquettes</label>
+                            {printOptions.labels &&
+                                <img src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon} width={16}
+                                     height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
+                                    ...old,
+                                    printLabelsOpened: !old.printLabelsOpened
+                                }))}/>}
                         </div>
-                        <div className="dropdown_item"
-                             title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
-                            <input id="print_free" name="print_free" type="checkbox"
-                                   checked={printOptions.freeModules}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       freeModules: e.target.checked
-                                   }))} disabled={!printOptions.labels}/>
-                            <label htmlFor="print_free">Décorer les emplacements libres</label>
-                        </div>
-                        <div className="dropdown_item"
-                             title="Imprimer les lignes de coupe pour cisailles et massicots">
-                            <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
-                                   checked={printOptions.pdfOptions.labelsCutLines}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
-                                   }))} disabled={!printOptions.labels || !printOptions.pdf}/>
-                            <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
-                        </div>
+                        {subMenus.printLabelsOpened && printOptions.labels && <>
+                            <div className="dropdown_item"
+                                 title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
+                                <input id="print_free" name="print_free" type="checkbox"
+                                       checked={printOptions.freeModules}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           freeModules: e.target.checked
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_free">Décorer les emplacements libres</label>
+                            </div>
+                            <div className="dropdown_item"
+                                 title="Imprimer les lignes de coupe pour cisailles et massicots">
+                                <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
+                                       checked={printOptions.pdfOptions.labelsCutLines}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
+                            </div>
+                            <div className="dropdown_item" style={{marginBottom: '1em'}}
+                                 title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
+                                <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
+                                       checked={printOptions.pdfOptions.printCurrents}
+                                       onChange={(e) => setPrintOptions((old) => ({
+                                           ...old,
+                                           pdfOptions: {...old.pdfOptions, printCurrents: e.target.checked}
+                                       }))} disabled={!printOptions.labels}/>
+                                <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour
+                                    aider à
+                                    leur installation</label>
+                            </div>
+                        </>}
 
-                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire"
-                             style={{marginTop: '1em'}}>
+                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
                                    checked={printOptions.schema}
                                    onChange={(e) => setPrintOptions((old) => ({
@@ -1435,7 +1555,7 @@ function App() {
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, schemaGridColor: hexToRgb(e.target.value)}
-                                   }))} disabled={!printOptions.schema || !printOptions.pdf}/>
+                                   }))} disabled={!printOptions.schema}/>
                         </div>*/}
 
                         <div className="dropdown_item head" title="Imprimer la nomenclature">
@@ -1450,34 +1570,23 @@ function App() {
 
                         <div className="dropdown_separator"></div>
                         <div className="dropdown_item head"
-                             title="Imprimer dans un fichier PDF pour améliorer la compatibilité d'impression">
-                            <input id="print_pdf" name="print_pdf" type="checkbox"
-                                   checked={printOptions.pdf}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdf: e.target.checked
-                                   }))}/>
-                            <label htmlFor="print_pdf">Imprimer au format PDF</label>
-                        </div>
-
-                        <div className="dropdown_item"
                              title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
                             <input id="print_pdf_openWindow" name="print_pdf_openWindow" type="checkbox"
                                    checked={printOptions.pdfOptions.openWindow}
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, openWindow: e.target.checked}
-                                   }))} disabled={!printOptions.pdf}/>
+                                   }))}/>
                             <label htmlFor="print_pdf_openWindow">Ouvrir le document dans un nouvel onglet</label>
                         </div>
-                        <div className="dropdown_item"
+                        <div className="dropdown_item head"
                              title="Ouvrir automatiquement les propriétés d'impressions">
                             <input id="print_pdf_autoPrint" name="print_pdf_autoPrint" type="checkbox"
                                    checked={printOptions.pdfOptions.autoPrint}
                                    onChange={(e) => setPrintOptions((old) => ({
                                        ...old,
                                        pdfOptions: {...old.pdfOptions, autoPrint: e.target.checked}
-                                   }))} disabled={!printOptions.pdf}/>
+                                   }))}/>
                             <label htmlFor="print_pdf_autoPrint">Ouvrir automatiquement les propriétés
                                 d&#39;impressions</label>
                         </div>
@@ -1527,6 +1636,7 @@ function App() {
                         maxWidth: '100%'
                     }}
                     editable={!UIFrozen}
+                    className={"contentEditable"}
                 />
             </h3>
 
@@ -1808,6 +1918,7 @@ function App() {
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
                 reassignModules={reassignModules}
+                getModuleById={getModuleById2}
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
 
@@ -1817,6 +1928,9 @@ function App() {
                 switchboard={switchboard}
                 setSwitchboard={setSwitchboard}
                 printOptions={printOptions}
+                reassignModules={reassignModules}
+                getModuleById={getModuleById2}
+                onEdit={(rowIndex, moduleIndex, tab, focus) => editModule(rowIndex, moduleIndex, tab, focus)}
             />
 
             {/** POPUPS **/}

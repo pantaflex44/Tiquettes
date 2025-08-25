@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 
-
 require('./libs/fpdf186/fpdf.php');
 define('EURO', chr(128));
 
@@ -70,6 +69,8 @@ function toFrenchDate(string $date, $withDate = true, $withHours = true): string
 
 class TiquettesPDF extends FPDF
 {
+
+    const VERSION = "1.5";
 
     protected $javascript;
     protected $n_js;
@@ -185,6 +186,23 @@ class TiquettesPDF extends FPDF
         $font_dy = sin($font_angle);
 
         $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', $txt_dx, $txt_dy, $font_dx, $font_dy, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
+        if ($this->ColorFlag)
+            $s = 'q ' . $this->TextColor . ' ' . $s . ' Q';
+        $this->_out($s);
+    }
+
+    function TextWithDirection($x, $y, $txt, $direction = 'R')
+    {
+        if ($direction == 'R')
+            $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', 1, 0, 0, 1, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
+        elseif ($direction == 'L')
+            $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', -1, 0, 0, -1, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
+        elseif ($direction == 'U')
+            $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', 0, 1, -1, 0, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
+        elseif ($direction == 'D')
+            $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', 0, -1, 1, 0, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
+        else
+            $s = sprintf('BT %.2F %.2F Td (%s) Tj ET', $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
         if ($this->ColorFlag)
             $s = 'q ' . $this->TextColor . ' ' . $s . ' Q';
         $this->_out($s);
@@ -775,6 +793,7 @@ class TiquettesPDF extends FPDF
         try {
 
             global $switchboard, $printOptions;
+            $printCurrents = $printOptions->pdfOptions?->printCurrents ?? false;
 
             require_once './libs/toPdf/themes/engine.php';
             $h = $switchboard->height;
@@ -790,7 +809,7 @@ class TiquettesPDF extends FPDF
 
             $cutLines = [];
 
-            $this->SetY($this->pageMargin + 5);
+            $this->SetY($this->pageMargin + 3);
 
             for ($i = 0; $i < count($switchboard->rows); $i++) {
                 $row = $switchboard->rows[$i];
@@ -806,7 +825,7 @@ class TiquettesPDF extends FPDF
                     $module = $row[$j];
 
                     if ($x + $w * $module->span > $this->GetPageWidth() - $this->pageMargin) {
-                        $this->SetY($this->GetY() + $h + 3);
+                        $this->SetY($this->GetY() + $h + ($printCurrents ? 11 : 3));
                         $x = $this->pageMargin;
                     }
 
@@ -842,10 +861,29 @@ class TiquettesPDF extends FPDF
                     $this->Line($workBox['x'], $workBox['y'], $workBox['x'], $workBox['y'] + $workBox['h']);
                     $this->Line($workBox['x'] + $workBox['w'], $workBox['y'], $workBox['x'] + $workBox['w'], $workBox['y'] + $workBox['h']);
 
+                    if ($printCurrents) {
+                        $ox = $this->GetX();
+                        $oy = $this->GetY();
+
+                        $this->SetXY($box['x'], $box['y'] + $box['h']);
+
+                        $this->SetTextColor(150, 150, 150);
+                        $this->SetDrawColor(220, 220, 220);
+                        $this->SetFillColor(252, 252, 252);
+
+                        $this->Rect($box['x'], $box['y'] + $box['h'], $box['w'], 6, 'DF');
+
+                        $this->SetFont('Helvetica', '', 7);
+                        $txt = mb_convert_encoding(trim(($module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
+                        $this->MultiCell($box['w'], 6, $txt, 0, 'C', false, 1);
+
+                        $this->SetXY($ox, $oy);
+                    }
+
                     $x += $w * $module->span;
                 }
 
-                $this->SetY($this->GetY() + $h + 6);
+                $this->SetY($this->GetY() + $h + ($printCurrents ? 10 : 6));
             }
 
             $this->drawCutLines($cutLines);
@@ -932,15 +970,17 @@ class TiquettesPDF extends FPDF
         global $switchboard;
 
         if ($switchboard->withGroundLine) {
+            $gridPosY = 30;
+
             $this->SetDash(1, 1);
             $this->SetLineWidth($this->schemaLineWidth);
             $this->SetDrawColor(200, 200, 200);
-            $this->Line($this->grid[$this->gridOrientation]['left'], $this->grid[$this->gridOrientation]['bottom'] - 25, $this->grid[$this->gridOrientation]['right'], $this->grid[$this->gridOrientation]['bottom'] - 25);
+            $this->Line($this->grid[$this->gridOrientation]['left'], $this->grid[$this->gridOrientation]['bottom'] - $gridPosY, $this->grid[$this->gridOrientation]['right'], $this->grid[$this->gridOrientation]['bottom'] - $gridPosY);
             $this->SetDash();
 
-            $this->Line($this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 2.5, $this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 2.5);
-            $this->Line($this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 1.5, $this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 1.5);
-            $this->Line($this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - 25 - 0.5, $this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - 25 + 0.5);
+            $this->Line($this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY - 2.5, $this->grid[$this->gridOrientation]['right'] - 2.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY + 2.5);
+            $this->Line($this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY - 1.5, $this->grid[$this->gridOrientation]['right'] - 1.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY + 1.5);
+            $this->Line($this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY - 0.5, $this->grid[$this->gridOrientation]['right'] - 0.5, $this->grid[$this->gridOrientation]['bottom'] - $gridPosY + 0.5);
             $this->SetLineWidth(0.2);
         }
     }
@@ -1036,7 +1076,7 @@ class TiquettesPDF extends FPDF
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
         } else {
-            $sf = ['hasType' => false];
+            $sf = ['hasType' => false, 'hasCrb' => false, 'hasCurrent' => true];
         }
 
         $isNew = ($this->schemaCurrentPosX + $this->schemaSymbolSize['w']) > $this->grid[$this->gridOrientation]['right'];
@@ -1056,48 +1096,62 @@ class TiquettesPDF extends FPDF
 
         if ($level < $this->grid[$this->gridOrientation]['schemaMaxLevels']) {
             $symbol = $this->getSymbol($module->func);
-            $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
+            if ($symbol !== '') $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
 
             $this->SetTextColor(0, 0, 0);
             $this->SetFont('Arial', 'B', 7);
             $this->Text($centerX + ($this->grid[$this->gridOrientation]['step'] / 2), $currentPosY + ($this->grid[$this->gridOrientation]['step'] / 2) + 2, str($module->id));
-            $this->SetFont('Arial', '', 5);
+            $this->SetFont('Arial', '', 6);
 
             $lines = [
                 $sf['hasType'] && $module->type ? str("Type " . $module->type ?? '') : '',
                 $sf['hasType'] && $module->type ? str($module->sensibility ?? '') : '',
-                str(trim(($module->crb ?? '') . ' ' . ($module->current ?? ''))),
+                str(trim(($sf['hasCrb'] && $module->crb ? ($module->crb ?? '') : '') . ' ' . ($sf['hasCurrent'] && $module->current ? ($module->current ?? '') : ''))),
                 str($module->pole ?? '')
             ];
             for ($i = 0; $i < count($lines); $i++) {
                 $this->Text($centerX + ($this->grid[$this->gridOrientation]['step'] / 2), $currentPosY + ($this->grid[$this->gridOrientation]['step'] / 2) + 2 + (($i + 1) * ($this->grid[$this->gridOrientation]['step'] / 2)), $lines[$i]);
             }
 
-            if ($module->pole) {
+            /*if (isset($module->pole) && is_string($module->pole)) {
                 $pole = $this->getPoleSymbol($module->pole);
-                $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
-            }
+                if ($pole !== '') $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
+            }*/
 
         } else {
             $symbol = $this->getSymbol('blank');
-            $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
+            if ($symbol !== '') $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
         }
 
         if ($this->getDirectChildsCount($module) === 0) {
             $this->SetFillColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
             $this->Rect($centerX - ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'], $this->schemaLineWidth, $this->grid[$this->gridOrientation]['bottom'] - ($currentPosY + $this->schemaSymbolSize['h']) - 20, 'F');
 
-            if ($module->icon) {
-                $icon = $this->getIcon($module->icon, '#000000', 100);
-                if ($icon !== '') {
-                    $this->Image($icon, $centerX - (5.5 / 2), $this->grid[$this->gridOrientation]['bottom'] - 17.5, 5.5, 5.5, 'PNG');
-                }
+            if (isset($module->pole) && is_string($module->pole)) {
+                $pole = $this->getPoleSymbol($module->pole);
+                if ($pole !== '') $this->Image($pole, $centerX - (2.9104166667 / 2), $this->grid[$this->gridOrientation]['bottom'] - 25, 2.9104166667, 0, 'PNG');
             }
-            if ($module->text) {
+
+            if (isset($module->wire) && is_string($module->wire) && trim($module->wire) !== "") {
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Arial', '', 5.5);
+                $this->TextWithDirection($centerX - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 20.5, str($module->wire . " mm²"), 'U');
+            }
+
+            /*$this->SetFillColor(200, 200, 200);
+            $this->Rect($centerX - ($this->schemaSymbolSize['w'] / 2), $this->grid[$this->gridOrientation]['bottom'] - 20, $this->schemaSymbolSize['w'], 0.1, 'F');*/
+
+            if (isset($module->icon) && is_string($module->icon)) {
+                $icon = $this->getIcon($module->icon, '#000000', 100);
+                if ($icon !== '') $this->Image($icon, $centerX - (5.5 / 2), $this->grid[$this->gridOrientation]['bottom'] - 18, 5.5, 5.5, 'PNG');
+            }
+
+            if (isset($module->text) && is_string($module->text) && trim($module->text) !== "") {
+                $this->SetTextColor(0, 0, 0);
                 $this->SetFont('Arial', '', 7);
                 $oldX = $this->GetX();
                 $oldY = $this->GetY();
-                $this->SetXY($centerX - ($this->schemaSymbolSize['w'] / 2), $this->grid[$this->gridOrientation]['bottom'] - 10);
+                $this->SetXY($centerX - ($this->schemaSymbolSize['w'] / 2), $this->grid[$this->gridOrientation]['bottom'] - 11);
                 $this->MultiCell($this->schemaSymbolSize['w'], 2.5, str($module->text), 0, 'C', false, 4);
                 $this->SetXY($oldX, $oldY);
             }
@@ -1142,7 +1196,7 @@ class TiquettesPDF extends FPDF
         $this->AddPage('L', 'A4', 0);
         $this->SetVisibility('all');
 
-        $this->SetY($this->pageMargin + 5);
+        $this->SetY($this->pageMargin + 3);
         $this->SetFont('Arial', 'B', 11);
         $this->SetTextColor(0, 0, 0);
         $oldPosX = $this->pageMargin;
@@ -1204,9 +1258,7 @@ class TiquettesPDF extends FPDF
 
                     if ($module->icon) {
                         $icon = $this->getIcon($module->icon, '#000000', 100);
-                        if ($icon !== '') {
-                            $this->Image($icon, $oldPosX + (($columns[2]['w'] / 2) - (5.5 / 2)), $this->GetY() + 1, 5.5, 5.5, 'PNG');
-                        }
+                        if ($icon !== '') $this->Image($icon, $oldPosX + (($columns[2]['w'] / 2) - (5.5 / 2)), $this->GetY() + 1, 5.5, 5.5, 'PNG');
                     }
                     $oldPosX += $columns[2]['w'];
 
@@ -1242,11 +1294,11 @@ class TiquettesPDF extends FPDF
                     $this->MultiCell($columns[6]['w'], 4, str(trim($module->desc ?? '')), 0, $columns[6]['align'], false, 3);
                     $oldPosX += $columns[6]['w'];
 
-                    $this->Ln(13);
+                    $this->Ln(11);
                 }
             }
 
-            $this->Ln(5);
+            $this->Ln(3);
         }
     }
 
@@ -1325,8 +1377,8 @@ foreach ($flattenModules as $module) {
                 'icon' => $module->icon,
                 'text' => $module->text,
                 'desc' => $module->desc,
-                'pole' => $module->pole
-
+                'pole' => $module->pole,
+                'wire' => $module->wire ?? ''
             ]);
         }
     }
@@ -1345,7 +1397,7 @@ $pdf->AliasNbPages();
 $pdf->SetGridColor($schemaGridColor);
 $pdf->SetShowCutLines($labelsCutLines);
 
-if (!$hasOnlyLabels) $pdf->AddFirstPage();
+if (!$hasOnlyLabels && $printOptions->firstPage === true) $pdf->AddFirstPage();
 if ($printOptions->schema === true) $pdf->AddSchemaPage();
 if ($printOptions->summary === true) $pdf->AddSummaryPage();
 if ($printOptions->labels === true) $pdf->AddLabelsPage();

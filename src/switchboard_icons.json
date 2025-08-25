@@ -2,568 +2,708 @@
     {
         "filename": "",
         "title": "Aucun pictogramme",
+        "modtype": "",
         "coef": 0.5
     },
     {
         "filename": "swb_ecl.svg",
         "title": "Eclairage (piece de jour)",
+        "modtype": "Eclairage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ecl2.svg",
         "title": "Eclairage (piece de nuit)",
+        "modtype": "Eclairage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ecl_cmd.svg",
         "title": "Eclairage secondaire",
+        "modtype": "Eclairage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_ecl_rgb.svg",
         "title": "Eclairage commande",
+        "modtype": "Eclairage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_eclext.svg",
         "title": "Eclairage exterieur",
+        "modtype": "Eclairage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1"
     },
     {
         "filename": "swb_pc.svg",
         "title": "Prise de courant murale",
+        "modtype": "Prises",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_pc2.svg",
         "title": "Appareil sur prise de courant",
+        "modtype": "Prises",
         "coef": 0.5,
         "func": "o",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_pctri.svg",
         "title": "Prise de courant triphase",
+        "modtype": "Prises",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_alim_eco.svg",
         "title": "Economie d'energie",
+        "modtype": "Alim",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_differential-circuit-breaker.svg",
         "title": "Interrupteur differentiel",
+        "modtype": "Alim",
         "coef": 1,
         "func": "id"
     },
     {
         "filename": "swb_alim_ht.svg",
         "title": "Coupure generale",
+        "modtype": "Alim",
         "coef": 1,
         "func": "sw",
-        "current": "63A"
+        "current": "63A",
+        "wire": "16"
     },
     {
         "filename": "swb_alim.svg",
         "title": "Alimentation commandee",
+        "modtype": "Alim",
         "coef": 1
     },
     {
         "filename": "swb_puissance.svg",
         "title": "Alimentation principale",
+        "modtype": "Alim",
         "coef": 1
     },
     {
         "filename": "swb_home.svg",
         "title": "Maison / Dependance / Extension",
+        "modtype": "Alim",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "63A"
+        "current": "63A",
+        "wire": "16"
     },
     {
         "filename": "swb_transformer.svg",
         "title": "Transformateur",
+        "modtype": "Alim",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_battery.svg",
         "title": "Chargeur",
+        "modtype": "Chargeur",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_surgeprotector.svg",
         "title": "Parafoudre / Protection",
+        "modtype": "Alim",
         "coef": 1
     },
     {
         "filename": "swb_ext.svg",
         "title": "Tableau divisionnaire / Tableau secondaire",
+        "modtype": "TD",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "40A"
+        "current": "40A",
+        "wire": "10"
     },
     {
         "filename": "swb_clim.svg",
         "title": "Pompe a chaleur / PAC / Groupe froid",
+        "modtype": "PAC",
         "coef": 0.5,
         "func": "q",
         "crb": "D",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_inverter.svg",
         "title": "Onduleur",
+        "modtype": "Alim",
         "coef": 0.5,
         "func": "q",
         "crb": "D",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_eau.svg",
         "title": "Compteur d'eau",
+        "modtype": "Comptage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_pompe1.svg",
         "title": "Pompe de relevage",
+        "modtype": "Pompe",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_four.svg",
         "title": "Four",
+        "modtype": "Four",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_frigo.svg",
         "title": "Refrigerateur / Frigo",
+        "modtype": "Frigo",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_froid.svg",
         "title": "Congelateur / Freezer",
+        "modtype": "Congél.",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_gaz.svg",
         "title": "Plaque de cuisson au gaz",
+        "modtype": "Cuisson",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_cuissin.svg",
         "title": "Plaque de cuisson electrique",
+        "modtype": "Cuisson",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
         "current": "32A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "6"
     },
     {
         "filename": "swb_induction.svg",
         "title": "Plaque de cuisson a induction",
+        "modtype": "Cuisson",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
         "current": "32A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "6"
     },
     {
         "filename": "swb_ll.svg",
         "title": "Lave linge",
+        "modtype": "Lave Linge",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
         "current": "20A",
-        "requiredIdTypes": ["A"]
+        "requiredIdTypes": ["A"],
+        "wire": "2.5"
     },
     {
         "filename": "swb_dryer.svg",
         "title": "Seche linge",
+        "modtype": "Seche Linge",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_ironing.svg",
         "title": "Lingerie / Repassage",
+        "modtype": "Repassage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_lv.svg",
         "title": "Lave vaisselle",
+        "modtype": "Lave Vaisselle",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_microonde.svg",
         "title": "Micro-ondes",
+        "modtype": "Micro-ondes",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_minuterie.svg",
         "title": "Minuterie",
+        "modtype": "Comptage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_portail.svg",
         "title": "Portail electrique",
+        "modtype": "Portail",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_voitureelectrique.svg",
         "title": "Borne de recharge",
+        "modtype": "Chargeur",
         "coef": 1,
         "func": "q",
         "crb": "B",
         "current": "32A",
-        "requiredIdTypes": ["A", "F", "HPI"]
+        "requiredIdTypes": ["A", "F", "HPI"],
+        "wire": "6"
     },
     {
         "filename": "swb_voitureelectrique2.svg",
         "title": "Prise de recharge",
+        "modtype": "Chargeur",
         "coef": 1,
         "func": "q",
         "crb": "C",
         "current": "20A",
-        "requiredIdTypes": ["A", "F", "HPI"]
+        "requiredIdTypes": ["A", "F", "HPI"],
+        "wire": "2.5"
     },
     {
         "filename": "swb_ship.svg",
         "title": "Bateaux / Ponton / Port",
+        "modtype": "Divers",
         "coef": 0.5
     },
     {
         "filename": "swb_solaire.svg",
-        "title": "Panneaux solaires / Photovoltaïque",
+        "title": "Panneaux solaires / Photovoltaique",
+        "modtype": "Solaire",
         "coef": 0.5
     },
     {
         "filename": "swb_volet.svg",
         "title": "Volet roulant / Velux",
+        "modtype": "Volet",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_store.svg",
         "title": "Store Banne",
+        "modtype": "Volet",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_garage.svg",
         "title": "Porte de garage motorisee",
+        "modtype": "Portail",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_split.svg",
         "title": "Unite murale / Monosplit / Cassette",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_remswitch.svg",
         "title": "Telerupteur",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_contact.svg",
         "title": "Contacteur / Relai",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "25A"
+        "current": "25A",
+        "wire": "4"
     },
     {
         "filename": "swb_clock.svg",
         "title": "Horloge journaliere",
+        "modtype": "Comptage",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_calendar-clock.svg",
         "title": "Horloge hebdomadaire",
+        "modtype": "Comptage",
         "coef": 0.5,
         "func": "kc",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_telec.svg",
         "title": "Telecommande / Divers",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ermt.svg",
         "title": "Telecommande blocs secours / BAES / BS",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_fire.svg",
         "title": "Alarme incendie",
+        "modtype": "Alarme",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_homeshield.svg",
         "title": "Alarme intrusion",
+        "modtype": "Alarme",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_smoke.svg",
         "title": "Détecteur de fumees",
+        "modtype": "Alarme",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_bell.svg",
         "title": "Sonnette / Carillon",
+        "modtype": "Alarme",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_telephonie.svg",
         "title": "Telephonie / Communication / Fibre",
+        "modtype": "Média",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_informatique.svg",
         "title": "Informatique / Ordinateur / PC",
+        "modtype": "Média",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_tv.svg",
         "title": "TV / Television / Ecran / Projecteur",
+        "modtype": "Média",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_music.svg",
         "title": "HiFi / Audio / Musique / Multimedia",
+        "modtype": "Média",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_thermo.svg",
         "title": "Thermostat / Commande de climatisation",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo2.svg",
         "title": "Thermostat / Commande de chauffage",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo3.svg",
         "title": "Thermostat general",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_thermo4.svg",
         "title": "Thermostat",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_bec.svg",
         "title": "Ballon d'eau chaude",
+        "modtype": "BEC",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_journuit.svg",
         "title": "Contacteur Jour / Nuit",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "kc",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_blrgas.svg",
         "title": "Chaudiere gaz",
+        "modtype": "Chauffage",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_chauffage.svg",
         "title": "Chauffage electrique / Convecteur / Radiateur",
+        "modtype": "Chauffage",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "16A"
+        "current": "16A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_twldryer.svg",
         "title": "Seche serviettes",
+        "modtype": "Chauffage",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_solchauffant.svg",
         "title": "Plancher chauffant",
+        "modtype": "Chauffage",
         "coef": 1,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_ventil.svg",
         "title": "Ventilation",
+        "modtype": "Ventilation",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "10A"
+        "current": "10A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_ventil2.svg",
         "title": "Centrale traitement d'air / CTA",
+        "modtype": "Ventilation",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_vmc.svg",
         "title": "VMC",
+        "modtype": "Ventilation",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "2A"
+        "current": "2A",
+        "wire": "1.5"
     },
     {
         "filename": "swb_pool.svg",
         "title": "Piscine / Jacuzzi / Bassin",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "40A"
+        "current": "40A",
+        "wire": "10"
     },
     {
         "filename": "swb_spa.svg",
         "title": "SPA / Massages / Bien etre",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "C",
-        "current": "20A"
+        "current": "20A",
+        "wire": "2.5"
     },
     {
         "filename": "swb_electric-motor.svg",
         "title": "Moteur electrique",
+        "modtype": "Divers",
         "coef": 0.5,
         "func": "q",
         "crb": "D"

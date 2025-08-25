@@ -317,6 +317,17 @@
     max-width: var(--symbol-width);
 }
 
+.schemaItemLastWire {
+    margin-top: 10px;
+    font-size: 60%;
+    text-align: center;
+    margin-inline: auto;
+
+    max-width: var(--symbol-width);
+    height: 1.2em;
+    line-height: 1.2em;
+}
+
 .schemaItemSeparator {
     display: block;
     width: 100%;

@@ -25,6 +25,7 @@ import cancelIcon from './assets/x.svg';
 import okIcon from './assets/check.svg';
 import prevIcon from './assets/arrow-left.svg';
 import nextIcon from './assets/arrow-right.svg';
+import loadingIcon from './assets/loading_mini.gif';
 
 export default function Popup({
                                   title,
@@ -37,6 +38,8 @@ export default function Popup({
                                   showOkButton = true,
                                   showPrevButton = false,
                                   showNextButton = false,
+                                  buttonsDisabled = false,
+                                  loading = false,
                                   additionalButtons = [],
                                   onCancel = null,
                                   onOk = null,
@@ -89,7 +92,7 @@ export default function Popup({
 
     return (
         <div className="popup-overflow">
-            <div className='popup' tabIndex={0} style={{width: `${width}px`}}>
+            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{width: `${width}px`}}>
                 <div className="popup_title">{title}</div>
                 {buttons.close &&
                     <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
@@ -99,6 +102,13 @@ export default function Popup({
                     {children}
                 </div>
 
+                {loading && (
+                    <div className={'popup_loading_box'}>
+                        <img src={loadingIcon} width={40} height={40} alt={"Chargement..."}/>
+                        <span>Chargement ...</span>
+                    </div>
+                )}
+
                 <div className="popup_buttons">
                     <div className="popup_buttons_box">
                         {Array.isArray(additionalButtons) && additionalButtons.map((b, i) => {
@@ -106,14 +116,26 @@ export default function Popup({
                             const {text, callback, ...props} = b;
                             if (typeof text === 'string' && text.trim() === '') return null;
 
-                            return <button key={i} {...props} onClick={callback} title={b.title}>{text}</button>;
+                            let p = {...props};
+                            if (buttonsDisabled) {
+                                let cls = (p.className ?? '').replaceAll(/disabled/ig, '');
+                                cls = cls + ' disabled';
+                                p = {...p, className: cls}
+                            }
+
+                            return <button key={i} {...p} onClick={callback} title={b.title}>{text}</button>;
                         })}
                     </div>
+
                     {(buttons.cancel || buttons.ok) && <div className="popup_buttons_box">
-                        {buttons.cancel && <button className='cancel' onClick={onCancel}>{cancelButtonContent}</button>}
-                        {buttons.prev && <button className='prev' onClick={onPrev}>{prevButtonContent}</button>}
-                        {buttons.next && <button className='next' onClick={onNext}>{nextButtonContent}</button>}
-                        {buttons.ok && <button className='ok' onClick={onOk}>{okButtonContent}</button>}
+                        {buttons.cancel && <button className={`cancel ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                                                   onClick={onCancel}>{cancelButtonContent}</button>}
+                        {buttons.prev && <button className={`prev ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                                                 onClick={onPrev}>{prevButtonContent}</button>}
+                        {buttons.next && <button className={`next ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                                                 onClick={onNext}>{nextButtonContent}</button>}
+                        {buttons.ok && <button className={`ok ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                                               onClick={onOk}>{okButtonContent}</button>}
                     </div>}
                 </div>
             </div>

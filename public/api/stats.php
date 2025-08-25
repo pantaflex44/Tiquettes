@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
  * Copyright (C) 2024-2025 Christophe LEMOINE
@@ -17,30 +16,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Credentials: true');
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-}
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
-}
-
-if (($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'POST')
-    || (stripos($_SERVER['HTTP_HOST'], 'localhost') === false
-        && stripos($_SERVER['HTTP_HOST'], '127.0.0.1') === false
-        && stripos($_SERVER['HTTP_HOST'], 'www.tiquettes.fr') === false)
-) {
-    header("HTTP/1.1 401 Unauthorized");
-    exit(0);
-}
-
 require_once(__DIR__ . '/libs/config.php');
 
 $date = date('Y-m-d');
