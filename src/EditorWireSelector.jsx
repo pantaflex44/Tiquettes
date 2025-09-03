@@ -49,19 +49,10 @@ export default function EditorWireSelector({id, value, onChange = null, current 
     const [cur, setCur] = useState(0);
 
     useEffect(() => {
-        const cc = rules[current] ?? 0;
-        setCur(cc);
+        setCur(rules[current] ?? 0);
 
         const l = [...new Set(Object.values(rules))];
         setList(old => (JSON.stringify(old) !== JSON.stringify(l) ? l : old));
-
-        /*let lmin = [...new Set(Object.values(rules))].filter((c) => c >= cc);
-        lmin = (lmin.length > 0) ? lmin[0] : (l.length > 0 ? l[0] : 0);
-        //const v = lmin;
-        const vv = value ?? 0;
-        //if (cc > 0 && vv < v) onChange(`${v}`)
-        const v = value ?? lmin;
-        if (cc > 0  && vv !== v) onChange(`${v}`);*/
     }, [current, onChange, rules, value]);
 
 
@@ -69,7 +60,8 @@ export default function EditorWireSelector({id, value, onChange = null, current 
                    onChange={(e) => {
                        if (onChange) onChange(e.target.value)
                    }}>
-        {cur === 0 && <option value={""}>-</option>}
+        <option value={""}>( détection automatique )</option>
+        {cur > 0 && <option value={"?"}>( inconnue )</option>}
         {list.map((item) => <option key={item} value={item}>{`${item} mm²`}</option>)}
     </select>
 }

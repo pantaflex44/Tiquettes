@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import {lazy, Suspense, useEffect, useMemo, useState} from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 
 import schemaFunctions from './schema_functions.json';
 
@@ -42,21 +42,21 @@ import EditorWireSelector from "./EditorWireSelector.jsx";
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
 export default function Editor({
-                                   theme,
-                                   switchboard,
-                                   stepSize,
+    theme,
+    switchboard,
+    stepSize,
 
-                                   getFilteredModulesBySchemaFuncs,
-                                   getModuleById,
+    getFilteredModulesBySchemaFuncs,
+    getModuleById,
 
-                                   editor,
-                                   onSetEditor,
+    editor,
+    onSetEditor,
 
-                                   onApplyModuleEditor,
-                                   onHandleModuleClear,
+    onApplyModuleEditor,
+    onHandleModuleClear,
 
-                                   hasBlankId = false,
-                               }) {
+    hasBlankId = false,
+}) {
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
     const [ed, setEd] = useState(editor);
     const [isCustomFunction, setIsCustomFunction] = useState(false);
@@ -87,42 +87,42 @@ export default function Editor({
     }, [switchboard, defaultModuleId, ed.currentModule.func]);
 
     const onUpdateModuleEditor = (data) => {
-        setEd((old) => ({...old, currentModule: {...old.currentModule, ...data}}));
+        setEd((old) => ({ ...old, currentModule: { ...old.currentModule, ...data } }));
     }
 
     useEffect(() => {
-            if (hasBlankId) {
-                onUpdateModuleEditor({id: lastFreeId});
-            }
-
-            let dbPole = 4;
-            if (switchboard.withDb) {
-                let pole = switchboard.db.pole.trim().toUpperCase();
-                dbPole = parseInt(pole.replace(/\D/g, ''));
-                if (dbPole === 3 && pole.includes('+N')) dbPole = 4;
-            }
-
-            let currentPole = 0;
-            if (ed.currentModule.pole) {
-                let pole = ed.currentModule.pole.trim().toUpperCase();
-                currentPole = parseInt(pole.replace(/\D/g, ''));
-                if (currentPole === 3 && pole.includes('+N')) currentPole = 4;
-            }
-
-            if (dbPole === 1 && currentPole !== 1) onUpdateModuleEditor({pole: switchboard.db.pole});
-
+        if (hasBlankId) {
+            onUpdateModuleEditor({ id: lastFreeId });
         }
+
+        let dbPole = 4;
+        if (switchboard.withDb) {
+            let pole = switchboard.db.pole.trim().toUpperCase();
+            dbPole = parseInt(pole.replace(/\D/g, ''));
+            if (dbPole === 3 && pole.includes('+N')) dbPole = 4;
+        }
+
+        let currentPole = 0;
+        if (ed.currentModule.pole) {
+            let pole = ed.currentModule.pole.trim().toUpperCase();
+            currentPole = parseInt(pole.replace(/\D/g, ''));
+            if (currentPole === 3 && pole.includes('+N')) currentPole = 4;
+        }
+
+        if (dbPole === 1 && currentPole !== 1) onUpdateModuleEditor({ pole: switchboard.db.pole });
+
+    }
         ,
         [hasBlankId, ed.currentModule.func]
     )
-    ;
+        ;
 
 
     return ed && (
         <Popup
             title={<div className="popup_title_content">
                 <img className="popup_title_content_img" src={editIcon} title="Editer le module"
-                     alt="Editer le module"/>
+                    alt="Editer le module" />
                 <span className="popup_title_content_id">{ed.currentModule.id ?? ""}</span>
                 {ed.currentModule.text ?
                     <span className="popup_title_content_desc">/ {ed.currentModule.text ?? ""}</span> : ""}
@@ -130,7 +130,7 @@ export default function Editor({
             showCloseButton={true}
             onCancel={() => onSetEditor(null)}
             onOk={() => {
-                onApplyModuleEditor({...ed})
+                onApplyModuleEditor({ ...ed })
             }}
             width={440}
             className="popup_flex"
@@ -142,37 +142,37 @@ export default function Editor({
                             onSetEditor(null)
                         }
                     },
-                    style: {color: 'red', borderColor: 'red'},
+                    style: { color: 'red', borderColor: 'red' },
                     disabled: ed.currentModule.free
                 }
             ]}
         >
-            <div style={{flex: 1, minHeight: '621px'}}>
+            <div style={{ flex: 1, minHeight: '621px' }}>
                 <div className={"editor_tabpages"}>
                     <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
-                           onChange={() => setEditorTab("main")}/>
+                        onChange={() => setEditorTab("main")} />
                     <label htmlFor="main_editor_tab">
-                        <img src={switchboardIcon} width="20" height="20" alt="Tableau"/>
+                        <img src={switchboardIcon} width="20" height="20" alt="Tableau" />
                         <span>Tableau</span>
                     </label>
 
                     <input type="checkbox" id="schema_editor_tab" checked={editorTab === "schema"}
-                           onChange={() => setEditorTab("schema")}/>
+                        onChange={() => setEditorTab("schema")} />
                     <label htmlFor="schema_editor_tab">
-                        <img src={schemaIcon} width="20" height="20" alt="Schéma"/>
+                        <img src={schemaIcon} width="20" height="20" alt="Schéma" />
                         <span>Schéma</span>
                     </label>
                 </div>
 
                 {ed.errors.map((error, i) => <div key={i} className="popup_row"
-                                                  style={{'--left_column_size': '100px'}}>
+                    style={{ '--left_column_size': '100px' }}>
                     <div>&nbsp;</div>
                     <div className="popup_error">{error}</div>
                 </div>)}
 
                 {editorTab === "main" &&
                     <>
-                        <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label htmlFor={`editor_id_${ed.currentModule.id.trim()}`}>Identifiant</label>
                             <div className="popup_row-flex">
                                 <input
@@ -180,30 +180,30 @@ export default function Editor({
                                     name="editor_id"
                                     id={`editor_id_${ed.currentModule.id.trim()}`}
                                     value={ed.currentModule.id}
-                                    onChange={(e) => onUpdateModuleEditor({id: e.target.value})}
+                                    onChange={(e) => onUpdateModuleEditor({ id: e.target.value })}
                                     autoFocus={!!(ed?.focusedInputName === "id")}
                                 />
                                 <button title="Trouver le prochain identifiant disponible."
-                                        onClick={() => onUpdateModuleEditor({id: lastFreeId})}>
+                                    onClick={() => onUpdateModuleEditor({ id: lastFreeId })}>
                                     <img src={assignIdIcon} width={22} height={22}
-                                         alt="Trouver le prochain identifiant libre."/>
+                                        alt="Trouver le prochain identifiant libre." />
                                 </button>
                             </div>
                         </div>
-                        <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <div></div>
-                            <label style={{fontSize: "small", color: "#777"}}>└ Identifiant du module
+                            <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module
                                 précédent: <b>{ed.prevModule?.id ?? "-"}</b></label>
                         </div>
 
 
-                        <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label htmlFor={`editor_text_${ed.currentModule.id.trim()}`}>Libellé</label>
                             <textarea
                                 name="editor_text"
                                 id={`editor_text_${ed.currentModule.id.trim()}`}
                                 value={ed.currentModule.text}
-                                onChange={(e) => onUpdateModuleEditor({text: e.target.value})}
+                                onChange={(e) => onUpdateModuleEditor({ text: e.target.value })}
                                 rows={3}
                                 autoFocus={!!(ed?.focusedInputName === "text")}
                             />
@@ -217,10 +217,10 @@ export default function Editor({
                             marginTop: '2em'
                         }}>
                             <label>Fonction</label>
-                            <Suspense fallback={<div style={{lineHeight: '40px'}}>...</div>}>
+                            <Suspense fallback={<div style={{ lineHeight: '40px' }}>...</div>}>
                                 <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
                                     if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
-                                        onUpdateModuleEditor({icon: selectedIcon, coef: selected?.coef ?? 0.5})
+                                        onUpdateModuleEditor({ icon: selectedIcon, coef: selected?.coef ?? 0.5 })
                                         /*
                                         if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
                                         if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
@@ -228,19 +228,19 @@ export default function Editor({
                                         if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
                                          */
 
-                                        if (selected?.func) onUpdateModuleEditor({func: selected?.func});
-                                        if (selected?.crb) onUpdateModuleEditor({crb: selected?.crb});
-                                        if (selected?.current) onUpdateModuleEditor({current: selected?.current});
-                                        if (selected?.wire) onUpdateModuleEditor({wire: selected?.wire});
+                                        if (selected?.func) onUpdateModuleEditor({ func: selected?.func });
+                                        if (selected?.crb) onUpdateModuleEditor({ crb: selected?.crb });
+                                        if (selected?.current) onUpdateModuleEditor({ current: selected?.current });
+                                        if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
 
-                                        if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({modtype: selected?.modtype});
+                                        if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({ modtype: selected?.modtype });
 
                                     }
                                     if (!selected || !selectedIcon) {
-                                        onUpdateModuleEditor({icon: null});
+                                        onUpdateModuleEditor({ icon: null });
                                     }
                                 }}
-                                              autoFocus={!!(ed?.focusedInputName === "icon")}/>
+                                    autoFocus={!!(ed?.focusedInputName === "icon")} />
                             </Suspense>
                         </div>
 
@@ -257,7 +257,7 @@ export default function Editor({
                                 id={`editor_modtype_${ed.currentModule.modtype.trim()}`}
                                 value={ed.currentModule.modtype}
                                 onChange={(e) => {
-                                    onUpdateModuleEditor({modtype: e.target.value})
+                                    onUpdateModuleEditor({ modtype: e.target.value })
                                     setIsCustomFunction(old => {
                                         const isCF = old && e.target.value.trim() !== "";
                                         return isCF;
@@ -271,14 +271,14 @@ export default function Editor({
                         </div>
 
 
-                        <div className="popup_row" style={{'--left_column_size': '100px'}}>
-                            <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>Annotations<br/><span
-                                style={{fontSize: '0.8em', color: 'gray'}}>(nomenclature)</span></label>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                            <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>Annotations<br /><span
+                                style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
                             <textarea
                                 name="editor_desc"
                                 id={`editor_desc_${ed.currentModule.id.trim()}`}
                                 value={ed.currentModule.desc}
-                                onChange={(e) => onUpdateModuleEditor({desc: e.target.value})}
+                                onChange={(e) => onUpdateModuleEditor({ desc: e.target.value })}
                                 rows={2}
                                 autoFocus={!!(ed?.focusedInputName === "desc")}
                             />
@@ -344,21 +344,21 @@ export default function Editor({
 
                 {editorTab === "schema" &&
                     <>
-                        <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                             <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
                             <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.func}
-                                                    onChange={(value) => onUpdateModuleEditor({func: value})}/>
+                                value={ed.currentModule.func}
+                                onChange={(value) => onUpdateModuleEditor({ func: value })} />
                         </div>
 
                         {ed.currentModule.func && <>
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>Parent</label>
                                 <EditorParentSelector id={`editor_schparent_${ed.currentModule.id.trim()}`}
-                                                      value={ed.currentModule.parentId}
-                                                      currentModuleId={ed.currentModule.id}
-                                                      filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                      onChange={(value) => onUpdateModuleEditor({parentId: value})}/>
+                                    value={ed.currentModule.parentId}
+                                    currentModuleId={ed.currentModule.id}
+                                    filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                    onChange={(value) => onUpdateModuleEditor({ parentId: value })} />
                             </div>
                             <div className="popup_row" style={{
                                 '--left_column_size': '100px',
@@ -367,7 +367,7 @@ export default function Editor({
                                 marginBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '2em'
                             }}>
                                 <div></div>
-                                <label style={{fontSize: "small", color: "#777"}}>└ Parent du module
+                                <label style={{ fontSize: "small", color: "#777" }}>└ Parent du module
                                     précédent: <b>{prevModuleTitle !== "" ? prevModuleTitle : "-"}</b></label>
                             </div>
 
@@ -381,70 +381,68 @@ export default function Editor({
                                     <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
                                         par</label>
                                     <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
-                                                           value={ed.currentModule.kcId}
-                                                           currentModuleId={ed.currentModule.id}
-                                                           filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                           onChange={(value) => onUpdateModuleEditor({kcId: value})}/>
+                                        value={ed.currentModule.kcId}
+                                        currentModuleId={ed.currentModule.id}
+                                        filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                        onChange={(value) => onUpdateModuleEditor({ kcId: value })} />
                                 </div>}
                         </>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasType &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>Type</label>
                                 <EditorTypeSelector id={`editor_type_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.type}
-                                                    onChange={(value) => onUpdateModuleEditor({type: value})}/>
+                                    value={ed.currentModule.type}
+                                    onChange={(value) => onUpdateModuleEditor({ type: value })} />
                             </div>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasCrb &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_crb_${ed.currentModule.id.trim()}`}>Courbe</label>
                                 <EditorCrbSelector id={`editor_crb_${ed.currentModule.id.trim()}`}
-                                                   value={ed.currentModule.crb}
-                                                   onChange={(value) => onUpdateModuleEditor({crb: value})}/>
+                                    value={ed.currentModule.crb}
+                                    onChange={(value) => onUpdateModuleEditor({ crb: value })} />
                             </div>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasType &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label
                                     htmlFor={`editor_sensibility_${ed.currentModule.id.trim()}`}>Sensibilité</label>
                                 <EditorSensibilitySelector id={`editor_sensibility_${ed.currentModule.id.trim()}`}
-                                                           value={ed.currentModule.sensibility}
-                                                           onChange={(value) => onUpdateModuleEditor({sensibility: value})}/>
+                                    value={ed.currentModule.sensibility}
+                                    onChange={(value) => onUpdateModuleEditor({ sensibility: value })} />
                             </div>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasCurrent &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
                                 <EditorCurrentSelector id={`editor_current_${ed.currentModule.id.trim()}`}
-                                                       value={ed.currentModule.current}
-                                                       onChange={(value) => onUpdateModuleEditor({current: value})}/>
+                                    value={ed.currentModule.current}
+                                    onChange={(value) => onUpdateModuleEditor({ current: value })} />
                             </div>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasWire &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
                                 <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.wire}
-                                                    onChange={(value) => {
-                                                        onUpdateModuleEditor({wire: value})
-                                                    }}
-                                                    current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}/>
+                                    value={ed.currentModule.wire}
+                                    onChange={(value) => onUpdateModuleEditor({ wire: value })}
+                                    current={parseInt(ed.currentModule.current.replace(/\D/g, ''))} />
                             </div>
                         }
 
                         {schemaFunctions[ed.currentModule.func]?.hasPole &&
-                            <div className="popup_row" style={{'--left_column_size': '100px'}}>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
                                 <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.pole}
-                                                    db={switchboard.withDb ? switchboard.db : null}
-                                                    onChange={(value) => onUpdateModuleEditor({pole: value})}/>
+                                    value={ed.currentModule.pole}
+                                    db={switchboard.withDb ? switchboard.db : null}
+                                    onChange={(value) => onUpdateModuleEditor({ pole: value })} />
                             </div>
                         }
 
@@ -473,7 +471,7 @@ export default function Editor({
                                     marginBlock: '1em',
                                     overflowY: 'hidden'
                                 }}>
-                                    <SchemaSymbol module={ed.currentModule}/>
+                                    <SchemaSymbol module={ed.currentModule} />
                                 </div>
                             </div>
                         )}

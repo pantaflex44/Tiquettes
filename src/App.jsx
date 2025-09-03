@@ -17,8 +17,8 @@
  */
 
 
-import {Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {satisfies} from 'compare-versions';
+import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { satisfies } from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
 import './app.css';
@@ -26,7 +26,7 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
-import {UserContext} from "./UserContext.jsx";
+import { UserContext } from "./UserContext.jsx";
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -57,7 +57,7 @@ import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
-import {stats_count, stats_count_json, stats_visit} from "../public/api/stats.js";
+import { stats_count, stats_count_json, stats_visit } from "../public/api/stats.js";
 import useDocumentVisibility from "./useVisibilityChange.jsx";
 
 
@@ -78,7 +78,7 @@ function App() {
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
-    const [subMenus, setSubMenus] = useState({printLabelsOpened: false});
+    const [subMenus, setSubMenus] = useState({ printLabelsOpened: false });
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -102,16 +102,16 @@ function App() {
     const getSavedPrintOptions = () => {
         if (sessionStorage.getItem(pkg.name + '_printOptions')) {
             const merge = (a, b) => [a, b].reduce((r, o) => Object
-                    .entries(o)
-                    .reduce((q, [k, v]) => ({
-                        ...q,
-                        [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
-                    }), r),
+                .entries(o)
+                .reduce((q, [k, v]) => ({
+                    ...q,
+                    [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
+                }), r),
                 {});
             return merge(defaultPrintOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions')));
         }
 
-        return {...defaultPrintOptions};
+        return { ...defaultPrintOptions };
     }
     const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
 
@@ -178,7 +178,7 @@ function App() {
     }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType, defaultVRef]);
 
     const createRow = useCallback((steps, rowsCount) => {
-        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({...defaultModule}).map((q, j) => ({
+        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
             ...q,
             id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
         })));
@@ -213,7 +213,7 @@ function App() {
         stepsPerRows: defaultStepsPerRows,
         stepSize: defaultStepSize,
         rows: createRow(defaultStepsPerRows, defaultNpRows),
-        db: {...defaultProjectProperties.db},
+        db: { ...defaultProjectProperties.db },
         withDb: false,
         withGroundLine: false,
         schemaMonitor: false,
@@ -300,7 +300,7 @@ function App() {
             });
         });
 
-        return {...reIndentedSwb, rows};
+        return { ...reIndentedSwb, rows };
     }, [defaultModuleId]);
 
     const reassignAllParents = (originalId, newId) => {
@@ -308,18 +308,18 @@ function App() {
             setSwitchboard((old) => {
                 let rows = old.rows.map((row) => {
                     return row.map((module) => {
-                        let mm = {...module};
+                        let mm = { ...module };
                         if (module.parentId === originalId) {
-                            mm = {...mm, parentId: newId};
+                            mm = { ...mm, parentId: newId };
                         }
                         if (module.kcId === originalId) {
-                            mm = {...mm, kcId: newId};
+                            mm = { ...mm, kcId: newId };
                         }
                         return mm;
                     });
                 });
 
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             });
         }
     };
@@ -344,10 +344,10 @@ function App() {
 
                     let func = (module.func ?? '').trim().toUpperCase();
                     if (func === '') func = defaultModuleId;
-                    counters = {...counters, [func]: (counters[func] ?? 0) + 1};
+                    counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
 
                     const newModuleId = `${func}${counters[func]}`;
-                    from = {...from, [module.id]: newModuleId};
+                    from = { ...from, [module.id]: newModuleId };
 
                     return {
                         ...module,
@@ -359,7 +359,7 @@ function App() {
             // re-assign parents
             rows = rows.map((row) => {
                 return row.map((module) => {
-                    let mm = {...module};
+                    let mm = { ...module };
                     if (from[module.parentId]) {
                         mm = {
                             ...mm,
@@ -382,7 +382,7 @@ function App() {
                 });
             });
 
-            setSwitchboard((old) => ({...old, rows}));
+            setSwitchboard((old) => ({ ...old, rows }));
         }
     }
 
@@ -425,7 +425,7 @@ function App() {
                 // <2.0.0
                 projectType: swb.projectType ?? defaultProjectType,
                 vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
-                db: {...defaultProjectProperties.db, ...(swb.db ?? {...defaultProjectProperties.db})},
+                db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
                 withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
                 withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                 schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
@@ -448,12 +448,12 @@ function App() {
 
             //console.log("Switchboard loaded from this session.");
 
-            return modulesAutoId({...swb});
+            return modulesAutoId({ ...swb });
         }
 
         //setWelcome(true);
 
-        return {...defaultProject};
+        return { ...defaultProject };
     };
 
     const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
@@ -509,10 +509,10 @@ function App() {
 
         setClipboard(null);
         setClipboardMode(null);
-        setPrintOptions({...defaultPrintOptions});
+        setPrintOptions({ ...defaultPrintOptions });
         setDocumentTitle(name);
         setTab(1);
-        setSubMenus(old => ({...old, printLabelsOpened: false}));
+        setSubMenus(old => ({ ...old, printLabelsOpened: false }));
         scrollToProject();
 
         stats_count('new');
@@ -525,9 +525,9 @@ function App() {
         setClipboard(null);
         setClipboardMode(null);
         setDocumentTitle(defaultProjectName);
-        setPrintOptions({...defaultPrintOptions});
+        setPrintOptions({ ...defaultPrintOptions });
         setTheme(defaultTheme);
-        setSubMenus(old => ({...old, printLabelsOpened: false}));
+        setSubMenus(old => ({ ...old, printLabelsOpened: false }));
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
@@ -549,7 +549,7 @@ function App() {
 
                     const rows = swb.rows.map((r) => {
                         return r.map((m) => {
-                            let nm = {...m};
+                            let nm = { ...m };
 
                             // <=1.4.0 : remove old theme definitions
                             if (nm.theme) delete nm['theme'];
@@ -558,7 +558,7 @@ function App() {
                             if (nm.icon) {
                                 const sic = swbIcons.filter((si) => si.filename === nm.icon);
                                 if (sic.length === 1) {
-                                    if (!nm.coef) nm = {...nm, coef: sic[0].coef};
+                                    if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
                                     //if (!nm.func) nm = {...nm, func: sic[0].func};
                                     //if (!nm.crb) nm = {...nm, crb: sic[0].crb};
                                     //if (!nm.current) nm = {...nm, current: sic[0].current};
@@ -566,10 +566,10 @@ function App() {
                             }
 
                             // <=2.0.3 : add half module size
-                            if (!nm.half) nm = {...nm, half: "none"};
+                            if (!nm.half) nm = { ...nm, half: "none" };
 
                             // <=2.2.3 : add modtype property
-                            if (!nm.modtype) nm = {...nm, modtype: ""};
+                            if (!nm.modtype) nm = { ...nm, modtype: "" };
 
                             return nm;
                         });
@@ -585,7 +585,7 @@ function App() {
                         // <2.0.0
                         projectType: swb.projectType ?? defaultProjectType,
                         vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
-                        db: {...defaultProjectProperties.db, ...(swb.db ?? {...defaultProjectProperties.db})},
+                        db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
                         withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
                         withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
                         schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
@@ -607,16 +607,16 @@ function App() {
                         rows
                     };
 
-                    setSwitchboard(() => modulesAutoId({...swb}));
+                    setSwitchboard(() => modulesAutoId({ ...swb }));
 
                     //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
                     //setDocumentTitle(filename);
 
                     setClipboard(null);
                     setClipboardMode(null);
-                    setPrintOptions({...defaultPrintOptions});
+                    setPrintOptions({ ...defaultPrintOptions });
                     setTab(1);
-                    setSubMenus(old => ({...old, printLabelsOpened: false}));
+                    setSubMenus(old => ({ ...old, printLabelsOpened: false }));
                     scrollToProject();
 
                     stats_count('import');
@@ -678,18 +678,18 @@ function App() {
             if (printOptions.pdfOptions.openWindow) form.target = '_blank';
 
             let params = Object.fromEntries(Object.entries({
-                switchboard: {value: JSON.stringify(switchboard)},
-                printOptions: {value: JSON.stringify(printOptions)},
-                tv: {value: JSON.stringify(pkg.version)},
-                auto: {value: printOptions.pdfOptions.autoPrint ? "1" : "0"},
-                schemaGridColor: {value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",")},
-                labelsCutLines: {value: printOptions.pdfOptions.labelsCutLines ? "1" : "0"},
+                switchboard: { value: JSON.stringify(switchboard) },
+                printOptions: { value: JSON.stringify(printOptions) },
+                tv: { value: JSON.stringify(pkg.version) },
+                auto: { value: printOptions.pdfOptions.autoPrint ? "1" : "0" },
+                schemaGridColor: { value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",") },
+                labelsCutLines: { value: printOptions.pdfOptions.labelsCutLines ? "1" : "0" },
             }).map(([key, value]) => {
                 const i = document.createElement("input");
                 i.type = "hidden";
                 i.name = key;
                 i.value = value.value;
-                return [key, {...value, input: form.appendChild(i)}];
+                return [key, { ...value, input: form.appendChild(i) }];
             }));
 
             form.submit();
@@ -717,7 +717,7 @@ function App() {
         // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
         let hasBlankId = false;
         if (!currentModule.id || currentModule.id.trim() === '') {
-            currentModule = {...currentModule, id: lastFreeId};
+            currentModule = { ...currentModule, id: lastFreeId };
             hasBlankId = true;
         }
 
@@ -737,7 +737,7 @@ function App() {
 
         // si le parent du module à éditer est inconnu, on propose celui du module précédent
         if (!currentModule.parentId) {
-            currentModule = {...currentModule, parentId: prevModule?.parentId};
+            currentModule = { ...currentModule, parentId: prevModule?.parentId };
         }
         // edition du module
         setEditor({
@@ -779,7 +779,7 @@ function App() {
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
                 ...old,
-                currentModule: {...old.currentModule, id: ""},
+                currentModule: { ...old.currentModule, id: "" },
                 errors: [...old.errors, "Un identifiant valide est requis."]
             }));
             return;
@@ -788,7 +788,7 @@ function App() {
         if (!(/\w*/.test(text))) {
             setEditor((old) => ({
                 ...old,
-                currentModule: {...old.currentModule, text: ""},
+                currentModule: { ...old.currentModule, text: "" },
                 errors: [...old.errors, "Une description valide est requise."]
             }));
             return;
@@ -797,7 +797,7 @@ function App() {
         if (!(/\w*/.test(desc))) {
             setEditor((old) => ({
                 ...old,
-                currentModule: {...old.currentModule, desc: ""},
+                currentModule: { ...old.currentModule, desc: "" },
                 errors: [...old.errors, "Une description valide est requise."]
             }));
             return;
@@ -833,7 +833,7 @@ function App() {
                 });
             });
 
-            return modulesAutoId({...old, rows});
+            return modulesAutoId({ ...old, rows });
         });
 
         // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
@@ -858,13 +858,13 @@ function App() {
                         }
                         return module;
                     }
-                    return {...module, span: module.span + 1};
+                    return { ...module, span: module.span + 1 };
                 });
 
                 return r.filter((rr) => rr !== null);
             });
 
-            return modulesAutoId({...old, rows});
+            return modulesAutoId({ ...old, rows });
         });
     };
 
@@ -881,15 +881,15 @@ function App() {
 
                         const s = module.span - 1;
                         const h = s <= 1 ? "none" : module.half;
-                        return {...module, span: s, half: h};
+                        return { ...module, span: s, half: h };
                     });
 
-                    r.splice(moduleIndex + 1, 0, {...defaultModule});
+                    r.splice(moduleIndex + 1, 0, { ...defaultModule });
 
                     return r;
                 });
 
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             });
         }
     };
@@ -905,17 +905,17 @@ function App() {
                     let r = row.map((module, j) => {
                         if (j !== moduleIndex) return module;
 
-                        return {...defaultModule, span: 1};
+                        return { ...defaultModule, span: 1 };
                     });
 
                     for (let o = 0; o < currentModule.span - 1; o++) {
-                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                        r.splice(moduleIndex + 1, 0, { ...defaultModule });
                     }
 
                     return r;
                 });
 
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             });
 
         }
@@ -942,7 +942,7 @@ function App() {
         const selected = findThemeByName(name);
         if (selected) {
             setTheme(selected);
-            setSwitchboard((old) => modulesAutoId({...old, theme: selected}));
+            setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
             setTab(1);
 
 
@@ -950,11 +950,11 @@ function App() {
     }
 
     const openProjectPropertiesEditor = () => {
-        setNewProjectProperties(() => ({...defaultProjectProperties}));
+        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
     };
 
     const updateProjectProperties = (data) => {
-        setNewProjectProperties((old) => ({...old, ...data}));
+        setNewProjectProperties((old) => ({ ...old, ...data }));
     };
 
     const handleScrollRight = () => {
@@ -1027,7 +1027,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex);
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             })
         }
     }
@@ -1044,7 +1044,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             })
         }
     }
@@ -1055,7 +1055,7 @@ function App() {
 
         if (!currentModule.free) {
             setClipboard(currentModule);
-            setClipboardMode({rowIndex, moduleIndex, mode});
+            setClipboardMode({ rowIndex, moduleIndex, mode });
         }
     }
 
@@ -1078,7 +1078,7 @@ function App() {
                 let r = row.map((module, j) => {
 
                     if (clipboardMode.mode === 'cut' && i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
-                        return {...defaultModule, span: module.span};
+                        return { ...defaultModule, span: module.span };
                     }
 
                     if (i !== rowIndex) return module;
@@ -1122,7 +1122,7 @@ function App() {
                 // si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
                 if (addLength > 0) {
                     for (let al = 0; al < addLength; al++) {
-                        r.splice(moduleIndex + 1, 0, {...defaultModule});
+                        r.splice(moduleIndex + 1, 0, { ...defaultModule });
                     }
                     addLength = 0;
                 }
@@ -1130,7 +1130,7 @@ function App() {
                 return r;
             });
 
-            return modulesAutoId({...old, rows});
+            return modulesAutoId({ ...old, rows });
         });
 
         setClipboard(null);
@@ -1179,7 +1179,7 @@ function App() {
             rows[rowIndex] = row;
             setSwitchboard((old) => {
                 moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return modulesAutoId({...old, rows});
+                return modulesAutoId({ ...old, rows });
             })
         }
     }
@@ -1225,14 +1225,14 @@ function App() {
         const newRow = createRow(switchboard.stepsPerRows, 1);
         rows.splice(rowIndex + 1, 0, ...newRow);
 
-        setSwitchboard((old) => modulesAutoId({...old, rows}));
+        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
     }
 
     const handleRowDelete = (rowIndex) => {
         let rows = switchboard.rows;
         rows.splice(rowIndex, 1);
 
-        setSwitchboard((old) => modulesAutoId({...old, rows}));
+        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
     }
 
     const rowAddAllowed = () => {
@@ -1274,13 +1274,13 @@ function App() {
     }
 
     const getModuleById2 = (moduleId) => {
-        let indexes = {row: -1, module: -1};
-        let m = {module: null, indexes};
+        let indexes = { row: -1, module: -1 };
+        let m = { module: null, indexes };
 
         switchboard.rows.forEach((row, ri) => {
             row.forEach((module, mi) => {
                 if (!m.module && module.id === moduleId && !module.free) {
-                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                    m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
                 }
             })
         });
@@ -1304,7 +1304,7 @@ function App() {
             const e_error = `La norme NFC 15-100 impose un minimum de 20% d'emplacements libres. Vous occupez ${used} module${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre).`;
             if (!e_errors.includes(e_error)) e_errors.push(e_error);
         }
-        if (e_errors.length > 0) result = {...result, errors: {...result.errors, Enveloppe: e_errors}};
+        if (e_errors.length > 0) result = { ...result, errors: { ...result.errors, Enveloppe: e_errors } };
 
         return result;
     }, [switchboard.rows, switchboard.switchboardMonitor]);
@@ -1447,10 +1447,10 @@ function App() {
                 <div className="button_group-separator"></div>
 
                 <button className={`button_group-new_project active`.trim()}
-                        onClick={() => {
-                            setWelcome(true);
-                        }} title="Créer un nouveau projet">
-                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName}/>
+                    onClick={() => {
+                        setWelcome(true);
+                    }} title="Créer un nouveau projet">
+                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
                     <span className={'responsive'}>Projets...</span>
                 </button>
 
@@ -1458,7 +1458,7 @@ function App() {
 
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }} style={{visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px'}}/>
+                }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
                 {/*<label htmlFor="importfile" className="button_group-import_project"
                        title="Importer un projet existant">
                     <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"}
@@ -1469,69 +1469,69 @@ function App() {
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();
                 }} title="Exporter...">
-                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"}/>
+                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
                     <span>Exporter</span>
                 </button>
 
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
-                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"}/>
+                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
                         <div className="dropdown_item head"
-                             title="Imprimer la page de garde">
+                            title="Imprimer la page de garde">
                             <input id="print_firstPage" name="print_firstPage" type="checkbox"
-                                   checked={printOptions.firstPage}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       firstPage: e.target.checked
-                                   }))}/>
+                                checked={printOptions.firstPage}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    firstPage: e.target.checked
+                                }))} />
                             <label htmlFor="print_firstPage">Page de garde</label>
                         </div>
                         <div className="dropdown_item head parent" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
-                                   checked={printOptions.labels}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       labels: e.target.checked
-                                   }))}/>
+                                checked={printOptions.labels}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    labels: e.target.checked
+                                }))} />
                             <label htmlFor="print_labels">Etiquettes</label>
                             {printOptions.labels &&
                                 <img src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon} width={16}
-                                     height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
-                                    ...old,
-                                    printLabelsOpened: !old.printLabelsOpened
-                                }))}/>}
+                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
+                                        ...old,
+                                        printLabelsOpened: !old.printLabelsOpened
+                                    }))} />}
                         </div>
                         {subMenus.printLabelsOpened && printOptions.labels && <>
                             <div className="dropdown_item"
-                                 title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
+                                title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
                                 <input id="print_free" name="print_free" type="checkbox"
-                                       checked={printOptions.freeModules}
-                                       onChange={(e) => setPrintOptions((old) => ({
-                                           ...old,
-                                           freeModules: e.target.checked
-                                       }))} disabled={!printOptions.labels}/>
+                                    checked={printOptions.freeModules}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        freeModules: e.target.checked
+                                    }))} disabled={!printOptions.labels} />
                                 <label htmlFor="print_free">Décorer les emplacements libres</label>
                             </div>
                             <div className="dropdown_item"
-                                 title="Imprimer les lignes de coupe pour cisailles et massicots">
+                                title="Imprimer les lignes de coupe pour cisailles et massicots">
                                 <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
-                                       checked={printOptions.pdfOptions.labelsCutLines}
-                                       onChange={(e) => setPrintOptions((old) => ({
-                                           ...old,
-                                           pdfOptions: {...old.pdfOptions, labelsCutLines: e.target.checked}
-                                       }))} disabled={!printOptions.labels}/>
+                                    checked={printOptions.pdfOptions.labelsCutLines}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, labelsCutLines: e.target.checked }
+                                    }))} disabled={!printOptions.labels} />
                                 <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
                             </div>
-                            <div className="dropdown_item" style={{marginBottom: '1em'}}
-                                 title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
+                            <div className="dropdown_item" style={{ marginBottom: '1em' }}
+                                title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
                                 <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
-                                       checked={printOptions.pdfOptions.printCurrents}
-                                       onChange={(e) => setPrintOptions((old) => ({
-                                           ...old,
-                                           pdfOptions: {...old.pdfOptions, printCurrents: e.target.checked}
-                                       }))} disabled={!printOptions.labels}/>
+                                    checked={printOptions.pdfOptions.printCurrents}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, printCurrents: e.target.checked }
+                                    }))} disabled={!printOptions.labels} />
                                 <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour
                                     aider à
                                     leur installation</label>
@@ -1540,11 +1540,11 @@ function App() {
 
                         <div className="dropdown_item head" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
-                                   checked={printOptions.schema}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       schema: e.target.checked
-                                   }))}/>
+                                checked={printOptions.schema}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    schema: e.target.checked
+                                }))} />
                             <label htmlFor="print_schema">Schéma unifilaire</label>
                         </div>
                         {/*<div className="dropdown_item"
@@ -1560,33 +1560,33 @@ function App() {
 
                         <div className="dropdown_item head" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
-                                   checked={printOptions.summary}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       summary: e.target.checked
-                                   }))}/>
+                                checked={printOptions.summary}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    summary: e.target.checked
+                                }))} />
                             <label htmlFor="print_summary">Nomenclature</label>
                         </div>
 
                         <div className="dropdown_separator"></div>
                         <div className="dropdown_item head"
-                             title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
+                            title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
                             <input id="print_pdf_openWindow" name="print_pdf_openWindow" type="checkbox"
-                                   checked={printOptions.pdfOptions.openWindow}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, openWindow: e.target.checked}
-                                   }))}/>
+                                checked={printOptions.pdfOptions.openWindow}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    pdfOptions: { ...old.pdfOptions, openWindow: e.target.checked }
+                                }))} />
                             <label htmlFor="print_pdf_openWindow">Ouvrir le document dans un nouvel onglet</label>
                         </div>
                         <div className="dropdown_item head"
-                             title="Ouvrir automatiquement les propriétés d'impressions">
+                            title="Ouvrir automatiquement les propriétés d'impressions">
                             <input id="print_pdf_autoPrint" name="print_pdf_autoPrint" type="checkbox"
-                                   checked={printOptions.pdfOptions.autoPrint}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, autoPrint: e.target.checked}
-                                   }))}/>
+                                checked={printOptions.pdfOptions.autoPrint}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    pdfOptions: { ...old.pdfOptions, autoPrint: e.target.checked }
+                                }))} />
                             <label htmlFor="print_pdf_autoPrint">Ouvrir automatiquement les propriétés
                                 d&#39;impressions</label>
                         </div>
@@ -1607,7 +1607,7 @@ function App() {
                 <button className="button_group-clear_project" onClick={() => {
                     if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
                 }} title="Réinitialiser le projet">
-                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"}/>
+                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
                     <span>Réinitialiser</span>
                 </button>
 
@@ -1619,7 +1619,7 @@ function App() {
             {/** PROJECT TITLE **/}
 
             <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
-                <img src={projectIcon} width={24} height={24} alt="Projet courant"/>
+                <img src={projectIcon} width={24} height={24} alt="Projet courant" />
                 <ContentEditable
                     value={switchboard.prjname ?? defaultProjectName}
                     onChange={(value) => {
@@ -1644,19 +1644,19 @@ function App() {
 
             <ul className="project">
                 <li title="Révision">
-                    <img src={versionIcon} alt="Révision" width={16} height={16}/>
+                    <img src={versionIcon} alt="Révision" width={16} height={16} />
                     <span>Révision {switchboard.prjversion ?? 1}</span>
                 </li>
                 <li title="Description">
-                    <img src={infoIcon} alt="Description" width={16} height={16}/>
+                    <img src={infoIcon} alt="Description" width={16} height={16} />
                     <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
                 </li>
                 <li title="Date de création">
-                    <img src={createdIcon} alt="Date de création" width={16} height={16}/>
+                    <img src={createdIcon} alt="Date de création" width={16} height={16} />
                     <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
                 </li>
                 <li title="Date de modification">
-                    <img src={updatedIcon} alt="Date de modification" width={16} height={16}/>
+                    <img src={updatedIcon} alt="Date de modification" width={16} height={16} />
                     <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
                 </li>
             </ul>
@@ -1665,18 +1665,18 @@ function App() {
 
             <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()}
-                     onClick={() => setTab(1)}>
-                    <img src={projectIcon} width={20} height={20} alt="Etiquettes"/>
+                    onClick={() => setTab(1)}>
+                    <img src={projectIcon} width={20} height={20} alt="Etiquettes" />
                     <span>Etiquettes</span>
                 </div>
                 <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()}
-                     onClick={() => setTab(2)}>
-                    <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire"/>
+                    onClick={() => setTab(2)}>
+                    <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire" />
                     <span>Schéma</span>
                 </div>
                 <div className={`tabPages_page ${tab === 3 ? 'selected' : ''}`.trim()}
-                     onClick={() => setTab(3)}>
-                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature"/>
+                    onClick={() => setTab(3)}>
+                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
                     <span>Nomenclature</span>
                 </div>
             </nav>
@@ -1685,12 +1685,12 @@ function App() {
 
             {/** SWITCHBOARD TAB **/}
             <div ref={switchboardRef}
-                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
-                 title={freeSpaceMessage}>
+                className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
+                title={freeSpaceMessage}>
                 <div className="tabPageBand notprintable">
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                            <span style={{fontSize: 'smaller', lineHeight: 1.2}}>Thème<br/>courant:</span>
+                            <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Thème<br />courant:</span>
                         </div>
                         <div className="tabPageBandCol">
                             <select
@@ -1707,43 +1707,43 @@ function App() {
                                 }}
                                 disabled={UIFrozen}
                             >
-                                {Object.entries(Object.groupBy(themesList, (({group}) => group))).map((e) => {
+                                {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
                                     const g = e[0];
                                     const l = e[1];
                                     return <Fragment key={`themes_${g}`}>
                                         <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
                                         {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`}
-                                                              value={t.name}>({g}) {t.title}</option>)}
+                                            value={t.name}>({g}) {t.title}</option>)}
                                     </Fragment>
                                 })}
                             </select>
                         </div>
                         {theme.name.startsWith('custom') && theme?.data && <div className="tabPageBandCol">
-                            <button style={{height: '34px'}}
-                                    title="Modifier le thème."
-                                    onClick={() => {
-                                        setThemeEditor(true)
-                                    }}>
+                            <button style={{ height: '34px' }}
+                                title="Modifier le thème."
+                                onClick={() => {
+                                    setThemeEditor(true)
+                                }}>
                                 <img src={themeSettingsIcon} alt="Modifier le thème."
-                                     width={22} height={22}/>
+                                    width={22} height={22} />
                             </button>
                         </div>}
                     </div>
 
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                                    <span style={{
-                                        fontSize: 'smaller',
-                                        lineHeight: 1.2
-                                    }}>Hauteur des<br/>étiquettes:</span>
+                            <span style={{
+                                fontSize: 'smaller',
+                                lineHeight: 1.2
+                            }}>Hauteur des<br />étiquettes:</span>
                         </div>
                         <div className="tabPageBandCol">
                             <input type="range" min={heightMin} max={heightMax} step={1}
-                                   style={{width: '100px'}}
-                                   value={switchboard.height} onChange={(e) => {
-                                const value = parseInt(e.target.value);
-                                if (value >= heightMin) setSwitchboard((old) => ({...old, height: value}));
-                            }}/>
+                                style={{ width: '100px' }}
+                                value={switchboard.height} onChange={(e) => {
+                                    const value = parseInt(e.target.value);
+                                    if (value >= heightMin) setSwitchboard((old) => ({ ...old, height: value }));
+                                }} />
                         </div>
                         <div className="tabPageBandCol">
                             <span>{switchboard.height}mm</span>
@@ -1752,10 +1752,10 @@ function App() {
 
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                                    <span style={{
-                                        fontSize: 'smaller',
-                                        lineHeight: 1.2
-                                    }}>Largeur des<br/>étiquettes:</span>
+                            <span style={{
+                                fontSize: 'smaller',
+                                lineHeight: 1.2
+                            }}>Largeur des<br />étiquettes:</span>
                         </div>
                         <div className="tabPageBandCol">
                             <select
@@ -1789,25 +1789,25 @@ function App() {
 
                     <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                            <button style={{height: '34px'}}
-                                    title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                                    onClick={() => reassignModules()}>
+                            <button style={{ height: '34px' }}
+                                title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+                                onClick={() => reassignModules()}>
                                 <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants"
-                                     width={22} height={22}/>
+                                    width={22} height={22} />
                             </button>
                         </div>
                         <div className="tabPageBandCol">
                             <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice"
-                                   checked={switchboard.switchboardMonitor}
-                                   onChange={() => setSwitchboard((old) => ({
-                                       ...old,
-                                       switchboardMonitor: !old.switchboardMonitor
-                                   }))}/>
+                                checked={switchboard.switchboardMonitor}
+                                onChange={() => setSwitchboard((old) => ({
+                                    ...old,
+                                    switchboardMonitor: !old.switchboardMonitor
+                                }))} />
                             <label htmlFor="switchboardMonitorChoice"
-                                   title="Conseils et Surveillance (NFC 15-100)"
-                                   className={`${monitor.errors ? 'error' : ''}`}>
+                                title="Conseils et Surveillance (NFC 15-100)"
+                                className={`${monitor.errors ? 'error' : ''}`}>
                                 <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon}
-                                     alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24}/>
+                                    alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24} />
                             </label>
                         </div>
                         {switchboard.switchboardMonitor && (
@@ -1816,9 +1816,9 @@ function App() {
                                     ? <>
                                         <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
                                         <img src={info2Icon} alt="Détails des erreurs"
-                                             title="Détails des erreurs" width={16} height={16}
-                                             style={{cursor: 'pointer', padding: '4px'}}
-                                             onClick={() => setMonitorOpened(old => !old)}/>
+                                            title="Détails des erreurs" width={16} height={16}
+                                            style={{ cursor: 'pointer', padding: '4px' }}
+                                            onClick={() => setMonitorOpened(old => !old)} />
                                     </>
                                     : <span>Aucune erreur détectée.</span>
                                 }
@@ -1829,9 +1829,9 @@ function App() {
 
                 {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
                     <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
-                         onBlur={() => setMonitorOpened(false)}>
+                        onBlur={() => setMonitorOpened(false)}>
                         <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
-                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"}/>
+                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
                         </div>
                         <div className="tabPageBandCol" style={{
                             height: 'max-content',
@@ -1845,7 +1845,7 @@ function App() {
                                         <ul>
                                             {errors.map((error, j) => <li key={j} className="tabPageError">
                                                 <img src={`${import.meta.env.BASE_URL}schema_warning.svg`}
-                                                     alt="Erreurs" width={16} height={16}/>
+                                                    alt="Erreurs" width={16} height={16} />
                                                 <span>{error}</span>
                                             </li>)}
                                         </ul>
@@ -1861,7 +1861,7 @@ function App() {
                         key={i}
                         rowIndex={i}
                         rowPosition={i + 1}
-                        items={row.map((m) => ({...defaultModule, ...m}))}
+                        items={row.map((m) => ({ ...defaultModule, ...m }))}
                         stepsPerRows={switchboard.stepsPerRows}
                         theme={theme}
                         clipboard={clipboard}
@@ -1953,7 +1953,7 @@ function App() {
                 rowsMin={rowsMin}
                 rowsMax={rowsMax}
                 heightMin={heightMin}
-                heightMax={{heightMax}}
+                heightMax={{ heightMax }}
                 onCreateProject={createProject}
                 onUpdateProjectProperties={updateProjectProperties}
             />}
@@ -1961,7 +1961,7 @@ function App() {
             {welcome && <WelcomePopup
                 onCancel={() => setWelcome(false)}
                 onNewProject={() => {
-                    setNewProjectProperties(() => ({...defaultProjectProperties}));
+                    setNewProjectProperties(() => ({ ...defaultProjectProperties }));
                     setWelcome(false);
                 }}
                 onImportProject={() => {
@@ -1979,7 +1979,7 @@ function App() {
                 onCancel={() => setThemeEditor(false)}
                 onApply={(editedTheme) => {
                     setTheme(editedTheme);
-                    setSwitchboard((old) => modulesAutoId({...old, theme: editedTheme}));
+                    setSwitchboard((old) => modulesAutoId({ ...old, theme: editedTheme }));
                     setThemeEditor(false);
 
 
