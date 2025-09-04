@@ -143,6 +143,7 @@ function App() {
         coef: 0.5,
         pole: "",
         wire: "",
+        grp: "",
         parentId: "",
         kcId: "",
         free: true,
@@ -169,6 +170,7 @@ function App() {
             kcId: "",
             pole: "1P+N",
             wire: "16",
+            grp: "",
             sensibility: "500mA",
             coef: 1,
             span: 4,
@@ -568,8 +570,12 @@ function App() {
                             // <=2.0.3 : add half module size
                             if (!nm.half) nm = { ...nm, half: "none" };
 
-                            // <=2.2.3 : add modtype property
+                            // <=2.2.3 : add modtype and wire property
                             if (!nm.modtype) nm = { ...nm, modtype: "" };
+                            if (!nm.wire) nm = { ...nm, wire: "" };
+
+                            // <=2.2.4 : add grp property
+                            if (!nm.grp) nm = { ...nm, grp: "" };
 
                             return nm;
                         });
@@ -775,6 +781,7 @@ function App() {
         const coef = data.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
         const wire = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.wire ?? "") : "").trim();
+        const grp = (data.currentModule.grp ?? "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -829,6 +836,7 @@ function App() {
                         coef,
                         pole,
                         wire,
+                        grp,
                     };
                 });
             });
@@ -1114,6 +1122,7 @@ function App() {
                         coef: clipboard.coef,
                         pole: clipboard.pole,
                         wire: clipboard.wire,
+                        grp: clipboard.grp,
                     };
                 });
 
