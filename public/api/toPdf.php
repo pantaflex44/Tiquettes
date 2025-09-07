@@ -1132,7 +1132,7 @@ class TiquettesPDF extends FPDF
                 if ($pole !== '') $this->Image($pole, $centerX - (2.9104166667 / 2), $this->grid[$this->gridOrientation]['bottom'] - 25, 2.9104166667, 0, 'PNG');
             }
 
-            if (isset($module->wire) && is_string($module->wire) && trim($module->wire) !== "") {
+            if (isset($module->wire) && is_string($module->wire) && trim($module->wire) !== "" && trim($module->wire) !== "?") {
                 $this->SetTextColor(0, 0, 0);
                 $this->SetFont('Arial', '', 5.5);
                 $this->TextWithDirection($centerX - 2.5, $this->grid[$this->gridOrientation]['bottom'] - 20.5, str($module->wire . " mm²"), 'U');

@@ -1,7 +1,7 @@
 {
     "name": "tiquettes",
     "title": "Tiquettes",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
     "keywords": [
         "tableau",
@@ -25,42 +25,44 @@
     "type": "module",
     "scripts": {
         "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\"",
-        "predev": "concurrently \"npm run copies\"",
+        "predev": "concurrently \"node ./extract-version.cjs\" \"npm run copies\"",
         "dev": "cross-env NODE_ENV=dev concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
-        "prebuild": "concurrently \"npm run copies\"",
+        "prebuild": "concurrently \"node ./extract-version.cjs\" \"npm run copies\"",
         "build": "cross-env NODE_ENV=ghpages vite build --mode ghpages",
-        "prebuild:web": "concurrently \"npm run copies\"",
+        "prebuild:web": "concurrently \"node ./extract-version.cjs\" \"npm run copies\"",
         "build:web": "cross-env NODE_ENV=web vite build --mode web",
-        "prebuild:dev": "concurrently \"npm run copies\"",
+        "prebuild:dev": "concurrently \"node ./extract-version.cjs\" \"npm run copies\"",
         "build:dev": "cross-env NODE_ENV=dev vite build --mode dev",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
     },
     "dependencies": {
+        "@vite-pwa/assets-generator": "^1.0.0",
         "compare-versions": "^6.1.1",
+        "cpx": "^1.5.0",
         "cpx2": "^8.0.0",
         "process": "^0.11.10",
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
         "sanitize-filename": "^1.6.3",
-        "sharp": "^0.34.1",
-        "use-debounce": "^10.0.4"
+        "sharp": "^0.34.3",
+        "use-debounce": "^10.0.6",
+        "vite-plugin-pwa": "^1.0.3"
     },
     "devDependencies": {
-        "@types/react": "^19.1.2",
-        "@types/react-dom": "^19.1.2",
-        "@vite-pwa/assets-generator": "^1.0.0",
-        "@vitejs/plugin-react": "^4.4.1",
-        "concurrently": "^9.1.2",
-        "cross-env": "^7.0.3",
-        "eslint": "^9.25.1",
+        "@types/react": "^19.1.12",
+        "@types/react-dom": "^19.1.9",
+        "@vitejs/plugin-react": "^5.0.2",
+        "concurrently": "^9.2.1",
+        "cross-env": "^10.0.0",
+        "eslint": "^9.34.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-react-refresh": "^0.4.20",
-        "vite": "6.3.3",
+        "react-error-overlay": "^6.0.9",
+        "vite": "^7.1.4",
         "vite-plugin-open-graph": "^2.0.6",
-        "vite-plugin-pwa": "^1.0.0",
-        "vite-plugin-sitemap": "^0.7.1"
+        "vite-plugin-sitemap": "^0.8.2"
     }
 }

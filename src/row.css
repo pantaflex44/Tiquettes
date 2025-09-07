@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
     Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
     Copyright (C) 2024-2025 Christophe LEMOINE
@@ -89,3 +90,123 @@
     filter: grayscale(1) opacity(0.5);
     pointer-events: none;
 }
+=======
+/**
+    Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+    Copyright (C) 2024-2025 Christophe LEMOINE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.row {
+    border: 1px solid darkgray;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: start;
+    align-items: start;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+}
+
+.row_title {
+    color: black;
+    font-size: smaller;
+    margin-bottom: 40px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+    column-gap: 0.75em;
+    font-weight: bold;
+}
+
+.row_add {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+    column-gap: 1em;
+}
+
+.row_add_icon {
+    cursor: pointer;
+}
+
+.row_action_line {
+    height: 1px;
+    border-top: 1px dotted var(--primary-color);
+    width: 100%;
+}
+
+.row_add.disabled {
+    filter: grayscale() opacity(0.3);
+    pointer-events: none;
+}
+
+.row_add .row_add_info {
+    font-size: small;
+    text-wrap: nowrap;
+    color: var(--primary-color);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.row_delete_icon {
+    cursor: pointer;
+}
+
+.row_delete_icon.disabled {
+    filter: grayscale() opacity(0.5);
+    pointer-events: none;
+}
+
+@media print {
+    .row {
+        width: calc(100% - 10mm);
+        border: 0;
+        border-left: 1px solid lightgray;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+        row-gap: 5mm;
+        justify-content: start;
+        align-items: start;
+    }
+
+    .row_title {
+        margin-bottom: 0;
+        font-weight: normal;
+        color: darkgray;
+    }
+
+    .row_add, .row_delete_icon {
+        display: none;
+    }
+
+
+}
+>>>>>>> dev
