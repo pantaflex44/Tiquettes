@@ -57,7 +57,9 @@ export default function Main() {
                 'https://www.tiquettes.fr/app/?enjoy',
                 'https://www.tiquettes.fr/app/?new',
                 'https://www.tiquettes.fr/app/?test',
-                'https://www.tiquettes.fr/app/api/toPdf.php'
+                'https://www.tiquettes.fr/app/api/toPdf.php',
+                'https://www.tiquettes.fr/app/infos.json',
+                'https://www.tiquettes.fr/dev/infos.json'
             ].includes(origin)) {
                 window.location.replace("https://www.tiquettes.fr/app/?enjoy");
             }
