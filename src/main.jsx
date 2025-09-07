@@ -20,7 +20,7 @@ import {useEffect} from 'react'
 import ReactDOM from 'react-dom/client'
 
 import App from './App.jsx'
-
+ 
 import './main.css';
 import * as pkg from '../package.json';
 import UserProvider from "./UserProvider.jsx";
