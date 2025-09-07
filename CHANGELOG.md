@@ -1,6 +1,17 @@
 # Changelog
 
 
+## [2.2.4] - 2025-09-07
+
+### Corrections
+
+- Correction d'un bug rendant obligatoire la définition de la section des conducteurs affiliés à chaque module.  3 nouvelles possibilité:
+    -   Détection automatique : défini automatiquement la section en fonction du calibre
+    -   Inconnue : pas de section définie
+    -   Xmm² : définition arbitraire
+
+
+
 ## [2.2.3] - 2025-08-25
 
 ### Ajouts
