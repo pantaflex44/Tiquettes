@@ -2,13 +2,20 @@
     "name": "tiquettes",
     "title": "Tiquettes",
     "version": "2.2.4",
+    "date": {
+        "year": 2025,
+        "month": 9,
+        "day": 7
+    },
     "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
     "keywords": [
+        "étiquette",
+        "schéma",
         "tableau",
         "armoire",
         "électrique",
         "électricité",
-        "étiquette",
+        "unifilaire",
         "créer",
         "générateur",
         "schneider",
