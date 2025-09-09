@@ -45,8 +45,11 @@ function Footer() {
 
 export default function Main() {
     useEffect(() => {
+        const origin = window.location.origin.toLowerCase().trim();
+
+        console.log(origin);
+
         if (import.meta.env.VITE_APP_MODE !== "development") {
-            const origin = window.location.origin.toLowerCase().trim();
             if (![
                 'https://tiquettes.fr',
                 'https://www.tiquettes.fr',

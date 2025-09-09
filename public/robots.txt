@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Allow: /Tiquettes/
 Allow: /app/
+Allow: /app/infos.json

@@ -1371,6 +1371,7 @@ function App() {
     }, [monitorOpened]);
 
     useEffect(() => {
+
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
