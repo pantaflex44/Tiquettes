@@ -55,7 +55,7 @@ const infos = {
 writeFile("./public/infos.json", infos);
 
 
-let changelog = `# ChangeLog ${nowFull}\n\n`;
+let changelog = `# ChangeLog\n\n`;
 
 function printChangeLogAction(action) {
     if (action.text) {
