@@ -1,1 +1,10 @@
-{"name":"Tiquettes","version":"2.2.4","description":"Générateur d'étiquettes pour tableaux et armoires électriques.","date":"2025-09-07"}
+{
+    "name": "Tiquettes",
+    "version": "2.2.4",
+    "date": "2025-09-07",
+    "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
+    "license": "AGPL-3.0",
+    "author": "Christophe LEMOINE",
+    "repository": "https://github.com/pantaflex44/Tiquettes",
+    "homepage": "https://www.tiquettes.fr/app/"
+}
