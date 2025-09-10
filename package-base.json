@@ -2,7 +2,7 @@
     "name": "tiquettes",
     "title": "Tiquettes",
     "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
-    "version": "",
+    "version": "2.2.4",
     "keywords": [
         "étiquette",
         "schéma",
@@ -26,19 +26,21 @@
     },
     "type": "module",
     "scripts": {
+        "compile": "concurrently \"node ./app-config-compiler.cjs\"",
         "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\"",
-        "prepare": "concurrently \"node ./app-config-compiler.cjs\" \"npm run copies\"",
         "predev": "concurrently \"npm run copies\"",
         "dev": "cross-env NODE_ENV=dev concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
-        "prebuild": "concurrently \"npm run prepare\"",
+        "prebuild": "concurrently \"npm run copies\"",
         "build": "cross-env NODE_ENV=ghpages vite build --mode ghpages",
-        "prebuild:web": "concurrently \"npm run prepare\"",
+        "prebuild:web": "concurrently \"npm run copies\"",
         "build:web": "cross-env NODE_ENV=web vite build --mode web",
-        "prebuild:dev": "concurrently \"npm run prepare\"",
+        "prebuild:dev": "concurrently \"npm run copies\"",
         "build:dev": "cross-env NODE_ENV=dev vite build --mode dev",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --port 8080",
-        "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg"
+        "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
+        "gitpush:dev": "func() { git checkout dev && npm run compile && git add . && git commit -m \"$1\" && git push origin dev; }; func",
+        "gitmerge:main": "func() { git checkout main && git merge dev -m \"Merge branch dev\" && git push origin main && git checkout dev; }; func"
     },
     "dependencies": {
         "@vite-pwa/assets-generator": "^1.0.0",
