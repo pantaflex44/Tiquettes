@@ -1,8 +1,9 @@
 let now = new Date(Date.now());
 const offset = now.getTimezoneOffset();
 now = new Date(now.getTime() - (offset * 60 * 1000));
-now = now.toISOString().split('T')[0];
-console.log(`[${now}] App config compilation...`);
+let nowFull = now.toISOString();
+now = nowFull.split('T')[0];
+console.log(`[${nowFull}] App config compilation...`);
 
 const fs = require("fs");
 function writeFile(filepath, data) {
@@ -54,7 +55,7 @@ const infos = {
 writeFile("./public/infos.json", infos);
 
 
-let changelog = "# ChangeLog\n\n";
+let changelog = `# ChangeLog - Build ${version} Update ${nowFull}\n\n`;
 
 function printChangeLogAction(action) {
     if (action.text) {
@@ -69,7 +70,7 @@ function printChangeLogAction(action) {
             }
             changelog += ` `;
         }
-        
+
         changelog += `${action.text}`;
     }
 }
