@@ -485,7 +485,7 @@ class TiquettesPDF extends FPDF
         global $isDev;
 
         if (!str_starts_with(trim($svgContent), "<?xml"))
-            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + trim($svgContent);
+            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
 
         if ($this->required['modules']['php_imagick'] === true && !$isDev) {
             $image = new Imagick();
