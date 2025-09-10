@@ -39,7 +39,8 @@
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
-        "gitpush:dev": "func() { git checkout dev && npm run compile && git add . && git commit -m \"$1\" && git push origin dev; }; func"
+        "gitpush:dev": "func() { git checkout dev && npm run compile && git add . && git commit -m \"$1\" && git push origin dev; }; func",
+        "gitmerge:main": "func() { git checkout main && git merge dev -m \"Merge branch dev\" && git push origin main && git checkout dev; }; func"
     },
     "dependencies": {
         "@vite-pwa/assets-generator": "^1.0.0",
