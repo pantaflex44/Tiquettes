@@ -1,80 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="1000mm"
-   height="1000mm"
-   viewBox="0 0 64 64"
-   version="1.1"
-   id="svg242"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="swb_microonde.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview244"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.18752455"
-     inkscape:cx="1367.8209"
-     inkscape:cy="1831.7601"
-     inkscape:window-width="1862"
-     inkscape:window-height="1011"
-     inkscape:window-x="58"
-     inkscape:window-y="32"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs239" />
-  <g
-     inkscape:label="Calque 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:5.75999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
-       id="rect415"
-       width="50.865059"
-       height="34.218159"
-       x="6.4637661"
-       y="16.350313" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:4.01539;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
-       d="M 41.983346,16.886114 V 50.014253 Z"
-       id="path1088" />
-    <circle
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
-       id="path1910"
-       cx="49.362965"
-       cy="24.600628"
-       r="2.6988966" />
-    <circle
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
-       id="path1910-3"
-       cx="49.394791"
-       cy="30.62501"
-       r="2.6988966" />
-    <circle
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
-       id="path1910-3-6"
-       cx="49.49115"
-       cy="40.205658"
-       r="2.6988966" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1"
-       d="m 15.441065,27.181781 c 0,0 1.017801,4.33329 6.703023,4.440647 C 27.829309,31.729786 25.026003,25.453 33.904575,25.453"
-       id="path2701" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1"
-       d="m 15.342614,37.725098 c 0,0 1.017801,4.33329 6.703023,4.440647 5.685221,0.107358 2.881915,-6.169428 11.760487,-6.169428"
-       id="path2701-5" />
-  </g>
+<svg width="1000" height="1000" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <path style="fill:none;stroke:#000;stroke-width:5.75999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M6.464 16.35h50.865v34.218H6.464z"/>
+    <path style="fill:none;stroke:#000;stroke-width:4.01539;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M41.983 16.886v33.128Z"/>
+    <circle style="fill:#000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" cx="49.363" cy="24.601" r="2.699"/>
+    <circle style="fill:#000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" cx="49.395" cy="30.625" r="2.699"/>
+    <circle style="fill:#000;fill-opacity:1;stroke:none;stroke-width:41.5542;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" cx="49.491" cy="40.206" r="2.699"/>
+    <path style="fill:none;fill-opacity:1;stroke:#000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1" d="M15.441 27.182s1.018 4.333 6.703 4.44c5.685.108 2.882-6.169 11.76-6.169M15.343 37.725s1.017 4.333 6.703 4.44c5.685.108 2.882-6.169 11.76-6.169"/>
 </svg>
