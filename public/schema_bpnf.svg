@@ -7,7 +7,7 @@
    viewBox="0 0 18.518519 26.455027"
    version="1.1"
    id="svg5"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="schema_bpnf.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -25,12 +25,12 @@
      inkscape:document-units="px"
      showgrid="true"
      inkscape:zoom="0.71290646"
-     inkscape:cx="170.42909"
-     inkscape:cy="537.93874"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:cx="251.08483"
+     inkscape:cy="529.52248"
+     inkscape:window-width="1862"
+     inkscape:window-height="1011"
+     inkscape:window-x="58"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -49,20 +49,12 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#000000;stroke-width:0.228806"
+       style="fill:#000000;stroke-width:0.232814"
        id="rect218"
        width="0.26458332"
-       height="8.0469694"
+       height="8.3313675"
        x="9.1305103"
        y="6.7515571e-10" />
-    <rect
-       style="fill:#000000;stroke-width:0.186921"
-       id="rect218-9"
-       width="0.26458332"
-       height="5.3705091"
-       x="7.7790055"
-       y="-9.3848667"
-       transform="rotate(90)" />
     <rect
        style="fill:#000000;stroke-width:0.235271;stroke-dasharray:none"
        id="rect218-3"
@@ -79,12 +71,16 @@
        y="8.7157831"
        transform="matrix(0.89063881,-0.45471147,0.5466923,0.83733358,0,0)" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:0.264567;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       d="M 3.4390536,12.120118 H 2.6612546 V 8.9834203 h 0.777799"
-       id="path9604" />
-    <path
        style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:0.793749, 0.793749;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        d="M 2.6702435,10.508701 H 6.5033352"
        id="path9606" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.23526456;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
+       d="M 4.000863,9.0325816 H 2.4821107 v 2.9656814 h 1.498293"
+       id="path2171" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.235265;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100"
+       d="M 9.2627195,8.3049384 H 3.9815974"
+       id="path3762" />
   </g>
 </svg>

@@ -688,6 +688,7 @@ function App() {
                 printOptions: { value: JSON.stringify(printOptions) },
                 tv: { value: JSON.stringify(pkg.version) },
                 auto: { value: printOptions.pdfOptions.autoPrint ? "1" : "0" },
+                isDev: { value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0" },
                 schemaGridColor: { value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",") },
                 labelsCutLines: { value: printOptions.pdfOptions.labelsCutLines ? "1" : "0" },
             }).map(([key, value]) => {

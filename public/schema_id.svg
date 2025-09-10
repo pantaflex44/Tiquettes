@@ -7,7 +7,7 @@
    viewBox="0 0 18.518519 26.455027"
    version="1.1"
    id="svg5"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="schema_id.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,15 +24,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="2.1719924"
-     inkscape:cx="348.75813"
-     inkscape:cy="359.34748"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:zoom="1"
+     inkscape:cx="349"
+     inkscape:cy="507.5"
+     inkscape:window-width="1862"
+     inkscape:window-height="1011"
+     inkscape:window-x="58"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     showguides="true">
     <inkscape:grid
        type="xygrid"
        id="grid88"
@@ -41,6 +42,16 @@
        spacingy="1"
        spacingx="1"
        units="px" />
+    <sodipodi:guide
+       position="8.0423283,8.4391536"
+       orientation="0,-1"
+       id="guide3435"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="6.851852,5.5026456"
+       orientation="0,-1"
+       id="guide3437"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <defs
      id="defs2" />
@@ -49,40 +60,40 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#000000;stroke-width:0.207275"
+       style="fill:#000000;stroke-width:0.20960318;stroke-dasharray:none"
        id="rect218"
        width="0.26458332"
-       height="6.6037803"
+       height="6.7533731"
        x="9.1305103"
-       y="6.7515571e-10" />
+       y="0.043068446" />
     <rect
-       style="fill:#000000;stroke-width:0.235271;stroke-dasharray:none"
+       style="fill:#000000;stroke-width:0.20960318;stroke-dasharray:none"
        id="rect218-3"
        width="0.26458332"
        height="11.944268"
        x="9.0924053"
        y="14.528446" />
+    <rect
+       style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:0.235727;stroke-opacity:1"
+       id="rect1148"
+       width="0.25727138"
+       height="8.5081558"
+       x="-0.39760515"
+       y="8.7157831"
+       transform="matrix(0.89063881,-0.45471147,0.5466923,0.83733358,0,0)" />
     <circle
        style="fill:#fdfdfd;fill-opacity:1;stroke:#0a0a0a;stroke-width:0.264583;stroke-opacity:1"
        id="path380"
-       cx="9.259716"
-       cy="6.5894718"
+       cx="9.2820206"
+       cy="7.4053874"
        r="0.55988979" />
-    <rect
-       style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:0.253139;stroke-opacity:1"
-       id="rect1148"
-       width="0.26824394"
-       height="9.4101744"
-       x="0.5304293"
-       y="7.8750744"
-       transform="matrix(0.86699798,-0.49831165,0.50169026,0.86504733,0,0)" />
     <path
-       id="rect1462"
-       style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-       d="m 5.1498026,17.140326 v 0.0072 a 1.1804246,1.5483882 0 0 0 -1.1752514,1.547936 1.1804246,1.5483882 0 0 0 1.1752514,1.548359 v 0.04222 h 8.2196784 v -0.0072 a 1.1804246,1.5483882 0 0 0 1.175252,-1.547936 1.1804246,1.5483882 0 0 0 -1.175252,-1.548359 v -0.04222 z" />
+       style="fill:none;stroke:#000000;stroke-width:0.224868;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none"
+       d="M 12.811948,17.251848 H 5.4837867 c 0,0 -1.3467861,0.0916 -1.3909962,1.380341 -0.04421,1.288739 1.380328,1.423182 1.380328,1.423182 h 7.3762625 c 0,0 1.34218,-0.06785 1.34218,-1.402231 0,-1.334382 -1.379613,-1.401292 -1.379613,-1.401292 z"
+       id="path3569" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:0.793749, 0.793749;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       d="M 3.8761601,18.519431 H 2.6271751 V 10.551769 H 6.8478828"
-       id="path4264" />
+       style="fill:none;stroke:#000000;stroke-width:0.215384;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:0.646151, 0.646151;stroke-dashoffset:0"
+       d="M 4.0824347,18.643316 H 1.9813159 v -8.072738 h 4.9225766"
+       id="path4297" />
   </g>
 </svg>

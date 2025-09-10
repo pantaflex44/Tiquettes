@@ -60,8 +60,10 @@ function toFrenchDate(string $date, $withDate = true, $withHours = true): string
     $f = [];
     $df = 'd/m/Y';
     $hf = 'H:i';
-    if ($withDate) $f[] = $df;
-    if ($withHours) $f[] = $hf;
+    if ($withDate)
+        $f[] = $df;
+    if ($withHours)
+        $f[] = $hf;
     $f = implode(' à ', $f);
 
     return $date->format($f ?: 'd/m/Y à H:i');
@@ -151,7 +153,7 @@ class TiquettesPDF extends FPDF
         parent::__construct($orientation, $unit, $size);
     }
 
-    function Polygon(array $points, string $style = 'D'): void
+    public function Polygon(array $points, string $style = 'D'): void
     {
         if ($style == 'F')
             $op = 'f';
@@ -174,7 +176,7 @@ class TiquettesPDF extends FPDF
         $this->_out($points_string . $op);
     }
 
-    function TextWithRotation($x, $y, $txt, $txt_angle, $font_angle = 0)
+    public function TextWithRotation($x, $y, $txt, $txt_angle, $font_angle = 0)
     {
         $font_angle += 90 + $txt_angle;
         $txt_angle *= M_PI / 180;
@@ -191,7 +193,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    function TextWithDirection($x, $y, $txt, $direction = 'R')
+    public function TextWithDirection($x, $y, $txt, $direction = 'R')
     {
         if ($direction == 'R')
             $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', 1, 0, 0, 1, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
@@ -208,7 +210,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    function SetDash(float|null $black = null, float|null $white = null): void
+    public function SetDash(float|null $black = null, float|null $white = null): void
     {
         if ($black !== null)
             $s = sprintf('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
@@ -217,7 +219,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0)
+    public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0)
     {
         // Output text with automatic or explicit line breaks, at most $maxline lines
         if (!isset($this->CurrentFont))
@@ -226,7 +228,7 @@ class TiquettesPDF extends FPDF
         if ($w == 0)
             $w = $this->w - $this->rMargin - $this->x;
         $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
-        $s = str_replace("\r", '', (string)$txt);
+        $s = str_replace("\r", '', (string) $txt);
         $nb = strlen($s);
         if ($nb > 0 && $s[$nb - 1] == "\n")
             $nb--;
@@ -326,12 +328,12 @@ class TiquettesPDF extends FPDF
         return '';
     }
 
-    function IncludeJS($script)
+    public function IncludeJS($script)
     {
         $this->javascript = $script;
     }
 
-    function SetVisibility($v)
+    public function SetVisibility($v)
     {
         if ($this->visibility != 'all')
             $this->_out('EMC');
@@ -344,17 +346,17 @@ class TiquettesPDF extends FPDF
         $this->visibility = $v;
     }
 
-    function StartPageGroup()
+    public function StartPageGroup()
     {
         $this->NewPageGroup = true;
     }
 
-    function GroupPageNo()
+    public function GroupPageNo()
     {
         return $this->PageGroups[$this->CurrPageGroup];
     }
 
-    function PageGroupAlias()
+    public function PageGroupAlias()
     {
         return $this->CurrPageGroup;
     }
@@ -480,7 +482,12 @@ class TiquettesPDF extends FPDF
 
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        if ($this->required['modules']['php_imagick'] === true) {
+        global $isDev;
+
+        if (!str_starts_with(trim($svgContent), "<?xml"))
+            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + trim($svgContent);
+
+        if ($this->required['modules']['php_imagick'] === true && !$isDev) {
             $image = new Imagick();
 
             $image->newImage($width, $height, new ImagickPixel('transparent'));
@@ -492,7 +499,7 @@ class TiquettesPDF extends FPDF
 
             return file_exists($pngFilepath);
 
-        } else if ($this->required['modules']['convert'] === true) {
+        } else if ($this->required['modules']['convert'] === true || $isDev) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
@@ -516,10 +523,13 @@ class TiquettesPDF extends FPDF
 
     function getIcon(string $name, string|false $color = false, int $iconSize = 100): string
     {
-        if ($color === false) $color = '#000000';
+        if ($color === false)
+            $color = '#000000';
         $color = strtolower(trim($color));
-        if (!preg_match('/^#[a-f0-9A-Z]{6}$/i', $color)) $color = '#000000';
-        if ($color === '#ffffff') $color = '#fefefe';
+        if (!preg_match('/^#[a-f0-9A-Z]{6}$/i', $color))
+            $color = '#000000';
+        if ($color === '#ffffff')
+            $color = '#fefefe';
 
         $path = '../';
         $name = trim(strtolower($name));
@@ -529,8 +539,10 @@ class TiquettesPDF extends FPDF
 
         $pngname = $pi['filename'] . '.png';
         $pngpath = './libs/toPdf/themes/icons/' . $color . '/';
-        if (!is_dir($pngpath)) mkdir($pngpath, 0777, true);
-        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime) return $pngpath . $pngname;
+        if (!is_dir($pngpath))
+            mkdir($pngpath, 0777, true);
+        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
+            return $pngpath . $pngname;
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
             $svg = file_get_contents($path . $name);
@@ -568,8 +580,10 @@ class TiquettesPDF extends FPDF
 
         $pngname = $pi['filename'] . '.png';
         $pngpath = './libs/toPdf/themes/icons/symbols/';
-        if (!is_dir($pngpath)) mkdir($pngpath, 0777, true);
-        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime) return $pngpath . $pngname;
+        if (!is_dir($pngpath))
+            mkdir($pngpath, 0777, true);
+        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
+            return $pngpath . $pngname;
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
             $svg = file_get_contents($path . $name);
@@ -594,8 +608,10 @@ class TiquettesPDF extends FPDF
 
         $pngname = $pi['filename'] . '.png';
         $pngpath = './libs/toPdf/themes/icons/poles/';
-        if (!is_dir($pngpath)) mkdir($pngpath, 0777, true);
-        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime) return $pngpath . $pngname;
+        if (!is_dir($pngpath))
+            mkdir($pngpath, 0777, true);
+        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
+            return $pngpath . $pngname;
 
         if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
             $svg = file_get_contents($path . $name);
@@ -708,9 +724,12 @@ class TiquettesPDF extends FPDF
         $this->Ln(5);
         $this->SetFont('Arial', '', 14);
         $contains = [];
-        if ($printOptions->schema === true) $contains[] = "Le schéma unifilaire";
-        if ($printOptions->summary === true) $contains[] = "La nomenclature";
-        if (count($contains) === 0) $contains[] = "Rien du tout !";
+        if ($printOptions->schema === true)
+            $contains[] = "Le schéma unifilaire";
+        if ($printOptions->summary === true)
+            $contains[] = "La nomenclature";
+        if (count($contains) === 0)
+            $contains[] = "Rien du tout !";
         foreach ($contains as $title) {
             $this->SetX($this->pageMargin + 28);
             $this->MultiCell(0, 7, cutStr(str("- " . $title)), 0, 'L', false);
@@ -781,7 +800,8 @@ class TiquettesPDF extends FPDF
                 $this->SetLineWidth(0.075);
                 $this->SetDash(1, 1);
                 $this->Line($cutLine[0], $cutLine[1], $cutLine[2], $cutLine[3]);
-                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');;
+                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');
+                ;
             }
             $this->SetDash();
             $cutLines = [];
@@ -874,7 +894,7 @@ class TiquettesPDF extends FPDF
                         $this->Rect($box['x'], $box['y'] + $box['h'], $box['w'], 6, 'DF');
 
                         $this->SetFont('Helvetica', '', 7);
-                        $txt = mb_convert_encoding(trim(($module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
+                        $txt = mb_convert_encoding(trim((($module->crb ?? "") . $module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
                         $this->MultiCell($box['w'], 6, $txt, 0, 'C', false, 1);
 
                         $this->SetXY($ox, $oy);
@@ -937,7 +957,8 @@ class TiquettesPDF extends FPDF
     {
         global $flattenModules;
 
-        if (is_null($pm)) return 0;
+        if (is_null($pm))
+            return 0;
 
         $childs = array_values(array_filter($flattenModules, fn($m) => $m->parentId === $pm->id));
         return count($childs);
@@ -947,7 +968,8 @@ class TiquettesPDF extends FPDF
     {
         global $flattenModules;
 
-        if (is_null($pm)) return 0;
+        if (is_null($pm))
+            return 0;
 
         $childs = array_values(array_filter($flattenModules, fn($m) => $m->parentId === $pm->parentId));
         return count($childs);
@@ -959,9 +981,11 @@ class TiquettesPDF extends FPDF
 
         $found = array_values(array_filter($flattenModules, fn($m) => $m->parentId === $id));
         if (count($found) > 0) {
-            if ($level > $this->schemaLevelsCount) $this->schemaLevelsCount = $level;
+            if ($level > $this->schemaLevelsCount)
+                $this->schemaLevelsCount = $level;
 
-            foreach ($found as $m) $this->schemaLevelsCounterRecursive($m->id, $level + 1);
+            foreach ($found as $m)
+                $this->schemaLevelsCounterRecursive($m->id, $level + 1);
         }
     }
 
@@ -987,7 +1011,8 @@ class TiquettesPDF extends FPDF
 
     protected function drawPowerLine(object|null $m, int $level, int $pos): void
     {
-        if (is_null($m) || $pos > 0) return;
+        if (is_null($m) || $pos > 0)
+            return;
 
         if (trim($m->parentId ?? '') === '') {
             $lx = $this->grid[$this->gridOrientation]['left'];
@@ -1000,9 +1025,12 @@ class TiquettesPDF extends FPDF
 
             $this->SetDrawColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
             $this->Polygon([
-                $lx, $ly,
-                $lx + 1.5, $ly - 1.5,
-                $lx + 3, $ly
+                $lx,
+                $ly,
+                $lx + 1.5,
+                $ly - 1.5,
+                $lx + 3,
+                $ly
             ], 'F');
 
             $this->SetFont('Arial', '', 5);
@@ -1025,9 +1053,12 @@ class TiquettesPDF extends FPDF
             if ($isNew || $this->schemaCurrentPosX < $this->schemaLastPos["L{$level}"]['x']) {
                 $ly += ($this->schemaLineWidth / 2);
                 $this->Polygon([
-                    $lx, $ly,
-                    $lx + 1.5, $ly - 1.5,
-                    $lx + 1.5, $ly + 1.5
+                    $lx,
+                    $ly,
+                    $lx + 1.5,
+                    $ly - 1.5,
+                    $lx + 1.5,
+                    $ly + 1.5
                 ], 'F');
 
                 $this->SetFont('Arial', '', 5);
@@ -1052,9 +1083,12 @@ class TiquettesPDF extends FPDF
             $lx = $this->grid[$this->gridOrientation]['right'];
             $ly += ($this->schemaLineWidth / 2);
             $this->Polygon([
-                $lx, $ly,
-                $lx - 1.5, $ly - 1.5,
-                $lx - 1.5, $ly + 1.5
+                $lx,
+                $ly,
+                $lx - 1.5,
+                $ly - 1.5,
+                $lx - 1.5,
+                $ly + 1.5
             ], 'F');
 
             $this->SetFont('Arial', '', 5);
@@ -1066,8 +1100,10 @@ class TiquettesPDF extends FPDF
             $pl = $l - 1;
             if (count($pms) > 0 && $pl >= 0) {
                 $pm = $pms[0];
-                if ($this->getSiblingCount($pm) > 0) $this->drawNextLine($pm, $pl);
-            };
+                if ($this->getSiblingCount($pm) > 0)
+                    $this->drawNextLine($pm, $pl);
+            }
+            ;
         }
     }
 
@@ -1096,7 +1132,8 @@ class TiquettesPDF extends FPDF
 
         if ($level < $this->grid[$this->gridOrientation]['schemaMaxLevels']) {
             $symbol = $this->getSymbol($module->func);
-            if ($symbol !== '') $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
+            if ($symbol !== '')
+                $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
 
             $this->SetTextColor(0, 0, 0);
             $this->SetFont('Arial', 'B', 7);
@@ -1120,7 +1157,8 @@ class TiquettesPDF extends FPDF
 
         } else {
             $symbol = $this->getSymbol('blank');
-            if ($symbol !== '') $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
+            if ($symbol !== '')
+                $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
         }
 
         if ($this->getDirectChildsCount($module) === 0) {
@@ -1129,7 +1167,8 @@ class TiquettesPDF extends FPDF
 
             if (isset($module->pole) && is_string($module->pole)) {
                 $pole = $this->getPoleSymbol($module->pole);
-                if ($pole !== '') $this->Image($pole, $centerX - (2.9104166667 / 2), $this->grid[$this->gridOrientation]['bottom'] - 25, 2.9104166667, 0, 'PNG');
+                if ($pole !== '')
+                    $this->Image($pole, $centerX - (2.9104166667 / 2), $this->grid[$this->gridOrientation]['bottom'] - 25, 2.9104166667, 0, 'PNG');
             }
 
             if (isset($module->wire) && is_string($module->wire) && trim($module->wire) !== "" && trim($module->wire) !== "?") {
@@ -1143,7 +1182,8 @@ class TiquettesPDF extends FPDF
 
             if (isset($module->icon) && is_string($module->icon)) {
                 $icon = $this->getIcon($module->icon, '#000000', 100);
-                if ($icon !== '') $this->Image($icon, $centerX - (5.5 / 2), $this->grid[$this->gridOrientation]['bottom'] - 18, 5.5, 5.5, 'PNG');
+                if ($icon !== '')
+                    $this->Image($icon, $centerX - (5.5 / 2), $this->grid[$this->gridOrientation]['bottom'] - 18, 5.5, 5.5, 'PNG');
             }
 
             if (isset($module->text) && is_string($module->text) && trim($module->text) !== "") {
@@ -1173,7 +1213,8 @@ class TiquettesPDF extends FPDF
         $found = array_values(array_filter($flattenModules, function ($m) use ($parentId) {
             return $m->parentId === $parentId;
         }));
-        if (count($found) === 0) return;
+        if (count($found) === 0)
+            return;
 
         $total = count($found);
         for ($i = 0; $i < $total; $i++) {
@@ -1182,7 +1223,8 @@ class TiquettesPDF extends FPDF
             $this->schemaDrawItem($i, $lastModule, $module, $level);
             $this->schemaDrawChilds($module->id, $level + 1);
 
-            if ($i < count($found) - 1) $this->schemaCurrentPosX += $this->schemaSymbolSize['w'] - 0.125;
+            if ($i < count($found) - 1)
+                $this->schemaCurrentPosX += $this->schemaSymbolSize['w'] - 0.125;
         }
     }
 
@@ -1239,7 +1281,8 @@ class TiquettesPDF extends FPDF
 
                 $module = $switchboard->rows[$i][$j];
                 if (!$module->free && ($module->func ?? '') !== '') {
-                    if ($module->func === 'k') $module->func = 'kc';
+                    if ($module->func === 'k')
+                        $module->func = 'kc';
 
                     if ($j === 0) {
                         $this->SetFillColor(220, 220, 220);
@@ -1258,7 +1301,8 @@ class TiquettesPDF extends FPDF
 
                     if ($module->icon) {
                         $icon = $this->getIcon($module->icon, '#000000', 100);
-                        if ($icon !== '') $this->Image($icon, $oldPosX + (($columns[2]['w'] / 2) - (5.5 / 2)), $this->GetY() + 1, 5.5, 5.5, 'PNG');
+                        if ($icon !== '')
+                            $this->Image($icon, $oldPosX + (($columns[2]['w'] / 2) - (5.5 / 2)), $this->GetY() + 1, 5.5, 5.5, 'PNG');
                     }
                     $oldPosX += $columns[2]['w'];
 
@@ -1278,7 +1322,8 @@ class TiquettesPDF extends FPDF
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
                     $fdetails = trim($ftype . ' ' . $fcrb . ' ' . $fsensibility . ' ' . $fcurrent . ' ' . $fpole);
-                    if ($fdetails !== '') $fdetails = "\n" . $fdetails;
+                    if ($fdetails !== '')
+                        $fdetails = "\n" . $fdetails;
                     $this->MultiCell($columns[4]['w'], 4, str("$fname$fdetails"), 0, $columns[4]['align'], false, 3);
                     $oldPosX += $columns[4]['w'];
 
@@ -1332,10 +1377,16 @@ $printOptions = json_decode($_POST['printOptions']);
 $tv = json_decode($_POST['tv']);
 $auto = intval(trim(($_POST['auto'] ?? '0'))) === 1;
 $schemaGridColor = explode(',', trim($_POST['schemaGridColor'] ?? ''));
-if (!is_array($schemaGridColor) || count($schemaGridColor) !== 3) $schemaGridColor = [230, 230, 230];
-if ($schemaGridColor[0] < 0 || $schemaGridColor[0] > 255) $schemaGridColor[0] = 230;
-if ($schemaGridColor[1] < 0 || $schemaGridColor[1] > 255) $schemaGridColor[1] = 230;
-if ($schemaGridColor[2] < 0 || $schemaGridColor[2] > 255) $schemaGridColor[2] = 230;
+$isDev = intval(trim(($_POST['isDev'] ?? '0'))) === 1;
+
+if (!is_array($schemaGridColor) || count($schemaGridColor) !== 3)
+    $schemaGridColor = [230, 230, 230];
+if ($schemaGridColor[0] < 0 || $schemaGridColor[0] > 255)
+    $schemaGridColor[0] = 230;
+if ($schemaGridColor[1] < 0 || $schemaGridColor[1] > 255)
+    $schemaGridColor[1] = 230;
+if ($schemaGridColor[2] < 0 || $schemaGridColor[2] > 255)
+    $schemaGridColor[2] = 230;
 $labelsCutLines = intval(trim(($_POST['labelsCutLines'] ?? '0'))) === 1;
 
 $hasSchema = $printOptions->schema === true;
@@ -1353,11 +1404,11 @@ foreach ($switchboard->rows as $row) {
 }
 if ($switchboard->withDb) {
     $flattenModules = array_map(function ($module) {
-        return (object)array_merge((array)$module, [
+        return (object) array_merge((array) $module, [
             'parentId' => $module->parentId === '' ? 'DB' : $module->parentId,
         ]);
     }, $flattenModules);
-    $flattenModules[] = (object)array_merge((array)$switchboard->db, [
+    $flattenModules[] = (object) array_merge((array) $switchboard->db, [
         'id' => 'DB',
         'parentId' => '',
         'func' => 'dd'
@@ -1369,7 +1420,7 @@ foreach ($flattenModules as $module) {
         $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === $kcId));
         if (count($kcModule) === 1) {
             $kcModule = $kcModule[0];
-            $flattenModules[] = (object)array_merge((array)$kcModule, [
+            $flattenModules[] = (object) array_merge((array) $kcModule, [
                 'kcId' => '',
                 'id' => '¤_' . $kcModule->id,
                 'parentId' => $module->id,
@@ -1397,10 +1448,15 @@ $pdf->AliasNbPages();
 $pdf->SetGridColor($schemaGridColor);
 $pdf->SetShowCutLines($labelsCutLines);
 
-if (!$hasOnlyLabels && $printOptions->firstPage === true) $pdf->AddFirstPage();
-if ($printOptions->schema === true) $pdf->AddSchemaPage();
-if ($printOptions->summary === true) $pdf->AddSummaryPage();
-if ($printOptions->labels === true) $pdf->AddLabelsPage();
-if ($auto) $pdf->AutoPrint(true);
+if (!$hasOnlyLabels && $printOptions->firstPage === true)
+    $pdf->AddFirstPage();
+if ($printOptions->schema === true)
+    $pdf->AddSchemaPage();
+if ($printOptions->summary === true)
+    $pdf->AddSummaryPage();
+if ($printOptions->labels === true)
+    $pdf->AddLabelsPage();
+if ($auto)
+    $pdf->AutoPrint(true);
 
 echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - Tiquettes " . $tv . ".pdf", true);

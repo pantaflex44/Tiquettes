@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
-   class="ionicon"
-   viewBox="0 0 512 512"
+   width="1000mm"
+   height="1000mm"
+   viewBox="0 0 64 64"
    version="1.1"
-   id="svg2"
+   id="svg133"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="swb_fire.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   width="1000"
-   height="1000"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs2" />
   <sodipodi:namedview
-     id="namedview2"
+     id="namedview135"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -23,31 +22,30 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.27863046"
-     inkscape:cx="-1175.392"
-     inkscape:cy="-346.33686"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.18752455"
+     inkscape:cx="1885.0865"
+     inkscape:cy="1885.0865"
+     inkscape:window-width="1862"
+     inkscape:window-height="1011"
+     inkscape:window-x="58"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2" />
-  <path
-     d="m 112,320 c 0,-93 124,-165 96,-272 66,0 192,96 192,272 a 144,144 0 0 1 -288,0 z"
-     fill="none"
-     stroke="currentColor"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke-width="32"
-     id="path1"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
-  <path
-     d="m 320,368 c 0,57.71 -32,80 -64,80 -32,0 -64,-22.29 -64,-80 0,-57.71 40,-86 32,-128 42,0 96,70.29 96,128 z"
-     fill="none"
-     stroke="currentColor"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke-width="32"
-     id="path2"
-     style="stroke:#000000;stroke-opacity:1" />
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs130" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:5.75999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-opacity:1;stroke-dasharray:none"
+       d="m 22.937624,8.3206677 c 0,0 29.305077,11.2829013 29.305077,30.5069863 0,19.224086 -21.521033,17.688103 -21.521033,17.688103 0,0 -19.696639,-0.270759 -19.696639,-13.935357 0,-13.6646 9.581833,-9.998629 12.36483,-20.097165 C 26.172854,12.3847 22.937624,8.3206677 22.937624,8.3206677 Z"
+       id="path367" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1"
+       d="m 30.650323,31.199227 c 0,0 14.535674,5.596456 14.535674,15.131836 0,9.53538 -10.674694,8.773514 -10.674694,8.773514 0,0 -9.769772,-0.1343 -9.769772,-6.912107 0,-6.777807 4.752706,-4.959441 6.133106,-9.968437 1.380399,-5.008996 -0.224314,-7.024806 -0.224314,-7.024806 z"
+       id="path367-3" />
+  </g>
 </svg>
