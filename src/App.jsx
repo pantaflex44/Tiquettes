@@ -78,7 +78,7 @@ function App() {
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
-    const [subMenus, setSubMenus] = useState({ printLabelsOpened: false });
+    const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -97,6 +97,9 @@ function App() {
             schemaGridColor: [230, 230, 230],
             labelsCutLines: true,
             printCurrents: false,
+            labelsPrintFormat: 'A4',
+            schemaPrintFormat: 'A4',
+            summaryPrintFormat: 'A4'
         }
     }), []);
     const getSavedPrintOptions = () => {
@@ -514,7 +517,7 @@ function App() {
         setPrintOptions({ ...defaultPrintOptions });
         setDocumentTitle(name);
         setTab(1);
-        setSubMenus(old => ({ ...old, printLabelsOpened: false }));
+        setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
         scrollToProject();
 
         stats_count('new');
@@ -529,7 +532,7 @@ function App() {
         setDocumentTitle(defaultProjectName);
         setPrintOptions({ ...defaultPrintOptions });
         setTheme(defaultTheme);
-        setSubMenus(old => ({ ...old, printLabelsOpened: false }));
+        setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
 
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
@@ -622,7 +625,7 @@ function App() {
                     setClipboardMode(null);
                     setPrintOptions({ ...defaultPrintOptions });
                     setTab(1);
-                    setSubMenus(old => ({ ...old, printLabelsOpened: false }));
+                    setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
                     scrollToProject();
 
                     stats_count('import');
@@ -1516,6 +1519,24 @@ function App() {
                         </div>
                         {subMenus.printLabelsOpened && printOptions.labels && <>
                             <div className="dropdown_item"
+                                title="Format d'impression">
+                                <label htmlFor="print_labels_format" style={{ flex: 1 }}>Format d'impression :</label>
+                                <input id="print_labels_format_A4" name="print_labels_format_A4" type="radio"
+                                    checked={printOptions.pdfOptions.labelsPrintFormat === 'A4'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, labelsPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.labelsPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_labels_format_A4" style={{ flex: 0 }}>A4</label>
+                                <input id="print_labels_format_A3" name="print_labels_format_A3" type="radio"
+                                    checked={printOptions.pdfOptions.labelsPrintFormat === 'A3'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, labelsPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.labelsPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_labels_format_A3" style={{ flex: 0 }}>A3</label>
+                            </div>
+                            <div className="dropdown_item"
                                 title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
                                 <input id="print_free" name="print_free" type="checkbox"
                                     checked={printOptions.freeModules}
@@ -1549,7 +1570,7 @@ function App() {
                             </div>
                         </>}
 
-                        <div className="dropdown_item head" title="Imprimer le schéma unifilaire">
+                        <div className="dropdown_item head parent" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
                                 checked={printOptions.schema}
                                 onChange={(e) => setPrintOptions((old) => ({
@@ -1557,19 +1578,35 @@ function App() {
                                     schema: e.target.checked
                                 }))} />
                             <label htmlFor="print_schema">Schéma unifilaire</label>
+                            {printOptions.schema &&
+                                <img src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon} width={16}
+                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
+                                        ...old,
+                                        printSchemaOpened: !old.printSchemaOpened
+                                    }))} />}
                         </div>
-                        {/*<div className="dropdown_item"
-                             title="Couleur de la grille de fond">
-                            <label htmlFor="print_pdf_schemaGridColor">Couleur de la grille de fond</label>
-                            <input id="print_pdf_schemaGridColor" name="print_pdf_schemaGridColor" type="color"
-                                   value={rgbToHex(printOptions.pdfOptions.schemaGridColor)}
-                                   onChange={(e) => setPrintOptions((old) => ({
-                                       ...old,
-                                       pdfOptions: {...old.pdfOptions, schemaGridColor: hexToRgb(e.target.value)}
-                                   }))} disabled={!printOptions.schema}/>
-                        </div>*/}
+                        {subMenus.printSchemaOpened && printOptions.schema && <>
+                            <div className="dropdown_item"
+                                title="Format d'impression">
+                                <label htmlFor="print_schema_format" style={{ flex: 1 }}>Format d'impression :</label>
+                                <input id="print_schema_format_A4" name="print_schema_format_A4" type="radio"
+                                    checked={printOptions.pdfOptions.schemaPrintFormat === 'A4'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.schemaPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_schema_format_A4" style={{ flex: 0 }}>A4</label>
+                                <input id="print_schema_format_A3" name="print_schema_format_A3" type="radio"
+                                    checked={printOptions.pdfOptions.schemaPrintFormat === 'A3'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.schemaPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_schema_format_A3" style={{ flex: 0 }}>A3</label>
+                            </div>
+                        </>}
 
-                        <div className="dropdown_item head" title="Imprimer la nomenclature">
+                        <div className="dropdown_item head parent" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
                                 checked={printOptions.summary}
                                 onChange={(e) => setPrintOptions((old) => ({
@@ -1577,7 +1614,33 @@ function App() {
                                     summary: e.target.checked
                                 }))} />
                             <label htmlFor="print_summary">Nomenclature</label>
+                            {printOptions.summary &&
+                                <img src={subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon} width={16}
+                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
+                                        ...old,
+                                        printSummaryOpened: !old.printSummaryOpened
+                                    }))} />}
                         </div>
+                        {subMenus.printSummaryOpened && printOptions.summary && <>
+                            <div className="dropdown_item"
+                                title="Format d'impression">
+                                <label htmlFor="print_summary_format" style={{ flex: 1 }}>Format d'impression :</label>
+                                <input id="print_summary_format_A4" name="print_summary_format_A4" type="radio"
+                                    checked={printOptions.pdfOptions.summaryPrintFormat === 'A4'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.summaryPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_summary_format_A4" style={{ flex: 0 }}>A4</label>
+                                <input id="print_summary_format_A3" name="print_summary_format_A3" type="radio"
+                                    checked={printOptions.pdfOptions.summaryPrintFormat === 'A3'}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.summaryPrintFormat }
+                                    }))} disabled={!printOptions.labels} />
+                                <label htmlFor="print_summary_format_A3" style={{ flex: 0 }}>A3</label>
+                            </div>
+                        </>}
 
                         <div className="dropdown_separator"></div>
                         <div className="dropdown_item head"

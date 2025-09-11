@@ -31,6 +31,15 @@
                     {
                         "text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
                     }
+                ],
+                "adds": [
+                    {
+                        "text": "Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.",
+                        "from": {
+                            "name": "Issue #38",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/38"
+                        }
+                    }
                 ]
             }
         },

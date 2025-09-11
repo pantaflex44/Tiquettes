@@ -812,7 +812,7 @@ class TiquettesPDF extends FPDF
     {
         try {
 
-            global $switchboard, $printOptions;
+            global $switchboard, $printOptions, $labelsPrintFormat;
             $printCurrents = $printOptions->pdfOptions?->printCurrents ?? false;
 
             require_once './libs/toPdf/themes/engine.php';
@@ -824,7 +824,7 @@ class TiquettesPDF extends FPDF
             $modulesCount = $switchboard->stepsPerRows;
             $this->subTitle = "Etiquettes à découper: {$rowsCount} x {$modulesCount} module" . ($modulesCount > 1 ? "s" : "") . "  /  largeur {$w}mm  /  hauteur {$h}mm";
             $this->StartPageGroup();
-            $this->AddPage('L', 'A4', 0);
+            $this->AddPage('L', $labelsPrintFormat, 0);
             $this->SetVisibility('all');
 
             $cutLines = [];
@@ -851,7 +851,7 @@ class TiquettesPDF extends FPDF
 
                     if ($this->GetY() + $h > $this->GetPageHeight() - ($this->pageBottomMargin)) {
                         $this->drawCutLines($cutLines);
-                        $this->AddPage('L', 'A4', 0);
+                        $this->AddPage('L', $labelsPrintFormat, 0);
                         $this->SetY($this->pageMargin + 10);
                     }
 
@@ -915,7 +915,7 @@ class TiquettesPDF extends FPDF
 
     function AddSchemaPage()
     {
-        global $switchboard, $flattenModules;
+        global $switchboard, $flattenModules, $schemaPrintFormat;
 
         $this->grid = [
             'P' => [
@@ -941,7 +941,7 @@ class TiquettesPDF extends FPDF
 
         $this->schemaCurrentFolio = 1;
         $this->subTitle = "Schéma unifilaire - Folio " . $this->schemaCurrentFolio;
-        $this->AddPage($this->gridOrientation, 'A4', 0);
+        $this->AddPage($this->gridOrientation, $schemaPrintFormat, 0);
         $this->drawGroundLine();
 
         $this->schemaInitialPos = [
@@ -1109,6 +1109,8 @@ class TiquettesPDF extends FPDF
 
     protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
     {
+        global $schemaPrintFormat;
+
         if ($module->func !== 'k') {
             $sf = $this->schemaFunctions[$module->func];
         } else {
@@ -1123,7 +1125,7 @@ class TiquettesPDF extends FPDF
 
             $this->schemaCurrentFolio++;
             $this->subTitle = "Schéma unifilaire - Folio " . $this->schemaCurrentFolio;
-            $this->AddPage($this->gridOrientation, 'A4', 0);
+            $this->AddPage($this->gridOrientation, $schemaPrintFormat, 0);
             $this->drawGroundLine();
             $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
         }
@@ -1230,12 +1232,12 @@ class TiquettesPDF extends FPDF
 
     function AddSummaryPage()
     {
-        global $switchboard, $printOptions;
+        global $switchboard, $printOptions, $summaryPrintFormat;
 
         $this->grid = false;
         $this->subTitle = "Nomenclature";
         $this->StartPageGroup();
-        $this->AddPage('L', 'A4', 0);
+        $this->AddPage('L', $summaryPrintFormat, 0);
         $this->SetVisibility('all');
 
         $this->SetY($this->pageMargin + 3);
@@ -1393,6 +1395,19 @@ $hasSchema = $printOptions->schema === true;
 $hasSummary = $printOptions->summary === true;
 $hasLabels = $printOptions->labels === true;
 $hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary;
+
+$summaryPrintFormat = strtoupper(trim((string) ($printOptions->pdfOptions?->summaryPrintFormat ?? 'A4')));
+if ($summaryPrintFormat !== 'A4' && $summaryPrintFormat !== 'A3')
+    $summaryPrintFormat = 'A4';
+
+$labelsPrintFormat = strtoupper(trim((string)($printOptions->pdfOptions?->labelsPrintFormat ?? 'A4')));
+if ($labelsPrintFormat !== 'A4' && $labelsPrintFormat !== 'A3')
+    $labelsPrintFormat = 'A4';
+
+$schemaPrintFormat = strtoupper(trim((string) ($printOptions->pdfOptions?->schemaPrintFormat ?? 'A4')));
+if ($schemaPrintFormat !== 'A4' && $schemaPrintFormat !== 'A3')
+    $schemaPrintFormat = 'A4';
+
 
 $flattenModules = [];
 foreach ($switchboard->rows as $row) {
