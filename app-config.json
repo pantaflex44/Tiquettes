@@ -24,6 +24,16 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
+        "2.2.5": {
+            "date": "2025-09-11",
+            "actions": {
+                "patches": [
+                    {
+                        "text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
+                    }
+                ]
+            }
+        },
         "2.2.4": {
             "date": "2025-09-07",
             "actions": {

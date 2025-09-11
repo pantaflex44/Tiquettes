@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [2.2.5] - 2025-09-11
+
+### Corrections
+
+- Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF.
+
+
 ## [2.2.4] - 2025-09-07
 
 ### Corrections
