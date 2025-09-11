@@ -1,56 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
-
-<svg
-   version="1.1"
-   x="0px"
-   y="0px"
-   viewBox="0 0 256 256"
-   enable-background="new 0 0 256 256"
-   xml:space="preserve"
-   id="svg6"
-   sodipodi:docname="swb_ermt.svg"
-   width="1000"
-   height="1000"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs
-   id="defs6" /><sodipodi:namedview
-   id="namedview6"
-   pagecolor="#ffffff"
-   bordercolor="#000000"
-   borderopacity="0.25"
-   inkscape:showpageshadow="2"
-   inkscape:pageopacity="0.0"
-   inkscape:pagecheckerboard="0"
-   inkscape:deskcolor="#d1d1d1"
-   inkscape:zoom="0.13931523"
-   inkscape:cx="-2379.4958"
-   inkscape:cy="-1510.9619"
-   inkscape:window-width="1920"
-   inkscape:window-height="1009"
-   inkscape:window-x="1912"
-   inkscape:window-y="-8"
-   inkscape:window-maximized="1"
-   inkscape:current-layer="svg6" />
-<metadata
-   id="metadata1"> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-<path
-   fill="#000000"
-   d="m 40.3,246 v -83.1 c 0,-4.4 3.6,-8 8,-8 h 159.5 c 4.4,0 8,3.6 8,8 V 246 h 17.4 V 144.2 c 0,-5.3 -4.3,-9.5 -9.5,-9.5 H 32.4 c -5.3,0 -9.5,4.3 -9.5,9.5 V 246 Z"
-   id="path1" /><path
-   fill="#000000"
-   d="m 110.9,192.5 c 0,9.4 7.7,17.1 17.1,17.1 9.4,0 17.1,-7.7 17.1,-17.1 v 0 c 0,-9.4 -7.7,-17.1 -17.1,-17.1 -9.4,0 -17.1,7.7 -17.1,17.1 z"
-   id="path2" /><path
-   fill="#000000"
-   d="m 84.7,126.74 c 16.6,-31.2 71,-32.1 86.7,0"
-   id="path3" /><path
-   fill="#000000"
-   d="M 63.4,97.82 C 81.7,50.72 176,48.92 193,97.82"
-   id="path4" /><path
-   fill="#000000"
-   d="M 42.1,58.5 C 54.6,-5.3 202,-7 214.9,58.5"
-   id="path5" />
+<svg viewBox="0 0 256 256" xml:space="preserve" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
+    <path d="M40.3 246v-83.1c0-4.4 3.6-8 8-8h159.5c4.4 0 8 3.6 8 8V246h17.4V144.2c0-5.3-4.3-9.5-9.5-9.5H32.4c-5.3 0-9.5 4.3-9.5 9.5V246Z"/>
+    <path d="M110.9 192.5c0 9.4 7.7 17.1 17.1 17.1 9.4 0 17.1-7.7 17.1-17.1 0-9.4-7.7-17.1-17.1-17.1-9.4 0-17.1 7.7-17.1 17.1zM84.7 126.74c16.6-31.2 71-32.1 86.7 0"/>
+    <path d="M63.4 97.82c18.3-47.1 112.6-48.9 129.6 0"/>
+    <path d="M42.1 58.5C54.6-5.3 202-7 214.9 58.5"/>
 </svg>

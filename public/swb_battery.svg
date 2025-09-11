@@ -1,6 +1,6 @@
 <svg width="1000" height="1000" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
     <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:5.75999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M5.704 19.101h52.547v32.456H5.704z"/>
-    <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100" d="M14.582 13.408h12.454v3.674H14.582zM37.202 13.328h12.454v3.674H37.202z"/>
+    <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100" d="M14.582 13.408h12.454v3.674H14.582zm22.62-.08h12.454v3.674H37.202z"/>
     <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:3.59195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M16.403 31.622h8.916v.516h-8.916z"/>
     <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:3.05357;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M38.82 31.502h9.763v.341H38.82z"/>
     <path style="fill:none;fill-rule:evenodd;stroke:#000;stroke-width:3.008;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M43.624 26.727h.176v10.198h-.176z"/>

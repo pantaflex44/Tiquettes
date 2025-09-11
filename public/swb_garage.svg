@@ -1,6 +1,6 @@
 <svg width="1000" height="1000" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
     <path style="fill:none;stroke:#000;stroke-width:5.75999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M7.165 57.478V23.689L32.072 5.946l24.925 17.81v33.697"/>
     <path style="fill:none;stroke:#000;stroke-width:4.36293;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M17.365 28.815h29.514v29.301H17.365z"/>
-    <path style="fill:none;stroke:#000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M23.653 36.353H40.31M23.718 42.875h16.657"/>
+    <path style="fill:none;stroke:#000;stroke-width:4.096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" d="M23.653 36.353H40.31m-16.592 6.522h16.657"/>
     <circle style="fill:#000;fill-opacity:1;stroke:none;stroke-width:10.0235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none" cx="32.009" cy="51.361" r="2.969"/>
 </svg>

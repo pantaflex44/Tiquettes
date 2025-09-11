@@ -1,56 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   id="Calque_2"
-   data-name="Calque 2"
-   viewBox="-6 -3 71.428571 71.428571"
-   version="1.1"
-   sodipodi:docname="swb_eclext.svg"
-   width="1000"
-   height="1000"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview57180"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     showguides="false"
-     inkscape:zoom="0.2120043"
-     inkscape:cx="-799.51208"
-     inkscape:cy="181.60009"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Calque_2" />
-  <defs
-     id="defs57160">
-    <style
-       id="style57158">
-            .cls-1 {
-
-            }
+<svg id="Calque_2" data-name="Calque 2" viewBox="-6 -3 71.429 71.429" version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
+    <defs id="defs57160">
+        <style id="style57158">
+            
         </style>
-  </defs>
-  <g
-     id="g1"
-     transform="matrix(2.7056526,0,0,2.7056526,-0.36884281,-0.2109203)">
-    <path
-       id="path57299"
-       style="color:#000000;fill:#000000;stroke-linecap:square;-inkscape-stroke:none"
-       d="M 9.0898438,0.49804688 C 7.5409472,0.47945916 5.9731142,1.0319017 4.7929688,2.1835938 3.6128234,3.3352857 2.8613281,5.0769793 2.8613281,7.2480469 V 22.3125 v 1 h 2 v -1 -15.0644531 c 0,-1.7247902 0.5523045,-2.8756971 1.328125,-3.6328125 C 6.9652737,2.8581188 8.005395,2.4853375 9.0644531,2.4980469 10.767696,2.518487 12.462574,3.4394297 13.0625,5.5195312 10.764399,5.9351876 8.7066694,7.6302868 7.7070312,10.255859 a 1.0001,1.0001 0 0 0 0.9335938,1.355469 h 11.423828 a 1.0001,1.0001 0 0 0 0.894531,-1.449219 C 19.573558,7.4059307 17.372019,5.8265301 15.099609,5.4882812 14.375111,2.3362442 11.729627,0.52972589 9.0898438,0.49804688 Z M 14.033203,7.421875 c 1.43037,-0.046857 2.948796,0.619661 4.189453,2.1894531 H 10.546875 C 11.49675,8.3297834 12.685219,7.4660332 14.033203,7.421875 Z" />
-    <path
-       id="path59877"
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.96912;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       d="M 11.636719,12.484375 A 2.7424681,2.7424681 0 0 0 14.3125,14.65625 2.7424681,2.7424681 0 0 0 16.988281,12.484375 Z" />
-  </g>
+    </defs>
+    <g id="g1" transform="matrix(2.70565 0 0 2.70565 -.369 -.21)">
+        <path id="path57299" style="color:#000;fill:#000;stroke-linecap:square;-inkscape-stroke:none" d="M9.09.498c-1.55-.019-3.117.534-4.297 1.686-1.18 1.151-1.932 2.893-1.932 5.064v16.064h2V7.248c0-1.725.553-2.876 1.328-3.633.776-.757 1.816-1.13 2.875-1.117 1.704.02 3.399.941 3.998 3.022-2.298.415-4.355 2.11-5.355 4.736a1 1 0 0 0 .934 1.355h11.423a1 1 0 0 0 .895-1.449c-1.385-2.756-3.587-4.335-5.86-4.674C14.376 2.336 11.73.53 9.09.498Zm4.943 6.924c1.43-.047 2.949.62 4.19 2.19h-7.676c.95-1.282 2.138-2.146 3.486-2.19Z"/>
+        <path id="path59877" style="fill:#000;fill-opacity:1;stroke:none;stroke-width:3.96912;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" d="M11.637 12.484a2.742 2.742 0 0 0 2.675 2.172 2.742 2.742 0 0 0 2.676-2.172Z"/>
+    </g>
 </svg>

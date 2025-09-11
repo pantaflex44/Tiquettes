@@ -1,53 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="1000"
-   height="1000"
-   viewBox="0 0 24 24"
-   fill="none"
-   stroke="currentColor"
-   stroke-width="2"
-   stroke-linecap="round"
-   stroke-linejoin="round"
-   class="icon icon-tabler icons-tabler-outline icon-tabler-power"
-   version="1.1"
-   id="svg3"
-   sodipodi:docname="swb_alim.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs3" />
-  <sodipodi:namedview
-     id="namedview3"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.26269531"
-     inkscape:cx="-169.39777"
-     inkscape:cy="-512"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg3" />
-  <path
-     stroke="none"
-     d="M 0,0 H 24 V 24 H 0 Z"
-     fill="none"
-     id="path1" />
-  <path
-     d="M 7,6 A 7.75,7.75 0 1 0 17,6"
-     id="path2"
-     style="stroke:#000000;stroke-opacity:1;fill:none" />
-  <path
-     d="m 12,4 v 8"
-     id="path3"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+<svg width="1000" height="1000" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-power" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0Z" stroke="none"/>
+    <path d="M7 6a7.75 7.75 0 1 0 10 0" style="stroke:#000;stroke-opacity:1;fill:none"/>
+    <path d="M12 4v8" style="fill:none;stroke:#000;stroke-opacity:1"/>
 </svg>

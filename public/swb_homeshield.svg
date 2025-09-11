@@ -1,54 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="1000"
-   height="1000"
-   viewBox="0 0 24 24"
-   fill="none"
-   stroke="currentColor"
-   stroke-width="2"
-   stroke-linecap="round"
-   stroke-linejoin="round"
-   class="icon icon-tabler icons-tabler-outline icon-tabler-home-shield"
-   version="1.1"
-   id="svg4"
-   sodipodi:docname="swb_homeshield.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.625"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
-  <path
-     stroke="none"
-     d="M 0,0 H 24 V 24 H 0 Z"
-     fill="none"
-     id="path1" />
-  <path
-     d="m 9,21 v -6 a 2,2 0 0 1 2,-2 h 1.341"
-     id="path2" />
-  <path
-     d="M 19.682,10.682 12,3 3,12 h 2 v 7 a 2,2 0 0 0 2,2 h 5"
-     id="path3" />
-  <path
-     d="m 22,16 c 0,4 -2.5,6 -3.5,6 -1,0 -3.5,-2 -3.5,-6 1,0 2.5,-0.5 3.5,-1.5 1,1 2.5,1.5 3.5,1.5 z"
-     id="path4" />
+<svg width="1000" height="1000" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-home-shield" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0Z" stroke="none"/>
+    <path d="M9 21v-6a2 2 0 0 1 2-2h1.341"/>
+    <path d="M19.682 10.682 12 3l-9 9h2v7a2 2 0 0 0 2 2h5"/>
+    <path d="M22 16c0 4-2.5 6-3.5 6S15 20 15 16c1 0 2.5-.5 3.5-1.5 1 1 2.5 1.5 3.5 1.5z"/>
 </svg>

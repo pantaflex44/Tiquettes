@@ -1,64 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="1000"
-   height="1000"
-   viewBox="0 0 24 24"
-   fill="none"
-   stroke="currentColor"
-   stroke-width="2"
-   stroke-linecap="round"
-   stroke-linejoin="round"
-   class="icon icon-tabler icons-tabler-outline icon-tabler-air-conditioning"
-   version="1.1"
-   id="svg6"
-   sodipodi:docname="swb_split.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview6"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.52539063"
-     inkscape:cx="566.24535"
-     inkscape:cy="452.04461"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg6" />
-  <path
-     stroke="none"
-     d="M 0,0 H 24 V 24 H 0 Z"
-     fill="none"
-     id="path1" />
-  <path
-     d="M 8,16 A 3,3 0 0 1 5,19"
-     id="path2" />
-  <path
-     d="m 16,16 a 3,3 0 0 0 3,3"
-     id="path3" />
-  <rect
-     style="display:inline;fill:none;stroke:#000000;stroke-width:1.67427;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     id="rect1"
-     width="17.327768"
-     height="8.2854614"
-     x="3.4162347"
-     y="5.0095663" />
-  <path
-     d="m 12,16 v 4"
-     id="path4" />
-  <path
-     d="M 7,13 V 10 A 1,1 0 0 1 8,9 h 8 a 1,1 0 0 1 1,1 v 3"
-     id="path6" />
+<svg width="1000" height="1000" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-air-conditioning" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0Z" stroke="none"/>
+    <path d="M8 16a3 3 0 0 1-3 3M16 16a3 3 0 0 0 3 3"/>
+    <path style="display:inline;fill:none;stroke:#000;stroke-width:1.67427;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" d="M3.416 5.01h17.328v8.285H3.416z"/>
+    <path d="M12 16v4M7 13v-3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3"/>
 </svg>

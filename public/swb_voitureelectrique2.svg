@@ -1,77 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="1000"
-   height="1000"
-   class="icon icon-tabler icons-tabler-outline icon-tabler-car"
-   stroke-linejoin="round"
-   stroke-width="2"
-   version="1.1"
-   id="svg1"
-   sodipodi:docname="swb_voitureelectrique2.svg"
-   viewBox="0 0 24 24"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs1" />
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.74301455"
-     inkscape:cx="333.10249"
-     inkscape:cy="474.4187"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg1" />
-  <path
-     d="m 6.53,3.69 6.35,6.35 -1.59,1.59 A 4.5,4.5 0 1 1 4.93,5.27 L 6.52,3.68 Z"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_25"
-     stroke="#000000"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
-  <path
-     d="M 2.04,14.52 4.75,11.81"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_26"
-     stroke="#000000"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
-  <path
-     d="M 10.56,2.14 7.85,4.85"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_27"
-     stroke="#000000"
-     style="stroke:#000000;stroke-opacity:1;fill:none" />
-  <path
-     d="M 14.43,6.01 11.72,8.72"
-     fill="#000000"
-     fill-opacity="0"
-     id="svg_28"
-     stroke="#000000"
-     style="fill:none" />
-  <path
-     d="m 12.389667,20.8744 h -1.151206 v -3.453617 l 1.151206,-2.878014 h 5.180424 l 2.302411,2.878014 h 0.575602 a 1.1512054,1.1512054 0 0 1 1.151206,1.151206 V 20.8744 h -1.151206 m -2.302411,0 h -3.453616 m -3.453616,-3.453617 h 8.634041 m -3.453617,0 v -2.878014"
-     id="path4"
-     style="fill:none;stroke:#000000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1" />
-  <path
-     d="m 12.389667,20.8744 a 1.1512054,1.1512054 0 1 0 2.30241,0 1.1512054,1.1512054 0 0 0 -2.30241,0"
-     id="path2"
-     style="fill:none;stroke:#000000;stroke-width:1.151208;stroke-opacity:1;fill-opacity:1;stroke-dasharray:none" />
-  <path
-     d="m 18.145693,20.8744 a 1.1512055,1.1512055 0 1 0 2.302411,0 1.1512055,1.1512055 0 0 0 -2.302411,0"
-     id="path3"
-     style="fill:none;stroke:#000000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1" />
+<svg width="1000" height="1000" class="icon icon-tabler icons-tabler-outline icon-tabler-car" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="m6.53 3.69 6.35 6.35-1.59 1.59a4.5 4.5 0 1 1-6.36-6.36l1.59-1.59ZM2.04 14.52l2.71-2.71" stroke="#000" style="fill:none;stroke:#000;stroke-opacity:1"/>
+    <path d="M10.56 2.14 7.85 4.85" stroke="#000" style="stroke:#000;stroke-opacity:1;fill:none"/>
+    <path d="m14.43 6.01-2.71 2.71" stroke="#000" style="fill:none"/>
+    <path d="M12.39 20.874h-1.152v-3.453l1.152-2.878h5.18l2.303 2.878h.575a1.151 1.151 0 0 1 1.151 1.151v2.302h-1.15m-2.303 0h-3.454m-3.454-3.453h8.635m-3.454 0v-2.878" style="fill:none;stroke:#000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1"/>
+    <path d="M12.39 20.874a1.151 1.151 0 1 0 2.302 0 1.151 1.151 0 0 0-2.302 0" style="fill:none;stroke:#000;stroke-width:1.151208;stroke-opacity:1;fill-opacity:1;stroke-dasharray:none"/>
+    <path d="M18.146 20.874a1.151 1.151 0 1 0 2.302 0 1.151 1.151 0 0 0-2.302 0" style="fill:none;stroke:#000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1"/>
 </svg>
