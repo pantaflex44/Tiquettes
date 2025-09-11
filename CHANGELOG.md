@@ -5,6 +5,7 @@
 ### Corrections
 
 - Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF.
+- [[Issue #28](https://github.com/pantaflex44/Tiquettes/issues/28)] Suppression de la limite de 3 lignes lors de l'impression des propriétés d'un module pour former la nomenclature.
 
 ### Ajouts
 

@@ -1473,12 +1473,6 @@ function App() {
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
                 }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
-                {/*<label htmlFor="importfile" className="button_group-import_project"
-                       title="Importer un projet existant">
-                    <img src={uploadProjectIcon} width={16} height={16} alt={"Importer"}
-                         onClick={() => importProjectChooseFile()}/>
-                    <span>Importer</span>
-                </label>*/}
 
                 <button className="button_group-export_project" onClick={() => {
                     exportProject();

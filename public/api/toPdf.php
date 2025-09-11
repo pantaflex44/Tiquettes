@@ -1294,12 +1294,17 @@ class TiquettesPDF extends FPDF
                         $this->Line($this->pageMargin, $this->GetY() - 2.5, $this->GetPageWidth() - $this->pageMargin, $this->GetY() - 2.5);
                     }
 
+                    $maxheight = 0;
+
                     $this->SetFont('Arial', '', 10);
                     $this->SetX($oldPosX + 5);
                     $this->Cell($columns[1]['w'], 8, str("P{$columnPositionText}"), 0, 0, $columns[1]['align']);
                     $this->SetX($oldPosX);
                     $this->Image('./libs/toPdf/assets/summary_position.png', $oldPosX, $this->GetY() + 1.9, 4, 4, 'PNG');
                     $oldPosX += $columns[1]['w'];
+
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
 
                     if ($module->icon) {
                         $icon = $this->getIcon($module->icon, '#000000', 100);
@@ -1308,10 +1313,16 @@ class TiquettesPDF extends FPDF
                     }
                     $oldPosX += $columns[2]['w'];
 
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
+
                     $this->SetFont('Arial', 'B', 10);
                     $this->SetX($oldPosX);
                     $this->Cell($columns[3]['w'], 8, str($module->id), 0, 0, $columns[3]['align']);
                     $oldPosX += $columns[3]['w'];
+
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
 
                     $oldPosY = $this->GetY();
 
@@ -1329,19 +1340,28 @@ class TiquettesPDF extends FPDF
                     $this->MultiCell($columns[4]['w'], 4, str("$fname$fdetails"), 0, $columns[4]['align'], false, 3);
                     $oldPosX += $columns[4]['w'];
 
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
+
                     $this->SetFont('Arial', '', 10);
                     $this->SetY($oldPosY);
                     $this->SetX($oldPosX);
-                    $this->MultiCell($columns[5]['w'], 4, str(trim($module->text ?? '')), 0, $columns[5]['align'], false, 3);
+                    $this->MultiCell($columns[5]['w'], 4, str(trim($module->text ?? '')), 0, $columns[5]['align'], false, 0);
                     $oldPosX += $columns[5]['w'];
 
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
+
                     $this->SetFont('Arial', '', 10);
                     $this->SetY($oldPosY);
                     $this->SetX($oldPosX);
-                    $this->MultiCell($columns[6]['w'], 4, str(trim($module->desc ?? '')), 0, $columns[6]['align'], false, 3);
+                    $this->MultiCell($columns[6]['w'], 4, str(trim($module->desc ?? '')), 0, $columns[6]['align'], false, 0);
                     $oldPosX += $columns[6]['w'];
 
-                    $this->Ln(11);
+                    if ($this->GetY() > $maxheight)
+                        $maxheight = $this->GetY();
+
+                    $this->SetY($maxheight + 4.6);
                 }
             }
 
@@ -1400,7 +1420,7 @@ $summaryPrintFormat = strtoupper(trim((string) ($printOptions->pdfOptions?->summ
 if ($summaryPrintFormat !== 'A4' && $summaryPrintFormat !== 'A3')
     $summaryPrintFormat = 'A4';
 
-$labelsPrintFormat = strtoupper(trim((string)($printOptions->pdfOptions?->labelsPrintFormat ?? 'A4')));
+$labelsPrintFormat = strtoupper(trim((string) ($printOptions->pdfOptions?->labelsPrintFormat ?? 'A4')));
 if ($labelsPrintFormat !== 'A4' && $labelsPrintFormat !== 'A3')
     $labelsPrintFormat = 'A4';
 
