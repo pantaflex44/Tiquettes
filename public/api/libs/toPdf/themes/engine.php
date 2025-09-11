@@ -127,7 +127,7 @@ class Theme
                     $data[$key]['lineCount'] = (int)($data[$key]['lineCount'] ?? 1);
                     $data[$key]['place'] = [
                         'w' => $workBox['w'] + 0.1,
-                        'h' => ($data[$key]['lineCount'] * $data[$key]['fontSize']) + (($data[$key]['lineCount'] - 1) * 0.5373),
+                        'h' => (($data[$key]['lineCount'] * $data[$key]['fontSize']) + (($data[$key]['lineCount'] - 1) * 0.5373)) - 1,
                     ];
                 }
 

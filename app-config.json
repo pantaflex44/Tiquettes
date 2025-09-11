@@ -29,6 +29,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Légère correction de la position des éléments dans chaque thème imprimables."
+                    },
+                    {
                         "text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
                     },
                     {
