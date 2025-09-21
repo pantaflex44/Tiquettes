@@ -27,85 +27,61 @@ class Theme
         return array($r, $g, $b);
     }
 
-    private static function setBgColor($pdf, $data, $module)
+    private static function getColorGroup(string $key, $data, $module): null|string
     {
         if (
-            array_key_exists('bgcolorUseGrp', $data)
-            && $data['bgcolorUseGrp'] === true
+            array_key_exists($key, $data)
+            && $data[$key] === true
             && $module->grp
             && gettype($module->grp) === 'string'
             && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
             && strlen($module->grp) === 7
         ) {
-            $color = self::computeColor($module->grp);
-            $pdf->SetFillColor($color[0], $color[1], $color[2]);
-        } else {
-            if (
-                array_key_exists('backgroundColor', $data)
-                && preg_match('/^#[a-f0-9]{6}$/i', $data['backgroundColor'])
-                && strlen($data['backgroundColor']) === 7
-            ) {
-                $color = self::computeColor($data['backgroundColor']);
-                $pdf->SetFillColor($color[0], $color[1], $color[2]);
-            } else {
-                $pdf->SetFillColor(255, 255, 255);
-            }
+            return $module->grp;
         }
+
+        return null;
+    }
+
+    private static function getColorType(string $key, $data, $module): null|string
+    {
+        if (
+            array_key_exists($key, $data)
+            && preg_match('/^#[a-f0-9]{6}$/i', $data[$key])
+            && strlen($data[$key]) === 7
+        ) {
+            return $data[$key];
+        }
+
+        return null;
+    }
+
+    private static function setBgColor($pdf, $data, $module)
+    {
+        $colorGroup = self::getColorGroup('bgcolorUseGrp', $data, $module);
+        $colorType = self::getColorType('backgroundColor', $data, $module);
+        $color = $colorGroup ?? $colorType ?? '#FFFFFF';
+        $color = self::computeColor($color);
+        $pdf->SetFillColor($color[0], $color[1], $color[2]);
     }
 
     private static function setFgColor($pdf, $data, $module)
     {
-        if (
-            array_key_exists('fgcolorUseGrp', $data)
-            && $data['fgcolorUseGrp'] === true
-            && $module->grp
-            && gettype($module->grp) === 'string'
-            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
-            && strlen($module->grp) === 7
-        ) {
-            $color = self::computeColor($module->grp);
-            $pdf->SetTextColor($color[0], $color[1], $color[2]);
-        } else {
-            if (
-                array_key_exists('color', $data)
-                && preg_match('/^#[a-f0-9]{6}$/i', $data['color'])
-                && strlen($data['color']) === 7
-            ) {
-                $color = self::computeColor($data['color']);
-                $pdf->SetTextColor($color[0], $color[1], $color[2]);
-            } else {
-                $pdf->SetTextColor(0, 0, 0);
-            }
-        }
+        $colorGroup = self::getColorGroup('fgcolorUseGrp', $data, $module);
+        $colorType = self::getColorType('color', $data, $module);
+        $color = $colorGroup ?? $colorType ?? '#000000';
+        $color = self::computeColor($color);
+        $pdf->SetTextColor($color[0], $color[1], $color[2]);
     }
 
     private static function setBdrColor($pdf, $data, $module)
     {
-        if (
-            array_key_exists('colorUseGrp', $data)
-            && $data['colorUseGrp'] === true
-            && $module->grp
-            && gettype($module->grp) === 'string'
-            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
-            && strlen($module->grp) === 7
-        ) {
-            $color = self::computeColor($module->grp);
-            $pdf->SetFillColor($color[0], $color[1], $color[2]);
-            $pdf->SetDrawColor($color[0], $color[1], $color[2]);
-        } else {
-            if (
-                array_key_exists('borderColor', $data)
-                && preg_match('/^#[a-f0-9]{6}$/i', $data['borderColor'])
-                && strlen($data['borderColor']) === 7
-            ) {
-                $color = self::computeColor($data['borderColor']);
-                $pdf->SetFillColor($color[0], $color[1], $color[2]);
-                $pdf->SetDrawColor($color[0], $color[1], $color[2]);
-            } else {
-                $pdf->SetFillColor(0, 0, 0);
-                $pdf->SetDrawColor(0, 0, 0);
-            }
-        }
+        $colorGroup = self::getColorGroup('colorUseGrp', $data, $module);
+        $colorType = self::getColorType('borderColor', $data, $module);
+        $color = $colorGroup ?? $colorType ?? '#000000';
+        $color = self::computeColor($color);
+        $pdf->SetFillColor($color[0], $color[1], $color[2]);
+        $pdf->SetDrawColor($color[0], $color[1], $color[2]);
     }
 
     public static function render($pdf, $workBox, $themeData, $module, $printOptions)
@@ -271,25 +247,9 @@ class Theme
                 } else if ($key === 'icon') { // draw icons
                     if ($data[$key]['type'] === 'icon' && $module->icon) { // icon format
 
-                        $color = '#000000';
-                        if (
-                            array_key_exists('fgcolorUseGrp', $data[$key])
-                            && $data[$key]['fgcolorUseGrp'] === true
-                            && $module->grp
-                            && gettype($module->grp) === 'string'
-                            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
-                            && strlen($module->grp) === 7
-                        ) {
-                            $color = $module->grp;
-                        } else {
-                            if (
-                                array_key_exists('color', $data[$key])
-                                && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
-                                && strlen($data[$key]['color']) === 7
-                            ) {
-                                $color = $data[$key]['color'];
-                            }
-                        }
+                        $colorGroup = self::getColorGroup('fgcolorUseGrp', $data[$key], $module);
+                        $colorType = self::getColorType('color', $data[$key], $module);
+                        $color = $colorGroup ?? $colorType ?? '#000000';
 
                         $icon = $pdf->getIcon($module->icon, $color, 100);
                         if ($icon !== '') {

@@ -39,7 +39,7 @@ function GroupColorChooser({
 
                     onCancel={() => setOpened(false)}
                     onOk={() => {
-                        if (onChange) onChange({ target: { value: color } });
+                        if (onChange) onChange(color);
                         setOpened(false);
                     }}
 

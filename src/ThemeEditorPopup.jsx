@@ -382,13 +382,13 @@ export default function ThemeEditorPopup({
                                     disabled={(editedTheme.data.top?.border ?? false) !== true}
                                     id={'tep-top-borderColor'}
                                     name={'tep-top-borderColor'}
-                                    onChange={(e) => setEditedTheme(old => ({
+                                    onChange={(c) => setEditedTheme(old => ({
                                         ...old,
                                         data: {
                                             ...old.data,
                                             top: {
                                                 ...(old.data.top ?? {}),
-                                                borderColor: e.target.value
+                                                borderColor: c
                                             },
                                         }
                                     }))}
@@ -480,13 +480,13 @@ export default function ThemeEditorPopup({
                                     disabled={(editedTheme.data.bottom?.border ?? false) !== true}
                                     id={'tep-bottom-borderColor'}
                                     name={'tep-bottom-borderColor'}
-                                    onChange={(e) => setEditedTheme(old => ({
+                                    onChange={(c) => setEditedTheme(old => ({
                                         ...old,
                                         data: {
                                             ...old.data,
                                             bottom: {
                                                 ...(old.data.bottom ?? {}),
-                                                borderColor: e.target.value
+                                                borderColor: c
                                             },
                                         }
                                     }))}

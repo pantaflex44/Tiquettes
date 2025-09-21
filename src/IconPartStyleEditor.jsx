@@ -149,11 +149,11 @@ export default function IconPartStyleEditor({
                 <GroupColorChooser value={editedTheme.data[propName]?.backgroundColor ?? '#ffffff'}
                     id={'tep-icon-backgroundColor'}
                     name={'tep-icon-backgroundColor'}
-                    onChange={(e) => setEditedTheme(old => ({
+                    onChange={(c) => setEditedTheme(old => ({
                         ...old,
                         data: {
                             ...old.data,
-                            [propName]: { ...(old.data[propName] ?? {}), backgroundColor: e.target.value }
+                            [propName]: { ...(old.data[propName] ?? {}), backgroundColor: c }
                         }
                     }))}
                     title={"Couleur du fond"}
@@ -172,11 +172,11 @@ export default function IconPartStyleEditor({
                 <GroupColorChooser value={editedTheme.data[propName]?.color ?? '#000000'}
                     id={'tep-icon-color'}
                     name={'tep-icon-color'}
-                    onChange={(e) => setEditedTheme(old => ({
+                    onChange={(c) => setEditedTheme(old => ({
                         ...old,
                         data: {
                             ...old.data,
-                            [propName]: { ...(old.data[propName] ?? {}), color: e.target.value }
+                            [propName]: { ...(old.data[propName] ?? {}), color: c }
                         }
                     }))}
                     title={"Couleur de l'icône"}

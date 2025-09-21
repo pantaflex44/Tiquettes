@@ -155,11 +155,11 @@ export default function TextPartStyleEditor({
                 <GroupColorChooser value={editedTheme.data[propName]?.backgroundColor ?? '#ffffff'}
                     id={'tep-id-backgroundColor'}
                     name={'tep-id-backgroundColor'}
-                    onChange={(e) => setEditedTheme(old => ({
+                    onChange={(c) => setEditedTheme(old => ({
                         ...old,
                         data: {
                             ...old.data,
-                            [propName]: { ...(old.data[propName] ?? {}), backgroundColor: e.target.value }
+                            [propName]: { ...(old.data[propName] ?? {}), backgroundColor: c }
                         }
                     }))}
                     title={"Couleur du fond"}
@@ -178,11 +178,11 @@ export default function TextPartStyleEditor({
                 <GroupColorChooser value={editedTheme.data[propName]?.color ?? '#000000'}
                     id={'tep-id-color'}
                     name={'tep-id-color'}
-                    onChange={(e) => setEditedTheme(old => ({
+                    onChange={(c) => setEditedTheme(old => ({
                         ...old,
                         data: {
                             ...old.data,
-                            [propName]: { ...(old.data[propName] ?? {}), color: e.target.value }
+                            [propName]: { ...(old.data[propName] ?? {}), color: c }
                         }
                     }))}
                     title={"Couleur du texte"}
