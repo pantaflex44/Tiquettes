@@ -445,21 +445,4 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [Trinakria23](https://github.com/Trinakria23)
 - [Boubigloubi](https://github.com/Boubigloubi)
 
- ### ☕ Et toutes les personnes qui m'ont offert un café que vous pouvez retrouver ici : [https://ko-fi.com/pantaflex44](https://ko-fi.com/pantaflex44)
-
- - Lucas
- - Fred
- - ATRIA Construction Mickaël
- - Lionel
- - Rudy
- - Louis
- - Grégory
- - dede3418
- - Philippe
- - Loïc
- - Geoffrey
- - oddyinfrance 
- - Anton 
- - Sylvan
- - Cyrille 
- - Zoliaaz 
+ ### ☕ Ainsi que pour tous les cafés offerts ;-)
