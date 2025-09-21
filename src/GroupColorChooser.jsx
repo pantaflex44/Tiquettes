@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
-import { BlockPicker, ChromePicker, SketchPicker } from 'react-color';
-
-import caretDownIcon from "./assets/caret-down.svg";
-import caretUpIcon from "./assets/caret-up.svg";
+import { ChromePicker } from 'react-color';
 
 import './groupColorChooser.css';
 import Popup from './Popup';
