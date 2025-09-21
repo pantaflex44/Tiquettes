@@ -120,7 +120,7 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    column-gap: 0.5rem;
+    column-gap: 0.25rem;
     width: 100%;
     height: 26px;
 }
@@ -131,7 +131,7 @@
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    column-gap: 0.25rem;
+    column-gap: 0.15rem;
 }
 
 .tep-settings_row label {

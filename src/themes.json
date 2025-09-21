@@ -16,7 +16,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "fgcolorUseGrp": true
             },
             "icon": {
                 "shown": true,
@@ -59,7 +60,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "bgcolorUseGrp": true
             },
             "icon": {
                 "shown": true,
@@ -124,7 +126,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "fgcolorUseGrp": true
             }
         }
     },
@@ -167,7 +170,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "fgcolorUseGrp": true
             }
         }
     },
@@ -210,7 +214,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "fgcolorUseGrp": true
             }
         }
     },
@@ -241,7 +246,8 @@
                 "horizontalAlignment": "center",
                 "backgoundColor": "transparent",
                 "color": "#000000",
-                "type": "text"
+                "type": "text",
+                "bgcolorUseGrp": true
             },
             "text": {
                 "shown": true,
@@ -259,6 +265,112 @@
             "top": {
                 "border": true,
                 "borderColor": "#999999"
+            }
+        }
+    },
+    {
+        "title": "Home Color Group",
+        "name": "custom|0b17a823-3745-4cfe-a590-6da46cb3cf26",
+        "default": false,
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 70,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "fgcolorUseGrp": false,
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "3",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 5,
+                "colorUseGrp": true,
+                "borderColor": "#a5f0d5"
+            },
+            "bottom": {
+                "border": false
+            }
+        }
+    },
+    {
+        "title": "Compagny Color Group",
+        "name": "custom|78560d61-29f9-4f1e-a802-a28b29e9ac1b",
+        "default": false,
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.4mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "icon": {
+                "shown": true,
+                "position": "top",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "fgcolorUseGrp": false,
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "middle",
+                "fullHeight": true,
+                "lineCount": "2",
+                "horizontalAlignment": "center",
+                "fontSize": "2.8mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000"
+            },
+            "top": {
+                "border": true,
+                "borderSize": 5,
+                "colorUseGrp": true,
+                "borderColor": "#a5f0d5"
+            },
+            "bottom": {
+                "border": false
             }
         }
     },
@@ -301,7 +413,8 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "#009e4d",
-                "color": "#ffffff"
+                "color": "#ffffff",
+                "bgcolorUseGrp": true
             }
         }
     },
@@ -322,6 +435,7 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "#009e4d",
+                "bgcolorUseGrp": true,
                 "color": "#ffffff"
             },
             "icon": {
@@ -365,6 +479,7 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "#009e4d",
+                "bgcolorUseGrp": true,
                 "color": "#009e4d"
             },
             "icon": {
@@ -408,6 +523,7 @@
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "#009e4d",
+                "bgcolorUseGrp": true,
                 "color": "#ffffff"
             },
             "icon": {
@@ -461,6 +577,7 @@
                 "horizontalAlignment": "center",
                 "backgoundColor": "transparent",
                 "color": "#ffffff",
+                "bgcolorUseGrp": true,
                 "backgroundColor": "#00689e"
             },
             "text": {
@@ -505,6 +622,7 @@
                 "horizontalAlignment": "center",
                 "backgoundColor": "transparent",
                 "color": "#ffffff",
+                "bgcolorUseGrp": true,
                 "backgroundColor": "#00689e"
             },
             "text": {
@@ -547,6 +665,7 @@
                 "sizePercent": 70,
                 "fullHeight": true,
                 "horizontalAlignment": "center",
+                "fgcolorUseGrp": true,
                 "backgoundColor": "transparent",
                 "color": "#00aae1"
             },
@@ -591,6 +710,7 @@
                 "fullHeight": false,
                 "horizontalAlignment": "center",
                 "backgoundColor": "transparent",
+                "fgcolorUseGrp": true,
                 "color": "#00aae1"
             },
             "text": {
@@ -753,6 +873,7 @@
             "top": {
                 "border": true,
                 "borderSize": 4,
+                "colorUseGrp": true,
                 "borderColor": "#ef3341"
             }
         }
@@ -806,6 +927,7 @@
             "bottom": {
                 "border": true,
                 "borderColor": "#ef3341",
+                "colorUseGrp": true,
                 "borderSize": 4
             }
         }

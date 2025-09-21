@@ -27,44 +27,84 @@ class Theme
         return array($r, $g, $b);
     }
 
-    private static function setBgColor($pdf, $data)
+    private static function setBgColor($pdf, $data, $module)
     {
-        if (array_key_exists('backgroundColor', $data)
-            && preg_match('/^#[a-f0-9]{6}$/i', $data['backgroundColor'])
-            && strlen($data['backgroundColor']) === 7
+        if (
+            array_key_exists('bgcolorUseGrp', $data)
+            && $data['bgcolorUseGrp'] === true
+            && $module->grp
+            && gettype($module->grp) === 'string'
+            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
+            && strlen($module->grp) === 7
         ) {
-            $color = self::computeColor($data['backgroundColor']);
+            $color = self::computeColor($module->grp);
             $pdf->SetFillColor($color[0], $color[1], $color[2]);
         } else {
-            $pdf->SetFillColor(255, 255, 255);
+            if (
+                array_key_exists('backgroundColor', $data)
+                && preg_match('/^#[a-f0-9]{6}$/i', $data['backgroundColor'])
+                && strlen($data['backgroundColor']) === 7
+            ) {
+                $color = self::computeColor($data['backgroundColor']);
+                $pdf->SetFillColor($color[0], $color[1], $color[2]);
+            } else {
+                $pdf->SetFillColor(255, 255, 255);
+            }
         }
     }
 
-    private static function setFgColor($pdf, $data)
+    private static function setFgColor($pdf, $data, $module)
     {
-        if (array_key_exists('color', $data)
-            && preg_match('/^#[a-f0-9]{6}$/i', $data['color'])
-            && strlen($data['color']) === 7
+        if (
+            array_key_exists('fgcolorUseGrp', $data)
+            && $data['fgcolorUseGrp'] === true
+            && $module->grp
+            && gettype($module->grp) === 'string'
+            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
+            && strlen($module->grp) === 7
         ) {
-            $color = self::computeColor($data['color']);
+            $color = self::computeColor($module->grp);
             $pdf->SetTextColor($color[0], $color[1], $color[2]);
         } else {
-            $pdf->SetTextColor(0, 0, 0);
+            if (
+                array_key_exists('color', $data)
+                && preg_match('/^#[a-f0-9]{6}$/i', $data['color'])
+                && strlen($data['color']) === 7
+            ) {
+                $color = self::computeColor($data['color']);
+                $pdf->SetTextColor($color[0], $color[1], $color[2]);
+            } else {
+                $pdf->SetTextColor(0, 0, 0);
+            }
         }
     }
 
-    private static function setBdrColor($pdf, $data)
+    private static function setBdrColor($pdf, $data, $module)
     {
-        if (array_key_exists('borderColor', $data)
-            && preg_match('/^#[a-f0-9]{6}$/i', $data['borderColor'])
-            && strlen($data['borderColor']) === 7
+        if (
+            array_key_exists('colorUseGrp', $data)
+            && $data['colorUseGrp'] === true
+            && $module->grp
+            && gettype($module->grp) === 'string'
+            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
+            && strlen($module->grp) === 7
         ) {
-            $color = self::computeColor($data['borderColor']);
+            $color = self::computeColor($module->grp);
             $pdf->SetFillColor($color[0], $color[1], $color[2]);
             $pdf->SetDrawColor($color[0], $color[1], $color[2]);
         } else {
-            $pdf->SetFillColor(0, 0, 0);
-            $pdf->SetDrawColor(0, 0, 0);
+            if (
+                array_key_exists('borderColor', $data)
+                && preg_match('/^#[a-f0-9]{6}$/i', $data['borderColor'])
+                && strlen($data['borderColor']) === 7
+            ) {
+                $color = self::computeColor($data['borderColor']);
+                $pdf->SetFillColor($color[0], $color[1], $color[2]);
+                $pdf->SetDrawColor($color[0], $color[1], $color[2]);
+            } else {
+                $pdf->SetFillColor(0, 0, 0);
+                $pdf->SetDrawColor(0, 0, 0);
+            }
         }
     }
 
@@ -79,7 +119,8 @@ class Theme
                 ARRAY_FILTER_USE_BOTH
             );
             $count = count(array_keys($data));
-            if ($count === 0) return;
+            if ($count === 0)
+                return;
 
             $data = array_map(fn($k) => array_merge($k, [
                 'position' => $k['position'] === 'top' ? 0 : ($k['position'] === 'middle' ? 1 : 2),
@@ -99,7 +140,8 @@ class Theme
             $borderTopStyle = $hasTopBorder ? ($originalData['top']['borderStyle'] ?? 'normal') : 'normal';
 
             foreach (array_keys($data) as $key) {
-                if ($data[$key]['fullHeight'] === true) $nbFh[] = $key;
+                if ($data[$key]['fullHeight'] === true)
+                    $nbFh[] = $key;
 
                 $data[$key]['margins'] = [
                     'top' => $pos === 0 ? 2 : 1,
@@ -111,11 +153,15 @@ class Theme
 
                 if ($key === 'id' || $key === 'text') {
                     $data[$key]['fontFamily'] = strtolower(trim($data[$key]['fontFamily'] ?? 'sans-serif'));
-                    if ($data[$key]['fontFamily'] === 'serif') $data[$key]['fontFamily'] = 'Times';
-                    else if ($data[$key]['fontFamily'] === 'monospace') $data[$key]['fontFamily'] = 'Courier';
-                    else if ($data[$key]['fontFamily'] === 'cursive') $data[$key]['fontFamily'] = 'Symbol';
-                    else $data[$key]['fontFamily'] = 'Helvetica';
-                    $data[$key]['fontSize'] = (float)($data[$key]['fontSize'] ?? 2.4);
+                    if ($data[$key]['fontFamily'] === 'serif')
+                        $data[$key]['fontFamily'] = 'Times';
+                    else if ($data[$key]['fontFamily'] === 'monospace')
+                        $data[$key]['fontFamily'] = 'Courier';
+                    else if ($data[$key]['fontFamily'] === 'cursive')
+                        $data[$key]['fontFamily'] = 'Symbol';
+                    else
+                        $data[$key]['fontFamily'] = 'Helvetica';
+                    $data[$key]['fontSize'] = (float) ($data[$key]['fontSize'] ?? 2.4);
                     $data[$key]['fontSizePt'] = $data[$key]['fontSize'] / 0.36; // mm to pt
                     $data[$key]['fontStyle'] = strtolower(trim($data[$key]['fontStyle'] ?? 'normal'));
                     $data[$key]['fontWeight'] = strtolower(trim($data[$key]['fontWeight'] ?? 'normal'));
@@ -124,7 +170,7 @@ class Theme
                     $data[$key]['fontStyle'] = $s;
                     $data[$key]['fontWeight'] = '';
 
-                    $data[$key]['lineCount'] = (int)($data[$key]['lineCount'] ?? 1);
+                    $data[$key]['lineCount'] = (int) ($data[$key]['lineCount'] ?? 1);
                     $data[$key]['place'] = [
                         'w' => $workBox['w'] + 0.1,
                         'h' => (($data[$key]['lineCount'] * $data[$key]['fontSize']) + (($data[$key]['lineCount'] - 1) * 0.5373)) - 1,
@@ -133,7 +179,8 @@ class Theme
 
                 if ($key === 'icon') {
                     $data[$key]['type'] = strtolower(trim($data[$key]['type'] ?? 'icon'));
-                    if ($data[$key]['type'] !== 'icon' && $data[$key]['type'] !== 'text') $data[$key]['type'] = 'icon';
+                    if ($data[$key]['type'] !== 'icon' && $data[$key]['type'] !== 'text')
+                        $data[$key]['type'] = 'icon';
 
                     $data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
                     $data[$key]['place'] = [
@@ -176,7 +223,8 @@ class Theme
                 $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
                 $diffNp = $workBox['h'] - $hs;
                 $diffNp = $diffNp / count($nbFh);
-                foreach ($nbFh as $key) $data[$key]['bgPlace']['h'] += $diffNp;
+                foreach ($nbFh as $key)
+                    $data[$key]['bgPlace']['h'] += $diffNp;
                 $np = $workBox['y'];
                 foreach (array_keys($data) as $key) {
                     $data[$key]['bgPlace']['y'] = $np;
@@ -191,12 +239,13 @@ class Theme
                 $keys = array_keys($data);
                 array_shift($keys);
                 $cnt = 0;
-                foreach ($keys as $key) $data[$key]['bgPlace']['y'] += $freeHs + ($cnt++ * $freeHs);
+                foreach ($keys as $key)
+                    $data[$key]['bgPlace']['y'] += $freeHs + ($cnt++ * $freeHs);
             }
 
             // draw background color
             foreach (array_keys($data) as $key) {
-                self::setBgColor($pdf, $data[$key]);
+                self::setBgColor($pdf, $data[$key], $module);
                 $r = $data[$key]['bgPlace'];
                 $pdf->Rect($r['x'], $r['y'], $r['w'], $r['h'], 'F');
 
@@ -212,7 +261,7 @@ class Theme
                 $pdf->SetXY($posX, $posY);
 
                 if ($key === 'id' || $key === 'text') { // draw text
-                    self::setFgColor($pdf, $data[$key]);
+                    self::setFgColor($pdf, $data[$key], $module);
                     $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
                     $txt = mb_convert_encoding($module->{$key}, 'windows-1252', 'UTF-8');
                     $align = strtolower(trim(($data[$key]['horizontalAlignment'] ?? 'center')));
@@ -220,11 +269,28 @@ class Theme
                     $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
 
                 } else if ($key === 'icon') { // draw icons
-                    if ($data[$key]['type'] === 'icon'  && $module->icon) { // icon format
-                        $color = (array_key_exists('color', $data[$key])
-                            && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
-                            && strlen($data[$key]['color']) === 7
-                        ) ? $data[$key]['color'] : '#000000';
+                    if ($data[$key]['type'] === 'icon' && $module->icon) { // icon format
+
+                        $color = '#000000';
+                        if (
+                            array_key_exists('fgcolorUseGrp', $data[$key])
+                            && $data[$key]['fgcolorUseGrp'] === true
+                            && $module->grp
+                            && gettype($module->grp) === 'string'
+                            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
+                            && strlen($module->grp) === 7
+                        ) {
+                            $color = $module->grp;
+                        } else {
+                            if (
+                                array_key_exists('color', $data[$key])
+                                && preg_match('/^#[a-f0-9]{6}$/i', $data[$key]['color'])
+                                && strlen($data[$key]['color']) === 7
+                            ) {
+                                $color = $data[$key]['color'];
+                            }
+                        }
+
                         $icon = $pdf->getIcon($module->icon, $color, 100);
                         if ($icon !== '') {
                             $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
@@ -236,7 +302,7 @@ class Theme
                             $oy = $pdf->GetY();
                             $pdf->SetXY($ox, $oy + 0.5);
 
-                            self::setFgColor($pdf, $data[$key]);
+                            self::setFgColor($pdf, $data[$key], $module);
                             $pdf->SetFont($data[$key]['modtypeParams']['fontFamily'], $data[$key]['modtypeParams']['fontStyle'], $data[$key]['modtypeParams']['fontSizePt']);
                             $txt = mb_convert_encoding($modtype, 'windows-1252', 'UTF-8');
                             $align = strtolower(trim(($data[$key]['horizontalAlignment'] ?? 'center')));
@@ -251,7 +317,7 @@ class Theme
 
             // draw borders
             if ($firstKey !== '' && $hasTopBorder) {
-                self::setBdrColor($pdf, $originalData['top']);
+                self::setBdrColor($pdf, $originalData['top'], $module);
 
                 $r = $data[$firstKey]['bgPlace'];
                 //$pdf->Rect($r['x'], $r['y'] + $r['h'] - $borderTopSize, $r['w'], $borderTopSize, 'F');
@@ -268,7 +334,7 @@ class Theme
                 $pdf->SetLineWidth(0.2);
             }
             if ($lastKey !== '' && $hasBottomBorder) {
-                self::setBdrColor($pdf, $originalData['bottom']);
+                self::setBdrColor($pdf, $originalData['bottom'], $module);
                 $r = $data[$lastKey]['bgPlace'];
                 //$pdf->Rect($r['x'], $r['y'], $r['w'], $borderBottomSize, 'F');
                 $pdf->SetLineWidth($borderBottomSize);

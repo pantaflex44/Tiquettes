@@ -37,12 +37,16 @@ function log_mail_connection(array $user): bool
 
 function generateUUID(): string
 {
-    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+    return sprintf(
+        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
         mt_rand(0, 0xffff),
         mt_rand(0, 0x0C2f) | 0x4000,
         mt_rand(0, 0x3fff) | 0x8000,
-        mt_rand(0, 0x2Aff), mt_rand(0, 0xffD3), mt_rand(0, 0xff4B)
+        mt_rand(0, 0x2Aff),
+        mt_rand(0, 0xffD3),
+        mt_rand(0, 0xff4B)
     );
 }
 
@@ -67,12 +71,13 @@ function getAuthorizationHeader(): string|false
     return $headers;
 }
 
-function generateToken(int $id, bool $withBearer = false, string $domainName = "www.tiquettes.fr", string $expiration = '+1 week'): array
+function generateToken(int $id, bool $withBearer = false, string $domainName = "www.tiquettes.fr", string $expiration = '+1 week'): array|bool
 {
     $stmt = DB->prepare("SELECT COUNT(*) AS count FROM users WHERE id = ?");
     $stmt->execute([$id]);
     $count = $stmt->fetch(\PDO::FETCH_COLUMN);
-    if (!$count || $count !== 1) return false;
+    if (!$count || $count !== 1)
+        return false;
 
     $uuid = generateUUID();
     $date = new \DateTimeImmutable();
@@ -92,7 +97,8 @@ function generateToken(int $id, bool $withBearer = false, string $domainName = "
         JWT_SECRET_KEY,
         'HS512'
     );
-    if ($withBearer) $token = "Bearer {$token}";
+    if ($withBearer)
+        $token = "Bearer {$token}";
 
     $stmt = DB->prepare("UPDATE users SET uuid = ?, uuid_expire = ?, uuid_refresh = ? WHERE id = ?");
     $stmt->execute([$uuid, $expireAt, $refreshBefore, $id]);
@@ -125,9 +131,11 @@ function getToken(string $domainName = "www.tiquettes.fr"): stdClass
     }
 
     $now = new \DateTimeImmutable();
-    if ($token->iss !== $domainName ||
+    if (
+        $token->iss !== $domainName ||
         $token->nbf > $now->getTimestamp() ||
-        $token->exp < $now->getTimestamp()) {
+        $token->exp < $now->getTimestamp()
+    ) {
         header('HTTP/1.1 401 Unauthorized');
         exit;
     }
@@ -179,7 +187,8 @@ function getUserById(int $id): array|null
     $stmt = DB->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$id]);
     $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-    if (!$user) return null;
+    if (!$user)
+        return null;
 
     return $user;
 }
@@ -208,7 +217,8 @@ function retryMinusOne(): int
     $client = $stmt->fetch(\PDO::FETCH_ASSOC);
     $attempts = is_array($client) ? $client['count'] : CONNECTION_MAX_RETRIES;
     $attempts--;
-    if ($attempts < 0) $attempts = 0;
+    if ($attempts < 0)
+        $attempts = 0;
     if (!is_array($client)) {
         $stmt = DB->prepare("INSERT INTO connection_retries (ip, count, after) VALUES(?, ?, datetime('now'))");
         $stmt->execute([CLIENT_IP, $attempts]);
@@ -227,7 +237,8 @@ function isRetryAllowed(): bool
     $stmt = DB->prepare("SELECT * FROM connection_retries WHERE ip = ? AND after <= datetime('now')");
     $stmt->execute([CLIENT_IP]);
     $client = $stmt->fetch(\PDO::FETCH_ASSOC);
-    if (!is_array($client)) return true;
+    if (!is_array($client))
+        return true;
     return $client['count'] > 0;
 }
 
@@ -239,15 +250,16 @@ function clearRetries(): void
 
 header('Content-Type: application/json');
 
-$category = isset($_GET['c']) ? trim(rawurldecode($_GET['c']) : '';
-$action = isset($_GET['a']) ? trim(rawurldecode($_GET['a']) : '';
+$category = isset($_GET['c']) ? trim(rawurldecode($_GET['c'])) : '';
+$action = isset($_GET['a']) ? trim(rawurldecode($_GET['a'])) : '';
 $params = array_reduce(array_map(function ($p) {
     $ep = explode('=', $p);
     $key = trim($ep[0]);
-    $value = count($ep > 1) ? trim($ep[1]) : '';
+    $value = count($ep) > 1 ? trim($ep[1]) : '';
     return [$key, $value];
-} , explode('|', isset($_GET['p']) ? trim(rawurldecode($_GET['p']) : ''))), function ($result, $item) {
-    if (is_array($item) && count($item) === 2) $result[$item[0]] = $item[1];
+}, explode('|', isset($_GET['p']) ? trim(rawurldecode($_GET['p'])) : '')), function ($result, $item) {
+    if (is_array($item) && count($item) === 2)
+        $result[$item[0]] = $item[1];
 });
 
 /*switch ($action) {

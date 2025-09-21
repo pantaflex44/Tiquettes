@@ -1,16 +1,17 @@
 # ChangeLog
 
-## [2.2.5] - 2025-09-11
+## [2.2.5] - 2025-09-21
 
 ### Corrections
 
-- Légère correction de la position des éléments dans chaque thème imprimables.
+- Légère correction de la position des éléments dans chaque thème imprimable.
 - Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF.
 - [[Issue #28](https://github.com/pantaflex44/Tiquettes/issues/28)] Suppression de la limite de 3 lignes lors de l'impression des propriétés d'un module pour former la nomenclature.
 
 ### Ajouts
 
 - [[Issue #38](https://github.com/pantaflex44/Tiquettes/issues/38)] Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.
+- [[Discussion #36](https://github.com/pantaflex44/Tiquettes/discussions/36)] Réponse à une proposition, nouvelle fonctionnalité qui permet d'associer un module à un groupe via une couleur. Couleur utilisée (si disponible et si demandée) par les thèmes.
 
 
 ## [2.2.4] - 2025-09-07

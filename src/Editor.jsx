@@ -38,6 +38,7 @@ import EditorContactSelector from "./EditorContactSelector.jsx";
 import EditorParentSelector from "./EditorParentSelector.jsx";
 import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
+import GroupColorSelector from "./GroupColorSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -119,334 +120,196 @@ export default function Editor({
 
 
     return ed && (
-        <Popup
-            title={<div className="popup_title_content">
-                <img className="popup_title_content_img" src={editIcon} title="Editer le module"
-                    alt="Editer le module" />
-                <span className="popup_title_content_id">{ed.currentModule.id ?? ""}</span>
-                {ed.currentModule.text ?
-                    <span className="popup_title_content_desc">/ {ed.currentModule.text ?? ""}</span> : ""}
-            </div>}
-            showCloseButton={true}
-            onCancel={() => onSetEditor(null)}
-            onOk={() => {
-                onApplyModuleEditor({ ...ed })
-            }}
-            width={440}
-            className="popup_flex"
-            additionalButtons={[
-                {
-                    text: "Supprimer",
-                    callback: () => {
-                        if (onHandleModuleClear(ed.rowIndex, ed.moduleIndex, ed.currentModule)) {
-                            onSetEditor(null)
-                        }
-                    },
-                    style: { color: 'red', borderColor: 'red' },
-                    disabled: ed.currentModule.free
-                }
-            ]}
-        >
-            <div style={{ flex: 1, minHeight: '621px' }}>
-                <div className={"editor_tabpages"}>
-                    <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
-                        onChange={() => setEditorTab("main")} />
-                    <label htmlFor="main_editor_tab">
-                        <img src={switchboardIcon} width="20" height="20" alt="Tableau" />
-                        <span>Tableau</span>
-                    </label>
+        <>
+            <Popup
+                title={<div className="popup_title_content">
+                    <img className="popup_title_content_img" src={editIcon} title="Editer le module"
+                        alt="Editer le module" />
+                    <span className="popup_title_content_id">{ed.currentModule.id ?? ""}</span>
+                    {ed.currentModule.text ?
+                        <span className="popup_title_content_desc">/ {ed.currentModule.text ?? ""}</span> : ""}
+                </div>}
+                showCloseButton={true}
+                onCancel={() => onSetEditor(null)}
+                onOk={() => {
+                    onApplyModuleEditor({ ...ed })
+                }}
+                width={440}
+                className="popup_flex"
+                additionalButtons={[
+                    {
+                        text: "Supprimer",
+                        callback: () => {
+                            if (onHandleModuleClear(ed.rowIndex, ed.moduleIndex, ed.currentModule)) {
+                                onSetEditor(null)
+                            }
+                        },
+                        style: { color: 'red', borderColor: 'red' },
+                        disabled: ed.currentModule.free
+                    }
+                ]}
+            >
+                <div style={{ flex: 1, minHeight: '621px' }}>
+                    <div className={"editor_tabpages"}>
+                        <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
+                            onChange={() => setEditorTab("main")} />
+                        <label htmlFor="main_editor_tab">
+                            <img src={switchboardIcon} width="20" height="20" alt="Tableau" />
+                            <span>Tableau</span>
+                        </label>
 
-                    <input type="checkbox" id="schema_editor_tab" checked={editorTab === "schema"}
-                        onChange={() => setEditorTab("schema")} />
-                    <label htmlFor="schema_editor_tab">
-                        <img src={schemaIcon} width="20" height="20" alt="Schéma" />
-                        <span>Schéma</span>
-                    </label>
-                </div>
+                        <input type="checkbox" id="schema_editor_tab" checked={editorTab === "schema"}
+                            onChange={() => setEditorTab("schema")} />
+                        <label htmlFor="schema_editor_tab">
+                            <img src={schemaIcon} width="20" height="20" alt="Schéma" />
+                            <span>Schéma</span>
+                        </label>
+                    </div>
 
-                {ed.errors.map((error, i) => <div key={i} className="popup_row"
-                    style={{ '--left_column_size': '100px' }}>
-                    <div>&nbsp;</div>
-                    <div className="popup_error">{error}</div>
-                </div>)}
+                    {ed.errors.map((error, i) => <div key={i} className="popup_row"
+                        style={{ '--left_column_size': '100px' }}>
+                        <div>&nbsp;</div>
+                        <div className="popup_error">{error}</div>
+                    </div>)}
 
-                {editorTab === "main" &&
-                    <>
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_id_${ed.currentModule.id.trim()}`}>Identifiant</label>
-                            <div className="popup_row-flex">
-                                <input
-                                    type="text"
-                                    name="editor_id"
-                                    id={`editor_id_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.id}
-                                    onChange={(e) => onUpdateModuleEditor({ id: e.target.value })}
-                                    autoFocus={!!(ed?.focusedInputName === "id")}
-                                />
-                                <button title="Trouver le prochain identifiant disponible."
-                                    onClick={() => onUpdateModuleEditor({ id: lastFreeId })}>
-                                    <img src={assignIdIcon} width={22} height={22}
-                                        alt="Trouver le prochain identifiant libre." />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <div></div>
-                            <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module
-                                précédent: <b>{ed.prevModule?.id ?? "-"}</b></label>
-                        </div>
-
-
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_text_${ed.currentModule.id.trim()}`}>Libellé</label>
-                            <textarea
-                                name="editor_text"
-                                id={`editor_text_${ed.currentModule.id.trim()}`}
-                                value={ed.currentModule.text}
-                                onChange={(e) => onUpdateModuleEditor({ text: e.target.value })}
-                                rows={3}
-                                autoFocus={!!(ed?.focusedInputName === "text")}
-                            />
-                        </div>
-
-
-                        <div className="popup_row" style={{
-                            alignItems: 'center', '--left_column_size': '100px',
-                            borderTop: '1px solid lightgray',
-                            paddingTop: '1em',
-                            marginTop: '2em'
-                        }}>
-                            <label>Fonction</label>
-                            <Suspense fallback={<div style={{ lineHeight: '40px' }}>...</div>}>
-                                <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
-                                    if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
-                                        onUpdateModuleEditor({ icon: selectedIcon, coef: selected?.coef ?? 0.5 })
-                                        /*
-                                        if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
-                                        if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
-                                        if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
-                                        if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
-                                         */
-
-                                        if (selected?.func) onUpdateModuleEditor({ func: selected?.func });
-                                        if (selected?.crb) onUpdateModuleEditor({ crb: selected?.crb });
-                                        if (selected?.current) onUpdateModuleEditor({ current: selected?.current });
-                                        if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
-
-                                        if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({ modtype: selected?.modtype });
-
-                                    }
-                                    if (!selected || !selectedIcon) {
-                                        onUpdateModuleEditor({ icon: null });
-                                    }
-                                }}
-                                    autoFocus={!!(ed?.focusedInputName === "icon")} />
-                            </Suspense>
-                        </div>
-
-                        <div className="popup_row" style={{
-                            '--left_column_size': '100px',
-                            borderBottom: '1px solid lightgray',
-                            paddingBottom: '1em',
-                            marginBottom: '2em'
-                        }}>
-                            <label htmlFor={`editor_modtype_${ed.currentModule.modtype.trim()}`}>Type</label>
-                            <input
-                                type="text"
-                                name="editor_modtype"
-                                id={`editor_modtype_${ed.currentModule.modtype.trim()}`}
-                                value={ed.currentModule.modtype}
-                                onChange={(e) => {
-                                    onUpdateModuleEditor({ modtype: e.target.value })
-                                    setIsCustomFunction(old => {
-                                        const isCF = old && e.target.value.trim() !== "";
-                                        return isCF;
-                                    });
-                                }}
-                                onInput={(e) => {
-                                    setIsCustomFunction(e.target.value.trim() !== "");
-                                }}
-                                autoFocus={!!(ed?.focusedInputName === "type")}
-                            />
-                        </div>
-
-
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>Annotations<br /><span
-                                style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
-                            <textarea
-                                name="editor_desc"
-                                id={`editor_desc_${ed.currentModule.id.trim()}`}
-                                value={ed.currentModule.desc}
-                                onChange={(e) => onUpdateModuleEditor({ desc: e.target.value })}
-                                rows={2}
-                                autoFocus={!!(ed?.focusedInputName === "desc")}
-                            />
-                        </div>
-
-
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginInline: 'auto',
-                            marginTop: '2em',
-                            alignItems: 'center',
-                            width: '100%',
-                            borderBottom: '1px solid lightgray'
-                        }}>
-                            <h5 style={{
-                                color: 'gray',
-                                width: '100%',
-                                borderBottom: '1px solid lightgray',
-                                margin: 0
-                            }}>Démonstration</h5>
-                            <div style={{
-                                borderRadius: '5px',
-                                border: '1px solid darkgray',
-                                width: 'min-content',
-                                maxWidth: '100%',
-                                overflowX: 'auto',
-                                marginBlock: '1em',
-                                minHeight: `calc(${switchboard.height}mm + 1mm)`,
-                                overflowY: 'hidden'
-                            }}>
-                                <Module
-                                    isDemo={true}
-                                    item={{
-                                        id: ed.currentModule.id,
-                                        icon: ed.currentModule.icon,
-                                        text: ed.currentModule.text,
-                                        desc: ed.currentModule.desc,
-                                        parentId: ed.currentModule.parentId,
-                                        func: ed.currentModule.func,
-                                        type: ed.currentModule.type,
-                                        current: ed.currentModule.current,
-                                        crb: ed.currentModule.crb,
-                                        sensibility: ed.currentModule.sensibility,
-                                        pole: ed.currentModule.pole,
-                                        wire: ed.currentModule.wire,
-                                        free: false,
-                                        span: ed.currentModule.span,
-                                        modtype: ed.currentModule.modtype,
-                                    }}
-                                    modulePosition={1}
-                                    rowPosition={1}
-                                    theme={theme}
-                                    style={{
-                                        "--h": `calc(${switchboard.height}mm + 1mm)`,
-                                        "--sw": `calc(${stepSize}mm + 1px)`
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </>
-                }
-
-                {editorTab === "schema" &&
-                    <>
-                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                            <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
-                            <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
-                                value={ed.currentModule.func}
-                                onChange={(value) => onUpdateModuleEditor({ func: value })} />
-                        </div>
-
-                        {ed.currentModule.func && <>
+                    {editorTab === "main" &&
+                        <>
                             <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>Parent</label>
-                                <EditorParentSelector id={`editor_schparent_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.parentId}
-                                    currentModuleId={ed.currentModule.id}
-                                    filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                    onChange={(value) => onUpdateModuleEditor({ parentId: value })} />
+                                <label htmlFor={`editor_id_${ed.currentModule.id.trim()}`}>Identifiant</label>
+                                <div className="popup_row-flex">
+                                    <input
+                                        type="text"
+                                        name="editor_id"
+                                        id={`editor_id_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.id}
+                                        onChange={(e) => onUpdateModuleEditor({ id: e.target.value })}
+                                        autoFocus={!!(ed?.focusedInputName === "id")}
+                                    />
+                                    <button title="Trouver le prochain identifiant disponible."
+                                        onClick={() => onUpdateModuleEditor({ id: lastFreeId })}>
+                                        <img src={assignIdIcon} width={22} height={22}
+                                            alt="Trouver le prochain identifiant libre." />
+                                    </button>
+                                </div>
                             </div>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <div></div>
+                                <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module
+                                    précédent: <b>{ed.prevModule?.id ?? "-"}</b></label>
+                            </div>
+
+
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_text_${ed.currentModule.id.trim()}`}>Libellé</label>
+                                <textarea
+                                    name="editor_text"
+                                    id={`editor_text_${ed.currentModule.id.trim()}`}
+                                    value={ed.currentModule.text}
+                                    onChange={(e) => onUpdateModuleEditor({ text: e.target.value })}
+                                    rows={3}
+                                    autoFocus={!!(ed?.focusedInputName === "text")}
+                                />
+                            </div>
+
+                            <div className="popup_row" style={{
+                                alignItems: 'center',
+                                '--left_column_size': '100px',
+                                gridTemplateColumns: 'var(--left_column_size) calc(100% - 100px)',
+                                maxWidth: '100%'
+                            }}>
+                                <label>Couleur</label>
+                                <div className="popup_row-flex" style={{
+                                    alignItems: 'center',
+                                    columnGap: '0.5rem',
+                                    maxWidth: '100%'
+                                }}>
+                                    <GroupColorSelector
+                                        switchboard={switchboard}
+                                        value={ed.currentModule.grp}
+                                        onChange={(value) => onUpdateModuleEditor({ grp: value })}
+                                    />
+                                    <div style={{
+                                        color: 'gray',
+                                        fontSize: 'smaller'
+                                    }}>Regrouppez vos circuits en utilisant des couleurs personnalisées.</div>
+                                </div>
+                            </div>
+
+                            <div className="popup_row" style={{
+                                alignItems: 'center', '--left_column_size': '100px',
+                                borderTop: '1px solid lightgray',
+                                paddingTop: '1em',
+                                marginTop: '2em'
+                            }}>
+                                <label>Fonction</label>
+                                <Suspense fallback={<div style={{ lineHeight: '40px' }}>...</div>}>
+                                    <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
+                                        if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
+                                            onUpdateModuleEditor({ icon: selectedIcon, coef: selected?.coef ?? 0.5 })
+                                            /*
+                                            if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
+                                            if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
+                                            if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
+                                            if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
+                                             */
+
+                                            if (selected?.func) onUpdateModuleEditor({ func: selected?.func });
+                                            if (selected?.crb) onUpdateModuleEditor({ crb: selected?.crb });
+                                            if (selected?.current) onUpdateModuleEditor({ current: selected?.current });
+                                            if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
+
+                                            if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({ modtype: selected?.modtype });
+
+                                        }
+                                        if (!selected || !selectedIcon) {
+                                            onUpdateModuleEditor({ icon: null });
+                                        }
+                                    }}
+                                        autoFocus={!!(ed?.focusedInputName === "icon")} />
+                                </Suspense>
+                            </div>
+
                             <div className="popup_row" style={{
                                 '--left_column_size': '100px',
-                                borderBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '1px solid lightgray',
-                                paddingBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '1em',
-                                marginBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '2em'
+                                borderBottom: '1px solid lightgray',
+                                paddingBottom: '1em',
+                                marginBottom: '2em'
                             }}>
-                                <div></div>
-                                <label style={{ fontSize: "small", color: "#777" }}>└ Parent du module
-                                    précédent: <b>{prevModuleTitle !== "" ? prevModuleTitle : "-"}</b></label>
+                                <label htmlFor={`editor_modtype_${ed.currentModule.modtype.trim()}`}>Type</label>
+                                <input
+                                    type="text"
+                                    name="editor_modtype"
+                                    id={`editor_modtype_${ed.currentModule.modtype.trim()}`}
+                                    value={ed.currentModule.modtype}
+                                    onChange={(e) => {
+                                        onUpdateModuleEditor({ modtype: e.target.value })
+                                        setIsCustomFunction(old => {
+                                            const isCF = old && e.target.value.trim() !== "";
+                                            return isCF;
+                                        });
+                                    }}
+                                    onInput={(e) => {
+                                        setIsCustomFunction(e.target.value.trim() !== "");
+                                    }}
+                                    autoFocus={!!(ed?.focusedInputName === "type")}
+                                />
                             </div>
 
-                            {schemaFunctions[ed.currentModule.func]?.supportContacts === true &&
-                                <div className="popup_row" style={{
-                                    '--left_column_size': '100px',
-                                    borderBottom: '1px solid lightgray',
-                                    paddingBottom: '1em',
-                                    marginBottom: '2em'
-                                }}>
-                                    <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
-                                        par</label>
-                                    <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
-                                        value={ed.currentModule.kcId}
-                                        currentModuleId={ed.currentModule.id}
-                                        filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                        onChange={(value) => onUpdateModuleEditor({ kcId: value })} />
-                                </div>}
-                        </>
-                        }
 
-                        {schemaFunctions[ed.currentModule.func]?.hasType &&
                             <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>Type</label>
-                                <EditorTypeSelector id={`editor_type_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.type}
-                                    onChange={(value) => onUpdateModuleEditor({ type: value })} />
+                                <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>Annotations<br /><span
+                                    style={{ fontSize: '0.8em', color: 'gray' }}>(nomenclature)</span></label>
+                                <textarea
+                                    name="editor_desc"
+                                    id={`editor_desc_${ed.currentModule.id.trim()}`}
+                                    value={ed.currentModule.desc}
+                                    onChange={(e) => onUpdateModuleEditor({ desc: e.target.value })}
+                                    rows={2}
+                                    autoFocus={!!(ed?.focusedInputName === "desc")}
+                                />
                             </div>
-                        }
 
-                        {schemaFunctions[ed.currentModule.func]?.hasCrb &&
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_crb_${ed.currentModule.id.trim()}`}>Courbe</label>
-                                <EditorCrbSelector id={`editor_crb_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.crb}
-                                    onChange={(value) => onUpdateModuleEditor({ crb: value })} />
-                            </div>
-                        }
 
-                        {schemaFunctions[ed.currentModule.func]?.hasType &&
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label
-                                    htmlFor={`editor_sensibility_${ed.currentModule.id.trim()}`}>Sensibilité</label>
-                                <EditorSensibilitySelector id={`editor_sensibility_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.sensibility}
-                                    onChange={(value) => onUpdateModuleEditor({ sensibility: value })} />
-                            </div>
-                        }
-
-                        {schemaFunctions[ed.currentModule.func]?.hasCurrent &&
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
-                                <EditorCurrentSelector id={`editor_current_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.current}
-                                    onChange={(value) => onUpdateModuleEditor({ current: value })} />
-                            </div>
-                        }
-
-                        {schemaFunctions[ed.currentModule.func]?.hasWire &&
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
-                                <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.wire}
-                                    onChange={(value) => onUpdateModuleEditor({ wire: value })}
-                                    current={parseInt(ed.currentModule.current.replace(/\D/g, ''))} />
-                            </div>
-                        }
-
-                        {schemaFunctions[ed.currentModule.func]?.hasPole &&
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
-                                <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.pole}
-                                    db={switchboard.withDb ? switchboard.db : null}
-                                    onChange={(value) => onUpdateModuleEditor({ pole: value })} />
-                            </div>
-                        }
-
-                        {ed.currentModule.func && (
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -463,23 +326,190 @@ export default function Editor({
                                     margin: 0
                                 }}>Démonstration</h5>
                                 <div style={{
-                                    width: '100px',
-                                    minWidth: '70px',
-                                    height: '100px',
+                                    borderRadius: '5px',
+                                    border: '1px solid darkgray',
+                                    width: 'min-content',
                                     maxWidth: '100%',
                                     overflowX: 'auto',
                                     marginBlock: '1em',
+                                    minHeight: `calc(${switchboard.height}mm + 1mm)`,
                                     overflowY: 'hidden'
                                 }}>
-                                    <SchemaSymbol module={ed.currentModule} />
+                                    <Module
+                                        isDemo={true}
+                                        item={{
+                                            id: ed.currentModule.id,
+                                            icon: ed.currentModule.icon,
+                                            text: ed.currentModule.text,
+                                            desc: ed.currentModule.desc,
+                                            parentId: ed.currentModule.parentId,
+                                            func: ed.currentModule.func,
+                                            type: ed.currentModule.type,
+                                            current: ed.currentModule.current,
+                                            grp: ed.currentModule.grp,
+                                            crb: ed.currentModule.crb,
+                                            sensibility: ed.currentModule.sensibility,
+                                            pole: ed.currentModule.pole,
+                                            wire: ed.currentModule.wire,
+                                            free: false,
+                                            span: ed.currentModule.span,
+                                            modtype: ed.currentModule.modtype,
+                                        }}
+                                        modulePosition={1}
+                                        rowPosition={1}
+                                        theme={theme}
+                                        style={{
+                                            "--h": `calc(${switchboard.height}mm + 1mm)`,
+                                            "--sw": `calc(${stepSize}mm + 1px)`
+                                        }}
+                                    />
                                 </div>
                             </div>
-                        )}
-                    </>
-                }
+                        </>
+                    }
+
+                    {editorTab === "schema" &&
+                        <>
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
+                                <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
+                                    value={ed.currentModule.func}
+                                    onChange={(value) => onUpdateModuleEditor({ func: value })} />
+                            </div>
+
+                            {ed.currentModule.func && <>
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>Parent</label>
+                                    <EditorParentSelector id={`editor_schparent_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.parentId}
+                                        currentModuleId={ed.currentModule.id}
+                                        filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                        onChange={(value) => onUpdateModuleEditor({ parentId: value })} />
+                                </div>
+                                <div className="popup_row" style={{
+                                    '--left_column_size': '100px',
+                                    borderBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '1px solid lightgray',
+                                    paddingBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '1em',
+                                    marginBottom: schemaFunctions[ed.currentModule.func]?.supportContacts === true ? 'initial' : '2em'
+                                }}>
+                                    <div></div>
+                                    <label style={{ fontSize: "small", color: "#777" }}>└ Parent du module
+                                        précédent: <b>{prevModuleTitle !== "" ? prevModuleTitle : "-"}</b></label>
+                                </div>
+
+                                {schemaFunctions[ed.currentModule.func]?.supportContacts === true &&
+                                    <div className="popup_row" style={{
+                                        '--left_column_size': '100px',
+                                        borderBottom: '1px solid lightgray',
+                                        paddingBottom: '1em',
+                                        marginBottom: '2em'
+                                    }}>
+                                        <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
+                                            par</label>
+                                        <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
+                                            value={ed.currentModule.kcId}
+                                            currentModuleId={ed.currentModule.id}
+                                            filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                            onChange={(value) => onUpdateModuleEditor({ kcId: value })} />
+                                    </div>}
+                            </>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasType &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>Type</label>
+                                    <EditorTypeSelector id={`editor_type_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.type}
+                                        onChange={(value) => onUpdateModuleEditor({ type: value })} />
+                                </div>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasCrb &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_crb_${ed.currentModule.id.trim()}`}>Courbe</label>
+                                    <EditorCrbSelector id={`editor_crb_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.crb}
+                                        onChange={(value) => onUpdateModuleEditor({ crb: value })} />
+                                </div>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasType &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label
+                                        htmlFor={`editor_sensibility_${ed.currentModule.id.trim()}`}>Sensibilité</label>
+                                    <EditorSensibilitySelector id={`editor_sensibility_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.sensibility}
+                                        onChange={(value) => onUpdateModuleEditor({ sensibility: value })} />
+                                </div>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasCurrent &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
+                                    <EditorCurrentSelector id={`editor_current_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.current}
+                                        onChange={(value) => onUpdateModuleEditor({ current: value })} />
+                                </div>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasWire &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
+                                    <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.wire}
+                                        onChange={(value) => onUpdateModuleEditor({ wire: value })}
+                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))} />
+                                </div>
+                            }
+
+                            {schemaFunctions[ed.currentModule.func]?.hasPole &&
+                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                    <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
+                                    <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.pole}
+                                        db={switchboard.withDb ? switchboard.db : null}
+                                        onChange={(value) => onUpdateModuleEditor({ pole: value })} />
+                                </div>
+                            }
+
+                            {ed.currentModule.func && (
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    marginInline: 'auto',
+                                    marginTop: '2em',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    borderBottom: '1px solid lightgray'
+                                }}>
+                                    <h5 style={{
+                                        color: 'gray',
+                                        width: '100%',
+                                        borderBottom: '1px solid lightgray',
+                                        margin: 0
+                                    }}>Démonstration</h5>
+                                    <div style={{
+                                        width: '100px',
+                                        minWidth: '70px',
+                                        height: '100px',
+                                        maxWidth: '100%',
+                                        overflowX: 'auto',
+                                        marginBlock: '1em',
+                                        overflowY: 'hidden'
+                                    }}>
+                                        <SchemaSymbol module={ed.currentModule} />
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    }
 
 
-            </div>
-        </Popup>
+                </div>
+
+
+
+            </Popup>
+        </>
     );
 }

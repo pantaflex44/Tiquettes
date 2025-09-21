@@ -17,13 +17,14 @@
  */
 
 /* eslint-disable react/prop-types */
-import {useEffect, useMemo, useRef, useState} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Popup from "./Popup.jsx";
 import Module from "./Module.jsx";
 import VerticalRule from "./VerticalRule.jsx";
 import IconSelector from "./IconSelector.jsx";
 import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
+import GroupColorChooser from "./GroupColorChooser.jsx";
 
 import importIcon from './assets/upload.svg';
 import exportIcon from './assets/download.svg';
@@ -36,14 +37,14 @@ import sanitizeFilename from "sanitize-filename";
 import './themeEditorPopup.css';
 
 export default function ThemeEditorPopup({
-                                             switchboard,
-                                             stepSize,
-                                             heightMin,
-                                             heightMax,
-                                             onCancel,
-                                             onApply,
-                                             theme
-                                         }) {
+    switchboard,
+    stepSize,
+    heightMin,
+    heightMax,
+    onCancel,
+    onApply,
+    theme
+}) {
 
 
     const defaultTheme = {
@@ -63,7 +64,9 @@ export default function ThemeEditorPopup({
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "bgcolorUseGrp": true,
+                "fgcolorUseGrp": false
             },
             "icon": {
                 "type": "icon",
@@ -73,7 +76,9 @@ export default function ThemeEditorPopup({
                 "fullHeight": true,
                 "horizontalAlignment": "center",
                 "backgoundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "bgcolorUseGrp": false,
+                "fgcolorUseGrp": false
             },
             "text": {
                 "shown": true,
@@ -86,19 +91,23 @@ export default function ThemeEditorPopup({
                 "fontStyle": "normal",
                 "fontFamily": "sans-serif",
                 "backgroundColor": "transparent",
-                "color": "#000000"
+                "color": "#000000",
+                "bgcolorUseGrp": false,
+                "fgcolorUseGrp": false
             },
             "top": {
                 "border": false,
+                "colorUseGrp": false
             },
             "bottom": {
                 "border": false,
+                "colorUseGrp": false
             }
         }
     };
 
-    const initialTheme = {...theme};
-    const [editedTheme, setEditedTheme] = useState({...theme});
+    const initialTheme = { ...theme };
+    const [editedTheme, setEditedTheme] = useState({ ...theme });
 
     const [sample, setSample] = useState({
         id: 'Q01',
@@ -116,8 +125,8 @@ export default function ThemeEditorPopup({
             ...old,
             data: {
                 ...old.data,
-                [actualId]: {...old.data[actualId], position: newPosition},
-                [newId]: {...old.data[newId], position: actualPosition}
+                [actualId]: { ...old.data[actualId], position: newPosition },
+                [newId]: { ...old.data[newId], position: actualPosition }
             }
         }));
     };
@@ -169,17 +178,17 @@ export default function ThemeEditorPopup({
         let iconOrder = iconPosition === 'bottom' ? 2 : (iconPosition === 'middle' ? 1 : 0);
         let textOrder = textPosition === 'bottom' ? 2 : (textPosition === 'middle' ? 1 : 0);
 
-        let pos = Object.entries({id: idOrder, icon: iconOrder, text: textOrder});
+        let pos = Object.entries({ id: idOrder, icon: iconOrder, text: textOrder });
         pos.sort((a, b) => a[1] < b[1] ? -1 : 1);
         pos = Object.fromEntries(pos
             .map((obj) => shown[obj[0]] === true ? obj[0] : null)
             .filter((key) => key !== null)
-            .map((obj, idx) => [obj, {order: idx, shown: true}])
+            .map((obj, idx) => [obj, { order: idx, shown: true }])
         );
 
-        if (!pos.id) pos = {...pos, id: {shown: false}};
-        if (!pos.icon) pos = {...pos, icon: {shown: false}};
-        if (!pos.text) pos = {...pos, text: {shown: false}};
+        if (!pos.id) pos = { ...pos, id: { shown: false } };
+        if (!pos.icon) pos = { ...pos, icon: { shown: false } };
+        if (!pos.text) pos = { ...pos, text: { shown: false } };
 
         return pos;
     }, [editedTheme.data.icon?.position, editedTheme.data.id?.position, editedTheme.data.text?.position, shown]);
@@ -239,10 +248,10 @@ export default function ThemeEditorPopup({
         additionalButtons={[
             {
                 text: (
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem'}}
-                         title={"Importer un thème"}>
-                        <img src={importIcon} alt={"Importer"} width={18} height={18}/>
-                        <input type={'file'} id={'importTheme'} ref={importRef} style={{display: 'none'}}/>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem' }}
+                        title={"Importer un thème"}>
+                        <img src={importIcon} alt={"Importer"} width={18} height={18} />
+                        <input type={'file'} id={'importTheme'} ref={importRef} style={{ display: 'none' }} />
                     </div>
                 ),
                 title: "Importer",
@@ -290,9 +299,9 @@ export default function ThemeEditorPopup({
             },
             {
                 text: (
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem'}}
-                         title={"Exporter ce thème"}>
-                        <img src={exportIcon} alt={"Exporter"} width={18} height={18}/>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem' }}
+                        title={"Exporter ce thème"}>
+                        <img src={exportIcon} alt={"Exporter"} width={18} height={18} />
                     </div>
                 ),
                 title: "Exporter",
@@ -307,7 +316,7 @@ export default function ThemeEditorPopup({
                         const name = `custom|${uuidV4()}`;
 
                         setEditedTheme(old => {
-                            const et = prepareTheme({...old, name, title});
+                            const et = prepareTheme({ ...old, name, title });
 
                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(et))}`;
                             const link = document.createElement("a");
@@ -325,15 +334,15 @@ export default function ThemeEditorPopup({
             },
             {
                 text: (
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem'}}
-                         title={"Annuler les modifications"}>
-                        <img src={undoIcon} alt={"Recharger"} width={18} height={18}/>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem' }}
+                        title={"Annuler les modifications"}>
+                        <img src={undoIcon} alt={"Recharger"} width={18} height={18} />
                         <span className={'additional_buttons_text'}>Thème par défaut</span>
                     </div>
                 ),
                 title: "Thème par défaut",
                 callback: () => {
-                    if (confirm("Êtes-vous certain de vouloir annuler vos modifications?")) setEditedTheme({...initialTheme});
+                    if (confirm("Êtes-vous certain de vouloir annuler vos modifications?")) setEditedTheme({ ...initialTheme });
                 }
             },
         ]}
@@ -348,60 +357,70 @@ export default function ThemeEditorPopup({
                 }}>
                     {shownCount > 0 && <>
                         {/* Top border */}
-                        <div className={'tep-settings_row'} style={{width: '100%'}}>
+                        <div className={'tep-settings_row'} style={{ width: '100%' }}>
                             <div className={'tep-settings_row-el'}>
-                                <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16}/>
+                                <img src={borderBottomIcon} alt={"Ajouter un séparateur haut"} width={16} height={16} />
                                 <input type={'checkbox'}
-                                       checked={(editedTheme.data.top?.border ?? false) === true}
-                                       id={'tep-top-border'}
-                                       name={'tep-top-border'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               top: {
-                                                   ...(old.data.top ?? {}),
-                                                   border: e.target.checked
-                                               },
-                                           }
-                                       }))}
-                                       title={"Ajouter un séparateur haut"}
+                                    checked={(editedTheme.data.top?.border ?? false) === true}
+                                    id={'tep-top-border'}
+                                    name={'tep-top-border'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                border: e.target.checked
+                                            },
+                                        }
+                                    }))}
+                                    title={"Ajouter un séparateur haut"}
                                 />
                             </div>
                             <div className={'tep-settings_row-el'}>
-                                <input type={'color'}
-                                       value={((editedTheme.data.top?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.top?.borderColor ?? '#000000')}
-                                       disabled={(editedTheme.data.top?.border ?? false) !== true}
-                                       id={'tep-top-borderColor'}
-                                       name={'tep-top-borderColor'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               top: {
-                                                   ...(old.data.top ?? {}),
-                                                   borderColor: e.target.value
-                                               },
-                                           }
-                                       }))}
-                                       title={"Couleur de la bordure"}
+                                <GroupColorChooser value={((editedTheme.data.top?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.top?.borderColor ?? '#000000')}
+                                    disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                    id={'tep-top-borderColor'}
+                                    name={'tep-top-borderColor'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                borderColor: e.target.value
+                                            },
+                                        }
+                                    }))}
+                                    title={"Couleur de la bordure"}
+                                    useGroupColorValue={(editedTheme.data.top?.colorUseGrp === true)}
+                                    onUseGroupColorChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                colorUseGrp: e.target.checked
+                                            },
+                                        }
+                                    }))}
                                 />
                             </div>
                             <div className={'tep-settings_row-el'}>
                                 <select id={'tep-top-borderSize'}
-                                        disabled={(editedTheme.data.top?.border ?? false) !== true}
-                                        name={'tep-top-borderSize'}
-                                        value={editedTheme.data.top?.borderSize ?? 1}
-                                        onChange={(e) => setEditedTheme(old => ({
-                                            ...old,
-                                            data: {
-                                                ...old.data,
-                                                top: {
-                                                    ...(old.data.top ?? {}),
-                                                    borderSize: parseInt(e.target.value)
-                                                },
-                                            }
-                                        }))}
+                                    disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                    name={'tep-top-borderSize'}
+                                    value={editedTheme.data.top?.borderSize ?? 1}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                borderSize: parseInt(e.target.value)
+                                            },
+                                        }
+                                    }))}
                                 >
                                     <option>1</option>
                                     <option>2</option>
@@ -412,19 +431,19 @@ export default function ThemeEditorPopup({
                             </div>
                             <div className={'tep-settings_row-el'}>
                                 <select id={'tep-top-borderStyle'}
-                                        disabled={(editedTheme.data.top?.border ?? false) !== true}
-                                        name={'tep-top-borderStyle'}
-                                        value={editedTheme.data.top?.borderStyle ?? 'solid'}
-                                        onChange={(e) => setEditedTheme(old => ({
-                                            ...old,
-                                            data: {
-                                                ...old.data,
-                                                top: {
-                                                    ...(old.data.top ?? {}),
-                                                    borderStyle: e.target.value
-                                                },
-                                            }
-                                        }))}
+                                    disabled={(editedTheme.data.top?.border ?? false) !== true}
+                                    name={'tep-top-borderStyle'}
+                                    value={editedTheme.data.top?.borderStyle ?? 'solid'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            top: {
+                                                ...(old.data.top ?? {}),
+                                                borderStyle: e.target.value
+                                            },
+                                        }
+                                    }))}
                                 >
                                     <option value={'solid'}>—</option>
                                     <option value={'dotted'}>…</option>
@@ -436,60 +455,70 @@ export default function ThemeEditorPopup({
 
                     {shownCount > 1 && <>
                         {/* Botttom border */}
-                        <div className={'tep-settings_row'} style={{width: '100%'}}>
+                        <div className={'tep-settings_row'} style={{ width: '100%' }}>
                             <div className={'tep-settings_row-el'}>
-                                <img src={borderTopIcon} alt={"Ajouter un séparateur bas"} width={16} height={16}/>
+                                <img src={borderTopIcon} alt={"Ajouter un séparateur bas"} width={16} height={16} />
                                 <input type={'checkbox'}
-                                       checked={(editedTheme.data.bottom?.border ?? false) === true}
-                                       id={'tep-bottom-border'}
-                                       name={'tep-bottom-border'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               bottom: {
-                                                   ...(old.data.bottom ?? {}),
-                                                   border: e.target.checked
-                                               },
-                                           }
-                                       }))}
-                                       title={"Ajouter un séparateur haut"}
+                                    checked={(editedTheme.data.bottom?.border ?? false) === true}
+                                    id={'tep-bottom-border'}
+                                    name={'tep-bottom-border'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            bottom: {
+                                                ...(old.data.bottom ?? {}),
+                                                border: e.target.checked
+                                            },
+                                        }
+                                    }))}
+                                    title={"Ajouter un séparateur haut"}
                                 />
                             </div>
                             <div className={'tep-settings_row-el'}>
-                                <input type={'color'}
-                                       value={((editedTheme.data.bottom?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.bottom?.borderColor ?? '#000000')}
-                                       disabled={(editedTheme.data.bottom?.border ?? false) !== true}
-                                       id={'tep-bottom-borderColor'}
-                                       name={'tep-bottom-borderColor'}
-                                       onChange={(e) => setEditedTheme(old => ({
-                                           ...old,
-                                           data: {
-                                               ...old.data,
-                                               bottom: {
-                                                   ...(old.data.bottom ?? {}),
-                                                   borderColor: e.target.value
-                                               },
-                                           }
-                                       }))}
-                                       title={"Couleur de la bordure"}
+                                <GroupColorChooser value={((editedTheme.data.bottom?.border ?? false) !== true) ? '#eeeeee' : (editedTheme.data.bottom?.borderColor ?? '#000000')}
+                                    disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                    id={'tep-bottom-borderColor'}
+                                    name={'tep-bottom-borderColor'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            bottom: {
+                                                ...(old.data.bottom ?? {}),
+                                                borderColor: e.target.value
+                                            },
+                                        }
+                                    }))}
+                                    title={"Couleur de la bordure"}
+                                    useGroupColorValue={(editedTheme.data.bottom?.colorUseGrp === true)}
+                                    onUseGroupColorChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            bottom: {
+                                                ...(old.data.bottom ?? {}),
+                                                colorUseGrp: e.target.checked
+                                            },
+                                        }
+                                    }))}
                                 />
                             </div>
                             <div className={'tep-settings_row-el'}>
                                 <select id={'tep-bottom-borderSize'}
-                                        disabled={(editedTheme.data.bottom?.border ?? false) !== true}
-                                        name={'tep-bottom-borderSize'}
-                                        value={editedTheme.data.bottom?.borderSize ?? 1}
-                                        onChange={(e) => setEditedTheme(old => ({
-                                            ...old,
-                                            data: {
-                                                ...old.data,
-                                                bottom: {
-                                                    ...(old.data.bottom ?? {}),
-                                                    borderSize: parseInt(e.target.value)
-                                                },
-                                            }
-                                        }))}
+                                    disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                    name={'tep-bottom-borderSize'}
+                                    value={editedTheme.data.bottom?.borderSize ?? 1}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            bottom: {
+                                                ...(old.data.bottom ?? {}),
+                                                borderSize: parseInt(e.target.value)
+                                            },
+                                        }
+                                    }))}
                                 >
                                     <option>1</option>
                                     <option>2</option>
@@ -500,19 +529,19 @@ export default function ThemeEditorPopup({
                             </div>
                             <div className={'tep-settings_row-el'}>
                                 <select id={'tep-bottom-borderStyle'}
-                                        disabled={(editedTheme.data.bottom?.border ?? false) !== true}
-                                        name={'tep-bottom-borderStyle'}
-                                        value={editedTheme.data.bottom?.borderStyle ?? 'solid'}
-                                        onChange={(e) => setEditedTheme(old => ({
-                                            ...old,
-                                            data: {
-                                                ...old.data,
-                                                bottom: {
-                                                    ...(old.data.bottom ?? {}),
-                                                    borderStyle: e.target.value
-                                                },
-                                            }
-                                        }))}
+                                    disabled={(editedTheme.data.bottom?.border ?? false) !== true}
+                                    name={'tep-bottom-borderStyle'}
+                                    value={editedTheme.data.bottom?.borderStyle ?? 'solid'}
+                                    onChange={(e) => setEditedTheme(old => ({
+                                        ...old,
+                                        data: {
+                                            ...old.data,
+                                            bottom: {
+                                                ...(old.data.bottom ?? {}),
+                                                borderStyle: e.target.value
+                                            },
+                                        }
+                                    }))}
                                 >
                                     <option value={'solid'}>—</option>
                                     <option value={'dotted'}>…</option>
@@ -522,7 +551,7 @@ export default function ThemeEditorPopup({
                         </div>
                     </>}
                 </div>
-                <div className={'tep-preview'} style={{width: `calc(${sample.width}mm + 1px + 50px)`}}>
+                <div className={'tep-preview'} style={{ width: `calc(${sample.width}mm + 1px + 50px)` }}>
                     <div className={'tep-module'} style={{
                         width: `calc(${sample.width}mm + 1px)`,
                         minHeight: `calc(${sample.height}mm + 1mm)`,
@@ -548,7 +577,7 @@ export default function ThemeEditorPopup({
                             }}
                         />
                     </div>
-                    <VerticalRule size={sample.height}/>
+                    <VerticalRule size={sample.height} />
                 </div>
                 <div className={'tep-sample'} style={{}}>
                     <div className="tep-row" style={{
@@ -563,7 +592,7 @@ export default function ThemeEditorPopup({
                                 id={'sample_id'}
                                 value={sample.id}
                                 onChange={(e) => {
-                                    setSample(old => ({...old, id: e.target.value}));
+                                    setSample(old => ({ ...old, id: e.target.value }));
                                 }}
                             />
                         </div>
@@ -574,7 +603,7 @@ export default function ThemeEditorPopup({
                     }}>
                         <label>Fonction</label>
                         <IconSelector value={sample.icon} onChange={(selectedIcon, selected) => {
-                            setSample(old => ({...old, icon: selectedIcon}));
+                            setSample(old => ({ ...old, icon: selectedIcon }));
                         }}
                         />
                     </div>
@@ -590,7 +619,7 @@ export default function ThemeEditorPopup({
                                 id={'sample_type'}
                                 value={sample.modtype}
                                 onChange={(e) => {
-                                    setSample(old => ({...old, modtype: e.target.value}));
+                                    setSample(old => ({ ...old, modtype: e.target.value }));
                                 }}
                             />
                         </div>
@@ -605,7 +634,7 @@ export default function ThemeEditorPopup({
                             id={'sample_text'}
                             value={sample.text}
                             onChange={(e) => {
-                                setSample(old => ({...old, text: e.target.value}));
+                                setSample(old => ({ ...old, text: e.target.value }));
                             }}
                             rows={3}
                         />
@@ -622,43 +651,43 @@ export default function ThemeEditorPopup({
                             id={'sample_height'}
                             type="range" min={heightMin} max={heightMax} step={1}
                             value={sample.height} onChange={(e) => {
-                            const value = parseInt(e.target.value);
-                            if (value >= heightMin) setSample(old => ({...old, height: value}));
-                        }}
-                            style={{width: 'initial', margin: 0, padding: 0}}/>
+                                const value = parseInt(e.target.value);
+                                if (value >= heightMin) setSample(old => ({ ...old, height: value }));
+                            }}
+                            style={{ width: 'initial', margin: 0, padding: 0 }} />
                     </div>
                 </div>
             </div>
             <div className={'tep-settings'}>
                 <ThemeEditorPartColumn propName={'id'}
-                                       title={"Identifiant"}
-                                       editedTheme={editedTheme}
-                                       setEditedTheme={setEditedTheme}
-                                       positions={positions}
-                                       shownCount={shownCount}
-                                       down={down}
-                                       up={up}/>
+                    title={"Identifiant"}
+                    editedTheme={editedTheme}
+                    setEditedTheme={setEditedTheme}
+                    positions={positions}
+                    shownCount={shownCount}
+                    down={down}
+                    up={up} />
                 <ThemeEditorPartColumn propName={'icon'}
-                                       title={"Fonction"}
-                                       editedTheme={editedTheme}
-                                       setEditedTheme={setEditedTheme}
-                                       positions={positions}
-                                       shownCount={shownCount}
-                                       down={down}
-                                       up={up}/>
+                    title={"Fonction"}
+                    editedTheme={editedTheme}
+                    setEditedTheme={setEditedTheme}
+                    positions={positions}
+                    shownCount={shownCount}
+                    down={down}
+                    up={up} />
                 <ThemeEditorPartColumn propName={'text'}
-                                       title={"Libellé"}
-                                       editedTheme={editedTheme}
-                                       setEditedTheme={setEditedTheme}
-                                       positions={positions}
-                                       shownCount={shownCount}
-                                       down={down}
-                                       up={up}/>
+                    title={"Libellé"}
+                    editedTheme={editedTheme}
+                    setEditedTheme={setEditedTheme}
+                    positions={positions}
+                    shownCount={shownCount}
+                    down={down}
+                    up={up} />
             </div>
 
             <div className="tep-extras">
                 <b>⁛</b> Télécharger de <a href="https://www.tiquettes.fr/themes.php" target={'_blank'}
-                                           rel={'noopener'}>nouveaux thèmes</a> pour embellir ses étiquettes !
+                    rel={'noopener'}>nouveaux thèmes</a> pour embellir ses étiquettes !
             </div>
         </div>
     </Popup>

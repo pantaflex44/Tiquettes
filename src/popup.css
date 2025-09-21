@@ -32,6 +32,10 @@ body:has(.popup-overflow) {
     z-index: 8000;
 }
 
+.popup-overflow.transparent {
+    background-color: transparent;
+}
+
 .popup {
     position: fixed;
     top: 50%;
@@ -71,15 +75,13 @@ body:has(.popup-overflow) {
     margin-right: 1em;
 }
 
-.popup_title_content_img {
-}
+.popup_title_content_img {}
 
 .popup_title_content_id {
     text-transform: uppercase;
 }
 
-.popup_title_content_desc {
-}
+.popup_title_content_desc {}
 
 .popup_title_content img {
     width: 18px;
@@ -189,7 +191,7 @@ body:has(.popup-overflow) {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 0.25em;
 }
 
@@ -229,7 +231,7 @@ body:has(.popup-overflow) {
     padding: 0.5em;
 }
 
-.popup_row > label {
+.popup_row>label {
     margin-right: 1em;
 }
 
@@ -243,7 +245,7 @@ body:has(.popup-overflow) {
     align-items: start;*/
 }
 
-.popup_row-flex > *:first-child {
+.popup_row-flex>*:first-child {
     flex: 1;
 }
 

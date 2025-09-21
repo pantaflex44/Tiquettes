@@ -18,6 +18,8 @@
 
 /* eslint-disable react/prop-types */
 
+import GroupColorChooser from "./GroupColorChooser";
+
 import alignLeftIcon from "./assets/align-left.svg";
 import alignCenterIcon from "./assets/align-center.svg";
 import alignRightIcon from "./assets/align-right.svg";
@@ -143,30 +145,49 @@ export default function IconPartStyleEditor({
 
         <div className={'tep-settings_row'}>
             <div className={'tep-settings_row-el'}>
-                <img src={backColorIcon} alt={"Couleur du fond"} width={16} height={16}/>
-                <input type={'color'} value={editedTheme.data[propName]?.backgroundColor ?? '#ffffff'}
-                       id={'tep-icon-backgroundColor'}
-                       name={'tep-icon-backgroundColor'}
-                       onChange={(e) => setEditedTheme(old => ({
-                           ...old,
-                           data: {
-                               ...old.data,
-                               [propName]: {...(old.data[propName] ?? {}), backgroundColor: e.target.value}
-                           }
-                       }))}
-                       title={"Couleur du fond"}
+                <img src={backColorIcon} alt={"Couleur du fond"} width={16} height={16} />
+                <GroupColorChooser value={editedTheme.data[propName]?.backgroundColor ?? '#ffffff'}
+                    id={'tep-icon-backgroundColor'}
+                    name={'tep-icon-backgroundColor'}
+                    onChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: { ...(old.data[propName] ?? {}), backgroundColor: e.target.value }
+                        }
+                    }))}
+                    title={"Couleur du fond"}
+                    useGroupColorValue={editedTheme.data[propName]?.bgcolorUseGrp === true}
+                    onUseGroupColorChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: { ...(old.data[propName] ?? {}), bgcolorUseGrp: e.target.checked },
+                        }
+                    }))}
                 />
             </div>
             <div className={'tep-settings_row-el'}>
                 <img src={iconColorIcon} alt={"Couleur de l'icône"} width={16} height={16}/>
-                <input type={'color'} value={editedTheme.data[propName]?.color ?? '#000000'}
-                       id={'tep-icon-color'}
-                       name={'tep-icon-color'}
-                       onChange={(e) => setEditedTheme(old => ({
-                           ...old,
-                           data: {...old.data, [propName]: {...(old.data[propName] ?? {}), color: e.target.value}}
-                       }))}
-                       title={"Couleur de l'icône"}
+                <GroupColorChooser value={editedTheme.data[propName]?.color ?? '#000000'}
+                    id={'tep-icon-color'}
+                    name={'tep-icon-color'}
+                    onChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: { ...(old.data[propName] ?? {}), color: e.target.value }
+                        }
+                    }))}
+                    title={"Couleur de l'icône"}
+                    useGroupColorValue={editedTheme.data[propName]?.fgcolorUseGrp === true}
+                    onUseGroupColorChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: { ...(old.data[propName] ?? {}), fgcolorUseGrp: e.target.checked },
+                        }
+                    }))}
                 />
             </div>
         </div>

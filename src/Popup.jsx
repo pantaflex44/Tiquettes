@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 import './popup.css';
 
@@ -28,60 +28,61 @@ import nextIcon from './assets/arrow-right.svg';
 import loadingIcon from './assets/loading_mini.gif';
 
 export default function Popup({
-                                  title,
-                                  children,
-                                  style = {},
-                                  className = null,
-                                  width = 440,
-                                  showCloseButton = true,
-                                  showCancelButton = true,
-                                  showOkButton = true,
-                                  showPrevButton = false,
-                                  showNextButton = false,
-                                  buttonsDisabled = false,
-                                  loading = false,
-                                  additionalButtons = [],
-                                  onCancel = null,
-                                  onOk = null,
-                                  onPrev = null,
-                                  onNext = null,
-                                  cancelButtonContent = <div style={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                      columnGap: '0.5rem'
-                                  }} title={"Annuler et fermer"}>
-                                      <img src={cancelIcon} alt={"Annuler"} width={18} height={18}/>
-                                      <span className={'additional_buttons_text'}>Annuler</span>
-                                  </div>,
-                                  prevButtonContent = <div style={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                      columnGap: '0.5rem'
-                                  }} title={"Précédent"}>
-                                      <img src={prevIcon} alt={"Précédent"} width={18} height={18}/>
-                                      <span className={'additional_buttons_text'}>Précédent</span>
-                                  </div>,
-                                  nextButtonContent = <div style={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                      columnGap: '0.5rem'
-                                  }} title={"Suivant"}>
-                                      <img src={nextIcon} alt={"Suivant"} width={18} height={18}/>
-                                      <span className={'additional_buttons_text'}>Suivant</span>
-                                  </div>,
-                                  okButtonContent = <div style={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                      columnGap: '0.5rem'
-                                  }} title={"Valider et fermer"}>
-                                      <img src={okIcon} alt={"Valider"} width={18} height={18}/>
-                                      <span className={'additional_buttons_text'}>Valider</span>
-                                  </div>,
-                              }) {
+    title,
+    children,
+    style = {},
+    className = null,
+    width = 440,
+    showCloseButton = true,
+    showCancelButton = true,
+    showOkButton = true,
+    showPrevButton = false,
+    showNextButton = false,
+    buttonsDisabled = false,
+    loading = false,
+    withOverflow = true,
+    additionalButtons = [],
+    onCancel = null,
+    onOk = null,
+    onPrev = null,
+    onNext = null,
+    cancelButtonContent = <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        columnGap: '0.5rem'
+    }} title={"Annuler et fermer"}>
+        <img src={cancelIcon} alt={"Annuler"} width={18} height={18} />
+        <span className={'additional_buttons_text'}>Annuler</span>
+    </div>,
+    prevButtonContent = <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        columnGap: '0.5rem'
+    }} title={"Précédent"}>
+        <img src={prevIcon} alt={"Précédent"} width={18} height={18} />
+        <span className={'additional_buttons_text'}>Précédent</span>
+    </div>,
+    nextButtonContent = <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        columnGap: '0.5rem'
+    }} title={"Suivant"}>
+        <img src={nextIcon} alt={"Suivant"} width={18} height={18} />
+        <span className={'additional_buttons_text'}>Suivant</span>
+    </div>,
+    okButtonContent = <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        columnGap: '0.5rem'
+    }} title={"Valider et fermer"}>
+        <img src={okIcon} alt={"Valider"} width={18} height={18} />
+        <span className={'additional_buttons_text'}>Valider</span>
+    </div>,
+}) {
     const buttons = useMemo(() => ({
         close: showCloseButton,
         cancel: showCancelButton,
@@ -91,12 +92,12 @@ export default function Popup({
     }), [showCancelButton, showOkButton, showCloseButton, showPrevButton, showNextButton]);
 
     return (
-        <div className="popup-overflow">
-            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{width: `${width}px`}}>
+        <div className={`popup-overflow ${withOverflow ? '' : 'transparent'}`.trim()}>
+            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ width: `${width}px` }}>
                 <div className="popup_title">{title}</div>
                 {buttons.close &&
                     <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
-                                                                          height={24}/></div>}
+                        height={24} /></div>}
 
                 <div className={`popup_content ${className}`} style={style}>
                     {children}
@@ -104,7 +105,7 @@ export default function Popup({
 
                 {loading && (
                     <div className={'popup_loading_box'}>
-                        <img src={loadingIcon} width={40} height={40} alt={"Chargement..."}/>
+                        <img src={loadingIcon} width={40} height={40} alt={"Chargement..."} />
                         <span>Chargement ...</span>
                     </div>
                 )}
@@ -113,14 +114,14 @@ export default function Popup({
                     <div className="popup_buttons_box">
                         {Array.isArray(additionalButtons) && additionalButtons.map((b, i) => {
                             if (!b.text || !b.callback) return null;
-                            const {text, callback, ...props} = b;
+                            const { text, callback, ...props } = b;
                             if (typeof text === 'string' && text.trim() === '') return null;
 
-                            let p = {...props};
+                            let p = { ...props };
                             if (buttonsDisabled) {
                                 let cls = (p.className ?? '').replaceAll(/disabled/ig, '');
                                 cls = cls + ' disabled';
-                                p = {...p, className: cls}
+                                p = { ...p, className: cls }
                             }
 
                             return <button key={i} {...p} onClick={callback} title={b.title}>{text}</button>;
@@ -129,13 +130,13 @@ export default function Popup({
 
                     {(buttons.cancel || buttons.ok) && <div className="popup_buttons_box">
                         {buttons.cancel && <button className={`cancel ${buttonsDisabled ? 'disabled' : ''}`.trim()}
-                                                   onClick={onCancel}>{cancelButtonContent}</button>}
+                            onClick={onCancel}>{cancelButtonContent}</button>}
                         {buttons.prev && <button className={`prev ${buttonsDisabled ? 'disabled' : ''}`.trim()}
-                                                 onClick={onPrev}>{prevButtonContent}</button>}
+                            onClick={onPrev}>{prevButtonContent}</button>}
                         {buttons.next && <button className={`next ${buttonsDisabled ? 'disabled' : ''}`.trim()}
-                                                 onClick={onNext}>{nextButtonContent}</button>}
+                            onClick={onNext}>{nextButtonContent}</button>}
                         {buttons.ok && <button className={`ok ${buttonsDisabled ? 'disabled' : ''}`.trim()}
-                                               onClick={onOk}>{okButtonContent}</button>}
+                            onClick={onOk}>{okButtonContent}</button>}
                     </div>}
                 </div>
             </div>

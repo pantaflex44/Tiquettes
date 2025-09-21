@@ -156,7 +156,7 @@ function IconSelector({value = null, onChange = null, onOpenState = null}) {
                 overflowY: 'auto',
                 backgroundColor: '#fff',
                 listStyle: 'none'
-            }} onMouseOut={() => setHoveredItem(null)}>
+            }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
                 {found.map((icon, i) => <Suspense key={i} fallback={<div></div>}>
                     <IconSelectorItem icon={icon} selected={selected} search={search}
                                       handleIconListItemSelected={handleIconListItemSelected}

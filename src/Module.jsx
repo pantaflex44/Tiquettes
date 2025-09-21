@@ -191,10 +191,10 @@ function Module({
                                 cursor: canEdit ? 'pointer' : 'default',
                                 '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
                                 '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
-                                '--topSeparatorColor': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderColor ?? '#000000') : 'initial',
+                                '--topSeparatorColor': currentTheme?.data?.top?.border === true ? ((currentTheme?.data?.top?.colorUseGrp === true && item.grp && item.grp !== '' ? item.grp : (currentTheme?.data?.top?.borderColor ?? '#000000'))) : 'initial',
                                 '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
                                 '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
-                                '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderColor ?? '#000000') : 'initial',
+                                '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? ((currentTheme?.data?.bottom?.colorUseGrp === true && item.grp && item.grp !== '' ? item.grp : (currentTheme?.data?.bottom?.borderColor ?? '#000000'))) : 'initial',
                             }}
                             onClick={() => {
                                 if (canEdit) onEdit(item)

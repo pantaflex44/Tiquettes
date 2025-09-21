@@ -1486,6 +1486,7 @@ function App() {
                     <span>Imprimer...</span>
                     <div className="dropdown">
                         <div className="dropdown_header">Options</div>
+
                         <div className="dropdown_item head"
                             title="Imprimer la page de garde">
                             <input id="print_firstPage" name="print_firstPage" type="checkbox"
@@ -1496,6 +1497,7 @@ function App() {
                                 }))} />
                             <label htmlFor="print_firstPage">Page de garde</label>
                         </div>
+
                         <div className="dropdown_item head parent" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
                                 checked={printOptions.labels}

@@ -217,6 +217,16 @@ mettra automatiquement à jour.
 
 ![Rechercher un pictogramme](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_icon_selector_search.png?raw=true)
 
+### Les groupes
+
+Il est parfois plus simple de regrouper les modules par pièces ou par zones par exemple. Pour ce faire, l'application vous propose de définir une couleur de groupe.
+
+![Définir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup_color.png?raw=true)
+
+Cette couleur pourra être affichée sur les étiquettes en fonction de la définition du thème sélectionné. Bien évidement, vous pouvez ajuster cet affichage en modifiant les paramètres du thème en cours ou créer votre propre thème !
+
+![Définir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_editor_color.png?raw=true)
+
 ## Décorer ses étiquettes
 
 ![Sélection du thème](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_selector.png?raw=true)
@@ -410,4 +420,46 @@ Le mode `paysage` ainsi que le format A4 sont sélectionnés par défaut.
 > **Imprimer en PDF nécessite d'être vigilant au niveau des propriétés de votre imprimante. Veillez à bien
 sélectionner "Taille réelle" ou "Echelle 100%" pour respecter la mise en page proposée par l'application.**
 
-## Fin!
+### Fin!
+
+---
+
+# Remerciements ❤ !
+
+Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous en remercie fortement pour tout celà !
+
+### 🐛 Remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et les [Discussions](https://github.com/pantaflex44/Tiquettes/discussions)
+
+- [zoliaaz](https://github.com/zoliaaz),
+- [cnaslain](https://github.com/cnaslain)
+- [ntarocco](https://github.com/ntarocco)
+- [jlecour](https://github.com/jlecour)
+- [plouflechien](https://github.com/plouflechien)
+- [Benoit485](https://github.com/Benoit485)
+- [F4FXL](https://github.com/F4FXL)
+- [dough29](https://github.com/dough29)
+- [karimLG](https://github.com/karimLG)
+- [fmdl](https://github.com/fmdl)
+- [ekozan](https://github.com/ekozan)
+- [Starlight58](https://github.com/Starlight58)
+- [Trinakria23](https://github.com/Trinakria23)
+- [Boubigloubi](https://github.com/Boubigloubi)
+
+ ### ☕ Et toutes les personnes qui m'ont offert un café que vous pouvez retrouver ici : [https://ko-fi.com/pantaflex44](https://ko-fi.com/pantaflex44)
+
+ - Lucas
+ - Fred
+ - ATRIA Construction Mickaël
+ - Lionel
+ - Rudy
+ - Louis
+ - Grégory
+ - dede3418
+ - Philippe
+ - Loïc
+ - Geoffrey
+ - oddyinfrance 
+ - Anton 
+ - Sylvan
+ - Cyrille 
+ - Zoliaaz 

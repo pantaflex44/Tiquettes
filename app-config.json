@@ -25,11 +25,11 @@
     },
     "changelog": {
         "2.2.5": {
-            "date": "2025-09-11",
+            "date": "2025-09-21",
             "actions": {
                 "patches": [
                     {
-                        "text": "Légère correction de la position des éléments dans chaque thème imprimables."
+                        "text": "Légère correction de la position des éléments dans chaque thème imprimable."
                     },
                     {
                         "text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
@@ -48,6 +48,13 @@
                         "from": {
                             "name": "Issue #38",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/38"
+                        }
+                    },
+                    {
+                        "text": "Réponse à une proposition, nouvelle fonctionnalité qui permet d'associer un module à un groupe via une couleur. Couleur utilisée (si disponible et si demandée) par les thèmes.",
+                        "from": {
+                            "name": "Discussion #36",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/36"
                         }
                     }
                 ]

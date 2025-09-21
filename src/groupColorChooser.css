@@ -1,0 +1,27 @@
+.gcc-box {
+    height: 26px;
+    min-height: 19px;
+    width: 26px;
+    cursor: pointer;
+}
+
+.gcc-box.disabled,
+.gcc-box:disabled {
+    cursor: default;
+    pointer-events: none;
+    background-color: transparent !important;
+}
+
+.gcc-box_group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.chrome-picker {
+    box-shadow: initial !important;
+}
