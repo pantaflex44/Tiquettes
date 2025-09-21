@@ -225,7 +225,7 @@ Il est parfois plus simple de regrouper les modules par pièces ou par zones par
 
 Cette couleur pourra être affichée sur les étiquettes en fonction de la définition du thème sélectionné. Bien évidement, vous pouvez ajuster cet affichage en modifiant les paramètres du thème en cours ou créer votre propre thème !
 
-![Définir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_editor_color.png?raw=true)
+![Choisir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_editor_color.png?raw=true)
 
 ## Décorer ses étiquettes
 
