@@ -894,7 +894,7 @@ class TiquettesPDF extends FPDF
                         $this->Rect($box['x'], $box['y'] + $box['h'], $box['w'], 6, 'DF');
 
                         $this->SetFont('Helvetica', '', 7);
-                        $txt = mb_convert_encoding(trim((($module->crb ?? "") . $module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
+                        $txt = mb_convert_encoding(trim(($module->crb ?? "") . ($module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
                         $this->MultiCell($box['w'], 6, $txt, 0, 'C', false, 1);
 
                         $this->SetXY($ox, $oy);

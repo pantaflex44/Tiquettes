@@ -18,14 +18,27 @@
 
 /* eslint-disable react/prop-types */
 
-import {UserContext} from "./UserContext.jsx";
+import { useState } from "react";
+import { UserContext } from "./UserContext.jsx";
 import useApi from "./useApi.jsx";
 
-export default function UserProvider({children}) {
+export default function UserProvider({ children }) {
     const api = useApi();
 
+    const [connected, setConnected] = useState(false);
+    const [details, setDetails] = useState()
+
+
+    const logout = () => {
+
+    };
+
+
     return (
-        <UserContext value={{}}>
+        <UserContext value={{
+            connected, details,
+            logout
+        }}>
             {children}
         </UserContext>
     )

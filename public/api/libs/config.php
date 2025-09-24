@@ -99,13 +99,20 @@ function send_Mail(array|string $to, string $subject, string $body): bool
         $mail->isSMTP();
         $mail->isHTML(true);
 
-        if (defined('SMTP_DEBUG')) $mail->SMTPDebug = SMTP_DEBUG;
-        if (defined('SMTP_HOST')) $mail->Host = SMTP_HOST;
-        if (defined('SMTP_AUTH')) $mail->SMTPAuth = SMTP_AUTH;
-        if (defined('SMTP_USERNAME')) $mail->Username = SMTP_USERNAME;
-        if (defined('SMTP_PASSWORD')) $mail->Password = SMTP_PASSWORD;
-        if (defined('SMTP_SECURE')) $mail->SMTPSecure = SMTP_SECURE;
-        if (defined('SMTP_PORT')) $mail->Port = SMTP_PORT;
+        if (defined('SMTP_DEBUG'))
+            $mail->SMTPDebug = SMTP_DEBUG;
+        if (defined('SMTP_HOST'))
+            $mail->Host = SMTP_HOST;
+        if (defined('SMTP_AUTH'))
+            $mail->SMTPAuth = SMTP_AUTH;
+        if (defined('SMTP_USERNAME'))
+            $mail->Username = SMTP_USERNAME;
+        if (defined('SMTP_PASSWORD'))
+            $mail->Password = SMTP_PASSWORD;
+        if (defined('SMTP_SECURE'))
+            $mail->SMTPSecure = SMTP_SECURE;
+        if (defined('SMTP_PORT'))
+            $mail->Port = SMTP_PORT;
         if (defined('SMTP_FROM')) {
             if (is_array(SMTP_FROM) && count(SMTP_FROM) === 2) {
                 $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);

@@ -50,6 +50,7 @@ import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
+import userShield from "./assets/user-shield.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -57,8 +58,12 @@ import SummaryTab from "./SummaryTab.jsx";
 import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
+
 import { stats_count, stats_count_json, stats_visit } from "../public/api/stats.js";
+
 import useDocumentVisibility from "./useVisibilityChange.jsx";
+
+
 
 
 function App() {
@@ -74,7 +79,6 @@ function App() {
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [welcome, setWelcome] = useState(false);
     const [themeEditor, setThemeEditor] = useState(false);
-    const [connect, setConnect] = useState(false);
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
@@ -1424,41 +1428,37 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                {/*<button className={`button_group-account dropdown_container`}
-                        onClick={() => {
-                            if (account.currentUser) {
-                            } else {
-                                setConnect(true);
-                            }
-                        }} title={account.currentUser ? "Mon compte" : "Connexion à mon espace dans le cloud"}>
-                    <img src={cloudDataConnectionIcon} width={16} height={16} alt={"Mon compte"}/>
-                    <span>{account.currentUser ? "Mon compte" : "Connexion"}</span>
-                    {account.currentUser && (
-                        <div className="dropdown"
-                             style={{left: 0, transform: 'none', rowGap: '0rem', paddingBottom: '1em'}}>
-                            <div className="dropdown_header">{account.currentUser.display_name}</div>
 
+                {/*<button className={`button_group-account dropdown_container`}
+                    onClick={() => { }} title={user.connected ? "Mon compte" : "Connexion à mon espace dans le cloud"}>
+                    <img src={userShield} width={16} height={16} alt={"Mon compte"} />
+                    <span>{user.connected ? "Mon compte" : "Connexion"}</span>
+                    {user.connected && (
+                        <div className="dropdown"
+                            style={{ left: 0, transform: 'none', rowGap: '0rem', paddingBottom: '1em' }}>
+                            <div className="dropdown_header">{user.details.display_name ?? "Utilisateur"}</div>
 
                             <div className="dropdown_separator"></div>
-                            <div className="dropdown_item menuitem" title="Mes préférences" style={{paddingBlock: 0}}>
-                                <div className="menuitem_content" onClick={() => setAccountSettings(true)}>
-                                    <img src={settingsIcon} width={18} height={18} alt={"Préférences"}/>
+                            <div className="dropdown_item menuitem" title="Mes préférences" style={{ paddingBlock: 0 }}>
+                                <div className="menuitem_content" onClick={() => {
+
+                                }}>
+                                    <img src={settingsIcon} width={18} height={18} alt={"Préférences"} />
                                     <span>Préférences...</span>
                                 </div>
                             </div>
-                            <div className="dropdown_item menuitem" title="Se déconnecter" style={{paddingBlock: 0}}>
+                            <div className="dropdown_item menuitem" title="Se déconnecter" style={{ paddingBlock: 0 }}>
                                 <div className="menuitem_content" onClick={() => {
-                                    if (confirm("Êtes-vous certain de vouloir vous déconnecter ?")) account.logout();
+                                    if (confirm("Êtes-vous certain de vouloir vous déconnecter ?")) user.logout();
                                 }}>
-                                    <img src={cancelIcon} width={18} height={18} alt={"Se déconnecter"}/>
+                                    <img src={cancelIcon} width={18} height={18} alt={"Se déconnecter"} />
                                     <span>Se déconnecter</span>
                                 </div>
                             </div>
                         </div>
                     )}
-                </button>*/}
-
-                <div className="button_group-separator"></div>
+                </button> 
+                <div className="button_group-separator"></div>*/}
 
                 <button className={`button_group-new_project active`.trim()}
                     onClick={() => {

@@ -262,6 +262,8 @@ $params = array_reduce(array_map(function ($p) {
         $result[$item[0]] = $item[1];
 });
 
+var_dump($category, $action, $params);
+
 /*switch ($action) {
     case 'login':
         if (!isRetryAllowed()) {
