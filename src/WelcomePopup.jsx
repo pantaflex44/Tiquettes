@@ -22,18 +22,14 @@ import "./welcomePopup.css";
 
 import projectIcon from "./assets/project.svg";
 import importIcon from "./assets/upload.svg";
-import folderOpenIcon from "./assets/folder-open.svg";
 
 import Popup from "./Popup.jsx";
-import {useContext} from "react";
-import {UserContext} from "./UserContext.jsx";
 
 export default function WelcomePopup({
                                          onCancel,
                                          onNewProject,
                                          onImportProject,
                                      }) {
-    const account = useContext(UserContext);
 
     return <Popup
         title={"Bienvenue sur Tiquettes"}
@@ -64,17 +60,6 @@ export default function WelcomePopup({
                     </div>
                 </div>
             </li>
-            {/*<li onClick={() => {
-                alert("Minute papillon, cette fonctionnalité n'est pas encore implémentée.")
-            }} className={account.currentUser ? '' : 'disabled'}>
-                <img src={folderOpenIcon} width={48} height={48} alt="Ouvrir depuis le cloud"/>
-                <div className="bigList-content">
-                    <div className="bigList-content_title">Ouvrir depuis mon espace</div>
-                    <div className="bigList-content_description">Ouvrir un projet depuis mon espace en
-                        ligne. {!account.currentUser &&
-                            <b>Vous devez être connecté à votre compte utilisateur.</b>}</div>
-                </div>
-            </li>*/}
         </ul>
     </Popup>
 }

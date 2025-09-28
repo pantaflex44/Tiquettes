@@ -314,9 +314,10 @@ export default function ThemeEditorPopup({
                         if (title === "") title = defaultTitle;
 
                         const name = `custom|${uuidV4()}`;
+                        const group = defaultTheme.group;
 
                         setEditedTheme(old => {
-                            const et = prepareTheme({ ...old, name, title });
+                            const et = prepareTheme({ ...old, name, title, group });
 
                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(et))}`;
                             const link = document.createElement("a");

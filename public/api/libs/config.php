@@ -65,13 +65,15 @@ if (!$hostIsAllowed) {
     exit(0);
 }
 
-$dbpath = __DIR__ . '/../tiquettes.db';
+include_once __DIR__ . '/constants.php';
+
+$dbpath = PATHES['private'] . '/tiquettes.db';
 $pdo = new PDO('sqlite:' . $dbpath);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 define('DB', $pdo);
 
-include_once __DIR__ . '/constants.php';
+
 
 function dd_json(mixed $content): void
 {
@@ -118,8 +120,8 @@ function send_Mail(array|string $to, string $subject, string $body): bool
                 $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);
                 $mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
             } else if (is_string(SMTP_FROM)) {
-                $mail->setFrom(SMTP_FROM);
-                $mail->addReplyTo(SMTP_FROM);
+                $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);
+                $mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
             }
         }
         if (is_array($to) && count($to) === 2) {

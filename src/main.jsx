@@ -23,7 +23,6 @@ import App from './App.jsx'
 
 import './main.css';
 import * as pkg from '../package.json';
-import UserProvider from "./UserProvider.jsx";
 
 function Footer() {
     return (
@@ -45,40 +44,37 @@ function Footer() {
 
 export default function Main() {
     useEffect(() => {
+        const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
+
+        const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
+        const pathes = ['app', 'dev'];
+        const params = ['enjoy', 'new', 'test'];
+
+        const origins = [];
+        domains.forEach(domain => {
+            const o = `https://${domain}`;
+            origins.push(o);
+            pathes.forEach(path => {
+                const k = `${o}/${path}/`;
+                origins.push(k);
+                params.forEach(param => {
+                    origins.push(`${k}?${param}`)
+                });
+            });
+        });
+
         const origin = window.location.origin.toLowerCase().trim();
 
         if (import.meta.env.VITE_APP_MODE !== "development") {
-            if (![
-                'https://tiquettes.fr',
-                'https://www.tiquettes.fr',
-                'https://tiquettes.fr/app/',
-                'https://tiquettes.fr/app/?enjoy',
-                'https://tiquettes.fr/app/?new',
-                'https://www.tiquettes.fr/app/',
-                'https://www.tiquettes.fr/app/?enjoy',
-                'https://www.tiquettes.fr/app/?new',
-                'https://www.tiquettes.fr/app/?test',
-                'https://www.tiquettes.fr/app/api/toPdf.php',
-                'https://www.tiquettes.fr/app/infos.json',
-            ].includes(origin)) {
-                window.location.replace("https://www.tiquettes.fr/app/?enjoy");
-            }
-        }
-
-        if (import.meta.env.VITE_APP_MODE === "development") {
-            console.log("Developement mode");
+            if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
     }, []);
 
     return (
-        <UserProvider>
-            {/*import.meta.env.VITE_APP_MODE && <>
-                <p className={"devmode blink"}>Version {pkg.version} en cours de développement</p>
-                <p className={"devmode"}>Version stable disponible ici: <a href={"https://www.tiquettes.fr/app/"}>https://www.tiquettes.fr/app/</a></p>
-            </>*/}
+        <>
             <App />
             <Footer />
-        </UserProvider>
+        </>
     );
 }
 

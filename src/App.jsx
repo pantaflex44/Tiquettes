@@ -17,7 +17,7 @@
  */
 
 
-import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { satisfies } from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
@@ -26,7 +26,6 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
-import { UserContext } from "./UserContext.jsx";
 
 import Row from "./Row";
 import ContentEditable from "./ContentEditable";
@@ -37,6 +36,7 @@ import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
 import summaryIcon from './assets/list.svg';
+
 import schemaIcon from './assets/schema.svg';
 import monitorIcon from "./assets/monitor.svg";
 import nomonitorIcon from "./assets/nomonitor.svg";
@@ -50,7 +50,6 @@ import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
-import userShield from "./assets/user-shield.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -66,13 +65,13 @@ import useDocumentVisibility from "./useVisibilityChange.jsx";
 
 
 
+
 function App() {
     const importRef = useRef();
     const projectRef = useRef();
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
 
-    const [testMode, setTestMode] = useState(false);
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
     const [newProjectProperties, setNewProjectProperties] = useState(null);
@@ -87,7 +86,6 @@ function App() {
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
     const tabIsActive = useDocumentVisibility();
-    const user = useContext(UserContext);
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: true,
@@ -965,8 +963,21 @@ function App() {
         }
     }
 
+    const replaceUrlHistory = () => {
+        const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
+        window.history.replaceState({}, document.title, newCurrentUrl);
+    }
+
+    const openWelcome = () => {
+        resetProject();
+        setWelcome(true);
+        replaceUrlHistory();
+    };
+
     const openProjectPropertiesEditor = () => {
+        resetProject();
         setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+        replaceUrlHistory();
     };
 
     const updateProjectProperties = (data) => {
@@ -1327,7 +1338,7 @@ function App() {
     }, [switchboard.rows, switchboard.switchboardMonitor]);
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
-    const openWelcome = () => setWelcome(true);
+
 
     useEffect(() => {
         let t = null;
@@ -1383,25 +1394,17 @@ function App() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
-        const enjoyProjectRequired = urlParams.get('enjoy') !== null;
-        const newProjectRequired = urlParams.get('new') !== null;
-
-        setTestMode(urlParams.get('test') !== null);
-
-        if (enjoyProjectRequired && !newProjectRequired) {
-            resetProject();
-            openWelcome();
-        }
-
-        if (newProjectRequired && !enjoyProjectRequired) {
-            resetProject();
-            openProjectPropertiesEditor();
-        }
-
-        if (enjoyProjectRequired || newProjectRequired) {
-            const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
-            window.history.replaceState({}, document.title, newCurrentUrl);
-        }
+        const extraParams = {
+            enjoy: () => openWelcome(),
+            new: () => openProjectPropertiesEditor(),
+        };
+        Object.keys(extraParams).every(param => {
+            if (urlParams.get(param) !== null) {
+                extraParams[param]();
+                return false;
+            }
+            return true;
+        });
 
         stats_visit(false);
         const visitTimeout = setTimeout(function () {
@@ -1428,37 +1431,6 @@ function App() {
             {/** TOOLBAR **/}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
-
-                {/*<button className={`button_group-account dropdown_container`}
-                    onClick={() => { }} title={user.connected ? "Mon compte" : "Connexion à mon espace dans le cloud"}>
-                    <img src={userShield} width={16} height={16} alt={"Mon compte"} />
-                    <span>{user.connected ? "Mon compte" : "Connexion"}</span>
-                    {user.connected && (
-                        <div className="dropdown"
-                            style={{ left: 0, transform: 'none', rowGap: '0rem', paddingBottom: '1em' }}>
-                            <div className="dropdown_header">{user.details.display_name ?? "Utilisateur"}</div>
-
-                            <div className="dropdown_separator"></div>
-                            <div className="dropdown_item menuitem" title="Mes préférences" style={{ paddingBlock: 0 }}>
-                                <div className="menuitem_content" onClick={() => {
-
-                                }}>
-                                    <img src={settingsIcon} width={18} height={18} alt={"Préférences"} />
-                                    <span>Préférences...</span>
-                                </div>
-                            </div>
-                            <div className="dropdown_item menuitem" title="Se déconnecter" style={{ paddingBlock: 0 }}>
-                                <div className="menuitem_content" onClick={() => {
-                                    if (confirm("Êtes-vous certain de vouloir vous déconnecter ?")) user.logout();
-                                }}>
-                                    <img src={cancelIcon} width={18} height={18} alt={"Se déconnecter"} />
-                                    <span>Se déconnecter</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </button> 
-                <div className="button_group-separator"></div>*/}
 
                 <button className={`button_group-new_project active`.trim()}
                     onClick={() => {
@@ -2055,6 +2027,7 @@ function App() {
 
                 }}
             />}
+
 
         </div>
     )

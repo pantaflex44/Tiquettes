@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.5": {
-            "date": "2025-09-21",
+            "date": "2025-09-28",
             "actions": {
                 "patches": [
                     {
@@ -40,6 +40,9 @@
                             "name": "Issue #28",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/28"
                         }
+                    },
+                    {
+                        "text": "Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème."
                     }
                 ],
                 "adds": [

@@ -142,6 +142,7 @@ export default function GroupColorSelector({
                     {Object.keys(found).map((color) => {
                         let t = found[color].map((m) => `<small><b>${m.id}</b></small> ${m.text}`.trim());
                         return <GroupColorSelectorItem
+                            key={color}
                             value={{ key: color, color, title: t.join('<br />') }}
                             selected={selected}
                             handleColorItemSelected={handleColorItemSelected}
