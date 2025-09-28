@@ -786,7 +786,7 @@ function App() {
         const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
         const coef = data.currentModule.coef ?? 0.5;
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
-        const wire = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.wire ?? "") : "").trim();
+        const wire = (schemaFunctions[data.currentModule.func]?.hasWire ? (data.currentModule.wire ?? "") : "").trim();
         const grp = (data.currentModule.grp ?? "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {

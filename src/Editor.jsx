@@ -112,11 +112,7 @@ export default function Editor({
 
         if (dbPole === 1 && currentPole !== 1) onUpdateModuleEditor({ pole: switchboard.db.pole });
 
-    }
-        ,
-        [hasBlankId, ed.currentModule.func]
-    )
-        ;
+    }, [hasBlankId, ed.currentModule.func]);
 
 
     return ed && (
@@ -253,10 +249,10 @@ export default function Editor({
                                             if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
                                              */
 
-                                            if (selected?.func) onUpdateModuleEditor({ func: selected?.func });
-                                            if (selected?.crb) onUpdateModuleEditor({ crb: selected?.crb });
-                                            if (selected?.current) onUpdateModuleEditor({ current: selected?.current });
-                                            if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
+                                            if (selected?.func && ed.currentModule.func === "") onUpdateModuleEditor({ func: selected?.func });
+                                            if (selected?.crb && ed.currentModule.crb === "") onUpdateModuleEditor({ crb: selected?.crb });
+                                            if (selected?.current && ed.currentModule.current === "") onUpdateModuleEditor({ current: selected?.current });
+                                            //if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
 
                                             if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({ modtype: selected?.modtype });
 

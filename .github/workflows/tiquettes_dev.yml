@@ -35,4 +35,4 @@ jobs:
           password: ${{ secrets.FTPPASSWORD }}
           port: 22
           local_path: "./dist/*"
-          remote_path: "./dev/"
+          remote_path: "./public/dev/"

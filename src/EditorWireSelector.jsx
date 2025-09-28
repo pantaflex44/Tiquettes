@@ -49,7 +49,8 @@ export default function EditorWireSelector({id, value, onChange = null, current 
     const [cur, setCur] = useState(0);
 
     useEffect(() => {
-        setCur(rules[current] ?? 0);
+        const c = rules[current] ?? 0;
+        setCur(c);
 
         const l = [...new Set(Object.values(rules))];
         setList(old => (JSON.stringify(old) !== JSON.stringify(l) ? l : old));
