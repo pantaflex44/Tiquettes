@@ -67,7 +67,8 @@ if (!$hostIsAllowed) {
 
 include_once __DIR__ . '/constants.php';
 
-$dbpath = PATHES['private'] . '/tiquettes.db';
+//$dbpath = PATHES['private'] . '/tiquettes.db';
+$dbpath = __DIR__. '/../tiquettes.db';
 $pdo = new PDO('sqlite:' . $dbpath);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
