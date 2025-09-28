@@ -66,6 +66,31 @@ export default function Editor({
     const prevModule = useMemo(() => getModuleById(ed?.prevModule?.parentId), [ed?.prevModule?.parentId]);
     const prevModuleTitle = useMemo(() => ((prevModule?.id ?? "-") + " " + (prevModule && schemaFunctions[prevModule.func] ? "(" + schemaFunctions[prevModule.func].name + ")" : "")).trim(), [prevModule]);
 
+    const rulesCurrentWires = {
+        2: 1,
+        6: 1.5,
+        10: 1.5,
+        15: 1.5,
+        16: 1.5,
+        20: 2.5,
+        25: 4,
+        30: 6,
+        32: 6,
+        40: 10,
+        45: 10,
+        50: 16,
+        60: 16,
+        63: 16,
+        80: 25,
+        90: 25,
+        100: 35,
+        125: 50,
+        160: 75,
+        180: 75,
+        240: 150,
+        250: 150,
+    };
+
     const lastFreeId = useMemo(() => {
         let rows = switchboard.rows;
 
@@ -252,7 +277,14 @@ export default function Editor({
                                             if (selected?.func && ed.currentModule.func === "") onUpdateModuleEditor({ func: selected?.func });
                                             if (selected?.crb && ed.currentModule.crb === "") onUpdateModuleEditor({ crb: selected?.crb });
                                             if (selected?.current && ed.currentModule.current === "") onUpdateModuleEditor({ current: selected?.current });
-                                            //if (selected?.wire && ed.currentModule.wire === "") onUpdateModuleEditor({ wire: selected?.wire });
+                                            if (selected?.wire && ed.currentModule.wire === "") {
+                                                let w = 0;
+                                                if (ed.currentModule.current !== "") {
+                                                    const c = parseInt(ed.currentModule.current.replace(/\D/g, ''));
+                                                    w = rulesCurrentWires[c] ?? 0;
+                                                }
+                                                onUpdateModuleEditor({ wire: w > 0 ? `${w}` : selected?.wire });
+                                            }
 
                                             if (selected?.modtype && !isCustomFunction) onUpdateModuleEditor({ modtype: selected?.modtype });
 
@@ -454,7 +486,9 @@ export default function Editor({
                                     <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
                                         value={ed.currentModule.wire}
                                         onChange={(value) => onUpdateModuleEditor({ wire: value })}
-                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))} />
+                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}
+                                        rules={rulesCurrentWires}
+                                    />
                                 </div>
                             }
 

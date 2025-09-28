@@ -20,31 +20,7 @@
 
 import {useEffect, useState} from "react";
 
-export default function EditorWireSelector({id, value, onChange = null, current = 0}) {
-    const rules = {
-        2: 1,
-        6: 1.5,
-        10: 1.5,
-        15: 1.5,
-        16: 1.5,
-        20: 2.5,
-        25: 4,
-        30: 6,
-        32: 6,
-        40: 10,
-        45: 10,
-        50: 16,
-        60: 16,
-        63: 16,
-        80: 25,
-        90: 25,
-        100: 35,
-        125: 50,
-        160: 75,
-        180: 75,
-        240: 150,
-        250: 150,
-    };
+export default function EditorWireSelector({ id, value, onChange = null, current = 0, rules = {} }) {
     const [list, setList] = useState([]);
     const [cur, setCur] = useState(0);
 
