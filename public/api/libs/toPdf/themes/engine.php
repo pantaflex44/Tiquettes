@@ -158,7 +158,21 @@ class Theme
                     if ($data[$key]['type'] !== 'icon' && $data[$key]['type'] !== 'text')
                         $data[$key]['type'] = 'icon';
 
-                    $data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
+                    /*$data[$key]['sizeMm'] = array_key_exists('sizePercent', $data[$key]) ? ((50 + ($data[$key]['sizePercent'] / 2)) / 100) * 10 : 10;
+                    $data[$key]['sizeMm'] = (1 - ($data[$key]['sizeMm'] / 10)) * $workBox['h'];
+
+                    $data[$key]['sizeMm'] = $workBox['h'] * ($data[$key]['sizePercent'] / 100);
+
+                    $pp = ((0.5 * ($data[$key]['sizePercent'] / 100)) + 0.15) - 0.15;
+                    if ($pp > 0.35)
+                        $pp = 0.35;
+                    $data[$key]['sizeMm'] = $workBox['h'] * $pp;
+                    if ($data[$key]['sizeMm'] < 3.2)
+                        $data[$key]['sizeMm'] = 3.2;*/
+
+                    $ppp = (((array_key_exists('sizePercent', $data[$key]) ? $data[$key]['sizePercent'] : 50) * 0.15) / 100) + 0.20;
+                    $data[$key]['sizeMm'] = $workBox['h'] * $ppp;
+
                     $data[$key]['place'] = [
                         'w' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
                         'h' => min($data[$key]['sizeMm'], $workBox['w'] - $data[$key]['margins']['left'] - $data[$key]['margins']['right']) - 1,
@@ -217,6 +231,31 @@ class Theme
                 $cnt = 0;
                 foreach ($keys as $key)
                     $data[$key]['bgPlace']['y'] += $freeHs + ($cnt++ * $freeHs);
+            }
+
+            // height too high
+            $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
+            if ($hs >= $workBox['h']) {
+                $lh = $data[$lastKey]['bgPlace']['h'];
+                $lh -= ($hs - $workBox['h']);
+                if ($lh < 0)
+                    $lh = 0;
+                $data[$lastKey]['bgPlace']['h'] = $lh;
+
+                if ($key === 'id' || $key === 'text') {
+                    $lc = $data[$key]['lineCount'];
+                    $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
+                    while ($th > $data[$lastKey]['bgPlace']['h']) {
+                        $lc--;
+                        $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
+                    }
+                    $data[$key]['place']['h'] = $th - 0.5;
+                    $data[$key]['lineCount'] = $lc;
+                } elseif ($data[$key]['place']['h'] > $data[$lastKey]['bgPlace']['h']) {
+                    $data[$key]['place']['h'] = $data[$lastKey]['bgPlace']['h'] - 2 - 0.5;
+                }
+
+                $data[$lastKey]['bgPlace']['y'] += ($hs - $workBox['h']);
             }
 
             // draw background color
