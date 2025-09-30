@@ -1,8 +1,61 @@
-<svg width="1000" height="1000" class="icon icon-tabler icons-tabler-outline icon-tabler-car" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="m6.53 3.69 6.35 6.35-1.59 1.59a4.5 4.5 0 1 1-6.36-6.36l1.59-1.59ZM2.04 14.52l2.71-2.71" stroke="#000" style="fill:none;stroke:#000;stroke-opacity:1"/>
-    <path d="M10.56 2.14 7.85 4.85" stroke="#000" style="stroke:#000;stroke-opacity:1;fill:none"/>
-    <path d="m14.43 6.01-2.71 2.71" stroke="#000" style="fill:none"/>
-    <path d="M12.39 20.874h-1.152v-3.453l1.152-2.878h5.18l2.303 2.878h.575a1.151 1.151 0 0 1 1.151 1.151v2.302h-1.15m-2.303 0h-3.454m-3.454-3.453h8.635m-3.454 0v-2.878" style="fill:none;stroke:#000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1"/>
-    <path d="M12.39 20.874a1.151 1.151 0 1 0 2.302 0 1.151 1.151 0 0 0-2.302 0" style="fill:none;stroke:#000;stroke-width:1.151208;stroke-opacity:1;fill-opacity:1;stroke-dasharray:none"/>
-    <path d="M18.146 20.874a1.151 1.151 0 1 0 2.302 0 1.151 1.151 0 0 0-2.302 0" style="fill:none;stroke:#000;stroke-width:1.1512;stroke-opacity:1;fill-opacity:1"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1000"
+   height="1000"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-car"
+   stroke-linejoin="round"
+   stroke-width="2"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="swb_voitureelectrique2.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     id="namedview16"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.868"
+     inkscape:cx="354.26267"
+     inkscape:cy="501.72811"
+     inkscape:window-width="1862"
+     inkscape:window-height="1011"
+     inkscape:window-x="1978"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg14" />
+  <path
+     d="m 5.518813,3.2508409 5.114498,5.1144977 -1.2806383,1.280638 A 3.6244472,3.6244472 0 1 1 4.2301207,4.5234245 l 1.280638,-1.280638 z M 1.9024202,11.973677 4.0851428,9.7909545"
+     stroke="#000000"
+     style="fill:none;stroke:#000000;stroke-width:1.61087;stroke-opacity:1"
+     id="path2" />
+  <path
+     d="M 8.7647069,2.0024202 6.5819842,4.1851428"
+     stroke="#000000"
+     style="fill:none;stroke:#000000;stroke-width:1.61087;stroke-opacity:1"
+     id="path4" />
+  <path
+     d="M 11.881731,5.1194447 9.6990088,7.3021674"
+     stroke="#000000"
+     style="fill:none;stroke-width:1.61087"
+     id="path6" />
+  <path
+     d="m 12.372274,21.194382 a 1.2014145,1.2014145 0 1 0 2.402829,0 1.2014145,1.2014145 0 0 0 -2.402829,0 m 6.007073,0 a 1.2014145,1.2014145 0 1 0 2.402828,0 1.2014145,1.2014145 0 0 0 -2.402828,0"
+     id="path4-3"
+     style="fill:none;stroke:#000000;stroke-width:1.20141;stroke-opacity:1" />
+  <path
+     d="m 12.379659,21.194382 h -1.201414 v -3.604244 l 1.201414,-3.003535 h 5.406366 l 2.40283,3.003535 h 0.600706 a 1.2014145,1.2014145 0 0 1 1.201415,1.201415 v 2.402829 h -1.201415 m -2.402829,0 h -3.604244 m -3.604243,-3.604244 h 9.01061 m -3.604244,0 v -3.003535 m -5.406366,-1.802123 5.406366,-2.402829 5.406365,2.402829"
+     id="path6-6"
+     style="fill:none;stroke:#000000;stroke-width:1.20141;stroke-opacity:1" />
 </svg>

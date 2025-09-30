@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- Correction des pictogrammes qui possédaient un problème de colorisation lors du rendu PDF.
 - [[Issue #40](https://github.com/pantaflex44/Tiquettes/issues/40)] Correction du moteur de rendu PDF pour la création d'étiquettes de très petites hauteurs.
 - Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème.
 - Légère correction de la position des éléments dans chaque thème imprimable.

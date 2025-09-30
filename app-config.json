@@ -29,6 +29,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Correction des pictogrammes qui possédaient un problème de colorisation lors du rendu PDF."
+                    },
+                    {
                         "text": "Correction du moteur de rendu PDF pour la création d'étiquettes de très petites hauteurs.",
                         "from": {
                             "name": "Issue #40",
