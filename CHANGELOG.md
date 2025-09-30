@@ -4,10 +4,11 @@
 
 ### Corrections
 
+- [[Issue #40](https://github.com/pantaflex44/Tiquettes/issues/40)] Correction du moteur de rendu PDF pour la création d'étiquettes de très petites hauteurs.
+- Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème.
 - Légère correction de la position des éléments dans chaque thème imprimable.
 - Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF.
 - [[Issue #28](https://github.com/pantaflex44/Tiquettes/issues/28)] Suppression de la limite de 3 lignes lors de l'impression des propriétés d'un module pour former la nomenclature.
-- Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème.
 
 ### Ajouts
 
