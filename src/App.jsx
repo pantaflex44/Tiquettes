@@ -1462,11 +1462,12 @@ function App() {
                         <div className="dropdown_item head"
                             title="Imprimer la page de garde">
                             <input id="print_firstPage" name="print_firstPage" type="checkbox"
-                                checked={printOptions.firstPage}
+                                checked={printOptions.firstPage && (printOptions.schema || printOptions.summary)}
                                 onChange={(e) => setPrintOptions((old) => ({
                                     ...old,
                                     firstPage: e.target.checked
-                                }))} />
+                                }))}
+                                disabled={!printOptions.schema && !printOptions.summary} />
                             <label htmlFor="print_firstPage">Page de garde</label>
                         </div>
 
