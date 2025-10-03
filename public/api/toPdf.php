@@ -1157,6 +1157,12 @@ class TiquettesPDF extends FPDF
                 if ($pole !== '') $this->Image($pole, $centerX - (2.9104166667 / 2), $currentPosY + $this->schemaSymbolSize['h'] - 5, 2.9104166667, 0, 'PNG');
             }*/
 
+            if (isset($module->line) && is_string($module->line) && trim($module->line) !== "") {
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Arial', '', 5.5);
+                $this->TextWithDirection($centerX - 1, $currentPosY + ($this->grid[$this->gridOrientation]['step'] / 2) + 1, str("L" . $module->line), 'U');
+            }
+
         } else {
             $symbol = $this->getSymbol('blank');
             if ($symbol !== '')

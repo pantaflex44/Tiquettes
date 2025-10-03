@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.5] - 2025-09-30
+## [2.2.5] - 2025-10-03
 
 ### Corrections
 
@@ -13,6 +13,8 @@
 
 ### Ajouts
 
+- [[Issue #41](https://github.com/pantaflex44/Tiquettes/issues/41)] Nouvelle propriété permettant de renseigner la phase utilisée lors d'une distribution monophasée à partir d'un parent triphasé.
+- Nouveau bouton 'zoom' dans la vue schéma de l'éditeur. Permet de légerement agrandir visuellement le schéma affiché.
 - [[Issue #38](https://github.com/pantaflex44/Tiquettes/issues/38)] Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.
 - [[Discussion #36](https://github.com/pantaflex44/Tiquettes/discussions/36)] Réponse à une proposition, nouvelle fonctionnalité qui permet d'associer un module à un groupe via une couleur. Couleur utilisée (si disponible et si demandée) par les thèmes.
 

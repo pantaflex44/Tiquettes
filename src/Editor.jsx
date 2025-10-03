@@ -39,6 +39,7 @@ import EditorParentSelector from "./EditorParentSelector.jsx";
 import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
 import GroupColorSelector from "./GroupColorSelector.jsx";
+import EditorLineSelector from "./EditorLineSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -116,6 +117,33 @@ export default function Editor({
         setEd((old) => ({ ...old, currentModule: { ...old.currentModule, ...data } }));
     }
 
+    const getParentById = (parentId) => {
+        const parent = Object.entries(getFilteredModulesBySchemaFuncs())
+            .map(([k, l]) => {
+                const res = l
+                    .map((module) => parentId === module.id ? module : null)
+                    .filter(f => f !== null);
+
+                if (res.length === 1) return res[0];
+                return null;
+            })
+            .filter(f => f !== null);
+        if (!parent || !Array.isArray(parent)) return null;
+
+        if (parent.length !== 1)
+            return null;
+
+        return parent[0];
+    };
+
+    const parentModule = useMemo(() => getParentById(ed.currentModule.parentId), [ed.currentModule.parentId]);
+    const parentModuleIsTri = useMemo(() => parentModule && schemaFunctions[parentModule.func]?.hasPole && (parentModule.pole === '3P+N' || parentModule.pole === '4P'), [parentModule]);
+    const hasLine = useMemo(() => parentModule && parentModuleIsTri && schemaFunctions[ed.currentModule.func]?.hasPole && ed.currentModule.pole === '1P+N', [parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions]);
+
+    useEffect(() => {
+        if (!hasLine) onUpdateModuleEditor({ line: "" })
+    }, [hasLine]);
+
     useEffect(() => {
         if (hasBlankId) {
             onUpdateModuleEditor({ id: lastFreeId });
@@ -170,7 +198,7 @@ export default function Editor({
                     }
                 ]}
             >
-                <div style={{ flex: 1, minHeight: '621px' }}>
+                <div style={{ flex: 1, minHeight: '690px' }}>
                     <div className={"editor_tabpages"}>
                         <input type="checkbox" id="main_editor_tab" checked={editorTab === "main"}
                             onChange={() => setEditorTab("main")} />
@@ -493,13 +521,20 @@ export default function Editor({
                             }
 
                             {schemaFunctions[ed.currentModule.func]?.hasPole &&
-                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                    <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
-                                    <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
-                                        value={ed.currentModule.pole}
-                                        db={switchboard.withDb ? switchboard.db : null}
-                                        onChange={(value) => onUpdateModuleEditor({ pole: value })} />
-                                </div>
+                                <>
+                                    <div className={`popup_row ${hasLine ? 'three' : ''}`.trim()} style={{ '--left_column_size': '100px' }}>
+                                        <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
+                                        <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
+                                            value={ed.currentModule.pole}
+                                            db={switchboard.withDb ? switchboard.db : null}
+                                            onChange={(value) => onUpdateModuleEditor({ pole: value })} style={{ flex: 1 }} />
+                                        {hasLine && <EditorLineSelector id={`editor_line_${ed.currentModule.id.trim()}`}
+                                            parentModule={hasLine ? parentModule : null}
+                                            value={ed.currentModule.line}
+                                            onChange={(value) => onUpdateModuleEditor({ line: value })} />}
+                                    </div>
+
+                                </>
                             }
 
                             {ed.currentModule.func && (

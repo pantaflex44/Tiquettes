@@ -148,6 +148,7 @@ function App() {
         coef: 0.5,
         pole: "",
         wire: "",
+        line: "",
         grp: "",
         parentId: "",
         kcId: "",
@@ -175,6 +176,7 @@ function App() {
             kcId: "",
             pole: "1P+N",
             wire: "16",
+            line: "",
             grp: "",
             sensibility: "500mA",
             coef: 1,
@@ -582,6 +584,9 @@ function App() {
                             // <=2.2.4 : add grp property
                             if (!nm.grp) nm = { ...nm, grp: "" };
 
+                            // <=2.2.5 : add line property
+                            if (!nm.line) nm = { ...nm, line: "" };
+
                             return nm;
                         });
                     });
@@ -788,6 +793,7 @@ function App() {
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
         const wire = (schemaFunctions[data.currentModule.func]?.hasWire ? (data.currentModule.wire ?? "") : "").trim();
         const grp = (data.currentModule.grp ?? "").trim();
+        const line = (data.currentModule.line ?? "").trim();
 
         if (!(/\w*/.test(id)) || id === '') {
             setEditor((old) => ({
@@ -842,6 +848,7 @@ function App() {
                         coef,
                         pole,
                         wire,
+                        line,
                         grp,
                     };
                 });
@@ -1141,6 +1148,7 @@ function App() {
                         coef: clipboard.coef,
                         pole: clipboard.pole,
                         wire: clipboard.wire,
+                        line: clipboard.line,
                         grp: clipboard.grp,
                     };
                 });
@@ -1563,14 +1571,14 @@ function App() {
                                     onChange={(e) => setPrintOptions((old) => ({
                                         ...old,
                                         pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.schemaPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
+                                    }))} disabled={!printOptions.schema} />
                                 <label htmlFor="print_schema_format_A4" style={{ flex: 0 }}>A4</label>
                                 <input id="print_schema_format_A3" name="print_schema_format_A3" type="radio"
                                     checked={printOptions.pdfOptions.schemaPrintFormat === 'A3'}
                                     onChange={(e) => setPrintOptions((old) => ({
                                         ...old,
                                         pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.schemaPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
+                                    }))} disabled={!printOptions.schema} />
                                 <label htmlFor="print_schema_format_A3" style={{ flex: 0 }}>A3</label>
                             </div>
                         </>}
@@ -1599,14 +1607,14 @@ function App() {
                                     onChange={(e) => setPrintOptions((old) => ({
                                         ...old,
                                         pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.summaryPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
+                                    }))} disabled={!printOptions.summary} />
                                 <label htmlFor="print_summary_format_A4" style={{ flex: 0 }}>A4</label>
                                 <input id="print_summary_format_A3" name="print_summary_format_A3" type="radio"
                                     checked={printOptions.pdfOptions.summaryPrintFormat === 'A3'}
                                     onChange={(e) => setPrintOptions((old) => ({
                                         ...old,
                                         pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.summaryPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
+                                    }))} disabled={!printOptions.summary} />
                                 <label htmlFor="print_summary_format_A3" style={{ flex: 0 }}>A3</label>
                             </div>
                         </>}

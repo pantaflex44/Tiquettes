@@ -29,11 +29,16 @@
 }
 
 .schema {
+    --schema-scale: 1;
+
+    min-height: calc(var(--schema-scale) * 650px) !important;
+
     position: relative;
     page: schema;
     padding: 0 !important;
 
     gap: 0;
+
 }
 
 .schemaContainer {
@@ -55,6 +60,8 @@
 
     padding: 40px;
     /*width: calc(100% - 60px);*/
+    width: min(max-content, 100%);
+
     overflow-x: auto;
 
     background-position: -5px -4px;
@@ -64,7 +71,8 @@
     page-break-before: always;
     break-before: page;
 
-
+    transform: scale(var(--schema-scale, 1));
+    transform-origin: 0 0;
 }
 
 .schemaItem {
@@ -159,7 +167,8 @@
 .schemaItemSymbolId,
 .schemaItemSymbolType,
 .schemaItemSymbolCurrent,
-.schemaItemSymbolPole {
+.schemaItemSymbolPole,
+.schemaItemSymbolLine {
     position: absolute;
 
     top: 10px;
@@ -168,6 +177,10 @@
     font-size: 65%;
     white-space: nowrap;
     line-height: 1.2;
+}
+
+.schemaItemSymbolId {
+    top: 5px;
 }
 
 .schemaItemSymbolType {
@@ -183,6 +196,16 @@
 .schemaItemSymbolPole {
     top: 51px;
     font-size: 50%;
+}
+
+.schemaItemSymbolLine {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 65%;
+    font-weight: 600;
+    top: 5px;
+    left: 31%;
+    transform: rotate(-90deg);
+    color: var(--primary-color);
 }
 
 .schemaItem .schemaItemSymbol.editable:hover .schemaItemSymbolId,
@@ -220,7 +243,7 @@
     width: 35px;
 }
 
-.schemaItem.isFirst > .schemaItemPrevLine.noNext {
+.schemaItem.isFirst>.schemaItemPrevLine.noNext {
     width: var(--symbol-width);
 }
 
@@ -229,7 +252,7 @@
     left: 35px;
 }
 
-.schemaItem.isFirst > .schemaItemPrevLine.noPrev {
+.schemaItem.isFirst>.schemaItemPrevLine.noPrev {
     left: 0;
 }
 
@@ -252,13 +275,11 @@
     width: 50%;
     height: 2px;
 
-    background: repeating-linear-gradient(
-            90deg,
+    background: repeating-linear-gradient(90deg,
             #000 0px,
             #000 1px,
             transparent 4px,
-            transparent 8px
-    );
+            transparent 8px);
 
     overflow-y: hidden;
 }
@@ -403,7 +424,7 @@
 
     display: grid;
     grid-template-areas: "a b f c"
-    "d b f e";
+        "d b f e";
     grid-auto-columns: auto 1fr auto auto;
     gap: 40px;
     overflow: hidden;
@@ -542,7 +563,7 @@
     }
 
     .schemaItem {
-display: block;
+        display: block;
         flex-wrap: wrap;
     }
 

@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.5": {
-            "date": "2025-09-30",
+            "date": "2025-10-03",
             "actions": {
                 "patches": [
                     {
@@ -56,6 +56,16 @@
                     }                    
                 ],
                 "adds": [
+                    {
+                        "text": "Nouvelle propriété permettant de renseigner la phase utilisée lors d'une distribution monophasée à partir d'un parent triphasé.",
+                        "from": {
+                            "name": "Issue #41",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/41"
+                        }
+                    },
+                    {
+                        "text": "Nouveau bouton 'zoom' dans la vue schéma de l'éditeur. Permet de légerement agrandir visuellement le schéma affiché."
+                    },
                     {
                         "text": "Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.",
                         "from": {

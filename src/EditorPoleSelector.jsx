@@ -18,9 +18,9 @@
 
 /* eslint-disable react/prop-types */
 
-import {useMemo} from "react";
+import { useMemo } from "react";
 
-export default function EditorPoleSelector({id, value, db, onChange = null}) {
+export default function EditorPoleSelector({ id, value, db, style = {}, onChange = null }) {
     const dbPole = useMemo(() => {
         if (!db || !db?.pole) return 4;
         let pole = db.pole.trim().toUpperCase();
@@ -30,10 +30,10 @@ export default function EditorPoleSelector({id, value, db, onChange = null}) {
     }, [db]);
 
     const allowedPoles = [
-        {key: "1P+N", name: "Monophasé (1P+N)"},
-        {key: "3P", name: "Triphasé (3P)"},
-        {key: "3P+N", name: "Triphasé (3P+N)"},
-        {key: "4P", name: "Tétrapolaire (4P)"}
+        { key: "1P+N", name: "Monophasé (1P+N)" },
+        { key: "3P", name: "Triphasé (3P)" },
+        { key: "3P+N", name: "Triphasé (3P+N)" },
+        { key: "4P", name: "Tétrapolaire (4P)" }
     ].filter(currentPole => {
         let p = parseInt(currentPole.key.replace(/\D/g, ''));
         if (p === 3 && currentPole.key.includes('+N')) p = 4;
@@ -41,9 +41,9 @@ export default function EditorPoleSelector({id, value, db, onChange = null}) {
     });
 
     return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
+        onChange={(e) => {
+            if (onChange) onChange(e.target.value)
+        }} style={{ ...style }}>
         <option value={""}>-</option>
         {allowedPoles.map((pole, i) => <option key={i} value={pole.key}>{pole.name}</option>)}
     </select>

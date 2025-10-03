@@ -172,6 +172,18 @@ body:has(.popup-overflow) {
     column-gap: 0.25em;
 }
 
+.popup_row.three {
+    grid-template-columns: var(--left_column_size) 1fr minmax(64px, 0.2fr);
+}
+
+.popup_row.three50 {
+    grid-template-columns: var(--left_column_size) 1fr 1fr;
+}
+
+.popup_row.threeFull50 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 .popup_row.span {
     grid-template-columns: 1fr;
 }

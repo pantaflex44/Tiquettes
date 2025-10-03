@@ -66,6 +66,7 @@ export default function SchemaSymbol({
              onClick={() => handleEdit()}>
             <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100}/>
             <div className="schemaItemSymbolId">{module.id}</div>
+            {module.line && <div className="schemaItemSymbolLine">L{module.line}</div>}
 
             {func.obj?.hasType &&
                 <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}
