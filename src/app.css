@@ -954,6 +954,10 @@ option[disabled] {
     }
 }
 
+.icon_selector_box {
+    cursor: pointer;
+}
+
 .icon_selector_box:focus-within, .icon_selector_box.focused {
     border-color: var(--primary-color) !important;
 }

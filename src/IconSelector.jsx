@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {lazy, Suspense, useEffect, useRef, useState} from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const IconSelectorItem = lazy(() => import('./IconSelectorItem.jsx'));
 
@@ -25,7 +25,7 @@ import caretDownIcon from './assets/caret-down.svg';
 import caretUpIcon from './assets/caret-up.svg';
 
 /* eslint-disable react/prop-types */
-function IconSelector({value = null, onChange = null, onOpenState = null}) {
+function IconSelector({ value = null, onChange = null, onOpenState = null }) {
     const [selected, setSelected] = useState(null);
     const [opened, setOpened] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(false);
@@ -37,11 +37,12 @@ function IconSelector({value = null, onChange = null, onOpenState = null}) {
     function handleSearchInput(e) {
         const v = e.target.value;
         const f = [...swbIcons].filter((icon) => icon.title.toLowerCase() === v.toLowerCase());
-        setSearch(f.length > 0 ? f[0] : {title: v});
+        setSearch(f.length > 0 ? f[0] : { title: v });
     }
 
     function handleSearchEnter() {
         setOpened(true);
+
     }
 
     function handleKeyUp(e) {
@@ -113,7 +114,7 @@ function IconSelector({value = null, onChange = null, onOpenState = null}) {
     }, [value]);
 
     return (
-        <div style={{position: 'relative'}} className="icon_selector">
+        <div style={{ position: 'relative' }} className="icon_selector">
             <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -129,17 +130,18 @@ function IconSelector({value = null, onChange = null, onOpenState = null}) {
                 padding: '0.5em',
                 fontWeight: 500,
                 backgroundColor: '#fff'
-            }}>
+            }}
+            >
                 {search && search.filename
                     ? <img loading={'lazy'} src={`${import.meta.env.VITE_APP_BASE}${search.filename}`} width={24} height={24}
-                           alt={search.title}/>
-                    : <div style={{width: '24px', height: '24px'}}></div>
+                        alt={search.title} onClick={handleIconListToggler} />
+                    : <div style={{ width: '24px', height: '24px' }} onClick={handleIconListToggler}></div>
                 }
                 <input type="text" value={search ? search.title : ''} onKeyUp={handleKeyUp} onChange={handleSearchInput}
-                       placeholder="Rechercher ..." style={{border: 0, padding: 0}} onInput={handleSearchEnter}/>
+                    placeholder="Rechercher ..." style={{ border: 0, padding: 0 }} onInput={handleSearchEnter} />
                 <img loading={'lazy'} src={opened ? caretUpIcon : caretDownIcon} width={16} height={16}
-                     style={{padding: '0px', cursor: 'pointer', marginTop: '2px'}} alt="Pictogrammes"
-                     title="Liste des pictogrammes" onClick={handleIconListToggler}/>
+                    style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Pictogrammes"
+                    title="Liste des pictogrammes" onClick={handleIconListToggler} />
             </div>
             <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{
                 zIndex: 1,
@@ -159,9 +161,9 @@ function IconSelector({value = null, onChange = null, onOpenState = null}) {
             }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
                 {found.map((icon, i) => <Suspense key={i} fallback={<div></div>}>
                     <IconSelectorItem icon={icon} selected={selected} search={search}
-                                      handleIconListItemSelected={handleIconListItemSelected}
-                                      hoveredItem={hoveredItem}
-                                      setHoveredItem={setHoveredItem}/>
+                        handleIconListItemSelected={handleIconListItemSelected}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem} />
                 </Suspense>)}
             </ul>
         </div>

@@ -89,11 +89,13 @@ export default function GroupColorSelector({
                 padding: '0.5em',
                 fontWeight: 500,
                 backgroundColor: '#fff'
-            }}>
+            }}
+                onClick={handleColorListToggler}
+            >
                 <div style={{ width: '30px', height: '20px', backgroundColor: selected.color }}></div>
                 <img loading={'lazy'} src={opened ? caretUpIcon : caretDownIcon} width={16} height={16}
                     style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Choisir une couleur"
-                    title="Liste des couleurs" onClick={handleColorListToggler} />
+                    title="Liste des couleurs" />
             </div>
             <input ref={colorPaletteRef} onChange={(e) => {
                 setSelected({
