@@ -31,8 +31,6 @@
 .schema {
     --schema-scale: 1;
 
-    min-height: calc(var(--schema-scale) * 650px) !important;
-
     position: relative;
     page: schema;
     padding: 0 !important;

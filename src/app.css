@@ -138,6 +138,12 @@ h4 {
     border-radius: 7px;
 }
 
+.schema.selected {
+    min-height: calc(var(--schema-scale) * 650px) !important;
+}
+
+
+
 .summary table {
     margin-inline: 2em;
     margin-bottom: 2em;
