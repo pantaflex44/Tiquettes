@@ -21,6 +21,7 @@ function writeFile(filepath, data) {
 
 const appConfig = require('./app-config.json');
 let pkg = require('./package-base.json');
+let oldpkg = require('./package.json');
 
 
 let version = "1.0.0";
@@ -28,6 +29,14 @@ let versions = Object.keys(appConfig.changelog ?? {});
 if (versions.length > 0) version = versions[0];
 let versionDate = appConfig.changelog[version]?.date ?? "";
 console.log(`Last release: v${version} ${versionDate}`);
+
+pkg = {
+    ...pkg,
+    dependencies: oldpkg.dependencies,
+    devDependencies: oldpkg.devDependencies
+}
+writeFile("./package-base.json", pkg);
+
 pkg = {
     ...pkg,
     name: appConfig.name,
@@ -38,7 +47,7 @@ pkg = {
     license: appConfig.license,
     homepage: appConfig.homepage,
     repository: appConfig.repository,
-    version
+    version,
 };
 writeFile("./package.json", pkg);
 

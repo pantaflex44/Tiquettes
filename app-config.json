@@ -29,6 +29,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Mise à jour globale de toutes les dépendances."
+                    },
+                    {
                         "text": "Correction des pictogrammes qui possédaient un problème de colorisation lors du rendu PDF."
                     },
                     {

@@ -1266,20 +1266,21 @@ class TiquettesPDF extends FPDF
         }
         $this->Ln(12);
 
-        $this->SetFont('Arial', '', 10);
-        $this->SetTextColor(0, 0, 0);
-
         for ($i = 0; $i < count($switchboard->rows); $i++) {
             $oldPosX = $this->pageMargin;
 
             $rowPosition = $i + 1;
             $rowPositionText = str_pad($rowPosition, strlen(strval(count($switchboard->rows))), '0', STR_PAD_LEFT);
 
+            $this->SetFont('Arial', '', 10);
+            $this->SetTextColor(0, 0, 0);
             $this->SetX($oldPosX + 5);
             $this->Cell($columns[0]['w'], 8, str("Rangée {$rowPositionText}"), 0, 0, $columns[0]['align']);
             $this->SetX($oldPosX);
             $this->Image('./libs/toPdf/assets/summary_row.png', $oldPosX, $this->GetY() + 1.9, 4, 4, 'PNG');
 
+
+            $rowIsEmpty = true;
             for ($j = 0; $j < count($switchboard->rows[$i]); $j++) {
                 $this->SetFont('Arial', '', 10);
 
@@ -1289,6 +1290,9 @@ class TiquettesPDF extends FPDF
 
                 $module = $switchboard->rows[$i][$j];
                 if (!$module->free && ($module->func ?? '') !== '') {
+                    if ($rowIsEmpty)
+                        $rowIsEmpty = false;
+
                     if ($module->func === 'k')
                         $module->func = 'kc';
 
@@ -1369,6 +1373,15 @@ class TiquettesPDF extends FPDF
 
                     $this->SetY($maxheight + 4.6);
                 }
+            }
+
+            if ($rowIsEmpty) {
+                $this->SetFont('Arial', '', 8);
+                $this->SetTextColor(100, 100, 100);
+                $this->SetX($this->pageMargin + $columns[0]['w'] + 5);
+                $this->Cell(0, 8, str("vide"), 0, 0, 'L');
+
+                $this->Ln(3);
             }
 
             $this->Ln(3);
