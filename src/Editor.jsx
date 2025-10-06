@@ -168,6 +168,8 @@ export default function Editor({
     }, [hasBlankId, ed.currentModule.func]);
 
 
+
+
     return ed && (
         <>
             <Popup
@@ -529,7 +531,6 @@ export default function Editor({
                                             db={switchboard.withDb ? switchboard.db : null}
                                             onChange={(value) => onUpdateModuleEditor({ pole: value })} style={{ flex: 1 }} />
                                         {hasLine && <EditorLineSelector id={`editor_line_${ed.currentModule.id.trim()}`}
-                                            parentModule={hasLine ? parentModule : null}
                                             value={ed.currentModule.line}
                                             onChange={(value) => onUpdateModuleEditor({ line: value })} />}
                                     </div>

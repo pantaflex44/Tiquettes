@@ -181,7 +181,7 @@ body:has(.popup-overflow) {
 }
 
 .popup_row.threeFull50 {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .popup_row.span {
