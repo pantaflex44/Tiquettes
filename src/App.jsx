@@ -58,7 +58,7 @@ import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 
-import { stats_count, stats_count_json, stats_visit } from "../public/api/stats.js";
+import { action, visit } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
 
@@ -207,6 +207,26 @@ function App() {
             lut[d2 & 0x3f | 0x80] + lut[d2 >> 8 & 0xff] + '-' + lut[d2 >> 16 & 0xff] + lut[d2 >> 24 & 0xff] +
             lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
     };
+
+    const getUrlParam = (name, type = 'string', defaultValue = null) => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        let param = urlParams.get(name);
+        if (param === null) return defaultValue;
+        param = decodeURIComponent(param).trim();
+
+        switch (type) {
+            case 'int':
+                return parseInt(param);
+            case 'float':
+                return parseFloat(param);
+            case 'boolean':
+                return param.toLowerCase() === 'true' || param === '1';
+            default:
+                return param;
+        }
+    }
 
     const defaultProject = useMemo(() => ({
         prjid: generateUUID(),
@@ -466,6 +486,21 @@ function App() {
     };
 
     const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
+    const switchboardIsEmpty = useMemo(() => {
+        let isEmpty = true;
+
+        for (let i = 0; i < switchboard.rows.length; i++) {
+            for (let j = 0; j < switchboard.rows[i].length; j++) {
+                if (switchboard.rows[i][j].free === false) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty === false) break;
+        }
+
+        return isEmpty;
+    }, [switchboard]);
 
     const lastFreeId = useMemo(() => {
         let rows = switchboard.rows;
@@ -524,14 +559,11 @@ function App() {
         setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
         scrollToProject();
 
-        stats_count('new');
-
     }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
 
     const resetProject = useCallback(() => {
         importRef.current.value = "";
 
-        setClipboard(null);
         setClipboardMode(null);
         setDocumentTitle(defaultProjectName);
         setPrintOptions({ ...defaultPrintOptions });
@@ -541,108 +573,120 @@ function App() {
         createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
     }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
 
+    const _importProject = (data) => {
+        try {
+            let swb = JSON.parse(data);
+
+            const theme = themeEngineCompatibility(swb);
+            setTheme(theme);
+
+            const rows = swb.rows.map((r) => {
+                return r.map((m) => {
+                    let nm = { ...m };
+
+                    // <=1.4.0 : remove old theme definitions
+                    if (nm.theme) delete nm['theme'];
+
+                    // <=2.0.0 : add module default values fors schema definitions
+                    if (nm.icon) {
+                        const sic = swbIcons.filter((si) => si.filename === nm.icon);
+                        if (sic.length === 1) {
+                            if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
+                            //if (!nm.func) nm = {...nm, func: sic[0].func};
+                            //if (!nm.crb) nm = {...nm, crb: sic[0].crb};
+                            //if (!nm.current) nm = {...nm, current: sic[0].current};
+                        }
+                    }
+
+                    // <=2.0.3 : add half module size
+                    if (!nm.half) nm = { ...nm, half: "none" };
+
+                    // <=2.2.3 : add modtype and wire property
+                    if (!nm.modtype) nm = { ...nm, modtype: "" };
+                    if (!nm.wire) nm = { ...nm, wire: "" };
+
+                    // <=2.2.4 : add grp property
+                    if (!nm.grp) nm = { ...nm, grp: "" };
+
+                    // <=2.2.5 : add line property
+                    if (!nm.line) nm = { ...nm, line: "" };
+
+                    return nm;
+                });
+            });
+            swb = {
+                ...defaultProject,
+                ...swb,
+
+                // <1.5.0
+                prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
+                prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
+                prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
+                // <2.0.0
+                projectType: swb.projectType ?? defaultProjectType,
+                vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
+                db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
+                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+                withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
+                schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
+                switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
+                summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
+                summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
+                summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
+                summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
+                summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
+                summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
+                summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
+                // <2.0.5
+                stepSize: swb.stepSize ?? defaultStepSize,
+                // <2.1.4
+                theme,
+                // <2.2.2
+                prjid: swb.prjid ?? generateUUID(),
+
+                rows
+            };
+
+            setSwitchboard(() => modulesAutoId({ ...swb }));
+
+            //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
+            //setDocumentTitle(filename);
+
+            setClipboard(null);
+            setClipboardMode(null);
+            setPrintOptions({ ...defaultPrintOptions });
+            setTab(1);
+            setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
+            scrollToProject();
+
+            action('import');
+
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            importRef.current.value = "";
+            alert("Impossible d'importer ce projet.");
+        }
+    };
+
     const importProjectChooseFile = () => {
         document.getElementById('importfile').click();
-    }
+    };
+
+    const importFromOutside = () => {
+        let data = getUrlParam('data', 'string', null);
+        if (data !== null) {
+            data = atob(data);
+            _importProject(data);
+        } else {
+            alert("Aucun projet à importer!");
+        }
+    };
 
     const importProject = (file) => {
         if (file) {
             const fileReader = new FileReader();
             fileReader.readAsText(file, 'UTF-8');
-            fileReader.onload = (e) => {
-                try {
-                    let swb = JSON.parse(e.target.result);
-
-                    const theme = themeEngineCompatibility(swb);
-                    setTheme(theme);
-
-                    const rows = swb.rows.map((r) => {
-                        return r.map((m) => {
-                            let nm = { ...m };
-
-                            // <=1.4.0 : remove old theme definitions
-                            if (nm.theme) delete nm['theme'];
-
-                            // <=2.0.0 : add module default values fors schema definitions
-                            if (nm.icon) {
-                                const sic = swbIcons.filter((si) => si.filename === nm.icon);
-                                if (sic.length === 1) {
-                                    if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
-                                    //if (!nm.func) nm = {...nm, func: sic[0].func};
-                                    //if (!nm.crb) nm = {...nm, crb: sic[0].crb};
-                                    //if (!nm.current) nm = {...nm, current: sic[0].current};
-                                }
-                            }
-
-                            // <=2.0.3 : add half module size
-                            if (!nm.half) nm = { ...nm, half: "none" };
-
-                            // <=2.2.3 : add modtype and wire property
-                            if (!nm.modtype) nm = { ...nm, modtype: "" };
-                            if (!nm.wire) nm = { ...nm, wire: "" };
-
-                            // <=2.2.4 : add grp property
-                            if (!nm.grp) nm = { ...nm, grp: "" };
-
-                            // <=2.2.5 : add line property
-                            if (!nm.line) nm = { ...nm, line: "" };
-
-                            return nm;
-                        });
-                    });
-                    swb = {
-                        ...defaultProject,
-                        ...swb,
-
-                        // <1.5.0
-                        prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
-                        prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
-                        prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
-                        // <2.0.0
-                        projectType: swb.projectType ?? defaultProjectType,
-                        vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
-                        db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
-                        withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
-                        withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
-                        schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
-                        switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
-                        summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
-                        summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
-                        summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
-                        summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
-                        summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
-                        summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
-                        summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
-                        // <2.0.5
-                        stepSize: swb.stepSize ?? defaultStepSize,
-                        // <2.1.4
-                        theme,
-                        // <2.2.2
-                        prjid: swb.prjid ?? generateUUID(),
-
-                        rows
-                    };
-
-                    setSwitchboard(() => modulesAutoId({ ...swb }));
-
-                    //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
-                    //setDocumentTitle(filename);
-
-                    setClipboard(null);
-                    setClipboardMode(null);
-                    setPrintOptions({ ...defaultPrintOptions });
-                    setTab(1);
-                    setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
-                    scrollToProject();
-
-                    stats_count('import');
-
-                    // eslint-disable-next-line no-unused-vars
-                } catch (err) {
-                    importRef.current.value = "";
-                    alert("Impossible d'importer ce projet.");
-                }
-            };
+            fileReader.onload = (e) => _importProject(e.target.result);
         } else {
             importRef.current.value = "";
             alert("Aucun projet à importer!");
@@ -664,7 +708,7 @@ function App() {
 
         setSwitchboard(swb);
 
-        stats_count('export');
+        action('export');
     };
 
     const printProject = () => {
@@ -674,16 +718,13 @@ function App() {
         if (printOptions.labels) types.push('print_labels');
         if (printOptions.schema) types.push('print_schema');
         if (printOptions.summary) types.push('print_summary');
-        stats_count(types);
 
-        stats_count_json('themes', {
-            name: theme.name,
-            title: theme.group + " - " + theme.title
-        });
     };
 
-    const toPdf = () => {
-        if (confirm("ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.")) {
+    const toPdf = (withConfirm = true, printOptionsEx = null) => {
+        let po = printOptionsEx ?? printOptions;
+
+        if (!withConfirm || (withConfirm && confirm("ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes."))) {
 
             let form = document.createElement("form");
             document.body.appendChild(form);
@@ -691,16 +732,16 @@ function App() {
             form.name = "toPdfForm";
             form.method = 'POST';
             form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
-            if (printOptions.pdfOptions.openWindow) form.target = '_blank';
+            if (po.pdfOptions.openWindow) form.target = '_blank';
 
             let params = Object.fromEntries(Object.entries({
                 switchboard: { value: JSON.stringify(switchboard) },
-                printOptions: { value: JSON.stringify(printOptions) },
+                printOptions: { value: JSON.stringify(po) },
                 tv: { value: JSON.stringify(pkg.version) },
-                auto: { value: printOptions.pdfOptions.autoPrint ? "1" : "0" },
+                auto: { value: po.pdfOptions.autoPrint ? "1" : "0" },
                 isDev: { value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0" },
-                schemaGridColor: { value: Array.isArray(printOptions.pdfOptions.schemaGridColor) ? printOptions.pdfOptions.schemaGridColor.join(",") : Object.values(printOptions.pdfOptions.schemaGridColor).join(",") },
-                labelsCutLines: { value: printOptions.pdfOptions.labelsCutLines ? "1" : "0" },
+                schemaGridColor: { value: Array.isArray(po.pdfOptions.schemaGridColor) ? po.pdfOptions.schemaGridColor.join(",") : Object.values(po.pdfOptions.schemaGridColor).join(",") },
+                labelsCutLines: { value: po.pdfOptions.labelsCutLines ? "1" : "0" },
             }).map(([key, value]) => {
                 const i = document.createElement("input");
                 i.type = "hidden";
@@ -719,13 +760,59 @@ function App() {
             document.body.removeChild(form);
             form = null;
 
-            /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(printOptions));
+            action('print');
+
+            /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
             const link = document.createElement("a");
             link.href = url;
             link.target = "_blank";
             link.click();*/
         }
     };
+
+    const printProjectFromOutside = () => {
+        let data = getUrlParam('data', 'string', null);
+        if (data !== null) {
+            data = atob(data);
+            _importProject(data);
+
+            const firstPage = getUrlParam('fp', 'boolean', defaultPrintOptions.firstPage);
+            const freeModules = getUrlParam('fm', 'boolean', defaultPrintOptions.freeModules);
+            const labels = getUrlParam('vl', 'boolean', defaultPrintOptions.labels);
+            const schema = getUrlParam('vh', 'boolean', defaultPrintOptions.schema);
+            const summary = getUrlParam('vs', 'boolean', defaultPrintOptions.summary);
+            const autoPrint = getUrlParam('ap', 'boolean', defaultPrintOptions.pdfOptions.autoPrint);
+            const labelsCutLines = getUrlParam('lcl', 'boolean', defaultPrintOptions.pdfOptions.labelsCutLines);
+            const printCurrents = getUrlParam('pc', 'boolean', defaultPrintOptions.pdfOptions.printCurrents);
+            let labelsPrintFormat = getUrlParam('lpf', 'string', defaultPrintOptions.pdfOptions.labelsPrintFormat).toUpperCase();
+            if (labelsPrintFormat !== 'A4' && labelsPrintFormat !== 'A3') labelsPrintFormat = 'A4';
+            let schemaPrintFormat = getUrlParam('hpf', 'string', defaultPrintOptions.pdfOptions.schemaPrintFormat).toUpperCase();
+            if (schemaPrintFormat !== 'A4' && schemaPrintFormat !== 'A3') schemaPrintFormat = 'A4';
+            let summaryPrintFormat = getUrlParam('spf', 'string', defaultPrintOptions.pdfOptions.summaryPrintFormat).toUpperCase();
+            if (summaryPrintFormat !== 'A4' && summaryPrintFormat !== 'A3') summaryPrintFormat = 'A4';
+
+            toPdf(false, {
+                ...defaultPrintOptions,
+                firstPage,
+                freeModules,
+                labels,
+                schema,
+                summary,
+                pdfOptions: {
+                    ...defaultPrintOptions.pdfOptions,
+                    autoPrint,
+                    labelsCutLines,
+                    labelsPrintFormat,
+                    openWindow: true,
+                    printCurrents,
+                    schemaPrintFormat,
+                    summaryPrintFormat,
+                }
+            });
+        } else {
+            alert("Aucun projet valide à imprimer!");
+        }
+    }
 
     const editModule = (rowIndex, moduleIndex, tabPage = 'main', focus = null) => {
         let focusedInputName = focus ?? 'id';
@@ -822,6 +909,8 @@ function App() {
             return;
         }
 
+        const isEmpty = switchboardIsEmpty;
+
         // applique les modifications
         setSwitchboard((old) => {
             let rows = old.rows.map((row, i) => {
@@ -859,6 +948,8 @@ function App() {
 
         // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
         reassignAllParents(data.originalModule?.id, id);
+
+        if (isEmpty) action('create');
 
         setEditor(null);
     }
@@ -981,9 +1072,32 @@ function App() {
         replaceUrlHistory();
     };
 
-    const openProjectPropertiesEditor = () => {
+    const openProjectPropertiesEditor = (urlParams) => {
+
+        let title = getUrlParam('t', 'string', defaultProjectProperties.name);
+        if (title === "") title = defaultProjectProperties.name;
+
+        let rows = getUrlParam('r', 'int', defaultProjectProperties.npRows);
+        if (rows < 1) rows = 1;
+        if (rows > 15) rows = 15;
+
+        let size = getUrlParam('s', 'int', defaultProjectProperties.spr);
+        if (size !== 13 && size !== 18 && size !== 24) size = 13;
+
+        let height = getUrlParam('h', 'int', defaultProjectProperties.hRow);
+        if (height < 10) height = 10;
+        if (height > 100) height = 100;
+
+        let newProject = {
+            ...defaultProjectProperties,
+            name: title,
+            npRows: rows,
+            spr: size,
+            hRow: height
+        };
+
         resetProject();
-        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+        setNewProjectProperties(newProject);
         replaceUrlHistory();
     };
 
@@ -1346,8 +1460,6 @@ function App() {
     }, [switchboard.rows, switchboard.switchboardMonitor]);
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
-
-
     useEffect(() => {
         let t = null;
 
@@ -1405,6 +1517,8 @@ function App() {
         const extraParams = {
             enjoy: () => openWelcome(),
             new: () => openProjectPropertiesEditor(),
+            import: () => importFromOutside(),
+            print: () => printProjectFromOutside(),
         };
         Object.keys(extraParams).every(param => {
             if (urlParams.get(param) !== null) {
@@ -1414,20 +1528,9 @@ function App() {
             return true;
         });
 
-        stats_visit(false);
-        const visitTimeout = setTimeout(function () {
-            if (tabIsActive) stats_visit(true);
-        }, 60000);
-
-        return () => {
-            clearTimeout(visitTimeout);
-        }
+        visit();
 
     }, []);
-
-    useEffect(() => {
-        if (tabIsActive) stats_visit(true);
-    }, [tabIsActive]);
 
     return (
         <div tabIndex={-1} onKeyUp={(e) => {

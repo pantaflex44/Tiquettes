@@ -34,3 +34,5 @@ public/api/libs/toPdf/themes/icons
 public/api/libs/toPdf/assets/schema_functions.json
 public/api/tiquettes.db
 public/api/libs/constants.php
+public/api/libs/constants.production.php
+public/api/libs/constants.development.php

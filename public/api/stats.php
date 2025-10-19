@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
  * Copyright (C) 2024-2025 Christophe LEMOINE
@@ -16,93 +17,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-require_once(__DIR__ . '/libs/config.php');
 
-$date = date('Y-m-d');
-$archiveDelay = '3 years';
+declare(strict_types=1);
 
-$stmt = DB->prepare("DELETE FROM stats WHERE date < date('now','-{$archiveDelay}')");
-$stmt->execute();
-
-$stmt = DB->prepare("SELECT * FROM stats WHERE date = ?");
-$stmt->execute([$date]);
-$statsData = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-if (!is_array($statsData)) {
-    $statsData = [];
-    $stmt = DB->prepare("PRAGMA table_info('stats')");
-    $stmt->execute();
-    while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-        if ($row['name'] === 'date') continue;
-        $statsData[$row['name']] = $row['dflt_value'] ?? null;
-    }
-    $statsData['date'] = $date;
-}
-
-function stats_by_type($type)
+function SQL2DateTimeUTC(string $sqlDate, string $format = 'Y-m-d H:i:s'): \DateTime
 {
-    global $statsData;
-
-    if (is_string($type) && $type !== '') $type = [$type];
-    if (!is_array($type)) return;
-
-    foreach ($type as $t) {
-        if (isset($statsData[$t]) && $t !== 'date') {
-            if (str_starts_with($t, 'count_')) {
-                $statsData[$t] = intval($statsData[$t] ?? '0') + 1;
-            }
-        }
-    }
-
-    $keys = join(',', array_keys($statsData));
-    $tokens = join(',', array_fill(0, count($statsData), '?'));
-    $values = array_values($statsData);
-    $stmt = DB->prepare("INSERT OR REPLACE INTO stats ({$keys}) VALUES({$tokens})");
-    $stmt->execute($values);
+    return \DateTime::createFromFormat($format, $sqlDate, new \DateTimeZone('UTC'));
 }
 
-function stats_by_json($type, $key, $params = [])
+function addToDateTime(\DateTime $dt, string $intervalString, bool $isClone = true): \DateTime
 {
-    global $statsData;
-
-    if (is_string($type) && $type !== '') $type = [$type];
-    if (!is_array($type)) return;
-
-    foreach ($type as $t) {
-        if (isset($statsData[$t]) && $t !== 'date') {
-            if (str_starts_with($t, 'count_') && !is_null($key)) {
-                $json = json_decode($statsData[$t], true);
-                if (is_null($json)) $json = [];
-                if (!array_key_exists($key, $json)) $json[$key] = ['title' => $params['title'] ?? $key, 'count' => 0];
-                $json[$key]['count'] = intval($json[$key]['count'] ?? '0') + 1;
-                $encoded = json_encode($json);
-                if (is_string($encoded) && $encoded !== '') {
-                    $statsData[$t] = $encoded;
-                }
-            }
-        }
-    }
-
-    $keys = join(',', array_keys($statsData));
-    $tokens = join(',', array_fill(0, count($statsData), '?'));
-    $values = array_values($statsData);
-    $stmt = DB->prepare("INSERT OR REPLACE INTO stats ({$keys}) VALUES({$tokens})");
-    $stmt->execute($values);
+    return (clone $dt)->add(\DateInterval::createFromDateString($intervalString));
 }
 
-$type = isset($_GET['type']) ? strtolower(trim($_GET['type'])) : null;
-if (is_string($type)) {
-    $type = explode('|', $type);
-    if (is_array($type) && count($type) > 0) {
-        if (isset($_GET['key'])) {
-            $key_decoded = base64_decode($_GET['key']);
-            $key = json_decode($key_decoded, true);
-            if (is_array($key) && isset($key['name']) && isset($key['title'])) {
-                $k = base64_encode($key['name'] . "|" . $key['title']);
-                stats_by_json($type[0], $k, ['title' => $key['title']]);
-            }
-        } else {
-            stats_by_type($type);
-        }
-    }
+function dateTimeFrom(string $from): \DateTime {
+    return new \DateTime($from, new \DateTimeZone("UTC"));
 }
+
+
+define('STATS_ALLOWED', !STATS_IGNORE_LOCALHOST || (STATS_IGNORE_LOCALHOST && !CLIENT_FROM_LOCALHOST));
+
+$statsStructure = isset($_GET['s']) ? strtolower(rawurldecode(trim($_GET['s']))) : '';
+define('STATS_STRUCTURE_ALLOWED', in_array($statsStructure, explode(',', STATS_ALLOWED_FROM)));
+define('STATS_STRUCTURE', STATS_STRUCTURE_ALLOWED ? $statsStructure : '');
+
+$statsAction = isset($_GET['a']) ? strtolower(rawurldecode(trim($_GET['a']))) : '';
+define('STATS_ACTION_ALLOWED', in_array($statsAction, explode(',', STATS_ALLOWED_ACTIONS), true));
+define('STATS_ACTION', STATS_ACTION_ALLOWED ? $statsAction : '');
+
+
