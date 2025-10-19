@@ -995,6 +995,9 @@ function is_bot()
         "zombiebot"
     ];
     $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    if ($userAgent === '')
+        return false;
+
     foreach ($bots as $bot) {
         if (stripos($userAgent, $bot) !== false)
             return true;
@@ -1040,7 +1043,8 @@ define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1'
 
 
 // referer
-define('REFERER', stripslashes($_SERVER['HTTP_REFERER'] ?? ''));
+define('REFERER', stripslashes($_SERVER['HTTP_REFERER'] ?? $_SERVER['HTTP_HOST'] ?? ''));
+write_json(REFERER);
 if (MODE !== 'development') {
     $hostIsAllowed = in_array(true, array_map(fn($allowedHost) => stripos(REFERER, $allowedHost, 0) !== false, [
         'localhost',
