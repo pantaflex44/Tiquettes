@@ -1044,6 +1044,7 @@ define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1'
 
 // referer
 $rfr = isset($_GET['rfr']) ? stripslashes(trim(rawurldecode($_GET['m']))) : ($_SERVER['HTTP_REFERER'] ?? $_SERVER['HTTP_HOST'] ?? '');
+write_json($rfr);
 define('REFERER', $rfr);
 if (MODE !== 'development') {
     $hostIsAllowed = in_array(true, array_map(fn($allowedHost) => stripos(REFERER, $allowedHost, 0) !== false, [
