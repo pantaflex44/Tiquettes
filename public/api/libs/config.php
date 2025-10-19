@@ -994,8 +994,9 @@ function is_bot()
         "zgrab",
         "zombiebot"
     ];
+    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
     foreach ($bots as $bot) {
-        if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false)
+        if (stripos($userAgent, $bot) !== false)
             return true;
     }
     return false;
