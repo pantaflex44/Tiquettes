@@ -1052,7 +1052,6 @@ if (MODE !== 'development') {
     }
 }
 
-dd_json(MYSQL_HOST);
 
 // database
 try {
