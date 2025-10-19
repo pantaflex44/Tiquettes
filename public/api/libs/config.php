@@ -1009,8 +1009,7 @@ function is_bot()
 // mode
 const DEFAULT_MODE = 'development';
 define('MODE', isset($_GET['m']) ? trim(rawurldecode($_GET['m'])) : DEFAULT_MODE);
-include_once __DIR__ . '/constants.' . DEFAULT_MODE . '.php';
-write_json(__DIR__ . '/constants.' . DEFAULT_MODE . '.php');
+include_once __DIR__ . '/constants.' . MODE . '.php';
 
 
 // cors
