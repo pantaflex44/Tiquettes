@@ -21,7 +21,7 @@
 require_once(__DIR__ . '/libs/config.php');
 require_once(__DIR__ . '/stats.php');
 
-
+dd_json(MYSQL_HOST);
 if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     $currentDate = NOW->format('Y-m-d');
     $currentDatetime = NOW->format('Y-m-d H:i:s');
