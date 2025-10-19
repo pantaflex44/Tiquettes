@@ -1051,6 +1051,7 @@ if (MODE !== 'development') {
         exit(0);
     }
 }
+
 dd_json(MYSQL_HOST);
 
 // database
