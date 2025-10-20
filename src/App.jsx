@@ -1528,8 +1528,6 @@ function App() {
             return true;
         });
 
-        visit();
-
     }, []);
 
     return (
