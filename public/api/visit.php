@@ -26,7 +26,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     $currentDatetime = NOW->format('Y-m-d H:i:s');
     $currentHour = (string) ((int) NOW->format('H'));
 
-    $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip = ? AND url = ?");
+    $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip LIKE ? AND url LIKE ?");
     $stmt->execute([CLIENT_IP, REFERER]);
     $found = $stmt->fetch(\PDO::FETCH_ASSOC);
     if (is_array($found)) {
