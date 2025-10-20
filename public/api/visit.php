@@ -29,7 +29,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip LIKE ? AND url LIKE ?");
     $stmt->execute([CLIENT_IP, REFERER]);
     $found = $stmt->fetch(\PDO::FETCH_ASSOC);
-    if (is_array($found)) {
+    if ($found !== false) {
         $id = $found['id'];
         $foundDatetime = SQL2DateTimeUTC($found['datetime'], 'Y-m-d H:i:s');
         $compareDatetime = $foundDatetime->add(\DateInterval::createFromDateString(STATS_VISITS_INTERVAL));
@@ -39,9 +39,9 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
 
             $stmt = DB->prepare("SELECT JSON_EXTRACT(stats_visits_details.counters, '$') AS counters FROM stats_visits_details WHERE visit_id = ? AND date = ?");
             $stmt->execute([$id, $currentDate]);
-            $found = $stmt->fetch(\PDO::FETCH_ASSOC);
-            if (is_array($found)) {
-                $counters = json_decode($found['counters'], true);
+            $found2 = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if ($found2 !== false) {
+                $counters = json_decode($found2['counters'], true);
                 if (array_key_exists($currentHour, $counters)) {
                     $counters[$currentHour]++;
                 } else {
