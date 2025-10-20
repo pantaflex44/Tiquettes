@@ -55,7 +55,7 @@ foreach (explode(',', STATS_ALLOWED_FROM) as $struct) {
         $stats['structs'][$struct] = [];
 
     $stmt = DB->prepare("SELECT * FROM stats_visits WHERE type = 'user' AND struct = ? AND datetime >= ?");
-    $stmt->execute([$struct, (clone NOW)->add(\DateInterval::createFromDateString('-1 hour'))->format('Y-m-d H:i:s')]);
+    $stmt->execute([$struct, (clone NOW)->add(\DateInterval::createFromDateString('-15 minutes'))->format('Y-m-d H:i:s')]);
     $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     $stats['structs'][$struct]['online'] = count($founds);
 
