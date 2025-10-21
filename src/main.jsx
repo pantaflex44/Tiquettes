@@ -57,13 +57,15 @@ export default function Main() {
             pathes.forEach(path => {
                 const k = `${o}/${path}/`;
                 origins.push(k);
-                params.forEach(param => {
+                /*params.forEach(param => {
                     origins.push(`${k}?${param}`)
-                });
+                });*/
             });
         });
 
-        const origin = window.location.origin.toLowerCase().trim();
+        origins.push('https://www.tiquettes.fr/app/api/reports.php');
+
+        const origin = window.location.origin.split('?')[0].toLowerCase().trim();
 
         if (import.meta.env.VITE_APP_MODE !== "development") {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
