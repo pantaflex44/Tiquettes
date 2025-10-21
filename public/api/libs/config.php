@@ -1050,12 +1050,6 @@ define('NOW', (new \DateTime('now', new \DateTimeZone('UTC'))));
 define('NOW_TIMESTAMP', NOW->getTimestamp());
 
 
-// client infos
-define('CLIENT_IP', getRealUserIp());
-define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
-define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1');
-
-
 // referer
 $rfr = isset($_GET['rfr']) ? stripslashes(trim(rawurldecode($_GET['rfr']))) : ($_SERVER['HTTP_REFERER'] ?? $_SERVER['HTTP_HOST'] ?? '');
 define('REFERER', $rfr);
@@ -1070,6 +1064,14 @@ if (MODE !== 'development') {
         exit(0);
     }
 }
+
+
+// client infos
+$ip = isset($_GET['ip']) ? stripslashes(trim(rawurldecode($_GET['ip']))) : '';
+if (!filter_var($ip, FILTER_VALIDATE_IP)) $ip = getRealUserIp();
+define('CLIENT_IP', $ip) ;
+define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
+define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1');
 
 
 // database
