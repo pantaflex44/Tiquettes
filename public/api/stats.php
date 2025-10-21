@@ -39,14 +39,14 @@ define('STATS_ALLOWED', !STATS_IGNORE_LOCALHOST || (STATS_IGNORE_LOCALHOST && !C
 
 $stmt = DB->prepare("SELECT * FROM stats_allowed_structs");
 $stmt->execute();
-define('STATS_ALLOWED_STRUCTURES', $stmt->fetchAll(\PDO::FETCH_ASSOC));
+define('STATS_ALLOWED_STRUCTURES', array_map(fn($i) => $i['key'], $stmt->fetchAll(\PDO::FETCH_ASSOC)));
 $statsStructure = isset($_GET['s']) ? strtolower(rawurldecode(trim($_GET['s']))) : '';
 define('STATS_STRUCTURE_ALLOWED', in_array($statsStructure, STATS_ALLOWED_STRUCTURES));
 define('STATS_STRUCTURE', STATS_STRUCTURE_ALLOWED ? $statsStructure : '');
 
 $stmt = DB->prepare("SELECT * FROM stats_allowed_actions");
 $stmt->execute();
-define('STATS_ALLOWED_ACTIONS', $stmt->fetchAll(\PDO::FETCH_ASSOC));
+define('STATS_ALLOWED_ACTIONS', array_map(fn($i) => $i['key'],$stmt->fetchAll(\PDO::FETCH_ASSOC)));
 $statsAction = isset($_GET['a']) ? strtolower(rawurldecode(trim($_GET['a']))) : '';
 define('STATS_ACTION_ALLOWED', in_array($statsAction, STATS_ALLOWED_ACTIONS, true));
 define('STATS_ACTION', STATS_ACTION_ALLOWED ? $statsAction : '');
