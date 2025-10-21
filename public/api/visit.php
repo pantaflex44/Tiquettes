@@ -63,4 +63,4 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     }
 }
 
-write_json($_SERVER);
+write_json(file_get_contents('./myip.php'));
