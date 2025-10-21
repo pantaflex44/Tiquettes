@@ -29,6 +29,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip = ? AND url = ?");
     $stmt->execute([CLIENT_IP, REFERER]);
     $found = $stmt->fetch(\PDO::FETCH_ASSOC);
+    write_json($found);
     if ($found !== false) {
         $id = $found['id'];
         $foundDatetime = SQL2DateTimeUTC($found['datetime'], 'Y-m-d H:i:s');
@@ -62,8 +63,3 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
         $stmt->execute([$visit_id, $currentDate, json_encode([$currentHour => 1])]);
     }
 }
-
-write_json([
-    'ip' => CLIENT_IP,
-    'referer' => REFERER
-]);

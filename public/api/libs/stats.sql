@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS `stats_visits`;
 
 CREATE TABLE `stats_visits` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `ip` varchar(15) NOT NULL,
+    `ip` varchar(255) NOT NULL,
     `type` varchar(10) NOT NULL,
     `struct` varchar(10) NOT NULL,
     `url` varchar(255) NOT NULL,

@@ -1067,7 +1067,7 @@ if (MODE !== 'development') {
 
 
 // client infos
-$ip = isset($_GET['ip']) ? stripslashes(trim(rawurldecode($_GET['ip']))) : '';
+$ip = isset($_GET['ip']) ? trim(rawurldecode($_GET['ip'])) : '';
 if (!filter_var($ip, FILTER_VALIDATE_IP)) $ip = getRealUserIp();
 define('CLIENT_IP', $ip) ;
 define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
