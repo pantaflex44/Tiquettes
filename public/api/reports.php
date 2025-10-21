@@ -59,9 +59,6 @@ $stats = [
 foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
     $stats['defn']['structs'][$structItem['key']] = $structItem['description'];
 
-    if (!isset($stats[$structItem['key']]))
-        $stats['visits'][$structItem['key']] = [];
-
     $stmt = DB->prepare("SELECT * FROM stats_visits_details WHERE date >= ? AND date <= ? ORDER BY date ASC");
     $stmt->execute([$periodDetails['start']->format(format: 'Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
     $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
