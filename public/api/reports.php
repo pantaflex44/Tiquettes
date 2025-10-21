@@ -46,24 +46,25 @@ $periodDetails = $periods[$period];
 $currentDate = NOW->format('Y-m-d');
 $currentDatetime = NOW->format('Y-m-d H:i:s');
 
-$stats = [];
-$stats['period'] = $periodDetails;
-$stats['structs'] = [];
+$resolution = isset($_GET['rs']) ? strtolower(trim($_GET['rs'])) : 'd'; // d: jours , h: heures
 
-foreach (explode(',', STATS_ALLOWED_FROM) as $struct) {
-    if (!isset($stats[$struct]))
-        $stats['structs'][$struct] = [];
+$stats = [
+    'datetime' => NOW,
+    'period' => $periodDetails,
+    'defn' => [],
+    'visits' => [],
+    'actions' => [],
+];
 
-    $stmt = DB->prepare("SELECT * FROM stats_visits WHERE type = 'user' AND struct = ? AND datetime >= ?");
-    $stmt->execute([$struct, (clone NOW)->add(\DateInterval::createFromDateString('-15 minutes'))->format('Y-m-d H:i:s')]);
-    $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    $stats['structs'][$struct]['online'] = count($founds);
+foreach (STATS_ALLOWED_STRUCTURES as $structItem) {
+    $stats['defn']['structs'][$structItem['key']] = $structItem['description'];
+
+    if (!isset($stats[$structItem['key']]))
+        $stats['visits'][$structItem['key']] = [];
 
     $stmt = DB->prepare("SELECT * FROM stats_visits_details WHERE date >= ? AND date <= ? ORDER BY date ASC");
-    $stmt->execute([$periodDetails['start']->format('Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
+    $stmt->execute([$periodDetails['start']->format(format: 'Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
     $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-    $stats['structs'][$struct]['visits'] = [];
     foreach ($founds as $found) {
         $date = $found['date'];
         $id = $found['visit_id'];
@@ -72,7 +73,7 @@ foreach (explode(',', STATS_ALLOWED_FROM) as $struct) {
         $stmt = DB->prepare("SELECT * FROM stats_visits WHERE id = ?");
         $stmt->execute([$id]);
         $found2 = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (!is_array($found2) || $found2['struct'] !== $struct)
+        if (!is_array($found2) || $found2['struct'] !== $structItem['key'])
             continue;
 
         $url = $found2['url'];
@@ -81,32 +82,61 @@ foreach (explode(',', STATS_ALLOWED_FROM) as $struct) {
 
         $counter = array_sum(array_values($counters));
 
-        if (!isset($stats['structs'][$struct]['visits']['by_url'][$url]['total']))
-            $stats['structs'][$struct]['visits']['by_url'][$url]['total'] = 0;
-        $stats['structs'][$struct]['visits']['by_url'][$url]['total'] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_url'][$url]['total']))
+            $stats['visits'][$structItem['key']]['by_url'][$url]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_url'][$url]['total'] += $counter;
 
-        if (!isset($stats['structs'][$struct]['visits']['by_url'][$url][$date]))
-            $stats['structs'][$struct]['visits']['by_url'][$url][$date] = 0;
-        $stats['structs'][$struct]['visits']['by_url'][$url][$date] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_url'][$url][$date]))
+            $stats['visits'][$structItem['key']]['by_url'][$url][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_url'][$url][$date] += $counter;
 
-        if (!isset($stats['structs'][$struct]['visits']['by_ip'][$ip]['total']))
-            $stats['structs'][$struct]['visits']['by_ip'][$ip]['total'] = 0;
-        $stats['structs'][$struct]['visits']['by_ip'][$ip]['total'] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_ip'][$ip]['total']))
+            $stats['visits'][$structItem['key']]['by_ip'][$ip]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_ip'][$ip]['total'] += $counter;
 
-        if (!isset($stats['structs'][$struct]['visits']['by_ip'][$ip][$date]))
-            $stats['structs'][$struct]['visits']['by_ip'][$ip][$date] = 0;
-        $stats['structs'][$struct]['visits']['by_ip'][$ip][$date] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_ip'][$ip][$date]))
+            $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] += $counter;
 
-        if (!isset($stats['structs'][$struct]['visits']['by_type'][$type]['total']))
-            $stats['structs'][$struct]['visits']['by_type'][$type]['total'] = 0;
-        $stats['structs'][$struct]['visits']['by_type'][$type]['total'] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_type'][$type]['total']))
+            $stats['visits'][$structItem['key']]['by_type'][$type]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_type'][$type]['total'] += $counter;
 
-        if (!isset($stats['structs'][$struct]['visits']['by_type'][$type][$date]))
-            $stats['structs'][$struct]['visits']['by_type'][$type][$date] = 0;
-        $stats['structs'][$struct]['visits']['by_type'][$type][$date] += $counter;
-        
+        if (!isset($stats['visits'][$structItem['key']]['by_type'][$type][$date]))
+            $stats['visits'][$structItem['key']]['by_type'][$type][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_type'][$type][$date] += $counter;
+
     }
-    
+
+
+    foreach (STATS_ALLOWED_ACTIONS as $actionItem) {
+        $stats['defn']['actions'][$actionItem['key']] = $actionItem['description'];
+
+        $tableName = 'stats_action_' . $actionItem['key'];
+        $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
+        $stmt->execute([MYSQL_BASE, $tableName]);
+        $count = $stmt->fetchColumn(0);
+        if ($count === 1) {
+            $date = $found['date'];
+
+            $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE date >= ? AND date <= ? ORDER BY date ASC");
+            $stmt->execute([$periodDetails['start']->format('Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
+            $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            foreach ($founds as $found) {
+                $counters = json_decode($found['counters'], true);
+                $counter = array_sum(array_values($counters));
+
+                if (!isset($stats['actions'][$actionItem['key']]['total']))
+                    $stats['actions'][$actionItem['key']]['total'] = 0;
+                $stats['actions'][$actionItem['key']]['total'] += $counter;
+
+                if (!isset($stats['actions'][$actionItem['key']][$date]))
+                    $stats['actions'][$actionItem['key']][$date] = 0;
+                $stats['actions'][$actionItem['key']][$date] += $counter;
+            }
+        }
+    }
+
 }
 
 

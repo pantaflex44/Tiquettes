@@ -36,3 +36,4 @@ public/api/tiquettes.db
 public/api/libs/constants.php
 public/api/libs/constants.production.php
 public/api/libs/constants.development.php
+public/api/libs/stats.sql

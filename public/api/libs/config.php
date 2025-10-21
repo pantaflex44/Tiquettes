@@ -1005,6 +1005,20 @@ function is_bot()
     return false;
 }
 
+function getRealUserIp()
+{
+    switch (true) {
+        case (!empty($_SERVER['HTTP_X_REAL_IP'])):
+            return $_SERVER['HTTP_X_REAL_IP'];
+        case (!empty($_SERVER['HTTP_CLIENT_IP'])):
+            return $_SERVER['HTTP_CLIENT_IP'];
+        case (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])):
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        default:
+            return $_SERVER['REMOTE_ADDR'];
+    }
+}
+
 
 // mode
 const DEFAULT_MODE = 'development';
@@ -1037,7 +1051,7 @@ define('NOW_TIMESTAMP', NOW->getTimestamp());
 
 
 // client infos
-define('CLIENT_IP', $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']));
+define('CLIENT_IP', getRealUserIp());
 define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
 define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1');
 

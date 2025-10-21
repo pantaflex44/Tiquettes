@@ -62,3 +62,5 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
         $stmt->execute([$visit_id, $currentDate, json_encode([$currentHour => 1])]);
     }
 }
+
+write_json($_SERVER);

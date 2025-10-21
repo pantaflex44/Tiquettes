@@ -43,7 +43,7 @@ function fetchURL(filename, struct = 'app', args = {}) {
     }
 }
 
-export function visit(struct = 'app') {
+export function visit(struct = 'web') {
     fetchURL('visit.php', struct);
 }
 
