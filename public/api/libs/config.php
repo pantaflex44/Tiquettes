@@ -1080,6 +1080,6 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     define('DB', $pdo);
 } catch (PDOException $e) {
-    dd_json($e);
+    dd_json(content: $e);
     exit(0);
 }

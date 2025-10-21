@@ -56,7 +56,7 @@ $stats = [
     'actions' => [],
 ];
 
-foreach (STATS_ALLOWED_STRUCTURES as $structItem) {
+foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
     $stats['defn']['structs'][$structItem['key']] = $structItem['description'];
 
     if (!isset($stats[$structItem['key']]))
@@ -109,7 +109,7 @@ foreach (STATS_ALLOWED_STRUCTURES as $structItem) {
     }
 
 
-    foreach (STATS_ALLOWED_ACTIONS as $actionItem) {
+    foreach (STATS_ALLOWED_ACTIONS_FULL as $actionItem) {
         $stats['defn']['actions'][$actionItem['key']] = $actionItem['description'];
 
         $tableName = 'stats_action_' . $actionItem['key'];
