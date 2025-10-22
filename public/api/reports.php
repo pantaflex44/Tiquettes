@@ -114,13 +114,12 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $stmt->execute([MYSQL_BASE, $tableName]);
         $count = $stmt->fetchColumn(0);
         if ($count === 1) {
-            $date = $found['date'];
-
             $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE date >= ? AND date <= ? ORDER BY date ASC");
             $stmt->execute([$periodDetails['start']->format('Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
             $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            write_json($founds);
             foreach ($founds as $found) {
+                $date = $found['date'];
+
                 $counters = json_decode($found['counters'], true);
                 $counter = array_sum(array_values($counters));
 
