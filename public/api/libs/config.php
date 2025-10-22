@@ -100,7 +100,7 @@ function send_Mail(array|string $to, string $subject, string $body): bool
     }
 }
 
-function is_bot()
+function is_bot(bool $get = false): bool|string
 {
     $bots = [
         "(BOT for JCE)",
@@ -1000,9 +1000,9 @@ function is_bot()
 
     foreach ($bots as $bot) {
         if (stripos($userAgent, $bot) !== false)
-            return true;
+            return $get ? $bot : true;
     }
-    return false;
+    return  false;
 }
 
 function getRealUserIp()

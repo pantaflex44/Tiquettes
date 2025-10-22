@@ -77,6 +77,16 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $ip = $found2['ip'];
         $type = $found2['type'];
 
+        if ($type === 'bot') {
+            $source = is_bot(true);
+            if ($source !== false) {
+                $source = strtolower($source);
+                if (!isset($stats['visits']['sources'][$source]))
+                    $stats['visits']['sources'][$source] = 0;
+                $stats['visits']['sources'][$source] += 1;
+            }
+        }
+
         $query = parse_url($url, PHP_URL_QUERY);
         if (is_string($query)) {
             $urlQuery = explode('&', $query);
@@ -84,10 +94,10 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                 $query = trim($query);
                 if (stripos(strtolower($query), 'source=') !== false) {
                     $parsed = explode('=', $query);
-
-                    if (!isset($stats['visits']['sources'][$parsed[1]]))
-                        $stats['visits']['sources'][$parsed[1]] = 0;
-                    $stats['visits']['sources'][$parsed[1]] += $counter;
+                    $source = strtolower($parsed[1]);
+                    if (!isset($stats['visits']['sources'][$source]))
+                        $stats['visits']['sources'][$source] = 0;
+                    $stats['visits']['sources'][$source] += 1;
                 }
             }
         }
