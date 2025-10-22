@@ -36,8 +36,8 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
         $foundDatetime = SQL2DateTimeUTC($found['datetime'], 'Y-m-d H:i:s');
         $compareDatetime = $foundDatetime->add(\DateInterval::createFromDateString(STATS_VISITS_INTERVAL));
         if (NOW >= $compareDatetime) {
-            $stmt = DB->prepare("UPDATE stats_visits SET datetime = ?, ua = ? WHERE id = ?");
-            $stmt->execute([$currentDatetime, USER_AGENT, $id]);
+            $stmt = DB->prepare("UPDATE stats_visits SET datetime = ?, ua = ?, rfr = ? WHERE id = ?");
+            $stmt->execute([$currentDatetime, USER_AGENT, PARENT_REFERER, $id]);
 
             $stmt = DB->prepare("SELECT JSON_EXTRACT(stats_visits_details.counters, '$') AS counters FROM stats_visits_details WHERE visit_id = ? AND date = ?");
             $stmt->execute([$id, $currentDate]);
@@ -57,8 +57,8 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
             }
         }
     } else {
-        $stmt = DB->prepare("INSERT INTO stats_visits (ip, type, struct, url, ua, datetime) VALUES(?, ?, ?, ?, ?, ?)");
-        $stmt->execute([CLIENT_IP, CLIENT_TYPE, STATS_STRUCTURE, REFERER, USER_AGENT, $currentDatetime]);
+        $stmt = DB->prepare("INSERT INTO stats_visits (ip, type, struct, url, ua, rfr, datetime) VALUES(?, ?, ?, ?, ?, ?)");
+        $stmt->execute([CLIENT_IP, CLIENT_TYPE, STATS_STRUCTURE, REFERER, USER_AGENT, PARENT_REFERER, $currentDatetime]);
         $visit_id = DB->lastInsertId();
         $stmt = DB->prepare("INSERT INTO stats_visits_details (visit_id, date, counters) VALUES(?, ?, ?)");
         $stmt->execute([$visit_id, $currentDate, json_encode([$currentHour => 1])]);

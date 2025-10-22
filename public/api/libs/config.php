@@ -1000,9 +1000,9 @@ function is_bot(): bool
 
     foreach ($bots as $bot) {
         if (stripos($userAgent, $bot) !== false)
-            return  true;
+            return true;
     }
-    return  false;
+    return false;
 }
 
 function getRealUserIp()
@@ -1066,16 +1066,22 @@ if (MODE !== 'development') {
 }
 
 
+// parent referer
+$prt = isset($_GET['prt']) ? stripslashes(trim(rawurldecode($_GET['prt']))) : '';
+define('PARENT_REFERER', $prt);
+
+
 // client infos
 $ip = isset($_GET['ip']) ? trim(rawurldecode($_GET['ip'])) : '';
-if (!filter_var($ip, FILTER_VALIDATE_IP)) $ip = getRealUserIp();
-define('CLIENT_IP', $ip) ;
+if (!filter_var($ip, FILTER_VALIDATE_IP))
+    $ip = getRealUserIp();
+define('CLIENT_IP', $ip);
 define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
 define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1');
 
 
 // user agent
-$ua = trim(isset($_GET['ua']) ? trim(rawurldecode($_GET['ua'])) :  (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''));
+$ua = trim(isset($_GET['ua']) ? trim(rawurldecode($_GET['ua'])) : (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''));
 define('USER_AGENT', $ua);
 
 // database
