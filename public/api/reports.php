@@ -109,9 +109,11 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
 
         if ($found2['rfr'] !== '') {
             $rfr = $found2['rfr'];
-            if (!isset($stats['visits']['sources'][$rfr]))
-                $stats['visits']['sources'][$rfr] = 0;
-            $stats['visits']['sources'][$rfr] += 1;
+            if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
+                if (!isset($stats['visits']['sources'][$rfr]))
+                    $stats['visits']['sources'][$rfr] = 0;
+                $stats['visits']['sources'][$rfr] += 1;
+            }
         }
 
         $counter = array_sum(array_values($counters));
