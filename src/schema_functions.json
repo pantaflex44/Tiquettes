@@ -43,6 +43,17 @@
         "supportContacts": true,
         "selectable": true
     },
+    "prd": {
+        "name": "Parafoudre",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
     "fus": {
         "name": "Fusible",
         "hasType": false,
