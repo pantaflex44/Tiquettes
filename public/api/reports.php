@@ -90,17 +90,27 @@ function browserTraductor(string $browser): string
     $srcs = [
         'opera' => 'Opera',
         'firefox' => 'Mozilla Firefox',
-        'chrome' => 'Google Chrome',
         'msie' => 'Microsoft Internet Explorer',
         'safari' => 'Apple Safari',
         'netscape' => 'Netscape',
         'edge' => 'Microsoft Edge',
-        'trident' => 'Microsoft Internet Explorer'
+        'trident' => 'Microsoft Internet Explorer',
+        'chrome' => 'Google Chrome'
     ];
 
     foreach (array_keys($srcs) as $s) {
-        if (stripos(strtolower($browser), $s) !== false)
-            return $srcs[$s];
+        if (stripos(strtolower($browser), $s) !== false) {
+            $txt = $srcs[$s];
+            $isMobile = stripos(strtolower($browser), 'mobile') !== false;
+            $isAndroid = stripos(strtolower($browser), 'android') !== false;
+
+            if ($isAndroid)
+                $txt .= ' Android';
+            if ($isMobile)
+                $txt .= ' Mobile';
+
+            return $txt;
+        }
     }
 
     return $browser;
@@ -109,11 +119,14 @@ function browserTraductor(string $browser): string
 function platformTraductor(string $platform): string
 {
     $srcs = [
+        'win32' => 'Microsoft Windows (32 bits)',
+        'win64' => 'Microsoft Windows (64 bits)',
+        'win10' => 'Microsoft Windows (10)',
         'windows' => 'Microsoft Windows',
-        'win32' => 'Microsoft Windows',
         'linux' => 'Linux',
-        'macintosh' => 'Apple Mac OS',
-        'mac os' => 'Apple Mac OS'
+        'mac os x' => 'Apple Mac OS (X)',
+        'mac os' => 'Apple Mac OS',
+        'macintosh' => 'Apple Mac OS'
     ];
 
     foreach (array_keys($srcs) as $s) {
