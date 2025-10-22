@@ -57,7 +57,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
             }
         }
     } else {
-        $stmt = DB->prepare("INSERT INTO stats_visits (ip, type, struct, url, ua, rfr, datetime) VALUES(?, ?, ?, ?, ?, ?)");
+        $stmt = DB->prepare("INSERT INTO stats_visits (ip, type, struct, url, ua, rfr, datetime) VALUES(?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([CLIENT_IP, CLIENT_TYPE, STATS_STRUCTURE, REFERER, USER_AGENT, PARENT_REFERER, $currentDatetime]);
         $visit_id = DB->lastInsertId();
         $stmt = DB->prepare("INSERT INTO stats_visits_details (visit_id, date, counters) VALUES(?, ?, ?)");
