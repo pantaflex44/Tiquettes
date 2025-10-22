@@ -78,12 +78,22 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $type = $found2['type'];
         
         if ($found2['ua'] !== '') {
-            $source = get_browser($found2['ua'], true);
-            if ($source !== false) {
-                $source = $source['parent'];
-                if (!isset($stats['visits']['sources'][$source]))
-                    $stats['visits']['sources'][$source] = 0;
-                $stats['visits']['sources'][$source] += 1;
+            $ua = get_browser($found2['ua'], true);
+            if ($ua !== false) {
+                $parent = $ua['parent'];
+                if (!isset($stats['visits']['sources'][$parent]))
+                    $stats['visits']['sources'][$parent] = 0;
+                $stats['visits']['sources'][$parent] += 1;
+
+                $browser = $ua['parent'];
+                if (!isset($stats['visits']['browser'][$browser]))
+                    $stats['visits']['browser'][$browser] = 0;
+                $stats['visits']['browser'][$browser] += 1;
+
+                $platform = $ua['platform'];
+                if (!isset($stats['visits']['platform'][$platform]))
+                    $stats['visits']['platform'][$platform] = 0;
+                $stats['visits']['platform'][$platform] += 1;
             }
         }
 
