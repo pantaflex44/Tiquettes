@@ -56,6 +56,74 @@ $stats = [
     'actions' => [],
 ];
 
+function sourceTraductor(string $source): string
+{
+    $srcs = [
+        'chatgpt' => 'ChatGPT',
+        'google' => 'Google',
+        'yahoo' => 'Yahoo',
+        'bing' => 'Microsoft Bing',
+        'carrot2' => 'Carrot2',
+        'duckduckgo' => 'DuckDuckGo',
+        'iseek' => 'iSeek',
+        'qwant' => 'Qwant',
+        'startpage' => 'Startpage',
+        'base-search' => 'Base',
+        'instagrok' => 'Instagrok',
+        'openmd' => 'OpenMD',
+        'refseek' => 'RefSeek',
+        'researchgate' => 'ResearchGate',
+        'baidu' => 'Baïdu',
+        'yandex' => 'Yandex'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($source), $s) !== false)
+            return $srcs[$s];
+    }
+
+    return $source;
+}
+
+function browserTraductor(string $browser): string
+{
+    $srcs = [
+        'opera' => 'Opera',
+        'firefox' => 'Mozilla Firefox',
+        'chrome' => 'Google Chrome',
+        'msie' => 'Microsoft Internet Explorer',
+        'safari' => 'Apple Safari',
+        'netscape' => 'Netscape',
+        'edge' => 'Microsoft Edge',
+        'trident' => 'Microsoft Internet Explorer'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($browser), $s) !== false)
+            return $srcs[$s];
+    }
+
+    return $browser;
+}
+
+function platformTraductor(string $platform): string
+{
+    $srcs = [
+        'windows' => 'Microsoft Windows',
+        'win32' => 'Microsoft Windows',
+        'linux' => 'Linux',
+        'macintosh' => 'Apple Mac OS',
+        'mac os' => 'Apple Mac OS'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($platform), $s) !== false)
+            return $srcs[$s];
+    }
+
+    return $platform;
+}
+
 foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
     $stats['defn']['structs'][$structItem['key']] = $structItem['description'];
 
@@ -76,16 +144,16 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $url = $found2['url'];
         $ip = $found2['ip'];
         $type = $found2['type'];
-        
+
         if ($found2['ua'] !== '') {
             $ua = get_browser($found2['ua'], true);
             if ($ua !== false) {
-                $browser = $ua['parent'];
+                $browser = browserTraductor($ua['browser']);
                 if (!isset($stats['visits']['browser'][$browser]))
                     $stats['visits']['browser'][$browser] = 0;
                 $stats['visits']['browser'][$browser] += 1;
 
-                $platform = $ua['platform'];
+                $platform = platformTraductor($ua['platform']);
                 if (!isset($stats['visits']['platform'][$platform]))
                     $stats['visits']['platform'][$platform] = 0;
                 $stats['visits']['platform'][$platform] += 1;
@@ -99,7 +167,7 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                 $query = trim($query);
                 if (stripos(strtolower($query), 'source=') !== false) {
                     $parsed = explode('=', $query);
-                    $source = strtolower($parsed[1]);
+                    $source = sourceTraductor(strtolower($parsed[1]));
                     if (!isset($stats['visits']['sources'][$source]))
                         $stats['visits']['sources'][$source] = 0;
                     $stats['visits']['sources'][$source] += 1;
@@ -110,6 +178,7 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         if ($found2['rfr'] !== '') {
             $rfr = $found2['rfr'];
             if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
+                $rfr = sourceTraductor($rfr);
                 if (!isset($stats['visits']['sources'][$rfr]))
                     $stats['visits']['sources'][$rfr] = 0;
                 $stats['visits']['sources'][$rfr] += 1;
