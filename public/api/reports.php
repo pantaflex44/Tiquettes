@@ -160,6 +160,16 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $type = $found2['type'];
 
         if ($found2['ua'] !== '') {
+            if (!isset($stats['visits']['supports']['mobile']))
+                $stats['visits']['supports']['mobile'] = 0;
+            if (!isset($stats['visits']['supports']['desktop']))
+                $stats['visits']['supports']['desktop'] = 0;
+            if (stripos(strtolower($found2['ua']), 'mobile') !== false || stripos(strtolower($found2['ua']), 'android') !== false) {
+                $stats['visits']['supports']['mobile'] += 1;
+            } else {
+                $stats['visits']['supports']['desktop'] += 1;
+            }
+
             $ua = get_browser($found2['ua'], true);
             if ($ua !== false) {
                 $browser = browserTraductor($ua['browser']);
