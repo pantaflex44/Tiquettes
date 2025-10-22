@@ -156,6 +156,8 @@
         "filename": "swb_surgeprotector.svg",
         "title": "Parafoudre / Protection",
         "modtype": "Alim",
+        "func": "prd",
+        "current": "250A",
         "coef": 1
     },
     {

@@ -51,7 +51,7 @@
         "hasPole": false,
         "hasWire": false,
         "hasContacts": false,
-        "supportContacts": true,
+        "supportContacts": false,
         "selectable": true
     },
     "fus": {
