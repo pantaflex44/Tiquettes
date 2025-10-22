@@ -1067,7 +1067,9 @@ if (MODE !== 'development') {
 
 
 // parent referer
-$prt = isset($_GET['prt']) ? stripslashes(trim(rawurldecode($_GET['prt']))) : '';
+$prt = trim(isset($_GET['prt']) ? stripslashes(trim(rawurldecode($_GET['prt']))) : '');
+if (stripos(strtolower($prt), 'tiquettes.fr') !== false)
+    $prt = '';
 define('PARENT_REFERER', $prt);
 
 
@@ -1080,10 +1082,10 @@ define('CLIENT_TYPE', is_bot() ? 'bot' : 'user');
 define('CLIENT_FROM_LOCALHOST', CLIENT_IP === '127.0.0.1' || CLIENT_IP === '::1');
 
 
-
 // user agent
 $ua = trim(isset($_GET['ua']) ? trim(rawurldecode($_GET['ua'])) : (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''));
 define('USER_AGENT', $ua);
+
 
 // database
 try {
