@@ -80,10 +80,7 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         if ($found2['ua'] !== '') {
             $ua = get_browser($found2['ua'], true);
             if ($ua !== false) {
-                $parent = $ua['parent'];
-                if (!isset($stats['visits']['sources'][$parent]))
-                    $stats['visits']['sources'][$parent] = 0;
-                $stats['visits']['sources'][$parent] += 1;
+                
 
                 $browser = $ua['parent'];
                 if (!isset($stats['visits']['browser'][$browser]))

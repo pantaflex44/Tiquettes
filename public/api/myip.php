@@ -919,8 +919,14 @@ function isBot()
     return false;
 }
 
+function getUserAgent()
+{
+    return trim(string: isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
+}
+
 header("Content-Type: application/json; charset=utf-8");
 echo json_encode([
     'ip' => getRealUserIp(),
-    'bot' => isBot()
+    'bot' => isBot(),
+    'ua' => getUserAgent()
 ]);
