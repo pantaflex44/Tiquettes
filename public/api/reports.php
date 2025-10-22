@@ -76,6 +76,13 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $url = $found2['url'];
         $ip = $found2['ip'];
         $type = $found2['type'];
+
+        
+        try {
+            $ipGeo = @file_get_contents("http://ip-api.com/json/" . $ip);
+        } catch (\Exception $ex) {
+            $ipGeo = false;
+        }
         
         if ($found2['ua'] !== '') {
             $ua = get_browser($found2['ua'], true);
@@ -126,6 +133,10 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         if (!isset($stats['visits'][$structItem['key']]['by_ip'][$ip][$date]))
             $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] = 0;
         $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] += $counter;
+
+        if ($ipGeo !== false) {
+            $stats['visits'][$structItem['key']]['by_ip'][$ip]['geo'] = $ipGeo;
+        }
 
         if (!isset($stats['visits'][$structItem['key']]['by_type'][$type]['total']))
             $stats['visits'][$structItem['key']]['by_type'][$type]['total'] = 0;
