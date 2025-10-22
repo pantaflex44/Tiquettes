@@ -80,8 +80,6 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         if ($found2['ua'] !== '') {
             $ua = get_browser($found2['ua'], true);
             if ($ua !== false) {
-                
-
                 $browser = $ua['parent'];
                 if (!isset($stats['visits']['browser'][$browser]))
                     $stats['visits']['browser'][$browser] = 0;
@@ -107,6 +105,13 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                     $stats['visits']['sources'][$source] += 1;
                 }
             }
+        }
+
+        if ($found2['rfr'] !== '') {
+            $rfr = $found2['rfr'];
+            if (!isset($stats['visits']['sources'][$rfr]))
+                $stats['visits']['sources'][$rfr] = 0;
+            $stats['visits']['sources'][$rfr] += 1;
         }
 
         $counter = array_sum(array_values($counters));
