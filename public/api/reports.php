@@ -124,6 +124,7 @@ function platformTraductor(string $platform): string
         'win10' => 'Microsoft Windows (10)',
         'windows' => 'Microsoft Windows',
         'linux' => 'Linux',
+        'macosx' => 'Apple Mac OS (X)',
         'mac os x' => 'Apple Mac OS (X)',
         'mac os' => 'Apple Mac OS',
         'macintosh' => 'Apple Mac OS'
