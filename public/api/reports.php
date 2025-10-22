@@ -77,6 +77,18 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $ip = $found2['ip'];
         $type = $found2['type'];
 
+        $urlQuery = explode('&', parse_url($url, PHP_URL_QUERY));
+        foreach($urlQuery as $query) {
+            $query = trim($query);
+            if (stripos(strtolower($query), 'source=') !== false) {
+                $parsed = explode('=', $query);
+
+                if (!isset($stats['visits']['sources'][$parsed[1]]))
+                    $stats['visits']['sources'][$parsed[1]] = 0;
+                $stats['visits']['sources'][$parsed[1]] += $counter;
+            }
+        }
+
         $counter = array_sum(array_values($counters));
 
         if (!isset($stats['visits'][$structItem['key']]['by_url'][$url]['total']))
