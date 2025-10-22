@@ -173,14 +173,14 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
             $ua = get_browser($found2['ua'], true);
             if ($ua !== false) {
                 $browser = browserTraductor($ua['browser']);
-                if (!isset($stats['visits']['browser'][$browser]))
-                    $stats['visits']['browser'][$browser] = 0;
-                $stats['visits']['browser'][$browser] += 1;
+                if (!isset($stats['visits']['browsers'][$browser]))
+                    $stats['visits']['browsers'][$browser] = 0;
+                $stats['visits']['browsers'][$browser] += 1;
 
                 $platform = platformTraductor($ua['platform']);
-                if (!isset($stats['visits']['platform'][$platform]))
-                    $stats['visits']['platform'][$platform] = 0;
-                $stats['visits']['platform'][$platform] += 1;
+                if (!isset($stats['visits']['platforms'][$platform]))
+                    $stats['visits']['platforms'][$platform] = 0;
+                $stats['visits']['platforms'][$platform] += 1;
             }
         }
 
