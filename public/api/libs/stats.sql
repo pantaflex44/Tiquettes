@@ -113,6 +113,7 @@ CREATE TABLE `stats_visits` (
     `type` varchar(10) NOT NULL,
     `struct` varchar(10) NOT NULL,
     `url` varchar(255) NOT NULL,
+    `ua` text,
     `datetime` datetime NOT NULL DEFAULT current_timestamp(),
     PRIMARY KEY (`id`),
     KEY `date` (`datetime`)

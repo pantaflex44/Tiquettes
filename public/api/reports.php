@@ -76,11 +76,14 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $url = $found2['url'];
         $ip = $found2['ip'];
         $type = $found2['type'];
-
-        if ($type === 'bot') {
-            $source = is_bot(true);
+        
+        $ua = $found2['ua'];
+        if ($ua === '')
+            $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        if ($ua !== '') {
+            $source = get_browser($ua, true);
             if ($source !== false) {
-                $source = strtolower($source);
+                $source = $source['parent'];
                 if (!isset($stats['visits']['sources'][$source]))
                     $stats['visits']['sources'][$source] = 0;
                 $stats['visits']['sources'][$source] += 1;
