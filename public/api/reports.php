@@ -118,6 +118,9 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
 
         $counter = array_sum(array_values($counters));
 
+        if (!isset($stats['visits'][$structItem['key']]['total']))
+            $stats['visits'][$structItem['key']]['total'] = 0;
+        $stats['visits'][$structItem['key']]['total'] += $counter;
 
         if (!isset($stats['visits'][$structItem['key']]['by_url'][$url]['total']))
             $stats['visits'][$structItem['key']]['by_url'][$url]['total'] = 0;
