@@ -77,11 +77,8 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $ip = $found2['ip'];
         $type = $found2['type'];
         
-        $ua = $found2['ua'];
-        if ($ua === '')
-            $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        if ($ua !== '') {
-            $source = get_browser($ua, true);
+        if ($found2['ua'] !== '') {
+            $source = get_browser($found2['ua'], true);
             if ($source !== false) {
                 $source = $source['parent'];
                 if (!isset($stats['visits']['sources'][$source]))
