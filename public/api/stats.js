@@ -20,27 +20,18 @@ function fetchURL(filename, struct = 'app', args = {}) {
         s: struct,
         ...args
     });
-    if (import.meta.env.VITE_APP_MODE === 'development') {
-        fetch(url)
-            .then((response) => response.text().then(text => ({ response, text })))
-            .then((data) => {
-                let { response, text } = data;
-                text = text.trim();
-                if (text === "") text = "no content";
+    fetch(url)
+        .then((response) => response.text().then(text => ({ response, text })))
+        .then((data) => {
+            let { response, text } = data;
+            text = text.trim();
+            if (text === "") text = "no content";
+            if (import.meta.env.VITE_APP_MODE === 'development') {
                 console.log(`Fetch response ${response.status} ${response.statusText} from ${url} [${text}]`)
-            })
-            .catch((error) => console.error(error));
-    } else {
-        fetch(url)
-            .then((response) => response.text().then(text => ({ response, text })))
-            .then((data) => {
-                let { response, text } = data;
-                text = text.trim();
-                if (text === "") text = "no content";
-                console.log(`Fetch response ${response.status} ${response.statusText} from ${url} [${text}]`)
-            })
-            .catch((error) => console.error(error));
-    }
+            }
+        })
+        .catch((error) => console.error(error));
+
 }
 
 export function visit(struct = 'web') {

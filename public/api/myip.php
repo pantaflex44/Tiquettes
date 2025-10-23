@@ -924,9 +924,96 @@ function getUserAgent()
     return trim(string: isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
 }
 
-header("Content-Type: application/json; charset=utf-8");
-echo json_encode([
-    'ip' => getRealUserIp(),
-    'bot' => isBot(),
-    'ua' => getUserAgent()
-]);
+function sourceTraductor(string $source): string
+{
+    $srcs = [
+        'chatgpt' => 'ChatGPT',
+        'google' => 'Google',
+        'yahoo' => 'Yahoo',
+        'bing' => 'Microsoft Bing',
+        'carrot2' => 'Carrot2',
+        'duckduckgo' => 'DuckDuckGo',
+        'iseek' => 'iSeek',
+        'qwant' => 'Qwant',
+        'startpage' => 'Startpage',
+        'base-search' => 'Base',
+        'instagrok' => 'Instagrok',
+        'openmd' => 'OpenMD',
+        'refseek' => 'RefSeek',
+        'researchgate' => 'ResearchGate',
+        'baidu' => 'Baïdu',
+        'yandex' => 'Yandex'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($source), $s) !== false)
+            return $srcs[$s];
+    }
+
+    return $source;
+}
+
+function browserTraductor(string $browser): string
+{
+    $srcs = [
+        'opera' => 'Opera',
+        'firefox' => 'Mozilla Firefox',
+        'msie' => 'Microsoft Internet Explorer',
+        'safari' => 'Apple Safari',
+        'netscape' => 'Netscape',
+        'edge' => 'Microsoft Edge',
+        'trident' => 'Microsoft Internet Explorer',
+        'chrome' => 'Google Chrome'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($browser), $s) !== false) {
+            $txt = $srcs[$s];
+            $isMobile = stripos(strtolower($browser), 'mobile') !== false;
+            $isAndroid = stripos(strtolower($browser), 'android') !== false;
+
+            if ($isAndroid)
+                $txt .= ' Android';
+            if ($isMobile)
+                $txt .= ' Mobile';
+
+            return $txt;
+        }
+    }
+
+    return $browser;
+}
+
+function platformTraductor(string $platform): string
+{
+    $srcs = [
+        'win32' => 'Microsoft Windows (32 bits)',
+        'win64' => 'Microsoft Windows (64 bits)',
+        'win10' => 'Microsoft Windows (10)',
+        'windows' => 'Microsoft Windows',
+        'linux' => 'Linux',
+        'macosx' => 'Apple Mac OS (X)',
+        'mac os x' => 'Apple Mac OS (X)',
+        'mac os' => 'Apple Mac OS',
+        'macintosh' => 'Apple Mac OS'
+    ];
+
+    foreach (array_keys($srcs) as $s) {
+        if (stripos(strtolower($platform), $s) !== false)
+            return $srcs[$s];
+    }
+
+    return $platform;
+}
+
+
+
+
+if (!defined('MYIP_NORETURN')) {
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode([
+        'ip' => getRealUserIp(),
+        'bot' => isBot(),
+        'ua' => getUserAgent()
+    ]);
+}
