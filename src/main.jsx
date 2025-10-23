@@ -67,9 +67,9 @@ export default function Main() {
 
         const origin = window.location.origin.split('?')[0].toLowerCase().trim();
 
-        if (import.meta.env.VITE_APP_MODE !== "development") {
+        /*if (import.meta.env.VITE_APP_MODE !== "development") {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
-        }
+        }*/
     }, []);
 
     return (
