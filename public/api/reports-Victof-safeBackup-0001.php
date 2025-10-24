@@ -77,10 +77,6 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $url = $found2['url'];
         $ip = $found2['ip'];
         $type = $found2['type'];
-        $country = $found2['country'];
-        $regionName = $found2['regionName'];
-        $city = $found2['city'];
-        $timezone = $found2['timezone'];
 
         if ($found2['ua'] !== '') {
             if (!isset($stats['visits'][$structItem['key']]['supports']['mobile']))
@@ -138,15 +134,34 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
             $stats['visits'][$structItem['key']]['total'] = 0;
         $stats['visits'][$structItem['key']]['total'] += $counter;
 
-        foreach (['type', 'url', 'country', 'regionName', 'city', 'timezone'] as $k) {
-            if (!isset($stats['visits'][$structItem['key']][$k][$$k]['total']))
-                $stats['visits'][$structItem['key']][$k][$$k]['total'] = 0;
-            $stats['visits'][$structItem['key']][$k][$$k]['total'] += $counter;
+        if (!isset($stats['visits'][$structItem['key']]['by_url'][$url]['total']))
+            $stats['visits'][$structItem['key']]['by_url'][$url]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_url'][$url]['total'] += $counter;
 
-            if (!isset($stats['visits'][$structItem['key']][$k][$$k][$date]))
-                $stats['visits'][$structItem['key']][$k][$$k][$date] = 0;
-            $stats['visits'][$structItem['key']][$k][$$k][$date] += $counter;
-        }
+        if (!isset($stats['visits'][$structItem['key']]['by_url'][$url][$date]))
+            $stats['visits'][$structItem['key']]['by_url'][$url][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_url'][$url][$date] += $counter;
+
+
+        if (!isset($stats['visits'][$structItem['key']]['by_ip'][$ip]['total']))
+            $stats['visits'][$structItem['key']]['by_ip'][$ip]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_ip'][$ip]['total'] += $counter;
+
+        if (!isset($stats['visits'][$structItem['key']]['by_ip'][$ip][$date]))
+            $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_ip'][$ip][$date] += $counter;
+
+        $stats['visits'][$structItem['key']]['by_ip'][$ip]['geo'] = "http://ip-api.com/json/" . $ip;
+
+
+        if (!isset($stats['visits'][$structItem['key']]['by_type'][$type]['total']))
+            $stats['visits'][$structItem['key']]['by_type'][$type]['total'] = 0;
+        $stats['visits'][$structItem['key']]['by_type'][$type]['total'] += $counter;
+
+        if (!isset($stats['visits'][$structItem['key']]['by_type'][$type][$date]))
+            $stats['visits'][$structItem['key']]['by_type'][$type][$date] = 0;
+        $stats['visits'][$structItem['key']]['by_type'][$type][$date] += $counter;
+
     }
 
 

@@ -26,6 +26,12 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     $currentDatetime = NOW->format('Y-m-d H:i:s');
     $currentHour = (string) ((int) NOW->format('H'));
 
+    $ipGeo = [];
+    try {
+        $ipGeo = @file_get_contents("http://ip-api.com/json/" . CLIENT_IP);
+    } catch (\Exception $ex) {
+    }
+
     $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip = ? AND url = ?");
     $stmt->execute([CLIENT_IP, REFERER]);
     $found = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -34,8 +40,17 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
         $foundDatetime = SQL2DateTimeUTC($found['datetime'], 'Y-m-d H:i:s');
         $compareDatetime = $foundDatetime->add(\DateInterval::createFromDateString(STATS_VISITS_INTERVAL));
         if (NOW >= $compareDatetime) {
-            $stmt = DB->prepare("UPDATE stats_visits SET datetime = ?, ua = ?, rfr = ? WHERE id = ?");
-            $stmt->execute([$currentDatetime, USER_AGENT, PARENT_REFERER, $id]);
+            $stmt = DB->prepare("UPDATE stats_visits SET datetime = ?, ua = ?, rfr = ?, country = ?, regionName = ?, city = ?, timezone = ? WHERE id = ?");
+            $stmt->execute([
+                $currentDatetime,
+                USER_AGENT,
+                PARENT_REFERER,
+                $ipGeo['country'] ?? '',
+                $ipGeo['regionName'] ?? '',
+                $ipGeo['city'] ?? '',
+                $ipGeo['timezone'] ?? '',
+                $id
+            ]);
 
             $stmt = DB->prepare("SELECT JSON_EXTRACT(stats_visits_details.counters, '$') AS counters FROM stats_visits_details WHERE visit_id = ? AND date = ?");
             $stmt->execute([$id, $currentDate]);
@@ -55,8 +70,20 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
             }
         }
     } else {
-        $stmt = DB->prepare("INSERT INTO stats_visits (ip, type, struct, url, ua, rfr, datetime) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([CLIENT_IP, CLIENT_TYPE, STATS_STRUCTURE, REFERER, USER_AGENT, PARENT_REFERER, $currentDatetime]);
+        $stmt = DB->prepare("INSERT INTO stats_visits (ip, country, regionName, city, timezone, type, struct, url, ua, rfr, datetime) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            CLIENT_IP,
+            $ipGeo['country'] ?? '',
+            $ipGeo['regionName'] ?? '',
+            $ipGeo['city'] ?? '',
+            $ipGeo['timezone'] ?? '',
+            CLIENT_TYPE,
+            STATS_STRUCTURE,
+            REFERER,
+            USER_AGENT,
+            PARENT_REFERER,
+            $currentDatetime
+        ]);
         $visit_id = DB->lastInsertId();
         $stmt = DB->prepare("INSERT INTO stats_visits_details (visit_id, date, counters) VALUES(?, ?, ?)");
         $stmt->execute([$visit_id, $currentDate, json_encode([$currentHour => 1])]);
