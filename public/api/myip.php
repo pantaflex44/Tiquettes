@@ -942,7 +942,10 @@ function sourceTraductor(string $source): string
         'refseek' => 'RefSeek',
         'researchgate' => 'ResearchGate',
         'baidu' => 'Baïdu',
-        'yandex' => 'Yandex'
+        'yandex' => 'Yandex',
+        'copilot' => 'Microsoft Copilot',
+        'ecosia' => 'Ecosia',
+        'forum.gce-electronics' => 'Forum GCE Electronics'
     ];
 
     foreach (array_keys($srcs) as $s) {
@@ -995,7 +998,9 @@ function platformTraductor(string $platform): string
         'macosx' => 'Apple Mac OS (X)',
         'mac os x' => 'Apple Mac OS (X)',
         'mac os' => 'Apple Mac OS',
-        'macintosh' => 'Apple Mac OS'
+        'macintosh' => 'Apple Mac OS',
+        'ios' => 'Apple iOS',
+        'unknown' => 'Inconnu'
     ];
 
     foreach (array_keys($srcs) as $s) {
