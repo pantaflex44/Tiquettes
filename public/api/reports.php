@@ -142,15 +142,15 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         foreach (['type', 'url', 'country', 'regionName', 'city', 'timezone'] as $k) {
             $value = trim($$k);
             if ($value === '')
-                $value = 'unknown';
+                $value = 'Autres';
 
-            if (!isset($stats['visits'][$structItem['key']][$k][$$k]['total']))
-                $stats['visits'][$structItem['key']][$k][$$k]['total'] = 0;
-            $stats['visits'][$structItem['key']][$k][$$k]['total'] += $counter;
+            if (!isset($stats['visits'][$structItem['key']][$k][$value]['total']))
+                $stats['visits'][$structItem['key']][$k][$value]['total'] = 0;
+            $stats['visits'][$structItem['key']][$k][$value]['total'] += $counter;
 
-            if (!isset($stats['visits'][$structItem['key']][$k][$$k][$date]))
-                $stats['visits'][$structItem['key']][$k][$$k][$date] = 0;
-            $stats['visits'][$structItem['key']][$k][$$k][$date] += $counter;
+            if (!isset($stats['visits'][$structItem['key']][$k][$value][$date]))
+                $stats['visits'][$structItem['key']][$k][$value][$date] = 0;
+            $stats['visits'][$structItem['key']][$k][$value][$date] += $counter;
         }
     }
 
