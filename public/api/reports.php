@@ -74,26 +74,28 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         if (!is_array($found2) || $found2['struct'] !== $structItem['key'])
             continue;
 
-        $url = $found2['url'];
-        $ip = $found2['ip'];
-        $type = $found2['type'];
-        $country = $found2['country'];
-        $regionName = $found2['regionName'];
-        $city = $found2['city'];
-        $timezone = $found2['timezone'];
+        $ua = trim($found2['ua'] ?? '');
+        $rfr = trim($found2['rfr'] ?? '');
+        $url = trim($found2['url'] ?? '');
+        $ip = trim($found2['ip'] ?? '');
+        $type = trim($found2['type'] ?? '');
+        $country = trim($found2['country'] ?? '');
+        $regionName = trim($found2['regionName'] ?? '');
+        $city = trim($found2['city'] ?? '');
+        $timezone = trim($found2['timezone'] ?? '');
 
-        if ($found2['ua'] !== '') {
+        if ($ua !== '') {
             if (!isset($stats['visits'][$structItem['key']]['supports']['mobile']))
                 $stats['visits'][$structItem['key']]['supports']['mobile'] = 0;
             if (!isset($stats['visits'][$structItem['key']]['supports']['desktop']))
                 $stats['visits'][$structItem['key']]['supports']['desktop'] = 0;
-            if (stripos(strtolower($found2['ua']), 'mobile') !== false || stripos(strtolower($found2['ua']), 'android') !== false) {
+            if (stripos(strtolower($ua), 'mobile') !== false || stripos(strtolower($ua), 'android') !== false) {
                 $stats['visits'][$structItem['key']]['supports']['mobile'] += 1;
             } else {
                 $stats['visits'][$structItem['key']]['supports']['desktop'] += 1;
             }
 
-            $ua = get_browser($found2['ua'], true);
+            $ua = get_browser($ua, true);
             if ($ua !== false) {
                 $browser = browserTraductor($ua['browser']);
                 if (!isset($stats['visits'][$structItem['key']]['browsers'][$browser]))
@@ -122,8 +124,7 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
             }
         }
 
-        if ($found2['rfr'] !== '') {
-            $rfr = $found2['rfr'];
+        if ($rfr !== '') {
             if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
                 $rfr = sourceTraductor($rfr);
                 if (!isset($stats['visits'][$structItem['key']]['sources'][$rfr]))
@@ -139,6 +140,10 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
         $stats['visits'][$structItem['key']]['total'] += $counter;
 
         foreach (['type', 'url', 'country', 'regionName', 'city', 'timezone'] as $k) {
+            $value = trim($$k);
+            if ($value === '')
+                $value = 'unknown';
+
             if (!isset($stats['visits'][$structItem['key']][$k][$$k]['total']))
                 $stats['visits'][$structItem['key']][$k][$$k]['total'] = 0;
             $stats['visits'][$structItem['key']][$k][$$k]['total'] += $counter;
