@@ -30,6 +30,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
     try {
         $ipGeo = @file_get_contents("http://ip-api.com/json/" . CLIENT_IP);
     } catch (\Exception $ex) {
+        $ipGeo['country'] = '_error_';
     }
 
     $stmt = DB->prepare("SELECT * FROM stats_visits WHERE ip = ? AND url = ?");
