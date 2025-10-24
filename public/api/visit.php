@@ -28,7 +28,7 @@ if (STATS_ALLOWED && STATS_STRUCTURE_ALLOWED) {
 
     $ipGeo = [];
     try {
-        $ipGeo = @file_get_contents("http://ip-api.com/json/" . CLIENT_IP);
+        $ipGeo = json_decode(file_get_contents("http://ip-api.com/json/" . CLIENT_IP), true);
     } catch (\Exception $ex) {
         $ipGeo['country'] = '_error_';
     }
