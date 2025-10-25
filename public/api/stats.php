@@ -72,7 +72,6 @@ define('STATS_ALLOWED_PERIODS', [
 ]);
 
 define('STATS_ALLOWED_RESOLUTIONS', [
-    'h' => ['text' => 'Moyenne par heures'],
-    'd' => ['text' => 'Moyenne par jours'],
-    't' => ['text' => 'Moyenne globale']
+    'h' => ['text' => 'Moyennes par heures'],
+    'd' => ['text' => 'Moyennes par jours']
 ]);
