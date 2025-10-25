@@ -67,6 +67,7 @@ $stats = [
 
 
 
+
 foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
     $stats['defn']['structs'][$structItem['key']] = $structItem['description'];
 
@@ -235,4 +236,9 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
 
 
 header('Content-type: application/json');
-echo json_encode($stats);
+
+if (isset($_GET['defnask'])) {
+    echo json_encode($stats['defn']);
+} else {
+    echo json_encode($stats);
+}
