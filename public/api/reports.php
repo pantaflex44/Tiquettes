@@ -46,7 +46,6 @@ $resolutionDetails = [
 
 
 
-
 $stats = [
     'datetime' => NOW,
     'period' => $periodDetails,
