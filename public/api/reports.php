@@ -52,10 +52,7 @@ $stats = [
     'period' => $periodDetails,
     'resolution' => $resolutionDetails,
     'defn' => [
-        'periods' => array_reduce(array_map(fn($k, $v) => [$k, $v['text']], array_keys(STATS_ALLOWED_PERIODS), array_values(STATS_ALLOWED_PERIODS)), function ($result, $item) {
-            $result[$item[0]] = $item[1];
-            return $result;
-        }, []),
+        'periods' => STATS_ALLOWED_PERIODS,
         'resolutions' => array_reduce(array_map(fn($k, $v) => [$k, $v['text']], array_keys(STATS_ALLOWED_RESOLUTIONS), array_values(STATS_ALLOWED_RESOLUTIONS)), function ($result, $item) {
             $result[$item[0]] = $item[1];
             return $result;
