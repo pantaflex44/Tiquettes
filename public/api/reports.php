@@ -23,38 +23,48 @@ declare(strict_types=1);
 require_once(__DIR__ . '/libs/config.php');
 require_once(__DIR__ . '/stats.php');
 
-$periods = [
-    '-1d' => ['start' => dateTimeFrom('yesterday'), 'end' => dateTimeFrom('yesterday'), 'text' => "Hier"],
-    'd' => ['start' => dateTimeFrom('today'), 'end' => dateTimeFrom('today'), 'text' => "Aujourd'hui"],
-    '-7d' => ['start' => dateTimeFrom('today -7 days'), 'end' => dateTimeFrom('today'), 'text' => "7 derniers jours"],
-    'w' => ['start' => dateTimeFrom('Monday this week'), 'end' => dateTimeFrom('Sunday this week'), 'text' => "Cette semaine"],
-    '-w' => ['start' => dateTimeFrom('Monday last week'), 'end' => dateTimeFrom('Sunday last week'), 'text' => "La semaine dernière"],
-    '-30d' => ['start' => dateTimeFrom('today -30 days'), 'end' => dateTimeFrom('today'), 'text' => "30 derniers jours"],
-    '-60d' => ['start' => dateTimeFrom('today -60 days'), 'end' => dateTimeFrom('today'), 'text' => "60 derniers jours"],
-    '-90d' => ['start' => dateTimeFrom('today -90 days'), 'end' => dateTimeFrom('today'), 'text' => "90 derniers jours"],
-    'm' => ['start' => dateTimeFrom('first day of this month'), 'end' => dateTimeFrom(from: 'last day of this month'), 'text' => "Ce mois ci"],
-    '-m' => ['start' => dateTimeFrom('first day of last month'), 'end' => dateTimeFrom(from: 'last day of last month'), 'text' => "Le mois dernier"],
-    'y' => ['start' => dateTimeFrom('first day of this year'), 'end' => dateTimeFrom(from: 'last day of this year'), 'text' => "Cette année"],
-    '-y' => ['start' => dateTimeFrom('first day of last year'), 'end' => dateTimeFrom(from: 'last day of last year'), 'text' => "L'année dernière"],
-];
+
 
 $period = isset($_GET['p']) ? strtolower(trim($_GET['p'])) : '-30d';
-if (!isset($periods[$period]))
+if (!isset(STATS_ALLOWED_PERIODS[$period]))
     $period = '-30d';
-$periodDetails = $periods[$period];
+$periodDetails = array_merge([
+    'key' => $period,
+], STATS_ALLOWED_PERIODS[$period]);
+
 
 $currentDate = NOW->format('Y-m-d');
 $currentDatetime = NOW->format('Y-m-d H:i:s');
 
-$resolution = isset($_GET['rs']) ? strtolower(trim($_GET['rs'])) : 'd'; // d: jours , h: heures
+$resolution = isset($_GET['rs']) ? strtolower(trim($_GET['rs'])) : 't'; // d: jours , h: heures , t: seulement les totaux'
+if (!isset(STATS_ALLOWED_RESOLUTIONS[$resolution]))
+    $resolution = 't';
+$resolutionDetails = [
+    'key' => $resolution,
+    'text' => STATS_ALLOWED_RESOLUTIONS[$resolution]['text']
+];
+
+
+
 
 $stats = [
     'datetime' => NOW,
     'period' => $periodDetails,
-    'defn' => [],
+    'resolution' => $resolutionDetails,
+    'defn' => [
+        'periods' => array_reduce(array_map(fn($k, $v) => [$k, $v['text']], array_keys(STATS_ALLOWED_PERIODS), array_values(STATS_ALLOWED_PERIODS)), function ($result, $item) {
+            $result[$item[0]] = $item[1];
+            return $result;
+        }, []),
+        'resolutions' => array_reduce(array_map(fn($k, $v) => [$k, $v['text']], array_keys(STATS_ALLOWED_RESOLUTIONS), array_values(STATS_ALLOWED_RESOLUTIONS)), function ($result, $item) {
+            $result[$item[0]] = $item[1];
+            return $result;
+        }, [])
+    ],
     'visits' => [],
     'actions' => [],
 ];
+
 
 
 foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
@@ -148,9 +158,27 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                 $stats['visits'][$structItem['key']][$k][$value]['total'] = 0;
             $stats['visits'][$structItem['key']][$k][$value]['total'] += $counter;
 
-            if (!isset($stats['visits'][$structItem['key']][$k][$value][$date]))
-                $stats['visits'][$structItem['key']][$k][$value][$date] = 0;
-            $stats['visits'][$structItem['key']][$k][$value][$date] += $counter;
+            if ($resolutionDetails['key'] === 'd') {
+                $interval = \DateInterval::createFromDateString('1 day');
+                $period = new \DatePeriod($periodDetails['start'], $interval, (clone $periodDetails['end'])->modify('+1 day'));
+                foreach ($period as $dt) {
+                    if (!isset($stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')]))
+                        $stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')] = 0;
+                }
+
+                $stats['visits'][$structItem['key']][$k][$value][$date] += $counter;
+            }
+
+            if ($resolutionDetails['key'] === 'h') {
+                for ($h = 0; $h <= 23; $h++) {
+                    if (!isset($stats['visits'][$structItem['key']][$k][$value][$h]))
+                        $stats['visits'][$structItem['key']][$k][$value][$h] = 0;
+                }
+
+                foreach ($counters as $hr => $cnt) {
+                    $stats['visits'][$structItem['key']][$k][$value][$hr] += $cnt;
+                }
+            }
         }
     }
 
@@ -176,9 +204,27 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                     $stats['actions'][$actionItem['key']]['total'] = 0;
                 $stats['actions'][$actionItem['key']]['total'] += $counter;
 
-                if (!isset($stats['actions'][$actionItem['key']][$date]))
-                    $stats['actions'][$actionItem['key']][$date] = 0;
-                $stats['actions'][$actionItem['key']][$date] += $counter;
+                if ($resolutionDetails['key'] === 'd') {
+                    $interval = \DateInterval::createFromDateString('1 day');
+                    $period = new \DatePeriod($periodDetails['start'], $interval, (clone $periodDetails['end'])->modify('+1 day'));
+                    foreach ($period as $dt) {
+                        if (!isset($stats['actions'][$actionItem['key']][$dt->format('Y-m-d')]))
+                            $stats['actions'][$actionItem['key']][$dt->format('Y-m-d')] = 0;
+                    }
+
+                    $stats['actions'][$actionItem['key']][$date] += $counter;
+                }
+
+                if ($resolutionDetails['key'] === 'h') {
+                    for ($h = 0; $h <= 23; $h++) {
+                        if (!isset($stats['actions'][$actionItem['key']][$h]))
+                            $stats['actions'][$actionItem['key']][$h] = 0;
+                    }
+
+                    foreach ($counters as $hr => $cnt) {
+                        $stats['actions'][$actionItem['key']][$hr] += $cnt;
+                    }
+                }
             }
         }
     }

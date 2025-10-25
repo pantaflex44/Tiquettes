@@ -7,7 +7,7 @@ function formatURL(url, args = {}) {
     return u + l;
 }
 
-function fetchURL(filename, struct = 'app', args = {}) {
+function fetchURL(filename, struct, args = {}) {
     const url = formatURL(import.meta.env.VITE_APP_API_URL + filename, {
         m: import.meta.env.VITE_APP_MODE,
         s: struct,

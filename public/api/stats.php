@@ -30,7 +30,8 @@ function addToDateTime(\DateTime $dt, string $intervalString, bool $isClone = tr
     return (clone $dt)->add(\DateInterval::createFromDateString($intervalString));
 }
 
-function dateTimeFrom(string $from): \DateTime {
+function dateTimeFrom(string $from): \DateTime
+{
     return new \DateTime($from, new \DateTimeZone("UTC"));
 }
 
@@ -50,9 +51,28 @@ $stmt = DB->prepare("SELECT * FROM stats_allowed_actions");
 $stmt->execute();
 $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 define('STATS_ALLOWED_ACTIONS_FULL', $result);
-define('STATS_ALLOWED_ACTIONS', array_map(fn($i) => $i['key'],$result));
+define('STATS_ALLOWED_ACTIONS', array_map(fn($i) => $i['key'], $result));
 $statsAction = isset($_GET['a']) ? strtolower(rawurldecode(trim($_GET['a']))) : '';
 define('STATS_ACTION_ALLOWED', in_array($statsAction, STATS_ALLOWED_ACTIONS, true));
 define('STATS_ACTION', STATS_ACTION_ALLOWED ? $statsAction : '');
 
+define('STATS_ALLOWED_PERIODS', [
+    '-1d' => ['start' => dateTimeFrom('yesterday'), 'end' => dateTimeFrom('yesterday'), 'text' => "Hier"],
+    'd' => ['start' => dateTimeFrom('today'), 'end' => dateTimeFrom('today'), 'text' => "Aujourd'hui"],
+    '-7d' => ['start' => dateTimeFrom('today -7 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 7 derniers jours"],
+    'w' => ['start' => dateTimeFrom('Monday this week'), 'end' => dateTimeFrom('Sunday this week'), 'text' => "Cette semaine"],
+    '-w' => ['start' => dateTimeFrom('Monday last week'), 'end' => dateTimeFrom('Sunday last week'), 'text' => "La semaine dernière"],
+    '-30d' => ['start' => dateTimeFrom('today -30 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 30 derniers jours"],
+    '-60d' => ['start' => dateTimeFrom('today -60 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 60 derniers jours"],
+    '-90d' => ['start' => dateTimeFrom('today -90 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 90 derniers jours"],
+    'm' => ['start' => dateTimeFrom('first day of this month'), 'end' => dateTimeFrom(from: 'last day of this month'), 'text' => "Ce mois ci"],
+    '-m' => ['start' => dateTimeFrom('first day of last month'), 'end' => dateTimeFrom(from: 'last day of last month'), 'text' => "Le mois dernier"],
+    'y' => ['start' => dateTimeFrom('first day of this year'), 'end' => dateTimeFrom(from: 'last day of this year'), 'text' => "Cette année"],
+    '-y' => ['start' => dateTimeFrom('first day of last year'), 'end' => dateTimeFrom(from: 'last day of last year'), 'text' => "L'année dernière"],
+]);
 
+define('STATS_ALLOWED_RESOLUTIONS', [
+    'h' => ['text' => 'Moyenne par heures'],
+    'd' => ['text' => 'Moyenne par jours'],
+    't' => ['text' => 'Moyenne globale']
+]);
