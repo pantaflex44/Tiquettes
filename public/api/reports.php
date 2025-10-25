@@ -36,9 +36,9 @@ $periodDetails = array_merge([
 $currentDate = NOW->format('Y-m-d');
 $currentDatetime = NOW->format('Y-m-d H:i:s');
 
-$resolution = isset($_GET['rs']) ? strtolower(trim($_GET['rs'])) : 't'; // d: jours , h: heures , t: seulement les totaux'
+$resolution = isset($_GET['rs']) ? strtolower(trim($_GET['rs'])) : 'd'; // d: jours , h: heures
 if (!isset(STATS_ALLOWED_RESOLUTIONS[$resolution]))
-    $resolution = 't';
+    $resolution = 'd';
 $resolutionDetails = [
     'key' => $resolution,
     'text' => STATS_ALLOWED_RESOLUTIONS[$resolution]['text']
