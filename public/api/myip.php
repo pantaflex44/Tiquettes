@@ -945,7 +945,8 @@ function sourceTraductor(string $source): string
         'yandex' => 'Yandex',
         'copilot' => 'Microsoft Copilot',
         'ecosia' => 'Ecosia',
-        'forum.gce-electronics' => 'Forum GCE Electronics'
+        'forum.gce-electronics' => 'Forum GCE Electronics',
+        'ilek' => 'ilek : Mieux consommer'
     ];
 
     foreach (array_keys($srcs) as $s) {
@@ -992,7 +993,11 @@ function platformTraductor(string $platform): string
     $srcs = [
         'win32' => 'Microsoft Windows (32 bits)',
         'win64' => 'Microsoft Windows (64 bits)',
+        'win11' => 'Microsoft Windows (11)',
         'win10' => 'Microsoft Windows (10)',
+        'win7' => 'Microsoft Windows (7)',
+        'win8' => 'Microsoft Windows (8)',
+        'win8.1' => 'Microsoft Windows (8)',
         'windows' => 'Microsoft Windows',
         'linux' => 'Linux',
         'macosx' => 'Apple Mac OS (X)',

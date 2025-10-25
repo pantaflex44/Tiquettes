@@ -126,7 +126,7 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                 $query = trim($query);
                 if (stripos(strtolower($query), 'source=') !== false) {
                     $parsed = explode('=', $query);
-                    $source = sourceTraductor(strtolower($parsed[1]));
+                    $source = $parsed[1];
                     if (!isset($stats['visits'][$structItem['key']]['sources'][$source]))
                         $stats['visits'][$structItem['key']]['sources'][$source] = 0;
                     $stats['visits'][$structItem['key']]['sources'][$source] += 1;
@@ -136,7 +136,6 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
 
         if ($rfr !== '') {
             if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
-                $rfr = sourceTraductor($rfr);
                 if (!isset($stats['visits'][$structItem['key']]['sources'][$rfr]))
                     $stats['visits'][$structItem['key']]['sources'][$rfr] = 0;
                 $stats['visits'][$structItem['key']]['sources'][$rfr] += 1;
