@@ -61,7 +61,7 @@ $stats = [
     'actions' => [],
 ];
 
-var_dump($stats);
+dd_json($stats);
 
 
 
