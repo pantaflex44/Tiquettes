@@ -1474,14 +1474,26 @@ foreach ($flattenModules as $module) {
         $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === $kcId));
         if (count($kcModule) === 1) {
             $kcModule = $kcModule[0];
+
+            if ($module->partialKc === true) {
+                $flattenModules[] = (object) array_merge((array) $module, [
+                    'kcId' => '',
+                    'id' => '| ' . $module->id,
+                    'parentId' => $module->id,
+                    'func' => 'o',
+                    'icon' => $module->icon,
+                    'text' => $module->text
+                ]);
+            }
+
             $flattenModules[] = (object) array_merge((array) $kcModule, [
                 'kcId' => '',
                 'id' => '¤_' . $kcModule->id,
                 'parentId' => $module->id,
                 'func' => 'k',
                 'icon' => $module->icon,
-                'text' => $module->text,
-                'desc' => $module->desc,
+                'text' => $module->partialKc === true ? $kcModule->text : $module->text,
+                'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
                 'pole' => $module->pole,
                 'wire' => $module->wire ?? ''
             ]);

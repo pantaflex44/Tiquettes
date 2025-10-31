@@ -445,5 +445,6 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [Trinakria23](https://github.com/Trinakria23)
 - [Boubigloubi](https://github.com/Boubigloubi)
 - [martinlbb](https://github.com/martinlbb)
+- [rems64](https://github.com/rems64)
 
  ### ☕ Ainsi que pour tous les cafés offerts ;-)

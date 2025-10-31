@@ -394,6 +394,10 @@ input[type="range"] {
     cursor: pointer;
 }
 
+label.disabled {
+    opacity: 0.4;
+}
+
 .file_button .file_label {
     display: inline-block;
     background-color: #f5f5f5;

@@ -18,20 +18,20 @@
 
 /* eslint-disable react/prop-types */
 
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 export default function SchemaDescription({
-                                              switchboard,
-                                              module
-                                          }) {
+    switchboard,
+    module
+}) {
     const getModuleById = (moduleId) => {
-        let indexes = {row: -1, module: -1};
-        let m = {module: null, indexes};
+        let indexes = { row: -1, module: -1 };
+        let m = { module: null, indexes };
 
         switchboard.rows.forEach((row, ri) => {
             row.forEach((module, mi) => {
                 if (!m.module && module.id === moduleId && !module.free) {
-                    m = {...m, module, indexes: {...indexes, row: ri, module: mi}};
+                    m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
                 }
             })
         });
@@ -45,22 +45,22 @@ export default function SchemaDescription({
         let wire = module.wire ?? "";
         let pole = module.pole ?? "";
 
-        const parentModule = getModuleById(module.parentId).module;
-        /*if (module.func === 'kc' && parentModule) {
+        /*const parentModule = getModuleById(module.parentId).module;
+        if (module.func === 'kc' && parentModule) {
             icon = parentModule.icon;
             text = parentModule.text;
             pole = parentModule.pole;
             wire = parentModule.wire;
         }*/
 
-        if (module.func === 'k' && parentModule) {
-            icon = parentModule.icon;
-            text = parentModule.text;
-            pole = parentModule.pole;
-            wire = parentModule.wire;
-        }
+        /*if (module.func === 'k' && parentModule) {
+            icon = module.icon;
+            text = module.text;
+            pole = module.pole;
+            wire = module.wire;
+        }*/
 
-        return {text, icon, wire, pole};
+        return { text, icon, wire, pole };
     }, [module]);
 
     return (

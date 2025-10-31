@@ -152,6 +152,7 @@ function App() {
         grp: "",
         parentId: "",
         kcId: "",
+        partialKc: false,
         free: true,
         span: 1,
         half: "none",
@@ -174,6 +175,7 @@ function App() {
             id: "DB",
             parentId: "",
             kcId: "",
+            partialKc: false,
             pole: "1P+N",
             wire: "16",
             line: "",
@@ -870,6 +872,7 @@ function App() {
         const desc = (data.currentModule.desc ?? "").trim();
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
+        const partialKc = data.currentModule.partialKc ?? false;
         const func = (data.currentModule.func ?? "").trim();
         const modtype = (data.currentModule.modtype ?? "").trim();
         const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
@@ -928,6 +931,7 @@ function App() {
                         desc,
                         parentId,
                         kcId,
+                        partialKc,
                         func,
                         crb,
                         modtype,
@@ -1253,6 +1257,7 @@ function App() {
                         desc: clipboard.desc,
                         parentId: clipboard.parentId,
                         kcId: clipboard.kcId,
+                        partialKc: clipboard.partialKc,
                         func: clipboard.func,
                         crb: clipboard.crb,
                         modtype: clipboard.modtype,

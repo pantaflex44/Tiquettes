@@ -24,6 +24,29 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
+        "2.2.6": {
+            "date": "2025-10-31",
+            "actions": {
+                "patches": [
+                    {
+                        "text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
+                        "from": {
+                            "name": "Discussion #43",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/43"
+                        }
+                    }
+                ],
+                "adds": [
+                    {
+                        "text": "Ajout d'un nouveau pictogramme: 'Réseau électrique'.",
+                        "from": {
+                            "name": "Discussion #44",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/44"
+                        }
+                    }
+                ]
+            }
+        },
         "2.2.5": {
             "date": "2025-10-03",
             "actions": {
@@ -56,7 +79,7 @@
                             "name": "Issue #28",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/28"
                         }
-                    }                    
+                    }
                 ],
                 "adds": [
                     {

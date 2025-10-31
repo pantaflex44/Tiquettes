@@ -88,6 +88,17 @@ export default function SchemaTab({
             const kcId = (module.kcId ?? "");
             const kcModule = getModuleById(kcId).module;
             if (kcModule) {
+                if (module.partialKc === true) {
+                    _childs.push({
+                        ...module,
+                        kcId: '',
+                        id: `↓${module.id}`,
+                        parentId: module.id,
+                        func: 'o',
+                        icon: module.icon,
+                        text: module.text,
+                    });
+                }
                 _childs.push({
                     ...kcModule,
                     kcId: '',
@@ -95,10 +106,11 @@ export default function SchemaTab({
                     parentId: module.id,
                     func: 'k',
                     icon: module.icon,
-                    text: module.text,
-                    desc: module.desc,
-                    pole: module.pole
-                })
+                    text: module.partialKc === true ? kcModule.text : module.text,
+                    desc: module.partialKc === true ? kcModule.desc : module.desc,
+                    pole: module.pole,
+                    wire: module.wire
+                });
             }
 
             const childs = getRow(_childs);

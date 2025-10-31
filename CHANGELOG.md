@@ -1,5 +1,16 @@
 # ChangeLog
 
+## [2.2.6] - 2025-10-31
+
+### Corrections
+
+- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43)] Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.
+
+### Ajouts
+
+- [[Discussion #44](https://github.com/pantaflex44/Tiquettes/discussions/44)] Ajout d'un nouveau pictogramme: 'Réseau électrique'.
+
+
 ## [2.2.5] - 2025-10-03
 
 ### Corrections

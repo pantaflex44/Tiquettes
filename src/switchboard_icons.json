@@ -102,6 +102,15 @@
         "func": "id"
     },
     {
+        "filename": "swb_grid.svg",
+        "title": "Reseau electrique",
+        "modtype": "Alim",
+        "coef": 1,
+        "func": "sw",
+        "current": "63A",
+        "wire": "16"
+    },
+    {
         "filename": "swb_alim_ht.svg",
         "title": "Coupure generale",
         "modtype": "Alim",
