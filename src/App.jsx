@@ -358,7 +358,7 @@ function App() {
     const reassignModules = () => {
         if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
             const swb = modulesAutoId(switchboard);
-
+            console.log(swb.rows);
             let counters = {};
 
             let from = {};
@@ -375,6 +375,7 @@ function App() {
 
                     let func = (module.func ?? '').trim().toUpperCase();
                     if (func === '') func = defaultModuleId;
+
                     counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
 
                     const newModuleId = `${func}${counters[func]}`;
@@ -402,7 +403,7 @@ function App() {
                         ...mm,
                         kcId: (mm.kcId ?? "").split('|')
                             .map(k => {
-                                if (from[k]) return k;
+                                if (from[k]) return from[k];
                                 return null
                             })
                             .filter(k => k !== null)
@@ -412,6 +413,9 @@ function App() {
                     return mm;
                 });
             });
+
+            console.log('------------------------------------');
+            console.log(rows);
 
             setSwitchboard((old) => ({ ...old, rows }));
         }
