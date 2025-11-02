@@ -358,9 +358,8 @@ function App() {
     const reassignModules = () => {
         if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
             const swb = modulesAutoId(switchboard);
-            console.log(swb.rows);
-            let counters = {};
 
+            let counters = {};
             let from = {};
 
             // re-assign modules id
@@ -413,9 +412,6 @@ function App() {
                     return mm;
                 });
             });
-
-            console.log('------------------------------------');
-            console.log(rows);
 
             setSwitchboard((old) => ({ ...old, rows }));
         }
