@@ -5,11 +5,11 @@
 ### Corrections
 
 - Modification du rendu du schéma unifilaire pour améliorer sa lecture.
-- Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur).
-- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43)] Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.
+- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43)] Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seulement être asservi par un contacteur mais aussi alimenter directement les autres sources.
 
 ### Ajouts
 
+- Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur).
 - [[Discussion #44](https://github.com/pantaflex44/Tiquettes/discussions/44)] Ajout d'un nouveau pictogramme: 'Réseau électrique'.
 
 

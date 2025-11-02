@@ -32,10 +32,7 @@
                         "text": "Modification du rendu du schéma unifilaire pour améliorer sa lecture."
                     },
                     {
-                        "text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
-                    },
-                    {
-                        "text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
+                        "text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seulement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
                         "from": {
                             "name": "Discussion #43",
                             "link": "https://github.com/pantaflex44/Tiquettes/discussions/43"
@@ -43,6 +40,9 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
+                    },
                     {
                         "text": "Ajout d'un nouveau pictogramme: 'Réseau électrique'.",
                         "from": {
