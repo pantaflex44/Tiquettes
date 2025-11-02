@@ -330,6 +330,35 @@ Les autres informations sont dynamiquement adaptées à la fonction choisie pré
 La zone de démonstration affiche la représentation graphique (Symbole) et les caractéristiques techniques telles
 qu'elles seront incluses dans le schéma unifilaire global.
 
+#### L'asservissement
+
+Les propriétés d'un module propose de définir par quel contacteur un module peut être asservi.
+
+Prenons un exemple concret:
+
+Je souhaite alimenter une ampoule qui devra être commandée par un télérupteur. Donc nous allons ajouter un module de type disjoncteur 2A pour protéger la bobine du télérupteur, un disjoncteur 10A pour protéger le circuit d'éclairage qui sera piloté par les contacts du télérupteur, et le télérupteur, lui même.
+
+Voici un schéma résumé:
+
+![Asservissement simple](./docs/_schema_asserv_simple.png?raw=true)
+
+Le disjoncteur Q1 protège la bobine du télérupteur KC1. Le disjoncteur Q2 protège l'éclairage couloir, le télérupteur KC1 asservi le disjoncteur Q2.
+
+![Asservissement simple - Propriétés](./docs/_props_asserv_simple.png?raw=true)
+
+Vous remarquerez le choix du type d'asservissement. Dans notre exemple, le disjoncteur Q2 ne protège que le circuit 'Eclairage couloir', donc c'est un asservissement total.
+
+Autre exemple. Nous souhaitons que le disjoncteur Q2 protège aussi le circuit d'éclairage Salon.
+
+![Asservissement double](./docs/_schema_asserv_double.png?raw=true)
+
+Pour ce faire, dans les propriétés du disjoncteur Q2, nous remplaçons le libellé 'Couloir' par 'Salon' puis dans les propriétés du schéma, nous indiquons un asservissement partiel.
+
+![Asservissement double - Propriétés](./docs/_props_asserv_double.png?raw=true)
+
+Et voila! La magie de Tiquettes.fr à encore opérée. :-)
+
+
 ### Génération du schéma unifilaire
 
 La génération dépend à 100% des données que vous aurez renseignées lors de l'édition d'un module.
@@ -378,7 +407,7 @@ désactiver cette surveillance à tout moment.
 Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024) :
 
 - ```Étiquettes```: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
-- ```Schéma```: Le nombre de circuits associés à un interrupteur différentiel : 8.
+- ```Schéma```: Le nombre de circuits associés à un interrupteur différentiel : 8 (sauf pour le tertiaire).
 - ```Schéma```: Le nombre minimum d'interrupteurs différentiels : 2.
 - ```Schéma```: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et
   Bornes/Prises de recharge : Type A.
