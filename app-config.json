@@ -25,9 +25,15 @@
     },
     "changelog": {
         "2.2.6": {
-            "date": "2025-10-31",
+            "date": "2025-11-02",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Modification du rendu du schéma unifilaire pour améliorer sa lecture."
+                    },
+                    {
+                        "text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
+                    },
                     {
                         "text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
                         "from": {

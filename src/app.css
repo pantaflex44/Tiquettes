@@ -169,6 +169,88 @@ option[disabled] {
     color: #aaa;
 }
 
+
+
+
+.buttons_box {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 34px;
+}
+
+.buttons_box-button {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    column-gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    border-top: 1px solid darkgray;
+    border-bottom: 1px solid darkgray;
+    border-right: 1px solid darkgray;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: all 250ms ease;
+}
+
+.buttons_box-button:first-of-type {
+    border-left: 1px solid darkgray;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.buttons_box-button:last-of-type {
+    border-right: 1px solid darkgray;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.buttons_box-button:last-of-type {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.buttons_box-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.buttons_box-button:not(.selected):hover {
+    background-color: var(--secondary-color);
+}
+
+.buttons_box:not(.disabled) .buttons_box-button.selected {
+    background-color: var(--primary-color);
+}
+
+.buttons_box:not(.disabled) .buttons_box-button.selected img {
+    filter: invert();
+}
+
+.buttons_box:hover>* {
+    border-color: var(--primary-color);
+}
+
+.buttons_box.disabled {
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+.buttons_box.disabled .buttons_box-button {
+    filter: grayscale(1.0) opacity(0.5);
+}
+
+
+
+
+
 .button_group {
     display: flex;
     flex-direction: row;

@@ -196,5 +196,16 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true
+    },
+    "pc": {
+        "name": "Prise modulaire",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": true,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
     }
 }

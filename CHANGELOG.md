@@ -1,9 +1,11 @@
 # ChangeLog
 
-## [2.2.6] - 2025-10-31
+## [2.2.6] - 2025-11-02
 
 ### Corrections
 
+- Modification du rendu du schéma unifilaire pour améliorer sa lecture.
+- Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur).
 - [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43)] Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seuelement être asservi par un contacteur mais aussi alimenter directement les autres sources.
 
 ### Ajouts

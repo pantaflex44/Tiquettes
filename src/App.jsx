@@ -613,6 +613,9 @@ function App() {
                     // <=2.2.5 : add line property
                     if (!nm.line) nm = { ...nm, line: "" };
 
+                    // <=2.2.6 : add partialKc property
+                    if (!nm.partialKc) nm = { ...nm, partialKc: false };
+
                     return nm;
                 });
             });

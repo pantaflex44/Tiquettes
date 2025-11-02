@@ -257,7 +257,7 @@ export default function SchemaTab({
                         }
                     }
 
-                    if (Object.keys(data.childs).length > 8) add_error(id, `La norme NFC 15-100 autorise un maximum de 8 circuits par interrupteur différentiel.`);
+                    if (switchboard.projectType === 'R' && Object.keys(data.childs).length > 8) add_error(id, `La norme NFC 15-100 autorise un maximum de 8 circuits par interrupteur différentiel.`);
 
                     if (switchboard.projectType === 'R') {
                         const sensibility = getSensibility(data.module);
@@ -316,7 +316,7 @@ export default function SchemaTab({
         }
 
         return result;
-    }, [tree?.childs, switchboard.schemaMonitor, switchboard.projectType, switchboard.vref]);
+    }, [tree?.childs, switchboard]);
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     return (

@@ -40,6 +40,7 @@ import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
 import GroupColorSelector from "./GroupColorSelector.jsx";
 import EditorLineSelector from "./EditorLineSelector.jsx";
+import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -463,28 +464,17 @@ export default function Editor({
                                         }}>
                                             <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
                                                 par</label>
-                                            <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
-                                                value={ed.currentModule.kcId}
-                                                currentModuleId={ed.currentModule.id}
-                                                filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                onChange={(value) => {
-                                                    onUpdateModuleEditor({ kcId: value });
-                                                    console.log(value);
-                                                    if (value === '') onUpdateModuleEditor({ partialKc: false });
-                                                }} />
-                                        </div>
-                                        <div className="popup_row" style={{
-                                            '--left_column_size': '100px',
-                                            borderBottom: '1px solid lightgray',
-                                            paddingBottom: '1em',
-                                            marginBottom: '2em'
-                                        }}>
-                                            <label></label>
-                                            <div style={{
-                                                display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', columnGap: '0.5rem'
-                                            }}>
-                                                <input id={`editor_contacts_partial_${ed.currentModule.id.trim()}`} type="checkbox" disabled={ed.currentModule.kcId === ''} checked={ed.currentModule.partialKc} onChange={(e) => onUpdateModuleEditor({ partialKc: e.target.checked })} />
-                                                <label htmlFor={`editor_contacts_partial_${ed.currentModule.id.trim()}`} className={ed.currentModule.kcId === '' ? 'disabled' : ''} style={{ flex: 1 }} title="En cochant cette case, vous indiquez que ce module peut alimenter directement une ou plusieurs sources mais aussi être asservi par le contacteur désigné ci-dessus.&#013;&#013;En décochant cette case, vous indiquez que ce module est entièrement asservi par le contacteur désigné ci-dessus.">Asservissement partiel</label>
+                                            <div className="popup_row-flex">
+                                                <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.kcId}
+                                                    currentModuleId={ed.currentModule.id}
+                                                    filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                    onChange={(value) => {
+                                                        onUpdateModuleEditor({ kcId: value });
+                                                        if (value === '') onUpdateModuleEditor({ partialKc: false });
+                                                    }} />
+                                                <EditorContactAsservSelector id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`} disabled={ed.currentModule.kcId === ''}
+                                                    value={ed.currentModule.partialKc} onChange={(value) => onUpdateModuleEditor({ partialKc: value })} />
                                             </div>
                                         </div>
                                     </>}

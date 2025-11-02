@@ -72,7 +72,7 @@ function toFrenchDate(string $date, $withDate = true, $withHours = true): string
 class TiquettesPDF extends FPDF
 {
 
-    const VERSION = "1.5";
+    const VERSION = "1.6";
 
     protected $javascript;
     protected $n_js;
@@ -326,6 +326,64 @@ class TiquettesPDF extends FPDF
         $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
         $this->x = $this->lMargin;
         return '';
+    }
+
+    public function Circle($x, $y, $r, $style = 'D')
+    {
+        $this->Ellipse($x, $y, $r, $r, $style);
+    }
+
+    public function Ellipse($x, $y, $rx, $ry, $style = 'D')
+    {
+        if ($style == 'F')
+            $op = 'f';
+        elseif ($style == 'FD' || $style == 'DF')
+            $op = 'B';
+        else
+            $op = 'S';
+        $lx = 4 / 3 * (M_SQRT2 - 1) * $rx;
+        $ly = 4 / 3 * (M_SQRT2 - 1) * $ry;
+        $k = $this->k;
+        $h = $this->h;
+        $this->_out(sprintf(
+            '%.2F %.2F m %.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x + $rx) * $k,
+            ($h - $y) * $k,
+            ($x + $rx) * $k,
+            ($h - ($y - $ly)) * $k,
+            ($x + $lx) * $k,
+            ($h - ($y - $ry)) * $k,
+            $x * $k,
+            ($h - ($y - $ry)) * $k
+        ));
+        $this->_out(sprintf(
+            '%.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x - $lx) * $k,
+            ($h - ($y - $ry)) * $k,
+            ($x - $rx) * $k,
+            ($h - ($y - $ly)) * $k,
+            ($x - $rx) * $k,
+            ($h - $y) * $k
+        ));
+        $this->_out(sprintf(
+            '%.2F %.2F %.2F %.2F %.2F %.2F c',
+            ($x - $rx) * $k,
+            ($h - ($y + $ly)) * $k,
+            ($x - $lx) * $k,
+            ($h - ($y + $ry)) * $k,
+            $x * $k,
+            ($h - ($y + $ry)) * $k
+        ));
+        $this->_out(sprintf(
+            '%.2F %.2F %.2F %.2F %.2F %.2F c %s',
+            ($x + $lx) * $k,
+            ($h - ($y + $ry)) * $k,
+            ($x + $rx) * $k,
+            ($h - ($y + $ly)) * $k,
+            ($x + $rx) * $k,
+            ($h - $y) * $k,
+            $op
+        ));
     }
 
     public function IncludeJS($script)
@@ -996,9 +1054,9 @@ class TiquettesPDF extends FPDF
         if ($switchboard->withGroundLine) {
             $gridPosY = 30;
 
-            $this->SetDash(1, 1);
+            //$this->SetDash(1, 1);
             $this->SetLineWidth($this->schemaLineWidth);
-            $this->SetDrawColor(200, 200, 200);
+            $this->SetDrawColor(100, 100, 100);
             $this->Line($this->grid[$this->gridOrientation]['left'], $this->grid[$this->gridOrientation]['bottom'] - $gridPosY, $this->grid[$this->gridOrientation]['right'], $this->grid[$this->gridOrientation]['bottom'] - $gridPosY);
             $this->SetDash();
 
@@ -1170,8 +1228,19 @@ class TiquettesPDF extends FPDF
         }
 
         if ($this->getDirectChildsCount($module) === 0) {
+            //$this->SetFillColor(100, 100, 100);
+            //$this->Rect($centerX - ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'], $this->schemaLineWidth, $this->grid[$this->gridOrientation]['bottom'] - ($currentPosY + $this->schemaSymbolSize['h']) - 20, 'F');
+
+            $plusTop = is_array($this->grid) ? $this->grid[$this->gridOrientation]['step'] : 0;
+
+            $this->SetDrawColor(125, 125, 125);
+            $this->SetDash(1, 1);
+            $this->Line(($centerX - ($this->schemaLineWidth / 2)) + ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'] + $plusTop, ($centerX - ($this->schemaLineWidth / 2)) + ($this->schemaLineWidth / 2), $this->grid[$this->gridOrientation]['bottom'] - 20 - $plusTop);
+            $this->SetDash();
+            //$this->Circle(($centerX - ($this->schemaLineWidth / 2)) + ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'] + $plusTop, 0.75, 'D');
+            $this->Line((($centerX - ($this->schemaLineWidth / 2)) + ($this->schemaLineWidth / 2)) - 2, $currentPosY + $this->schemaSymbolSize['h'] + $plusTop, (($centerX - ($this->schemaLineWidth / 2)) + ($this->schemaLineWidth / 2)) + 2, $currentPosY + $this->schemaSymbolSize['h'] + $plusTop);
+
             $this->SetFillColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
-            $this->Rect($centerX - ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'], $this->schemaLineWidth, $this->grid[$this->gridOrientation]['bottom'] - ($currentPosY + $this->schemaSymbolSize['h']) - 20, 'F');
 
             if (isset($module->pole) && is_string($module->pole)) {
                 $pole = $this->getPoleSymbol($module->pole);
