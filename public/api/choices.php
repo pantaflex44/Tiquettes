@@ -35,15 +35,21 @@ if (STATS_ALLOWED && STATS_CHOICE_ALLOWED) {
     }
 
     if ($k !== '') {
-        $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE struct = ? AND name = ?");
-        $stmt->execute([STATS_STRUCTURE, $k]);
-        $found = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (is_array($found) && isset($found['counter'])) {
-            $stmt = DB->prepare("UPDATE " . $tableName . " SET counter = ? WHERE struct = ? AND name = ?");
-            $stmt->execute([$found['counter'] + 1, STATS_STRUCTURE, $k]);
-        } else {
-            $stmt = DB->prepare("INSERT INTO " . $tableName . " (struct, name, counter) VALUES(?, ?, 1)");
-            $stmt->execute([STATS_STRUCTURE, $k]);
+        foreach (explode('|', $k) as $ki) {
+            $key = trim($ki);
+            if ($key === '')
+                continue;
+
+            $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE struct = ? AND name = ?");
+            $stmt->execute([STATS_STRUCTURE, $key]);
+            $found = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if (is_array($found) && isset($found['counter'])) {
+                $stmt = DB->prepare("UPDATE " . $tableName . " SET counter = ? WHERE struct = ? AND name = ?");
+                $stmt->execute([$found['counter'] + 1, STATS_STRUCTURE, $key]);
+            } else {
+                $stmt = DB->prepare("INSERT INTO " . $tableName . " (struct, name, counter) VALUES(?, ?, 1)");
+                $stmt->execute([STATS_STRUCTURE, $key]);
+            }
         }
     }
 }

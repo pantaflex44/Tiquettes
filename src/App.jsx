@@ -264,13 +264,17 @@ function App() {
         document.title = t;
     };
 
-    const sendChoice = (choiceName, key, unique = false) => {
-        if (key.trim() === '') return;
+    const sendChoice = (choiceName, keys = [], unique = false) => {
+        const ks = keyx.map(k => is_string(k) ? k.trim() : null).filter(k => k !== null);
+
+        if (ks.length === 0) return;
+
         if (unique && !uniqueChoices.includes(choiceName)) {
             setUniqueChoices(old => ([...old, choiceName]));
-            choices(choiceName, key);
+            choices(choiceName, ks);
         }
-        if (!unique) choices(choiceName, key);
+
+        if (!unique) choices(choiceName, ks);
     }
 
     const scrollToProject = () => {
