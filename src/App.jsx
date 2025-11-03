@@ -731,7 +731,7 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        sendChoice('theme', switchboard.theme.title, true);
+        sendChoice('theme', [switchboard.theme.title], true);
 
     };
 
@@ -784,13 +784,14 @@ function App() {
             form = null;
 
             action('print');
-            sendChoice('theme', switchboard.theme.title, true);
+            sendChoice('theme', [switchboard.theme.title], true);
 
-            sendChoice('print', 'total');
-            if (po.firstPage) sendChoice('print', 'firstPage');
-            if (po.labels) sendChoice('print', 'labels');
-            if (po.summary) sendChoice('print', 'summary');
-            if (po.schema) sendChoice('print', 'schema'); 
+            $sc = ['total'];
+            if (po.firstPage) array_push($sc, 'firstPage');
+            if (po.labels) array_push($sc, 'labels');
+            if (po.summary) array_push($sc, 'summary');
+            if (po.schema) array_push($sc, 'schema');
+            sendChoice('print', $sc);
 
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
             const link = document.createElement("a");
