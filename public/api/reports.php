@@ -55,10 +55,12 @@ $stats = [
         'resolutions' => array_reduce(array_map(fn($k, $v) => [$k, $v['text']], array_keys(STATS_ALLOWED_RESOLUTIONS), array_values(STATS_ALLOWED_RESOLUTIONS)), function ($result, $item) {
             $result[$item[0]] = $item[1];
             return $result;
-        }, [])
+        }, []),
+        'choices' => STATS_ALLOWED_CHOICES,
     ],
     'visits' => [],
     'actions' => [],
+    'choices' => []
 ];
 
 
@@ -176,6 +178,23 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                 }
             }
         }
+
+        foreach (STATS_ALLOWED_CHOICES_FULL as $choiceItem) {
+            $stats['defn']['choices'][$choiceItem['key']] = $choiceItem['description'];
+
+            $tableName = 'stats_choice_' . $choiceItem['key'];
+            $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
+            $stmt->execute([MYSQL_BASE, $tableName]);
+            $count = $stmt->fetchColumn(0);
+            if ($count === 1) {
+                $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE struct = ? ORDER BY counter DESC");
+                $stmt->execute([$structItem['key']]);
+                $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                foreach ($founds as $found) {
+                    $stats['choices'][$structItem['key']][$choiceItem['key']][$found['name']] = $found['counter'];
+                }
+            }
+        }
     }
 
 
@@ -224,6 +243,8 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
             }
         }
     }
+
+
 
 }
 

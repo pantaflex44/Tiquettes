@@ -58,7 +58,7 @@ import SchemaTab from "./SchemaTab.jsx";
 import WelcomePopup from "./WelcomePopup.jsx";
 import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 
-import { action, visit } from "../public/api/stats.js";
+import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
 
@@ -82,6 +82,7 @@ function App() {
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
+    const [uniqueChoices, setUniqueChoices] = useState([]);
 
     const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
 
@@ -262,6 +263,15 @@ function App() {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
         document.title = t;
     };
+
+    const sendChoice = (choiceName, key, unique = false) => {
+        if (key.trim() === '') return;
+        if (unique && !uniqueChoices.includes(choiceName)) {
+            setUniqueChoices(old => ([...old, choiceName]));
+            choices(choiceName, key);
+        }
+        if (!unique) choices(choiceName, key);
+    }
 
     const scrollToProject = () => {
         projectRef.current && projectRef.current.scrollIntoView({
@@ -555,6 +565,7 @@ function App() {
 
         setClipboard(null);
         setClipboardMode(null);
+        setUniqueChoices([]);
         setPrintOptions({ ...defaultPrintOptions });
         setDocumentTitle(name);
         setTab(1);
@@ -567,6 +578,7 @@ function App() {
         importRef.current.value = "";
 
         setClipboardMode(null);
+        setUniqueChoices([]);
         setDocumentTitle(defaultProjectName);
         setPrintOptions({ ...defaultPrintOptions });
         setTheme(defaultTheme);
@@ -659,6 +671,7 @@ function App() {
 
             setClipboard(null);
             setClipboardMode(null);
+            setUniqueChoices([]);
             setPrintOptions({ ...defaultPrintOptions });
             setTab(1);
             setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
@@ -714,6 +727,8 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
+        sendChoice('theme', switchboard.theme.title, true);
+
     };
 
     const printProject = () => {
@@ -723,7 +738,6 @@ function App() {
         if (printOptions.labels) types.push('print_labels');
         if (printOptions.schema) types.push('print_schema');
         if (printOptions.summary) types.push('print_summary');
-
     };
 
     const toPdf = (withConfirm = true, printOptionsEx = null) => {
@@ -766,6 +780,13 @@ function App() {
             form = null;
 
             action('print');
+            sendChoice('theme', switchboard.theme.title, true);
+
+            sendChoice('print', 'total');
+            if (po.firstPage) sendChoice('print', 'firstPage');
+            if (po.labels) sendChoice('print', 'labels');
+            if (po.summary) sendChoice('print', 'summary');
+            if (po.schema) sendChoice('print', 'schema'); 
 
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
             const link = document.createElement("a");

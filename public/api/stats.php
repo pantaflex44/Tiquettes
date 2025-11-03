@@ -56,6 +56,15 @@ $statsAction = isset($_GET['a']) ? strtolower(rawurldecode(trim($_GET['a']))) : 
 define('STATS_ACTION_ALLOWED', in_array($statsAction, STATS_ALLOWED_ACTIONS, true));
 define('STATS_ACTION', STATS_ACTION_ALLOWED ? $statsAction : '');
 
+$stmt = DB->prepare("SELECT * FROM stats_allowed_choices");
+$stmt->execute();
+$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+define('STATS_ALLOWED_CHOICES_FULL', $result);
+define('STATS_ALLOWED_CHOICES', array_map(fn($i) => $i['key'], $result));
+$statsChoice = isset($_GET['c']) ? strtolower(rawurldecode(trim($_GET['c']))) : '';
+define('STATS_CHOICE_ALLOWED', in_array($statsChoice, STATS_ALLOWED_CHOICES, true));
+define('STATS_CHOICE', STATS_CHOICE_ALLOWED ? $statsChoice : '');
+
 define('STATS_ALLOWED_PERIODS', [
     '-1d' => ['start' => dateTimeFrom('yesterday'), 'end' => dateTimeFrom('yesterday'), 'text' => "Hier"],
     'd' => ['start' => dateTimeFrom('today'), 'end' => dateTimeFrom('today'), 'text' => "Aujourd'hui"],
