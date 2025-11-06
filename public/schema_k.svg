@@ -2,6 +2,6 @@
     <path style="fill:#000;stroke-width:.207275" d="M9.131 0h.265v6.604h-.265z"/>
     <path style="fill:#000;stroke-width:.235271;stroke-dasharray:none" d="M9.092 14.528h.265v11.944h-.265z"/>
     <path style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:.235727;stroke-opacity:1" transform="matrix(.89064 -.45471 .5467 .83733 0 0)" d="M-.398 8.716h.257v8.508h-.257z"/>
-    <circle style="fill:none;fill-opacity:1;stroke:#020202;stroke-width:.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" cx="8.463" cy="6.611" r=".797"/>
+    <circle style="fill:#ffffff00;fill-opacity:0;stroke:#020202;stroke-width:.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" cx="8.463" cy="6.611" r=".797"/>
     <path style="fill:#000;stroke:#000;stroke-width:.352777;stroke-dasharray:1.05833,1.05833" d="M9.001 10.96h-6.89"/>
 </svg>

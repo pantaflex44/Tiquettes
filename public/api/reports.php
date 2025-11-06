@@ -45,6 +45,8 @@ $resolutionDetails = [
 ];
 
 
+$gf = explode('|', isset($_GET['gf']) ? strtolower(trim($_GET['gf'])) : 'visits|actions|choices');
+
 
 $stats = [
     'datetime' => NOW,
@@ -57,12 +59,7 @@ $stats = [
             return $result;
         }, []),
     ],
-    'visits' => [],
-    'actions' => [],
-    'choices' => []
 ];
-
-
 
 
 foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
@@ -71,174 +68,181 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
     $stmt = DB->prepare("SELECT * FROM stats_visits_details WHERE date >= ? AND date <= ? ORDER BY date ASC");
     $stmt->execute([$periodDetails['start']->format(format: 'Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
     $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    foreach ($founds as $found) {
-        $date = $found['date'];
-        $id = $found['visit_id'];
-        $counters = json_decode($found['counters'], true);
 
-        $stmt = DB->prepare("SELECT * FROM stats_visits WHERE id = ?");
-        $stmt->execute([$id]);
-        $found2 = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (!is_array($found2) || $found2['struct'] !== $structItem['key'])
-            continue;
+    if (in_array('visits', $gf)) {
+        foreach ($founds as $found) {
+            $date = $found['date'];
+            $id = $found['visit_id'];
+            $counters = json_decode($found['counters'], true);
 
-        $ua = trim($found2['ua'] ?? '');
-        $rfr = trim($found2['rfr'] ?? '');
-        $url = trim($found2['url'] ?? '');
-        $ip = trim($found2['ip'] ?? '');
-        $type = trim($found2['type'] ?? '');
-        $country = trim($found2['country'] ?? '');
-        $regionName = trim($found2['regionName'] ?? '');
-        $city = trim($found2['city'] ?? '');
-        $timezone = trim($found2['timezone'] ?? '');
+            $stmt = DB->prepare("SELECT * FROM stats_visits WHERE id = ?");
+            $stmt->execute([$id]);
+            $found2 = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if (!is_array($found2) || $found2['struct'] !== $structItem['key'])
+                continue;
 
-        if ($ua !== '') {
-            if (!isset($stats['visits'][$structItem['key']]['supports']['mobile']))
-                $stats['visits'][$structItem['key']]['supports']['mobile'] = 0;
-            if (!isset($stats['visits'][$structItem['key']]['supports']['desktop']))
-                $stats['visits'][$structItem['key']]['supports']['desktop'] = 0;
-            if (stripos(strtolower($ua), 'mobile') !== false || stripos(strtolower($ua), 'android') !== false) {
-                $stats['visits'][$structItem['key']]['supports']['mobile'] += 1;
-            } else {
-                $stats['visits'][$structItem['key']]['supports']['desktop'] += 1;
-            }
+            $ua = trim($found2['ua'] ?? '');
+            $rfr = trim($found2['rfr'] ?? '');
+            $url = trim($found2['url'] ?? '');
+            $ip = trim($found2['ip'] ?? '');
+            $type = trim($found2['type'] ?? '');
+            $country = trim($found2['country'] ?? '');
+            $regionName = trim($found2['regionName'] ?? '');
+            $city = trim($found2['city'] ?? '');
+            $timezone = trim($found2['timezone'] ?? '');
 
-            $ua = get_browser($ua, true);
-            if ($ua !== false) {
-                $browser = browserTraductor($ua['browser']);
-                if (!isset($stats['visits'][$structItem['key']]['browsers'][$browser]))
-                    $stats['visits'][$structItem['key']]['browsers'][$browser] = 0;
-                $stats['visits'][$structItem['key']]['browsers'][$browser] += 1;
-
-                $platform = platformTraductor($ua['platform']);
-                if (!isset($stats['visits'][$structItem['key']]['platforms'][$platform]))
-                    $stats['visits'][$structItem['key']]['platforms'][$platform] = 0;
-                $stats['visits'][$structItem['key']]['platforms'][$platform] += 1;
-            }
-        }
-
-        $query = parse_url($url, PHP_URL_QUERY);
-        if (is_string($query)) {
-            $urlQuery = explode('&', $query);
-            foreach ($urlQuery as $query) {
-                $query = trim($query);
-                if (stripos(strtolower($query), 'source=') !== false) {
-                    $parsed = explode('=', $query);
-                    $source = $parsed[1];
-                    if (!isset($stats['visits'][$structItem['key']]['sources'][$source]))
-                        $stats['visits'][$structItem['key']]['sources'][$source] = 0;
-                    $stats['visits'][$structItem['key']]['sources'][$source] += 1;
-                }
-            }
-        }
-
-        if ($rfr !== '') {
-            if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
-                if (!isset($stats['visits'][$structItem['key']]['sources'][$rfr]))
-                    $stats['visits'][$structItem['key']]['sources'][$rfr] = 0;
-                $stats['visits'][$structItem['key']]['sources'][$rfr] += 1;
-            }
-        }
-
-        $counter = array_sum(array_values($counters));
-
-        if (!isset($stats['visits'][$structItem['key']]['total']))
-            $stats['visits'][$structItem['key']]['total'] = 0;
-        $stats['visits'][$structItem['key']]['total'] += $counter;
-
-        foreach (['type', 'url', 'country', 'regionName', 'city', 'timezone'] as $k) {
-            $value = trim($$k);
-            if ($value === '')
-                $value = 'Autres';
-
-            if (!isset($stats['visits'][$structItem['key']][$k][$value]['total']))
-                $stats['visits'][$structItem['key']][$k][$value]['total'] = 0;
-            $stats['visits'][$structItem['key']][$k][$value]['total'] += $counter;
-
-            if ($resolutionDetails['key'] === 'd') {
-                $interval = \DateInterval::createFromDateString('1 day');
-                $period = new \DatePeriod($periodDetails['start'], $interval, (clone $periodDetails['end'])->modify('+1 day'));
-                foreach ($period as $dt) {
-                    if (!isset($stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')]))
-                        $stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')] = 0;
+            if ($ua !== '') {
+                if (!isset($stats['visits'][$structItem['key']]['supports']['mobile']))
+                    $stats['visits'][$structItem['key']]['supports']['mobile'] = 0;
+                if (!isset($stats['visits'][$structItem['key']]['supports']['desktop']))
+                    $stats['visits'][$structItem['key']]['supports']['desktop'] = 0;
+                if (stripos(strtolower($ua), 'mobile') !== false || stripos(strtolower($ua), 'android') !== false) {
+                    $stats['visits'][$structItem['key']]['supports']['mobile'] += 1;
+                } else {
+                    $stats['visits'][$structItem['key']]['supports']['desktop'] += 1;
                 }
 
-                $stats['visits'][$structItem['key']][$k][$value][$date] += $counter;
+                $ua = get_browser($ua, true);
+                if ($ua !== false) {
+                    $browser = browserTraductor($ua['browser']);
+                    if (!isset($stats['visits'][$structItem['key']]['browsers'][$browser]))
+                        $stats['visits'][$structItem['key']]['browsers'][$browser] = 0;
+                    $stats['visits'][$structItem['key']]['browsers'][$browser] += 1;
+
+                    $platform = platformTraductor($ua['platform']);
+                    if (!isset($stats['visits'][$structItem['key']]['platforms'][$platform]))
+                        $stats['visits'][$structItem['key']]['platforms'][$platform] = 0;
+                    $stats['visits'][$structItem['key']]['platforms'][$platform] += 1;
+                }
             }
 
-            if ($resolutionDetails['key'] === 'h') {
-                for ($h = 0; $h <= 23; $h++) {
-                    if (!isset($stats['visits'][$structItem['key']][$k][$value][$h]))
-                        $stats['visits'][$structItem['key']][$k][$value][$h] = 0;
-                }
-
-                foreach ($counters as $hr => $cnt) {
-                    $stats['visits'][$structItem['key']][$k][$value][$hr] += $cnt;
+            $query = parse_url($url, PHP_URL_QUERY);
+            if (is_string($query)) {
+                $urlQuery = explode('&', $query);
+                foreach ($urlQuery as $query) {
+                    $query = trim($query);
+                    if (stripos(strtolower($query), 'source=') !== false) {
+                        $parsed = explode('=', $query);
+                        $source = $parsed[1];
+                        if (!isset($stats['visits'][$structItem['key']]['sources'][$source]))
+                            $stats['visits'][$structItem['key']]['sources'][$source] = 0;
+                        $stats['visits'][$structItem['key']]['sources'][$source] += 1;
+                    }
                 }
             }
-        }
 
-    }
+            if ($rfr !== '') {
+                if (stripos(strtolower($rfr), 'tiquettes.fr') === false) {
+                    if (!isset($stats['visits'][$structItem['key']]['sources'][$rfr]))
+                        $stats['visits'][$structItem['key']]['sources'][$rfr] = 0;
+                    $stats['visits'][$structItem['key']]['sources'][$rfr] += 1;
+                }
+            }
 
-    foreach (STATS_ALLOWED_ACTIONS_FULL as $actionItem) {
-        $stats['defn']['actions'][$actionItem['key']] = $actionItem['description'];
+            $counter = array_sum(array_values($counters));
 
-        $tableName = 'stats_action_' . $actionItem['key'];
-        $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
-        $stmt->execute([MYSQL_BASE, $tableName]);
-        $count = $stmt->fetchColumn(0);
-        if ($count === 1) {
-            $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE date >= ? AND date <= ? ORDER BY date ASC");
-            $stmt->execute([$periodDetails['start']->format('Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
-            $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            foreach ($founds as $found) {
-                $date = $found['date'];
+            if (!isset($stats['visits'][$structItem['key']]['total']))
+                $stats['visits'][$structItem['key']]['total'] = 0;
+            $stats['visits'][$structItem['key']]['total'] += $counter;
 
-                $counters = json_decode($found['counters'], true);
-                $counter = array_sum(array_values($counters));
+            foreach (['type', 'url', 'country', 'regionName', 'city', 'timezone'] as $k) {
+                $value = trim($$k);
+                if ($value === '')
+                    $value = 'Autres';
 
-                if (!isset($stats['actions'][$actionItem['key']]['total']))
-                    $stats['actions'][$actionItem['key']]['total'] = 0;
-                $stats['actions'][$actionItem['key']]['total'] += $counter;
+                if (!isset($stats['visits'][$structItem['key']][$k][$value]['total']))
+                    $stats['visits'][$structItem['key']][$k][$value]['total'] = 0;
+                $stats['visits'][$structItem['key']][$k][$value]['total'] += $counter;
 
                 if ($resolutionDetails['key'] === 'd') {
                     $interval = \DateInterval::createFromDateString('1 day');
                     $period = new \DatePeriod($periodDetails['start'], $interval, (clone $periodDetails['end'])->modify('+1 day'));
                     foreach ($period as $dt) {
-                        if (!isset($stats['actions'][$actionItem['key']][$dt->format('Y-m-d')]))
-                            $stats['actions'][$actionItem['key']][$dt->format('Y-m-d')] = 0;
+                        if (!isset($stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')]))
+                            $stats['visits'][$structItem['key']][$k][$value][$dt->format('Y-m-d')] = 0;
                     }
 
-                    $stats['actions'][$actionItem['key']][$date] += $counter;
+                    $stats['visits'][$structItem['key']][$k][$value][$date] += $counter;
                 }
 
                 if ($resolutionDetails['key'] === 'h') {
                     for ($h = 0; $h <= 23; $h++) {
-                        if (!isset($stats['actions'][$actionItem['key']][$h]))
-                            $stats['actions'][$actionItem['key']][$h] = 0;
+                        if (!isset($stats['visits'][$structItem['key']][$k][$value][$h]))
+                            $stats['visits'][$structItem['key']][$k][$value][$h] = 0;
                     }
 
                     foreach ($counters as $hr => $cnt) {
-                        $stats['actions'][$actionItem['key']][$hr] += $cnt;
+                        $stats['visits'][$structItem['key']][$k][$value][$hr] += $cnt;
+                    }
+                }
+            }
+
+        }
+    }
+
+    if (in_array('actions', $gf)) {
+        foreach (STATS_ALLOWED_ACTIONS_FULL as $actionItem) {
+            $stats['defn']['actions'][$actionItem['key']] = $actionItem['description'];
+
+            $tableName = 'stats_action_' . $actionItem['key'];
+            $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
+            $stmt->execute([MYSQL_BASE, $tableName]);
+            $count = $stmt->fetchColumn(0);
+            if ($count === 1) {
+                $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE date >= ? AND date <= ? ORDER BY date ASC");
+                $stmt->execute([$periodDetails['start']->format('Y-m-d'), $periodDetails['end']->format('Y-m-d')]);
+                $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                foreach ($founds as $found) {
+                    $date = $found['date'];
+
+                    $counters = json_decode($found['counters'], true);
+                    $counter = array_sum(array_values($counters));
+
+                    if (!isset($stats['actions'][$actionItem['key']]['total']))
+                        $stats['actions'][$actionItem['key']]['total'] = 0;
+                    $stats['actions'][$actionItem['key']]['total'] += $counter;
+
+                    if ($resolutionDetails['key'] === 'd') {
+                        $interval = \DateInterval::createFromDateString('1 day');
+                        $period = new \DatePeriod($periodDetails['start'], $interval, (clone $periodDetails['end'])->modify('+1 day'));
+                        foreach ($period as $dt) {
+                            if (!isset($stats['actions'][$actionItem['key']][$dt->format('Y-m-d')]))
+                                $stats['actions'][$actionItem['key']][$dt->format('Y-m-d')] = 0;
+                        }
+
+                        $stats['actions'][$actionItem['key']][$date] += $counter;
+                    }
+
+                    if ($resolutionDetails['key'] === 'h') {
+                        for ($h = 0; $h <= 23; $h++) {
+                            if (!isset($stats['actions'][$actionItem['key']][$h]))
+                                $stats['actions'][$actionItem['key']][$h] = 0;
+                        }
+
+                        foreach ($counters as $hr => $cnt) {
+                            $stats['actions'][$actionItem['key']][$hr] += $cnt;
+                        }
                     }
                 }
             }
         }
     }
 
-    foreach (STATS_ALLOWED_CHOICES_FULL as $choiceItem) {
-        $stats['defn']['choices'][$choiceItem['key']] = $choiceItem['description'];
+    if (in_array('choices', $gf)) {
+        foreach (STATS_ALLOWED_CHOICES_FULL as $choiceItem) {
+            $stats['defn']['choices'][$choiceItem['key']] = $choiceItem['description'];
 
-        $tableName = 'stats_choice_' . $choiceItem['key'];
-        $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
-        $stmt->execute([MYSQL_BASE, $tableName]);
-        $count = $stmt->fetchColumn(0);
-        if ($count === 1) {
-            $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE struct = ? ORDER BY counter DESC");
-            $stmt->execute([$structItem['key']]);
-            $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            foreach ($founds as $found) {
-                $stats['choices'][$structItem['key']][$choiceItem['key']][$found['name']] = $found['counter'];
+            $tableName = 'stats_choice_' . $choiceItem['key'];
+            $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
+            $stmt->execute([MYSQL_BASE, $tableName]);
+            $count = $stmt->fetchColumn(0);
+            if ($count === 1) {
+                $stmt = DB->prepare("SELECT * FROM " . $tableName . " WHERE struct = ? ORDER BY counter DESC");
+                $stmt->execute([$structItem['key']]);
+                $founds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                foreach ($founds as $found) {
+                    $stats['choices'][$structItem['key']][$choiceItem['key']][$found['name']] = $found['counter'];
+                }
             }
         }
     }

@@ -65,6 +65,17 @@
         "supportContacts": true,
         "selectable": true
     },
+    "trf": {
+        "name": "Transformateur",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true
+    },
     "i": {
         "name": "Interrupteur",
         "hasType": false,
