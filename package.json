@@ -44,7 +44,7 @@
         "gitmerge:main": "func() { git checkout main && git merge dev -m \"Merge branch dev\" && git push origin main && git checkout dev; }; func"
     },
     "dependencies": {
-        "@vite-pwa/assets-generator": "^1.0.1",
+        "@vite-pwa/assets-generator": "^1.0.2",
         "compare-versions": "^6.1.1",
         "cpx": "^1.5.0",
         "cpx2": "^8.0.0",
@@ -53,22 +53,22 @@
         "react-color": "^2.19.3",
         "react-dom": "^19.2.0",
         "sanitize-filename": "^1.6.3",
-        "sharp": "^0.34.4",
+        "sharp": "^0.34.5",
         "use-debounce": "^10.0.6",
-        "vite-plugin-pwa": "^1.0.3"
+        "vite-plugin-pwa": "^1.1.0"
     },
     "devDependencies": {
-        "@types/react": "^19.2.0",
-        "@types/react-dom": "^19.2.0",
-        "@vitejs/plugin-react": "^5.0.4",
+        "@types/react": "^19.2.2",
+        "@types/react-dom": "^19.2.2",
+        "@vitejs/plugin-react": "^5.1.0",
         "concurrently": "^9.2.1",
         "cross-env": "^10.1.0",
-        "eslint": "^9.37.0",
+        "eslint": "^9.39.1",
         "eslint-plugin-react": "^7.37.5",
-        "eslint-plugin-react-hooks": "^6.1.1",
-        "eslint-plugin-react-refresh": "^0.4.23",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.24",
         "react-error-overlay": "^6.1.0",
-        "vite": "^7.1.9",
+        "vite": "^7.2.1",
         "vite-plugin-open-graph": "^2.0.6",
         "vite-plugin-sitemap": "^0.8.2"
     }
