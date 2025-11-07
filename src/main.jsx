@@ -71,8 +71,11 @@ export default function Main() {
         fetch(`./infos.json?t=${Date.now()}`, {
             method: 'GET'
         })
-            .then((response) => response.json)
-            .then((json) => console.log(typeof json, json))
+            .then((response) => response.json())
+            .then((json) => {
+                const currentVersion = json.version ?? "0.0.0";
+                console.log(currentVersion)
+            })
             .catch(error => console.error("Unable to verify app version : ", error));
 
     }, []);
