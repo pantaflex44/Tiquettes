@@ -68,7 +68,7 @@ export default function Main() {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
 
-        fetch(`../infos.json?t=${Date.now()}`, {
+        fetch(`./infos.json?t=${Date.now()}`, {
             method: 'GET'
         })
             .then((response) => response.json)
