@@ -74,7 +74,10 @@ export default function Main() {
             .then((response) => response.json())
             .then((json) => {
                 const currentVersion = json.version ?? "0.0.0";
-                console.log(currentVersion)
+                const localVersion = pkg.version;
+                if (semver.gt(currentVersion, localVersion)) {
+                    console.log("New version availlable ! Please 'force reload' your browser to use this new version.");
+                }
             })
             .catch(error => console.error("Unable to verify app version : ", error));
 
