@@ -298,12 +298,6 @@ export default function Editor({
                                     <IconSelector value={ed.currentModule.icon} onChange={(selectedIcon, selected) => {
                                         if (!ed.currentModule.icon || (selectedIcon && ed.currentModule.icon !== selectedIcon)) {
                                             onUpdateModuleEditor({ icon: selectedIcon, coef: selected?.coef ?? 0.5 })
-                                            /*
-                                            if (selected?.func && !ed.currentModule.func) onUpdateModuleEditor({func: selected?.func});
-                                            if (selected?.crb && !ed.currentModule.crb) onUpdateModuleEditor({crb: selected?.crb});
-                                            if (selected?.current && !ed.currentModule.current) onUpdateModuleEditor({current: selected?.current});
-                                            if (selected?.wire && !ed.currentModule.wire) onUpdateModuleEditor({wire: selected?.wire});
-                                             */
 
                                             if (selected?.func && ed.currentModule.func === "") onUpdateModuleEditor({ func: selected?.func });
                                             if (selected?.crb && ed.currentModule.crb === "") onUpdateModuleEditor({ crb: selected?.crb });
@@ -321,7 +315,7 @@ export default function Editor({
 
                                         }
                                         if (!selected || !selectedIcon) {
-                                            onUpdateModuleEditor({ icon: null });
+                                            onUpdateModuleEditor({ icon: null, modtype: '' });
                                         }
                                     }}
                                         autoFocus={!!(ed?.focusedInputName === "icon")} />
@@ -397,22 +391,8 @@ export default function Editor({
                                     <Module
                                         isDemo={true}
                                         item={{
-                                            id: ed.currentModule.id,
-                                            icon: ed.currentModule.icon,
-                                            text: ed.currentModule.text,
-                                            desc: ed.currentModule.desc,
-                                            parentId: ed.currentModule.parentId,
-                                            func: ed.currentModule.func,
-                                            type: ed.currentModule.type,
-                                            current: ed.currentModule.current,
-                                            grp: ed.currentModule.grp,
-                                            crb: ed.currentModule.crb,
-                                            sensibility: ed.currentModule.sensibility,
-                                            pole: ed.currentModule.pole,
-                                            wire: ed.currentModule.wire,
-                                            free: false,
-                                            span: ed.currentModule.span,
-                                            modtype: ed.currentModule.modtype,
+                                            ...ed.currentModule,
+                                            free: false
                                         }}
                                         modulePosition={1}
                                         rowPosition={1}

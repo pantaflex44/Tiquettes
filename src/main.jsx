@@ -48,7 +48,6 @@ export default function Main() {
 
         const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
         const pathes = ['app', 'dev'];
-        const params = ['enjoy', 'new', 'test'];
 
         const origins = [];
         domains.forEach(domain => {
@@ -57,9 +56,6 @@ export default function Main() {
             pathes.forEach(path => {
                 const k = `${o}/${path}/`;
                 origins.push(k);
-                /*params.forEach(param => {
-                    origins.push(`${k}?${param}`)
-                });*/
             });
         });
 
@@ -70,6 +66,11 @@ export default function Main() {
         if (import.meta.env.VITE_APP_MODE !== "development") {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
+
+        import(`./infos.json?t=${(Date.now()).toString()}`, { with: { type: "json" } })
+            .then(doc => console.log(doc))
+            .catch(error => console.error("Unable to verify new version of this app : ", error));
+
     }, []);
 
     return (
