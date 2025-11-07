@@ -53,6 +53,7 @@
         "react-color": "^2.19.3",
         "react-dom": "^19.2.0",
         "sanitize-filename": "^1.6.3",
+        "semver": "^7.7.3",
         "sharp": "^0.34.5",
         "use-debounce": "^10.0.6",
         "vite-plugin-pwa": "^1.1.0"

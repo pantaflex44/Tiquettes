@@ -18,6 +18,7 @@
 
 import { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
+import * as semver from 'semver';
 
 import App from './App.jsx'
 
@@ -67,10 +68,12 @@ export default function Main() {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
 
-        const nowString = (Date.now()).toString();
-        import(`../infos.json?t=${nowString}`, { with: { type: "json" } })
-            .then(doc => console.log(doc))
-            .catch(error => console.error("Unable to verify new version of this app : ", error));
+        fetch(`../infos.json?t=${Date.now()}`, {
+            method: 'GET'
+        })
+            .then((response) => response.json)
+            .then((json) => console.log(typeof json, json))
+            .catch(error => console.error("Unable to verify app version : ", error));
 
     }, []);
 
