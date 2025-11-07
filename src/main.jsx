@@ -67,7 +67,8 @@ export default function Main() {
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
 
-        import(`./infos.json?t=${(Date.now()).toString()}`, { with: { type: "json" } })
+        const nowString = (Date.now()).toString();
+        import(`../infos.json?t=${nowString}`, { with: { type: "json" } })
             .then(doc => console.log(doc))
             .catch(error => console.error("Unable to verify new version of this app : ", error));
 
