@@ -6,21 +6,16 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 
 [<img alt="URL" src="https://img.shields.io/badge/🠊-https://www.tiquettes.fr-%3CCOLOR%3E?style=for-the-badge&color=darkcyan&labelColor=darkcyan">](https://www.tiquettes.fr)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T61BPPX0)
 
 <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Finfos.json&query=%24.version&label=Current&prefix=v&color=%23fff">&nbsp;&nbsp;
 <img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
-<img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
-<img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff">
-
----
-En temps réel:
-
+<img alt="Création" src="https://img.shields.io/badge/Création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff"><br />
+<img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff"><br />
 <img alt="Nouveaux projets" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.create&label=Nouveaux projets&color=%23fff">&nbsp;&nbsp;
 <img alt="Impressions" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.print&label=Impressions&color=%23fff">&nbsp;&nbsp;
 
----
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T61BPPX0)
 
 ---
 
