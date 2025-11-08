@@ -24,7 +24,7 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
-        "2.2.7": {
+        "2.2.6": {
             "date": "2025-11-08",
             "actions": {
                 "patches": [
@@ -40,6 +40,9 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Nouvelle fonctionnalité permettant d'indiquer une nouvelle version disponible de l'application. L'utilisateur devra recharger la page de l'application pour en bénéficier."
+                    },
                     {
                         "text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
                     },

@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.7] - 2025-11-08
+## [2.2.6] - 2025-11-08
 
 ### Corrections
 
@@ -9,6 +9,7 @@
 
 ### Ajouts
 
+- Nouvelle fonctionnalité permettant d'indiquer une nouvelle version disponible de l'application. L'utilisateur devra recharger la page de l'application pour en bénéficier.
 - Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur).
 - [[Discussion #44](https://github.com/pantaflex44/Tiquettes/discussions/44)] Ajout d'un nouveau pictogramme: 'Réseau électrique'.
 

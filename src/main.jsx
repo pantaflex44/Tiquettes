@@ -45,26 +45,28 @@ function Footer() {
 
 export default function Main() {
     useEffect(() => {
-        const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
-
-        const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
-        const pathes = ['app', 'dev'];
-
-        const origins = [];
-        domains.forEach(domain => {
-            const o = `https://${domain}`;
-            origins.push(o);
-            pathes.forEach(path => {
-                const k = `${o}/${path}/`;
-                origins.push(k);
-            });
-        });
-
-        origins.push('https://www.tiquettes.fr/app/api/reports.php');
-
-        const origin = window.location.origin.split('?')[0].toLowerCase().trim();
 
         if (import.meta.env.VITE_APP_MODE !== "development") {
+            const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
+
+            const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
+            const pathes = [
+                '/app/',
+                '/app/api/reports.php',
+                '/app/infos.json',
+            ];
+
+            const origins = [];
+            domains.forEach(domain => {
+                const o = `https://${domain}`;
+                origins.push(o);
+                pathes.forEach(path => {
+                    const k = `${o}${path}`;
+                    origins.push(k);
+                });
+            });
+
+            const origin = window.location.origin.split('?')[0].toLowerCase().trim();
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
         }
 
