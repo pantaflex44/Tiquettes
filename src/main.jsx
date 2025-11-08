@@ -58,6 +58,7 @@ export default function Main() {
             const pathes = [
                 '/app/',
                 '/app/api/reports.php',
+                '/app/api/resume.php',
                 '/app/infos.json',
             ];
 
