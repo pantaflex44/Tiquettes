@@ -69,14 +69,19 @@ export default function Main() {
         }
 
         fetch(`./infos.json?t=${Date.now()}`, {
-            method: 'GET'
+            method: 'GET',
+            cache: 'no-store',
+            headers: {
+                'Pragma': 'no-cache',
+                'Cache-Control': 'no-cache'
+            }
         })
             .then((response) => response.json())
             .then((json) => {
                 const currentVersion = json.version ?? "0.0.0";
                 const localVersion = pkg.version;
                 if (semver.gt(currentVersion, localVersion)) {
-                    console.log("New version availlable ! Please 'force reload' your browser to use this new version.");
+                    console.log(`New version ${currentVersion} availlable ! Please force your browser to reload before using it.`);
                 }
             })
             .catch(error => console.error("Unable to verify app version : ", error));
