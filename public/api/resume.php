@@ -38,6 +38,12 @@ foreach (STATS_ALLOWED_ACTIONS_FULL as $actionItem) {
             $counters = json_decode($found['counters'], true);
             $counter = array_sum(array_values($counters));
 
+            // rapprochement des anciennes stats
+            if ($actionItem['key'] === 'create')
+                $counter += 3425;
+            if ($actionItem['key'] === 'print')
+                $counter += 6278;
+
             if (!isset($stats[$actionItem['key']]))
                 $stats[$actionItem['key']] = 0;
             $stats[$actionItem['key']] += $counter;
