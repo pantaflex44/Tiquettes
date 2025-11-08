@@ -731,7 +731,7 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        sendChoice('theme', [switchboard.theme.title], true);
+        sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
 
@@ -784,7 +784,7 @@ function App() {
             form = null;
 
             action('print');
-            sendChoice('theme', [switchboard.theme.title], true);
+            sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
             if (po.firstPage) sc.push('firstPage');
