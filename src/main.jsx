@@ -46,6 +46,8 @@ function Footer() {
 export default function Main() {
     useEffect(() => {
 
+        console.log("Mode: ", import.meta.env.VITE_APP_MODE);
+
         if (import.meta.env.VITE_APP_MODE !== "development") {
             const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
 
@@ -68,8 +70,6 @@ export default function Main() {
 
             const origin = window.location.origin.split('?')[0].toLowerCase().trim();
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
-
-            console.log('Good origin for mode: ', import.meta.env.VITE_APP_MODE, ' ;-)');
         }
 
         fetch(`./infos.json?t=${Date.now()}`, {
