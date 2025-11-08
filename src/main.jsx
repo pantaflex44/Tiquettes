@@ -69,7 +69,7 @@ export default function Main() {
             const origin = window.location.origin.split('?')[0].toLowerCase().trim();
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
 
-            console.log('Good origin ;-)');
+            console.log('Good origin for mode: ', import.meta.env.VITE_APP_MODE, ' ;-)');
         }
 
         fetch(`./infos.json?t=${Date.now()}`, {
