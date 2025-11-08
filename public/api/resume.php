@@ -39,13 +39,14 @@ foreach (STATS_ALLOWED_ACTIONS_FULL as $actionItem) {
             $counter = array_sum(array_values($counters));
 
             // rapprochement des anciennes stats
+            $rats = 0;
             if ($actionItem['key'] === 'create')
-                $counter += 3425;
+                $rats = 3425;
             if ($actionItem['key'] === 'print')
-                $counter += 6278;
+                $rats = 6278;
 
             if (!isset($stats[$actionItem['key']]))
-                $stats[$actionItem['key']] = 0;
+                $stats[$actionItem['key']] = $rats;
             $stats[$actionItem['key']] += $counter;
         }
     }
