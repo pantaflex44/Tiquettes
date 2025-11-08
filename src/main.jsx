@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import * as semver from 'semver';
 
@@ -24,6 +24,7 @@ import App from './App.jsx'
 
 import './main.css';
 import * as pkg from '../package.json';
+import NewVersionPopup from './NewVersionPopup.jsx';
 
 function Footer() {
     return (
@@ -44,9 +45,11 @@ function Footer() {
 }
 
 export default function Main() {
+    const [newVersionAvaillable, setNewVersionAvaillable] = useState(null);
+
     useEffect(() => {
 
-        console.log("Mode: ", import.meta.env.VITE_APP_MODE);
+        console.log("Mode:", import.meta.env.VITE_APP_MODE);
 
         if (import.meta.env.VITE_APP_MODE !== "development") {
             const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
@@ -84,8 +87,12 @@ export default function Main() {
             .then((json) => {
                 const currentVersion = json.version ?? "0.0.0";
                 const localVersion = pkg.version;
+
+                console.log("Versions:", `online: ${currentVersion}`, `local: ${localVersion}`);
+
                 if (semver.gt(currentVersion, localVersion)) {
                     console.log(`New version ${currentVersion} availlable ! Please force your browser to reload before using it.`);
+                    setNewVersionAvaillable(currentVersion);
                 }
             })
             .catch(error => console.error("Unable to verify app version : ", error));
@@ -96,6 +103,13 @@ export default function Main() {
         <>
             <App />
             <Footer />
+
+            {newVersionAvaillable && <NewVersionPopup
+                newVersion={newVersionAvaillable}
+                onOk={() => {
+                    window.location.reload(true);
+                }}
+            />}
         </>
     );
 }
