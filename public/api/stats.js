@@ -36,5 +36,6 @@ export function action(actionName, struct = 'app') {
 }
 
 export function choices(choiceName, keys = [], struct = 'app') {
+    console.log(choiceName, keys.join('|'));
     fetchURL('choices.php', struct, { c: choiceName, k: keys.join('|') });
 }
