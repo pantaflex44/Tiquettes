@@ -68,6 +68,8 @@ export default function Main() {
 
             const origin = window.location.origin.split('?')[0].toLowerCase().trim();
             if (!origins.includes(origin)) window.location.replace(defaultUrl);
+
+            console.log('Good origin ;-)');
         }
 
         fetch(`./infos.json?t=${Date.now()}`, {
