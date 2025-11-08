@@ -88,11 +88,11 @@ export default function Main() {
                 const currentVersion = json.version ?? "0.0.0";
                 const localVersion = pkg.version;
 
-                console.log("Versions:", `online: ${currentVersion}`, `local: ${localVersion}`);
-
                 if (semver.gt(currentVersion, localVersion)) {
                     console.log(`New version ${currentVersion} availlable ! Please force your browser to reload before using it.`);
                     setNewVersionAvaillable(currentVersion);
+                } else {
+                    console.log(`You are up to date. Current version: ${currentVersion}`);
                 }
             })
             .catch(error => console.error("Unable to verify app version : ", error));
