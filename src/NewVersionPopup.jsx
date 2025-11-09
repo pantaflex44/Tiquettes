@@ -35,16 +35,25 @@ export default function NewVersionPopup({
         showOkButton={true}
         showCancelButton={false}
         okButtonContent={
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem', fontSize: '110%' }}
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '0.5rem', fontSize: '120%' }}
                 title={"Charger la nouvelle version"}>
                 <img src={reloadIcon} alt={"Charger"} width={20} height={20} />
                 <span>Utiliser la nouvelle version</span>
             </div>
         }
+        additionalButtons={[
+            {
+                'text': "Découvrir les nouveautés",
+                'callback': function () {
+                    window.open('https://www.tiquettes.fr/changelog.php', '_blank').focus();
+                }
+            }
+        ]}
+        width={500}
         onOk={onOk}
     >
-        <h1>La version {newVersion} est désormais disponible !</h1>
+        <h1>Une nouvelle version ({newVersion ?? '?'}) est disponible !</h1>
         <h2>Votre navigateur Internet utilise une version obsolète.</h2>
-        <h4 style={{fontWeight: '500'}}>Pour toujours satisfaire vos éxigences les plus pointues, Tiquettes.fr évolue sans cesse.<br />Rechargez la page de votre naviguateur ou cliquez sur le bouton ci-dessous pour en profier :-)</h4>
+        <h4 style={{ fontWeight: '500' }}>Pour toujours satisfaire vos éxigences les plus pointues, Tiquettes.fr évolue sans cesse.<br />Rechargez la page de votre naviguateur ou cliquez sur le bouton ci-dessous pour en profier :-)</h4>
     </Popup>
 }
