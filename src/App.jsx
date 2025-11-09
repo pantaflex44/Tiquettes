@@ -787,10 +787,10 @@ function App() {
             sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
-            if (po.firstPage) sc.push('firstPage');
-            if (po.labels) sc.push('labels');
-            if (po.summary) sc.push('summary');
-            if (po.schema) sc.push('schema');
+            if (po.firstPage) sc.push('Page de garde');
+            if (po.labels) sc.push('Etiquettes');
+            if (po.summary) sc.push('Nomenclature');
+            if (po.schema) sc.push('Schéma unifilaire');
             sendChoice('print', sc);
 
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));

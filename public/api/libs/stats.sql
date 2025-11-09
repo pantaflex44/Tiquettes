@@ -117,8 +117,8 @@ CREATE TABLE `stats_allowed_choices` (
 --
 
 INSERT INTO `stats_allowed_choices` (`id`, `key`, `description`) VALUES
-(1, 'theme', 'Nom du thème utilisé'),
-(7, 'uses', 'Utilisations');
+(1, 'theme', 'Thèmes utilisés'),
+(7, 'print', 'Préférences d\'impressions');
 
 -- --------------------------------------------------------
 
