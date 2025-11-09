@@ -216,7 +216,8 @@
     </p>
     <!-- End Description -->
 
-    <nav class="header">
+    <nav class="header"
+        style="position: sticky; top: 0; z-index: 1000; box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
         <ul>
             <li><a href="https://www.tiquettes.fr/documentation.php" target="_blank" rel="noopener"><img src="/doc.svg"
                         width="16" height="16" alt="Documentation" /><span>Documentation</span></a></li>
@@ -235,12 +236,11 @@
                         alt="Partenariats" /><span>Partenariats</span></a></li>
             <li><a href="#ressources"><img src="/ressources.svg" width="16" height="16"
                         alt="Ressources" /><span>Ressources</span></a></li>
-            <!--<li>
-                <a href='https://ko-fi.com/T6T61BPPX0' target='_blank' rel="noopener"
-                    style="padding: 0; margin-left: 0px; margin-top: 2px;margin-bottom: -2px;"><img height='32'
-                        style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6'
-                        alt='Buy Me a Coffee at ko-fi.com'></a>
-            </li>-->
+            <li style="margin-inline:0.5rem;">
+                <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+                <script
+                    type='text/javascript'>kofiwidget2.init('Supporter le projet', '#000', 'T6T61BPPX0'); kofiwidget2.draw();</script>
+            </li>
         </ul>
     </nav>
 
@@ -393,7 +393,7 @@
     <script type="module" src="/src/main.jsx"></script>
 
 
-    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <!--<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
     <script>
         kofiWidgetOverlay.draw('pantaflex44', {
             'type': 'floating-chat',
@@ -428,7 +428,7 @@
         .floatingchat-container {
             width: max-content;
         }
-    </style>
+    </style>-->
 
 </body>
 
