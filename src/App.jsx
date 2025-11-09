@@ -786,7 +786,7 @@ function App() {
             action('print');
             sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
-            let sc = ['total'];
+            let sc = ['Total'];
             if (po.firstPage) sc.push('Page de garde');
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
