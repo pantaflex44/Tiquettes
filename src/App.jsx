@@ -731,7 +731,7 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+        sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
 
@@ -784,9 +784,9 @@ function App() {
             form = null;
 
             action('print');
-            sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+            sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
-            let sc = ['total'];
+            let sc = [];
             if (po.firstPage) sc.push('Page de garde');
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
