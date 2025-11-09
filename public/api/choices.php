@@ -36,7 +36,7 @@ if (STATS_ALLOWED && STATS_CHOICE_ALLOWED) {
 
     if ($k !== '') {
         $exploded = explode('|', $k);
-        $exploded['total'] = count($exploded);
+        //$exploded['total'] = count($exploded);
 
         foreach ($exploded as $ki) {
             $key = trim($ki);
