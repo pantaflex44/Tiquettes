@@ -89,7 +89,7 @@ function App() {
     const tabIsActive = useDocumentVisibility();
 
     const defaultPrintOptions = useMemo(() => ({
-        firstPage: true,
+        firstPage: false,
         labels: true,
         summary: false,
         schema: false,
@@ -1685,10 +1685,19 @@ function App() {
                         <div className="dropdown_item head parent" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
                                 checked={printOptions.schema}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    schema: e.target.checked
-                                }))} />
+                                onChange={(e) => setPrintOptions((old) => {
+                                    let ret = {
+                                        ...old,
+                                        schema: e.target.checked
+                                    };
+                                    if (!ret.schema && !ret.summary) {
+                                        ret = {
+                                            ...ret,
+                                            firstPage: false
+                                        }
+                                    }
+                                    return ret;
+                                })} />
                             <label htmlFor="print_schema">Schéma unifilaire</label>
                             {printOptions.schema &&
                                 <img src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon} width={16}
@@ -1721,10 +1730,19 @@ function App() {
                         <div className="dropdown_item head parent" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
                                 checked={printOptions.summary}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    summary: e.target.checked
-                                }))} />
+                                onChange={(e) => setPrintOptions((old) => {
+                                    let ret = {
+                                        ...old,
+                                        summary: e.target.checked
+                                    };
+                                    if (!ret.schema && !ret.summary) {
+                                        ret = {
+                                            ...ret,
+                                            firstPage: false
+                                        }
+                                    }
+                                    return ret;
+                                })} />
                             <label htmlFor="print_summary">Nomenclature</label>
                             {printOptions.summary &&
                                 <img src={subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon} width={16}
