@@ -793,12 +793,12 @@ function App() {
             if (po.schema) sc.push('Schéma unifilaire');
             sendChoice('print', sc);
 
-            sendChoice('print_format', [
-                'total',
-                `Etiquettes : ${po.pdfOptions.labelsPrintFormat}`,
-                `Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`,
-                `Nomenclature : ${po.pdfOptions.summaryPrintFormat}`
-            ]);
+            let sf = ['total'];
+            if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
+            if (po.summary) sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
+            if (po.schema) sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
+            sendChoice('print_format', sf);
+
 
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
             const link = document.createElement("a");

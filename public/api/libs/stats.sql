@@ -118,7 +118,8 @@ CREATE TABLE `stats_allowed_choices` (
 
 INSERT INTO `stats_allowed_choices` (`id`, `key`, `description`) VALUES
 (1, 'theme', 'Thèmes utilisés'),
-(7, 'print', 'Préférences d\'impressions');
+(2, 'print', 'Préférences d\'impressions');
+(3, 'print_format', 'Formats d\'impressions' );
 
 -- --------------------------------------------------------
 
