@@ -793,6 +793,13 @@ function App() {
             if (po.schema) sc.push('Schéma unifilaire');
             sendChoice('print', sc);
 
+            sendChoice('print_format', [
+                'total',
+                `Etiquettes : ${po.pdfOptions.labelsPrintFormat}`,
+                `Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`,
+                `Nomenclature : ${po.pdfOptions.summaryPrintFormat}`
+            ]);
+
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
             const link = document.createElement("a");
             link.href = url;
