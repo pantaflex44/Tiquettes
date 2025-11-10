@@ -198,14 +198,8 @@ foreach (STATS_ALLOWED_STRUCTURES_FULL as $structItem) {
                     $counters = json_decode($found['counters'], true);
                     $counter = array_sum(array_values($counters));
 
-                    $rats = 0;
-                    if ($actionItem['key'] === 'create')
-                        $rats = 3425;
-                    if ($actionItem['key'] === 'print')
-                        $rats = 6278;
-
                     if (!isset($stats['actions'][$actionItem['key']]['total']))
-                        $stats['actions'][$actionItem['key']]['total'] = $rats;
+                        $stats['actions'][$actionItem['key']]['total'] = 0;
                     $stats['actions'][$actionItem['key']]['total'] += $counter;
 
                     if ($resolutionDetails['key'] === 'd') {
