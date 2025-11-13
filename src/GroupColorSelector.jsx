@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./groupColorSelector.css";
 
@@ -25,6 +25,8 @@ import caretDownIcon from './assets/caret-down.svg';
 import caretUpIcon from './assets/caret-up.svg';
 import GroupColorSelectorItem from "./GroupColorSelectorItem";
 import GroupColorSelectorSeparator from "./GroupColorSelectorSeparator";
+import Popup from "./Popup";
+import { ChromePicker } from "react-color";
 
 export default function GroupColorSelector({
     switchboard,
@@ -32,6 +34,7 @@ export default function GroupColorSelector({
     onChange = null
 }) {
     const [opened, setOpened] = useState(false);
+    const [paletteOpened, setPaletteOpened] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(false);
     const [selected, setSelected] = useState({ key: value, color: value, title: '' });
     const found = useMemo(() => {
@@ -49,7 +52,6 @@ export default function GroupColorSelector({
     }, [switchboard.rows]);
 
     const listRef = useRef();
-    const colorPaletteRef = useRef();
 
     function handleColorListToggler() {
         setOpened((old) => {
@@ -63,6 +65,7 @@ export default function GroupColorSelector({
     }
 
     function handleColorItemSelected(selected) {
+        console.log(selected);
         setSelected(() => selected);
         setOpened(false);
     }
@@ -73,87 +76,101 @@ export default function GroupColorSelector({
     }, [selected]);
 
     return (
-        <div style={{ position: 'relative' }} className="icon_selector">
-            <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'nowrap',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                columnGap: '1em',
-                minWidth: '19px',
-                width: 'calc(100% - 1.3em)',
-                minHeight: '19px',
-                border: '1px solid darkgray',
-                borderRadius: '5px',
-                padding: '0.5em',
-                fontWeight: 500,
-                backgroundColor: '#fff'
-            }}
-                onClick={handleColorListToggler}
-            >
-                <div style={{ width: '30px', height: '20px', backgroundColor: selected.color }}></div>
-                <img loading={'lazy'} src={opened ? caretUpIcon : caretDownIcon} width={16} height={16}
-                    style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Choisir une couleur"
-                    title="Liste des couleurs" />
+        <>
+            <div style={{ position: 'relative' }} className="icon_selector">
+                <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    columnGap: '1em',
+                    minWidth: '19px',
+                    width: 'calc(100% - 1.3em)',
+                    minHeight: '19px',
+                    border: '1px solid darkgray',
+                    borderRadius: '5px',
+                    padding: '0.5em',
+                    fontWeight: 500,
+                    backgroundColor: '#fff'
+                }}
+                    onClick={handleColorListToggler}
+                >
+                    <div style={{ width: '30px', height: '20px', backgroundColor: selected.color }}></div>
+                    <img loading={'lazy'} src={opened ? caretUpIcon : caretDownIcon} width={16} height={16}
+                        style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Choisir une couleur"
+                        title="Liste des couleurs" />
+                </div>
+
+                <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{
+                    zIndex: 1,
+                    visibility: (opened ? 'visible' : 'hidden'),
+                    position: 'absolute',
+                    border: '1px solid darkgray',
+                    borderRadius: '5px',
+                    padding: '0.5em',
+                    fontWeight: 400,
+                    width: '16em',
+                    margin: 0,
+                    marginTop: '0em',
+                    height: 'max-content',
+                    maxHeight: '24em',
+                    overflowY: 'auto',
+                    backgroundColor: '#fff',
+                    listStyle: 'none'
+                }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
+                    <GroupColorSelectorItem
+                        value={{ key: '', color: '', title: '' }}
+                        selected={selected}
+                        handleColorItemSelected={handleColorItemSelected}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem}
+                    />
+                    <GroupColorSelectorItem
+                        value={{ key: '_new_', color: '', title: '' }}
+                        selected={selected}
+                        handleColorItemSelected={() => {
+                            let c = (selected?.color ?? 'transparent').trim();
+                            if (c === '') c = 'transparent';
+                            setPaletteOpened(true);
+                        }}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem}
+                    />
+                    {Object.keys(found).length > 0 && <>
+                        <GroupColorSelectorSeparator />
+                        {Object.keys(found).map((color) => {
+                            let t = found[color].map((m) => `<small><b>${m.id}</b></small> ${m.text}`.trim());
+                            return <GroupColorSelectorItem
+                                key={color}
+                                value={{ key: color, color, title: t.join('<br />') }}
+                                selected={selected}
+                                handleColorItemSelected={handleColorItemSelected}
+                                hoveredItem={hoveredItem}
+                                setHoveredItem={setHoveredItem}
+                            />;
+                        })}
+                    </>}
+                </ul>
             </div>
-            <input ref={colorPaletteRef} onChange={(e) => {
-                setSelected({
-                    key: e.target.value,
-                    color: e.target.value
-                });
-                setOpened(false);
-            }} type="color" id="color-palette" tabIndex='-1' style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} />
-            <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{
-                zIndex: 1,
-                visibility: (opened ? 'visible' : 'hidden'),
-                position: 'absolute',
-                border: '1px solid darkgray',
-                borderRadius: '5px',
-                padding: '0.5em',
-                fontWeight: 400,
-                width: '16em',
-                margin: 0,
-                marginTop: '0em',
-                height: 'max-content',
-                maxHeight: '24em',
-                overflowY: 'auto',
-                backgroundColor: '#fff',
-                listStyle: 'none'
-            }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
-                <GroupColorSelectorItem
-                    value={{ key: '', color: '', title: '' }}
-                    selected={selected}
-                    handleColorItemSelected={handleColorItemSelected}
-                    hoveredItem={hoveredItem}
-                    setHoveredItem={setHoveredItem}
-                />
-                <GroupColorSelectorItem
-                    value={{ key: '_new_', color: '', title: '' }}
-                    selected={selected}
-                    handleColorItemSelected={() => {
-                        colorPaletteRef.current.focus();
-                        colorPaletteRef.current.value = selected?.color ?? 'transparent';
-                        colorPaletteRef.current.click();
-                    }}
-                    hoveredItem={hoveredItem}
-                    setHoveredItem={setHoveredItem}
-                />
-                {Object.keys(found).length > 0 && <>
-                    <GroupColorSelectorSeparator />
-                    {Object.keys(found).map((color) => {
-                        let t = found[color].map((m) => `<small><b>${m.id}</b></small> ${m.text}`.trim());
-                        return <GroupColorSelectorItem
-                            key={color}
-                            value={{ key: color, color, title: t.join('<br />') }}
-                            selected={selected}
-                            handleColorItemSelected={handleColorItemSelected}
-                            hoveredItem={hoveredItem}
-                            setHoveredItem={setHoveredItem}
-                        />;
-                    })}
-                </>}
-            </ul>
-        </div>
+
+            {paletteOpened && <Popup
+                title={"Nouvelle couleur de groupe"}
+                showCloseButton={false}
+                showCancelButton={false}
+                showOkButton={true}
+                withOverflow={false}
+                width={315}
+                onOk={() => setPaletteOpened(false)}
+            >
+                <div style={{ boxSizing: 'border-box', width: '100%', height: 'max-content', border: '1px solid #ccc', borderTopLeftRadius: '7px', borderTopRightRadius: '7px' }}>
+                    <div style={{ boxSizing: 'border-box', width: '100%', height: '30px', backgroundColor: selected.color, marginBottom: '0', borderTopLeftRadius: '7px', borderTopRightRadius: '7px' }}></div>
+                    <ChromePicker disableAlpha={true} color={selected.color} onChange={(c) => setSelected({
+                        key: c.hex,
+                        color: c.hex
+                    })} width={300} />
+                </div>
+            </Popup>}
+        </>
     );
 }

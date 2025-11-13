@@ -25,6 +25,7 @@ import App from './App.jsx'
 import './main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './NewVersionPopup.jsx';
+import AuthProvider from './AuthProvider.jsx';
 
 function Footer() {
     return (
@@ -101,7 +102,7 @@ export default function Main() {
     }, []);
 
     return (
-        <>
+        <AuthProvider>
             <App />
             <Footer />
 
@@ -111,7 +112,7 @@ export default function Main() {
                     window.location.reload(true);
                 }}
             />}
-        </>
+        </AuthProvider>
     );
 }
 

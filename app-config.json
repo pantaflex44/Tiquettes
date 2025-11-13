@@ -29,6 +29,13 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Correction d'un bug empechant l'affichage du sélecteur de couleur de groupe.",
+                        "from": {
+                            "name": "Issue #47",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/47"
+                        }
+                    },
+                    {
                         "text": "Modification du rendu du schéma unifilaire pour améliorer sa lecture."
                     },
                     {

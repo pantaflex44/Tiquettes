@@ -35,7 +35,7 @@ function GroupColorChooser({
                     showCancelButton={true}
                     showOkButton={true}
                     withOverflow={false}
-                    width={318}
+                    width={315}
 
                     onCancel={() => setOpened(false)}
                     onOk={() => {

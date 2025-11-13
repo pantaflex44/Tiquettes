@@ -459,6 +459,13 @@ option[disabled] {
     padding-inline: 0.25em;
 }
 
+.dropdown_container .dropdown .dropdown_item form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+}
+
 .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;

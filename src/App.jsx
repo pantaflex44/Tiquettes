@@ -50,6 +50,7 @@ import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
+import userShieldIcon from "./assets/user-shield.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -61,7 +62,8 @@ import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
-
+import useAuth from "./useAuth.jsx";
+import LoginPopup from "./LoginPopup.jsx";
 
 
 
@@ -83,10 +85,11 @@ function App() {
     const [clipboardMode, setClipboardMode] = useState(null);
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
     const [uniqueChoices, setUniqueChoices] = useState([]);
+    const [loginPopup, setLoginPopup] = useState(false);
+    const [accountPopup, setAccountPopup] = useState(false);
 
-    const UIFrozen = useMemo(() => clipboard !== null, [clipboard]);
-
-    const tabIsActive = useDocumentVisibility();
+    const { currentUser, authenticated } = useAuth();
+    const UIFrozen = useMemo(() => clipboard !== null || loginPopup || accountPopup || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, loginPopup, themeEditor, welcome, editor, newProjectProperties, accountPopup]);
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
@@ -1582,6 +1585,21 @@ function App() {
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
 
+                {(import.meta.env.VITE_USE_AUTH ?? 'false').trim().toLowerCase() === 'true' && <>
+                    {!authenticated
+                        ? <button className={`button_group-connection`.trim()}
+                            onClick={() => {
+                                setLoginPopup(true);
+                            }} title="Connexion...">
+                            <img src={userShieldIcon} width={16} height={16} alt="Connexion..." />
+                            <span>Connexion...</span>
+                        </button>
+                        : <>
+                        </>
+                    }
+                    <div className="button_group-separator"></div>
+                </>}
+
                 <button className={`button_group-new_project active`.trim()}
                     onClick={() => {
                         setWelcome(true);
@@ -2195,6 +2213,11 @@ function App() {
 
 
                 }}
+            />}
+
+            {loginPopup && <LoginPopup
+                onCancel={() => setLoginPopup(false)}
+                onOk={() => setLoginPopup(false)}
             />}
 
 

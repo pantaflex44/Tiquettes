@@ -39,6 +39,10 @@ export default function Popup({
     showPrevButton = false,
     showNextButton = false,
     buttonsDisabled = false,
+    okButtonDisabled = false,
+    cancelButtonDisabled = false,
+    prevButtonDisabled = false,
+    nextButtonDisabled = false,
     loading = false,
     withOverflow = true,
     additionalButtons = [],
@@ -129,13 +133,13 @@ export default function Popup({
                     </div>
 
                     {(buttons.cancel || buttons.ok) && <div className="popup_buttons_box">
-                        {buttons.cancel && <button className={`cancel ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                        {buttons.cancel && <button className={`cancel ${buttonsDisabled || cancelButtonDisabled ? 'disabled' : ''}`.trim()}
                             onClick={onCancel}>{cancelButtonContent}</button>}
-                        {buttons.prev && <button className={`prev ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                        {buttons.prev && <button className={`prev ${buttonsDisabled || prevButtonDisabled ? 'disabled' : ''}`.trim()}
                             onClick={onPrev}>{prevButtonContent}</button>}
-                        {buttons.next && <button className={`next ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                        {buttons.next && <button className={`next ${buttonsDisabled || nextButtonDisabled ? 'disabled' : ''}`.trim()}
                             onClick={onNext}>{nextButtonContent}</button>}
-                        {buttons.ok && <button className={`ok ${buttonsDisabled ? 'disabled' : ''}`.trim()}
+                        {buttons.ok && <button className={`ok ${buttonsDisabled || okButtonDisabled ? 'disabled' : ''}`.trim()}
                             onClick={onOk}>{okButtonContent}</button>}
                     </div>}
                 </div>

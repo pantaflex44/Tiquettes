@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- [[Issue #47](https://github.com/pantaflex44/Tiquettes/issues/47)] Correction d'un bug empechant l'affichage du sélecteur de couleur de groupe.
 - Modification du rendu du schéma unifilaire pour améliorer sa lecture.
 - [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43)] Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seulement être asservi par un contacteur mais aussi alimenter directement les autres sources.
 

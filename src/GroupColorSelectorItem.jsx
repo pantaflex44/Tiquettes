@@ -38,8 +38,8 @@ function GroupColorSelectorItem({
         backgroundColor: (value?.key !== selected?.key && hoveredItem === value?.key) ? 'var(--secondary-color)' : ((value?.key === selected?.key) ? '#f5f5f5' : 'inherit')
     }} onMouseMove={() => setHoveredItem(value?.key)}>
         <div style={{ minWidth: '30px', width: '30px', height: '20px', backgroundColor: value?.color ?? 'transparent', border: value?.key === '' ? '1px solid lightgray' : 'initial' }}></div>
-        {value?.key === '' && <div>Aucune couleur</div>}
-        {value?.key === '_new_' && <div>Nouvelle couleur ...</div>}
+        {value?.key === '' && <div style={{ alignSelf: "center" }}>Aucune couleur</div>}
+        {value?.key === '_new_' && <div style={{ alignSelf: "center" }}>Nouvelle couleur ...</div>}
         {value?.key !== '' && value?.key !== '_new_' && <div dangerouslySetInnerHTML={{ __html: value?.title ?? value?.key }} style={{ marginTop: '-2px' }} />}
     </li>;
 }
