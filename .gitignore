@@ -24,10 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 *.db
-.env
-.env.dev
-.env.ghpages
-.env.web
 *.sql
 
 google205542c04daca98b.html
