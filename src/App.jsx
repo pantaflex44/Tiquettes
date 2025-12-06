@@ -62,8 +62,6 @@ import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
-import useAuth from "./useAuth.jsx";
-import LoginPopup from "./LoginPopup.jsx";
 
 
 
@@ -85,11 +83,8 @@ function App() {
     const [clipboardMode, setClipboardMode] = useState(null);
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
     const [uniqueChoices, setUniqueChoices] = useState([]);
-    const [loginPopup, setLoginPopup] = useState(false);
-    const [accountPopup, setAccountPopup] = useState(false);
 
-    const { currentUser, authenticated } = useAuth();
-    const UIFrozen = useMemo(() => clipboard !== null || loginPopup || accountPopup || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, loginPopup, themeEditor, welcome, editor, newProjectProperties, accountPopup]);
+    const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard,  themeEditor, welcome, editor, newProjectProperties]);
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
@@ -1585,21 +1580,6 @@ function App() {
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
 
-                {(import.meta.env.VITE_USE_AUTH ?? 'false').trim().toLowerCase() === 'true' && <>
-                    {!authenticated
-                        ? <button className={`button_group-connection`.trim()}
-                            onClick={() => {
-                                setLoginPopup(true);
-                            }} title="Connexion...">
-                            <img src={userShieldIcon} width={16} height={16} alt="Connexion..." />
-                            <span>Connexion...</span>
-                        </button>
-                        : <>
-                        </>
-                    }
-                    <div className="button_group-separator"></div>
-                </>}
-
                 <button className={`button_group-new_project active`.trim()}
                     onClick={() => {
                         setWelcome(true);
@@ -2215,10 +2195,6 @@ function App() {
                 }}
             />}
 
-            {loginPopup && <LoginPopup
-                onCancel={() => setLoginPopup(false)}
-                onOk={() => setLoginPopup(false)}
-            />}
 
 
         </div>

@@ -2,7 +2,8 @@ import {defineConfig, loadEnv} from 'vite'
 import react from '@vitejs/plugin-react'
 import ogPlugin from 'vite-plugin-open-graph';
 import Sitemap from 'vite-plugin-sitemap';
-import {VitePWA} from 'vite-plugin-pwa';
+import { VitePWA } from 'vite-plugin-pwa';
+import mkcert from 'vite-plugin-mkcert'
 
 import * as pkg from './package.json';
 
@@ -57,6 +58,15 @@ export default ({mode}) => {
             }
         }
     };
+
+    if (env.VITE_IS_LOCAL === "true") {
+        options = {
+            ...options, plugins: [
+                ...options.plugins,
+                mkcert(),
+            ]
+        };
+    }
 
     if (mode === 'production') {
         options = {

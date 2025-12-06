@@ -23,14 +23,13 @@ declare(strict_types=1);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require __DIR__ . '/PHPMailer-master/src/Exception.php';
-require __DIR__ . '/PHPMailer-master/src/PHPMailer.php';
-require __DIR__ . '/PHPMailer-master/src/SMTP.php';
-
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+require __DIR__ . '/PHPMailer-master/src/Exception.php';
+require __DIR__ . '/PHPMailer-master/src/PHPMailer.php';
+require __DIR__ . '/PHPMailer-master/src/SMTP.php';
 
 define('MYIP_NORETURN', true);
 require_once __DIR__ . '/../myip.php';
@@ -40,12 +39,40 @@ function dd_json(mixed $content): void
     header('Content-Type: application/json');
     write_json([
         'errors' => $content,
+        'status' => 'error',
+        'message' => $content
     ]);
 }
 
 function write_json(mixed $content): void
 {
     echo json_encode($content);
+    exit;
+}
+
+function exit_error(string $message, string $lib = 'main', string $code = 'system', array $params = []): void
+{
+    echo json_encode(array_merge(
+        [
+            'status' => 'error',
+            'code' => $code,
+            'lib' => $lib,
+            'message' => $message,
+        ],
+        $params
+    ));
+    exit;
+}
+
+function exit_ok(string $lib = 'main', array $params = []): void
+{
+    echo json_encode(array_merge(
+        [
+            'status' => 'ok',
+            'lib' => $lib,
+        ],
+        $params
+    ));
     exit;
 }
 
@@ -76,10 +103,10 @@ function send_Mail(array|string $to, string $subject, string $body): bool
         if (defined('SMTP_FROM')) {
             if (is_array(SMTP_FROM) && count(SMTP_FROM) === 2) {
                 $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);
-                $mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
+                //$mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
             } else if (is_string(SMTP_FROM)) {
                 $mail->setFrom(SMTP_FROM[0], SMTP_FROM[1]);
-                $mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
+                //$mail->addReplyTo(SMTP_FROM[0], SMTP_FROM[1]);
             }
         }
         if (is_array($to) && count($to) === 2) {
@@ -387,6 +414,41 @@ function displayNameGenerator(): string
     return $adjectif . $nom . $nombre;
 }
 
+function dateDiff2Minutes(DateTime $startDate, DateTime $endDate): int
+{
+    $since = $startDate->diff($endDate);
+    $minutes = $since->days * 24 * 60;
+    $minutes += $since->h * 60;
+    $minutes += $since->i;
+    return $minutes;
+}
+
+function twoFaTokenGenerator($length = 6)
+{
+    $caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    $code = '';
+    $max = strlen($caracteres) - 1;
+
+    for ($i = 0; $i < $length; $i++) {
+        $code .= $caracteres[random_int(0, $max)];
+    }
+
+    return $code;
+}
+
+function stripeStatusText(string $status): string
+{
+    return match ($status) {
+        'trialing' => "Période d'essai en cours",
+        'active' => "Abonnement actif et en règle",
+        'incomplete' => "Paiment echoué lors de la souscription",
+        'incomplete_expired' => "Demande de paiement expirée",
+        'past_due' => "Paiement echoué lors du renouvellement",
+        'canceled' => "Abonnement annulé",
+        'unpaid' => "Paiement echoué lors du renouvellement mais abonnement encore actif",
+        'paused' => "Période d'essai terminée mais aucun paiement n'a été effectué"
+    };
+}
 
 
 // mode
@@ -465,3 +527,6 @@ try {
     dd_json(content: $e);
     exit(0);
 }
+
+
+

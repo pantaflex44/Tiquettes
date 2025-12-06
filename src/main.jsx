@@ -25,7 +25,7 @@ import App from './App.jsx'
 import './main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './NewVersionPopup.jsx';
-import AuthProvider from './AuthProvider.jsx';
+
 
 function Footer() {
     return (
@@ -49,7 +49,6 @@ export default function Main() {
     const [newVersionAvaillable, setNewVersionAvaillable] = useState(null);
 
     useEffect(() => {
-
         console.log("Mode:", import.meta.env.VITE_APP_MODE);
 
         if (import.meta.env.VITE_APP_MODE !== "development") {
@@ -102,7 +101,7 @@ export default function Main() {
     }, []);
 
     return (
-        <AuthProvider>
+        <>
             <App />
             <Footer />
 
@@ -112,7 +111,7 @@ export default function Main() {
                     window.location.reload(true);
                 }}
             />}
-        </AuthProvider>
+        </>
     );
 }
 

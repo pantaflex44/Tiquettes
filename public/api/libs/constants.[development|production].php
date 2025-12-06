@@ -3,6 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
+
 const SMTP_DEBUG = SMTP::DEBUG_OFF;
 const SMTP_HOST = 'smtp.mail.fr';
 const SMTP_AUTH = true;

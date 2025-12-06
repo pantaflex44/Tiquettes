@@ -24,6 +24,11 @@ dist-ssr
 *.sln
 *.sw?
 *.db
+.env
+.env.dev
+.env.ghpages
+.env.web
+*.sql
 
 google205542c04daca98b.html
 
@@ -36,4 +41,7 @@ public/api/tiquettes.db
 public/api/libs/constants.php
 public/api/libs/constants.production.php
 public/api/libs/constants.development.php
-public/api/libs/users.sql
+
+public/api/templates
+src/twofaInput.css
+src/TwofaInput.jsx
