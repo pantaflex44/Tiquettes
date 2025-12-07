@@ -1,6 +1,6 @@
 /**
     Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
-    Copyright (C) 2024-2025 Christophe LEMOINE
+    Copyright (C) 2024-2026 Christophe LEMOINE
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -238,6 +238,7 @@ option[disabled] {
 }
 
 .buttons_box.disabled {
+    -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
     cursor: default;
@@ -686,6 +687,7 @@ option[disabled] {
 .editor_tabpages {
     width: 100%;
     flex: 1;
+    -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -699,6 +701,7 @@ option[disabled] {
 
 .editor_tabpages input[type="checkbox"] {
     display: none;
+    -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -712,6 +715,7 @@ option[disabled] {
     padding-inline: 1em;
     padding-block: 0.25em;
     font-size: 90%;
+    -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -1036,6 +1040,7 @@ option[disabled] {
     }
 
     .summary_text2 textarea {
+        -webkit-user-select: none;
         user-select: none;
         border: 0;
         padding: 0;

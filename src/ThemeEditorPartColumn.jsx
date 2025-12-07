@@ -1,6 +1,6 @@
 /**
  Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
- Copyright (C) 2024-2025 Christophe LEMOINE
+ Copyright (C) 2024-2026 Christophe LEMOINE
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by

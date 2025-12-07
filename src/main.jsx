@@ -1,6 +1,6 @@
 /**
  Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
- Copyright (C) 2024-2025 Christophe LEMOINE
+ Copyright (C) 2024-2026 Christophe LEMOINE
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -40,7 +40,7 @@ function Footer() {
                     href="https://www.gnu.org/licenses/agpl-3.0.fr.html" style={{ color: 'var(--primary-color)' }}
                     target="_blank">{`Licence ${pkg.license}`}</a> | <a href="https://pantaflex44.github.io/Portfolio/"
                         style={{ color: 'var(--primary-color)' }}
-                        target="_blank">{pkg.author} (pantaflex44)</a> | 2024-2025</span>
+                    target="_blank">{pkg.author} (pantaflex44)</a> | &copy; 2024-2026</span>
         </div>
     );
 }
@@ -73,7 +73,7 @@ export default function Main() {
             });
 
             const origin = window.location.origin.split('?')[0].toLowerCase().trim();
-            if (!origins.includes(origin)) window.location.replace(defaultUrl);
+            if (!origins.includes(origin)) window.location.rece(defaultUrl);
         }
 
         fetch(`./infos.json?t=${Date.now()}`, {
