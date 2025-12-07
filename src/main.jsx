@@ -40,7 +40,7 @@ function Footer() {
                     href="https://www.gnu.org/licenses/agpl-3.0.fr.html" style={{ color: 'var(--primary-color)' }}
                     target="_blank">{`Licence ${pkg.license}`}</a> | <a href="https://pantaflex44.github.io/Portfolio/"
                         style={{ color: 'var(--primary-color)' }}
-                        target="_blank">{pkg.author} (pantaflex44)</a> | &copy; 2024-2025</span>
+                    target="_blank">{pkg.author} (pantaflex44)</a> | &copy; 2024-{new Date().getFullYear()}</span>
         </div>
     );
 }
