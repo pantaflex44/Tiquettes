@@ -1,0 +1,7 @@
+Propositions
+
+Avoir NO et NF sur un même contacteur
+https://github.com/pantaflex44/Tiquettes/issues/49
+
+Réseau multiples
+https://github.com/pantaflex44/Tiquettes/discussions/50

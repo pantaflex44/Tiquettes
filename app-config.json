@@ -25,9 +25,16 @@
     },
     "changelog": {
         "2.2.6": {
-            "date": "2025-11-08",
+            "date": "2025-01-05",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Correction typographique Tiquettes/src/EditorCurrentSelector.jsx par https://github.com/mmnlfrrr.",
+                        "from": {
+                            "name": "PR #54",
+                            "link": "https://github.com/pantaflex44/Tiquettes/pull/54"
+                        }
+                    },
                     {
                         "text": "Correction d'un bug empechant l'affichage du sélecteur de couleur de groupe.",
                         "from": {

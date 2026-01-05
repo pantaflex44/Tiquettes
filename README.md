@@ -481,5 +481,6 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [martinlbb](https://github.com/martinlbb)
 - [rems64](https://github.com/rems64)
 - [Biodom13](https://github.com/Biodom13)
+- [mmnlfrrr](https://github.com/mmnlfrrr)
 
  ### ☕ Ainsi que pour tous les cafés offerts ;-)
