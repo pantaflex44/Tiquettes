@@ -41,10 +41,10 @@ export default function EditorCurrentSelector({id, value, onChange = null}) {
         <option value={"80A"}>80A</option>
         <option value={"90A"}>90A</option>
         <option value={"100A"}>100A</option>
-        <option value={"125A"}>100A</option>
+        <option value={"125A"}>125A</option>
         <option value={"160A"}>160A</option>
-        <option value={"180A"}>100A</option>
-        <option value={"240A"}>100A</option>
+        <option value={"180A"}>180A</option>
+        <option value={"240A"}>240A</option>
         <option value={"250A"}>250A</option>
     </select>
 }
