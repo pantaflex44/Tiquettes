@@ -76,7 +76,7 @@ export default function Main() {
         origins.push('https://localhost:' + import.meta.env.VITE_SERVER_PORT);
 
         const origin = window.location.origin.split('?')[0].toLowerCase().trim();
-        if (!origins.includes(origin)) window.location.rece(defaultUrl);
+        if (!origins.includes(origin)) window.location.replace(defaultUrl);
         //}
 
         fetch(`./infos.json?t=${Date.now()}`, {
