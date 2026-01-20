@@ -51,30 +51,33 @@ export default function Main() {
     useEffect(() => {
         console.log("Mode:", import.meta.env.VITE_APP_MODE);
 
-        if (import.meta.env.VITE_APP_MODE !== "development") {
-            const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
+        //if (import.meta.env.VITE_APP_MODE !== "development") {
+        const defaultUrl = 'https://www.tiquettes.fr/app/?enjoy';
 
-            const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
-            const pathes = [
-                '/app/',
-                '/app/api/reports.php',
-                '/app/api/resume.php',
-                '/app/infos.json',
-            ];
+        const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
+        const pathes = [
+            '/app/',
+            '/app/api/reports.php',
+            '/app/api/resume.php',
+            '/app/infos.json',
+            'localhost'
+        ];
 
-            const origins = [];
-            domains.forEach(domain => {
-                const o = `https://${domain}`;
-                origins.push(o);
-                pathes.forEach(path => {
-                    const k = `${o}${path}`;
-                    origins.push(k);
-                });
+        const origins = [];
+        domains.forEach(domain => {
+            const o = `https://${domain}`;
+            origins.push(o);
+            pathes.forEach(path => {
+                const k = `${o}${path}`;
+                origins.push(k);
             });
+        });
+        origins.push('http://localhost:' + import.meta.env.VITE_SERVER_PORT);
+        origins.push('https://localhost:' + import.meta.env.VITE_SERVER_PORT);
 
-            const origin = window.location.origin.split('?')[0].toLowerCase().trim();
-            if (!origins.includes(origin)) window.location.rece(defaultUrl);
-        }
+        const origin = window.location.origin.split('?')[0].toLowerCase().trim();
+        if (!origins.includes(origin)) window.location.rece(defaultUrl);
+        //}
 
         fetch(`./infos.json?t=${Date.now()}`, {
             method: 'GET',
