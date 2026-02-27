@@ -1255,6 +1255,7 @@ function App() {
 
     const handleModulePaste = (rowIndex, moduleIndex) => {
         if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
+        if (clipboardMode?.mode !== 'cut' && clipboardMode?.mode !== 'copy') return;
 
         setSwitchboard((old) => {
             let deleteLength = 0;
@@ -1327,7 +1328,7 @@ function App() {
     }
 
     const modulePasteAllowed = (rowIndex, moduleIndex) => {
-        if (!clipboard) return false;
+        if (!clipboard || (clipboardMode.mode !== 'cut' && clipboardMode.mode !== 'copy')) return false;
 
         const row = switchboard.rows[rowIndex];
 
@@ -1353,6 +1354,78 @@ function App() {
     const handleCancelPaste = () => {
         setClipboard(null);
         setClipboardMode(null);
+    }
+
+    const handleModuleInterCopy = (rowIndex, moduleIndex) => {
+        const row = switchboard.rows[rowIndex];
+        const currentModule = row[moduleIndex];
+
+        if (!currentModule.free) {
+            setClipboard(currentModule);
+            setClipboardMode({ rowIndex, moduleIndex, mode: 'inter' });
+        }
+    }
+
+    const handleModuleInter = (rowIndex, moduleIndex) => {
+        if (!moduleInterAllowed(rowIndex, moduleIndex)) return;
+        if (clipboardMode?.mode !== 'inter') return;
+
+        let prems = null;
+        let snds = null;
+        switchboard.rows.forEach((row, i) => {
+            row.forEach((module, j) => {
+                if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+                    prems = module;
+                }
+                if (i === rowIndex && j === moduleIndex) {
+                    snds = module;
+                }
+            });
+        });
+        if (prems === null || snds === null) {
+            alert("Impossible de procéder à l'échange de ces 2 modules.");
+            setClipboard(null);
+            setClipboardMode(null);
+            return;
+        }
+
+        setSwitchboard((old) => {
+            let rows = old.rows.map((row, i) => {
+                let r = row.map((module, j) => {
+
+                    if (i === rowIndex && j === moduleIndex) {
+                        return prems;
+                    }
+
+                    if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+                        return snds;
+                    }
+
+                    if (i !== rowIndex) return module;
+                    if (j !== moduleIndex) return module;
+                });
+
+                r = r.filter((rr) => rr !== null);
+
+                return r;
+            });
+
+            return modulesAutoId({ ...old, rows });
+        });
+
+        setClipboard(null);
+        setClipboardMode(null);
+    }
+
+    const moduleInterAllowed = (rowIndex, moduleIndex) => {
+        if (!clipboard || (clipboardMode.mode !== 'inter')) return false;
+
+        const row = switchboard.rows[rowIndex];
+
+        const currentModule = row[moduleIndex];
+        if (currentModule.span === clipboard.span && currentModule.id !== clipboard.id) return true;
+
+        return false;
     }
 
     const handleModuleHalf = (rowIndex, moduleIndex, item, mode) => {
@@ -2099,6 +2172,10 @@ function App() {
                         onModuleCancelPaste={() => handleCancelPaste()}
                         modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
                         hasClipboard={clipboard !== null}
+
+                        onModuleInterCopy={(moduleIndex, item) => handleModuleInterCopy(i, moduleIndex, item)}
+                        onModuleInter={(moduleIndex, item) => handleModuleInter(i, moduleIndex, item)}
+                        moduleInterAllowed={(moduleIndex, item) => moduleInterAllowed(i, moduleIndex, item)}
 
                         onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
                         onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}

@@ -24,6 +24,20 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
+        "2.2.7": {
+            "date": "2025-02-27",
+            "actions": {
+                "adds": [
+                    {
+                        "text": "Ajout de la possibilité d'échanger 2 modules en lieu et place.",
+                        "from": {
+                            "name": "Discussion #65",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/65"
+                        }
+                    }
+                ]
+            }
+        },
         "2.2.6": {
             "date": "2025-01-05",
             "actions": {

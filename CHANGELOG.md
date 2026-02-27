@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [2.2.7] - 2025-02-27
+
+### Ajouts
+
+- [[Discussion #65](https://github.com/pantaflex44/Tiquettes/discussions/65)] Ajout de la possibilité d'échanger 2 modules en lieu et place.
+
+
 ## [2.2.6] - 2025-01-05
 
 ### Corrections

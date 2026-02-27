@@ -692,6 +692,16 @@
         "wire": "1.5"
     },
     {
+        "filename": "swb_vmc.svg",
+        "title": "Hotte aspirante",
+        "modtype": "Cuisine",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A",
+        "wire": "1.5"
+    },
+    {
         "filename": "swb_pool.svg",
         "title": "Piscine / Jacuzzi / Bassin",
         "modtype": "Divers",

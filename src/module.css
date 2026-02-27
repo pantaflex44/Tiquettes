@@ -232,7 +232,7 @@
     width: calc(100% - 1em - 0px);
     background-color: var(--secondary-color-light-light);
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     gap: 0.5em;
     padding-right: 0.55em;
     padding-left: 0.45em;
@@ -302,7 +302,7 @@
 
 .module:has(.module_content.disabled:not(.clipboard_me)) {
     pointer-events: none;
-    filter: grayscale(1);
+    filter: grayscale(1) opacity(0.6);
 }
 
 .module .module_content.disabled {

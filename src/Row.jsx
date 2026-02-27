@@ -25,44 +25,47 @@ import Module from "./Module";
 
 /* eslint-disable react/prop-types */
 function Row({
-                                  rowPosition,
-                                  rowIndex,
-                                  items,
-                                  theme,
-                                  clipboard,
-                                  clipboardMode,
-                                  style = {},
-                                  onModuleGrow = null,
-                                  onModuleShrink = null,
-                                  moduleGrowAllowed = null,
-                                  moduleShrinkAllowed = null,
-                                  moduleMoveLeftAllowed = null,
-                                  moduleMoveRightAllowed = null,
-                                  onModuleClear = null,
-                                  onModuleEdit = null,
-                                  onModuleCopy = null,
-                                  onModuleCut = null,
-                                  onModulePaste = null,
-                                  onModuleCancelPaste = null,
-                                  modulePasteAllowed = null,
-                                  onModuleMoveLeft = null,
-                                  onModuleMoveRight = null,
-                                  onModuleHalf = null,
-                                  onRowAddAfter = null,
-                                  onRowDelete = null,
-                                  rowAddAllowed = null,
-                                  rowDeleteAllowed = null,
-                                  printFreeModuleAllowed = null,
-                                  hasClipboard = false
-                              }) {
+    rowPosition,
+    rowIndex,
+    items,
+    theme,
+    clipboard,
+    clipboardMode,
+    style = {},
+    onModuleGrow = null,
+    onModuleShrink = null,
+    moduleGrowAllowed = null,
+    moduleShrinkAllowed = null,
+    moduleMoveLeftAllowed = null,
+    moduleMoveRightAllowed = null,
+    onModuleClear = null,
+    onModuleEdit = null,
+    onModuleCopy = null,
+    onModuleCut = null,
+    onModulePaste = null,
+    onModuleInter = null,
+    onModuleInterCopy = null,
+    onModuleCancelPaste = null,
+    modulePasteAllowed = null,
+    moduleInterAllowed = null,
+    onModuleMoveLeft = null,
+    onModuleMoveRight = null,
+    onModuleHalf = null,
+    onRowAddAfter = null,
+    onRowDelete = null,
+    rowAddAllowed = null,
+    rowDeleteAllowed = null,
+    printFreeModuleAllowed = null,
+    hasClipboard = false
+}) {
     return (
         <div className={`switchboard_row row_${rowPosition}`} id={`row_${rowPosition}`}>
 
             <div className="row_title">
                 <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon}
-                     width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => {
-                    if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex);
-                }}/>
+                    width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => {
+                        if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex);
+                    }} />
                 <span>Rangée {rowPosition}</span>
             </div>
             <div className="row" style={style}>
@@ -90,8 +93,11 @@ function Row({
                         onCopy={(item) => onModuleCopy(i, item)}
                         onCut={(item) => onModuleCut(i, item)}
                         onPaste={(item) => onModulePaste(i, item)}
+                        onInter={(item) => onModuleInter(i, item)}
+                        onInterCopy={(item) => onModuleInterCopy(i, item)}
                         cancelPaste={() => onModuleCancelPaste()}
                         pasteAllowed={(item) => modulePasteAllowed(i, item)}
+                        interAllowed={(item) => moduleInterAllowed(i, item)}
                         hasClipboard={hasClipboard}
 
                         shrinkAllowed={(item) => moduleShrinkAllowed(i, item)}
@@ -111,7 +117,7 @@ function Row({
             </div>
             <div className={`row_add ${!rowAddAllowed() ? 'disabled' : ''}`} title="Insérer une nouvelle rangée">
                 <img className="row_add_icon" src={rowAddIcon} width={24} height={24} alt="Ajouter une rangée"
-                     onClick={() => onRowAddAfter(rowIndex)}/>
+                    onClick={() => onRowAddAfter(rowIndex)} />
                 {rowAddAllowed()
                     ? <div className="row_add_info" onClick={() => onRowAddAfter(rowIndex)}>Insérer une nouvelle rangée
                         ici</div>
