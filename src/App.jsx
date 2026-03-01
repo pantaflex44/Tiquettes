@@ -902,7 +902,7 @@ function App() {
 
         const id = data.currentModule.id.trim().toUpperCase();
         const icon = data.currentModule.icon;
-        const text = (data.currentModule.text ?? "").trim();
+        const text = (data.currentModule.text ?? "").trimRight().replace(/ [ \r\n]+/gm, "\n");
         const desc = (data.currentModule.desc ?? "").trim();
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();

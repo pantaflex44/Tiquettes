@@ -483,5 +483,6 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [Biodom13](https://github.com/Biodom13)
 - [mmnlfrrr](https://github.com/mmnlfrrr)
 - [LeG2](https://github.com/LeG2)
+- [misterg94](https://github.com/misterg94)
 
  ### ☕ Ainsi que pour tous les cafés offerts ;-)

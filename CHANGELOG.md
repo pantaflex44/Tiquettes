@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.2.7] - 2025-02-27
+## [2.2.7] - 2025-03-01
 
 ### Ajouts
 
+- [[Issue #66](https://github.com/pantaflex44/Tiquettes/issues/66)] Ajouter des lignes vides au début des libellés des étiquettes.
 - [[Discussion #65](https://github.com/pantaflex44/Tiquettes/discussions/65)] Ajout de la possibilité d'échanger 2 modules en lieu et place.
 
 
