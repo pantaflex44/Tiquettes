@@ -36,6 +36,8 @@ import exportProjectIcon from './assets/download.svg';
 import printProjectIcon from './assets/printer.svg';
 import projectIcon from './assets/project.svg';
 import summaryIcon from './assets/list.svg';
+import resizeIcon from './assets/aspect-ratio.svg';
+import resizeOffIcon from './assets/aspect-ratio-off.svg';
 
 import schemaIcon from './assets/schema.svg';
 import monitorIcon from "./assets/monitor.svg";
@@ -84,7 +86,7 @@ function App() {
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
     const [uniqueChoices, setUniqueChoices] = useState([]);
 
-    const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard,  themeEditor, welcome, editor, newProjectProperties]);
+    const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
@@ -114,10 +116,18 @@ function App() {
                 {});
             return merge(defaultPrintOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions')));
         }
-
         return { ...defaultPrintOptions };
     }
     const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
+
+    const getSavedAutoResize = () => {
+        if (sessionStorage.getItem(pkg.name + '_autoResize')) {
+            return sessionStorage.getItem(pkg.name + '_autoResize') === 'true';
+        }
+        return false;
+    }
+    const [spaceSize, setSpaceSize] = useState('1152px');
+    const [autoSpaceSize, setAutoSpaceSize] = useState(getSavedAutoResize());
 
     const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
     const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
@@ -1622,6 +1632,29 @@ function App() {
     }, [monitorOpened]);
 
     useEffect(() => {
+        if (!autoSpaceSize && spaceSize !== '1152px') {
+            setSpaceSize('1152px');
+        } else if (autoSpaceSize) {
+            if (switchboard.stepsPerRows === 18 && spaceSize !== '1340px') {
+                setSpaceSize('1340px');
+            } else if (switchboard.stepsPerRows === 24 && spaceSize !== '1760px') {
+                setSpaceSize('1760px');
+            } else if (switchboard.stepsPerRows === 13 && spaceSize !== '1152px') {
+                setSpaceSize('1152px');
+            }
+        }
+
+        sessionStorage.setItem(pkg.name + '_autoResize', autoSpaceSize ? 'true' : 'false');
+    }, [autoSpaceSize, switchboard.stepsPerRows]);
+
+    useEffect(() => {
+        const ctn = document.getElementById('content');
+        if (ctn) {
+            ctn.style.setProperty('--content-size', spaceSize);
+        }
+    }, [spaceSize]);
+
+    useEffect(() => {
 
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -1650,7 +1683,7 @@ function App() {
             }
         }}>
             {/** TOOLBAR **/}
-            
+
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
 
@@ -1895,6 +1928,14 @@ function App() {
                 </button>
 
                 <div className="button_group-separator"></div>
+
+                <div className="button_group-separator" style={{ marginLeft: 'auto' }}></div>
+
+                <button className={`button_group-resize end ${autoSpaceSize ? 'checked' : ''}`} onClick={() => setAutoSpaceSize((old) => !old)} title="Redimensionner automatiquement l'espace de travail">
+                    <img src={autoSpaceSize ? resizeIcon : resizeOffIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Redimensionner automatiquement"} />
+                </button>
+
+
             </nav>
 
             {/** SWITCHBOARD PROJECT **/}

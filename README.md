@@ -84,6 +84,21 @@ Immédiatement, celui-ci s'affichera dans la zone de travail!
 
 Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
 
+
+---
+> <b>🛈 Bon à savoir</b>
+>
+> Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour un enveloppe de 13 modules. Toutefois, si vous possédezun écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
+>
+> <small>**Taille de la zone de travail par défaut**</small><br />
+>![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOff.png?raw=true)
+>
+> <small>**Taille de la zone de travail avec Redimensionnement automatique**</small><br />
+>![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOn.png?raw=true)
+---
+
+
+
 ![Nouveau projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_project_resume.png?raw=true)
 
 Sous le nom du projet, vous retrouvez le numéro de la dernière version exportée, les caractéristiques de l'enveloppe,
@@ -484,5 +499,6 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [mmnlfrrr](https://github.com/mmnlfrrr)
 - [LeG2](https://github.com/LeG2)
 - [misterg94](https://github.com/misterg94)
+- [Fanka14](https://github.com/Fanka14)
 
  ### ☕ Ainsi que pour tous les cafés offerts ;-)

@@ -21,6 +21,12 @@
     --secondary-color: lightcyan;
     --secondary-color-light: rgb(240, 255, 255);
     --secondary-color-light-light: rgb(247, 255, 255);
+    /* 24 modules */
+        /* --content-size: 1800px; */
+        /* 18 modules */
+        /* --content-size: 1400px; */
+        /* 13 modules */
+        --content-size: 1152px;
 }
 
 :focus {
@@ -60,7 +66,7 @@
     }
 
     @bottom-center {
-        content: "Page "counter(page) " / "counter(pages);
+        content: "Page " counter(page) " / " counter(pages);
         font-family: sans-serif;
         font-size: 8pt;
         color: darkgray;
@@ -76,7 +82,7 @@
     }
 
     @bottom-center {
-        content: "Page "counter(page) " / "counter(pages);
+        content: "Page " counter(page) " / " counter(pages);
         font-family: sans-serif;
         font-size: 8pt;
         color: darkgray;
@@ -98,7 +104,7 @@ body {
 #content {
     margin-inline: auto;
     padding-inline: 1em;
-    width: 1152px;
+    width: var(--content-size);
     max-width: calc(100% - 2em);
     display: flex;
     flex-direction: column;
@@ -127,7 +133,7 @@ nav.header {
 }
 
 nav.header ul {
-    max-width: 1152px;
+    max-width: var(--content-size);
     margin-inline: auto;
     margin-block: 0;
     list-style: none;
@@ -289,7 +295,8 @@ h1 sup {
     color: darkgray;
 }
 
-button, .fakeButton {
+button,
+.fakeButton {
     background-color: #f5f5f5;
     border: 1px solid darkgray;
     border-radius: 5px;
@@ -321,16 +328,19 @@ button, .fakeButton {
     column-gap: 0.5em;
 }
 
-button:not(:disabled):hover, .fakeButton:not(:disabled):hover {
+button:not(:disabled):hover,
+.fakeButton:not(:disabled):hover {
     background-color: var(--secondary-color);
     border-color: var(--primary-color);
 }
 
-button:disabled, .fakeButton:disabled {
+button:disabled,
+.fakeButton:disabled {
     cursor: default;
 }
 
-button:disabled img, .fakeButton:disabled img {
+button:disabled img,
+.fakeButton:disabled img {
     filter: opacity(0.4);
 }
 
@@ -388,8 +398,10 @@ select:focus {
     border-color: var(--primary-color);
 }
 
-input[type="checkbox"], input[type="radio"],
-input[type="checkbox"]+label, input[type="radio"]+label,
+input[type="checkbox"],
+input[type="radio"],
+input[type="checkbox"]+label,
+input[type="radio"]+label,
 input[type="range"] {
     cursor: pointer;
 }

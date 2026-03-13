@@ -25,9 +25,16 @@
     },
     "changelog": {
         "2.2.7": {
-            "date": "2025-03-01",
+            "date": "2025-03-13",
             "actions": {
                 "adds": [
+                    {
+                        "text": "Redimmensionnement de la zone de travail",
+                        "from": {
+                            "name": "Discussion #68",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/68"
+                        }
+                    },
                     {
                         "text": "Ajouter des lignes vides au début des libellés des étiquettes.",
                         "from": {
