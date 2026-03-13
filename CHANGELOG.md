@@ -4,7 +4,7 @@
 
 ### Corrections
 
-- [[Issue #67](https://github.com/pantaflex44/Tiquettes/issues/67)] Correction d'un bug lors de la ré-identification automatique des modules
+- [[Issue #67](https://github.com/pantaflex44/Tiquettes/issues/67)] Correction d'un bug lors de la ré-identification automatique des modules 
 
 ### Ajouts
 

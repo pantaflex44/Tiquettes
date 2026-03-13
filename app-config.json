@@ -29,7 +29,7 @@
             "actions": {
                 "patches": [
                     {
-                        "text": "Correction d'un bug lors de la ré-identification automatique des modules",
+                        "text": "Correction d'un bug lors de la ré-identification automatique des modules ",
                         "from": {
                             "name": "Issue #67",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/67"
