@@ -315,6 +315,14 @@ function App() {
 
         // correction des identifiants en doublon
         let ids = [];
+        rows.forEach((row) => {
+            row.forEach((module) => {
+                if (!module.free && module.id.trim() !== '') {
+                    ids.push(module.id.trim());
+                }
+            });
+        });
+
         rows = rows.map((row) => {
             return row.map((module) => {
                 if (module.free) {
@@ -324,9 +332,9 @@ function App() {
                     };
                 }
 
-                const currentModuleId = module.id.trim();
+                /*const currentModuleId = module.id.trim();*/
 
-                if (currentModuleId === '') {
+                if (module.id.trim() === '') {
                     let count = 1;
                     while (ids.includes(`${defaultModuleId}${count}`)) count++;
 
@@ -337,10 +345,10 @@ function App() {
                     };
                 }
 
-                if (ids.includes(currentModuleId)) {
+                /*if (ids.includes(currentModuleId)) {
                     let sup = 1;
                     while (ids.includes(`${currentModuleId}_${sup}`)) sup++;
-
+    
                     ids.push(`${currentModuleId}_${sup}`);
                     return {
                         ...module,
@@ -348,13 +356,34 @@ function App() {
                     };
                 }
 
-                ids.push(currentModuleId);
+                ids.push(currentModuleId);*/
                 return module;
             });
         });
 
         return { ...reIndentedSwb, rows };
     }, [defaultModuleId]);
+
+    const getNextId = (id, clipboardMode = '') => {
+        if (clipboardMode !== 'cut') {
+            let ids = [];
+            switchboard.rows.forEach((row) => {
+                row.forEach((module) => {
+                    if (!module.free && module.id.trim() !== '') {
+                        ids.push(module.id.trim());
+                    }
+                });
+            });
+            if (ids.includes(id)) {
+                let ii = id.split('_');
+                let count = 1;
+                while (ids.includes(`${ii[0]}_${count}`)) count++;
+                return `${ii[0]}_${count}`;
+            }
+        }
+
+        return id;
+    }; 
 
     const reassignAllParents = (originalId, newId) => {
         if (originalId && originalId !== newId) {
@@ -1270,6 +1299,8 @@ function App() {
         setSwitchboard((old) => {
             let deleteLength = 0;
             let addLength = 0;
+            let oldModuleId = '';
+            let newModuleId = '';
 
             let rows = old.rows.map((row, i) => {
                 let r = row.map((module, j) => {
@@ -1293,8 +1324,16 @@ function App() {
 
                     if (j !== moduleIndex) return module;
 
+                    let mm = { ...module };
+                    /*if (module.id !== '') {
+                        oldModuleId = module.id;
+                        newModuleId = module.id + '_copie';
+                        mm = { ...mm, id: newModuleId };
+                    }*/
+                    const newId = getNextId(clipboard.id, clipboardMode?.mode);
                     return {
-                        ...module,
+                        ...mm,
+                        id: newId,
                         free: clipboard.free,
                         span: clipboard.span,
                         icon: clipboard.icon,
@@ -1329,6 +1368,20 @@ function App() {
 
                 return r;
             });
+
+            /*rows = old.rows.map((row, i) => {
+                let r = row.map((module, j) => {
+                    let mm = { ...module };
+                    if (module.parentId === oldModuleId) {
+                        mm = { ...mm, parentId: newModuleId };
+                    }
+                    if (module.kcId === oldModuleId) {
+                        mm = { ...mm, kcId: newModuleId };
+                    }
+                    return mm;
+                });
+                return r;
+            });*/
 
             return modulesAutoId({ ...old, rows });
         });

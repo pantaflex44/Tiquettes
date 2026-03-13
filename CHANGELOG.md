@@ -2,6 +2,10 @@
 
 ## [2.2.7] - 2025-03-13
 
+### Corrections
+
+- [[Issue #67](https://github.com/pantaflex44/Tiquettes/issues/67)] Correction d'un bug lors de la ré-identification automatique des modules
+
 ### Ajouts
 
 - [[Discussion #68](https://github.com/pantaflex44/Tiquettes/discussions/68)] Redimmensionnement de la zone de travail

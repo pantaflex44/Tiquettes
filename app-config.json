@@ -27,6 +27,15 @@
         "2.2.7": {
             "date": "2025-03-13",
             "actions": {
+                "patches": [
+                    {
+                        "text": "Correction d'un bug lors de la ré-identification automatique des modules",
+                        "from": {
+                            "name": "Issue #67",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/67"
+                        }
+                    }
+                ],
                 "adds": [
                     {
                         "text": "Redimmensionnement de la zone de travail",

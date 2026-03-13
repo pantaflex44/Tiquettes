@@ -500,5 +500,6 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [LeG2](https://github.com/LeG2)
 - [misterg94](https://github.com/misterg94)
 - [Fanka14](https://github.com/Fanka14)
+- [xhark](https://github.com/blogmotion)
 
  ### ☕ Ainsi que pour tous les cafés offerts ;-)
