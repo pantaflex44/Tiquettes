@@ -88,12 +88,12 @@ Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-
 ---
 > <b>🛈 Bon à savoir</b>
 >
-> Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour un enveloppe de 13 modules. Toutefois, si vous possédezun écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
+> Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour une enveloppe de 13 modules. Toutefois, si vous possédez un écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
 >
 > <small>**Taille de la zone de travail par défaut**</small><br />
 >![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOff.png?raw=true)
 >
-> <small>**Taille de la zone de travail avec Redimensionnement automatique**</small><br />
+> <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
 >![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOn.png?raw=true)
 ---
 

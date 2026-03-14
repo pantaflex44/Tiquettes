@@ -16,6 +16,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+'use strict'
+
 import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import * as semver from 'semver';

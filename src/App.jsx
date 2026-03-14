@@ -16,6 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+'use strict'
 
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { satisfies } from 'compare-versions';
@@ -64,7 +65,6 @@ import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
-
 
 
 
