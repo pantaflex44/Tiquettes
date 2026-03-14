@@ -309,13 +309,12 @@ function App() {
         return true;
     };
 
+    // correction des identifiants en doublon
     const modulesAutoId = useCallback((swb) => {
         let reIndentedSwb = swb;
         let rows = reIndentedSwb.rows;
-
-        // correction des identifiants en doublon
         let ids = [];
-        rows.forEach((row) => {
+        swb.rows.forEach((row) => {
             row.forEach((module) => {
                 if (!module.free && module.id.trim() !== '') {
                     ids.push(module.id.trim());
@@ -332,8 +331,6 @@ function App() {
                     };
                 }
 
-                /*const currentModuleId = module.id.trim();*/
-
                 if (module.id.trim() === '') {
                     let count = 1;
                     while (ids.includes(`${defaultModuleId}${count}`)) count++;
@@ -345,45 +342,12 @@ function App() {
                     };
                 }
 
-                /*if (ids.includes(currentModuleId)) {
-                    let sup = 1;
-                    while (ids.includes(`${currentModuleId}_${sup}`)) sup++;
-    
-                    ids.push(`${currentModuleId}_${sup}`);
-                    return {
-                        ...module,
-                        id: `${currentModuleId}_${sup}`
-                    };
-                }
-
-                ids.push(currentModuleId);*/
                 return module;
             });
         });
 
         return { ...reIndentedSwb, rows };
     }, [defaultModuleId]);
-
-    const getNextId = (id, clipboardMode = '') => {
-        if (clipboardMode !== 'cut') {
-            let ids = [];
-            switchboard.rows.forEach((row) => {
-                row.forEach((module) => {
-                    if (!module.free && module.id.trim() !== '') {
-                        ids.push(module.id.trim());
-                    }
-                });
-            });
-            if (ids.includes(id)) {
-                let ii = id.split('_');
-                let count = 1;
-                while (ids.includes(`${ii[0]}_${count}`)) count++;
-                return `${ii[0]}_${count}`;
-            }
-        }
-
-        return id;
-    }; 
 
     const reassignAllParents = (originalId, newId) => {
         if (originalId && originalId !== newId) {
@@ -554,6 +518,28 @@ function App() {
 
         return isEmpty;
     }, [switchboard]);
+
+    const allMemoizedIds = useMemo(() => {
+        let ids = [];
+        switchboard.rows.forEach((row) => {
+            row.forEach((module) => {
+                if (!module.free && module.id.trim() !== '') {
+                    ids.push(module.id.trim());
+                }
+            });
+        });
+        return ids;
+    }, [switchboard.rows]);
+
+    const getNextId = (id) => {
+        if (allMemoizedIds.includes(id)) {
+            let ii = id.split('_');
+            let count = 1;
+            while (allMemoizedIds.includes(`${ii[0]}_${count}`)) count++;
+            return `${ii[0]}_${count}`;
+        }
+        return id;
+    };
 
     const lastFreeId = useMemo(() => {
         let rows = switchboard.rows;
@@ -1324,16 +1310,9 @@ function App() {
 
                     if (j !== moduleIndex) return module;
 
-                    let mm = { ...module };
-                    /*if (module.id !== '') {
-                        oldModuleId = module.id;
-                        newModuleId = module.id + '_copie';
-                        mm = { ...mm, id: newModuleId };
-                    }*/
-                    const newId = getNextId(clipboard.id, clipboardMode?.mode);
                     return {
-                        ...mm,
-                        id: newId,
+                        ...module,
+                        id: clipboardMode.mode !== 'cut' ? getNextId(clipboard.id) : clipboard.id,
                         free: clipboard.free,
                         span: clipboard.span,
                         icon: clipboard.icon,
