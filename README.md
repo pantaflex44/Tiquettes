@@ -80,10 +80,6 @@ sauvegarde automatique de votre session de travail est aussi intégrée au syst�
 Pour importer un projet, cliquez sur le bouton `Importer` puis chargez le fichier correspondant à votre projet.
 Immédiatement, celui-ci s'affichera dans la zone de travail!
 
-### Résumé du projet
-
-Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
-
 
 ---
 > <b>🛈 Bon à savoir</b>
@@ -96,6 +92,11 @@ Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-
 > <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
 >![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOn.png?raw=true)
 ---
+
+
+### Résumé du projet
+
+Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
 
 
 
