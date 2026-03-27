@@ -18,7 +18,7 @@
 
 'use strict'
 
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { satisfies } from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
@@ -54,6 +54,9 @@ import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
 import userShieldIcon from "./assets/user-shield.svg";
+import saveProjectIcon from "./assets/device-floppy.svg";
+import waitProjectIcon from "./assets/hourglass-high.svg";
+import alertProjectIcon from "./assets/alert-triangle.svg";
 
 import Editor from "./Editor.jsx";
 import NewProjectEditor from "./NewProjectEditor.jsx";
@@ -65,6 +68,9 @@ import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./useVisibilityChange.jsx";
+import { SpaceContext } from "./SpaceContext.jsx";
+import LoadingPopup from "./LoadingPopup.jsx";
+import LoadingErrorPopup from "./LoadingErrorPopup.jsx";
 
 
 
@@ -73,6 +79,8 @@ function App() {
     const projectRef = useRef();
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
+
+    const space = useContext(SpaceContext);
 
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
@@ -103,6 +111,20 @@ function App() {
             labelsPrintFormat: 'A4',
             schemaPrintFormat: 'A4',
             summaryPrintFormat: 'A4'
+        },
+        firstPageOptions: {
+            photo: false,
+            name: false,
+            siret: false,
+            postalAddress: false,
+            contacts: false,
+            phones: false,
+            projectName: true,
+            projectRevision: true,
+            projectCreated: true,
+            projectUpdated: true,
+            projectElectricalType: true,
+            projectElectricalVoltage: true
         }
     }), []);
     const getSavedPrintOptions = () => {
@@ -616,7 +638,7 @@ function App() {
 
     const _importProject = (data) => {
         try {
-            let swb = JSON.parse(data);
+            let swb = typeof data === 'string' ? JSON.parse(data) : data;
 
             const theme = themeEngineCompatibility(swb);
             setTheme(theme);
@@ -706,10 +728,13 @@ function App() {
 
             action('import');
 
+            return true;
             // eslint-disable-next-line no-unused-vars
         } catch (err) {
             importRef.current.value = "";
             alert("Impossible d'importer ce projet.");
+
+            return false;
         }
     };
 
@@ -1687,6 +1712,21 @@ function App() {
     }, [spaceSize]);
 
     useEffect(() => {
+        if (space.loadState === 'loaded' && space.project?.switchboard) {
+            const sms = switchboard ? JSON.stringify(switchboard) : null;
+            const ims = JSON.stringify(space.project?.switchboard);
+            if (ims !== sms) {
+                console.log("Project loading...");
+                if (_importProject(space.project?.switchboard)) {
+                    console.log("Project loaded.");
+                } else {
+                    console.log("Project loading error!");
+                }
+            }
+        }
+    }, [space.project, space.loadState]);
+
+    useEffect(() => {
 
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -1719,31 +1759,45 @@ function App() {
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
 
-                <button className={`button_group-new_project active`.trim()}
-                    onClick={() => {
-                        setWelcome(true);
-                    }} title="Créer un nouveau projet">
-                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
-                    <span className={'responsive'}>Projets...</span>
-                </button>
+                {!space.project && <>
+                    <button className={`button_group-new_project active`.trim()}
+                        onClick={() => {
+                            setWelcome(true);
+                        }} title="Créer un nouveau projet">
+                        <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
+                        <span className={'responsive'}>Projets...</span>
+                    </button>
 
-                <div className="button_group-separator"></div>
+                    <div className="button_group-separator"></div>
 
-                <input id="importfile" ref={importRef} type="file" onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
+                    <input id="importfile" ref={importRef} type="file" onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
+                    }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
 
-                <button className="button_group-export_project" onClick={() => {
-                    exportProject();
-                }} title="Exporter...">
-                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
-                    <span>Exporter</span>
-                </button>
+                    <button className="button_group-export_project" onClick={() => {
+                        exportProject();
+                    }} title="Exporter...">
+                        <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
+                        <span>Exporter</span>
+                    </button>
+                </>}
+
+                {space.project && <>
+                    <div style={{ fontSize: '70%', display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)' }}>Les espaces de Tiquettes</div>
+                    <div className="button_group-separator"></div>
+
+                    <button className="button_group-save_project" onClick={() => space.save(switchboard)} title="Sauvegarder le projet" disabled={space.saveState === 'saving'}>
+                        {space.saveState !== 'saving' && space.saveState !== 'error' && <img src={saveProjectIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Sauvegarder"} />}
+                        {space.saveState === 'saving' && <img src={waitProjectIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Sauvegarde en cours"} />}
+                        {space.saveState === 'error' && <img src={alertProjectIcon} className="blink" width={18} height={18} style={{ width: '18px', height: '18px' }} title={"Erreur lors de la sauvegarde"} />}
+                        <span>Sauvegarder</span>
+                    </button>
+                </>}
 
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
-                    <div className="dropdown">
+                    <div className="dropdown" style={{ left: space.project ? '100%' : '35%' }}>
                         <div className="dropdown_header">Options</div>
 
                         <div className="dropdown_item head"
@@ -1950,16 +2004,19 @@ function App() {
                     </div>
                 </button>
 
+                {!space.project && <>
+                    <div className="button_group-separator"></div>
+
+                    <button className="button_group-clear_project" onClick={() => {
+                        if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
+                    }} title="Réinitialiser le projet">
+                        <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
+                        <span>Réinitialiser</span>
+                    </button>
+                </>}
+
                 <div className="button_group-separator"></div>
 
-                <button className="button_group-clear_project" onClick={() => {
-                    if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
-                }} title="Réinitialiser le projet">
-                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
-                    <span>Réinitialiser</span>
-                </button>
-
-                <div className="button_group-separator"></div>
 
                 <div className="button_group-separator" style={{ marginLeft: 'auto' }}></div>
 
@@ -2345,6 +2402,9 @@ function App() {
 
                 }}
             />}
+
+            {space && space.loadState === 'loading' && !space.error && <LoadingPopup />}
+            {space && space.error && <LoadingErrorPopup error={space.error} onCancel={() => { if (window) window.close(); }} />}
 
 
 

@@ -45,6 +45,7 @@
     },
     "dependencies": {
         "@vite-pwa/assets-generator": "^1.0.2",
+        "axios": "^1.13.6",
         "compare-versions": "^6.1.1",
         "cpx": "^1.5.0",
         "cpx2": "^8.0.0",

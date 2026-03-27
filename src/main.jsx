@@ -27,6 +27,7 @@ import App from './App.jsx'
 import './main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './NewVersionPopup.jsx';
+import SpaceProvider from './SpaceProvider.jsx';
 
 
 function Footer() {
@@ -62,7 +63,8 @@ export default function Main() {
             '/app/api/reports.php',
             '/app/api/resume.php',
             '/app/infos.json',
-            'localhost'
+            '/api/',
+            '/dev/'
         ];
 
         const origins = [];
@@ -106,7 +108,7 @@ export default function Main() {
     }, []);
 
     return (
-        <>
+        <SpaceProvider>
             <App />
             <Footer />
 
@@ -116,7 +118,7 @@ export default function Main() {
                     window.location.reload(true);
                 }}
             />}
-        </>
+        </SpaceProvider>
     );
 }
 

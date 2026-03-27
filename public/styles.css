@@ -711,3 +711,12 @@ input[type="range"]:focus {
 .stepper>.step.active>.step-description {
     font-weight: bold;
 }
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}

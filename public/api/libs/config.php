@@ -36,16 +36,19 @@ require_once __DIR__ . '/../myip.php';
 
 function dd_json(mixed $content): void
 {
-    header('Content-Type: application/json');
-    write_json([
+    /*write_json([
         'errors' => $content,
         'status' => 'error',
         'message' => $content
+    ]);*/
+    write_json([
+        'error' => $content
     ]);
 }
 
 function write_json(mixed $content): void
 {
+    header('Content-Type: application/json');
     echo json_encode($content);
     exit;
 }
@@ -450,6 +453,12 @@ function stripeStatusText(string $status): string
     };
 }
 
+function filter_string_polyfill(string $string): string
+{
+    $str = preg_replace('/\\x00|<[^>]*>?/', '', $string);
+    return trim(str_replace(["'", '"'], ["'", '"'], $str));
+}
+
 
 // mode
 const DEFAULT_MODE = 'development';
@@ -524,9 +533,6 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     define('DB', $pdo);
 } catch (PDOException $e) {
-    dd_json(content: $e);
+    dd_json(content: $e->getMessage());
     exit(0);
 }
-
-
-
