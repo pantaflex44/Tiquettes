@@ -26,6 +26,8 @@ import { SpaceContext } from './SpaceContext.jsx';
 export default function SpaceProvider({ children }) {
     const [project, setProject] = useState(null);
     const [instanceId, setInstanceId] = useState(null);
+    const [printOptions, setPrintOptions] = useState(null);
+    const [params, setParams] = useState(null);
     const [error, setError] = useState(null);
 
     const [loadState, setLoadState] = useState(null);
@@ -59,7 +61,9 @@ export default function SpaceProvider({ children }) {
     const closeAll = (noProject = false, noError = false) => {
         if (noProject === false) {
             setProject(null);
+            setParams(null);
             setInstanceId(null);
+            setPrintOptions(null);
         }
         setLoadState('closed');
         setSaveState(null);
@@ -97,14 +101,16 @@ export default function SpaceProvider({ children }) {
             ufiid,
             {},
             (data) => {
-                if (!data.instanceId || data.instanceId !== ufiid || !data.project) {
+                if (!data.instanceId || data.instanceId !== ufiid || !data.project || !data.params || data.printOptions) {
                     throw new Error("Impossible de charger ce projet.");
                 } else {
                     if (!data.project || !data.project.switchboard) {
                         throw new Error("Impossible de former ce projet. Document corrompu.");
                     }
                     setProject(data.project);
+                    setParams(data.params);
                     setInstanceId(data.instanceId);
+                    setPrintOptions(data.printOptions);
                     setLoadState('loaded');
                 }
             },
@@ -121,7 +127,9 @@ export default function SpaceProvider({ children }) {
             apiSend(
                 import.meta.env.VITE_APP_API_URL + "save.php",
                 instanceId,
-                { switchboard: JSON.stringify(switchboard) },
+                {
+                    switchboard: JSON.stringify(switchboard),
+                },
                 (data) => {
                     if (!data.instanceId || data.instanceId !== instanceId || !data.ok) {
                         throw new Error("Impossible de sauvegarder ce projet.");
@@ -138,7 +146,11 @@ export default function SpaceProvider({ children }) {
                 }
             );
         } else {
-            setSaveState('error');
+            if (auto) {
+                setSaveState('error');
+            } else {
+                apiError(new Error("Impossible de sauvegarder pour le moment..."));
+            }
         }
     };
 
@@ -165,6 +177,8 @@ export default function SpaceProvider({ children }) {
     return (
         <SpaceContext value={{
             project,
+            params,
+            printOptions,
             loadState,
             saveState,
             error,
