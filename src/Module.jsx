@@ -184,7 +184,7 @@ function Module({
             : (isFree && !canPaste && !hasClipboard
                 ? <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
                         alt="Editer ce module"
-                    onClick={() => { if (!isDemo && !isLimited) { onEdit(item); } }} />
+                    onClick={() => { if (!isDemo) { onEdit(item); } }} />
                 : (!isFree && themedModule
                     ? <div
                         className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''} ${hasClipboard && clipboard?.id === item.id ? 'clipboard_me' : ''} ${hasClipboard && !canPaste && !canInter ? 'disabled' : ''}`.trim()}
