@@ -26,9 +26,9 @@ import { SpaceContext } from './SpaceContext.jsx';
 export default function SpaceProvider({ children }) {
     const [project, setProject] = useState(null);
     const [instanceId, setInstanceId] = useState(null);
-    const [printOptions, setPrintOptions] = useState(null);
     const [params, setParams] = useState(null);
     const [error, setError] = useState(null);
+    const [isLimited, setIsLimited] = useState(false);
 
     const [loadState, setLoadState] = useState(null);
     const [saveState, setSaveState] = useState(null);
@@ -63,7 +63,6 @@ export default function SpaceProvider({ children }) {
             setProject(null);
             setParams(null);
             setInstanceId(null);
-            setPrintOptions(null);
         }
         setLoadState('closed');
         setSaveState(null);
@@ -73,23 +72,21 @@ export default function SpaceProvider({ children }) {
     };
 
     const apiError = (error) => {
+        console.error(error);
         if (error.response) {
             setError({
                 code: 'RESPONSE_ERROR',
-                message: error.message ?? '',
-                text: "Oh la, il apparait que nous venons de rencontrer le Professeur Tournesol ... La réponse ne correspond pas à la demande.<br /><br />Impossible de charger le projet dans ces conditions."
+                message: error.message ?? "Oh la, il apparait que nous venons de rencontrer le Professeur Tournesol ... La réponse ne correspond pas à la demande.<br /><br />Impossible de charger le projet dans ces conditions.",
             });
         } else if (error.request) {
             setError({
                 code: 'REQUEST_ERROR',
-                message: error.message ?? '',
-                text: "Hum, j'ai l'impression que quelqu'un boude dans son coin. Aucune réponse et aucun contenu à charger !<br /><br />Si le problème persiste, veuillez, s'il vous plait, nous contacter pour que l'on puisse corriger ce comportement."
+                message: error.message ?? "Hum, j'ai l'impression que quelqu'un boude dans son coin. Aucune réponse et aucun contenu à charger !<br /><br />Si le problème persiste, veuillez, s'il vous plait, nous contacter pour que l'on puisse corriger ce comportement.",
             });
         } else {
             setError({
                 code: 'COMMON_ERROR',
-                message: error.message ?? '',
-                text: "Nous venons de retrouver un insecte dans les transistors provoquant une erreur générale."
+                message: error.message ?? "Nous venons de retrouver un insecte dans les transistors provoquant une erreur générale.",
             });
         }
     };
@@ -97,20 +94,20 @@ export default function SpaceProvider({ children }) {
     const load = (ufiid) => {
         setLoadState('loading');
         apiSend(
-            import.meta.env.VITE_APP_API_URL + "load.php",
+            import.meta.env.VITE_APP_SPACE_API_URL + "load.php",
             ufiid,
             {},
             (data) => {
-                if (!data.instanceId || data.instanceId !== ufiid || !data.project || !data.params || data.printOptions) {
+                if (!data.instanceId || data.instanceId !== ufiid || !data.project || !data.params) {
                     throw new Error("Impossible de charger ce projet.");
                 } else {
                     if (!data.project || !data.project.switchboard) {
-                        throw new Error("Impossible de former ce projet. Document corrompu.");
+                        throw new Error("Impossible de lire le contenu de ce projet. Document corrompu.");
                     }
                     setProject(data.project);
                     setParams(data.params);
                     setInstanceId(data.instanceId);
-                    setPrintOptions(data.printOptions);
+                    setIsLimited(data.params?.limited ?? false);
                     setLoadState('loaded');
                 }
             },
@@ -122,10 +119,12 @@ export default function SpaceProvider({ children }) {
     };
 
     const save = (switchboard, auto = false) => {
+        if (isLimited) return;
+
         setSaveState('saving');
         if (instanceId) {
             apiSend(
-                import.meta.env.VITE_APP_API_URL + "save.php",
+                import.meta.env.VITE_APP_SPACE_API_URL + "save.php",
                 instanceId,
                 {
                     switchboard: JSON.stringify(switchboard),
@@ -178,10 +177,10 @@ export default function SpaceProvider({ children }) {
         <SpaceContext value={{
             project,
             params,
-            printOptions,
             loadState,
             saveState,
             error,
+            isLimited,
             save
         }}>
             {children}

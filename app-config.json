@@ -24,6 +24,20 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
+        "2.2.8": {
+            "date": "2025-04-12",
+            "actions": {
+                "patches": [
+                    {
+                        "text": "Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.",
+                        "from": {
+                            "name": "Discussion #43",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084"
+                        }
+                    }
+                ]
+            }
+        },
         "2.2.7": {
             "date": "2025-03-27",
             "actions": {

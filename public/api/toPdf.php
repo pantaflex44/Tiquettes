@@ -556,7 +556,6 @@ class TiquettesPDF extends FPDF
             $image->writeImage($pngFilepath);
 
             return file_exists($pngFilepath);
-
         } else if ($this->required['modules']['convert'] === true || $isDev) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
@@ -730,7 +729,6 @@ class TiquettesPDF extends FPDF
                 $y += $step;
             }
             $this->grid[$this->gridOrientation]['right'] = $this->GetPageWidth() - $originalX;
-
         }
 
         $this->Ln($this->pageMargin + 5);
@@ -817,7 +815,7 @@ class TiquettesPDF extends FPDF
             $this->SetFont('Arial', 'B', 14);
             $this->Cell(($this->GetPageWidth() / 2) - $this->pageMargin - ($this->pageMargin / 2) - 23, 7, str($title), 0, 0, 'L');
 
-            $this->SetX(($this->GetPageWidth() / 2) - $this->pageMargin + +($this->pageMargin / 2));
+            $this->SetX(($this->GetPageWidth() / 2) - $this->pageMargin + + ($this->pageMargin / 2));
             $this->SetFont('Arial', '', 14);
             $this->MultiCell(($this->GetPageWidth() / 2) - $this->pageMargin - ($this->pageMargin / 2) - 23, 7, cutStr(str($value)), 0, 'L', false);
 
@@ -858,8 +856,7 @@ class TiquettesPDF extends FPDF
                 $this->SetLineWidth(0.075);
                 $this->SetDash(1, 1);
                 $this->Line($cutLine[0], $cutLine[1], $cutLine[2], $cutLine[3]);
-                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');
-                ;
+                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');;
             }
             $this->SetDash();
             $cutLines = [];
@@ -1160,8 +1157,7 @@ class TiquettesPDF extends FPDF
                 $pm = $pms[0];
                 if ($this->getSiblingCount($pm) > 0)
                     $this->drawNextLine($pm, $pl);
-            }
-            ;
+            };
         }
     }
 
@@ -1220,7 +1216,6 @@ class TiquettesPDF extends FPDF
                 $this->SetFont('Arial', '', 5.5);
                 $this->TextWithDirection($centerX - 1, $currentPosY + ($this->grid[$this->gridOrientation]['step'] / 2) + 1, str("L" . $module->line), 'U');
             }
-
         } else {
             $symbol = $this->getSymbol('blank');
             if ($symbol !== '')
@@ -1456,8 +1451,6 @@ class TiquettesPDF extends FPDF
             $this->Ln(3);
         }
     }
-
-
 }
 
 
@@ -1537,14 +1530,25 @@ if ($switchboard->withDb) {
         'func' => 'dd'
     ]);
 }
+
+function existsInFlattenModules(string $id): bool
+{
+    global $flattenModules;
+
+    $found = array_values(array_filter($flattenModules, fn($m) => $m->id === $id));
+    return count($found) === 1;
+}
+
 foreach ($flattenModules as $module) {
     $kcId = trim($module->kcId ?? '');
-    if ($kcId !== '') {
-        $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === $kcId));
+    $kcId_a = explode('|', $kcId);
+
+    foreach ($kcId_a as $kcId_item) {
+        $kcModule = array_values(array_filter($flattenModules, fn($module) => $module->id === trim($kcId_item)));
         if (count($kcModule) === 1) {
             $kcModule = $kcModule[0];
 
-            if ($module->partialKc === true) {
+            if ($module->partialKc === true && !existsInFlattenModules('| ' . $module->id)) {
                 $flattenModules[] = (object) array_merge((array) $module, [
                     'kcId' => '',
                     'id' => '| ' . $module->id,
@@ -1555,17 +1559,19 @@ foreach ($flattenModules as $module) {
                 ]);
             }
 
-            $flattenModules[] = (object) array_merge((array) $kcModule, [
-                'kcId' => '',
-                'id' => '¤_' . $kcModule->id,
-                'parentId' => $module->id,
-                'func' => 'k',
-                'icon' => $module->icon,
-                'text' => $module->partialKc === true ? $kcModule->text : $module->text,
-                'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
-                'pole' => $module->pole,
-                'wire' => $module->wire ?? ''
-            ]);
+            if (!existsInFlattenModules('¤_' . $kcModule->id)) {
+                $flattenModules[] = (object) array_merge((array) $kcModule, [
+                    'kcId' => '',
+                    'id' => '¤_' . $kcModule->id,
+                    'parentId' => $module->id,
+                    'func' => 'k',
+                    'icon' => $module->icon,
+                    'text' => $module->partialKc === true ? $kcModule->text : $module->text,
+                    'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
+                    'pole' => $module->pole,
+                    'wire' => $module->wire ?? ''
+                ]);
+            }
         }
     }
 }

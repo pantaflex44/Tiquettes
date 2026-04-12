@@ -75,12 +75,15 @@ import LoadingErrorPopup from "./LoadingErrorPopup.jsx";
 
 
 function App() {
+    const documentIsVisible = useDocumentVisibility();
+
     const importRef = useRef();
     const projectRef = useRef();
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
 
     const space = useContext(SpaceContext);
+    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
 
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
@@ -93,6 +96,7 @@ function App() {
     const [clipboardMode, setClipboardMode] = useState(null);
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
     const [uniqueChoices, setUniqueChoices] = useState([]);
+    const [spaceProjectUpdated, setSpaceProjectUpdated] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
 
@@ -141,6 +145,45 @@ function App() {
         return { ...defaultPrintOptions };
     }
     const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
+
+    const _importPrintOptions = (spacePrintOptions) => {
+        try {
+            setPrintOptions({
+                ...defaultPrintOptions,
+                firstPage: spacePrintOptions?.firstPage ?? defaultPrintOptions.firstPage,
+                labels: spacePrintOptions?.defaultPrintOptionsLabels ?? defaultPrintOptions.labels,
+                summary: spacePrintOptions?.defaultPrintOptionsSummary ?? defaultPrintOptions.summary,
+                schema: spacePrintOptions?.defaultPrintOptionsSchema ?? defaultPrintOptions.schema,
+                freeModules: spacePrintOptions?.freeModules ?? defaultPrintOptions.freeModules,
+                pdfOptions: {
+                    ...defaultPrintOptions.pdfOptions,
+                    labelsCutLines: spacePrintOptions?.labelsCutLines ?? defaultPrintOptions.pdfOptions.labelsCutLines,
+                    printCurrents: spacePrintOptions?.printCurrents ?? defaultPrintOptions.pdfOptions.printCurrents,
+                    labelsPrintFormat: spacePrintOptions?.labelsPrintFormat ?? defaultPrintOptions.pdfOptions.labelsPrintFormat,
+                    schemaPrintFormat: spacePrintOptions?.schemaPrintFormat ?? defaultPrintOptions.pdfOptions.schemaPrintFormat,
+                    summaryPrintFormat: spacePrintOptions?.summaryPrintFormat ?? defaultPrintOptions.pdfOptions.summaryPrintFormat,
+                },
+                firstPageOptions: {
+                    ...defaultPrintOptions.firstPageOptions,
+                    photo: spacePrintOptions?.firstPagePhoto ?? defaultPrintOptions.firstPageOptions.photo,
+                    name: spacePrintOptions?.firstPageName ?? defaultPrintOptions.firstPageOptions.name,
+                    siret: spacePrintOptions?.firstPageSiret ?? defaultPrintOptions.firstPageOptions.siret,
+                    postalAddress: spacePrintOptions?.firstPagePostalAddress ?? defaultPrintOptions.firstPageOptions.postalAddress,
+                    contacts: spacePrintOptions?.firstPageContacts ?? defaultPrintOptions.firstPageOptions.contacts,
+                    phones: spacePrintOptions?.firstPagePhones ?? defaultPrintOptions.firstPageOptions.phones,
+                    projectName: spacePrintOptions?.firstPageProjectName ?? defaultPrintOptions.firstPageOptions.projectName,
+                    projectRevision: spacePrintOptions?.firstPageProjectRevision ?? defaultPrintOptions.firstPageOptions.projectRevision,
+                    projectCreated: spacePrintOptions?.firstPageProjectCreated ?? defaultPrintOptions.firstPageOptions.projectCreated,
+                    projectUpdated: spacePrintOptions?.firstPageProjectUpdated ?? defaultPrintOptions.firstPageOptions.projectUpdated,
+                    projectElectricalType: spacePrintOptions?.firstPageProjectElectricalType ?? defaultPrintOptions.firstPageOptions.projectElectricalType,
+                    projectElectricalVoltage: spacePrintOptions?.firstPageProjectElectricalVoltage ?? defaultPrintOptions.firstPageOptions.projectElectricalVoltage,
+                }
+            });
+            console.log('Project print options loaded.');
+        } catch (error) {
+            console.log('Unable to load project proint options:', error);
+        }
+    };
 
     const getSavedAutoResize = () => {
         if (sessionStorage.getItem(pkg.name + '_autoResize')) {
@@ -380,9 +423,12 @@ function App() {
                         if (module.parentId === originalId) {
                             mm = { ...mm, parentId: newId };
                         }
-                        if (module.kcId === originalId) {
-                            mm = { ...mm, kcId: newId };
+
+                        let kcId_a = (module.kcId ?? "").split('|').map(k => k.trim());
+                        if (kcId_a.includes(originalId)) {
+                            mm = { ...mm, kcId: kcId_a.map(k => k === originalId ? newId : k).join('|') };
                         }
+
                         return mm;
                     });
                 });
@@ -613,6 +659,7 @@ function App() {
         });
 
         setClipboard(null);
+        setSpaceProjectUpdated(false);
         setClipboardMode(null);
         setUniqueChoices([]);
         setPrintOptions({ ...defaultPrintOptions });
@@ -627,6 +674,7 @@ function App() {
         importRef.current.value = "";
 
         setClipboardMode(null);
+        setSpaceProjectUpdated(false);
         setUniqueChoices([]);
         setDocumentTitle(defaultProjectName);
         setPrintOptions({ ...defaultPrintOptions });
@@ -719,6 +767,7 @@ function App() {
             //setDocumentTitle(filename);
 
             setClipboard(null);
+            setSpaceProjectUpdated(false);
             setClipboardMode(null);
             setUniqueChoices([]);
             setPrintOptions({ ...defaultPrintOptions });
@@ -1654,6 +1703,10 @@ function App() {
         t = setTimeout(() => {
             const savedProjectIsOutdated = sessionStorage.getItem(pkg.name) !== JSON.stringify(switchboard);
             if (savedProjectIsOutdated) {
+                if (space.project) {
+                    setSpaceProjectUpdated(true);
+                }
+
                 let updatedProject = {
                     ...switchboard,
                     prjupdated: new Date()
@@ -1718,6 +1771,7 @@ function App() {
             if (ims !== sms) {
                 console.log("Project loading...");
                 if (_importProject(space.project?.switchboard)) {
+                    _importPrintOptions(space.project?.printOptions);
                     console.log("Project loaded.");
                 } else {
                     console.log("Project loading error!");
@@ -1727,7 +1781,28 @@ function App() {
     }, [space.project, space.loadState]);
 
     useEffect(() => {
+        if (space.project && space.saveState === 'saved') {
+            console.log('Project saved.');
 
+            if (spaceProjectUpdated) {
+                setSpaceProjectUpdated(false);
+            }
+        }
+    }, [space.saveState]);
+
+    useEffect(() => {
+        if (!documentIsVisible && space.project && spaceProjectUpdated && space.saveState !== 'saving') {
+            space.save(switchboard);
+        }
+    }, [documentIsVisible]);
+
+    const handleUnload = (e) => {
+        if (space.project && spaceProjectUpdated && space.saveState !== 'saving') {
+            space.save(switchboard);
+        }
+    }
+
+    useEffect(() => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
@@ -1745,19 +1820,22 @@ function App() {
             return true;
         });
 
+        window.addEventListener('unload', handleUnload)
+        return () => {
+            window.removeEventListener('unload', handleUnload)
+        }
     }, []);
 
     return (
-        <div tabIndex={-1} onKeyUp={(e) => {
+        <div ref={projectRef} tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
                 setClipboard(null);
                 setClipboardMode(null);
             }
-        }}>
+        }} >
             {/** TOOLBAR **/}
 
-
-            <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()}>
+            <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()} style={{ position: 'sticky', top: '0.25rem', zIndex: 5000 }}>
 
                 {!space.project && <>
                     <button className={`button_group-new_project active`.trim()}
@@ -1782,11 +1860,11 @@ function App() {
                     </button>
                 </>}
 
-                {space.project && <>
+                {space.project && !isLimited && <>
                     <div style={{ fontSize: '70%', display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)' }}>Les espaces de Tiquettes</div>
                     <div className="button_group-separator"></div>
 
-                    <button className="button_group-save_project" onClick={() => space.save(switchboard)} title="Sauvegarder le projet" disabled={space.saveState === 'saving'}>
+                    <button className="button_group-save_project" onClick={() => space.save(switchboard)} title="Sauvegarder le projet" disabled={space.saveState === 'saving' || !spaceProjectUpdated} data-updated={spaceProjectUpdated}>
                         {space.saveState !== 'saving' && space.saveState !== 'error' && <img src={saveProjectIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Sauvegarder"} />}
                         {space.saveState === 'saving' && <img src={waitProjectIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Sauvegarde en cours"} />}
                         {space.saveState === 'error' && <img src={alertProjectIcon} className="blink" width={18} height={18} style={{ width: '18px', height: '18px' }} title={"Erreur lors de la sauvegarde"} />}
@@ -1797,7 +1875,7 @@ function App() {
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
-                    <div className="dropdown" style={{ left: space.project ? '100%' : '35%' }}>
+                    <div className="dropdown" style={{ left: isLimited ? '200px' : '70px' }}>
                         <div className="dropdown_header">Options</div>
 
                         <div className="dropdown_item head"
@@ -2015,6 +2093,15 @@ function App() {
                     </button>
                 </>}
 
+                {isLimited && (
+                    <>
+                        <div className="button_group-separator"></div>
+                        <div style={{ fontSize: '75%', display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', color: 'red', textAlign: 'center', textTransform: 'uppercase', cursor: 'default' }} title="Le document a été ouvert en mode lecture seule car vous n'avez pas, actuellement, les droits nécessaires pour le modifier.">
+                            Lecture seule
+                        </div>
+                    </>
+                )}
+
                 <div className="button_group-separator"></div>
 
 
@@ -2031,7 +2118,7 @@ function App() {
 
             {/** PROJECT TITLE **/}
 
-            <h3 ref={projectRef} className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
+            <h3 className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <img src={projectIcon} width={24} height={24} alt="Projet courant" />
                 <ContentEditable
                     value={switchboard.prjname ?? defaultProjectName}
@@ -2048,7 +2135,7 @@ function App() {
                         fontWeight: 'bold',
                         maxWidth: '100%'
                     }}
-                    editable={!UIFrozen}
+                    editable={!UIFrozen && !isLimited}
                     className={"contentEditable"}
                 />
             </h3>
@@ -2101,114 +2188,121 @@ function App() {
                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
                 title={freeSpaceMessage}>
                 <div className="tabPageBand notprintable">
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Thème<br />courant:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <select
-                                value={theme?.name ?? defaultTheme}
-                                onChange={(e) => {
-                                    updateTheme(e.target.value);
-                                }}
-                                style={{
-                                    maxWidth: '100%',
-                                    width: '280px',
-                                    overflowX: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis'
-                                }}
-                                disabled={UIFrozen}
-                            >
-                                {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
-                                    const g = e[0];
-                                    const l = e[1];
-                                    return <Fragment key={`themes_${g}`}>
-                                        <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                        {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`}
-                                            value={t.name}>({g}) {t.title}</option>)}
-                                    </Fragment>
-                                })}
-                            </select>
-                        </div>
-                        {theme.name.startsWith('custom') && theme?.data && <div className="tabPageBandCol">
-                            <button style={{ height: '34px' }}
-                                title="Modifier le thème."
-                                onClick={() => {
-                                    setThemeEditor(true)
-                                }}>
-                                <img src={themeSettingsIcon} alt="Modifier le thème."
-                                    width={22} height={22} />
-                            </button>
-                        </div>}
-                    </div>
+                    {!isLimited && (
+                        <>
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Thème<br />courant:</span>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select
+                                        value={theme?.name ?? defaultTheme}
+                                        onChange={(e) => {
+                                            updateTheme(e.target.value);
+                                        }}
+                                        style={{
+                                            maxWidth: '100%',
+                                            width: '280px',
+                                            overflowX: 'hidden',
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis'
+                                        }}
+                                        disabled={UIFrozen}
+                                    >
+                                        {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
+                                            const g = e[0];
+                                            const l = e[1];
+                                            return <Fragment key={`themes_${g}`}>
+                                                <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
+                                                {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`}
+                                                    value={t.name}>({g}) {t.title}</option>)}
+                                            </Fragment>
+                                        })}
+                                    </select>
+                                </div>
+                                {theme.name.startsWith('custom') && theme?.data && <div className="tabPageBandCol">
+                                    <button style={{ height: '34px' }}
+                                        title="Modifier le thème."
+                                        onClick={() => {
+                                            setThemeEditor(true)
+                                        }}>
+                                        <img src={themeSettingsIcon} alt="Modifier le thème."
+                                            width={22} height={22} />
+                                    </button>
+                                </div>}
+                            </div>
+
+
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <span style={{
+                                        fontSize: 'smaller',
+                                        lineHeight: 1.2
+                                    }}>Hauteur des<br />étiquettes:</span>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <input type="range" min={heightMin} max={heightMax} step={1}
+                                        style={{ width: '100px' }}
+                                        value={switchboard.height} onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            if (value >= heightMin) setSwitchboard((old) => ({ ...old, height: value }));
+                                        }} />
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <span>{switchboard.height}mm</span>
+                                </div>
+                            </div>
+
+                            <div className="tabPageBandGroup">
+                                <div className="tabPageBandCol">
+                                    <span style={{
+                                        fontSize: 'smaller',
+                                        lineHeight: 1.2
+                                    }}>Largeur des<br />étiquettes:</span>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select
+                                        value={switchboard.stepSize ?? defaultStepSize}
+                                        onChange={(e) => {
+                                            const value = parseFloat(e.target.value);
+                                            if (value === 17.5 || value === 18) setSwitchboard((old) => ({
+                                                ...old,
+                                                stepSize: value
+                                            }));
+                                        }}
+                                        style={{
+                                            maxWidth: '100%',
+                                            width: 'max-content',
+                                            overflowX: 'hidden',
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis'
+                                        }}
+                                        disabled={UIFrozen}
+                                    >
+                                        <option>17.5</option>
+                                        <option>18</option>
+                                    </select>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <span>mm</span>
+                                </div>
+                            </div>
+
+                            <div className="tabPageBandNL"></div>
+                        </>
+                    )}
 
                     <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{
-                                fontSize: 'smaller',
-                                lineHeight: 1.2
-                            }}>Hauteur des<br />étiquettes:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <input type="range" min={heightMin} max={heightMax} step={1}
-                                style={{ width: '100px' }}
-                                value={switchboard.height} onChange={(e) => {
-                                    const value = parseInt(e.target.value);
-                                    if (value >= heightMin) setSwitchboard((old) => ({ ...old, height: value }));
-                                }} />
-                        </div>
-                        <div className="tabPageBandCol">
-                            <span>{switchboard.height}mm</span>
-                        </div>
-                    </div>
-
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{
-                                fontSize: 'smaller',
-                                lineHeight: 1.2
-                            }}>Largeur des<br />étiquettes:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <select
-                                value={switchboard.stepSize ?? defaultStepSize}
-                                onChange={(e) => {
-                                    const value = parseFloat(e.target.value);
-                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({
-                                        ...old,
-                                        stepSize: value
-                                    }));
-                                }}
-                                style={{
-                                    maxWidth: '100%',
-                                    width: 'max-content',
-                                    overflowX: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis'
-                                }}
-                                disabled={UIFrozen}
-                            >
-                                <option>17.5</option>
-                                <option>18</option>
-                            </select>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <span>mm</span>
-                        </div>
-                    </div>
-
-                    <div className="tabPageBandNL"></div>
-
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <button style={{ height: '34px' }}
-                                title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                                onClick={() => reassignModules()}>
-                                <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants"
-                                    width={22} height={22} />
-                            </button>
-                        </div>
+                        {!isLimited && (
+                            <div className="tabPageBandCol">
+                                <button style={{ height: '34px' }}
+                                    title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+                                    onClick={() => reassignModules()}>
+                                    <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants"
+                                        width={22} height={22} />
+                                </button>
+                            </div>
+                        )}
                         <div className="tabPageBandCol">
                             <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice"
                                 checked={switchboard.switchboardMonitor}
@@ -2352,63 +2446,71 @@ function App() {
 
             {/** POPUPS **/}
 
-            {editor && <Editor
-                theme={theme}
-                switchboard={switchboard}
-                stepSize={switchboard.stepSize}
-                getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
-                getModuleById={getModuleById}
-                editor={editor}
-                onSetEditor={setEditor}
-                onApplyModuleEditor={applyModuleEditor}
-                onHandleModuleClear={handleModuleClear}
-            />}
+            {
+                editor && <Editor
+                    theme={theme}
+                    switchboard={switchboard}
+                    stepSize={switchboard.stepSize}
+                    getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
+                    getModuleById={getModuleById}
+                    editor={editor}
+                    onSetEditor={setEditor}
+                    onApplyModuleEditor={applyModuleEditor}
+                    onHandleModuleClear={handleModuleClear}
+                />
+            }
 
-            {newProjectProperties && <NewProjectEditor
-                newProjectProperties={newProjectProperties}
-                onSetNewProjectProperties={setNewProjectProperties}
-                rowsMin={rowsMin}
-                rowsMax={rowsMax}
-                heightMin={heightMin}
-                heightMax={{ heightMax }}
-                onCreateProject={createProject}
-                onUpdateProjectProperties={updateProjectProperties}
-            />}
+            {
+                newProjectProperties && <NewProjectEditor
+                    newProjectProperties={newProjectProperties}
+                    onSetNewProjectProperties={setNewProjectProperties}
+                    rowsMin={rowsMin}
+                    rowsMax={rowsMax}
+                    heightMin={heightMin}
+                    heightMax={{ heightMax }}
+                    onCreateProject={createProject}
+                    onUpdateProjectProperties={updateProjectProperties}
+                />
+            }
 
-            {welcome && <WelcomePopup
-                onCancel={() => setWelcome(false)}
-                onNewProject={() => {
-                    setNewProjectProperties(() => ({ ...defaultProjectProperties }));
-                    setWelcome(false);
-                }}
-                onImportProject={() => {
-                    importProjectChooseFile();
-                    setWelcome(false);
-                }}
-            />}
+            {
+                welcome && <WelcomePopup
+                    onCancel={() => setWelcome(false)}
+                    onNewProject={() => {
+                        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+                        setWelcome(false);
+                    }}
+                    onImportProject={() => {
+                        importProjectChooseFile();
+                        setWelcome(false);
+                    }}
+                />
+            }
 
-            {themeEditor && <ThemeEditorPopup
-                switchboard={switchboard}
-                stepSize={switchboard.stepSize}
-                heightMin={heightMin}
-                heightMax={heightMax}
-                theme={theme}
-                onCancel={() => setThemeEditor(false)}
-                onApply={(editedTheme) => {
-                    setTheme(editedTheme);
-                    setSwitchboard((old) => modulesAutoId({ ...old, theme: editedTheme }));
-                    setThemeEditor(false);
+            {
+                themeEditor && <ThemeEditorPopup
+                    switchboard={switchboard}
+                    stepSize={switchboard.stepSize}
+                    heightMin={heightMin}
+                    heightMax={heightMax}
+                    theme={theme}
+                    onCancel={() => setThemeEditor(false)}
+                    onApply={(editedTheme) => {
+                        setTheme(editedTheme);
+                        setSwitchboard((old) => modulesAutoId({ ...old, theme: editedTheme }));
+                        setThemeEditor(false);
 
 
-                }}
-            />}
+                    }}
+                />
+            }
 
             {space && space.loadState === 'loading' && !space.error && <LoadingPopup />}
             {space && space.error && <LoadingErrorPopup error={space.error} onCancel={() => { if (window) window.close(); }} />}
 
 
 
-        </div>
+        </div >
     )
 }
 

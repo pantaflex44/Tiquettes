@@ -23,6 +23,7 @@ const IconSelectorItem = lazy(() => import('./IconSelectorItem.jsx'));
 import swbIcons from './switchboard_icons.json';
 import caretDownIcon from './assets/caret-down.svg';
 import caretUpIcon from './assets/caret-up.svg';
+import useOutsideAlerter from "./useOutsideAlerter.jsx";
 
 /* eslint-disable react/prop-types */
 function IconSelector({ value = null, onChange = null, onOpenState = null }) {
@@ -33,6 +34,10 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
     const [found, setFound] = useState([...swbIcons]);
 
     const listRef = useRef();
+    const listContainerRef = useRef();
+    useOutsideAlerter(listContainerRef, () => {
+        setOpened(false);
+    });
 
     function handleSearchInput(e) {
         const v = e.target.value;
@@ -114,7 +119,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
     }, [value]);
 
     return (
-        <div style={{ position: 'relative' }} className="icon_selector">
+        <div style={{ position: 'relative' }} className="icon_selector" ref={listContainerRef}>
             <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -158,7 +163,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
                 overflowY: 'auto',
                 backgroundColor: '#fff',
                 listStyle: 'none'
-            }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
+            }} onMouseOut={() => setHoveredItem(null)} /*onBlur={() => setOpened(false)}*/>
                 {found.map((icon, i) => <Suspense key={i} fallback={<div></div>}>
                     <IconSelectorItem icon={icon} selected={selected} search={search}
                         handleIconListItemSelected={handleIconListItemSelected}

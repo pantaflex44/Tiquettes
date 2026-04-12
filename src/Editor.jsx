@@ -41,6 +41,7 @@ import EditorWireSelector from "./EditorWireSelector.jsx";
 import GroupColorSelector from "./GroupColorSelector.jsx";
 import EditorLineSelector from "./EditorLineSelector.jsx";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
+import EditorMultiContactSelector from "./EditorMultiContactSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -305,7 +306,7 @@ export default function Editor({
                                             if (selected?.wire && ed.currentModule.wire === "") {
                                                 let w = 0;
                                                 if (ed.currentModule.current !== "") {
-                                                    const c = parseInt(ed.currentModule.current.replace(/\D/g, ''));
+                                                    const c = parseInt((ed.currentModule.current ?? '').replace(/\D/g, ''));
                                                     w = rulesCurrentWires[c] ?? 0;
                                                 }
                                                 onUpdateModuleEditor({ wire: w > 0 ? `${w}` : selected?.wire });
@@ -445,15 +446,15 @@ export default function Editor({
                                             <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
                                                 par</label>
                                             <div className="popup_row-flex">
-                                                <EditorContactSelector id={`editor_contacts_${ed.currentModule.id.trim()}`}
+                                        <EditorMultiContactSelector id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.kcId}
                                                     currentModuleId={ed.currentModule.id}
                                                     filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
                                                     onChange={(value) => {
                                                         onUpdateModuleEditor({ kcId: value });
-                                                        if (value === '') onUpdateModuleEditor({ partialKc: false });
+                                                        if (value.length === 0) onUpdateModuleEditor({ partialKc: false });
                                                     }} />
-                                                <EditorContactAsservSelector id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`} disabled={ed.currentModule.kcId === ''}
+                                        <EditorContactAsservSelector id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`} disabled={ed.currentModule.kcId === '' /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/}
                                                     value={ed.currentModule.partialKc} onChange={(value) => onUpdateModuleEditor({ partialKc: value })} />
                                             </div>
                                         </div>
@@ -504,7 +505,7 @@ export default function Editor({
                                     <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
                                         value={ed.currentModule.wire}
                                         onChange={(value) => onUpdateModuleEditor({ wire: value })}
-                                        current={parseInt(ed.currentModule.current.replace(/\D/g, ''))}
+                                    current={parseInt((ed.currentModule.current ?? '').replace(/\D/g, ''))}
                                         rules={rulesCurrentWires}
                                     />
                                 </div>

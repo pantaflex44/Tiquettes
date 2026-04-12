@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [2.2.8] - 2025-04-12
+
+### Corrections
+
+- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084)] Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.
+
+
 ## [2.2.7] - 2025-03-27
 
 ### Corrections

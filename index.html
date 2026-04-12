@@ -236,11 +236,12 @@
                         alt="Partenariats" /><span>Partenariats</span></a></li>
             <li><a href="#ressources"><img src="/ressources.svg" width="16" height="16"
                         alt="Ressources" /><span>Ressources</span></a></li>
-            <li style="margin-inline:0.5rem;">
+            <li id="kofi" style="margin-inline:0.5rem;">
                 <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
                 <script
                     type='text/javascript'>kofiwidget2.init('Offrir un café', '#000', 'T6T61BPPX0'); kofiwidget2.draw();</script>
             </li>
+
         </ul>
     </nav>
 
@@ -391,6 +392,17 @@
     </div>
 
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        if (urlParams.get('ufiid') !== null) {
+            const kofiEL = document.getElementById('kofi');
+            if (kofiEL) {
+                kofiEL.style.display = 'none';
+            }
+        }
+    </script>
 
 
     <!--<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>

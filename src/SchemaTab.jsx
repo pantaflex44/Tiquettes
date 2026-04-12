@@ -18,7 +18,7 @@
 
 /* eslint-disable react/prop-types */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import SchemaItem from "./SchemaItem.jsx";
 
@@ -37,6 +37,7 @@ import cancelIcon from "./assets/cancel.svg";
 import numbersIcon from "./assets/numbers.svg";
 import zoomPlusIcon from "./assets/zoom-in.svg";
 import zoomMinusIcon from "./assets/zoom-out.svg";
+import { SpaceContext } from "./SpaceContext.jsx";
 
 export default function SchemaTab({
     tab,
@@ -47,6 +48,9 @@ export default function SchemaTab({
     getModuleById,
     onEditSymbol = null,
 }) {
+    const space = useContext(SpaceContext);
+    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
+
     const [monitorOpened, setMonitorOpened] = useState(false);
     const [zoomed, setZoomed] = useState(false);
     const monitorRef = useRef(null);
@@ -86,32 +90,35 @@ export default function SchemaTab({
 
             // si un module est asservi par un contacteur, on ajoute les contacts sous ce module pour indiquer l'asservissement
             const kcId = (module.kcId ?? "");
-            const kcModule = getModuleById(kcId).module;
-            if (kcModule) {
-                if (module.partialKc === true) {
+            const kcId_a = kcId.split("|");
+            kcId_a.forEach((k) => {
+                const kcModule = getModuleById(k.trim()).module;
+                if (kcModule) {
+                    if (module.partialKc === true) {
+                        _childs.push({
+                            ...module,
+                            kcId: '',
+                            id: `↓${module.id}`,
+                            parentId: module.id,
+                            func: 'o',
+                            icon: module.icon,
+                            text: module.text,
+                        });
+                    }
                     _childs.push({
-                        ...module,
+                        ...kcModule,
                         kcId: '',
-                        id: `↓${module.id}`,
+                        id: `¤_${kcModule.id}`,
                         parentId: module.id,
-                        func: 'o',
+                        func: 'k',
                         icon: module.icon,
-                        text: module.text,
+                        text: module.partialKc === true ? kcModule.text : module.text,
+                        desc: module.partialKc === true ? kcModule.desc : module.desc,
+                        pole: module.pole,
+                        wire: module.wire
                     });
                 }
-                _childs.push({
-                    ...kcModule,
-                    kcId: '',
-                    id: `¤_${kcModule.id}`,
-                    parentId: module.id,
-                    func: 'k',
-                    icon: module.icon,
-                    text: module.partialKc === true ? kcModule.text : module.text,
-                    desc: module.partialKc === true ? kcModule.desc : module.desc,
-                    pole: module.pole,
-                    wire: module.wire
-                });
-            }
+            });
 
             const childs = getRow(_childs);
 
@@ -119,11 +126,23 @@ export default function SchemaTab({
                 module,
                 childs,
                 isLast: Object.keys(childs).length === 0,
-                hasPrev: i > 0,
-                hasNext: i < moduleList.length - 1,
                 hasBrothers: Object.keys(getChilds(module.parentId) ?? {}).length > 0,
             };
-        })
+        });
+
+        let e = Object.entries(l);
+        for (let i = 0; i < e.length; i++) {
+            e[i] = [
+                e[i][0],
+                {
+                    ...e[i][1],
+                    hasPrev: i > 0,
+                    hasNext: i < e.length - 1,
+                }
+            ];
+        }
+        l = Object.fromEntries(e);
+
         return l;
     }, [switchboard.rows, switchboard.withDb]
     );
@@ -325,119 +344,123 @@ export default function SchemaTab({
             style={{ '--schema-scale': zoomed ? '1.5' : '1' }}
         >
             <div className="tabPageBand notprintable">
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR"
-                            checked={switchboard.projectType === "R"}
-                            onChange={() => setSwitchboard((old) => ({ ...old, projectType: "R" }))} />
-                        <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
-                            <img src={homeIcon} alt="Project résidentiel" width={24} height={24} />
-                        </label>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT"
-                            checked={switchboard.projectType === "T"}
-                            onChange={() => setSwitchboard((old) => ({ ...old, projectType: "T" }))} />
-                        <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
-                            <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24} />
-                        </label>
-                    </div>
-                </div>
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Tension de<br />référence:</span>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400}
-                            value={switchboard.vref}
-                            onChange={(e) => setSwitchboard((old) => ({ ...old, vref: e.target.value }))} />
-                    </div>
-                </div>
+                {!isLimited && (
+                    <>
+                        <div className="tabPageBandGroup">
+                            <div className="tabPageBandCol">
+                                <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR"
+                                    checked={switchboard.projectType === "R"}
+                                    onChange={() => setSwitchboard((old) => ({ ...old, projectType: "R" }))} />
+                                <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
+                                    <img src={homeIcon} alt="Project résidentiel" width={24} height={24} />
+                                </label>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT"
+                                    checked={switchboard.projectType === "T"}
+                                    onChange={() => setSwitchboard((old) => ({ ...old, projectType: "T" }))} />
+                                <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
+                                    <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24} />
+                                </label>
+                            </div>
+                        </div>
+                        <div className="tabPageBandGroup">
+                            <div className="tabPageBandCol">
+                                <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Tension de<br />référence:</span>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400}
+                                    value={switchboard.vref}
+                                    onChange={(e) => setSwitchboard((old) => ({ ...old, vref: e.target.value }))} />
+                            </div>
+                        </div>
 
-                <div className="tabPageBandSeparator"></div>
+                        <div className="tabPageBandSeparator"></div>
 
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice"
-                            checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({
-                                ...old,
-                                db: { ...old.db, func: 'db' },
-                                withDb: !old.withDb
-                            }))} />
-                        <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
-                            <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement"
-                                width={24} height={24} />
-                        </label>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({
-                            ...old,
-                            db: { ...old.db, type: e.target.value }
-                        }))} disabled={!switchboard.withDb}>
-                            <option value="">Instantané</option>
-                            <option value="S">Sélectif</option>
-                        </select>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => {
-                            let sw = {
-                                ...old,
-                                db: { ...old.db, pole: e.target.value }
-                            };
+                        <div className="tabPageBandGroup">
+                            <div className="tabPageBandCol">
+                                <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice"
+                                    checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({
+                                        ...old,
+                                        db: { ...old.db, func: 'db' },
+                                        withDb: !old.withDb
+                                    }))} />
+                                <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
+                                    <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement"
+                                        width={24} height={24} />
+                                </label>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({
+                                    ...old,
+                                    db: { ...old.db, type: e.target.value }
+                                }))} disabled={!switchboard.withDb}>
+                                    <option value="">Instantané</option>
+                                    <option value="S">Sélectif</option>
+                                </select>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => {
+                                    let sw = {
+                                        ...old,
+                                        db: { ...old.db, pole: e.target.value }
+                                    };
 
-                            if (e.target.value === "1P+N") {
-                                sw = {
-                                    ...sw,
-                                    rows: sw.rows.map((row) => row.map((module) => {
-                                        if (module.pole && module.pole !== e.target.value) {
-                                            return { ...module, pole: e.target.value };
-                                        }
-                                        return module;
-                                    }))
-                                };
-                            }
+                                    if (e.target.value === "1P+N") {
+                                        sw = {
+                                            ...sw,
+                                            rows: sw.rows.map((row) => row.map((module) => {
+                                                if (module.pole && module.pole !== e.target.value) {
+                                                    return { ...module, pole: e.target.value };
+                                                }
+                                                return module;
+                                            }))
+                                        };
+                                    }
 
-                            return sw;
-                        })} disabled={!switchboard.withDb}>
-                            <option value="1P+N">Monophasé</option>
-                            <option value="3P+N">Triphasé</option>
-                        </select>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({
-                            ...old,
-                            db: { ...old.db, sensibility: e.target.value }
-                        }))} disabled={!switchboard.withDb}>
-                            <option value="500mA">500mA</option>
-                        </select>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({
-                            ...old,
-                            db: { ...old.db, current: e.target.value }
-                        }))} disabled={!switchboard.withDb}>
-                            <option value="10/30A">10/30A</option>
-                            <option value="15/45A">15/45A</option>
-                            <option value="30/60A">30/60A</option>
-                            <option value="60/90A">60/90A</option>
-                            <option value="60A">60A mono-calibre</option>
-                        </select>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice"
-                            checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({
-                                ...old,
-                                withGroundLine: !old.withGroundLine
-                            }))} />
-                        <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
-                            <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre"
-                                width={24} height={24} />
-                        </label>
-                    </div>
-                    {/**<div className="tabPageBandSeparator"></div>**/}
-                </div>
+                                    return sw;
+                                })} disabled={!switchboard.withDb}>
+                                    <option value="1P+N">Monophasé</option>
+                                    <option value="3P+N">Triphasé</option>
+                                </select>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({
+                                    ...old,
+                                    db: { ...old.db, sensibility: e.target.value }
+                                }))} disabled={!switchboard.withDb}>
+                                    <option value="500mA">500mA</option>
+                                </select>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({
+                                    ...old,
+                                    db: { ...old.db, current: e.target.value }
+                                }))} disabled={!switchboard.withDb}>
+                                    <option value="10/30A">10/30A</option>
+                                    <option value="15/45A">15/45A</option>
+                                    <option value="30/60A">30/60A</option>
+                                    <option value="60/90A">60/90A</option>
+                                    <option value="60A">60A mono-calibre</option>
+                                </select>
+                            </div>
+                            <div className="tabPageBandCol">
+                                <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice"
+                                    checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({
+                                        ...old,
+                                        withGroundLine: !old.withGroundLine
+                                    }))} />
+                                <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
+                                    <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre"
+                                        width={24} height={24} />
+                                </label>
+                            </div>
+                            {/**<div className="tabPageBandSeparator"></div>**/}
+                        </div>
 
-                <div className="tabPageBandNL"></div>
+                        <div className="tabPageBandNL"></div>
+                    </>
+                )}
 
                 <div className="tabPageBandGroup">
                     <div className="tabPageBandCol">
@@ -449,15 +472,19 @@ export default function SchemaTab({
                                 alt="Zoom" width={24} height={24} />
                         </label>
                     </div>
-                    <div className="tabPageBandSeparator"></div>
-                    <div className="tabPageBandCol">
-                        <button style={{ height: '34px' }}
-                            title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                            onClick={() => reassignModules()}>
-                            <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
-                                height={22} />
-                        </button>
-                    </div>
+                    {!isLimited && (
+                        <>
+                            <div className="tabPageBandSeparator"></div>
+                            <div className="tabPageBandCol">
+                                <button style={{ height: '34px' }}
+                                    title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+                                    onClick={() => reassignModules()}>
+                                    <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
+                                        height={22} />
+                                </button>
+                            </div>
+                        </>
+                    )}
                     <div className="tabPageBandCol">
                         <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice"
                             checked={switchboard.schemaMonitor}
@@ -484,31 +511,33 @@ export default function SchemaTab({
                 </div>
             </div>
 
-            {switchboard.schemaMonitor && monitorOpened && monitor.errors && (
-                <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
-                    onBlur={() => setMonitorOpened(false)}>
-                    <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
-                        <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+            {
+                switchboard.schemaMonitor && monitorOpened && monitor.errors && (
+                    <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
+                        onBlur={() => setMonitorOpened(false)}>
+                        <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
+                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+                        </div>
+                        <div className="tabPageBandCol"
+                            style={{ height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content' }}>
+                            <ul>
+                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                                    <li key={i} className="tabPageErrors">
+                                        <div>{id}:</div>
+                                        <ul>
+                                            {errors.map((error, j) => <li key={j} className="tabPageError">
+                                                <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs"
+                                                    width={16} height={16} />
+                                                <span>{error}</span>
+                                            </li>)}
+                                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                    <div className="tabPageBandCol"
-                        style={{ height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content' }}>
-                        <ul>
-                            {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
-                                <li key={i} className="tabPageErrors">
-                                    <div>{id}:</div>
-                                    <ul>
-                                        {errors.map((error, j) => <li key={j} className="tabPageError">
-                                            <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs"
-                                                width={16} height={16} />
-                                            <span>{error}</span>
-                                        </li>)}
-                                    </ul>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            )}
+                )
+            }
 
             <div className="schemaGrid">
                 <div className="schemaItemSeparator first"></div>
@@ -523,6 +552,6 @@ export default function SchemaTab({
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

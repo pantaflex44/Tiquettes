@@ -30,9 +30,9 @@ export default function LoadingErrorPopup({ error, onCancel }) {
         showNextButton={false}
         onCancel={() => onCancel()}
     >
-        <h3 style={{ margin: 0, padding: 0 }}>Huston, nous rencontrons un problème !</h3>
-        <p style={{ margin: 0, marginTop: '1rem', padding: 0 }} dangerouslySetInnerHTML={{ __html: error?.text ?? '' }} ></p>
-        <p style={{ margin: 0, marginTop: '2rem', padding: 0, paddingLeft: '0.5rem', fontWeight: 600, fontSize: '105%', borderLeft: '4px solid #ccc' }} dangerouslySetInnerHTML={{ __html: `${error?.message ?? '-'}`.trim() }} ></p>
-        <p style={{ margin: 0, marginTop: 0, padding: 0, paddingLeft: '0.5rem', fontSize: '80%', borderLeft: '4px solid #ccc' }} dangerouslySetInnerHTML={{ __html: `${error?.code ?? 'UNKNOWN_ERROR'}`.trim() }} ></p>
+        <h4 style={{ margin: 0, padding: 0, fontWeight: 300, color: 'red' }}>Huston, nous rencontrons un problème !</h4>
+        {/*<p style={{ margin: 0, marginTop: '1rem', padding: 0 }} dangerouslySetInnerHTML={{ __html: error?.text ?? '' }} ></p>*/}
+        <p style={{ margin: 0, marginBottom: '2rem', marginTop: '1rem', padding: 0, fontWeight: 600, fontSize: '105%' }} dangerouslySetInnerHTML={{ __html: `${error?.message ?? '-'}`.trim() }} ></p>
+        <p style={{ margin: 0, marginTop: 0, padding: 0, paddingTop: '0.5rem', fontSize: '80%' }} dangerouslySetInnerHTML={{ __html: `#_${error?.code ?? 'UNKNOWN_ERROR'}`.trim() }} ></p>
     </Popup >
 }

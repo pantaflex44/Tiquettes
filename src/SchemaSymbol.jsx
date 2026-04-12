@@ -18,16 +18,20 @@
 
 /* eslint-disable react/prop-types */
 
-import {useMemo} from "react";
+import { useContext, useMemo } from "react";
 
 import schemaFunctions from './schema_functions.json';
+import { SpaceContext } from "./SpaceContext";
 
 export default function SchemaSymbol({
-                                         switchboard,
-                                         module,
-                                         onEdit = null,
-                                         monitor = {}
-                                     }) {
+    switchboard,
+    module,
+    onEdit = null,
+    monitor = {}
+}) {
+
+    const space = useContext(SpaceContext);
+    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
 
     const func = useMemo(() => {
         if (!module?.func) return null;
@@ -44,7 +48,7 @@ export default function SchemaSymbol({
 
         let obj = schemaFunctions[func];
         if (isContact) {
-            obj = {name: "Contacteur", hasPole: true, hasCurrent: true, hasWire: true};
+            obj = { name: "Contacteur", hasPole: true, hasCurrent: true, hasWire: true };
         }
 
         const name = obj?.name ?? "";
@@ -53,7 +57,7 @@ export default function SchemaSymbol({
         const title = `${module.id} / ${name}: ${module.text}${titleErrors}${titleInfos}`.trim();
         const icon = `${import.meta.env.BASE_URL}schema_${func}.svg`;
 
-        return {obj, name, title, icon, isDb, isContact};
+        return { obj, name, title, icon, isDb, isContact };
     }, [module]);
 
     const handleEdit = () => {
@@ -61,15 +65,15 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div style={{"--symbol-width": '70px',"--symbol-height": '100px'}} className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`}
-             title={func.title}
-             onClick={() => handleEdit()}>
-            <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100}/>
+        <div style={{ "--symbol-width": '70px', "--symbol-height": '100px' }} className={`schemaItemSymbol ${isLimited ? 'limited' : ''} ${!func.isDb ? 'editable' : ''}`}
+            title={func.title}
+            onClick={() => handleEdit()}>
+            <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100} />
             <div className="schemaItemSymbolId">{module.id}</div>
             {module.line && <div className="schemaItemSymbolLine">L{module.line}</div>}
 
             {func.obj?.hasType &&
-                <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br/>{module.sensibility}
+                <div className="schemaItemSymbolType">{module.type ? 'Type' : ''} {module.type}<br />{module.sensibility}
                 </div>}
 
             <div
@@ -79,15 +83,15 @@ export default function SchemaSymbol({
                 <>
                     <div className="schemaItemSymbolPole">{module.pole}</div>
                     <img className="schemaItemSymbolImgPole"
-                         src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole}
-                         width={11}/>
+                        src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`} alt={module.pole}
+                        width={11} />
                 </>
             )}
 
             {monitor.errors && monitor.errors[module.id] &&
                 <img className="schemaItemSymbolWarning notprintable"
-                     src={`${import.meta.env.BASE_URL}schema_warning.svg`}
-                     alt="Erreur"/>}
+                src={`${import.meta.env.BASE_URL}schema_warning.svg`}
+                    alt="Erreur" />}
         </div>
     );
 }
