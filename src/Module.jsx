@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { cloneElement, useEffect, useContext, useMemo, useRef, useState } from 'react';
+import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 
 import './module.css';
 import themesList from './themes.json';
@@ -36,7 +36,6 @@ import noHalfIcon from './assets/no-half.svg';
 import clearIcon from './assets/trash.svg';
 import interIcon from './assets/inter.svg';
 import inter2Icon from './assets/inter2.svg';
-import { SpaceContext } from './SpaceContext.jsx';
 
 
 /* eslint-disable react/prop-types */
@@ -73,16 +72,13 @@ function Module({
 }) {
     const moduleRef = useRef(null);
 
-    const space = useContext(SpaceContext);
-    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
-
-    const isFree = useMemo(() => (!isDemo && !isLimited) && item.free, [isDemo, item.free]);
-    const canPaste = useMemo(() => (!isDemo && !isLimited) && item.free && hasClipboard && (pasteAllowed && pasteAllowed(item)), [hasClipboard, isDemo, item, pasteAllowed]);
-    const canInter = useMemo(() => (!isDemo && !isLimited) && !item.free && hasClipboard && (interAllowed && interAllowed(item)), [hasClipboard, isDemo, item, interAllowed]);
-    const canEdit = useMemo(() => (!isDemo && !isLimited) && onEdit && !item.free, [isDemo, item.free, onEdit]);
-    const canCopy = useMemo(() => (!isDemo && !isLimited) && onCopy && !item.free, [isDemo, item.free, onCopy]);
-    const canInterCopy = useMemo(() => (!isDemo && !isLimited) && onInterCopy && !item.free, [isDemo, item.free, onInterCopy]);
-    const canTransform = useMemo(() => ((!isDemo && !isLimited) && (((moveLeftAllowed && moveLeftAllowed(item)) || (moveRightAllowed && moveRightAllowed(item)) || (shrinkAllowed && shrinkAllowed(item)) || (growAllowed && growAllowed(item))))), [growAllowed, isDemo, item, moveLeftAllowed, moveRightAllowed, shrinkAllowed]);
+    const isFree = useMemo(() => (!isDemo) && item.free, [isDemo, item.free]);
+    const canPaste = useMemo(() => (!isDemo) && item.free && hasClipboard && (pasteAllowed && pasteAllowed(item)), [hasClipboard, isDemo, item, pasteAllowed]);
+    const canInter = useMemo(() => (!isDemo) && !item.free && hasClipboard && (interAllowed && interAllowed(item)), [hasClipboard, isDemo, item, interAllowed]);
+    const canEdit = useMemo(() => (!isDemo) && onEdit && !item.free, [isDemo, item.free, onEdit]);
+    const canCopy = useMemo(() => (!isDemo) && onCopy && !item.free, [isDemo, item.free, onCopy]);
+    const canInterCopy = useMemo(() => (!isDemo) && onInterCopy && !item.free, [isDemo, item.free, onInterCopy]);
+    const canTransform = useMemo(() => ((!isDemo) && (((moveLeftAllowed && moveLeftAllowed(item)) || (moveRightAllowed && moveRightAllowed(item)) || (shrinkAllowed && shrinkAllowed(item)) || (growAllowed && growAllowed(item))))), [growAllowed, isDemo, item, moveLeftAllowed, moveRightAllowed, shrinkAllowed]);
     const halfModeLeft = useMemo(() => item.half === "none" || item.half === "right" ? "left" : "none", [item.half]);
     const halfModeRight = useMemo(() => item.half === "none" || item.half === "left" ? "right" : "none", [item.half]);
     const canHalfMode = useMemo(() => !item.free && item.span > 1, [item.free, item.span]);
@@ -144,7 +140,7 @@ function Module({
 
 
     return item && <div
-        className={`module ${isLimited ? 'limited' : ''} ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo || isLimited ? 'demo' : ''}${hasClipboard && item.free && !canPaste ? 'disabled' : ''}`.trim()}
+        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo ? 'demo' : ''}${hasClipboard && item.free && !canPaste ? 'disabled' : ''}`.trim()}
         id={`module_${rowPosition}_${modulePosition}`}
         data-row={rowPosition}
         style={{
@@ -152,15 +148,15 @@ function Module({
             "--sw": `calc((${style['--sw']} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
             "--nsw": style['--sw'],
             color: item.free ? 'darkgray' : 'black',
-            overflowX: isDemo || isLimited ? 'hidden' : 'initial',
+            overflowX: isDemo ? 'hidden' : 'initial',
             cursor: canPaste ? 'pointer' : 'default',
         }}
         tabIndex={!canPaste && !hasClipboard ? 0 : null}
-        title={!isDemo && !isLimited ? (canPaste ? "Coller ici" : (canInter ? "Cliquer ici pour procéder à l'échange" : "Cliquer sur le crayon pour éditer ce module...")) : "Module de démonstration"}
+        title={!isDemo ? (canPaste ? "Coller ici" : (canInter ? "Cliquer ici pour procéder à l'échange" : "Cliquer sur le crayon pour éditer ce module...")) : "Module de démonstration"}
         ref={moduleRef}
         data-id={`${rowPosition}-${modulePosition}`}
         onKeyUp={(e) => {
-            if (!isDemo && !isLimited) {
+            if (!isDemo) {
                 if (e.key === 'ArrowLeft' && moveLeftAllowed && moveLeftAllowed(item)) {
                     onMoveLeft(item);
                 } else if (e.key === 'ArrowRight' && moveRightAllowed(item)) {
@@ -186,18 +182,16 @@ function Module({
             <img className="module_iconfree" src={pasteIcon} style={{ width: '50%' }} title="Coller ici" alt="Coller ici"
                 onClick={() => onPaste(item)} />
             : (isFree && !canPaste && !hasClipboard
-                ? (isLimited
-                    ? <div style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}></div>
-                    : <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
+                ? <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
                         alt="Editer ce module"
-                        onClick={() => { if (!isDemo && !isLimited) { onEdit(item); } }} />)
+                    onClick={() => { if (!isDemo && !isLimited) { onEdit(item); } }} />
                 : (!isFree && themedModule
                     ? <div
                         className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''} ${hasClipboard && clipboard?.id === item.id ? 'clipboard_me' : ''} ${hasClipboard && !canPaste && !canInter ? 'disabled' : ''}`.trim()}
                         style={{
-                            width: isDemo || isLimited ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                            minWidth: isDemo || isLimited ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                            maxWidth: isDemo || isLimited ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                            width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                            minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
+                            maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
                             marginLeft: item.half === "left" ? `calc((${style['--sw']} / 2) - 1px)` : '0px',
                             marginRight: item.half === "right" ? `calc((${style['--sw']} / 2) - 1px)` : '0px',
                             borderLeftWidth: item.half === "left" ? '1px' : '0px',
@@ -234,7 +228,7 @@ function Module({
             )
         }
 
-        {!hasClipboard && !isDemo && !isLimited && canTransform && <>
+        {!hasClipboard && !isDemo && canTransform && <>
             <div className="module_top">
                 <div className="top_row">
                     <div className="tool" title="Demi module sur la gauche"
@@ -272,7 +266,7 @@ function Module({
         </>
         }
 
-        {!canPaste && !canInter && !isDemo && !isLimited && !isFree && (
+        {!canPaste && !canInter && !isDemo && !isFree && (
             <div className="module_bottom">
                 {(canEdit || canCopy) && (
                     <div className="bottom_row">
@@ -311,7 +305,7 @@ function Module({
             </div>
         )}
 
-        {hasClipboard && !isDemo && !isLimited && clipboard?.id === item.id &&
+        {hasClipboard && !isDemo && clipboard?.id === item.id &&
             <div className="module_bottom paste force_visible" title="Cliquer ici pour annuler">
                 <div className="tool paste cancel" onClick={() => cancelPaste()}
                     style={{
@@ -328,7 +322,7 @@ function Module({
             </div>
         }
 
-        {canInter && !isDemo && !isLimited && clipboard?.id !== item.id &&
+        {canInter && !isDemo && clipboard?.id !== item.id &&
             <div className="module_bottom paste" title="Cliquer sur le module pour procéder à l'échange">
                 <div className="tool inter"
                     style={{

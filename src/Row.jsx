@@ -22,8 +22,6 @@ import rowDeleteIcon from './assets/trash.svg';
 
 
 import Module from "./Module";
-import { useContext, useMemo } from 'react';
-import { SpaceContext } from './SpaceContext';
 
 /* eslint-disable react/prop-types */
 function Row({
@@ -60,17 +58,14 @@ function Row({
     printFreeModuleAllowed = null,
     hasClipboard = false
 }) {
-    const space = useContext(SpaceContext);
-    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
-
     return (
         <div className={`switchboard_row row_${rowPosition}`} id={`row_${rowPosition}`}>
 
-            <div className="row_title" style={{ '--isLimited': isLimited ? 0 : 1 }}>
-                {!isLimited && <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon}
+            <div className="row_title" >
+                <img className={`row_delete_icon ${!rowDeleteAllowed() ? 'disabled' : ''}`} src={rowDeleteIcon}
                     width={20} height={20} alt="Supprimer cette rangée" title="Supprimer cette rangée" onClick={() => {
                         if (confirm(`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`)) onRowDelete(rowIndex);
-                    }} />}
+                    }} />
                 <span>Rangée {rowPosition}</span>
             </div>
             <div className="row" style={style}>
@@ -120,7 +115,7 @@ function Row({
                     />
                 ))}
             </div>
-            {!isLimited && <div className={`row_add ${!rowAddAllowed() ? 'disabled' : ''}`} title="Insérer une nouvelle rangée">
+            <div className={`row_add ${!rowAddAllowed() ? 'disabled' : ''}`} title="Insérer une nouvelle rangée">
                 <img className="row_add_icon" src={rowAddIcon} width={24} height={24} alt="Ajouter une rangée"
                     onClick={() => onRowAddAfter(rowIndex)} />
                 {rowAddAllowed()
@@ -129,7 +124,7 @@ function Row({
                     : <div className="row_add_info">Nombre de rangées maximum atteint</div>
                 }
                 <div className="row_action_line"></div>
-            </div>}
+            </div>
         </div>
     );
 }

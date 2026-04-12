@@ -20,13 +20,12 @@
 
 import "./schema.css";
 
-import { Fragment, useContext, useMemo } from "react";
+import { Fragment } from "react";
 
 import SchemaSymbol from "./SchemaSymbol.jsx";
 import SchemaDescription from "./SchemaDescription.jsx";
 
 import firstIcon from "./assets/caret-down-light.svg";
-import { SpaceContext } from "./SpaceContext.jsx";
 
 export default function SchemaItem({
     switchboard,
@@ -36,9 +35,6 @@ export default function SchemaItem({
     onEditSymbol,
     monitor = {}
 }) {
-    const space = useContext(SpaceContext);
-    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
-
     return Object.entries(childs ?? {}).map(([id, item], j) => (
         <Fragment key={id}>
             <div className={`schemaItem ${isFirst ? 'isFirst' : ''} ${item.isLast ? 'isLast' : ''}`.trim()}
@@ -55,7 +51,7 @@ export default function SchemaItem({
                 {item.hasNext && <div className="schemaItemNextLine"></div>}
 
                 <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module}
-                    onEdit={(module) => { if (!isLimited) { onEditSymbol(module) } }}
+                    onEdit={(module) => { onEditSymbol(module) }}
                     monitor={monitor} />
 
                 {item.isLast ? (
@@ -63,7 +59,7 @@ export default function SchemaItem({
                 ) : (
                     <div className="schemaItemChilds">
                         <SchemaItem switchboard={switchboard} childs={item.childs}
-                                baseId={baseId ?? item.module.id} onEditSymbol={(module) => { if (!isLimited) { onEditSymbol(module) } }}
+                                baseId={baseId ?? item.module.id} onEditSymbol={(module) => { onEditSymbol(module) }}
                                 monitor={monitor} />
                     </div>
                 )}

@@ -23,8 +23,6 @@ import summaryRowIcon from "./assets/summary_row.svg";
 import summaryPositionIcon from "./assets/summary_position.svg";
 import summaryNoPicto from "./assets/summary_nopicto.svg";
 import numbersIcon from "./assets/numbers.svg";
-import { useContext, useMemo } from 'react';
-import { SpaceContext } from './SpaceContext';
 
 export default function SummaryTab({
     tab,
@@ -35,9 +33,6 @@ export default function SummaryTab({
     getModuleById,
     onEdit = null,
 }) {
-    const space = useContext(SpaceContext);
-    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
-
     /*const getModuleById = (moduleId) => {
         let indexes = {row: -1, module: -1};
         let m = {module: null, indexes};
@@ -54,8 +49,6 @@ export default function SummaryTab({
     }*/
 
     const handleEdit = (module, tab, focus = null) => {
-        if (isLimited) return;
-
         const m = getModuleById(module.id);
         if (!m?.module) return;
 
@@ -64,89 +57,86 @@ export default function SummaryTab({
 
     return (
         <div
-            className={`summary ${isLimited ? 'limited' : ''} ${tab === 3 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
-            {!isLimited && (
-                <>
-                    <div className="tabPageBand notprintable">
-                        <div className="tabPageBandGroup">
-                            <div className="tabPageBandCol">
-                                <button style={{ height: '34px' }}
-                                    title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                                    onClick={() => reassignModules()}>
-                                    <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
-                                        height={22} />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="tabPageBandGroup">
-                            <div className="tabPageBandCol">
-                                <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Afficher<br />les colones:</span>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnRowChoice" id="summaryColumnRowChoice"
-                                    checked={switchboard.summaryColumnRow} onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnRow: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnRowChoice" title="Colone 'Rangée'">Rangée</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnPositionChoice" id="summaryColumnPositionChoice"
-                                    checked={switchboard.summaryColumnPosition}
-                                    onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnPosition: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnPositionChoice" title="Colone 'Position'">Position</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnTypeChoice" id="summaryColumnTypeChoice"
-                                    checked={switchboard.summaryColumnType} onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnType: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnTypeChoice" title="Colone 'Type'">Type</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnIdChoice" id="summaryColumnIdChoice"
-                                    checked={switchboard.summaryColumnId} onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnId: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnIdChoice" title="Colone 'Identifiant'">Identifiant</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnFunctionChoice" id="summaryColumnFunctionChoice"
-                                    checked={switchboard.summaryColumnFunction}
-                                    onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnFunction: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnFunctionChoice" title="Colone 'Fonction'">Fonction</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnLabelChoice" id="summaryColumnLabelChoice"
-                                    checked={switchboard.summaryColumnLabel} onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnLabel: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnLabelChoice" title="Colone 'Libellé'">Libellé</label>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <input type="checkbox" name="summaryColumnDescriptionChoice"
-                                    id="summaryColumnDescriptionChoice"
-                                    checked={switchboard.summaryColumnDescription}
-                                    onChange={(e) => setSwitchboard((old) => ({
-                                        ...old,
-                                        summaryColumnDescription: e.target.checked
-                                    }))} />
-                                <label htmlFor="summaryColumnDescriptionChoice"
-                                    title="Colone 'Annotations'">Annotations</label>
-                            </div>
-                        </div>
+            className={`summary ${tab === 3 ? 'selected' : ''} ${printOptions.summary ? 'printable' : 'notprintable'}`.trim()}>
+
+            <div className="tabPageBand notprintable">
+                <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <button style={{ height: '34px' }}
+                            title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+                            onClick={() => reassignModules()}>
+                            <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
+                                height={22} />
+                        </button>
                     </div>
-                </>
-            )}
+                </div>
+                <div className="tabPageBandGroup">
+                    <div className="tabPageBandCol">
+                        <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Afficher<br />les colones:</span>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnRowChoice" id="summaryColumnRowChoice"
+                            checked={switchboard.summaryColumnRow} onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnRow: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnRowChoice" title="Colone 'Rangée'">Rangée</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnPositionChoice" id="summaryColumnPositionChoice"
+                            checked={switchboard.summaryColumnPosition}
+                            onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnPosition: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnPositionChoice" title="Colone 'Position'">Position</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnTypeChoice" id="summaryColumnTypeChoice"
+                            checked={switchboard.summaryColumnType} onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnType: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnTypeChoice" title="Colone 'Type'">Type</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnIdChoice" id="summaryColumnIdChoice"
+                            checked={switchboard.summaryColumnId} onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnId: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnIdChoice" title="Colone 'Identifiant'">Identifiant</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnFunctionChoice" id="summaryColumnFunctionChoice"
+                            checked={switchboard.summaryColumnFunction}
+                            onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnFunction: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnFunctionChoice" title="Colone 'Fonction'">Fonction</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnLabelChoice" id="summaryColumnLabelChoice"
+                            checked={switchboard.summaryColumnLabel} onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnLabel: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnLabelChoice" title="Colone 'Libellé'">Libellé</label>
+                    </div>
+                    <div className="tabPageBandCol">
+                        <input type="checkbox" name="summaryColumnDescriptionChoice"
+                            id="summaryColumnDescriptionChoice"
+                            checked={switchboard.summaryColumnDescription}
+                            onChange={(e) => setSwitchboard((old) => ({
+                                ...old,
+                                summaryColumnDescription: e.target.checked
+                            }))} />
+                        <label htmlFor="summaryColumnDescriptionChoice"
+                            title="Colone 'Annotations'">Annotations</label>
+                    </div>
+                </div>
+            </div>
 
             <table>
                 <thead>

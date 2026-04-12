@@ -18,7 +18,7 @@
 
 'use strict'
 
-import { useEffect, useState } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import * as semver from 'semver';
 
@@ -27,7 +27,6 @@ import App from './App.jsx'
 import './main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './NewVersionPopup.jsx';
-import SpaceProvider from './SpaceProvider.jsx';
 
 
 Array.prototype.replaceItemWith = function (item, newItem) {
@@ -220,7 +219,7 @@ export default function Main() {
     }, []);
 
     return (
-        <SpaceProvider>
+        <>
             <App />
             <Footer />
 
@@ -230,7 +229,7 @@ export default function Main() {
                     window.location.reload(true);
                 }}
             />}
-        </SpaceProvider>
+        </>
     );
 }
 

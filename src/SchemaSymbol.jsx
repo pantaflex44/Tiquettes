@@ -18,10 +18,9 @@
 
 /* eslint-disable react/prop-types */
 
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 
 import schemaFunctions from './schema_functions.json';
-import { SpaceContext } from "./SpaceContext";
 
 export default function SchemaSymbol({
     switchboard,
@@ -29,10 +28,6 @@ export default function SchemaSymbol({
     onEdit = null,
     monitor = {}
 }) {
-
-    const space = useContext(SpaceContext);
-    const isLimited = useMemo(() => space.project && space.isLimited, [space.project, space.isLimited]);
-
     const func = useMemo(() => {
         if (!module?.func) return null;
 
@@ -65,7 +60,7 @@ export default function SchemaSymbol({
     }
 
     return func && (
-        <div style={{ "--symbol-width": '70px', "--symbol-height": '100px' }} className={`schemaItemSymbol ${isLimited ? 'limited' : ''} ${!func.isDb ? 'editable' : ''}`}
+        <div style={{ "--symbol-width": '70px', "--symbol-height": '100px' }} className={`schemaItemSymbol ${!func.isDb ? 'editable' : ''}`}
             title={func.title}
             onClick={() => handleEdit()}>
             <img className="schemaItemSymbolImg" src={func.icon} alt={func.name} width={70} height={100} />

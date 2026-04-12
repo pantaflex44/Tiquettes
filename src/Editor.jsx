@@ -34,7 +34,6 @@ import EditorPoleSelector from "./EditorPoleSelector.jsx";
 import EditorSensibilitySelector from "./EditorSensibilitySelector.jsx";
 import EditorCrbSelector from "./EditorCrbSelector.jsx";
 import EditorTypeSelector from "./EditorTypeSelector.jsx";
-import EditorContactSelector from "./EditorContactSelector.jsx";
 import EditorParentSelector from "./EditorParentSelector.jsx";
 import EditorFunctionSelector from "./EditorFunctionSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
