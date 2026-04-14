@@ -927,8 +927,12 @@ class TiquettesPDF extends FPDF
                         'w' => $module->half === 'left' || $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
                         'h' => $box['h'],
                     ];
+                    $restPos = [
+                        'x' => $printOptions->freeModules === true ? ($module->half === 'left' ?  ($box['x'] - $workBox['x']) : 0) : 0,
+                        'w' => $printOptions->freeModules === true ? ($box['w'] - $workBox['w']) : 0,
+                    ];
 
-                    Theme::render($this, $workBox, $switchboard->theme->data, $module, $printOptions);
+                    Theme::render($this, $workBox, $restPos, $switchboard->theme->data, $module, $printOptions);
 
                     $this->SetDrawColor(170, 170, 170);
                     $this->SetLineWidth(0.1);

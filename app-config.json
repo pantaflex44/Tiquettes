@@ -25,9 +25,16 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2025-04-12",
+            "date": "2025-04-14",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.",
+                        "from": {
+                            "name": "Issue #27",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203"
+                        }
+                    },
                     {
                         "text": "Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.",
                         "from": {

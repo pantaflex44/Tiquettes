@@ -84,7 +84,7 @@ class Theme
         $pdf->SetDrawColor($color[0], $color[1], $color[2]);
     }
 
-    public static function render($pdf, $workBox, $themeData, $module, $printOptions)
+    public static function render($pdf, $workBox, $restPos, $themeData, $module, $printOptions)
     {
         if ($printOptions->freeModules === true || (!$printOptions->freeModules && !$module->free)) {
             $originalData = json_decode(json_encode($themeData), true);
@@ -262,7 +262,7 @@ class Theme
             foreach (array_keys($data) as $key) {
                 self::setBgColor($pdf, $data[$key], $module);
                 $r = $data[$key]['bgPlace'];
-                $pdf->Rect($r['x'], $r['y'], $r['w'], $r['h'], 'F');
+                $pdf->Rect($r['x']  + $restPos['x'], $r['y'], $r['w'] + $restPos['w'], $r['h'], 'F');
 
                 $oldX = $pdf->GetX();
                 $oldY = $pdf->GetY();
@@ -282,7 +282,6 @@ class Theme
                     $align = strtolower(trim(($data[$key]['horizontalAlignment'] ?? 'center')));
                     $align = $align === 'left' ? 'L' : ($align === 'right' ? 'R' : 'C');
                     $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
-
                 } else if ($key === 'icon') { // draw icons
                     if ($data[$key]['type'] === 'icon' && $module->icon) { // icon format
 
@@ -328,7 +327,7 @@ class Theme
                 } else {
                     $pdf->SetDash(null, null);
                 }
-                $pdf->Line($r['x'] + ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4, $r['x'] + $r['w'] - ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4);
+                $pdf->Line($r['x']  + $restPos['x'] + ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4, $r['x'] + $r['w'] + $restPos['w'] - ($borderTopSize / 2), $r['y'] + $r['h'] - $borderTopSize + 0.4);
                 $pdf->SetDash(null, null);
                 $pdf->SetLineWidth(0.2);
             }
@@ -344,12 +343,10 @@ class Theme
                 } else {
                     $pdf->SetDash(null, null);
                 }
-                $pdf->Line($r['x'] + ($borderBottomSize / 2), $r['y'], $r['x'] + $r['w'] - ($borderBottomSize / 2), $r['y']);
+                $pdf->Line($r['x'] + $restPos['x'] + ($borderBottomSize / 2), $r['y'], $r['x'] + $r['w'] + $restPos['w'] - ($borderBottomSize / 2), $r['y']);
                 $pdf->SetDash(null, null);
                 $pdf->SetLineWidth(0.2);
             }
         }
-
     }
-
 }
