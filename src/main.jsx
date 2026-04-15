@@ -32,17 +32,13 @@ import SpaceProvider from './SpaceProvider.jsx';
 
 function Footer() {
     return (
-        <div style={{
-            marginTop: '1em',
-            fontSize: 'small',
-            color: 'darkgray',
-        }} className='footer'>{pkg.title} {pkg.version} {/*import.meta.env.VITE_APP_MODE && "(DEV)"*/}<span
+        <div className='footer'>{pkg.title} {pkg.version} {/*import.meta.env.VITE_APP_MODE && "(DEV)"*/}<span
             className="not_printable"> | <a href={pkg.repository.url}
-                style={{ color: 'var(--primary-color)' }}
+                className="footer-link"
                 target="_blank">{pkg.repository.url}</a> | <a
-                    href="https://www.gnu.org/licenses/agpl-3.0.fr.html" style={{ color: 'var(--primary-color)' }}
+                    href="https://www.gnu.org/licenses/agpl-3.0.fr.html" className="footer-link"
                     target="_blank">{`Licence ${pkg.license}`}</a> | <a href="https://pantaflex44.github.io/Portfolio/"
-                        style={{ color: 'var(--primary-color)' }}
+                        className="footer-link"
                     target="_blank">{pkg.author} (pantaflex44)</a> | &copy; 2024-{new Date().getFullYear()}</span>
         </div>
     );

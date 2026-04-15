@@ -20,6 +20,24 @@ body{
     accent-color: var(--primary-color);
 }
 
+.footer {
+    margin-top: 1rem;
+    padding-inline: 0.25rem;
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.footer-link {
+    color: var(--primary-color);
+}
+
+.footer-link:focus-visible,
+.footer-link:hover {
+    color: #006f6f;
+}
+
 p.devmode {
     color: black;
     text-transform: uppercase;

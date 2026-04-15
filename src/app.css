@@ -24,7 +24,7 @@
     flex-wrap: wrap;
     gap: 0.5em;
     margin-bottom: 1em;
-    margin-left: 28px;
+    margin-left: 0;
 }
 
 .toolbar input[type='number'] {
@@ -99,14 +99,15 @@ h4 {
 }
 
 .projectbox {
-    padding-bottom: 3em;
+    padding-bottom: 2rem;
     margin-bottom: 1em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: start;
     align-items: start;
-    column-gap: 5em;
+    column-gap: 2rem;
+    row-gap: 1rem;
 }
 
 .projectbox .newproject {
@@ -136,7 +137,7 @@ h4 {
 .summary.selected,
 .schema.selected {
     height: max-content;
-    min-height: 410px;
+    min-height: 320px;
     /*padding: 2em;*/
     border: 1px solid darkgray;
     border-radius: 7px;
@@ -183,7 +184,7 @@ option[disabled] {
     gap: 0;
     align-items: stretch;
     justify-content: flex-start;
-    min-height: 34px;
+    min-height: 44px;
 }
 
 .buttons_box-button {
@@ -197,8 +198,8 @@ option[disabled] {
     border-top: 1px solid darkgray;
     border-bottom: 1px solid darkgray;
     border-right: 1px solid darkgray;
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
     transition: all 250ms ease;
 }
@@ -221,8 +222,8 @@ option[disabled] {
 }
 
 .buttons_box-button img {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
 }
 
 .buttons_box-button:not(.selected):hover {
@@ -267,7 +268,8 @@ option[disabled] {
     border: 1px solid darkgray;
     border-radius: 7px;
     background-color: #f5f5f5;
-    margin-bottom: 3em;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
 }
 
 .button_group>*:not(.button_group-separator) {
@@ -279,8 +281,9 @@ option[disabled] {
     gap: 0.5em;
     border: 0;
     border-radius: 0;
-    padding-inline: 1em;
+    padding-inline: 0.9em;
     padding-block: 0.75em;
+    min-height: 44px;
 }
 
 .button_group>*.end:not(.button_group-separator) {
@@ -326,6 +329,15 @@ option[disabled] {
     border-color: var(--primary-color);
 }
 
+.button_group button:focus-visible,
+.button_group label:focus-visible,
+.tabPages .tabPages_page:focus-visible,
+.tabPageBandCol>label:focus-visible,
+.buttons_box-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .dropdown_container {
     position: relative;
 }
@@ -333,10 +345,10 @@ option[disabled] {
 .dropdown_container .dropdown {
     position: absolute;
     display: none;
-    top: 30px;
+    top: 42px;
     left: 35%;
     transform: translateX(-65%);
-    min-width: 260px;
+    min-width: min(320px, calc(100vw - 2rem));
     padding: 1.5em;
     border: 1px solid darkgray;
     border-radius: 7px;
@@ -449,7 +461,7 @@ option[disabled] {
     flex-direction: row;
     align-items: center;
     padding-inline: 0.75rem;
-    padding-block: 0.5rem;
+    padding-block: 0.625rem;
     cursor: pointer;
     font-size: 90%;
 }
@@ -641,7 +653,10 @@ option[disabled] {
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
-    margin-top: 3em;
+    margin-top: 2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -654,7 +669,7 @@ option[disabled] {
     border-top: 2px solid darkgray;
     border-left: 1px solid darkgray;
     margin-bottom: -5px;
-    line-height: 24px;
+    line-height: 1.2;
     font-size: smaller;
     cursor: pointer;
     background-color: white;
@@ -665,6 +680,8 @@ option[disabled] {
     align-items: center;
     column-gap: 0.5em;
     color: #333;
+    min-height: 44px;
+    white-space: nowrap;
 }
 
 .tabPages .tabPages_page img {
@@ -781,8 +798,8 @@ option[disabled] {
 }
 
 .tabPageBandGroup {
-    margin-block: 1em;
-    margin-inline: 1em;
+    margin-block: 0.75rem;
+    margin-inline: 0.75rem;
 
     display: flex;
     flex-wrap: wrap;
@@ -884,9 +901,7 @@ option[disabled] {
     justify-content: flex-start;
     align-items: center;
     column-gap: 0.25em;
-    height: 34px;
-    min-height: 34px;
-    max-height: 34px;
+    min-height: 44px;
 }
 
 .tabPageBandSeparator {
@@ -915,7 +930,7 @@ option[disabled] {
     height: calc(100% - 2px);
     margin-block: 2px;
 
-    padding-inline: 1em;
+    padding-inline: 0.9rem;
 
     background-color: #f5f5f5;
     border: 1px solid darkgray;
@@ -962,9 +977,58 @@ option[disabled] {
     border-bottom-color: var(--primary-color);
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 639px) {
+    .toolbar {
+        margin-bottom: 0.75rem;
+        gap: 0.35rem;
+    }
+
+    .project {
+        margin-bottom: 1rem;
+        row-gap: 0.4rem;
+    }
+
+    .project li {
+        width: 100%;
+    }
+
+    .project li span {
+        margin-right: 0.25rem;
+    }
+
+    .projectbox {
+        padding-bottom: 1.25rem;
+        row-gap: 0.75rem;
+    }
+
+    .switchboard_row {
+        margin-inline: 0.75rem;
+        margin-top: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .summary table {
+        margin-inline: 0.75rem;
+        display: block;
+        overflow-x: auto;
+    }
+
+    .button_group {
+        flex-wrap: wrap;
+        border: 0;
+        background: transparent;
+        gap: 0.5rem;
+    }
+
+    .button_group .button_group-separator {
+        display: none;
+    }
+
     .button_group>*:not(.button_group-separator) {
         align-items: center;
+        border: 1px solid darkgray;
+        border-radius: 8px;
+        background-color: #f5f5f5;
     }
 
     .button_group span {
@@ -978,6 +1042,62 @@ option[disabled] {
 
     .button_group>*:not(.button_group-separator) span.responsive {
         display: inline-block;
+    }
+
+    .dropdown_container .dropdown {
+        position: fixed;
+        left: 1rem !important;
+        right: 1rem;
+        top: auto;
+        bottom: 1rem;
+        transform: none !important;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .tabPages {
+        margin-top: 1.25rem;
+    }
+
+    .tabPageBand {
+        position: static;
+    }
+
+    .tabPageBandGroup {
+        width: 100%;
+        margin-inline: 0.5rem;
+    }
+
+    .tabPageBand.errors {
+        position: fixed;
+        inset: auto 0.75rem 0.75rem;
+        margin: 0;
+        width: auto;
+        max-height: 75vh;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    .button_group {
+        flex-wrap: nowrap;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .projectbox {
+        column-gap: 2rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .projectbox {
+        column-gap: 3rem;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .projectbox {
+        column-gap: 4rem;
     }
 }
 
