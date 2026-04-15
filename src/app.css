@@ -16,6 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* ── Toolbar ────────────────────────────────────── */
+
 .toolbar {
     display: flex;
     flex-direction: row;
@@ -32,18 +34,23 @@
     text-align: right;
 }
 
+/* ── Headings ───────────────────────────────────── */
+
 h3 {
     margin-top: 0;
     scroll-margin-top: 1em;
     display: flex;
     width: 100%;
-    height: 28px;
+    height: 32px;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
     column-gap: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 h3 sup {
@@ -61,46 +68,66 @@ h4 {
     column-gap: 0.5em;
 }
 
+/* ── Project metadata ───────────────────────────── */
+
 .project {
-    margin-bottom: 2em;
+    margin-bottom: 1rem;
     list-style: none;
     padding-left: 0;
-    color: var(--primary-color);
+    color: var(--text-secondary);
 
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
-    column-gap: 1em;
-    row-gap: 0.15em;
+    gap: 0.375rem;
 }
 
 .project li {
-    margin-left: 0;
-    padding-left: 0;
+    margin: 0;
+    padding: 0;
 
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    column-gap: 0.25em;
+    column-gap: 0.3em;
+
+    background-color: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding-inline: 0.625em;
+    padding-block: 0.25em;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.project li img {
+    opacity: 0.6;
+    flex-shrink: 0;
 }
 
 .project li.nobefore {
-    margin-block: 1em;
-    color: black;
+    margin-block: 0.5em;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding-inline: 0;
 }
 
 .project li span {
-    margin-right: 1em;
-    font-size: small;
+    margin-right: 0;
+    white-space: nowrap;
 }
 
+/* ── Project box ────────────────────────────────── */
+
 .projectbox {
-    padding-bottom: 2rem;
-    margin-bottom: 1em;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0.75em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -111,8 +138,10 @@ h4 {
 }
 
 .projectbox .newproject {
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
 }
+
+/* ── Tab content panels ─────────────────────────── */
 
 .switchboard,
 .summary,
@@ -121,12 +150,8 @@ h4 {
     flex-direction: column;
     flex-wrap: nowrap;
     overflow-x: auto;
-    /*border: 1px solid darkgray;
-    border-top: 2px solid var(--primary-color);
-    border-radius: 7px;
-    padding: 2em;*/
     position: relative;
-    background-color: white;
+    background-color: var(--surface);
 
     height: 0px;
     padding: 0;
@@ -138,44 +163,38 @@ h4 {
 .schema.selected {
     height: max-content;
     min-height: 320px;
-    /*padding: 2em;*/
-    border: 1px solid darkgray;
-    border-radius: 7px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
 }
 
 .schema.selected {
     min-height: calc(var(--schema-scale) * 650px) !important;
 }
 
-
-
 .summary table {
-    margin-inline: 2em;
-    margin-bottom: 2em;
+    margin-inline: 1.5rem;
+    margin-bottom: 2rem;
 }
+
+/* ── Switchboard rows ───────────────────────────── */
 
 .switchboard_row {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 0.75em;
+    gap: 0.625em;
     width: max-content;
     margin-bottom: 0;
-    margin-inline: 2em;
-    margin-top: 2em;
+    margin-inline: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .switchboard_row:last-of-type {
-    margin-bottom: 2em;
+    margin-bottom: 1.5rem;
 }
 
-option[disabled] {
-    background-color: #eee;
-    color: #aaa;
-}
-
-
-
+/* ── Button box (icon group) ────────────────────── */
 
 .buttons_box {
     display: inline-flex;
@@ -195,39 +214,36 @@ option[disabled] {
     align-items: center;
     justify-content: center;
     align-self: stretch;
-    border-top: 1px solid darkgray;
-    border-bottom: 1px solid darkgray;
-    border-right: 1px solid darkgray;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
     width: 44px;
     height: 44px;
     cursor: pointer;
-    transition: all 250ms ease;
+    transition: background-color var(--transition), border-color var(--transition);
+    background-color: var(--surface-alt);
 }
 
 .buttons_box-button:first-of-type {
-    border-left: 1px solid darkgray;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-left: 1px solid var(--border);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 
 .buttons_box-button:last-of-type {
-    border-right: 1px solid darkgray;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.buttons_box-button:last-of-type {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-right: 1px solid var(--border);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 .buttons_box-button img {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
 
 .buttons_box-button:not(.selected):hover {
     background-color: var(--secondary-color);
+    border-color: var(--primary-color);
 }
 
 .buttons_box:not(.disabled) .buttons_box-button.selected {
@@ -253,9 +269,7 @@ option[disabled] {
     filter: grayscale(1.0) opacity(0.5);
 }
 
-
-
-
+/* ── Main action toolbar (button_group) ─────────── */
 
 .button_group {
     display: flex;
@@ -265,11 +279,17 @@ option[disabled] {
     align-items: stretch;
     gap: 0;
     width: 100%;
-    border: 1px solid darkgray;
-    border-radius: 7px;
-    background-color: #f5f5f5;
-    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface);
+    margin-bottom: 0.75rem;
     overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+    scrollbar-width: none;
+}
+
+.button_group::-webkit-scrollbar {
+    display: none;
 }
 
 .button_group>*:not(.button_group-separator) {
@@ -277,26 +297,34 @@ option[disabled] {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: start;
-    gap: 0.5em;
+    align-items: center;
+    gap: 0.4em;
     border: 0;
     border-radius: 0;
-    padding-inline: 0.9em;
-    padding-block: 0.75em;
+    padding-inline: 0.875em;
+    padding-block: 0.625em;
     min-height: 44px;
+    background-color: transparent;
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color var(--transition);
 }
 
 .button_group>*.end:not(.button_group-separator) {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
+
 .button_group>*:not(.button_group-separator) span {
-    line-height: 18px;
+    line-height: 1;
 }
 
 .button_group>*:not(.button_group-separator) img {
     height: 16px;
     width: 16px;
+    flex-shrink: 0;
 }
 
 .button_group>*:not(.button_group-separator):first-of-type {
@@ -306,10 +334,11 @@ option[disabled] {
 
 .button_group .button_group-separator {
     width: 1px;
-    background-color: darkgray;
+    background-color: var(--border);
     padding: 0;
     margin: 0;
     border-radius: 0;
+    flex-shrink: 0;
 }
 
 .button_group .active span {
@@ -317,16 +346,20 @@ option[disabled] {
 }
 
 .button_group label {
-    background-color: #f5f5f5;
+    background-color: transparent;
     font-weight: 500;
     cursor: pointer;
-    font-size: smaller;
-    transition: all 0.2s ease;
+    font-size: 0.8125rem;
+    transition: background-color var(--transition);
 }
 
 .button_group label:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--primary-color);
+    background-color: var(--secondary-color-light);
+}
+
+.button_group button:not(:disabled):hover,
+.button_group label:not(:disabled):hover {
+    background-color: var(--secondary-color-light);
 }
 
 .button_group button:focus-visible,
@@ -334,9 +367,11 @@ option[disabled] {
 .tabPages .tabPages_page:focus-visible,
 .tabPageBandCol>label:focus-visible,
 .buttons_box-button:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+    outline: 2px solid var(--primary-color) !important;
+    outline-offset: -2px !important;
 }
+
+/* ── Dropdown menus ─────────────────────────────── */
 
 .dropdown_container {
     position: relative;
@@ -345,18 +380,17 @@ option[disabled] {
 .dropdown_container .dropdown {
     position: absolute;
     display: none;
-    top: 42px;
+    top: calc(100% + 4px);
     left: 35%;
     transform: translateX(-65%);
-    min-width: min(320px, calc(100vw - 2rem));
-    padding: 1.5em;
-    border: 1px solid darkgray;
-    border-radius: 7px;
-    background: linear-gradient(to bottom, white, #f5f5f5);
+    min-width: min(340px, calc(100vw - 2rem));
+    padding: 1.25em;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
     text-align: left;
     flex-direction: column;
-    /*row-gap: 0.75em;*/
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-lg);
     z-index: 99;
     cursor: default;
 }
@@ -374,7 +408,7 @@ option[disabled] {
 
 .dropdown_container .dropdown.top {
     top: initial;
-    bottom: 1.5rem;
+    bottom: calc(100% + 4px);
     transform: initial;
 }
 
@@ -382,7 +416,7 @@ option[disabled] {
     padding-block: 0.25rem;
     padding-inline: 0.5rem;
     font-size: small !important;
-    background: #fff !important;
+    background: var(--surface) !important;
 }
 
 .dropdown_container .dropdown.small label {
@@ -403,9 +437,9 @@ option[disabled] {
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
-    column-gap: 0.25em;
-    font-size: larger;
-    padding-block: 0.40em;
+    column-gap: 0.375em;
+    font-size: 0.9rem;
+    padding-block: 0.35em;
 }
 
 .dropdown_container .dropdown .dropdown_item.form {
@@ -415,14 +449,14 @@ option[disabled] {
 .dropdown_container .dropdown .dropdown_item label {
     width: 100%;
     background-color: initial;
-    color: #000;
+    color: var(--text-primary);
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
 }
 
 .dropdown_container .dropdown .dropdown_item.form label {
     margin: 0 0 0.5rem;
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .dropdown_container .dropdown .dropdown_item label:hover {
@@ -430,19 +464,19 @@ option[disabled] {
 }
 
 .dropdown_container .dropdown .dropdown_item input:disabled+label {
-    color: darkgray;
+    color: var(--text-secondary);
 }
 
 .dropdown_container .dropdown .dropdown_item:not(.head):not(.menuitem) {
     margin-left: 0.5rem;
     padding-left: 0.5rem;
-    border-left: 2px solid #ddd;
+    border-left: 2px solid #e5e7eb;
 }
 
 .dropdown_container .dropdown .dropdown_item:not(.head):not(.menuitem) label {
-    color: #444;
-    font-size: smaller;
-    font-weight: 300;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 400;
 }
 
 .dropdown_container .dropdown .dropdown_item.menuitem {
@@ -456,14 +490,15 @@ option[disabled] {
     border: 0;
     background: none;
     margin-inline: -0.5rem;
-    border-radius: 5px;
+    border-radius: 6px;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding-inline: 0.75rem;
-    padding-block: 0.625rem;
+    padding-block: 0.5rem;
     cursor: pointer;
-    font-size: 90%;
+    font-size: 0.875rem;
+    transition: background-color var(--transition), color var(--transition);
 }
 
 .dropdown_container .dropdown .dropdown_item.menuitem:hover .menuitem_content {
@@ -484,38 +519,39 @@ option[disabled] {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-
 }
 
 .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;
-    background-color: #bbb;
-    margin-block: 0.75em;
+    background-color: var(--border);
+    margin-block: 0.625em;
 }
 
 .dropdown_container .dropdown .dropdown_separator2 {
     width: calc(100% - 1rem);
     height: 1px;
-    background-color: #ddd;
-    margin-block: 0.5em;
+    background-color: #e5e7eb;
+    margin-block: 0.4em;
     margin-left: 1rem;
 }
 
 .dropdown_container .dropdown .dropdown_header {
-    font-size: larger;
-    font-weight: bold;
+    font-size: 0.9375rem;
+    font-weight: 700;
     margin-bottom: 0.5em;
+    color: var(--text-primary);
 }
 
 .dropdown_container .dropdown .dropdown_subheader {
-    font-size: 100%;
-    font-weight: normal;
+    font-size: 0.875rem;
+    font-weight: 400;
     margin-bottom: 0.5em;
+    color: var(--text-secondary);
 }
 
 .dropdown_container .dropdown .dropdown_footer {
-    margin-top: 1.5em;
+    margin-top: 1.25em;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -526,16 +562,18 @@ option[disabled] {
 
 .dropdown_container .dropdown .dropdown_footer * {
     width: 100%;
-    font-weight: bold;
-    background-color: white;
+    font-weight: 600;
 }
+
+/* ── button_group states ────────────────────────── */
 
 .button_group.disabled {
     pointer-events: none;
+    opacity: 0.5;
 }
 
 .button_group.disabled * {
-    color: darkgray;
+    color: var(--text-secondary);
 }
 
 .button_group .button_group-account img {
@@ -544,48 +582,54 @@ option[disabled] {
 }
 
 .button_group .button_group-resize.checked {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color-light);
     color: var(--primary-color);
 }
 
 .button_group .button_group-resize.checked img {
-    /*filter: invert(100%) sepia(0%) saturate(7496%) hue-rotate(142deg) brightness(102%) contrast(102%);*/
     filter: invert(38%) sepia(47%) saturate(6220%) hue-rotate(160deg) brightness(91%) contrast(101%);
 }
+
+/* ── Summary table ──────────────────────────────── */
+
 .summary table {
-    font-size: smaller;
+    font-size: 0.8125rem;
     border-collapse: collapse;
 }
 
 .summary table caption {
     text-align: left;
-    font-size: 120%;
-    font-weight: bold;
-    margin-bottom: 1em;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.875em;
+    color: var(--text-primary);
 }
 
 .summary table thead tr th {
-    font-size: 110%;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     text-align: left;
-    padding-top: 2em;
-    padding-bottom: 1em;
+    padding-top: 1.5em;
+    padding-bottom: 0.75em;
     color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
 }
 
 .summary table tbody tr:nth-child(2n+1) {
-    background-color: #f5f5f5;
+    background-color: #f9fafb;
 }
 
 .summary table tbody tr:hover td:not(.summary_row):not(.summary_position) {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color-light);
 }
 
 .summary table tbody tr.newrow {
-    border-top: 1px dotted lightgray;
+    border-top: 1px dotted #d1d5db;
 }
 
 .summary table tbody tr.otherrow td:not(:first-child) {
-    border-top: 1px dotted lightgray;
+    border-top: 1px dotted #d1d5db;
 }
 
 .summary table tbody tr td {
@@ -618,7 +662,7 @@ option[disabled] {
 }
 
 .summary table tbody tr td.summary_id {
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .summary table tbody tr td.summary_func p {
@@ -647,76 +691,87 @@ option[disabled] {
     white-space: pre;
 }
 
+/* ── Tab pages ──────────────────────────────────── */
+
 .tabPages {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
-    align-items: center;
-    margin-top: 2rem;
+    align-items: stretch;
+    margin-top: 1.25rem;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    gap: 0.25rem;
+    padding-bottom: 0;
+    scrollbar-width: none;
+}
+
+.tabPages::-webkit-scrollbar {
+    display: none;
 }
 
 .tabPages .tabPages_page {
-    padding-inline: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.75em;
-    border-top: 2px solid darkgray;
-    border-left: 1px solid darkgray;
-    margin-bottom: -5px;
+    padding-inline: 1.125em;
+    padding-block: 0.625em;
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 2px solid var(--border);
     line-height: 1.2;
-    font-size: smaller;
+    font-size: 0.8125rem;
+    font-weight: 500;
     cursor: pointer;
-    background-color: white;
+    background-color: var(--surface-alt);
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
-    column-gap: 0.5em;
-    color: #333;
+    column-gap: 0.4em;
+    color: var(--text-secondary);
     min-height: 44px;
     white-space: nowrap;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+    position: relative;
 }
 
 .tabPages .tabPages_page img {
     display: none;
-}
-
-.tabPages .tabPages_page:first-of-type {
-    border-top-left-radius: 7px;
-}
-
-.tabPages .tabPages_page:last-of-type {
-    border-right: 1px solid darkgray;
-    border-top-right-radius: 7px;
+    width: 16px;
+    height: 16px;
 }
 
 .tabPages .tabPages_page:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color-light);
+    color: var(--text-primary);
+    border-color: var(--primary-color);
 }
 
 .tabPages:not(.disabled) .tabPages_page.selected {
-    background-color: #f0f0f0;
-    font-weight: bold;
-    color: black;
-    border-top-color: var(--primary-color);
+    background-color: var(--surface);
+    font-weight: 700;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-bottom-color: var(--surface);
+    box-shadow: var(--shadow-sm);
+    z-index: 1;
 }
 
 .tabPages .tabPages_page.selected img {
     display: block;
-    margin-top: -2px;
 }
 
 .tabPages.disabled {
     pointer-events: none;
     filter: grayscale(1);
+    opacity: 0.6;
 }
+
+/* ── Editor tab pages ───────────────────────────── */
 
 .editor_tabpages {
     width: 100%;
@@ -724,13 +779,13 @@ option[disabled] {
     -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
-    -webkit-user-select: none;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
+    gap: 0;
 }
 
 .editor_tabpages input[type="checkbox"] {
@@ -738,7 +793,6 @@ option[disabled] {
     -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
-    -webkit-user-select: none;
 }
 
 .editor_tabpages input[type="checkbox"]+label {
@@ -746,35 +800,40 @@ option[disabled] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding-inline: 1em;
     padding-block: 0.25em;
-    font-size: 90%;
+    font-size: 0.8125rem;
     -webkit-user-select: none;
     user-select: none;
     -moz-user-select: none;
-    -webkit-user-select: none;
-    border-bottom: 2px solid #ccc;
-    column-gap: 0.5em;
-    height: 28px;
+    border-bottom: 2px solid var(--border);
+    column-gap: 0.4em;
+    height: 32px;
+    color: var(--text-secondary);
+    transition: color var(--transition), border-color var(--transition);
 }
 
 .editor_tabpages input[type="checkbox"]+label>img {
     display: none;
+    width: 14px;
+    height: 14px;
 }
 
 .editor_tabpages input[type="checkbox"]:checked+label {
-    font-weight: bolder;
+    font-weight: 700;
     border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .editor_tabpages input[type="checkbox"]:checked+label>img {
     display: block;
 }
 
+/* ── Tab page band (controls strip) ────────────── */
+
 .tabPageBand {
     position: sticky;
-    left: 0.5rem;
-    top: 0.5rem;
+    left: 0;
+    top: 0;
 
     display: flex;
     flex-wrap: wrap;
@@ -782,48 +841,42 @@ option[disabled] {
     justify-content: flex-start;
     align-items: stretch;
 
-
-    /*padding-inline: 1.25em;*/
-    /*padding-block: 1em;*/
-    min-height: calc(60px - 2em);
+    min-height: 52px;
     margin: 0.5rem;
 
-    font-size: 80%;
-    background: linear-gradient(to bottom, #fff, #f9f9f9);
+    font-size: 0.8rem;
+    background: var(--surface);
 
-    border: 1px solid darkgray;
-    border-radius: 7px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
 
     z-index: 1;
 }
 
 .tabPageBandGroup {
-    margin-block: 0.75rem;
+    margin-block: 0.625rem;
     margin-inline: 0.75rem;
 
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: stretch;
-    column-gap: 1em;
-    row-gap: 1em;
-
-    overflow-x: hidden;
+    align-items: center;
+    column-gap: 0.875em;
+    row-gap: 0.625em;
 }
 
 .tabPageBand.errors {
-    background: initial;
-    background-color: #fff8f6;
-    border: 1px solid darkgray;
-    border-radius: 7px;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    background: #fffbf6;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
 
-    padding: 1.5em;
+    padding: 1.25em;
 
     position: absolute;
     margin: 0.5rem;
-    margin-inline: 0.5rem;
     margin-top: calc(60px - 2.5em);
     width: calc(100% - 3.5rem - 1rem);
     max-height: 500px;
@@ -836,18 +889,24 @@ option[disabled] {
     position: absolute;
     z-index: 1001;
 
-    right: 7px;
-    top: 7px;
-    width: 24px;
-    height: 24px;
+    right: 8px;
+    top: 8px;
+    width: 28px;
+    height: 28px;
 
-    text-align: center;
-    font-weight: bold;
-    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     border-radius: 50%;
     background-color: white;
+    border: 1px solid var(--border);
     cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.tabPageBand.errors .closeButton:hover {
+    background-color: var(--secondary-color-light);
 }
 
 .tabPageBand.errors ul {
@@ -865,18 +924,18 @@ option[disabled] {
 }
 
 .tabPageBand.errors ul {
-    gap: 1.5em;
+    gap: 1.25em;
 }
 
 .tabPageBand.errors ul ul {
-    gap: 0.5em;
+    gap: 0.375em;
     margin-left: 0.5em;
 }
 
 .tabPageBand.errors .tabPageErrors div {
-    font-weight: bold;
-    margin-bottom: 0.5em;
-    color: darkgoldenrod;
+    font-weight: 700;
+    margin-bottom: 0.375em;
+    color: #b45309;
 }
 
 .tabPageBand.errors .tabPageErrors .tabPageError {
@@ -884,14 +943,18 @@ option[disabled] {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
-    line-height: 16px;
+    line-height: 1.4;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
 }
 
 .tabPageBand.errors .tabPageErrors .tabPageError svg {
     width: 20px;
     height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .tabPageBandCol {
@@ -906,13 +969,16 @@ option[disabled] {
 
 .tabPageBandSeparator {
     width: 1px;
+    background-color: var(--border);
     margin-inline: 0.25em;
+    align-self: stretch;
 }
 
 .tabPageBandNL {
     flex-basis: 100%;
     height: 1px;
-    background-color: darkgray;
+    background-color: var(--border);
+    margin-block: 0.125rem;
 }
 
 .tabPageBandCol>input[type="checkbox"] {
@@ -923,25 +989,26 @@ option[disabled] {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 0.5em;
+    gap: 0.4em;
     justify-content: center;
     align-items: center;
 
-    height: calc(100% - 2px);
-    margin-block: 2px;
+    height: 36px;
 
-    padding-inline: 0.9rem;
+    padding-inline: 0.75rem;
 
-    background-color: #f5f5f5;
-    border: 1px solid darkgray;
-    border-radius: 5px;
+    background-color: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
 
-    transition: all 200ms ease-out;
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition);
+    font-size: 0.8125rem;
 }
 
 .tabPageBandCol>label:hover {
     border-color: var(--primary-color);
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color-light);
 }
 
 .tabPageBandCol>input[type="checkbox"]+label>img {
@@ -956,26 +1023,32 @@ option[disabled] {
 }
 
 .tabPageBandCol>input[type="checkbox"]:checked+label.error {
-    background-color: darkgoldenrod;
-    border-color: darkgoldenrod;
+    background-color: #d97706;
+    border-color: #d97706;
     color: #fff;
-    /*animation: blinker 1s linear infinite;*/
 }
 
 .tabPageBandCol>input[type="checkbox"]:checked+label>img {
     filter: invert(94%) sepia(100%) saturate(22%) hue-rotate(48deg) brightness(107%) contrast(106%);
 }
 
+/* ── Content editable ───────────────────────────── */
+
 .contentEditable {
     border: 1px dashed transparent;
+    border-bottom: 1px dashed transparent;
     width: 100%;
     flex: 1;
-    padding-inline: 0.5em;
+    padding-inline: 0.375em;
+    border-radius: 4px;
+    transition: border-color var(--transition);
 }
 
 .contentEditable:hover {
     border-bottom-color: var(--primary-color);
 }
+
+/* ── Responsive: mobile ─────────────────────────── */
 
 @media screen and (max-width: 639px) {
     .toolbar {
@@ -984,56 +1057,43 @@ option[disabled] {
     }
 
     .project {
-        margin-bottom: 1rem;
-        row-gap: 0.4rem;
+        margin-bottom: 0.75rem;
+        gap: 0.3rem;
     }
 
     .project li {
-        width: 100%;
-    }
-
-    .project li span {
-        margin-right: 0.25rem;
+        font-size: 0.7rem;
+        padding-inline: 0.5em;
     }
 
     .projectbox {
-        padding-bottom: 1.25rem;
+        padding-bottom: 1rem;
         row-gap: 0.75rem;
     }
 
     .switchboard_row {
-        margin-inline: 0.75rem;
-        margin-top: 0.75rem;
+        margin-inline: 0.625rem;
+        margin-top: 0.625rem;
         gap: 0.5rem;
     }
 
     .summary table {
-        margin-inline: 0.75rem;
+        margin-inline: 0.625rem;
         display: block;
         overflow-x: auto;
     }
 
+    /* Toolbar wraps on mobile */
     .button_group {
-        flex-wrap: wrap;
-        border: 0;
-        background: transparent;
-        gap: 0.5rem;
+        flex-wrap: nowrap;
+        border-radius: 8px;
+        overflow-x: auto;
     }
 
     .button_group .button_group-separator {
-        display: none;
-    }
-
-    .button_group>*:not(.button_group-separator) {
-        align-items: center;
-        border: 1px solid darkgray;
-        border-radius: 8px;
-        background-color: #f5f5f5;
-    }
-
-    .button_group span {
-        line-height: 18px;
-        margin-top: 2px;
+        display: flex;
+        width: 1px;
+        flex-shrink: 0;
     }
 
     .button_group>*:not(.button_group-separator) span {
@@ -1044,19 +1104,24 @@ option[disabled] {
         display: inline-block;
     }
 
+    /* Dropdown: position fixed at bottom on mobile */
     .dropdown_container .dropdown {
         position: fixed;
         left: 1rem !important;
         right: 1rem;
-        top: auto;
         bottom: 1rem;
+        top: auto !important;
         transform: none !important;
+        width: auto;
+        min-width: 0;
         max-height: 70vh;
         overflow-y: auto;
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
     }
 
     .tabPages {
-        margin-top: 1.25rem;
+        margin-top: 1rem;
     }
 
     .tabPageBand {
@@ -1074,14 +1139,19 @@ option[disabled] {
         margin: 0;
         width: auto;
         max-height: 75vh;
+        border-radius: 12px;
     }
 }
+
+/* ── Responsive: sm ─────────────────────────────── */
 
 @media screen and (min-width: 640px) {
     .button_group {
         flex-wrap: nowrap;
     }
 }
+
+/* ── Responsive: md+ ────────────────────────────── */
 
 @media screen and (min-width: 768px) {
     .projectbox {
@@ -1101,8 +1171,10 @@ option[disabled] {
     }
 }
 
+/* ── Print ──────────────────────────────────────── */
+
 @media print {
-h4,
+    h4,
     .toolbar,
     .project {
         display: none;
@@ -1117,12 +1189,12 @@ h4,
         display: none;
     }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .switchboard,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .summary,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .schema,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .switchboard.selected,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .summary.selected,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .schema.selected {
+    .switchboard,
+    .summary,
+    .schema,
+    .switchboard.selected,
+    .summary.selected,
+    .schema.selected {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -1134,6 +1206,7 @@ h4,
         padding: 0;
         height: max-content;
         opacity: 1;
+        box-shadow: none;
     }
 
     .switchboard_row {
@@ -1149,63 +1222,5 @@ h4,
         overflow: hidden;
         margin-inline: 0;
         margin-top: 0;
-    }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .summary,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .summary.selected,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .schema,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .schema.selected {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        page-break-before: always;
-        break-before: page;
-        padding-block: 2em;
-        overflow: hidden;
-    }
-
-    .summary table {
-        margin: 0;
-    }
-
-    .summary {
-        padding-top: 0;
-        margin-top: 0;
-    }
-
-    .switchboard_row:not(:first-of-type) {
-        padding-top: 7mm;
-    }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .projectbox,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .button_group {
-        display: none;
-    }
-
-    .notprintable {
-        display: none !important;
-    }
-
-    .summary_text2 textarea {
-        -webkit-user-select: none;
-        user-select: none;
-        border: 0;
-        padding: 0;
-        background-color: transparent;
-    }
-}
-
-.icon_selector_box {
-    cursor: pointer;
-}
-
-.icon_selector_box:focus-within,
-.icon_selector_box.focused {
-    border-color: var(--primary-color) !important;
-}
-
-
-@keyframes blinker {
-    50% {
-        opacity: 0;
     }
 }
