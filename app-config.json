@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2025-04-14",
+            "date": "2025-04-16",
             "actions": {
                 "patches": [
                     {
@@ -40,6 +40,15 @@
                         "from": {
                             "name": "Discussion #43",
                             "link": "https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084"
+                        }
+                    }
+                ],
+                "adds": [
+                    {
+                        "text": "Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.",
+                        "from": {
+                            "name": "Issue #72",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/72"
                         }
                     }
                 ]

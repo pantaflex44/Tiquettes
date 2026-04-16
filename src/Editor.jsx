@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable react/prop-types */
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
 import schemaFunctions from './schema_functions.json';
 
@@ -41,6 +41,7 @@ import GroupColorSelector from "./GroupColorSelector.jsx";
 import EditorLineSelector from "./EditorLineSelector.jsx";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorMultiContactSelector from "./EditorMultiContactSelector.jsx";
+import EditorParallelSelector from "./EditorParallelSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -411,9 +412,19 @@ export default function Editor({
                         <>
                             <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
+                            <div className="popup_row-flex">
                                 <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
                                     value={ed.currentModule.func}
-                                    onChange={(value) => onUpdateModuleEditor({ func: value })} />
+                                    onChange={(value) => {
+                                        onUpdateModuleEditor({ func: value });
+                                        if (schemaFunctions[ed.currentModule.func]?.hasShareWithCilds !== true) {
+                                            onUpdateModuleEditor({ onlyChilds: false });
+                                        }
+                                    }} />
+                                <EditorParallelSelector id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
+                                    disabled={schemaFunctions[ed.currentModule.func]?.hasShareWithCilds !== true}
+                                    value={ed.currentModule.onlyChilds ?? true} onChange={(value) => onUpdateModuleEditor({ onlyChilds: value })} />
+                            </div>
                             </div>
 
                             {ed.currentModule.func && <>
@@ -563,7 +574,7 @@ export default function Editor({
 
 
 
-            </Popup>
+            </Popup >
         </>
     );
 }

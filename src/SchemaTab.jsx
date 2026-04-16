@@ -45,6 +45,7 @@ export default function SchemaTab({
     printOptions,
     reassignModules,
     getModuleById,
+    schemaFunctions,
     onEditSymbol = null,
 }) {
     const [monitorOpened, setMonitorOpened] = useState(false);
@@ -115,6 +116,20 @@ export default function SchemaTab({
                     });
                 }
             });
+
+            if (_childs.length > 0 && schemaFunctions[module.func]?.hasShareWithCilds === true && module.onlyChilds === false) {
+                _childs.push({
+                    ...module,
+                    onlyChilds: true,
+                    partialKc: false,
+                    kcId: '',
+                    id: `↓_${module.id}`,
+                    parentId: module.id,
+                    func: 'o',
+                    icon: module.icon,
+                    text: module.text,
+                });
+            }
 
             const childs = getRow(_childs);
 

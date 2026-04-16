@@ -18,15 +18,15 @@
 
 /* eslint-disable react/prop-types */
 
-import {Fragment} from "react";
+import { Fragment } from "react";
 
 import schemaFunctions from './schema_functions.json';
 
-export default function EditorParentSelector({id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null}) {
+export default function EditorParentSelector({ id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null }) {
     return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
+        onChange={(e) => {
+            if (onChange) onChange(e.target.value)
+        }} >
         <option value={""}>- aucun -</option>
         {Object.entries(filteredModulesListBySchemaFuncs)
             .map(([k, l]) => {
@@ -37,7 +37,7 @@ export default function EditorParentSelector({id, value, currentModuleId, filter
                             .map((module) => (
                                 currentModuleId !== module.id
                                     ? <option key={module.id}
-                                              value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
+                                        value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
                                     : null
                             ))
                             .filter(f => f !== null)}

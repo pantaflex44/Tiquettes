@@ -86,7 +86,6 @@ function App() {
     const [clipboardMode, setClipboardMode] = useState(null);
     const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
     const [uniqueChoices, setUniqueChoices] = useState([]);
-    const [spaceProjectUpdated, setSpaceProjectUpdated] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
 
@@ -217,6 +216,7 @@ function App() {
         parentId: "",
         kcId: "",
         partialKc: false,
+        onlyChilds: true,
         free: true,
         span: 1,
         half: "none",
@@ -240,6 +240,7 @@ function App() {
             parentId: "",
             kcId: "",
             partialKc: false,
+            onlyChilds: true,
             pole: "1P+N",
             wire: "16",
             line: "",
@@ -664,7 +665,6 @@ function App() {
         });
 
         setClipboard(null);
-        setSpaceProjectUpdated(false);
         setClipboardMode(null);
         setUniqueChoices([]);
         setPrintOptions({ ...defaultPrintOptions });
@@ -679,7 +679,6 @@ function App() {
         importRef.current.value = "";
 
         setClipboardMode(null);
-        setSpaceProjectUpdated(false);
         setUniqueChoices([]);
         setDocumentTitle(defaultProjectName);
         setPrintOptions({ ...defaultPrintOptions });
@@ -730,6 +729,9 @@ function App() {
                     // <=2.2.6 : add partialKc property
                     if (!nm.partialKc) nm = { ...nm, partialKc: false };
 
+                    // <=2.2.8 : add partialKc property
+                    if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
+
                     return nm;
                 });
             });
@@ -772,7 +774,6 @@ function App() {
             //setDocumentTitle(filename);
 
             setClipboard(null);
-            setSpaceProjectUpdated(false);
             setClipboardMode(null);
             setUniqueChoices([]);
             setPrintOptions({ ...defaultPrintOptions });
@@ -1011,6 +1012,7 @@ function App() {
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
         const partialKc = data.currentModule.partialKc ?? false;
+        const onlyChilds = data.currentModule.onlyChilds ?? true;
         const func = (data.currentModule.func ?? "").trim();
         const modtype = (data.currentModule.modtype ?? "").trim();
         const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
@@ -1070,6 +1072,7 @@ function App() {
                         parentId,
                         kcId,
                         partialKc,
+                        onlyChilds,
                         func,
                         crb,
                         modtype,
@@ -1400,6 +1403,7 @@ function App() {
                         parentId: clipboard.parentId,
                         kcId: clipboard.kcId,
                         partialKc: clipboard.partialKc,
+                        onlyChilds: clipboard.onlyChilds,
                         func: clipboard.func,
                         crb: clipboard.crb,
                         modtype: clipboard.modtype,
@@ -2357,6 +2361,7 @@ function App() {
                 printOptions={printOptions}
                 reassignModules={reassignModules}
                 getModuleById={getModuleById2}
+                schemaFunctions={schemaFunctions}
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
 

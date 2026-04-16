@@ -972,6 +972,8 @@ class TiquettesPDF extends FPDF
         }
     }
 
+    protected $drawedSymbols = [];
+
     function AddSchemaPage()
     {
         global $switchboard, $flattenModules, $schemaPrintFormat;
@@ -1009,6 +1011,7 @@ class TiquettesPDF extends FPDF
         ];
         $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
 
+        $drawedSymbols = [];
         $this->schemaDrawChilds('', 0);
     }
 
@@ -1132,7 +1135,8 @@ class TiquettesPDF extends FPDF
     {
         global $flattenModules;
 
-        if (!is_null($m) && $this->getSiblingCount($m) > 1) {
+        $gsc = $this->getSiblingCount($m);
+        if (!is_null($m) && $gsc > 1) {
             $lx = $this->schemaLastPos["L{$l}"]['x'] + ($this->schemaSymbolSize['w'] / 2);
             $ly = $this->schemaInitialPos['y'] + ($this->schemaSymbolSize['h'] * $l) - ($this->schemaLineWidth / 2) - 0.125;
             $lw = $this->grid[$this->gridOrientation]['right'] - $lx;
@@ -1159,8 +1163,9 @@ class TiquettesPDF extends FPDF
             $pl = $l - 1;
             if (count($pms) > 0 && $pl >= 0) {
                 $pm = $pms[0];
-                if ($this->getSiblingCount($pm) > 0)
+                if ($this->getSiblingCount($pm) > 0) {
                     $this->drawNextLine($pm, $pl);
+                }
             };
         }
     }
@@ -1177,6 +1182,7 @@ class TiquettesPDF extends FPDF
 
         $isNew = ($this->schemaCurrentPosX + $this->schemaSymbolSize['w']) > $this->grid[$this->gridOrientation]['right'];
         $currentPosY = $this->schemaInitialPos['y'] + ($this->schemaSymbolSize['h'] * $level) - 0.125;
+        $directChildsCount = $this->getDirectChildsCount($module);
 
         if ($isNew) {
             $this->drawNextLine($lastModule, $level);
@@ -1226,7 +1232,7 @@ class TiquettesPDF extends FPDF
                 $this->Image($symbol, $this->schemaCurrentPosX, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
         }
 
-        if ($this->getDirectChildsCount($module) === 0) {
+        if ($directChildsCount === 0) {
             //$this->SetFillColor(100, 100, 100);
             //$this->Rect($centerX - ($this->schemaLineWidth / 2), $currentPosY + $this->schemaSymbolSize['h'], $this->schemaLineWidth, $this->grid[$this->gridOrientation]['bottom'] - ($currentPosY + $this->schemaSymbolSize['h']) - 20, 'F');
 
