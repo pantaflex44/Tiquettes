@@ -1137,40 +1137,45 @@ class TiquettesPDF extends FPDF
 
         $gsc = $this->getSiblingCount($m);
         if (!is_null($m) && $gsc > 1) {
-            $lx = $this->schemaLastPos["L{$l}"]['x'] + ($this->schemaSymbolSize['w'] / 2);
-            $ly = $this->schemaInitialPos['y'] + ($this->schemaSymbolSize['h'] * $l) - ($this->schemaLineWidth / 2) - 0.125;
-            $lw = $this->grid[$this->gridOrientation]['right'] - $lx;
-            $this->SetFillColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
-            $this->Rect($lx, $ly, $lw, $this->schemaLineWidth, 'F');
+            // $this->schemaLastPos["L{$l}"]['index']
+            // $this->schemaLastPos["L{$l}"]['total']
+            // $this->schemaLastPos["L{$l}"]['islast']
+            if (!$this->schemaLastPos["L{$l}"]['islast']) {
+                $lx = $this->schemaLastPos["L{$l}"]['x'] + ($this->schemaSymbolSize['w'] / 2);
+                $ly = $this->schemaInitialPos['y'] + ($this->schemaSymbolSize['h'] * $l) - ($this->schemaLineWidth / 2) - 0.125;
+                $lw = $this->grid[$this->gridOrientation]['right'] - $lx;
+                $this->SetFillColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
+                $this->Rect($lx, $ly, $lw, $this->schemaLineWidth, 'F');
 
-            $lx = $this->grid[$this->gridOrientation]['right'];
-            $ly += ($this->schemaLineWidth / 2);
-            $this->Polygon([
-                $lx,
-                $ly,
-                $lx - 1.5,
-                $ly - 1.5,
-                $lx - 1.5,
-                $ly + 1.5
-            ], 'F');
+                $lx = $this->grid[$this->gridOrientation]['right'];
+                $ly += ($this->schemaLineWidth / 2);
+                $this->Polygon([
+                    $lx,
+                    $ly,
+                    $lx - 1.5,
+                    $ly - 1.5,
+                    $lx - 1.5,
+                    $ly + 1.5
+                ], 'F');
 
-            $this->SetFont('Arial', '', 5);
-            $folio = $this->schemaCurrentFolio + 1;
-            $fs = str("Folio {$folio}");
-            $this->Text($lx - $this->GetStringWidth($fs) - 2.5, $ly - 1, $fs);
+                $this->SetFont('Arial', '', 5);
+                $folio = $this->schemaCurrentFolio + 1;
+                $fs = str("Folio {$folio}");
+                $this->Text($lx - $this->GetStringWidth($fs) - 2.5, $ly - 1, $fs);
 
-            $pms = array_values(array_filter($flattenModules, fn($pm) => $m->parentId === $pm->id));
-            $pl = $l - 1;
-            if (count($pms) > 0 && $pl >= 0) {
-                $pm = $pms[0];
-                if ($this->getSiblingCount($pm) > 0) {
-                    $this->drawNextLine($pm, $pl);
-                }
-            };
+                $pms = array_values(array_filter($flattenModules, fn($pm) => $m->parentId === $pm->id));
+                $pl = $l - 1;
+                if (count($pms) > 0 && $pl >= 0) {
+                    $pm = $pms[0];
+                    if ($this->getSiblingCount($pm) > 0) {
+                        $this->drawNextLine($pm, $pl);
+                    }
+                };
+            }
         }
     }
 
-    protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
+    protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level, int $index, int $total): void
     {
         global $schemaPrintFormat, $schemaFunctions;
 
@@ -1285,6 +1290,9 @@ class TiquettesPDF extends FPDF
         $this->schemaLastPos["L{$level}"] = [
             'x' => $this->schemaCurrentPosX,
             'y' => $currentPosY,
+            'index' => $index,
+            'total' => $total,
+            'islast' => $index >= $total
         ];
     }
 
@@ -1302,7 +1310,7 @@ class TiquettesPDF extends FPDF
         for ($i = 0; $i < $total; $i++) {
             $module = $found[$i];
             $lastModule = $i > 0 ? $found[$i - 1] : null;
-            $this->schemaDrawItem($i, $lastModule, $module, $level);
+            $this->schemaDrawItem($i, $lastModule, $module, $level, $i + 1, $total);
             $this->schemaDrawChilds($module->id, $level + 1);
 
             if ($i < count($found) - 1)

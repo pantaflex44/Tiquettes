@@ -29,6 +29,13 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Correction du suivi des folios dans le système d'impression PDF.",
+                        "from": {
+                            "name": "Issue #71",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/71"
+                        }
+                    },
+                    {
                         "text": "Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.",
                         "from": {
                             "name": "Issue #27",
