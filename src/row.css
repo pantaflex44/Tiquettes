@@ -16,8 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* ── Row container ──────────────────────────────── */
+
 .row {
-    border: 1px solid darkgray;
+    border: 1px solid var(--border);
+    border-radius: 4px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -27,13 +30,16 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-
+    overflow: visible;
 }
 
+/* ── Row title ──────────────────────────────────── */
+
 .row_title {
-    color: black;
-    font-size: smaller;
-    margin-bottom: 40px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 38px;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -42,28 +48,38 @@
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
-    column-gap: 0.75em;
-    font-weight: bold;
+    column-gap: 0.625em;
+    letter-spacing: 0.02em;
 }
 
+/* ── Row add control ────────────────────────────── */
+
 .row_add {
-    margin-top: 40px;
+    margin-top: 38px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
-    column-gap: 1em;
+    column-gap: 0.75em;
 }
 
 .row_add_icon {
     cursor: pointer;
+    opacity: 0.65;
+    transition: opacity var(--transition), transform var(--transition);
+}
+
+.row_add_icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 .row_action_line {
     height: 1px;
-    border-top: 1px dotted var(--primary-color);
+    border-top: 1px dashed var(--primary-color);
     width: 100%;
+    opacity: 0.4;
 }
 
 .row_add.disabled {
@@ -72,29 +88,47 @@
 }
 
 .row_add .row_add_info {
-    font-size: small;
+    font-size: 0.75rem;
     text-wrap: nowrap;
     color: var(--primary-color);
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity var(--transition);
 }
+
+.row_add:hover .row_add_info {
+    opacity: 1;
+}
+
+/* ── Row delete control ─────────────────────────── */
 
 .row_delete_icon {
     cursor: pointer;
+    opacity: 0.55;
+    transition: opacity var(--transition), transform var(--transition);
+}
+
+.row_delete_icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 .row_delete_icon.disabled {
-    filter: grayscale() opacity(0.5);
+    filter: grayscale() opacity(0.3);
     pointer-events: none;
 }
+
+/* ── Print ──────────────────────────────────────── */
 
 @media print {
     .row {
         width: calc(100% - 10mm);
         border: 0;
-        border-left: 1px solid lightgray;
+        border-left: 1px solid #e0e0e0;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -102,17 +136,17 @@
         row-gap: 5mm;
         justify-content: start;
         align-items: start;
+        border-radius: 0;
     }
 
     .row_title {
         margin-bottom: 0;
-        font-weight: normal;
-        color: darkgray;
+        font-weight: 400;
+        color: #bbb;
     }
 
-    .row_add, .row_delete_icon {
+    .row_add,
+    .row_delete_icon {
         display: none;
     }
-
-
 }

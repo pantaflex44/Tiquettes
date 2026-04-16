@@ -16,37 +16,72 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-body{
+body {
     accent-color: var(--primary-color);
 }
 
+/* ── Footer ─────────────────────────────────────── */
+
+.footer {
+    margin-top: 0.5rem;
+    padding-inline: 0.5rem;
+    padding-block: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    border-top: 1px solid var(--border);
+    width: 100%;
+}
+
+.footer-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+
+.footer-link:focus-visible,
+.footer-link:hover {
+    color: #005f5f;
+    text-decoration: underline;
+}
+
+/* ── Dev mode indicator ─────────────────────────── */
+
 p.devmode {
-    color: black;
+    color: var(--text-primary);
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 3em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
 }
 
 p.devmode.blink {
-    color: red;
+    color: #dc2626;
     margin-bottom: 0;
-    font-weight: bold;
+    font-weight: 700;
     animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0;
-    }
+    50% { opacity: 0; }
 }
 
+/* ── Print ──────────────────────────────────────── */
 
 @media print {
     .footer {
         position: absolute;
         top: 5mm;
         right: 10mm;
-        font-size: small;
+        font-size: 7pt;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: #aaa;
     }
 
     .not_printable {
