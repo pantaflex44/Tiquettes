@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require('./libs/fpdf186/fpdf.php');
 define('EURO', chr(128));
 
+$schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
+
 
 function str(string $str): string|false
 {
@@ -100,7 +102,6 @@ class TiquettesPDF extends FPDF
 
     public $pageMargin = 10;
     public $pageBottomMargin = 12;
-    public $schemaFunctions = null;
 
     public array $required = [];
 
@@ -147,7 +148,6 @@ class TiquettesPDF extends FPDF
     {
         $this->required = self::requirements();
 
-        $this->schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
         $this->schemaLevelsCounterRecursive();
 
         parent::__construct($orientation, $unit, $size);
@@ -1172,10 +1172,10 @@ class TiquettesPDF extends FPDF
 
     protected function schemaDrawItem(int $pos, object|null $lastModule, object $module, int $level): void
     {
-        global $schemaPrintFormat;
+        global $schemaPrintFormat, $schemaFunctions;
 
         if ($module->func !== 'k') {
-            $sf = $this->schemaFunctions[$module->func];
+            $sf = $schemaFunctions[$module->func];
         } else {
             $sf = ['hasType' => false, 'hasCrb' => false, 'hasCurrent' => true];
         }
@@ -1312,7 +1312,7 @@ class TiquettesPDF extends FPDF
 
     function AddSummaryPage()
     {
-        global $switchboard, $printOptions, $summaryPrintFormat;
+        global $switchboard, $printOptions, $summaryPrintFormat, $schemaFunctions;
 
         $this->grid = false;
         $this->subTitle = "Nomenclature";
@@ -1412,10 +1412,10 @@ class TiquettesPDF extends FPDF
 
                     $this->SetFont('Arial', '', 9);
                     $this->SetX($oldPosX);
-                    $fname = array_key_exists($module->func, $this->schemaFunctions) ? trim($this->schemaFunctions[$module->func]['name'] ?? '-') : '-';
-                    $ftype = array_key_exists($module->func, $this->schemaFunctions) ? trim($this->schemaFunctions[$module->func]['hasType'] ? 'Type ' . trim($module->type) : '') : '-';
-                    $fcrb = array_key_exists($module->func, $this->schemaFunctions) ? trim($this->schemaFunctions[$module->func]['hasCrb'] ? 'Courbe ' . trim($module->crb) : '') : '-';
-                    $fsensibility = array_key_exists($module->func, $this->schemaFunctions) ? trim($this->schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '-';
+                    $fname = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '-';
+                    $ftype = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? 'Type ' . trim($module->type) : '') : '-';
+                    $fcrb = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? 'Courbe ' . trim($module->crb) : '') : '-';
+                    $fsensibility = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '-';
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
                     $fdetails = trim($ftype . ' ' . $fcrb . ' ' . $fsensibility . ' ' . $fcurrent . ' ' . $fpole);
@@ -1583,6 +1583,19 @@ foreach ($flattenModules as $module) {
                 ]);
             }
         }
+    }
+
+    if ($schemaFunctions[$module->func]['hasShareWithCilds'] === true && $module->onlyChilds === false) {
+        $flattenModules[] = (object) array_merge((array) $module, [
+            'kcId' => '',
+            'onlyChilds' => true,
+            'partialKc' => false,
+            'id' => '|_' . $module->id,
+            'parentId' => $module->id,
+            'func' => 'o',
+            'icon' => $module->icon,
+            'text' => $module->text
+        ]);
     }
 }
 
