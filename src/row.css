@@ -31,10 +31,9 @@
 }
 
 .row_title {
-    --isLimited: 0;
     color: black;
     font-size: smaller;
-    margin-bottom: calc(40px * var(--isLimited));
+    margin-bottom: 40px;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
