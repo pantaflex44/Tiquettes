@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2025-04-16",
+            "date": "2025-04-17",
             "actions": {
                 "patches": [
                     {
@@ -48,6 +48,11 @@
                             "name": "Discussion #43",
                             "link": "https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084"
                         }
+                    }
+                ],
+                "updates": [
+                    {
+                        "text": "Intégration des paramètres d'impression dans les fichiers des projets."
                     }
                 ],
                 "adds": [

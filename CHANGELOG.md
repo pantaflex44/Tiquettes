@@ -1,12 +1,16 @@
 # ChangeLog
 
-## [2.2.8] - 2025-04-16
+## [2.2.8] - 2025-04-17
 
 ### Corrections
 
 - [[Issue #71](https://github.com/pantaflex44/Tiquettes/issues/71)] Correction du suivi des folios dans le système d'impression PDF.
 - [[Issue #27](https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203)] Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.
 - [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084)] Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.
+
+### Modifications
+
+- Intégration des paramètres d'impression dans les fichiers des projets.
 
 ### Ajouts
 

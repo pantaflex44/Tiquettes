@@ -135,39 +135,40 @@ function App() {
     }
     const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
 
-    const _importPrintOptions = (spacePrintOptions) => {
+    const _importPrintOptions = (po) => {
         try {
-            setPrintOptions({
+            let spo = {
                 ...defaultPrintOptions,
-                firstPage: spacePrintOptions?.firstPage ?? defaultPrintOptions.firstPage,
-                labels: spacePrintOptions?.defaultPrintOptionsLabels ?? defaultPrintOptions.labels,
-                summary: spacePrintOptions?.defaultPrintOptionsSummary ?? defaultPrintOptions.summary,
-                schema: spacePrintOptions?.defaultPrintOptionsSchema ?? defaultPrintOptions.schema,
-                freeModules: spacePrintOptions?.freeModules ?? defaultPrintOptions.freeModules,
+                firstPage: po?.firstPage ?? defaultPrintOptions.firstPage,
+                labels: po?.labels ?? defaultPrintOptions.labels,
+                summary: po?.summary ?? defaultPrintOptions.summary,
+                schema: po?.schema ?? defaultPrintOptions.schema,
+                freeModules: po?.freeModules ?? defaultPrintOptions.freeModules,
                 pdfOptions: {
                     ...defaultPrintOptions.pdfOptions,
-                    labelsCutLines: spacePrintOptions?.labelsCutLines ?? defaultPrintOptions.pdfOptions.labelsCutLines,
-                    printCurrents: spacePrintOptions?.printCurrents ?? defaultPrintOptions.pdfOptions.printCurrents,
-                    labelsPrintFormat: spacePrintOptions?.labelsPrintFormat ?? defaultPrintOptions.pdfOptions.labelsPrintFormat,
-                    schemaPrintFormat: spacePrintOptions?.schemaPrintFormat ?? defaultPrintOptions.pdfOptions.schemaPrintFormat,
-                    summaryPrintFormat: spacePrintOptions?.summaryPrintFormat ?? defaultPrintOptions.pdfOptions.summaryPrintFormat,
+                    labelsCutLines: po?.pdfOptions?.labelsCutLines ?? defaultPrintOptions.pdfOptions.labelsCutLines,
+                    printCurrents: po?.pdfOptions?.printCurrents ?? defaultPrintOptions.pdfOptions.printCurrents,
+                    labelsPrintFormat: po?.pdfOptions?.labelsPrintFormat ?? defaultPrintOptions.pdfOptions.labelsPrintFormat,
+                    schemaPrintFormat: po?.pdfOptions?.schemaPrintFormat ?? defaultPrintOptions.pdfOptions.schemaPrintFormat,
+                    summaryPrintFormat: po?.pdfOptions?.summaryPrintFormat ?? defaultPrintOptions.pdfOptions.summaryPrintFormat,
                 },
                 firstPageOptions: {
                     ...defaultPrintOptions.firstPageOptions,
-                    photo: spacePrintOptions?.firstPagePhoto ?? defaultPrintOptions.firstPageOptions.photo,
-                    name: spacePrintOptions?.firstPageName ?? defaultPrintOptions.firstPageOptions.name,
-                    siret: spacePrintOptions?.firstPageSiret ?? defaultPrintOptions.firstPageOptions.siret,
-                    postalAddress: spacePrintOptions?.firstPagePostalAddress ?? defaultPrintOptions.firstPageOptions.postalAddress,
-                    contacts: spacePrintOptions?.firstPageContacts ?? defaultPrintOptions.firstPageOptions.contacts,
-                    phones: spacePrintOptions?.firstPagePhones ?? defaultPrintOptions.firstPageOptions.phones,
-                    projectName: spacePrintOptions?.firstPageProjectName ?? defaultPrintOptions.firstPageOptions.projectName,
-                    projectRevision: spacePrintOptions?.firstPageProjectRevision ?? defaultPrintOptions.firstPageOptions.projectRevision,
-                    projectCreated: spacePrintOptions?.firstPageProjectCreated ?? defaultPrintOptions.firstPageOptions.projectCreated,
-                    projectUpdated: spacePrintOptions?.firstPageProjectUpdated ?? defaultPrintOptions.firstPageOptions.projectUpdated,
-                    projectElectricalType: spacePrintOptions?.firstPageProjectElectricalType ?? defaultPrintOptions.firstPageOptions.projectElectricalType,
-                    projectElectricalVoltage: spacePrintOptions?.firstPageProjectElectricalVoltage ?? defaultPrintOptions.firstPageOptions.projectElectricalVoltage,
+                    photo: po?.firstPageOptions?.photo ?? defaultPrintOptions.firstPageOptions.photo,
+                    name: po?.firstPageOptions?.name ?? defaultPrintOptions.firstPageOptions.name,
+                    siret: po?.firstPageOptions?.siret ?? defaultPrintOptions.firstPageOptions.siret,
+                    postalAddress: po?.firstPageOptions?.postalAddress ?? defaultPrintOptions.firstPageOptions.postalAddress,
+                    contacts: po?.firstPageOptions?.contacts ?? defaultPrintOptions.firstPageOptions.contacts,
+                    phones: po?.firstPageOptions?.phones ?? defaultPrintOptions.firstPageOptions.phones,
+                    projectName: po?.firstPageOptions?.projectName ?? defaultPrintOptions.firstPageOptions.projectName,
+                    projectRevision: po?.firstPageOptions?.projectRevision ?? defaultPrintOptions.firstPageOptions.projectRevision,
+                    projectCreated: po?.firstPageOptions?.projectCreated ?? defaultPrintOptions.firstPageOptions.projectCreated,
+                    projectUpdated: po?.firstPageOptions?.projectUpdated ?? defaultPrintOptions.firstPageOptions.projectUpdated,
+                    projectElectricalType: po?.firstPageOptions?.projectElectricalType ?? defaultPrintOptions.firstPageOptions.projectElectricalType,
+                    projectElectricalVoltage: po?.firstPageOptions?.projectElectricalVoltage ?? defaultPrintOptions.firstPageOptions.projectElectricalVoltage,
                 }
-            });
+            };
+            setPrintOptions(spo);
             console.log('Project print options loaded.');
         } catch (error) {
             console.log('Unable to load project proint options:', error);
@@ -660,7 +661,7 @@ function App() {
                 height: height,
                 stepsPerRows,
                 stepSize: defaultStepSize,
-                rows: createRow(stepsPerRows, rowsCount)
+                rows: createRow(stepsPerRows, rowsCount),
             });
         });
 
@@ -729,7 +730,7 @@ function App() {
                     // <=2.2.6 : add partialKc property
                     if (!nm.partialKc) nm = { ...nm, partialKc: false };
 
-                    // <=2.2.8 : add partialKc property
+                    // <=2.2.8 : add onlyChilds property
                     if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
 
                     return nm;
@@ -776,7 +777,11 @@ function App() {
             setClipboard(null);
             setClipboardMode(null);
             setUniqueChoices([]);
+
             setPrintOptions({ ...defaultPrintOptions });
+            // since 2.2.8 : add print options import from project if exists
+            if (swb.printOptions) _importPrintOptions(swb.printOptions);
+
             setTab(1);
             setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
             scrollToProject();
@@ -823,6 +828,7 @@ function App() {
             ...switchboard,
             prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1,
             appversion: pkg.version,
+            printOptions: { ...printOptions }
         }
 
         const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
