@@ -19,10 +19,10 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import "./groupColorSelector.css";
+import "../css/groupColorSelector.css";
 
-import caretDownIcon from './assets/caret-down.svg';
-import caretUpIcon from './assets/caret-up.svg';
+import caretDownIcon from '../assets/caret-down.svg';
+import caretUpIcon from '../assets/caret-up.svg';
 import GroupColorSelectorItem from "./GroupColorSelectorItem";
 import GroupColorSelectorSeparator from "./GroupColorSelectorSeparator";
 import Popup from "./Popup";
@@ -65,7 +65,6 @@ export default function GroupColorSelector({
     }
 
     function handleColorItemSelected(selected) {
-        console.log(selected);
         setSelected(() => selected);
         setOpened(false);
     }

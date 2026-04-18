@@ -21,7 +21,7 @@ import { useState } from 'react';
 
 import { ChromePicker } from 'react-color';
 
-import './groupColorChooser.css';
+import '../css/groupColorChooser.css';
 import Popup from './Popup';
 
 function GroupColorChooser({

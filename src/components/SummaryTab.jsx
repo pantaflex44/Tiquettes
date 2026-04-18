@@ -17,12 +17,12 @@
  */
 
 /* eslint-disable react/prop-types */
-import schemaFunctions from './schema_functions.json';
+import schemaFunctions from '../schema_functions.json';
 
-import summaryRowIcon from "./assets/summary_row.svg";
-import summaryPositionIcon from "./assets/summary_position.svg";
-import summaryNoPicto from "./assets/summary_nopicto.svg";
-import numbersIcon from "./assets/numbers.svg";
+import summaryRowIcon from "../assets/summary_row.svg";
+import summaryPositionIcon from "../assets/summary_position.svg";
+import summaryNoPicto from "../assets/summary_nopicto.svg";
+import numbersIcon from "../assets/numbers.svg";
 
 export default function SummaryTab({
     tab,

@@ -18,8 +18,8 @@
 
 /* eslint-disable react/prop-types */
 
-import partialParaIcon from './assets/para_p.svg';
-import totalParaIcon from './assets/para_t.svg';
+import partialParaIcon from '../assets/para_p.svg';
+import totalParaIcon from '../assets/para_t.svg';
 
 export default function EditorParallelSelector({ id, value, disabled = false, onChange = null }) {
     return <div className={`buttons_box ${disabled === true ? 'disabled' : ''}`.trim()} id={id} name={id}>

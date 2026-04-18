@@ -20,7 +20,7 @@
 
 import { useMemo } from "react";
 
-import schemaFunctions from './schema_functions.json';
+import schemaFunctions from '../schema_functions.json';
 
 export default function SchemaSymbol({
     switchboard,
@@ -85,7 +85,7 @@ export default function SchemaSymbol({
 
             {monitor.errors && monitor.errors[module.id] &&
                 <img className="schemaItemSymbolWarning notprintable"
-                src={`${import.meta.env.BASE_URL}schema_warning.svg`}
+                    src={`${import.meta.env.BASE_URL}schema_warning.svg`}
                     alt="Erreur" />}
         </div>
     );

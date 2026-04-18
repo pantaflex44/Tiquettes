@@ -18,18 +18,18 @@
 
 /* eslint-disable react/prop-types */
 
-import "./welcomePopup.css";
+import "../css/welcomePopup.css";
 
-import projectIcon from "./assets/project.svg";
-import importIcon from "./assets/upload.svg";
+import projectIcon from "../assets/project.svg";
+import importIcon from "../assets/upload.svg";
 
 import Popup from "./Popup.jsx";
 
 export default function WelcomePopup({
-                                         onCancel,
-                                         onNewProject,
-                                         onImportProject,
-                                     }) {
+    onCancel,
+    onNewProject,
+    onImportProject,
+}) {
 
     return <Popup
         title={"Bienvenue sur Tiquettes"}
@@ -41,7 +41,7 @@ export default function WelcomePopup({
             <li onClick={() => {
                 onNewProject();
             }}>
-                <img src={projectIcon} width={48} height={48} alt="Nouveau projet"/>
+                <img src={projectIcon} width={48} height={48} alt="Nouveau projet" />
                 <div className="bigList-content">
                     <div className="bigList-content_title">Nouveau projet libre</div>
                     <div className="bigList-content_description">Démarrez librement votre nouveau projet. C&#39;est à
@@ -52,7 +52,7 @@ export default function WelcomePopup({
             <li onClick={() => {
                 onImportProject();
             }}>
-                <img src={importIcon} width={48} height={48} alt="Importer un projet"/>
+                <img src={importIcon} width={48} height={48} alt="Importer un projet" />
                 <div className="bigList-content">
                     <div className="bigList-content_title">Importer un projet existant</div>
                     <div className="bigList-content_description">Chargez facilement un ancien projet depuis votre

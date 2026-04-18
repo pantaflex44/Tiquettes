@@ -476,7 +476,7 @@ sélectionner "Taille réelle" ou "Echelle 100%" pour respecter la mise en page 
 
 # Remerciements ❤ !
 
-Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous en remercie fortement pour tout celà !
+Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous remercie fortement pour tout celà !
 
 ### 🐛 Remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et les [Discussions](https://github.com/pantaflex44/Tiquettes/discussions)
 
@@ -502,5 +502,7 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 - [misterg94](https://github.com/misterg94)
 - [Fanka14](https://github.com/Fanka14)
 - [xhark](https://github.com/blogmotion)
+- [lonewulf](https://github.com/lonewulf)
 
- ### ☕ Ainsi que pour tous les cafés offerts ;-)
+
+ ### ☕ Ainsi que pour toutes les personnes m'ayant offert des cafés ;-)

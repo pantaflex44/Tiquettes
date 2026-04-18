@@ -18,9 +18,9 @@
 
 /* eslint-disable react/prop-types */
 
-import "./newVersionPopup.css";
+import "../css/newVersionPopup.css";
 
-import reloadIcon from "./assets/refresh-dot.svg";
+import reloadIcon from "../assets/refresh-dot.svg";
 
 import Popup from "./Popup.jsx";
 

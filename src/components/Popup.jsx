@@ -19,13 +19,13 @@
 /* eslint-disable react/prop-types */
 import { useMemo } from "react";
 
-import './popup.css';
+import '../css/popup.css';
 
-import cancelIcon from './assets/x.svg';
-import okIcon from './assets/check.svg';
-import prevIcon from './assets/arrow-left.svg';
-import nextIcon from './assets/arrow-right.svg';
-import loadingIcon from './assets/loading_mini.gif';
+import cancelIcon from '../assets/x.svg';
+import okIcon from '../assets/check.svg';
+import prevIcon from '../assets/arrow-left.svg';
+import nextIcon from '../assets/arrow-right.svg';
+import loadingIcon from '../assets/loading_mini.gif';
 
 export default function Popup({
     title,

@@ -17,10 +17,17 @@
  */
 
 /* eslint-disable react/prop-types */
-import './horizontalRule.css';
+import schemaFunctions from '../schema_functions.json';
 
-export default function HorizontalRule({size}) {
-    return (
-        <div className={'horizontalRule noprint'} style={{'--ruleWidth': `calc(${size}mm)`}}>{size}mm</div>
-    );
+export default function EditorFunctionSelector({ id, value, onChange = null }) {
+    return <select id={id} name={id} value={value}
+        onChange={(e) => {
+            if (onChange) onChange(e.target.value)
+        }}>
+        <option value={""}>-</option>
+        {Object.keys(schemaFunctions)
+            .filter(key => (schemaFunctions[key].selectable ?? false) === true)
+            .map((key, i) => <option key={i}
+                value={key}>{schemaFunctions[key].name}</option>)}
+    </select>
 }

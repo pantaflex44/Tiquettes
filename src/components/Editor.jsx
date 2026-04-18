@@ -19,12 +19,12 @@
 /* eslint-disable react/prop-types */
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
-import schemaFunctions from './schema_functions.json';
+import schemaFunctions from '../schema_functions.json';
 
-import switchboardIcon from './assets/project.svg';
-import schemaIcon from './assets/schema.svg';
-import editIcon from './assets/edit.svg';
-import assignIdIcon from './assets/assign-number.svg';
+import switchboardIcon from '../assets/project.svg';
+import schemaIcon from '../assets/schema.svg';
+import editIcon from '../assets/edit.svg';
+import assignIdIcon from '../assets/assign-number.svg';
 
 import Module from "./Module.jsx";
 import Popup from "./Popup.jsx";
@@ -412,19 +412,19 @@ export default function Editor({
                         <>
                             <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
-                            <div className="popup_row-flex">
-                                <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
-                                    value={ed.currentModule.func}
-                                    onChange={(value) => {
-                                        onUpdateModuleEditor({ func: value });
-                                        if (schemaFunctions[ed.currentModule.func]?.hasShareWithCilds !== true) {
-                                            onUpdateModuleEditor({ onlyChilds: false });
-                                        }
-                                    }} />
-                                <EditorParallelSelector id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
-                                    disabled={schemaFunctions[ed.currentModule.func]?.hasShareWithCilds !== true}
-                                    value={ed.currentModule.onlyChilds ?? true} onChange={(value) => onUpdateModuleEditor({ onlyChilds: value })} />
-                            </div>
+                                <div className="popup_row-flex">
+                                    <EditorFunctionSelector id={`editor_func_${ed.currentModule.id.trim()}`}
+                                        value={ed.currentModule.func}
+                                        onChange={(value) => {
+                                            onUpdateModuleEditor({ func: value });
+                                            if (schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true) {
+                                                onUpdateModuleEditor({ onlyChilds: true });
+                                            }
+                                        }} />
+                                    <EditorParallelSelector id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
+                                        disabled={schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true}
+                                        value={ed.currentModule.onlyChilds ?? true} onChange={(value) => onUpdateModuleEditor({ onlyChilds: value })} />
+                                </div>
                             </div>
 
                             {ed.currentModule.func && <>
@@ -456,7 +456,7 @@ export default function Editor({
                                             <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>Asservi
                                                 par</label>
                                             <div className="popup_row-flex">
-                                        <EditorMultiContactSelector id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
+                                                <EditorMultiContactSelector id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.kcId}
                                                     currentModuleId={ed.currentModule.id}
                                                     filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
@@ -464,7 +464,7 @@ export default function Editor({
                                                         onUpdateModuleEditor({ kcId: value });
                                                         if (value.length === 0) onUpdateModuleEditor({ partialKc: false });
                                                     }} />
-                                        <EditorContactAsservSelector id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`} disabled={ed.currentModule.kcId === '' /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/}
+                                                <EditorContactAsservSelector id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`} disabled={ed.currentModule.kcId === '' /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/}
                                                     value={ed.currentModule.partialKc} onChange={(value) => onUpdateModuleEditor({ partialKc: value })} />
                                             </div>
                                         </div>
@@ -515,7 +515,7 @@ export default function Editor({
                                     <EditorWireSelector id={`editor_wire_${ed.currentModule.id.trim()}`}
                                         value={ed.currentModule.wire}
                                         onChange={(value) => onUpdateModuleEditor({ wire: value })}
-                                    current={parseInt((ed.currentModule.current ?? '').replace(/\D/g, ''))}
+                                        current={parseInt((ed.currentModule.current ?? '').replace(/\D/g, ''))}
                                         rules={rulesCurrentWires}
                                     />
                                 </div>

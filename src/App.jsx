@@ -22,14 +22,14 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { satisfies } from 'compare-versions';
 import sanitizeFilename from 'sanitize-filename';
 
-import './app.css';
+import './css/app.css';
 import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
 
-import Row from "./Row";
-import ContentEditable from "./ContentEditable";
+import Row from "./components/Row.jsx";
+import ContentEditable from "./components/ContentEditable.jsx";
 
 import newProjectIcon from './assets/new_project.svg';
 import clearProjectIcon from './assets/x.svg';
@@ -54,18 +54,16 @@ import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
 
-import Editor from "./Editor.jsx";
-import NewProjectEditor from "./NewProjectEditor.jsx";
-import SummaryTab from "./SummaryTab.jsx";
-import SchemaTab from "./SchemaTab.jsx";
-import WelcomePopup from "./WelcomePopup.jsx";
-import ThemeEditorPopup from "./ThemeEditorPopup.jsx";
+import Editor from "./components/Editor.jsx";
+import NewProjectEditor from "./components/NewProjectEditor.jsx";
+import SummaryTab from "./components/SummaryTab.jsx";
+import SchemaTab from "./components/SchemaTab.jsx";
+import WelcomePopup from "./components/WelcomePopup.jsx";
+import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 
 import { action, choices } from "../public/api/stats.js";
 
-import useDocumentVisibility from "./useVisibilityChange.jsx";
-
-
+import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 
 function App() {
     const documentIsVisible = useDocumentVisibility();
@@ -137,41 +135,15 @@ function App() {
 
     const _importPrintOptions = (po) => {
         try {
-            let spo = {
-                ...defaultPrintOptions,
-                firstPage: po?.firstPage ?? defaultPrintOptions.firstPage,
-                labels: po?.labels ?? defaultPrintOptions.labels,
-                summary: po?.summary ?? defaultPrintOptions.summary,
-                schema: po?.schema ?? defaultPrintOptions.schema,
-                freeModules: po?.freeModules ?? defaultPrintOptions.freeModules,
-                pdfOptions: {
-                    ...defaultPrintOptions.pdfOptions,
-                    labelsCutLines: po?.pdfOptions?.labelsCutLines ?? defaultPrintOptions.pdfOptions.labelsCutLines,
-                    printCurrents: po?.pdfOptions?.printCurrents ?? defaultPrintOptions.pdfOptions.printCurrents,
-                    labelsPrintFormat: po?.pdfOptions?.labelsPrintFormat ?? defaultPrintOptions.pdfOptions.labelsPrintFormat,
-                    schemaPrintFormat: po?.pdfOptions?.schemaPrintFormat ?? defaultPrintOptions.pdfOptions.schemaPrintFormat,
-                    summaryPrintFormat: po?.pdfOptions?.summaryPrintFormat ?? defaultPrintOptions.pdfOptions.summaryPrintFormat,
-                },
-                firstPageOptions: {
-                    ...defaultPrintOptions.firstPageOptions,
-                    photo: po?.firstPageOptions?.photo ?? defaultPrintOptions.firstPageOptions.photo,
-                    name: po?.firstPageOptions?.name ?? defaultPrintOptions.firstPageOptions.name,
-                    siret: po?.firstPageOptions?.siret ?? defaultPrintOptions.firstPageOptions.siret,
-                    postalAddress: po?.firstPageOptions?.postalAddress ?? defaultPrintOptions.firstPageOptions.postalAddress,
-                    contacts: po?.firstPageOptions?.contacts ?? defaultPrintOptions.firstPageOptions.contacts,
-                    phones: po?.firstPageOptions?.phones ?? defaultPrintOptions.firstPageOptions.phones,
-                    projectName: po?.firstPageOptions?.projectName ?? defaultPrintOptions.firstPageOptions.projectName,
-                    projectRevision: po?.firstPageOptions?.projectRevision ?? defaultPrintOptions.firstPageOptions.projectRevision,
-                    projectCreated: po?.firstPageOptions?.projectCreated ?? defaultPrintOptions.firstPageOptions.projectCreated,
-                    projectUpdated: po?.firstPageOptions?.projectUpdated ?? defaultPrintOptions.firstPageOptions.projectUpdated,
-                    projectElectricalType: po?.firstPageOptions?.projectElectricalType ?? defaultPrintOptions.firstPageOptions.projectElectricalType,
-                    projectElectricalVoltage: po?.firstPageOptions?.projectElectricalVoltage ?? defaultPrintOptions.firstPageOptions.projectElectricalVoltage,
-                }
-            };
-            setPrintOptions(spo);
-            console.log('Project print options loaded.');
+            if (typeof po !== "object") throw new Error();
+
+            setPrintOptions({ ...defaultPrintOptions, ...po });
+
+            console.log('Imported project print options loaded.');
         } catch (error) {
-            console.log('Unable to load project proint options:', error);
+            setPrintOptions({ ...defaultPrintOptions });
+
+            console.log('No project print options to load or corrupted.');
         }
     };
 
@@ -708,9 +680,6 @@ function App() {
                         const sic = swbIcons.filter((si) => si.filename === nm.icon);
                         if (sic.length === 1) {
                             if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
-                            //if (!nm.func) nm = {...nm, func: sic[0].func};
-                            //if (!nm.crb) nm = {...nm, crb: sic[0].crb};
-                            //if (!nm.current) nm = {...nm, current: sic[0].current};
                         }
                     }
 
@@ -778,9 +747,8 @@ function App() {
             setClipboardMode(null);
             setUniqueChoices([]);
 
-            setPrintOptions({ ...defaultPrintOptions });
-            // since 2.2.8 : add print options import from project if exists
-            if (swb.printOptions) _importPrintOptions(swb.printOptions);
+            // since 2.2.8 : add print options import from project if exists, default properties if not
+            _importPrintOptions(swb.printOptions);
 
             setTab(1);
             setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));

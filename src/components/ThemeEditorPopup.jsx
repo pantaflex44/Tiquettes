@@ -26,15 +26,15 @@ import IconSelector from "./IconSelector.jsx";
 import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
 import GroupColorChooser from "./GroupColorChooser.jsx";
 
-import importIcon from './assets/upload.svg';
-import exportIcon from './assets/download.svg';
-import undoIcon from './assets/undo.svg';
-import borderTopIcon from './assets/border-top.svg';
-import borderBottomIcon from './assets/border-bottom.svg';
+import importIcon from '../assets/upload.svg';
+import exportIcon from '../assets/download.svg';
+import undoIcon from '../assets/undo.svg';
+import borderTopIcon from '../assets/border-top.svg';
+import borderBottomIcon from '../assets/border-bottom.svg';
 
 import sanitizeFilename from "sanitize-filename";
 
-import './themeEditorPopup.css';
+import '../css/themeEditorPopup.css';
 
 export default function ThemeEditorPopup({
     switchboard,

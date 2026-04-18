@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2025-04-17",
+            "date": "2025-04-18",
             "actions": {
                 "patches": [
                     {
@@ -51,6 +51,12 @@
                     }
                 ],
                 "updates": [
+                    {
+                        "text": "Mise à jour des médias pour OG / Github / Twitter."
+                    },
+                    {
+                        "text": "Légère mise à jour de l'arborescence du projet."
+                    },
                     {
                         "text": "Intégration des paramètres d'impression dans les fichiers des projets."
                     }

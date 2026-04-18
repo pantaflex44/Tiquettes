@@ -17,10 +17,10 @@
  */
 
 /* eslint-disable react/prop-types */
-import './verticalRule.css';
+import '../css/verticalRule.css';
 
-export default function VerticalRule({size}) {
+export default function VerticalRule({ size }) {
     return (
-        <div className={'verticalRule noprint'} style={{'--ruleHeight': `calc(${size}mm + 1mm)`}}><span>{size}mm</span></div>
+        <div className={'verticalRule noprint'} style={{ '--ruleHeight': `calc(${size}mm + 1mm)` }}><span>{size}mm</span></div>
     );
 }

@@ -18,24 +18,24 @@
 
 import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 
-import './module.css';
-import themesList from './themes.json';
+import '../css/module.css';
+import themesList from '../themes.json';
 
-import editIcon from './assets/edit.svg';
-import shrinkIcon from './assets/minus.svg';
-import growIcon from './assets/plus.svg';
-import copyIcon from './assets/copy.svg';
-import cutIcon from './assets/cut.svg';
-import pasteIcon from './assets/paste.svg';
-import leftIcon from './assets/left.svg';
-import rightIcon from './assets/right.svg';
-import cancelredIcon from './assets/x.svg';
-import halfLeftIcon from './assets/half-left.svg';
-import halfRightIcon from './assets/half-right.svg';
-import noHalfIcon from './assets/no-half.svg';
-import clearIcon from './assets/trash.svg';
-import interIcon from './assets/inter.svg';
-import inter2Icon from './assets/inter2.svg';
+import editIcon from '../assets/edit.svg';
+import shrinkIcon from '../assets/minus.svg';
+import growIcon from '../assets/plus.svg';
+import copyIcon from '../assets/copy.svg';
+import cutIcon from '../assets/cut.svg';
+import pasteIcon from '../assets/paste.svg';
+import leftIcon from '../assets/left.svg';
+import rightIcon from '../assets/right.svg';
+import cancelredIcon from '../assets/x.svg';
+import halfLeftIcon from '../assets/half-left.svg';
+import halfRightIcon from '../assets/half-right.svg';
+import noHalfIcon from '../assets/no-half.svg';
+import clearIcon from '../assets/trash.svg';
+import interIcon from '../assets/inter.svg';
+import inter2Icon from '../assets/inter2.svg';
 
 
 /* eslint-disable react/prop-types */
@@ -183,7 +183,7 @@ function Module({
                 onClick={() => onPaste(item)} />
             : (isFree && !canPaste && !hasClipboard
                 ? <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
-                        alt="Editer ce module"
+                    alt="Editer ce module"
                     onClick={() => { if (!isDemo) { onEdit(item); } }} />
                 : (!isFree && themedModule
                     ? <div

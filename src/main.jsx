@@ -18,127 +18,18 @@
 
 'use strict'
 
-import { StrictMode, useEffect, useState } from 'react'
+import './others/arrayExtends.js';
+
+import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import * as semver from 'semver';
 
 import App from './App.jsx'
 
-import './main.css';
+import './css/main.css';
 import * as pkg from '../package.json';
-import NewVersionPopup from './NewVersionPopup.jsx';
+import NewVersionPopup from './components/NewVersionPopup.jsx';
 
-
-Array.prototype.replaceItemWith = function (item, newItem) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-        this[index] = newItem;
-    }
-};
-
-
-Array.prototype.removeItem = function (item) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-        this.splice(index, 1);
-    }
-};
-
-
-Array.prototype.insertItemAt = function (index, newItem) {
-    this.splice(index, 0, newItem);
-};
-
-
-Array.prototype.moveItem = function (item, newIndex) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-        this.splice(index, 1);
-        this.splice(newIndex, 0, item);
-    }
-};
-
-
-Array.prototype.moveItemTo = function (item, targetArray) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-        this.splice(index, 1);
-        targetArray.push(item);
-    }
-};
-
-
-Array.prototype.moveItemToIndex = function (item, targetArray, targetIndex) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-        this.splice(index, 1);
-        targetArray.splice(targetIndex, 0, item);
-    }
-};
-
-
-Array.prototype.swapItems = function (item1, item2) {
-    const index1 = this.indexOf(item1);
-    const index2 = this.indexOf(item2);
-    if (index1 !== -1 && index2 !== -1) {
-        this[index1] = item2;
-        this[index2] = item1;
-    }
-};
-
-
-Array.prototype.getItemAfter = function (item) {
-    const index = this.indexOf(item);
-    if (index !== -1 && index < this.length - 1) {
-        return this[index + 1];
-    }
-    return null;
-};
-
-
-Array.prototype.getItemBefore = function (item) {
-    const index = this.indexOf(item);
-    if (index > 0) {
-        return this[index - 1];
-    }
-    return null;
-};
-
-
-Array.prototype.getFirstItem = function () {
-    return this.length > 0 ? this[0] : null;
-};
-
-
-Array.prototype.getLastItem = function () {
-    return this.length > 0 ? this[this.length - 1] : null;
-};
-
-
-Array.prototype.containsItem = function (item) {
-    return this.indexOf(item) !== -1;
-};
-
-
-Array.prototype.clear = function () {
-    this.length = 0;
-};
-
-
-Array.prototype.clone = function () {
-    return this.slice();
-};
-
-
-Array.prototype.filterBy = function (callback) {
-    const result = [];
-    this.forEach(item => {
-        if (callback(item)) {
-            result.push(item);
-        }
-    });
-    return result;
-};
 
 
 function Footer() {

@@ -18,14 +18,14 @@
 
 /* eslint-disable react/prop-types */
 
-import "./schema.css";
+import "../css/schema.css";
 
 import { Fragment } from "react";
 
 import SchemaSymbol from "./SchemaSymbol.jsx";
 import SchemaDescription from "./SchemaDescription.jsx";
 
-import firstIcon from "./assets/caret-down-light.svg";
+import firstIcon from "../assets/caret-down-light.svg";
 
 export default function SchemaItem({
     switchboard,
@@ -59,8 +59,8 @@ export default function SchemaItem({
                 ) : (
                     <div className="schemaItemChilds">
                         <SchemaItem switchboard={switchboard} childs={item.childs}
-                                baseId={baseId ?? item.module.id} onEditSymbol={(module) => { onEditSymbol(module) }}
-                                monitor={monitor} />
+                            baseId={baseId ?? item.module.id} onEditSymbol={(module) => { onEditSymbol(module) }}
+                            monitor={monitor} />
                     </div>
                 )}
             </div>

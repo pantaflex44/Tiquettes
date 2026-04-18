@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2025-04-17
+## [2.2.8] - 2025-04-18
 
 ### Corrections
 
@@ -10,6 +10,8 @@
 
 ### Modifications
 
+- Mise à jour des médias pour OG / Github / Twitter.
+- Légère mise à jour de l'arborescence du projet.
 - Intégration des paramètres d'impression dans les fichiers des projets.
 
 ### Ajouts

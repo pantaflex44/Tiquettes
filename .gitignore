@@ -39,5 +39,5 @@ public/api/libs/constants.production.php
 public/api/libs/constants.development.php
 
 public/api/templates
-src/twofaInput.css
+src/css/twofaInput.css
 src/TwofaInput.jsx

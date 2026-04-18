@@ -20,7 +20,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 
-import schemaFunctions from './schema_functions.json';
+import schemaFunctions from '../schema_functions.json';
 
 export default function EditorLineSelector({ id, value, onChange = null }) {
     return <select id={id} name={id} value={value}

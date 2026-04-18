@@ -9,7 +9,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "id": {
         "name": "Interrupteur différentiel",
@@ -21,7 +21,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "dd": {
         "name": "Disjoncteur différentiel",
@@ -33,7 +33,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "q": {
         "name": "Disjoncteur",
@@ -45,7 +45,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "prd": {
         "name": "Parafoudre",
@@ -57,7 +57,7 @@
         "hasContacts": false,
         "supportContacts": false,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     },
     "fus": {
         "name": "Fusible",
@@ -69,7 +69,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "trf": {
         "name": "Transformateur",
@@ -81,7 +81,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "i": {
         "name": "Interrupteur",
@@ -93,7 +93,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "kc": {
         "name": "Contacteur",
@@ -105,7 +105,7 @@
         "hasContacts": true,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "cpt": {
         "name": "Sous-comptage",
@@ -117,7 +117,7 @@
         "hasContacts": false,
         "supportContacts": false,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     },
     "o": {
         "name": "Autre",
@@ -129,7 +129,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "c": {
         "name": "Commande",
@@ -141,7 +141,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": false,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "cno": {
         "name": "Commande NO",
@@ -153,7 +153,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "cnf": {
         "name": "Commande NF",
@@ -165,7 +165,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "bpno": {
         "name": "Bouton poussoir NO",
@@ -177,7 +177,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "bpnf": {
         "name": "Bouton poussoir NF",
@@ -189,7 +189,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": true
+        "hasShareWithChilds": true
     },
     "led": {
         "name": "Voyant",
@@ -201,7 +201,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     },
     "son": {
         "name": "Carillon",
@@ -213,7 +213,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     },
     "telec": {
         "name": "Télécommande",
@@ -225,7 +225,7 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     },
     "pc": {
         "name": "Prise modulaire",
@@ -237,6 +237,6 @@
         "hasContacts": false,
         "supportContacts": true,
         "selectable": true,
-        "hasShareWithCilds": false
+        "hasShareWithChilds": false
     }
 }

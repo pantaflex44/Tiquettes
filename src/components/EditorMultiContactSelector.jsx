@@ -20,9 +20,9 @@
 
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
-import caretDownIcon from './assets/caret-down.svg';
-import caretUpIcon from './assets/caret-up.svg';
-import useOutsideAlerter from "./useOutsideAlerter";
+import caretDownIcon from '../assets/caret-down.svg';
+import caretUpIcon from '../assets/caret-up.svg';
+import useOutsideAlerter from "../hooks/useOutsideAlerter";
 
 
 export default function EditorMultiContactSelector({ id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null }) {

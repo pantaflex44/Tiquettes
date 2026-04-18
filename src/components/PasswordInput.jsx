@@ -18,41 +18,41 @@
 
 /* eslint-disable react/prop-types */
 
-import {useRef} from "react";
+import { useRef } from "react";
 
-import eyeIcon from "./assets/eye.svg";
-import eyeOffIcon from "./assets/eye-off.svg";
+import eyeIcon from "../assets/eye.svg";
+import eyeOffIcon from "../assets/eye-off.svg";
 
 function PasswordInput({
-                           id = '',
-                           name = '',
-                           placeholder = '',
-                           value = '',
-                           onChange = null,
-                           onFocus = null,
-                           onBlur = null,
-                           ...props
-                       }) {
+    id = '',
+    name = '',
+    placeholder = '',
+    value = '',
+    onChange = null,
+    onFocus = null,
+    onBlur = null,
+    ...props
+}) {
     const passwordInputRef = useRef(null);
     const passwordImgRef = useRef(null);
 
     return (
         <div className={'password_form_row'}>
             <input type={'password'} id={id} name={name} placeholder={placeholder}
-                   ref={passwordInputRef}
-                   style={{minHeight: '32px'}}
-                   autoComplete={'new-password'}
-                   value={value}
-                   onChange={onChange}
-                   onInput={(e) => {
-                       if (e.target.type !== 'password') {
-                           e.target.type = 'password';
-                           passwordImgRef.current.src = eyeIcon;
-                       }
-                   }}
-                   onFocus={onFocus}
-                   onBlur={onBlur}
-                   {...props}
+                ref={passwordInputRef}
+                style={{ minHeight: '32px' }}
+                autoComplete={'new-password'}
+                value={value}
+                onChange={onChange}
+                onInput={(e) => {
+                    if (e.target.type !== 'password') {
+                        e.target.type = 'password';
+                        passwordImgRef.current.src = eyeIcon;
+                    }
+                }}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                {...props}
             />
             <img src={eyeIcon} ref={passwordImgRef} width={18} height={18} onClick={(e) => {
                 if (passwordInputRef.current.type === 'password') {
@@ -63,7 +63,7 @@ function PasswordInput({
                     e.target.src = eyeIcon;
                 }
                 passwordInputRef.current.focus();
-            }}/>
+            }} />
         </div>
     );
 }

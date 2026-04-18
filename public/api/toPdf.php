@@ -1593,7 +1593,7 @@ foreach ($flattenModules as $module) {
         }
     }
 
-    if ($schemaFunctions[$module->func]['hasShareWithCilds'] === true && $module->onlyChilds === false) {
+    if ($schemaFunctions[$module->func]['hasShareWithChilds'] === true && $module->onlyChilds === false) {
         $flattenModules[] = (object) array_merge((array) $module, [
             'kcId' => '',
             'onlyChilds' => true,

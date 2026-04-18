@@ -20,10 +20,10 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const IconSelectorItem = lazy(() => import('./IconSelectorItem.jsx'));
 
-import swbIcons from './switchboard_icons.json';
-import caretDownIcon from './assets/caret-down.svg';
-import caretUpIcon from './assets/caret-up.svg';
-import useOutsideAlerter from "./useOutsideAlerter.jsx";
+import swbIcons from '../switchboard_icons.json';
+import caretDownIcon from '../assets/caret-down.svg';
+import caretUpIcon from '../assets/caret-up.svg';
+import useOutsideAlerter from "../hooks/useOutsideAlerter.jsx";
 
 /* eslint-disable react/prop-types */
 function IconSelector({ value = null, onChange = null, onOpenState = null }) {

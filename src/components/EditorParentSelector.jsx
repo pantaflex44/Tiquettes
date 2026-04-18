@@ -20,7 +20,7 @@
 
 import { Fragment } from "react";
 
-import schemaFunctions from './schema_functions.json';
+import schemaFunctions from '../schema_functions.json';
 
 export default function EditorParentSelector({ id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null }) {
     return <select id={id} name={id} value={value}

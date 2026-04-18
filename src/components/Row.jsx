@@ -16,9 +16,9 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import './row.css';
-import rowAddIcon from './assets/row-add.svg';
-import rowDeleteIcon from './assets/trash.svg';
+import '../css/row.css';
+import rowAddIcon from '../assets/row-add.svg';
+import rowDeleteIcon from '../assets/trash.svg';
 
 
 import Module from "./Module";

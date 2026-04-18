@@ -18,8 +18,8 @@
 
 /* eslint-disable react/prop-types */
 
-import partialAsservIcon from './assets/asserv_p.svg';
-import totalAsservIcon from './assets/asserv_t.svg';
+import partialAsservIcon from '../assets/asserv_p.svg';
+import totalAsservIcon from '../assets/asserv_t.svg';
 
 export default function EditorContactAsservSelector({ id, value, disabled = false, onChange = null }) {
     return <div className={`buttons_box ${disabled === true ? 'disabled' : ''}`.trim()} id={id} name={id}>

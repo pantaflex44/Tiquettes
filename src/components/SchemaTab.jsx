@@ -22,21 +22,21 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import SchemaItem from "./SchemaItem.jsx";
 
-import swbIcons from './switchboard_icons.json';
+import swbIcons from '../switchboard_icons.json';
 
-import monitorIcon from './assets/monitor.svg';
-import nomonitorIcon from './assets/nomonitor.svg';
-import boltIcon from './assets/bolt.svg';
-import noboltIcon from './assets/nobolt.svg';
-import groundIcon from './assets/ground.svg';
-import nogroundIcon from './assets/noground.svg';
-import homeIcon from "./assets/home.svg";
-import compagnyIcon from "./assets/compagny.svg";
-import info2Icon from "./assets/info2.svg";
-import cancelIcon from "./assets/cancel.svg";
-import numbersIcon from "./assets/numbers.svg";
-import zoomPlusIcon from "./assets/zoom-in.svg";
-import zoomMinusIcon from "./assets/zoom-out.svg";
+import monitorIcon from '../assets/monitor.svg';
+import nomonitorIcon from '../assets/nomonitor.svg';
+import boltIcon from '../assets/bolt.svg';
+import noboltIcon from '../assets/nobolt.svg';
+import groundIcon from '../assets/ground.svg';
+import nogroundIcon from '../assets/noground.svg';
+import homeIcon from "../assets/home.svg";
+import compagnyIcon from "../assets/compagny.svg";
+import info2Icon from "../assets/info2.svg";
+import cancelIcon from "../assets/cancel.svg";
+import numbersIcon from "../assets/numbers.svg";
+import zoomPlusIcon from "../assets/zoom-in.svg";
+import zoomMinusIcon from "../assets/zoom-out.svg";
 
 export default function SchemaTab({
     tab,
@@ -117,7 +117,7 @@ export default function SchemaTab({
                 }
             });
 
-            if (_childs.length > 0 && schemaFunctions[module.func]?.hasShareWithCilds === true && module.onlyChilds === false) {
+            if (_childs.length > 0 && schemaFunctions[module.func]?.hasShareWithChilds === true && module.onlyChilds === false) {
                 _childs.push({
                     ...module,
                     onlyChilds: true,
