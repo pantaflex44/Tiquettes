@@ -506,3 +506,9 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 
 
  ### ☕ Ainsi que pour toutes les personnes m'ayant offert des cafés ;-)
+
+---
+
+ ![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/public/github_1280x640.png?raw=true)
+
+---

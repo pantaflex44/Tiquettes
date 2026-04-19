@@ -42,6 +42,7 @@ import EditorLineSelector from "./EditorLineSelector.jsx";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorMultiContactSelector from "./EditorMultiContactSelector.jsx";
 import EditorParallelSelector from "./EditorParallelSelector.jsx";
+import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -500,14 +501,23 @@ export default function Editor({
                                 </div>
                             }
 
-                            {schemaFunctions[ed.currentModule.func]?.hasCurrent &&
-                                <div className="popup_row" style={{ '--left_column_size': '100px' }}>
-                                    <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
-                                    <EditorCurrentSelector id={`editor_current_${ed.currentModule.id.trim()}`}
-                                        value={ed.currentModule.current}
-                                        onChange={(value) => onUpdateModuleEditor({ current: value })} />
-                                </div>
-                            }
+                        {schemaFunctions[ed.currentModule.func]?.hasNONCChoice &&
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Type</label>
+                                <EditorContactTypeSelector id={`editor_contact_type_${ed.currentModule.id.trim()}`}
+                                    value={ed.currentModule.kcType ?? "NO"}
+                                    onChange={(value) => onUpdateModuleEditor({ kcType: value })} />
+                            </div>
+                        }
+
+                        {schemaFunctions[ed.currentModule.func]?.hasCurrent &&
+                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                                <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
+                                <EditorCurrentSelector id={`editor_current_${ed.currentModule.id.trim()}`}
+                                    value={ed.currentModule.current}
+                                    onChange={(value) => onUpdateModuleEditor({ current: value })} />
+                            </div>
+                        }
 
                             {schemaFunctions[ed.currentModule.func]?.hasWire &&
                                 <div className="popup_row" style={{ '--left_column_size': '100px' }}>

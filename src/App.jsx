@@ -188,6 +188,7 @@ function App() {
         grp: "",
         parentId: "",
         kcId: "",
+        kcType: "NO",
         partialKc: false,
         onlyChilds: true,
         free: true,
@@ -212,6 +213,7 @@ function App() {
             id: "DB",
             parentId: "",
             kcId: "",
+            kcType: "NO",
             partialKc: false,
             onlyChilds: true,
             pole: "1P+N",
@@ -310,6 +312,42 @@ function App() {
         firstPagePhones: null
 
     }), [defaultProjectName, defaultProjectType, defaultVRef, defaultTheme, defaultHRow, defaultStepsPerRows, defaultStepSize, createRow, defaultNpRows, defaultProjectProperties.db]);
+
+    const autoUpdateProjectProperties = (swb) => {
+        const theme = themeEngineCompatibility(swb);
+
+        return {
+            ...swb,
+
+            // <1.5.0  : add project metas 
+            // >=1.5.0 : convert data types
+            prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
+            prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
+            prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
+            // <2.0.0
+            projectType: swb.projectType ?? defaultProjectType,
+            vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
+            db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
+            withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+            withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
+            schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
+            switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
+            summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
+            summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
+            summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
+            summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
+            summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
+            summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
+            summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
+            // <2.0.5
+            stepSize: swb.stepSize ?? defaultStepSize,
+            // <2.1.4
+            theme,
+            // <2.2.2
+            prjid: swb.prjid ?? generateUUID(),
+
+        };
+    }
 
     const setDocumentTitle = (title) => {
         const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
@@ -504,47 +542,10 @@ function App() {
                 ...defaultProject,
                 ...JSON.parse(sessionStorage.getItem(pkg.name))
             };
-
-            const theme = themeEngineCompatibility(swb);
-
-            swb = {
-                ...swb,
-
-                // <1.5.0  : add project metas 
-                // >=1.5.0 : convert data types
-                prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
-                prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
-                prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
-                // <2.0.0
-                projectType: swb.projectType ?? defaultProjectType,
-                vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
-                db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
-                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
-                withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
-                schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
-                switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
-                summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
-                summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
-                summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
-                summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
-                summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
-                summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
-                summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
-                // <2.0.5
-                stepSize: swb.stepSize ?? defaultStepSize,
-                // <2.1.4
-                theme,
-                // <2.2.2
-                prjid: swb.prjid ?? generateUUID(),
-
-            };
-
-            //console.log("Switchboard loaded from this session.");
+            swb = autoUpdateProjectProperties(swb);
 
             return modulesAutoId({ ...swb });
         }
-
-        //setWelcome(true);
 
         return { ...defaultProject };
     };
@@ -664,9 +665,7 @@ function App() {
     const _importProject = (data) => {
         try {
             let swb = typeof data === 'string' ? JSON.parse(data) : data;
-
-            const theme = themeEngineCompatibility(swb);
-            setTheme(theme);
+            swb = autoUpdateProjectProperties(swb);
 
             const rows = swb.rows.map((r) => {
                 return r.map((m) => {
@@ -701,43 +700,13 @@ function App() {
 
                     // <=2.2.8 : add onlyChilds property
                     if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
+                    if (!nm.kcType) nm = { ...nm, kcType: "NO" };
 
                     return nm;
                 });
             });
-            swb = {
-                ...defaultProject,
-                ...swb,
 
-                // <1.5.0
-                prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
-                prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
-                prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
-                // <2.0.0
-                projectType: swb.projectType ?? defaultProjectType,
-                vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
-                db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
-                withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
-                withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
-                schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
-                switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
-                summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
-                summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
-                summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
-                summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
-                summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
-                summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
-                summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
-                // <2.0.5
-                stepSize: swb.stepSize ?? defaultStepSize,
-                // <2.1.4
-                theme,
-                // <2.2.2
-                prjid: swb.prjid ?? generateUUID(),
-
-                rows
-            };
-
+            setTheme(swb.theme);
             setSwitchboard(() => modulesAutoId({ ...swb }));
 
             //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
@@ -985,6 +954,7 @@ function App() {
         const desc = (data.currentModule.desc ?? "").trim();
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
+        const kcType = (data.currentModule.kcType ?? "NO").trim();
         const partialKc = data.currentModule.partialKc ?? false;
         const onlyChilds = data.currentModule.onlyChilds ?? true;
         const func = (data.currentModule.func ?? "").trim();
@@ -1045,6 +1015,7 @@ function App() {
                         desc,
                         parentId,
                         kcId,
+                        kcType,
                         partialKc,
                         onlyChilds,
                         func,
@@ -1376,6 +1347,7 @@ function App() {
                         desc: clipboard.desc,
                         parentId: clipboard.parentId,
                         kcId: clipboard.kcId,
+                        kcType: clipboard.kcType,
                         partialKc: clipboard.partialKc,
                         onlyChilds: clipboard.onlyChilds,
                         func: clipboard.func,
@@ -1626,6 +1598,19 @@ function App() {
         for (const row of switchboard.rows) {
             for (const module of row) {
                 if (module.id === moduleId) {
+                    m = module;
+                    break;
+                }
+            }
+        }
+        return m;
+    }
+
+    const getModuleByKcId = (moduleId) => {
+        let m = null;
+        for (const row of switchboard.rows) {
+            for (const module of row) {
+                if (module.kcId === moduleId) {
                     m = module;
                     break;
                 }

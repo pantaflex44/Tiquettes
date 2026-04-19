@@ -231,6 +231,7 @@ option[disabled] {
 
 .buttons_box:not(.disabled) .buttons_box-button.selected {
     background-color: var(--primary-color);
+    color: #fff;
 }
 
 .buttons_box:not(.disabled) .buttons_box-button.selected img {

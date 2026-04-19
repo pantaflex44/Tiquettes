@@ -1,18 +1,20 @@
 # ChangeLog
 
-## [2.2.8] - 2025-04-18
+## [2.2.8] - 2025-04-19
 
 ### Corrections
 
+- Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement.
 - [[Issue #71](https://github.com/pantaflex44/Tiquettes/issues/71)] Correction du suivi des folios dans le système d'impression PDF.
 - [[Issue #27](https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203)] Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.
-- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084)] Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.
 
 ### Modifications
 
+- [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
 - Mise à jour des médias pour OG / Github / Twitter.
 - Légère mise à jour de l'arborescence du projet.
 - Intégration des paramètres d'impression dans les fichiers des projets.
+- [[Discussion #43](https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084)] Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.
 
 ### Ajouts
 

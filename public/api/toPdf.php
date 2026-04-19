@@ -972,8 +972,6 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    protected $drawedSymbols = [];
-
     function AddSchemaPage()
     {
         global $switchboard, $flattenModules, $schemaPrintFormat;
@@ -1011,7 +1009,6 @@ class TiquettesPDF extends FPDF
         ];
         $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
 
-        $drawedSymbols = [];
         $this->schemaDrawChilds('', 0);
     }
 
@@ -1202,7 +1199,11 @@ class TiquettesPDF extends FPDF
         $centerX = $this->schemaCurrentPosX + ($this->schemaSymbolSize['w'] / 2);
 
         if ($level < $this->grid[$this->gridOrientation]['schemaMaxLevels']) {
-            $symbol = $this->getSymbol($module->func);
+            $sff = $module->func;
+            if ($module->func === 'k' && $schemaFunctions['kc']['hasNONCChoice'] === true && strtoupper(trim($module->kcType ?? "")) === 'NC') {
+                $sff .= '_nc';
+            }
+            $symbol = $this->getSymbol($sff);
             if ($symbol !== '')
                 $this->Image($symbol, $this->schemaCurrentPosX + 0.04, $currentPosY, $this->schemaSymbolSize['w'], $this->schemaSymbolSize['h'], 'PNG');
 
@@ -1577,19 +1578,17 @@ foreach ($flattenModules as $module) {
                 ]);
             }
 
-            if (!existsInFlattenModules('¤_' . $kcModule->id)) {
-                $flattenModules[] = (object) array_merge((array) $kcModule, [
-                    'kcId' => '',
-                    'id' => '¤_' . $kcModule->id,
-                    'parentId' => $module->id,
-                    'func' => 'k',
-                    'icon' => $module->icon,
-                    'text' => $module->partialKc === true ? $kcModule->text : $module->text,
-                    'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
-                    'pole' => $module->pole,
-                    'wire' => $module->wire ?? ''
-                ]);
-            }
+            $flattenModules[] = (object) array_merge((array) $kcModule, [
+                'kcId' => '',
+                'id' => '¤_' . $kcModule->id,
+                'parentId' => $module->id,
+                'func' => 'k',
+                'icon' => $module->icon,
+                'text' => $module->partialKc === true ? $kcModule->text : $module->text,
+                'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
+                'pole' => $module->pole,
+                'wire' => $module->wire ?? ''
+            ]);
         }
     }
 

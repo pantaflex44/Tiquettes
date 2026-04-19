@@ -50,7 +50,7 @@ export default function SchemaSymbol({
         const titleErrors = monitor.errors && monitor.errors[module.id] ? "\r\n\r\n⚠ : " + monitor.errors[module.id].join("\r\n⚠ : ") : "";
         const titleInfos = monitor.infos && monitor.infos[module.id] ? "\r\n\r\n🛈 " + monitor.infos[module.id].join("\r\n🛈 ") : "";
         const title = `${module.id} / ${name}: ${module.text}${titleErrors}${titleInfos}`.trim();
-        const icon = `${import.meta.env.BASE_URL}schema_${func}.svg`;
+        const icon = `${import.meta.env.BASE_URL}` + (isContact && schemaFunctions['kc'].hasNONCChoice === true ? `schema_${func}` + (module.kcType === 'NC' ? '_nc' : '') + '.svg' : `schema_${func}.svg`)
 
         return { obj, name, title, icon, isDb, isContact };
     }, [module]);
