@@ -204,6 +204,7 @@ export default function SchemaTab({
                 const isTetra = (pole) => pole === "4P" || pole === "3P+N";
                 const isMono = (pole) => pole === "1P+N" || pole === "2P";
 
+
                 const getCurrent = (module) => {
                     const _currentCurrent = (module?.current ?? "0A").split('/');
                     if (_currentCurrent.length > 0) return parseInt(_currentCurrent[_currentCurrent.length - 1].replace(/\D/g, ''));
@@ -316,6 +317,7 @@ export default function SchemaTab({
                     }
                 }
 
+
                 // Vérification du câblage du module courant (cohérence des pôles)
                 if (currentPole && parentPole && (
                     ((parentPole === '1P+N' || parentPole === '2P') && currentPole !== '1P+N' && currentPole !== '2P')
@@ -415,6 +417,7 @@ export default function SchemaTab({
                                 ...old,
                                 db: { ...old.db, pole: e.target.value }
                             };
+
 
                             if (e.target.value === "1P+N" || e.target.value === "2P") {
                                 sw = {

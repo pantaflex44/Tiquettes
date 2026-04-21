@@ -143,6 +143,7 @@ export default function Editor({
     const parentModuleIsTri = useMemo(() => parentModule && schemaFunctions[parentModule.func]?.hasPole && (parentModule.pole === '3P+N' || parentModule.pole === '4P'), [parentModule]);
     const hasLine = useMemo(() => parentModule && parentModuleIsTri && schemaFunctions[ed.currentModule.func]?.hasPole && (ed.currentModule.pole === '1P+N' || ed.currentModule.pole === '2P'), [parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions]);
 
+
     useEffect(() => {
         if (!hasLine) onUpdateModuleEditor({ line: "" })
     }, [hasLine]);
