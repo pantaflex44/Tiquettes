@@ -148,9 +148,7 @@ function CustomTheme({ item, data, style }) {
             color: (colors.fg.id ? item.grp : (data?.id?.color ?? "#000000")),
             backgroundColor: (colors.bg.id ? item.grp : (data?.id?.backgroundColor ?? "transparent")),
             width: "100%",
-            transform: (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
-            "-webkit-transform": (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
-            "-moz-transform": (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(90deg)' : 'none',
+            transform: (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none'
         },
         icon: {
             ...positions.icon,
@@ -232,9 +230,7 @@ function CustomTheme({ item, data, style }) {
             color: (colors.fg.text ? item.grp : (data?.text?.color ?? "#000000")),
             backgroundColor: (colors.bg.text ? item.grp : (data?.text?.backgroundColor ?? "transparent")),
             width: "100%",
-            transform: (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
-            "-webkit-transform": (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
-            "-moz-transform": (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
+            transform: (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none'
         }
     }), [data, positions, colors]);
 
