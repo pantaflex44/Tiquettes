@@ -48,13 +48,6 @@
                 ],
                 "updates": [
                     {
-                        "text": "Ajout de la polarisation 2P.",
-                        "from": {
-                            "name": "Issue #75",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/75"
-                        }
-                    },
-                    {
                         "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
                     },
                     {
@@ -82,6 +75,20 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout de la possibilité d'exclure un module de la numérotation automatique.",
+                        "from": {
+                            "name": "Issue #77",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/77"
+                        }
+                    },
+                    {
+                        "text": "Ajout de la polarisation 2P.",
+                        "from": {
+                            "name": "Issue #75",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/75"
+                        }
+                    },
                     {
                         "text": "Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.",
                         "from": {
