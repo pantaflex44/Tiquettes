@@ -31,7 +31,7 @@ export default function EditorPoleSelector({ id, value, db, style = {}, onChange
 
     const allowedPoles = [
         { key: "1P+N", name: "Monophasé unipolaire (1P+N)" },
-        { key: "2P", name: "Monophasé bipolaire (2P)" },
+        { key: "2P", name: "Monophasé bipolaire (2P)" }, 
         { key: "3P", name: "Triphasé (3P)" },
         { key: "3P+N", name: "Triphasé (3P+N)" },
         { key: "4P", name: "Tétrapolaire (4P)" }
