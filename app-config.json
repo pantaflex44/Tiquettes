@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2025-04-19",
+            "date": "2026-04-21",
             "actions": {
                 "patches": [
                     {
@@ -47,6 +47,16 @@
                     }
                 ],
                 "updates": [
+                    {
+                        "text": "Ajout de la polarisation 2P.",
+                        "from": {
+                            "name": "Issue #75",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/75"
+                        }
+                    },
+                    {
+                        "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
+                    },
                     {
                         "text": "Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).",
                         "from": {
@@ -83,7 +93,7 @@
             }
         },
         "2.2.7": {
-            "date": "2025-03-27",
+            "date": "2026-03-27",
             "actions": {
                 "patches": [
                     {
@@ -120,7 +130,7 @@
             }
         },
         "2.2.6": {
-            "date": "2025-01-05",
+            "date": "2026-01-05",
             "actions": {
                 "patches": [
                     {

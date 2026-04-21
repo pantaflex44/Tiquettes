@@ -98,6 +98,7 @@ class TiquettesPDF extends FPDF
     protected $schemaCurrentFolio = 1;
     protected $schemaLevelsCount = 0;
     protected $showLabelsCutLines = false;
+    protected $angle = 0;
 
 
     public $pageMargin = 10;
@@ -191,6 +192,25 @@ class TiquettesPDF extends FPDF
         if ($this->ColorFlag)
             $s = 'q ' . $this->TextColor . ' ' . $s . ' Q';
         $this->_out($s);
+    }
+
+    public function Rotate(int $angle, int $x = -1, int $y = -1): void
+    {
+        if ($x == -1)
+            $x = $this->x;
+        if ($y == -1)
+            $y = $this->y;
+        if ($this->angle != 0)
+            $this->_out('Q');
+        $this->angle = $angle;
+        if ($angle != 0) {
+            $angle *= M_PI / 180;
+            $c = cos($angle);
+            $s = sin($angle);
+            $cx = $x * $this->k;
+            $cy = ($this->h - $y) * $this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+        }
     }
 
     public function TextWithDirection($x, $y, $txt, $direction = 'R')
@@ -492,6 +512,10 @@ class TiquettesPDF extends FPDF
 
     function _endpage()
     {
+        if ($this->angle != 0) {
+            $this->angle = 0;
+            $this->_out('Q');
+        }
         $this->SetVisibility('all');
         parent::_endpage();
     }

@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2025-04-19
+## [2.2.8] - 2026-04-21
 
 ### Corrections
 
@@ -10,6 +10,8 @@
 
 ### Modifications
 
+- [[Issue #75](https://github.com/pantaflex44/Tiquettes/issues/75)] Ajout de la polarisation 2P.
+- Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
 - [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
 - Mise à jour des médias pour OG / Github / Twitter.
 - Légère mise à jour de l'arborescence du projet.
@@ -21,7 +23,7 @@
 - [[Issue #72](https://github.com/pantaflex44/Tiquettes/issues/72)] Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.
 
 
-## [2.2.7] - 2025-03-27
+## [2.2.7] - 2026-03-27
 
 ### Corrections
 
@@ -34,7 +36,7 @@
 - [[Discussion #65](https://github.com/pantaflex44/Tiquettes/discussions/65)] Ajout de la possibilité d'échanger 2 modules en lieu et place.
 
 
-## [2.2.6] - 2025-01-05
+## [2.2.6] - 2026-01-05
 
 ### Corrections
 

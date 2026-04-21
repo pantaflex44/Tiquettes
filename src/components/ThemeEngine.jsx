@@ -114,7 +114,7 @@ function CustomTheme({ item, data, style }) {
     const styles = useMemo(() => ({
         id: {
             ...positions.id,
-            width: "calc(100% - 2mm)",
+            width: (data?.id?.displayMode ?? 'H') === 'V' ? "calc(100% + 8mm)" : "calc(100% - 2mm)",
             height: "max-content",
             padding: "1mm",
             paddingTop: positions.id.order === 0 ? "2mm" : "1mm",
@@ -148,6 +148,9 @@ function CustomTheme({ item, data, style }) {
             color: (colors.fg.id ? item.grp : (data?.id?.color ?? "#000000")),
             backgroundColor: (colors.bg.id ? item.grp : (data?.id?.backgroundColor ?? "transparent")),
             width: "100%",
+            transform: (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
+            "-webkit-transform": (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
+            "-moz-transform": (data?.id?.displayMode ?? 'H') === 'V' ? 'rotate(90deg)' : 'none',
         },
         icon: {
             ...positions.icon,
@@ -195,7 +198,7 @@ function CustomTheme({ item, data, style }) {
         },
         text: {
             ...positions.text,
-            width: "calc(100% - 2mm)",
+            width: (data?.text?.displayMode ?? 'H') === 'V' ? "calc(100% + 8mm)" : "calc(100% - 2mm)",
             height: "max-content",
             padding: "1mm",
             paddingTop: positions.text.order === 0 ? "2mm" : "1mm",
@@ -229,9 +232,11 @@ function CustomTheme({ item, data, style }) {
             color: (colors.fg.text ? item.grp : (data?.text?.color ?? "#000000")),
             backgroundColor: (colors.bg.text ? item.grp : (data?.text?.backgroundColor ?? "transparent")),
             width: "100%",
+            transform: (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
+            "-webkit-transform": (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
+            "-moz-transform": (data?.text?.displayMode ?? 'H') === 'V' ? 'rotate(-90deg)' : 'none',
         }
     }), [data, positions, colors]);
-
 
     return (<>
 

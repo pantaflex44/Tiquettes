@@ -27,6 +27,8 @@ import backColorIcon from "../assets/paint.svg";
 import textColorIcon from "../assets/text-color.svg";
 import boldIcon from "../assets/bold.svg";
 import italicIcon from "../assets/italic.svg";
+import horizontalDisplayModeIcon from "../assets/horizontalDisplayMode.svg";
+import verticalDisplayModeIcon from "../assets/verticalDisplayMode.svg";
 
 export default function TextPartStyleEditor({
     positions,
@@ -113,6 +115,45 @@ export default function TextPartStyleEditor({
                         }
                     }))}
                     title={"Alignement à droite"}
+                />
+            </div>
+            <div className={'tep-settings_row-el-separator'}></div>
+            <div className={'tep-settings_row-el'}>
+                <img src={horizontalDisplayModeIcon} alt={"Présentation horizontale"} width={16} height={16} />
+                <input type={'checkbox'}
+                    checked={(editedTheme.data[propName]?.displayMode ?? 'H') === 'H'}
+                    id={'tep-id-horizontalDisplayMode'}
+                    name={'tep-id-horizontalDisplayMode'}
+                    onChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: {
+                                ...(old.data[propName] ?? {}),
+                                displayMode: e.target.checked ? 'H' : old.data[propName]?.displayMode
+                            }
+                        }
+                    }))}
+                    title={"Présentation horizontale"}
+                />
+            </div>
+            <div className={'tep-settings_row-el'}>
+                <img src={verticalDisplayModeIcon} alt={"Présentation verticale"} width={16} height={16} />
+                <input type={'checkbox'}
+                    checked={(editedTheme.data[propName]?.displayMode ?? 'H') === 'V'}
+                    id={'tep-id-verticalDisplayMode'}
+                    name={'tep-id-verticalDisplayMode'}
+                    onChange={(e) => setEditedTheme(old => ({
+                        ...old,
+                        data: {
+                            ...old.data,
+                            [propName]: {
+                                ...(old.data[propName] ?? {}),
+                                displayMode: e.target.checked ? 'V' : old.data[propName]?.displayMode
+                            }
+                        }
+                    }))}
+                    title={"Présentation verticale"}
                 />
             </div>
         </div>

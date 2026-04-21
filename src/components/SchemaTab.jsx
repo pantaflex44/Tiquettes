@@ -202,7 +202,7 @@ export default function SchemaTab({
             Object.entries(childs).forEach(([id, data]) => {
                 const isTri = (pole) => pole === "3P" || pole === "4P" || pole === "3P+N";
                 const isTetra = (pole) => pole === "4P" || pole === "3P+N";
-                const isMono = (pole) => pole === "1P+N";
+                const isMono = (pole) => pole === "1P+N" || pole === "2P";
 
                 const getCurrent = (module) => {
                     const _currentCurrent = (module?.current ?? "0A").split('/');
@@ -318,9 +318,9 @@ export default function SchemaTab({
 
                 // Vérification du câblage du module courant (cohérence des pôles)
                 if (currentPole && parentPole && (
-                    (parentPole === '1P+N' && currentPole !== '1P+N')
+                    ((parentPole === '1P+N' || parentPole === '2P') && currentPole !== '1P+N' && currentPole !== '2P')
                     || (parentPole === '3P' && currentPole !== '3P')
-                    || ((parentPole === '1P+N' || parentPole === '3P') && (currentPole === '4P' || currentPole === '3P+N'))
+                    || ((parentPole === '1P+N' || parentPole === '2P' || parentPole === '3P') && (currentPole === '4P' || currentPole === '3P+N'))
                 )) {
                     add_error(id, `Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`);
                 }
@@ -416,7 +416,7 @@ export default function SchemaTab({
                                 db: { ...old.db, pole: e.target.value }
                             };
 
-                            if (e.target.value === "1P+N") {
+                            if (e.target.value === "1P+N" || e.target.value === "2P") {
                                 sw = {
                                     ...sw,
                                     rows: sw.rows.map((row) => row.map((module) => {

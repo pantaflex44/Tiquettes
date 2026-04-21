@@ -28,7 +28,7 @@ dist-ssr
 
 google205542c04daca98b.html
 
-private
+sftp.js
 
 public/api/.idea/*
 public/api/libs/toPdf/themes/icons
@@ -41,3 +41,4 @@ public/api/libs/constants.development.php
 public/api/templates
 src/css/twofaInput.css
 src/TwofaInput.jsx
+package-base - OLD.json

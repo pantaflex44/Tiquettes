@@ -147,6 +147,9 @@ class Theme
                     $data[$key]['fontWeight'] = '';
 
                     $data[$key]['lineCount'] = (int) ($data[$key]['lineCount'] ?? 1);
+                    if ($data[$key]['lineCount'] < 1)
+                        $data[$key]['lineCount'] = 1;
+                    $data[$key]['originalLineCount'] = $data[$key]['lineCount'];
                     $data[$key]['place'] = [
                         'w' => $workBox['w'] + 0.1,
                         'h' => (($data[$key]['lineCount'] * $data[$key]['fontSize']) + (($data[$key]['lineCount'] - 1) * 0.5373)) - 1,
@@ -276,12 +279,21 @@ class Theme
                 $pdf->SetXY($posX, $posY);
 
                 if ($key === 'id' || $key === 'text') { // draw text
+                    $dm = $data[$key]['displayMode'] ?? 'H';
+
                     self::setFgColor($pdf, $data[$key], $module);
                     $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
                     $txt = mb_convert_encoding($module->{$key}, 'windows-1252', 'UTF-8');
                     $align = strtolower(trim(($data[$key]['horizontalAlignment'] ?? 'center')));
                     $align = $align === 'left' ? 'L' : ($align === 'right' ? 'R' : 'C');
-                    $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
+
+                    if ($dm === 'H') {
+                        $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
+                    } else if ($dm === 'V') {
+                        $pdf->Rotate(90, $posX, $posY);
+                        $pdf->MultiCell($data[$key]['place']['w'] + ($data[$key]['fontSize'] * $data[$key]['originalLineCount']), $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
+                        $pdf->Rotate(0);
+                    }
                 } else if ($key === 'icon') { // draw icons
                     if ($data[$key]['type'] === 'icon' && $module->icon) { // icon format
 

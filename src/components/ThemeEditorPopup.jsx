@@ -66,7 +66,8 @@ export default function ThemeEditorPopup({
                 "backgroundColor": "transparent",
                 "color": "#000000",
                 "bgcolorUseGrp": true,
-                "fgcolorUseGrp": false
+                "fgcolorUseGrp": false,
+                "displayMode": "H"
             },
             "icon": {
                 "type": "icon",
@@ -93,7 +94,8 @@ export default function ThemeEditorPopup({
                 "backgroundColor": "transparent",
                 "color": "#000000",
                 "bgcolorUseGrp": false,
-                "fgcolorUseGrp": false
+                "fgcolorUseGrp": false,
+                "displayMode": "H"
             },
             "top": {
                 "border": false,

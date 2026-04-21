@@ -134,6 +134,13 @@
     column-gap: 0.15rem;
 }
 
+.tep-settings_row-el-separator {
+    width: 1px;
+    height: 16px;
+    background-color: #999;
+    margin-inline: 0.25rem;
+}
+
 .tep-settings_row label {
     font-size: 80%;
     cursor: pointer;
