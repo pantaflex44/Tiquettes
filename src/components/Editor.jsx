@@ -25,6 +25,8 @@ import switchboardIcon from '../assets/project.svg';
 import schemaIcon from '../assets/schema.svg';
 import editIcon from '../assets/edit.svg';
 import assignIdIcon from '../assets/assign-number.svg';
+import numberAutoIcon from '../assets/numbers_auto.svg';
+import numberManIcon from '../assets/numbers_man.svg';
 
 import Module from "./Module.jsx";
 import Popup from "./Popup.jsx";
@@ -245,6 +247,11 @@ export default function Editor({
                                         <img src={assignIdIcon} width={22} height={22}
                                             alt="Trouver le prochain identifiant libre." />
                                     </button>
+                                <button title={"Etat actuel: " + (ed.currentModule.noAutoId === true ? "ne pas renuméroter automatiquement." : "inclure dans la numérotation automatique.")}
+                                    onClick={() => onUpdateModuleEditor({ noAutoId: !ed.currentModule.noAutoId })} style={{ backgroundColor: ed.currentModule.noAutoId === true ? 'initial' : 'var(--primary-color)', color: ed.currentModule.noAutoId === true ? 'initial' : '#fff' }}>
+                                    <img src={ed.currentModule.noAutoId === true ? numberManIcon : numberAutoIcon} width={22} height={22} style={{ filter: ed.currentModule.noAutoId === true ? 'initial' : 'invert()' }}
+                                        alt="Inclure dans la numérotation automatique." />
+                                </button>
                                 </div>
                             </div>
                             <div className="popup_row" style={{ '--left_column_size': '100px' }}>

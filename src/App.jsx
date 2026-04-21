@@ -191,6 +191,7 @@ function App() {
         kcType: "NO",
         partialKc: false,
         onlyChilds: true,
+        noAutoId: false,
         free: true,
         span: 1,
         half: "none",
@@ -216,6 +217,7 @@ function App() {
             kcType: "NO",
             partialKc: false,
             onlyChilds: true,
+            noAutoId: false,
             pole: "1P+N",
             wire: "16",
             line: "",
@@ -472,12 +474,15 @@ function App() {
                         };
                     }
 
-                    let func = (module.func ?? '').trim().toUpperCase();
-                    if (func === '') func = defaultModuleId;
+                    let newModuleId = module.id;
+                    if ((module.noAutoId ?? false) !== true) {
+                        let func = (module.func ?? '').trim().toUpperCase();
+                        if (func === '') func = defaultModuleId;
 
-                    counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
+                        counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
 
-                    const newModuleId = `${func}${counters[func]}`;
+                        newModuleId = `${func}${counters[func]}`;
+                    }
                     from = { ...from, [module.id]: newModuleId };
 
                     return {
@@ -701,6 +706,7 @@ function App() {
                     // <=2.2.8 : add onlyChilds property
                     if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
                     if (!nm.kcType) nm = { ...nm, kcType: "NO" };
+                    if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
 
                     return nm;
                 });
@@ -931,7 +937,7 @@ function App() {
         setEditor({
             rowIndex,
             moduleIndex,
-            /*originalModule: {...currentModule},*/
+            originalModule: { ...currentModule },
             currentModule,
             prevModule,
             theme,
@@ -956,6 +962,7 @@ function App() {
         const kcId = (data.currentModule.kcId ?? "").trim();
         const kcType = (data.currentModule.kcType ?? "NO").trim();
         const partialKc = data.currentModule.partialKc ?? false;
+        const noAutoId = data.currentModule.noAutoId ?? false;
         const onlyChilds = data.currentModule.onlyChilds ?? true;
         const func = (data.currentModule.func ?? "").trim();
         const modtype = (data.currentModule.modtype ?? "").trim();
@@ -1018,6 +1025,7 @@ function App() {
                         kcType,
                         partialKc,
                         onlyChilds,
+                        noAutoId,
                         func,
                         crb,
                         modtype,
@@ -1350,6 +1358,7 @@ function App() {
                         kcType: clipboard.kcType,
                         partialKc: clipboard.partialKc,
                         onlyChilds: clipboard.onlyChilds,
+                        noAutoId: clipboard.noAutoId,
                         func: clipboard.func,
                         crb: clipboard.crb,
                         modtype: clipboard.modtype,
