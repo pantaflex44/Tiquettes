@@ -143,7 +143,7 @@ export default function Editor({
 
     const parentModule = useMemo(() => getParentById(ed.currentModule.parentId), [ed.currentModule.parentId]);
     const parentModuleIsTri = useMemo(() => parentModule && schemaFunctions[parentModule.func]?.hasPole && (parentModule.pole === '3P+N' || parentModule.pole === '4P'), [parentModule]);
-    const hasLine = useMemo(() => parentModule && parentModuleIsTri && schemaFunctions[ed.currentModule.func]?.hasPole && (ed.currentModule.pole === '1P+N' || ed.currentModule.pole === '2P'), [parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions]);
+    const hasLine = useMemo(() => ((parentModule && parentModuleIsTri) || (!parentModule && switchboard.withDb && (switchboard.db.pole === '3P+N' || switchboard.db.pole === '4P'))) && schemaFunctions[ed.currentModule.func]?.hasPole && (ed.currentModule.pole === '1P+N' || ed.currentModule.pole === '2P'), [parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions]);
 
 
     useEffect(() => {
@@ -248,8 +248,8 @@ export default function Editor({
                                             alt="Trouver le prochain identifiant libre." />
                                     </button>
                                 <button title={"Etat actuel: " + (ed.currentModule.noAutoId === true ? "ne pas renuméroter automatiquement." : "inclure dans la numérotation automatique.")}
-                                    onClick={() => onUpdateModuleEditor({ noAutoId: !ed.currentModule.noAutoId })} style={{ backgroundColor: ed.currentModule.noAutoId === true ? 'initial' : 'var(--primary-color)', color: ed.currentModule.noAutoId === true ? 'initial' : '#fff' }}>
-                                    <img src={ed.currentModule.noAutoId === true ? numberManIcon : numberAutoIcon} width={22} height={22} style={{ filter: ed.currentModule.noAutoId === true ? 'initial' : 'invert()' }}
+                                    onClick={() => onUpdateModuleEditor({ noAutoId: !ed.currentModule.noAutoId })} style={{ backgroundColor: ed.currentModule.noAutoId === true ? 'var(--primary-color)' : 'initial' }}>
+                                    <img src={ed.currentModule.noAutoId === true ? numberManIcon : numberAutoIcon} width={22} height={22} style={{ filter: ed.currentModule.noAutoId === true ? 'invert()' : 'initial' }}
                                         alt="Inclure dans la numérotation automatique." />
                                 </button>
                                 </div>
