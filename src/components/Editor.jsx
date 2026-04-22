@@ -169,7 +169,7 @@ export default function Editor({
             if (currentPole === 3 && pole.includes('+N')) currentPole = 4;
         }
 
-        if (dbPole === 1 && currentPole !== 1) onUpdateModuleEditor({ pole: switchboard.db.pole });
+        if (dbPole === 1 && (currentPole !== 1 && currentPole !== 2)) onUpdateModuleEditor({ pole: switchboard.db.pole, line: "" });
 
     }, [hasBlankId, ed.currentModule.func]);
 

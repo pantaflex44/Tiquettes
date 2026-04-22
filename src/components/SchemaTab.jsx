@@ -57,6 +57,14 @@ export default function SchemaTab({
         if (monitorOpened) monitorRef.current.focus();
     }, [monitorOpened]);
 
+    const polesCounter = (pole) => {
+        if (!pole) return 4;
+        let p = parseInt(pole.replace(/\D/g, ''));
+        if (p === 1 && pole.includes('+N')) p = 2;
+        if (p === 3 && pole.includes('+N')) p = 4;
+        return p;
+    };
+
     const handleEditSymbol = (module) => {
         const m = getModuleById(module.id);
         if (!m?.module) return;
@@ -419,11 +427,19 @@ export default function SchemaTab({
                             };
 
 
-                            if (e.target.value === "1P+N" || e.target.value === "2P") {
+                            if (e.target.value === "1P+N") {
                                 sw = {
                                     ...sw,
                                     rows: sw.rows.map((row) => row.map((module) => {
-                                        if (module.pole && module.pole !== e.target.value) {
+                                        let modulePoleCounter = polesCounter(module.pole);
+                                        //if (modulePoleCounter === 1) modulePoleCounter = 2;
+                                        //if (modulePoleCounter === 3) modulePoleCounter = 4;
+
+                                        let dbPoleCounter = polesCounter(e.target.value);
+                                        //if (dbPoleCounter === 1) dbPoleCounter = 2;
+                                        //if (dbPoleCounter === 3) dbPoleCounter = 4;
+
+                                        if (modulePoleCounter > dbPoleCounter) {
                                             return { ...module, pole: e.target.value };
                                         }
                                         return module;
