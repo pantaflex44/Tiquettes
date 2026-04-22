@@ -544,6 +544,7 @@ export default function Editor({
                                     <div className={`popup_row ${hasLine ? 'three' : ''}`.trim()} style={{ '--left_column_size': '100px' }}>
                                         <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
                                         <EditorPoleSelector id={`editor_pole_${ed.currentModule.id.trim()}`}
+                                    parentModule={getParentById(ed.currentModule.parentId)}
                                             value={ed.currentModule.pole}
                                             db={switchboard.withDb ? switchboard.db : null}
                                             onChange={(value) => onUpdateModuleEditor({ pole: value })} style={{ flex: 1 }} />

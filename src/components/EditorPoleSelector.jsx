@@ -20,13 +20,18 @@
 
 import { useMemo } from "react";
 
-export default function EditorPoleSelector({ id, value, db, style = {}, onChange = null }) {
+export default function EditorPoleSelector({ id, parentModule, value, db, style = {}, onChange = null }) {
+    const polesCounter = (pole) => {
+        let p = parseInt(pole.replace(/\D/g, ''));
+        if (p === 1 && pole.includes('+N')) p = 2;
+        if (p === 3 && pole.includes('+N')) p = 4;
+        return p;
+    };
+
     const dbPole = useMemo(() => {
         if (!db || !db?.pole) return 4;
         let pole = db.pole.trim().toUpperCase();
-        let p = parseInt(pole.replace(/\D/g, ''));
-        if (p === 3 && pole.includes('+N')) p = 4;
-        return p;
+        return polesCounter(pole);
     }, [db]);
 
     const allowedPoles = [
@@ -36,9 +41,13 @@ export default function EditorPoleSelector({ id, value, db, style = {}, onChange
         { key: "3P+N", name: "Triphasé (3P+N)" },
         { key: "4P", name: "Tétrapolaire (4P)" }
     ].filter(currentPole => {
-        let p = parseInt(currentPole.key.replace(/\D/g, ''));
-        if (p === 3 && currentPole.key.includes('+N')) p = 4;
-        return p <= dbPole;
+        const p = polesCounter(currentPole.key);
+        if (p <= dbPole) {
+            if (!parentModule || !parentModule?.pole) return true;
+            let parentPole = parentModule.pole.trim().toUpperCase();
+            return p <= polesCounter(parentPole);
+        }
+        return false;
     });
 
     return <select id={id} name={id} value={value}
