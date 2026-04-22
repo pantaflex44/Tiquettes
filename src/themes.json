@@ -375,6 +375,57 @@
         }
     },
     {
+        "title": "VertiView",
+        "name": "custom|1eec9d47-bff5-43d9-beee-c78cf45275ed",
+        "default": false,
+        "group": "Simple",
+        "data": {
+            "id": {
+                "shown": false,
+                "position": "top",
+                "fullHeight": false,
+                "lineCount": 1,
+                "horizontalAlignment": "center",
+                "fontSize": "2.3mm",
+                "fontWeight": "bold",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "transparent",
+                "color": "#000000",
+                "displayMode": "H"
+            },
+            "icon": {
+                "shown": false,
+                "position": "middle",
+                "sizePercent": 50,
+                "fullHeight": false,
+                "horizontalAlignment": "center",
+                "backgoundColor": "transparent",
+                "color": "#000000"
+            },
+            "text": {
+                "shown": true,
+                "position": "bottom",
+                "fullHeight": true,
+                "lineCount": "2",
+                "horizontalAlignment": "center",
+                "fontSize": "3.5mm",
+                "fontWeight": "normal",
+                "fontStyle": "normal",
+                "fontFamily": "sans-serif",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "displayMode": "V"
+            },
+            "top": {
+                "border": false
+            },
+            "bottom": {
+                "border": false
+            }
+        }
+    },
+    {
         "title": "Standard",
         "name": "custom|schn1",
         "default": true,

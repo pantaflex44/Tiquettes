@@ -19,6 +19,7 @@
 
 ### Ajouts
 
+- Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion.
 - [[Issue #77](https://github.com/pantaflex44/Tiquettes/issues/77)] Ajout de la possibilité d'exclure un module de la numérotation automatique.
 - [[Issue #75](https://github.com/pantaflex44/Tiquettes/issues/75)] Ajout de la polarisation 2P.
 - [[Issue #72](https://github.com/pantaflex44/Tiquettes/issues/72)] Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.

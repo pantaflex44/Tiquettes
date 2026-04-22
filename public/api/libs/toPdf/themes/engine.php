@@ -290,8 +290,9 @@ class Theme
                     if ($dm === 'H') {
                         $pdf->MultiCell($data[$key]['place']['w'], $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
                     } else if ($dm === 'V') {
-                        $pdf->Rotate(90, $posX + $data[$key]['place']['w'], $posY + (($r['h'] + $data[$key]['place']['h']) / 2));
-                        $pdf->MultiCell($data[$key]['place']['h'] + ($data[$key]['fontSize'] * $data[$key]['originalLineCount']), $data[$key]['fontSize'], $txt, 1, $align, false, $data[$key]['lineCount']);
+                        $pdf->SetXY($posX - 5, $posY - ($data[$key]['fontSize'] * $data[$key]['originalLineCount'])  + (($data[$key]['fontSize'] * ($data[$key]['originalLineCount'] - 1)) / 2));
+                        $pdf->Rotate(90, $r['x'] + ($r['w'] / 2), $r['y'] + ($r['h'] / 2));
+                        $pdf->MultiCell($data[$key]['place']['w'] + 9, $data[$key]['fontSize'], $txt, 0, $align, false, $data[$key]['lineCount']);
                         $pdf->Rotate(0);
                     }
                 } else if ($key === 'icon') { // draw icons
