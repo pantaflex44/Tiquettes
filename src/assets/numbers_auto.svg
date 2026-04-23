@@ -34,7 +34,7 @@
      showguides="true"
      inkscape:zoom="33.291667"
      inkscape:cx="14.237797"
-     inkscape:cy="10.678348"
+     inkscape:cy="14.282853"
      inkscape:window-width="1920"
      inkscape:window-height="1008"
      inkscape:window-x="0"
@@ -70,40 +70,32 @@
      d="M 0,0 H 24 V 24 H 0 Z"
      fill="none"
      id="path1" />
-  <path
-     d="M 5.1528129,10.918131 V 3.4827185 L 3.0284093,5.6071221"
-     id="path2"
-     style="stroke-width:2.1244" />
-  <path
-     d="m 9.4042556,4.2551064 a 1.2390491,1.2390491 0 1 1 2.4780974,0 c 0,0.3661388 -0.372334,0.9045054 -0.619525,1.2390493 L 9.4042556,7.3527284 h 2.4780974"
-     id="path3"
-     style="stroke-width:1.23905" />
-  <path
-     d="M 3.5595102,10.918131 H 6.7461154"
-     id="path5"
-     style="stroke-width:2.1244" />
   <text
      xml:space="preserve"
      style="font-size:9.49087px;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:403.549"
      x="1.1719749"
-     y="22.493925"
+     y="20.823717"
      id="text5"
      transform="scale(0.99292875,1.0071216)"><tspan
        sodipodi:role="line"
        id="tspan5"
        x="1.1719749"
-       y="22.493925"
+       y="20.823717"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.49087px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:403.549">auto</tspan></text>
   <text
      xml:space="preserve"
-     style="font-weight:bold;font-size:11.9116px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:506.475"
-     x="15.361277"
-     y="10.188591"
-     id="text2"
-     transform="scale(0.96636508,1.0348056)"><tspan
+     style="font-size:12px;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:403.549"
+     x="5.8950138"
+     y="11.066169"
+     id="text5-6"
+     transform="scale(0.99292875,1.0071216)"><tspan
        sodipodi:role="line"
-       id="tspan2"
-       x="15.361277"
-       y="10.188591"
-       style="stroke:none;stroke-width:506.475">✔</tspan></text>
+       id="tspan5-7"
+       x="5.8950138"
+       y="11.066169"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:403.549">n°</tspan></text>
+  <path
+     style="fill:#000000;stroke-width:1;stroke-dasharray:none"
+     d="M 1.5319149,22.317897 H 22.107634"
+     id="path2" />
 </svg>

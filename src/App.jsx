@@ -2128,7 +2128,9 @@ function App() {
                                 title="Modifier le thème."
                                 onClick={() => {
                                     setThemeEditor(true)
-                                }}>
+                                }}
+                                disabled={UIFrozen}
+                            >
                                 <img src={themeSettingsIcon} alt="Modifier le thème."
                                     width={22} height={22} />
                             </button>
@@ -2149,7 +2151,10 @@ function App() {
                                 value={switchboard.height} onChange={(e) => {
                                     const value = parseInt(e.target.value);
                                     if (value >= heightMin) setSwitchboard((old) => ({ ...old, height: value }));
-                                }} />
+                                }}
+                                disabled={UIFrozen}
+                                className={UIFrozen ? 'disabled' : ''}
+                            />
                         </div>
                         <div className="tabPageBandCol">
                             <span>{switchboard.height}mm</span>
@@ -2197,7 +2202,7 @@ function App() {
                         <div className="tabPageBandCol">
                             <button style={{ height: '34px' }}
                                 title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                                onClick={() => reassignModules()}>
+                                onClick={() => reassignModules()} disabled={UIFrozen}>
                                 <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants"
                                     width={22} height={22} />
                             </button>
@@ -2208,7 +2213,7 @@ function App() {
                                 onChange={() => setSwitchboard((old) => ({
                                     ...old,
                                     switchboardMonitor: !old.switchboardMonitor
-                                }))} />
+                                }))} disabled={UIFrozen} />
                             <label htmlFor="switchboardMonitorChoice"
                                 title="Conseils et Surveillance (NFC 15-100)"
                                 className={`${monitor.errors ? 'error' : ''}`}>

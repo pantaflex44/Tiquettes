@@ -254,7 +254,7 @@ export default function Editor({
                                 </button>
                                 </div>
                             </div>
-                            <div className="popup_row" style={{ '--left_column_size': '100px' }}>
+                        <div className="popup_row" style={{ '--left_column_size': '100px' }}>
                                 <div></div>
                                 <label style={{ fontSize: "small", color: "#777" }}>└ Identifiant du module
                                     précédent: <b>{ed.prevModule?.id ?? "-"}</b></label>

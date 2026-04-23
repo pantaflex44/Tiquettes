@@ -406,6 +406,23 @@ input[type="range"] {
     cursor: pointer;
 }
 
+input[type="checkbox"]:disabled,
+input[type="radio"]:disabled,
+input[type="range"]:disabled,
+input[type="checkbox"]:disabled+label,
+input[type="radio"]:disabled+label {
+    user-select: none !important;
+    pointer-events: none !important;
+    cursor: default !important;
+    filter: grayscale() !important;
+}
+
+input[type="checkbox"]:disabled+label > img,
+input[type="radio"]:disabled+label > img {
+    cursor: default !important;
+    filter: opacity(0.4) !important;
+}
+
 label.disabled {
     opacity: 0.4;
 }
@@ -607,6 +624,10 @@ input[type="range"]::-webkit-slider-thumb {
     border: 2px solid #f5f5f5;
 }
 
+input[type="range"].disabled::-webkit-slider-thumb {
+    background-color: var(#ccc);
+}
+
 /***** Firefox *****/
 input[type="range"]::-moz-range-thumb {
     background-color: var(--primary-color);
@@ -614,6 +635,10 @@ input[type="range"]::-moz-range-thumb {
     width: 17px;
     border-radius: 50%;
     border: 2px solid #f5f5f5;
+}
+
+input[type="range"].disabled::-moz-range-thumb {
+    background-color: var(#ccc);
 }
 
 /* Removes default focus */
