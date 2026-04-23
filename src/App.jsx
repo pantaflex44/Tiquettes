@@ -464,6 +464,16 @@ function App() {
             let counters = {};
             let from = {};
 
+            // get all modules id from no auto id assignment
+            const keepThem = swb.rows.map((row) => {
+                return row.map((module) => {
+                    if ((module.noAutoId ?? false) === true) {
+                        return module.id;
+                    }
+                    return null;
+                });
+            }).flat().filter(kt => kt !== null);
+
             // re-assign modules id
             let rows = swb.rows.map((row) => {
                 return row.map((module) => {
@@ -479,9 +489,11 @@ function App() {
                         let func = (module.func ?? '').trim().toUpperCase();
                         if (func === '') func = defaultModuleId;
 
-                        counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
+                        do {
+                            counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
+                            newModuleId = `${func}${counters[func]}`;
+                        } while (keepThem.includes(newModuleId));
 
-                        newModuleId = `${func}${counters[func]}`;
                     }
                     from = { ...from, [module.id]: newModuleId };
 
