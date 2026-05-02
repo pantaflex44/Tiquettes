@@ -158,12 +158,14 @@ class TiquettesLabeler
         return false;
     }
 
-    function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100, string $color = '#000000', string $bgcolor = '#FFFFFF'): string
+    function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100): string
     {
         try {
             if (is_null($name)) {
                 return '';
             }
+
+            $color = '#000000';
 
             $path = '../';
             $name = trim(strtolower($name));
@@ -209,22 +211,12 @@ class TiquettesLabeler
                     }
 
                     $resampledIm = imagecreatetruecolor($newWidth, $newHeight);
-
-                    list($r, $g, $b) = array_map(
-                        function ($c) {
-                            return hexdec(str_pad($c, 2, $c));
-                        },
-                        str_split(ltrim($bgcolor, '#'), strlen($bgcolor) > 4 ? 2 : 1)
-                    );
-                    $c = imagecolorallocate($resampledIm, $r, $g, $b);
-                    imagefill($resampledIm, 0, 0, $c);
-
                     $image = imagecreatefrompng($pngpath . $pngname);
                     imagecopyresampled($resampledIm, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
                     imagepng($resampledIm, $pngpath . $pngname, 0);
 
                     if (file_exists($pngpath . $name) && is_writable($pngpath . $name)) {
-                        @unlink($pngpath . $name);
+                        unlink($pngpath . $name);
                     }
                 }
 
@@ -369,9 +361,7 @@ class TiquettesLabeler
                 imageresolution($imt, $dpiX, $dpiY);
                 imagealphablending($imt, true);
 
-                $white2 = imagecolorallocate($imt, 255, 255, 255);
                 $black2 = imagecolorallocate($imt, 0, 0, 0);
-                imagefill($imt, 0, 0,  $white2);
 
                 $font = __DIR__ . '/libs/toLabeler/assets/arial.ttf';
                 $fontSize = $textSize === 'LARGE' ? 14 : ($textSize === 'SMALL' ? 10 : 12);
