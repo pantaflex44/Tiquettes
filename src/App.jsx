@@ -27,6 +27,7 @@ import * as pkg from '../package.json';
 import themesList from './themes.json';
 import swbIcons from './switchboard_icons.json';
 import schemaFunctions from './schema_functions.json';
+import labelersOptions from './labelers_options.json';
 
 import Row from "./components/Row.jsx";
 import ContentEditable from "./components/ContentEditable.jsx";
@@ -39,6 +40,7 @@ import projectIcon from './assets/project.svg';
 import summaryIcon from './assets/list.svg';
 import resizeIcon from './assets/aspect-ratio.svg';
 import resizeOffIcon from './assets/aspect-ratio-off.svg';
+import settingsIcon from './assets/settings.svg';
 
 import schemaIcon from './assets/schema.svg';
 import monitorIcon from "./assets/monitor.svg";
@@ -53,6 +55,15 @@ import numbersIcon from "./assets/numbers.svg";
 import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
+import downloadIcon from "./assets/download.svg";
+import exportLabelerIconOnlyIcon from "./assets/exportLabelerIconOnly.svg";
+import exportLabelerTextOnlyIcon from "./assets/exportLabelerTextOnly.svg";
+import exportLabelerIconTextIcon from "./assets/exportLabelerIconText.svg";
+import exportLabelerTextOrientationHIcon from "./assets/text-orientation-h.svg";
+import exportLabelerTextOrientationVIcon from "./assets/text-orientation-v.svg";
+import exportLabelerTextSize1Icon from "./assets/text-size-1.svg";
+import exportLabelerTextSize2Icon from "./assets/text-size-2.svg";
+import exportLabelerTextSize3Icon from "./assets/text-size-3.svg";
 
 import Editor from "./components/Editor.jsx";
 import NewProjectEditor from "./components/NewProjectEditor.jsx";
@@ -60,10 +71,12 @@ import SummaryTab from "./components/SummaryTab.jsx";
 import SchemaTab from "./components/SchemaTab.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
 import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
+import LabelerPopup from "./components/LabelerPopup.jsx";
 
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
+
 
 function App() {
     const documentIsVisible = useDocumentVisibility();
@@ -72,6 +85,7 @@ function App() {
     const projectRef = useRef();
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
+    const labelerRef = useRef();
 
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
@@ -82,10 +96,43 @@ function App() {
     const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
     const [clipboard, setClipboard] = useState(null);
     const [clipboardMode, setClipboardMode] = useState(null);
-    const [subMenus, setSubMenus] = useState({ printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false });
+    const [subMenus, setSubMenus] = useState({
+        printLabelsOpened: false,
+        printSchemaOpened: false,
+        printSummaryOpened: false
+    });
     const [uniqueChoices, setUniqueChoices] = useState([]);
+    const [labelerOptionsRowsSelection, setLabelerOptionsRowsSelection] = useState(null);
+    const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
+
+    /*const defaultLabelersOptions = useMemo(() => ({
+        PT_P710BT: {
+            height: 18,
+            withIcons: true,
+            withText: true,
+            textOrientation: 'H',
+            fontSize: 2,
+            invert: false,
+            dpiX: 180,
+            dpiY: 360
+        }
+    }), []);
+    const getSavedLabelersOptions = () => {
+        if (sessionStorage.getItem(pkg.name + '_labelersOptions')) {
+            const merge = (a, b) => [a, b].reduce((r, o) => Object
+                .entries(o)
+                .reduce((q, [k, v]) => ({
+                    ...q,
+                    [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
+                }), r),
+                {});
+            return merge(defaultLabelersOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_labelersOptions')));
+        }
+        return { ...defaultLabelersOptions };
+    }
+    const [labelersOptions, setLabelersOptions] = useState(getSavedLabelersOptions());*/
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
@@ -798,6 +845,62 @@ function App() {
         sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
+
+    const toLabeler = (model, options) => {
+        const rowPositionMin = 1;
+        const rowPositionMax = switchboard.rows.length;
+        const selectedPositions = (labelerOptionsRowsSelection ?? `1-${rowPositionMax}`)
+            .split(',')
+            .map(p => p.trim())
+            .filter(p => p !== '')
+            .map(p => {
+                let sp = p
+                    .split('-')
+                    .map(x => parseInt(x.trim()))
+                    .map(x => isNaN(x) ? rowPositionMax : (x < rowPositionMin ? rowPositionMin : (x > rowPositionMax ? rowPositionMax : x)));
+                const min = Math.min(...sp);
+                const max = Math.max(...sp);
+                return Array.from({ length: (max - min) + 1 }, (v, k) => k + 1);
+            })
+            .flat();
+        const uniqueSelectedPositions = Array
+            .from(new Set(selectedPositions))
+            .map(x => x - 1) // to zero based index
+            .sort((a, b) => a - b);
+
+        let form = document.createElement("form");
+        document.body.appendChild(form);
+        form.style.display = "none";
+        form.name = "toLabelerForm";
+        form.method = 'POST';
+        form.action = import.meta.env.VITE_APP_API_URL + "toLabeler.php";
+        //form.target = '_blank';
+
+        let params = Object.fromEntries(Object.entries({
+            switchboard: { value: JSON.stringify(switchboard) },
+            model: { value: model },
+            options: { value: JSON.stringify(options) },
+            selections: { value: JSON.stringify(uniqueSelectedPositions) },
+            tv: { value: JSON.stringify(pkg.version) },
+            isDev: { value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0" },
+        }).map(([key, value]) => {
+            const i = document.createElement("input");
+            i.type = "hidden";
+            i.name = key;
+            i.value = value.value;
+            return [key, { ...value, input: form.appendChild(i) }];
+        }));
+
+        form.submit();
+
+        Object.entries(params).forEach(([_, value]) => {
+            form.removeChild(value.input);
+        });
+        params = null;
+
+        document.body.removeChild(form);
+        form = null;
+    }
 
     const printProject = () => {
         toPdf();
@@ -1678,6 +1781,10 @@ function App() {
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     useEffect(() => {
+        setLabelerOptionsRowsSelection(switchboard.rows.length > 1 ? `1-${switchboard.rows.length}` : `${switchboard.rows.length}`);
+    }, [switchboard.rows.length]);
+
+    useEffect(() => {
         let t = null;
 
         if (!verifyVersion(switchboard)) {
@@ -1701,20 +1808,23 @@ function App() {
                 sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
                 setSwitchboard(updatedProject);
                 setDocumentTitle(updatedProject.prjname);
-
-                //console.log("Switchboard saved to this session.");
             }
 
             const printOptionsIsOutdated = sessionStorage.getItem(pkg.name + '_printOptions') !== JSON.stringify(printOptions);
             if (printOptionsIsOutdated) {
                 sessionStorage.setItem(pkg.name + '_printOptions', JSON.stringify(printOptions));
             }
+
+            const labelersOptionsIsOutdated = sessionStorage.getItem(pkg.name + '_labelersOptions') !== JSON.stringify(labelersOptions);
+            if (labelersOptionsIsOutdated) {
+                sessionStorage.setItem(pkg.name + '_labelersOptions', JSON.stringify(labelersOptions));
+            }
         }, 1000);
 
         return () => {
             if (t) clearTimeout(t);
         }
-    }, [resetProject, switchboard, printOptions]);
+    }, [resetProject, switchboard, printOptions, labelersOptions]);
 
     useEffect(() => {
         if (window) {
@@ -1794,11 +1904,42 @@ function App() {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
                 }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
 
-                <button className="button_group-export_project" onClick={() => {
-                    exportProject();
-                }} title="Exporter...">
+                <button className="button_group-export_project dropdown_container" title="Exporter...">
                     <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
                     <span>Exporter</span>
+                    <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '213px', minWidth: '320px' }}>
+                        <div className="dropdown_header">Exportation</div>
+
+                        <div className="dropdown_item_flex head">
+                            <div className="dropdown_item_flex_left">
+                                Projet complet
+                            </div>
+                            <div className="dropdown_item_flex_right">
+                                <div className="fakeButton discreet" style={{ marginBlock: '0' }} title="Exporter le projet" onClick={() => {
+                                    exportProject();
+                                }}>
+                                    <img src={downloadIcon} width={16} height={16} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="dropdown_header" style={{ marginTop: '1.5rem' }}>Étiqueteuses</div>
+                        <div style={{ fontSize: '90%', color: '#777', marginBottom: '1rem' }}>
+                            <span>Exporter les rangées d'étiquettes au format compatible avec les étiquetteuse ci-dessous.</span>
+                        </div>
+                        <div className="dropdown_item_flex head">
+                            <div className="dropdown_item_flex_left">
+                                <span style={{ fontSize: '100%' }}>Rangées à exporter:</span>
+                                <input type="text" name="" id="" ref={labelerRef} value={labelerOptionsRowsSelection ?? `1-${switchboard.rows.length}`} onChange={(e) => setLabelerOptionsRowsSelection(e.target.value)} placeholder="1, 2, 3-6" style={{ width: '100px', height: '28px', marginLeft: '0.5rem' }} />
+                            </div>
+                            <div className="dropdown_item_flex_right">
+                                <div className="fakeButton discreet" style={{ flex: 1, marginBlock: '0' }} title="Exporter les étiquettes" onClick={() => setLabelerOptionsPopup(true)}>
+                                    <img src={downloadIcon} width={16} height={16} />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </button>
 
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
@@ -2003,7 +2144,7 @@ function App() {
                         {/*<div className="dropdown_separator2"></div>*/}
 
                         <div className="dropdown_footer">
-                            <div className="fakeButton" title="Lancer l&apos;impression" onClick={() => {
+                            <div className="fakeButton" style={{ fontSize: '100%' }} title="Lancer l&apos;impression" onClick={() => {
                                 printProject();
                             }}>Lancer l&apos;impression...
                             </div>
@@ -2419,6 +2560,17 @@ function App() {
 
 
                     }}
+                />
+            }
+
+            {
+                labelerOptionsPopup && <LabelerPopup
+                    switchboard={switchboard}
+                    onApply={(model, options) => {
+                        toLabeler(model, options);
+                        setLabelerOptionsPopup(false);
+                    }}
+                    onCancel={() => setLabelerOptionsPopup(false)}
                 />
             }
 

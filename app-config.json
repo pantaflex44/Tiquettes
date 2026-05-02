@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-04-23",
+            "date": "2026-05-02",
             "actions": {
                 "patches": [
                     {
@@ -75,6 +75,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE !",
+                        "from": {
+                            "name": "Issue #70",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/70"
+                        }
+                    },
                     {
                         "text": "Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion."
                     },

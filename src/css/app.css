@@ -501,6 +501,34 @@ option[disabled] {
 
 }
 
+.dropdown_container .dropdown .dropdown_item_flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+    column-gap: 0.25em;
+    min-height: 40px;
+}
+
+.dropdown_container .dropdown .dropdown_item_flex .dropdown_item_flex_left,
+.dropdown_container .dropdown .dropdown_item_flex .dropdown_item_flex_right {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+    column-gap: 0.25em;
+}
+
+.dropdown_container .dropdown .dropdown_item_flex .dropdown_item_flex_left {
+    flex: 1;
+}
+
+.dropdown_container .dropdown .dropdown_item_flex.head {
+    font-size: 105%;
+}
+
 .dropdown_container .dropdown .dropdown_separator {
     width: 100%;
     height: 1px;

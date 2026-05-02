@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-04-23
+## [2.2.8] - 2026-05-02
 
 ### Corrections
 
@@ -19,6 +19,7 @@
 
 ### Ajouts
 
+- [[Issue #70](https://github.com/pantaflex44/Tiquettes/issues/70)] Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE !
 - Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion.
 - [[Issue #77](https://github.com/pantaflex44/Tiquettes/issues/77)] Ajout de la possibilité d'exclure un module de la numérotation automatique.
 - [[Issue #75](https://github.com/pantaflex44/Tiquettes/issues/75)] Ajout de la polarisation 2P.

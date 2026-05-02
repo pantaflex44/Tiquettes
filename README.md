@@ -199,6 +199,14 @@ et les modules.
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
 > dans l'onglet ```Éditeur``` et ```Schéma```.
 
+Une option est disponible dans l'éditeur de modules permettant d'empêcher ou non le réassignement automatique de l'identifiant d'un module:
+
+![Réassignement autorisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoidok.png?raw=true)
+
+En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actuel:
+
+![Réassignement non autorisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_noautoid.png?raw=true)
+
 ## Édition d'un module
 
 Après avoir cliqué sur le symbole d'édition d'un module, une fenêtre popup s'ouvre et vous offre la possibilité d'
@@ -480,30 +488,7 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 
 ### 🐛 Remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et les [Discussions](https://github.com/pantaflex44/Tiquettes/discussions)
 
-- [zoliaaz](https://github.com/zoliaaz),
-- [cnaslain](https://github.com/cnaslain)
-- [ntarocco](https://github.com/ntarocco)
-- [jlecour](https://github.com/jlecour)
-- [plouflechien](https://github.com/plouflechien)
-- [Benoit485](https://github.com/Benoit485)
-- [F4FXL](https://github.com/F4FXL)
-- [dough29](https://github.com/dough29)
-- [karimLG](https://github.com/karimLG)
-- [fmdl](https://github.com/fmdl)
-- [ekozan](https://github.com/ekozan)
-- [Starlight58](https://github.com/Starlight58)
-- [Trinakria23](https://github.com/Trinakria23)
-- [Boubigloubi](https://github.com/Boubigloubi)
-- [martinlbb](https://github.com/martinlbb)
-- [rems64](https://github.com/rems64)
-- [Biodom13](https://github.com/Biodom13)
-- [mmnlfrrr](https://github.com/mmnlfrrr)
-- [LeG2](https://github.com/LeG2)
-- [misterg94](https://github.com/misterg94)
-- [Fanka14](https://github.com/Fanka14)
-- [xhark](https://github.com/blogmotion)
-- [lonewulf](https://github.com/lonewulf)
-- [Yvan13120](https://github.com/Yvan13120) 
+[zoliaaz](https://github.com/zoliaaz), [cnaslain](https://github.com/cnaslain), [ntarocco](https://github.com/ntarocco), [jlecour](https://github.com/jlecour), [plouflechien](https://github.com/plouflechien), [Benoit485](https://github.com/Benoit485), [F4FXL](https://github.com/F4FXL), [dough29](https://github.com/dough29), [karimLG](https://github.com/karimLG), [fmdl](https://github.com/fmdl), [ekozan](https://github.com/ekozan), [Starlight58](https://github.com/Starlight58), [Trinakria23](https://github.com/Trinakria23), [Boubigloubi](https://github.com/Boubigloubi), [martinlbb](https://github.com/martinlbb), [rems64](https://github.com/rems64), [Biodom13](https://github.com/Biodom13), [mmnlfrrr](https://github.com/mmnlfrrr), [LeG2](https://github.com/LeG2), [misterg94](https://github.com/misterg94), [Fanka14](https://github.com/Fanka14), [xhark](https://github.com/blogmotion), [lonewulf](https://github.com/lonewulf), [Yvan13120](https://github.com/Yvan13120) 
 
 
  ### ☕ Ainsi que pour toutes les personnes m'ayant offert des cafés ;-)

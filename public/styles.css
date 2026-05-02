@@ -22,7 +22,7 @@
     --secondary-color-light: rgb(240, 255, 255);
     --secondary-color-light-light: rgb(247, 255, 255);
     /* 24 modules */
-        /* --content-size: 1800px; */
+    /* --content-size: 1800px; */
         /* 18 modules */
         /* --content-size: 1400px; */
         /* 13 modules */
@@ -329,7 +329,7 @@ button,
 }
 
 button:not(:disabled):hover,
-.fakeButton:not(:disabled):hover {
+.fakeButton:not(.discreet):not(:disabled):hover {
     background-color: var(--secondary-color);
     border-color: var(--primary-color);
 }
@@ -342,6 +342,29 @@ button:disabled,
 button:disabled img,
 .fakeButton:disabled img {
     filter: opacity(0.4);
+}
+
+.fakeButton.discreet {
+    border: 0 !important;
+    width: max-content !important;
+    height: max-content !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+    transition: all 100ms ease;
+}
+
+.fakeButton.discreet img {
+    width: 20px !important;
+    height: 20px !important;
+    transition: all 100ms ease;
+}
+
+.fakeButton.discreet:hover {
+    color: var(--primary-color);
+}
+
+.fakeButton.discreet:hover img {
+    filter: invert(31%) sepia(93%) saturate(903%) hue-rotate(145deg) brightness(102%) contrast(101%);
 }
 
 input[type="file"] {
@@ -392,6 +415,11 @@ input[type="number"] {
     min-width: 19px !important;
 }
 
+input[type="number"].minheight {
+    min-height: 19px !important;
+    min-width: 19px !important;
+}
+
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
 textarea:focus,
 select:focus {
@@ -417,8 +445,8 @@ input[type="radio"]:disabled+label {
     filter: grayscale() !important;
 }
 
-input[type="checkbox"]:disabled+label > img,
-input[type="radio"]:disabled+label > img {
+input[type="checkbox"]:disabled+label>img,
+input[type="radio"]:disabled+label>img {
     cursor: default !important;
     filter: opacity(0.4) !important;
 }
@@ -736,6 +764,7 @@ input[type="range"]:focus {
 .stepper>.step.active>.step-description {
     font-weight: bold;
 }
+
 .blink {
     animation: blinker 1s linear infinite;
 }
@@ -744,4 +773,26 @@ input[type="range"]:focus {
     50% {
         opacity: 0;
     }
+}
+.ctooltip {
+    position: absolute;
+    background: #646464;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: arial;
+    font-size: 12px;
+    text-shadow: 0px 1px 1px #000;
+    color: #ffc64a;
+}
+
+.ctooltip:before {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #646464;
+    position: absolute;
+    bottom: -5px;
+    left: 5px;
 }

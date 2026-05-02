@@ -1,0 +1,250 @@
+{
+    "PT-P300BT": {
+        "group": "Brother",
+        "model": "PT-P300BT",
+        "title": "Brother P-touch CUBE",
+        "ribbon": {
+            "steps": [
+                6,
+                9,
+                12
+            ],
+            "value": 12
+        },
+        "dpi": {
+            "x": 180,
+            "y": 180
+        },
+        "options": {
+            "invert": {
+                "has": true,
+                "value": false
+            },
+            "icons": {
+                "has": true,
+                "value": false
+            },
+            "text": {
+                "has": true,
+                "value": true
+            },
+            "textOrientation": {
+                "value": "horizontal",
+                "options": [
+                    "horizontal",
+                    "vertical"
+                ]
+            },
+            "textSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            }
+        }
+    },
+    "PT_P710BT": {
+        "group": "Brother",
+        "model": "PT_P710BT",
+        "title": "Brother P-touch CUBE Plus",
+        "ribbon": {
+            "steps": [
+                6,
+                9,
+                12,
+                18,
+                24
+            ],
+            "value": 24
+        },
+        "dpi": {
+            "x": 180,
+            "y": 360
+        },
+        "options": {
+            "invert": {
+                "has": true,
+                "value": false
+            },
+            "icons": {
+                "has": true,
+                "value": true
+            },
+            "text": {
+                "has": true,
+                "value": true
+            },
+            "textOrientation": {
+                "has": true,
+                "value": "horizontal",
+                "options": [
+                    "horizontal",
+                    "vertical"
+                ]
+            },
+            "textSize": {
+                "has": true,
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            }
+        }
+    },
+    "PT_P720BT": {
+        "group": "Brother",
+        "model": "PT_P720BT",
+        "title": "Brother P-touch CUBE Pro",
+        "ribbon": {
+            "steps": [
+                6,
+                9,
+                12,
+                18,
+                24
+            ],
+            "value": 24
+        },
+        "dpi": {
+            "x": 180,
+            "y": 180
+        },
+        "options": {
+            "invert": {
+                "has": true,
+                "value": false
+            },
+            "icons": {
+                "has": true,
+                "value": true
+            },
+            "text": {
+                "has": true,
+                "value": true
+            },
+            "textOrientation": {
+                "has": true,
+                "value": "horizontal",
+                "options": [
+                    "horizontal",
+                    "vertical"
+                ]
+            },
+            "textSize": {
+                "has": true,
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            }
+        }
+    },
+    "PT-P910BT": {
+        "group": "Brother",
+        "model": "PT-P910BT",
+        "title": "Brother P-touch CUBE Plus XP",
+        "ribbon": {
+            "steps": [
+                6,
+                9,
+                12,
+                18,
+                24,
+                36
+            ],
+            "value": 24
+        },
+        "dpi": {
+            "x": 360,
+            "y": 360
+        },
+        "options": {
+            "invert": {
+                "has": true,
+                "value": false
+            },
+            "icons": {
+                "has": true,
+                "value": true
+            },
+            "text": {
+                "has": true,
+                "value": true
+            },
+            "textOrientation": {
+                "has": true,
+                "value": "horizontal",
+                "options": [
+                    "horizontal",
+                    "vertical"
+                ]
+            },
+            "textSize": {
+                "has": true,
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            }
+        }
+    },
+    "PT-P920BT": {
+        "group": "Brother",
+        "model": "PT-P920BT",
+        "title": "Brother P-touch CUBE Edge",
+        "ribbon": {
+            "steps": [
+                6,
+                9,
+                12,
+                18,
+                24,
+                36
+            ],
+            "value": 24
+        },
+        "dpi": {
+            "x": 360,
+            "y": 360
+        },
+        "options": {
+            "invert": {
+                "has": true,
+                "value": false
+            },
+            "icons": {
+                "has": true,
+                "value": true
+            },
+            "text": {
+                "has": true,
+                "value": true
+            },
+            "textOrientation": {
+                "has": true,
+                "value": "horizontal",
+                "options": [
+                    "horizontal",
+                    "vertical"
+                ]
+            },
+            "textSize": {
+                "has": true,
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            }
+        }
+    }
+}

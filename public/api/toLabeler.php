@@ -1,0 +1,483 @@
+<?php
+
+/**
+ * Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+ * Copyright (C) 2024-2025 Christophe LEMOINE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+set_time_limit(120); // 2 min
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header("Access-Control-Allow-Origin: *");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+}
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
+
+
+function filter_string_polyfill(string $string): string
+{
+    $str = preg_replace('/\x00|<[^>]*>?/', '', $string);
+    return str_replace(["'", '"'], ['&#39;', '&#34;'], $str);
+}
+
+
+
+
+class TiquettesLabeler
+{
+
+    const VERSION = "1.0";
+
+    protected string $model = '';
+    protected array $options = [];
+
+    public array $required = [];
+
+    public static function requirements()
+    {
+        $response = [
+            'modules' => [
+                'php' => version_compare(phpversion(), '8.3', '>='),
+                'php_imagick' => extension_loaded('imagick'),
+                'convert' => false,
+                'magick' => false,
+            ],
+            'ok' => false
+        ];
+
+        try {
+            $retval = 0;
+            $ret = exec('magick -version', result_code: $retval);
+            $response['modules']['magick'] = $ret !== false && $retval === 0;
+        } catch (\Exception $ex) {
+        }
+
+        try {
+            $retval = 0;
+            $ret = exec('convert -version', result_code: $retval);
+            $response['modules']['convert'] = $ret !== false && $retval === 0;
+        } catch (\Exception $ex) {
+        }
+
+        $response['ok'] = $response['modules']['php']
+            && ($response['modules']['php_imagick']  || $response['modules']['magick'] || $response['modules']['convert']);
+
+        return $response;
+    }
+
+    function __construct(string $model, array $options)
+    {
+        $this->required = self::requirements();
+        $this->model = $model;
+        $this->options = $options;
+    }
+
+    function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
+    {
+        global $isDev;
+
+        if (!str_starts_with(trim($svgContent), "<?xml"))
+            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
+
+        if ($this->required['modules']['php_imagick'] === true && !$isDev) {
+            $image = new Imagick();
+
+            $image->newImage($width, $height, new ImagickPixel('transparent'));
+            $image->readImageBlob($svgContent);
+            $image->transparentPaintImage('#ffffff', 0, 10, false);
+            //$image->thumbnailImage($width, $height, true);
+            $image->setImageFormat('png64');
+            $image->writeImage($pngFilepath);
+
+            return file_exists($pngFilepath);
+        } else if ($this->required['modules']['magick'] === true || $isDev) {
+            $f = basename($pngFilepath, '.png');
+            $d = dirname($pngFilepath);
+            $s = "{$d}/{$f}.svg";
+            file_put_contents($s, $svgContent);
+            $cmd = "magick {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+
+            try {
+                $retval = 0;
+                $output = [];
+                $ret = exec($cmd, $output, $retval);
+
+                return $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+                return false;
+            }
+        } else if ($this->required['modules']['convert'] === true) {
+            $f = basename($pngFilepath, '.png');
+            $d = dirname($pngFilepath);
+            $s = "{$d}/{$f}.svg";
+            file_put_contents($s, $svgContent);
+            $cmd = "convert {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+
+            try {
+                $retval = 0;
+                $output = [];
+                $ret = exec($cmd, $output, $retval);
+
+                return $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100, string $color = '#000000', string $bgcolor = '#FFFFFF'): string
+    {
+        if (is_null($name)) {
+            return '';
+        }
+
+        $path = '../';
+        $name = trim(strtolower($name));
+        $pi = pathinfo($name);
+
+        $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
+
+        $pngname = $pi['filename'] . '.png';
+        $pngpath = './libs/toLabeler/' . $this->model . '/icons/' . $color . '/' . $iconSizeX . 'x' . $iconSizeY . '/';
+        if (!is_dir($pngpath))
+            mkdir($pngpath, 0777, true);
+        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
+            return $pngpath . $pngname;
+
+        if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
+            $svg = file_get_contents($path . $name);
+
+            foreach ([3, 4, 8, 6] as $size) {
+                $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
+
+                $svg = preg_replace("/\"(\s*){$colorPattern}(\s*)\"/i", "\"{$color}\"", $svg);
+                $svg = preg_replace('/\"(\s*)currentColor(\s*)\"/i', "\"{$color}\"", $svg);
+
+                foreach (['color', 'fill', 'stroke'] as $key) {
+                    $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
+                }
+            }
+
+            if (!$this->svg2png($svg, $pngpath . $pngname, $iconSizeX, $iconSizeY)) {
+                copy(__DIR__ . '/libs/toLabeler/assets/blank.png', $pngpath . $pngname);
+            } else {
+                list($width, $height, $type, $attr) = getimagesize($pngpath . $pngname);
+
+                $newWidth = $iconSizeX;
+                $newHeight = $iconSizeY;
+                if ($width > $height) {
+                    $newWidth = $iconSizeX;
+                    $newHeight = $height * ($iconSizeY / $width);
+                }
+                if ($width < $height) {
+                    $newWidth = $width * ($iconSizeX / $height);
+                    $newHeight = $iconSizeY;
+                }
+
+                $resampledIm = imagecreatetruecolor($newWidth, $newHeight);
+
+                list($r, $g, $b) = array_map(
+                    function ($c) {
+                        return hexdec(str_pad($c, 2, $c));
+                    },
+                    str_split(ltrim($bgcolor, '#'), strlen($bgcolor) > 4 ? 2 : 1)
+                );
+                $c = imagecolorallocate($resampledIm, $r, $g, $b);
+                imagefill($resampledIm, 0, 0, $c);
+
+                $image = imagecreatefrompng($pngpath . $pngname);
+                imagecopyresampled($resampledIm, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                imagepng($resampledIm, $pngpath . $pngname, 0);
+
+                if (file_exists($pngpath . $name) && is_writable($pngpath . $name)) {
+                    @unlink($pngpath . $name);
+                }
+            }
+
+            touch($pngpath . $pngname, $mtime);
+
+            return $pngpath . $pngname;
+        }
+
+        return '';
+    }
+
+    public function Output(int $rowIndex): mixed
+    {
+        global $switchboard;
+
+        if ($rowIndex < 0 || $rowIndex > count($switchboard->rows) - 1) {
+            return null;
+        }
+
+        $fName = "Output_" . $this->model;
+        if (!is_callable([__CLASS__, $fName])) {
+            return null;
+        }
+
+        return call_user_func_array([__CLASS__, $fName], [$rowIndex]);
+    }
+
+    public function Output_PT_P710BT(int $rowIndex): mixed
+    {
+        global $switchboard;
+
+        $dpiX = 180;
+        $dpiY = 360;
+        $margins = 10;
+
+        $modules = $switchboard->rows[$rowIndex];
+        $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
+
+        $invert = isset($displayOptions['invert']) ? $displayOptions['invert'] : ['has' => false, 'value' => false];
+        $invert = ($invert['has'] ?? false) === true && ($invert['value'] ?? false) === true;
+
+        $iconsOptions = isset($displayOptions['icons']) ? $displayOptions['icons'] : ['has' => false, 'value' => false];
+        $withIcons = ($iconsOptions['has'] ?? false) === true && ($iconsOptions['value'] ?? false) === true;
+
+        $textOptions = isset($displayOptions['text']) ? $displayOptions['text'] : ['has' => false, 'value' => false];
+        $withText = ($textOptions['has'] ?? false) === true && ($textOptions['value'] ?? false) === true;
+
+        $textOrientation = strtoupper(trim(isset($displayOptions['textOrientation']) ? $displayOptions['textOrientation']['value'] ?? 'horizontal' : 'horizontal'));
+        $textSize = strtoupper(trim(isset($displayOptions['textSize']) ? $displayOptions['textSize']['value'] ?? 'normal' : 'normal'));
+
+        $displayMode = 'BOTH';
+        if ($withIcons && !$withText) {
+            $displayMode = 'ICONS';
+        } else if (!$withIcons && $withText) {
+            $displayMode = 'TEXT';
+        }
+
+        $stepSize = isset($this->options['stepSize']) && isset($this->options['stepSize']['value']) ? floatval($this->options['stepSize']['value'] ?? $switchboard->stepSize) : $switchboard->stepSize;
+        if ($stepSize !== 17.5 && $stepSize !== 18) {
+            $stepSize = $switchboard->stepSize;
+        }
+
+        $widthMM = count($modules) * $stepSize;
+        $widthPX = (int)round($widthMM * ($dpiX / 25.4));
+        $heightMM = $this->options['ribbon']['value'];
+        $heightPX = (int)round($heightMM * ($dpiY / 25.4));
+        $stepSizePX = (int) round($stepSize * ($dpiX / 25.4));
+
+        $im = imagecreatetruecolor($widthPX, $heightPX);
+        imageresolution($im, $dpiX, $dpiY);
+        imagealphablending($im, true);
+        imagesavealpha($im, false);
+
+        $white = imagecolorallocate($im, 255, 255, 255);
+        $black = imagecolorallocate($im, 0, 0, 0);
+        imagefill($im, 0, 0, $white);
+
+        $r = $dpiY / $dpiX;
+        $w = $stepSizePX - $margins;
+        $h = ($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) - $margins;
+        $placeSizeX = $w;
+        $placeSizeY = $h;
+
+        if (($w * $r) < $h) {
+            $placeSizeX = $w;
+            $placeSizeY = $w * $r;
+        } else {
+            $placeSizeX = $h / $r;
+            $placeSizeY = $h;
+        }
+        $placeSizeX = (int) round($placeSizeX);
+        $placeSizeY = (int) round($placeSizeY);
+
+        for ($i = 0; $i < count($modules); $i++) {
+            $module = $modules[$i];
+
+            $posX = $i * $stepSizePX;
+            $posY = 0;
+
+            if (isset($module->icon) && !is_null($module->icon) && is_string($module->icon) && $displayMode === 'BOTH' || $displayMode === 'ICONS') {
+                $icon = $this->getIcon($module->icon, $placeSizeX, $placeSizeY);
+                if ($icon !== '') {
+                    $iconIm = imagecreatefrompng($icon);
+                    $sx = imagesx($iconIm);
+                    $sy = imagesy($iconIm);
+
+                    $centerX = (int)round(($stepSizePX / 2) - ($sx / 2));
+                    $centerY = (int) round((($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) / 2) - ($sy / 2));
+
+                    imagecopy($im, $iconIm, $posX + $centerX, $posY + $centerY, 0, 0, $sx, $sy);
+                }
+            }
+
+            if (isset($module->text) && is_string($module->text) && trim($module->text) !== "" && $displayMode === 'BOTH' || $displayMode === 'TEXT') {
+                $w = (int)$stepSizePX - $margins - $margins;
+                $h = (int) round($placeSizeY / $r);
+
+                $imt = imagecreatetruecolor($w, $h);
+                imageresolution($imt, $dpiX, $dpiY);
+                imagealphablending($imt, true);
+
+                $white2 = imagecolorallocate($imt, 255, 255, 255);
+                $black2 = imagecolorallocate($imt, 0, 0, 0);
+                imagefill($imt, 0, 0,  $white2);
+
+                $font = __DIR__ . '/libs/toLabeler/assets/arial.ttf';
+                $fontSize = $textSize === 'LARGE' ? 14 : ($textSize === 'SMALL' ? 10 : 12);
+                $box = imagettfbbox($fontSize, 0, $font, $module->text);
+                $boxW = $box[4] - $box[6];
+                $boxH = $box[5] - $box[3];
+
+                $tx = (int) round(($w / 2) - ($boxW / 2));
+                $ty = $posY + $margins + 5;
+                $angle = 0;
+                if ($textOrientation === 'VERTICAL') {
+                    $angle = 90;
+                    $tx = ((int) round(($w / 2) + ($boxH / 2))) + $margins;
+                    $h -= (2 * $margins);
+                    $ty = $posY + $h;
+                }
+
+                imagettftext($imt, $fontSize, $angle, $tx, $ty,  $black2, $font, $module->text);
+
+                imagecopyresampled($im, $imt, $posX + ((int) round(($stepSizePX / 2) - ($w / 2))), $posY + $margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $stepSizePX - $margins - $margins, $placeSizeY, $w, $h);
+            }
+
+            imagedashedline($im, $posX + $stepSizePX - 1, 0, $posX + $stepSizePX - 1, $heightPX,  $black);
+        }
+
+        if ($invert) {
+            /*for ($x = 0; $x < $widthPX; $x++) {
+                for ($y = 0; $y < $heightPX; $y++) {
+                    $rgb = imagecolorat($im, $x, $y);
+                    $r = 255 - (($rgb >> 16) & 0xFF);
+                    $g = 255 - (($rgb >> 8) & 0xFF);
+                    $b = 255 - ($rgb & 0xFF);
+                    $a = ($rgb >> 24) & 0xFF;
+                    $newColor = imagecolorallocatealpha($im, $r, $g, $b, $a);
+                    imagesetpixel($im, $x, $y, $newColor);
+                }
+            }*/
+            imagefilter($im, IMG_FILTER_NEGATE);
+        }
+
+        return $im;
+    }
+}
+
+
+if (isset($_GET['require'])) {
+    header('Content-Type: application/json; charset=utf-8');
+    $requirements = TiquettesLabeler::requirements();
+    echo json_encode($requirements);
+    exit();
+}
+
+
+if (!isset($_POST['switchboard'])) {
+    echo 'Missing switchboard parameter';
+    exit;
+}
+if (!isset($_POST['model'])) {
+    echo 'Missing labeler model parameter';
+    exit;
+}
+if (!isset($_POST['options'])) {
+    echo 'Missing options parameter';
+    exit;
+}
+if (!isset($_POST['selections'])) {
+    echo 'Missing selections parameter';
+    exit;
+}
+
+$switchboard = json_decode($_POST['switchboard']);
+$options = json_decode($_POST['options'], true);
+$selections = json_decode($_POST['selections'], true);
+$tv = json_decode($_POST['tv']);
+$isDev = intval(trim(($_POST['isDev'] ?? '0'))) === 1;
+$model = trim(filter_string_polyfill($_POST['model']));
+
+$tl = new TiquettesLabeler($model, $options);
+
+$rowImages = [];
+for ($rowIndex = 0; $rowIndex < count($switchboard->rows); $rowIndex++) {
+    if (!in_array($rowIndex, $selections)) {
+        continue;
+    }
+
+    $img = $tl->Output($rowIndex);
+    if (!is_null($img)) {
+        $rowImages[] = [
+            'filename' => "Rangée " . ($rowIndex + 1) . " - " . $options['ribbon']['value'] . "mm - " . $model . ".png",
+            'stream' => $img
+        ];
+    }
+}
+
+
+$tmppath = './libs/toLabeler/tmp/' . uniqid() . '/';
+if (!is_dir($tmppath))
+    mkdir($tmppath, 0777, true);
+
+$zipFilepath = $tmppath . $switchboard->prjname .  " - " . $options['ribbon']['value'] . "mm - " . $model . " - Tiquettes " . $tv . ".zip";
+$za = new ZipArchive;
+$za->open($zipFilepath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+$created = [];
+foreach ($rowImages as $img) {
+    $f = $tmppath . $img['filename'];
+    if (file_exists($f)) {
+        @unlink($f);
+    }
+
+    if (imagepng($img['stream'], $f)) {
+        $created[] = $f;
+    }
+}
+foreach ($created as $file) {
+    $za->addFile($file, basename($file));
+}
+
+$za->close();
+
+
+header('Content-disposition: attachment; filename=' . basename($zipFilepath));
+header('Content-type: application/zip');
+header('Content-Length: ' . filesize($zipFilepath));
+header("Content-Transfer-Encoding: binary");
+
+$fileData = @file_get_contents($zipFilepath);
+
+$files = glob($tmppath . '*');
+foreach ($files as $file) {
+    if (is_file($file)) {
+        unlink($file);
+    }
+}
+rmdir($tmppath);
+
+ob_end_clean();
+flush();
+echo $fileData;

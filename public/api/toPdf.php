@@ -114,10 +114,18 @@ class TiquettesPDF extends FPDF
                 'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
                 'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
                 'php_imagick' => extension_loaded('imagick'),
+                'magick' => false,
                 'convert' => false,
             ],
             'ok' => false
         ];
+
+        try {
+            $retval = 0;
+            $ret = exec('magick -version', result_code: $retval);
+            $response['modules']['magick'] = $ret !== false && $retval === 0;
+        } catch (\Exception $ex) {
+        }
 
         try {
             $retval = 0;
@@ -129,7 +137,7 @@ class TiquettesPDF extends FPDF
         $response['ok'] = $response['modules']['php']
             && $response['modules']['fpdf']
             && $response['modules']['schema_functions.json']
-            && ($response['modules']['php_imagick'] || $response['modules']['convert']);
+            && ($response['modules']['php_imagick'] || $response['modules']['magick'] || $response['modules']['convert']);
 
         return $response;
     }
@@ -580,13 +588,29 @@ class TiquettesPDF extends FPDF
             $image->writeImage($pngFilepath);
 
             return file_exists($pngFilepath);
-        } else if ($this->required['modules']['convert'] === true || $isDev) {
+        } else if ($this->required['modules']['magick'] === true || $isDev) {
+            $f = basename($pngFilepath, '.png');
+            $d = dirname($pngFilepath);
+            $s = "{$d}/{$f}.svg";
+            file_put_contents($s, $svgContent);
+            $cmd = "magick {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+
+            try {
+                $retval = 0;
+                $output = [];
+                $ret = exec($cmd, $output, $retval);
+
+                return $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+                return false;
+            }
+        } else if ($this->required['modules']['convert'] === true) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
             file_put_contents($s, $svgContent);
 
-            $cmd = "convert {$s} -size 100x100 -transparent white png24:{$pngFilepath}";
+            $cmd = "convert {$s} -antialias -size 100x100 -transparent white png24:{$pngFilepath}";
 
             try {
                 $retval = 0;
@@ -602,8 +626,12 @@ class TiquettesPDF extends FPDF
         return false;
     }
 
-    function getIcon(string $name, string|false $color = false, int $iconSize = 100): string
+    function getIcon(string|null $name, string|false $color = false, int $iconSize = 100): string
     {
+        if (is_null($name)) {
+            return '';
+        }
+
         if ($color === false)
             $color = '#000000';
         $color = strtolower(trim($color));
@@ -641,6 +669,10 @@ class TiquettesPDF extends FPDF
 
             if (!$this->svg2png($svg, $pngpath . $pngname, $iconSize, $iconSize)) {
                 copy(__DIR__ . '/libs/toPdf/assets/blank.png', $pngpath . $pngname);
+            } else {
+                if (file_exists($pngpath . $name) && is_writable($pngpath . $name)) {
+                    @unlink($pngpath . $name);
+                }
             }
 
             touch($pngpath . $pngname, $mtime);
