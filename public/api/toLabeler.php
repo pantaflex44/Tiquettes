@@ -365,7 +365,9 @@ class TiquettesLabeler
                 imageresolution($imt, $dpiX, $dpiY);
                 imagealphablending($imt, true);
 
+                $white2 = imagecolorallocate($imt, 255, 255, 255);
                 $black2 = imagecolorallocate($imt, 0, 0, 0);
+                imagefill($imt, 0, 0, $white2);
 
                 $font = __DIR__ . '/libs/toLabeler/assets/arial.ttf';
                 $fontSize = $textSize === 'LARGE' ? 14 : ($textSize === 'SMALL' ? 10 : 12);
@@ -392,17 +394,6 @@ class TiquettesLabeler
         }
 
         if ($invert) {
-            /*for ($x = 0; $x < $widthPX; $x++) {
-                for ($y = 0; $y < $heightPX; $y++) {
-                    $rgb = imagecolorat($im, $x, $y);
-                    $r = 255 - (($rgb >> 16) & 0xFF);
-                    $g = 255 - (($rgb >> 8) & 0xFF);
-                    $b = 255 - ($rgb & 0xFF);
-                    $a = ($rgb >> 24) & 0xFF;
-                    $newColor = imagecolorallocatealpha($im, $r, $g, $b, $a);
-                    imagesetpixel($im, $x, $y, $newColor);
-                }
-            }*/
             imagefilter($im, IMG_FILTER_NEGATE);
         }
 
