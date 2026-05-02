@@ -760,9 +760,9 @@ option[disabled] {
     width: 100%;
     flex: 1;
     -webkit-user-select: none;
-    user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -774,9 +774,9 @@ option[disabled] {
 .editor_tabpages input[type="checkbox"] {
     display: none;
     -webkit-user-select: none;
-    user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
 }
 
 .editor_tabpages input[type="checkbox"]+label {
@@ -788,9 +788,9 @@ option[disabled] {
     padding-block: 0.25em;
     font-size: 90%;
     -webkit-user-select: none;
-    user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     border-bottom: 2px solid #ccc;
     column-gap: 0.5em;
     height: 28px;
