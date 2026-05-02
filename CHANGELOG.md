@@ -10,6 +10,7 @@
 
 ### Modifications
 
+- [[Issue #85](https://github.com/pantaflex44/Tiquettes/issues/85)] Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
 - [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
 - Mise à jour des médias pour OG / Github / Twitter.
@@ -19,6 +20,7 @@
 
 ### Ajouts
 
+- [[Issue #84](https://github.com/pantaflex44/Tiquettes/issues/84)] Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire
 - [[Issue #70](https://github.com/pantaflex44/Tiquettes/issues/70)] Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!
 - Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion.
 - [[Issue #77](https://github.com/pantaflex44/Tiquettes/issues/77)] Ajout de la possibilité d'exclure un module de la numérotation automatique.

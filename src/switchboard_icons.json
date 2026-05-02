@@ -85,6 +85,16 @@
         "wire": "2.5"
     },
     {
+        "filename": "swb_pc_kitchen.svg",
+        "title": "Prise en credence / Prise de courant cuisine",
+        "modtype": "Prises",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A",
+        "wire": "2.5"
+    },
+    {
         "filename": "swb_alim_eco.svg",
         "title": "Economie d'energie",
         "modtype": "Alim",
@@ -282,6 +292,16 @@
         "wire": "6"
     },
     {
+        "filename": "swb_soup.svg",
+        "title": "Chauffe plats / Soupiere",
+        "modtype": "Cuisson",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "20A",
+        "wire": "2.5"
+    },
+    {
         "filename": "swb_ll.svg",
         "title": "Lave linge",
         "modtype": "Lave Linge",
@@ -316,6 +336,46 @@
         "filename": "swb_lv.svg",
         "title": "Lave vaisselle",
         "modtype": "Lave Vaisselle",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A",
+        "wire": "2.5"
+    },
+    {
+        "filename": "swb_lg.svg",
+        "title": "Lave verres",
+        "modtype": "Lave Vaisselle",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A",
+        "wire": "2.5"
+    },
+    {
+        "filename": "swb_iceberg.svg",
+        "title": "Machine a glaçons / Refrigerateur de cave",
+        "modtype": "Machine a glaçons",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A",
+        "wire": "2.5"
+    },
+    {
+        "filename": "swb_fountain.svg",
+        "title": "Fontaine a eau / Distributeur d'eau",
+        "modtype": "Distributeur d'eau",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "16A",
+        "wire": "2.5"
+    },
+    {
+        "filename": "swb_coffeetea.svg",
+        "title": "Machine a cafe / Theiere electrique / Bouilloire",
+        "modtype": "Prises",
         "coef": 0.5,
         "func": "q",
         "crb": "C",

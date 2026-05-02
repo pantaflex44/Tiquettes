@@ -48,6 +48,13 @@
                 ],
                 "updates": [
                     {
+                        "text": "Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.",
+                        "from": {
+                            "name": "Issue #85",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/85"
+                        }
+                    },
+                    {
                         "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
                     },
                     {
@@ -75,6 +82,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire",
+                        "from": {
+                            "name": "Issue #84",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/84"
+                        }
+                    },
                     {
                         "text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!",
                         "from": {
