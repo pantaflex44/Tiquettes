@@ -102,52 +102,57 @@ class TiquettesLabeler
     {
         global $isDev;
 
-        if (!str_starts_with(trim($svgContent), "<?xml"))
-            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
+        try {
+            if (!str_starts_with(trim($svgContent), "<?xml"))
+                $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
 
-        if ($this->required['modules']['php_imagick'] === true && !$isDev) {
-            $image = new Imagick();
+            if ($this->required['modules']['php_imagick'] === true && !$isDev) {
+                $image = new Imagick();
 
-            $image->newImage($width, $height, new ImagickPixel('transparent'));
-            $image->readImageBlob($svgContent);
-            $image->transparentPaintImage('#ffffff', 0, 10, false);
-            //$image->thumbnailImage($width, $height, true);
-            $image->setImageFormat('png64');
-            $image->writeImage($pngFilepath);
+                $image->newImage($width, $height, new ImagickPixel('transparent'));
+                $image->readImageBlob($svgContent);
+                $image->transparentPaintImage('#ffffff', 0, 10, false);
+                //$image->thumbnailImage($width, $height, true);
+                $image->setImageFormat('png64');
+                $image->writeImage($pngFilepath);
 
-            return file_exists($pngFilepath);
-        } else if ($this->required['modules']['magick'] === true || $isDev) {
-            $f = basename($pngFilepath, '.png');
-            $d = dirname($pngFilepath);
-            $s = "{$d}/{$f}.svg";
-            file_put_contents($s, $svgContent);
-            $cmd = "magick {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                return file_exists($pngFilepath);
+            } else if ($this->required['modules']['magick'] === true || $isDev) {
+                $f = basename($pngFilepath, '.png');
+                $d = dirname($pngFilepath);
+                $s = "{$d}/{$f}.svg";
+                file_put_contents($s, $svgContent);
+                $cmd = "magick {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
 
-            try {
-                $retval = 0;
-                $output = [];
-                $ret = exec($cmd, $output, $retval);
+                try {
+                    $retval = 0;
+                    $output = [];
+                    $ret = exec($cmd, $output, $retval);
 
-                return $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
-                return false;
+                    return $ret !== false && $retval === 0;
+                } catch (\Exception $ex) {
+                    return false;
+                }
+            } else if ($this->required['modules']['convert'] === true) {
+                $f = basename($pngFilepath, '.png');
+                $d = dirname($pngFilepath);
+                $s = "{$d}/{$f}.svg";
+                file_put_contents($s, $svgContent);
+                $cmd = "convert {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+
+                try {
+                    $retval = 0;
+                    $output = [];
+                    $ret = exec($cmd, $output, $retval);
+
+                    return $ret !== false && $retval === 0;
+                } catch (\Exception $ex) {
+                    return false;
+                }
             }
-        } else if ($this->required['modules']['convert'] === true) {
-            $f = basename($pngFilepath, '.png');
-            $d = dirname($pngFilepath);
-            $s = "{$d}/{$f}.svg";
-            file_put_contents($s, $svgContent);
-            $cmd = "convert {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
-
-            try {
-                $retval = 0;
-                $output = [];
-                $ret = exec($cmd, $output, $retval);
-
-                return $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
-                return false;
-            }
+        } catch (\Exception $ex) {
+            var_dump($ex);
+            exit();
         }
 
         return false;
@@ -155,76 +160,81 @@ class TiquettesLabeler
 
     function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100, string $color = '#000000', string $bgcolor = '#FFFFFF'): string
     {
-        if (is_null($name)) {
-            return '';
-        }
-
-        $path = '../';
-        $name = trim(strtolower($name));
-        $pi = pathinfo($name);
-
-        $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
-
-        $pngname = $pi['filename'] . '.png';
-        $pngpath = './libs/toLabeler/icons/' . $color . '/' . $iconSizeX . 'x' . $iconSizeY . '/';
-        if (!is_dir($pngpath))
-            mkdir($pngpath, 0777, true);
-        if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
-            return $pngpath . $pngname;
-
-        if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
-            $svg = file_get_contents($path . $name);
-
-            foreach ([3, 4, 8, 6] as $size) {
-                $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
-
-                $svg = preg_replace("/\"(\s*){$colorPattern}(\s*)\"/i", "\"{$color}\"", $svg);
-                $svg = preg_replace('/\"(\s*)currentColor(\s*)\"/i', "\"{$color}\"", $svg);
-
-                foreach (['color', 'fill', 'stroke'] as $key) {
-                    $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
-                }
+        try {
+            if (is_null($name)) {
+                return '';
             }
 
-            if (!$this->svg2png($svg, $pngpath . $pngname, $iconSizeX, $iconSizeY)) {
-                copy(__DIR__ . '/libs/toLabeler/assets/blank.png', $pngpath . $pngname);
-            } else {
-                list($width, $height, $type, $attr) = getimagesize($pngpath . $pngname);
+            $path = '../';
+            $name = trim(strtolower($name));
+            $pi = pathinfo($name);
 
-                $newWidth = $iconSizeX;
-                $newHeight = $iconSizeY;
-                if ($width > $height) {
+            $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
+
+            $pngname = $pi['filename'] . '.png';
+            $pngpath = './libs/toLabeler/icons/' . $color . '/' . $iconSizeX . 'x' . $iconSizeY . '/';
+            if (!is_dir($pngpath))
+                mkdir($pngpath, 0777, true);
+            if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
+                return $pngpath . $pngname;
+
+            if (file_exists($path . $name) && is_readable($path . $name) && $pi['extension'] === 'svg') {
+                $svg = file_get_contents($path . $name);
+
+                foreach ([3, 4, 8, 6] as $size) {
+                    $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
+
+                    $svg = preg_replace("/\"(\s*){$colorPattern}(\s*)\"/i", "\"{$color}\"", $svg);
+                    $svg = preg_replace('/\"(\s*)currentColor(\s*)\"/i', "\"{$color}\"", $svg);
+
+                    foreach (['color', 'fill', 'stroke'] as $key) {
+                        $svg = preg_replace("/{$key}(\s*):(\s*){$colorPattern}(\s*)([;\"']+)/i", "{$key}:{$color}$5", $svg);
+                    }
+                }
+
+                if (!$this->svg2png($svg, $pngpath . $pngname, $iconSizeX, $iconSizeY)) {
+                    copy(__DIR__ . '/libs/toLabeler/assets/blank.png', $pngpath . $pngname);
+                } else {
+                    list($width, $height, $type, $attr) = getimagesize($pngpath . $pngname);
+
                     $newWidth = $iconSizeX;
-                    $newHeight = $height * ($iconSizeY / $width);
-                }
-                if ($width < $height) {
-                    $newWidth = $width * ($iconSizeX / $height);
                     $newHeight = $iconSizeY;
+                    if ($width > $height) {
+                        $newWidth = $iconSizeX;
+                        $newHeight = $height * ($iconSizeY / $width);
+                    }
+                    if ($width < $height) {
+                        $newWidth = $width * ($iconSizeX / $height);
+                        $newHeight = $iconSizeY;
+                    }
+
+                    $resampledIm = imagecreatetruecolor($newWidth, $newHeight);
+
+                    list($r, $g, $b) = array_map(
+                        function ($c) {
+                            return hexdec(str_pad($c, 2, $c));
+                        },
+                        str_split(ltrim($bgcolor, '#'), strlen($bgcolor) > 4 ? 2 : 1)
+                    );
+                    $c = imagecolorallocate($resampledIm, $r, $g, $b);
+                    imagefill($resampledIm, 0, 0, $c);
+
+                    $image = imagecreatefrompng($pngpath . $pngname);
+                    imagecopyresampled($resampledIm, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                    imagepng($resampledIm, $pngpath . $pngname, 0);
+
+                    if (file_exists($pngpath . $name) && is_writable($pngpath . $name)) {
+                        @unlink($pngpath . $name);
+                    }
                 }
 
-                $resampledIm = imagecreatetruecolor($newWidth, $newHeight);
+                touch($pngpath . $pngname, $mtime);
 
-                list($r, $g, $b) = array_map(
-                    function ($c) {
-                        return hexdec(str_pad($c, 2, $c));
-                    },
-                    str_split(ltrim($bgcolor, '#'), strlen($bgcolor) > 4 ? 2 : 1)
-                );
-                $c = imagecolorallocate($resampledIm, $r, $g, $b);
-                imagefill($resampledIm, 0, 0, $c);
-
-                $image = imagecreatefrompng($pngpath . $pngname);
-                imagecopyresampled($resampledIm, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                imagepng($resampledIm, $pngpath . $pngname, 0);
-
-                if (file_exists($pngpath . $name) && is_writable($pngpath . $name)) {
-                    @unlink($pngpath . $name);
-                }
+                return $pngpath . $pngname;
             }
-
-            touch($pngpath . $pngname, $mtime);
-
-            return $pngpath . $pngname;
+        } catch (\Exception $ex) {
+            var_dump($ex);
+            exit();
         }
 
         return '';
