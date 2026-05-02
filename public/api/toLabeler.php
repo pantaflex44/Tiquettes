@@ -501,7 +501,7 @@ $created = [];
 foreach ($rowImages as $img) {
     $f = $tmppath . $img['filename'];
     if (file_exists($f)) {
-        @unlink($f);
+        unlink($f);
     }
     if (imagepng($img['stream'], $f)) {
         $zip->addFileFromPath(basename($f), $f);
