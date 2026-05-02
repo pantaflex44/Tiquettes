@@ -138,7 +138,7 @@ class TiquettesLabeler
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
                 file_put_contents($s, $svgContent);
-                $cmd = "convert {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                $cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
 
                 try {
                     $retval = 0;
