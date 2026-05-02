@@ -211,6 +211,10 @@ class TiquettesLabeler
                     }
 
                     $resampledIm = imagecreatetruecolor($newWidth, $newHeight);
+
+                    $white = imagecolorallocate($resampledIm, 255, 255, 255);
+                    imagefill($resampledIm, 0, 0, $white);
+
                     $image = imagecreatefrompng($pngpath . $pngname);
                     imagecopyresampled($resampledIm, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
                     imagepng($resampledIm, $pngpath . $pngname, 0);
