@@ -2582,3 +2582,12 @@ function App() {
 }
 
 export default App
+
+
+//TODO: Doc: Refaire les screenshots
+//TODO: Doc: Inclure dans la renumérotation auto
+//TODO: Doc: Allocation d'un module à ses enfants seuelement ou conserver une alimentation directe en //
+//TODO: Doc: Asservissement partiel / total d'un contact
+//TODO: Doc: Exportation pour les étiqueteuses
+//TODO: Doc: Gestion des folios
+//TODO: Doc: Nouvelle boite de dialogue pour le renseignement des infos personnelles

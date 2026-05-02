@@ -55,6 +55,7 @@ class TiquettesLabeler
 
     protected string $model = '';
     protected array $options = [];
+    protected int $margins = 10;
 
     public array $required = [];
 
@@ -165,7 +166,7 @@ class TiquettesLabeler
         $mtime = file_exists($path . $name) ? filemtime($path . $name) : time();
 
         $pngname = $pi['filename'] . '.png';
-        $pngpath = './libs/toLabeler/' . $this->model . '/icons/' . $color . '/' . $iconSizeX . 'x' . $iconSizeY . '/';
+        $pngpath = './libs/toLabeler/icons/' . $color . '/' . $iconSizeX . 'x' . $iconSizeY . '/';
         if (!is_dir($pngpath))
             mkdir($pngpath, 0777, true);
         if (file_exists($pngpath . $pngname) && filemtime($pngpath . $pngname) === $mtime)
@@ -245,13 +246,32 @@ class TiquettesLabeler
         return call_user_func_array([__CLASS__, $fName], [$rowIndex]);
     }
 
+    public function Output_PT_P300BT(int $rowIndex): mixed
+    {
+        return $this->Output_PT_P710BT($rowIndex);
+    }
+
+    public function Output_PT_P720BT(int $rowIndex): mixed
+    {
+        return $this->Output_PT_P710BT($rowIndex);
+    }
+
+    public function Output_PT_P910BT(int $rowIndex): mixed
+    {
+        return $this->Output_PT_P710BT($rowIndex);
+    }
+
+    public function Output_PT_P920BT(int $rowIndex): mixed
+    {
+        return $this->Output_PT_P710BT($rowIndex);
+    }
+
     public function Output_PT_P710BT(int $rowIndex): mixed
     {
         global $switchboard;
 
-        $dpiX = 180;
-        $dpiY = 360;
-        $margins = 10;
+        $dpiX = isset($this->options['dpi']) && isset($this->options['dpi']['x']) ? intval($this->options['dpi']['x']['value'] ?? 180) : 180;
+        $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y']['value'] ?? 360) : 360;
 
         $modules = $switchboard->rows[$rowIndex];
         $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
@@ -296,8 +316,8 @@ class TiquettesLabeler
         imagefill($im, 0, 0, $white);
 
         $r = $dpiY / $dpiX;
-        $w = $stepSizePX - $margins;
-        $h = ($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) - $margins;
+        $w = $stepSizePX - $this->margins;
+        $h = ($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) - $this->margins;
         $placeSizeX = $w;
         $placeSizeY = $h;
 
@@ -332,7 +352,7 @@ class TiquettesLabeler
             }
 
             if (isset($module->text) && is_string($module->text) && trim($module->text) !== "" && $displayMode === 'BOTH' || $displayMode === 'TEXT') {
-                $w = (int)$stepSizePX - $margins - $margins;
+                $w = (int)$stepSizePX - $this->margins - $this->margins;
                 $h = (int) round($placeSizeY / $r);
 
                 $imt = imagecreatetruecolor($w, $h);
@@ -350,18 +370,18 @@ class TiquettesLabeler
                 $boxH = $box[5] - $box[3];
 
                 $tx = (int) round(($w / 2) - ($boxW / 2));
-                $ty = $posY + $margins + 5;
+                $ty = $posY + $this->margins + 5;
                 $angle = 0;
                 if ($textOrientation === 'VERTICAL') {
                     $angle = 90;
-                    $tx = ((int) round(($w / 2) + ($boxH / 2))) + $margins;
-                    $h -= (2 * $margins);
+                    $tx = ((int) round(($w / 2) + ($boxH / 2))) + $this->margins;
+                    $h -= (2 * $this->margins);
                     $ty = $posY + $h;
                 }
 
                 imagettftext($imt, $fontSize, $angle, $tx, $ty,  $black2, $font, $module->text);
 
-                imagecopyresampled($im, $imt, $posX + ((int) round(($stepSizePX / 2) - ($w / 2))), $posY + $margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $stepSizePX - $margins - $margins, $placeSizeY, $w, $h);
+                imagecopyresampled($im, $imt, $posX + ((int) round(($stepSizePX / 2) - ($w / 2))), $posY + $this->margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $stepSizePX - $this->margins - $this->margins, $placeSizeY, $w, $h);
             }
 
             imagedashedline($im, $posX + $stepSizePX - 1, 0, $posX + $stepSizePX - 1, $heightPX,  $black);
