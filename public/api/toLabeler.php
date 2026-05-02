@@ -478,12 +478,9 @@ foreach ($created as $file) {
 $za->close();
 
 
-header('Content-disposition: attachment; filename=' . basename($zipFilepath));
-header('Content-type: application/zip');
-header('Content-Length: ' . filesize($zipFilepath));
-header("Content-Transfer-Encoding: binary");
-
 $fileData = @file_get_contents($zipFilepath);
+$basename = basename($zipFilepath);
+$filesize = filesize($zipFilepath);
 
 $files = glob($tmppath . '*');
 foreach ($files as $file) {
@@ -495,4 +492,9 @@ rmdir($tmppath);
 
 ob_end_clean();
 flush();
-echo $fileData;
+
+header("Content-disposition: attachment; filename=$basename");
+header("Content-type: application/zip");
+header("Content-Length: $filesize");
+header("Content-Transfer-Encoding: binary");
+print $fileData;
