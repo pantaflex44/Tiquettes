@@ -610,7 +610,7 @@ class TiquettesPDF extends FPDF
             $s = "{$d}/{$f}.svg";
             file_put_contents($s, $svgContent);
 
-            $cmd = "convert {$s} -antialias -size 100x100 -transparent white png24:{$pngFilepath}";
+            $cmd = "convert {$s} -size 100x100 -transparent white png24:{$pngFilepath}";
 
             try {
                 $retval = 0;
