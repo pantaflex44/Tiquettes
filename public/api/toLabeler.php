@@ -477,7 +477,7 @@ foreach ($created as $file) {
 
 $za->close();
 
-/*
+
 header('Content-disposition: attachment; filename=' . basename($zipFilepath));
 header('Content-type: application/zip');
 header('Content-Length: ' . filesize($zipFilepath));
@@ -496,4 +496,3 @@ rmdir($tmppath);
 ob_end_clean();
 flush();
 echo $fileData;
-*/
