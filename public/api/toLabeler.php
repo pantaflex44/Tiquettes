@@ -117,7 +117,7 @@ class TiquettesLabeler
                 $image->writeImage($pngFilepath);
 
                 return file_exists($pngFilepath);
-            } else if ($this->required['modules']['magick'] === true || $isDev) {
+                /*} else if ($this->required['modules']['magick'] === true || $isDev) {
                 $f = basename($pngFilepath, '.png');
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
@@ -132,8 +132,8 @@ class TiquettesLabeler
                     return $ret !== false && $retval === 0;
                 } catch (\Exception $ex) {
                     return false;
-                }
-            } else if ($this->required['modules']['convert'] === true) {
+                }*/
+            } else if ($this->required['modules']['convert'] === true || $isDev) {
                 $f = basename($pngFilepath, '.png');
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
