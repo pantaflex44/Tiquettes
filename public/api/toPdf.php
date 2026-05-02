@@ -741,23 +741,23 @@ class TiquettesPDF extends FPDF
 
     function Header()
     {
-        global $switchboard, $tv;
+        global $switchboard, $tv, $printOptions;
 
         $this->SetY(1.5);
 
-        if ($this->PageNo() > 1) {
+        if ($this->PageNo() > 1 || !$printOptions->firstPage) {
             $this->SetTextColor(0, 0, 0);
             $this->SetFont('Arial', 'B', 9);
             $this->Cell(0, 10, str($switchboard->prjname . ' - rev ' . $switchboard->prjversion), 0, 0, 'R');
         }
 
-        if ($this->PageNo() === 1) {
+        if ($this->PageNo() === 1 && $printOptions->firstPage) {
             $this->SetTextColor(170, 170, 170);
             $this->SetFont('Arial', '', 8);
-            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI')), 0, 0, 'R');
+            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : ($this->required['modules']['convert'] ? 'ImageMagick Convert' : 'ImageMagick CLI'))), 0, 0, 'R');
         }
 
-        if ($this->subTitle !== "" && $this->PageNo() > 1) {
+        if ($this->subTitle !== "" && ($this->PageNo() > 1 || !$printOptions->firstPage)) {
             $this->SetX($this->pageMargin);
             $this->SetTextColor(0, 139, 139);
             $this->SetFont('Arial', 'B', 11);

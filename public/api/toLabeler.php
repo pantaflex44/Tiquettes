@@ -18,6 +18,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+require './libs/ZipStream-PHP-3.2.2/src/ZipStream.php';
+require './libs/ZipStream-PHP-3.2.2/src/OperationMode.php';
+require './libs/ZipStream-PHP-3.2.2/src/CompressionMethod.php';
+require './libs/ZipStream-PHP-3.2.2/src/File.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception.php';
+require './libs/ZipStream-PHP-3.2.2/src/GeneralPurposeBitFlag.php';
+require './libs/ZipStream-PHP-3.2.2/src/Version.php';
+require './libs/ZipStream-PHP-3.2.2/src/Time.php';
+require './libs/ZipStream-PHP-3.2.2/src/PackField.php';
+require './libs/ZipStream-PHP-3.2.2/src/LocalFileHeader.php';
+require './libs/ZipStream-PHP-3.2.2/src/EndOfCentralDirectory.php';
+require './libs/ZipStream-PHP-3.2.2/src/DataDescriptor.php';
+require './libs/ZipStream-PHP-3.2.2/src/CentralDirectoryFileHeader.php';
+
+require './libs/ZipStream-PHP-3.2.2/src/Stream/CallbackStreamWrapper.php';
+
+require './libs/ZipStream-PHP-3.2.2/src/Zs/ExtendedInformationExtraField.php';
+
+require './libs/ZipStream-PHP-3.2.2/src/Exception/StreamNotSeekableException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/StreamNotReadableException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/SimulationFileUnknownException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/ResourceActionException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/OverflowException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/FileSizeIncorrectException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/FileNotReadableException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/FileNotFoundException.php';
+require './libs/ZipStream-PHP-3.2.2/src/Exception/DosTimeOverflowException.php';
+
+
+use ZipStream\ZipStream;
+use ZipStream\Stream\CallbackStreamWrapper;
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -451,8 +483,45 @@ for ($rowIndex = 0; $rowIndex < count($switchboard->rows); $rowIndex++) {
     }
 }
 
+$zip = new ZipStream(
+    //operationMode: OperationMode::SIMULATE_STRICT, // or SIMULATE_LAX
+    defaultEnableZeroHeader: false,
+    sendHttpHeaders: true,
+    outputName: $switchboard->prjname .  " - " . $options['ribbon']['value'] . "mm - " . $model . " - Tiquettes " . $tv . ".zip",
+    outputStream: CallbackStreamWrapper::open(function (string $data) {
+        echo $data;
+    }),
+);
 
 $tmppath = './libs/toLabeler/tmp/' . uniqid() . '/';
+if (!is_dir($tmppath))
+    mkdir($tmppath, 0777, true);
+
+$created = [];
+foreach ($rowImages as $img) {
+    $f = $tmppath . $img['filename'];
+    if (file_exists($f)) {
+        @unlink($f);
+    }
+    if (imagepng($img['stream'], $f)) {
+        $zip->addFileFromPath(basename($f), $f);
+    }
+}
+
+$size = $zip->finish();
+
+$files = glob($tmppath . '*');
+foreach ($files as $file) {
+    if (is_file($file)) {
+        unlink($file);
+    }
+}
+rmdir($tmppath);
+
+
+
+
+/*$tmppath = './libs/toLabeler/tmp/' . uniqid() . '/';
 if (!is_dir($tmppath))
     mkdir($tmppath, 0777, true);
 
@@ -507,4 +576,4 @@ header("Content-Length: $filesize");
 header("Content-Transfer-Encoding: binary");
 
 ob_end_flush();
-print $fileData;
+echo $fileData;*/
