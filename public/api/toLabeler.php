@@ -478,9 +478,15 @@ foreach ($created as $file) {
 $za->close();
 
 
-$fileData = @file_get_contents($zipFilepath);
+
+//$fileData = @file_get_contents($zipFilepath);
 $basename = basename($zipFilepath);
 $filesize = filesize($zipFilepath);
+
+ob_start();
+@readfile($zipFilepath);
+$fileData = ob_get_contents();
+ob_get_clean();
 
 $files = glob($tmppath . '*');
 foreach ($files as $file) {
@@ -500,6 +506,5 @@ header("Content-Type: application/octet-stream");
 header("Content-Length: $filesize");
 header("Content-Transfer-Encoding: binary");
 
-ob_end_clean();
-flush();
+ob_end_flush();
 print $fileData;
