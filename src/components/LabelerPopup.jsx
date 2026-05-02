@@ -150,6 +150,7 @@ export default function LabelerPopup({
                     </select>
                 </div>
             )}
+
             {options &&
                 <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
                     <label htmlFor={`labeler_stepsize`}>Largeur des modules</label>

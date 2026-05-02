@@ -76,7 +76,7 @@
                 ],
                 "adds": [
                     {
-                        "text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE !",
+                        "text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!",
                         "from": {
                             "name": "Issue #70",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/70"

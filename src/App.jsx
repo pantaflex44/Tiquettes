@@ -1942,6 +1942,7 @@ function App() {
                     </div>
                 </button>
 
+
                 <button className="button_group-print_project dropdown_container" title="Imprimer...">
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
