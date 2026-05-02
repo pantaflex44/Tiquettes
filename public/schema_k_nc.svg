@@ -5,28 +5,50 @@
    viewBox="0 0 18.518998 26.455"
    version="1.1"
    id="svg4"
+   sodipodi:docname="schema_k_nc.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.799"
+     inkscape:cx="350.43805"
+     inkscape:cy="500"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
   <defs
      id="defs4" />
   <path
-     style="fill:#000000;stroke-width:0.207275"
+     style="fill:#010101;stroke-width:0;fill-opacity:1;stroke:none;stroke-dasharray:none"
      d="M 9.131,0 H 9.396 V 8.723106 H 9.131 Z"
      id="path1" />
   <path
-     style="fill:#000000;stroke-width:0.207275"
+     style="fill:#010101;stroke-width:0;stroke:none;stroke-opacity:1;fill-opacity:1;stroke-dasharray:none"
      d="m 9.3990552,8.5637576 v 0.265 H 2.9937213 v -0.265 z"
      id="path1-5" />
   <path
-     style="fill:#000000;stroke-width:0.235271;stroke-dasharray:none"
+     style="fill:#010101;stroke-width:0;stroke-dasharray:none;fill-opacity:1;stroke:none"
      d="M 9.092,14.528 H 9.357 V 26.472 H 9.092 Z"
      id="path2" />
   <path
-     style="fill:#030303;fill-opacity:1;stroke:none;stroke-width:0.23506;stroke-opacity:1"
+     style="fill:#010101;fill-opacity:1;stroke:none;stroke-width:0;stroke-opacity:1;stroke-dasharray:none"
      d="M 4.4105625,7.4791429 4.639457,7.3622824 9.2907806,14.486286 9.0618861,14.603146 Z"
      id="path3" />
   <path
-     style="fill:#000000;stroke:#000000;stroke-width:0.352777;stroke-dasharray:1.05833, 1.05833"
+     style="fill:none;stroke:#000000;stroke-width:0.23810142;stroke-dasharray:0.71430365,0.71430365;fill-opacity:1;stroke-opacity:1;stroke-dashoffset:0"
      d="M 9.001,10.96 H 2.111"
      id="path4" />
 </svg>
