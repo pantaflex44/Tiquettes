@@ -312,7 +312,20 @@ class TiquettesLabeler
         $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y']['value'] ?? 360) : 360;
 
         $modules = $switchboard->rows[$rowIndex];
+
+        // trim free modules at the start of the row
+        while (count($modules) > 0 && isset($modules[0]->free) && $modules[0]->free === true) {
+            array_shift($modules);
+        }
+
+        // trim free modules at the end of the row
+        while (count($modules) > 0 && isset($modules[count($modules) - 1]->free) && $modules[count($modules) - 1]->free === true) {
+            array_pop($modules);
+        }
+
         $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
+
+        $hasBorderInter = isset($displayOptions['borders']) && isset($displayOptions['borders']['inter']) ? $displayOptions['borders']['inter'] === true : true;
 
         $invert = isset($displayOptions['invert']) ? $displayOptions['invert'] : ['has' => false, 'value' => false];
         $invert = ($invert['has'] ?? false) === true && ($invert['value'] ?? false) === true;
@@ -422,7 +435,9 @@ class TiquettesLabeler
                 imagecopyresampled($im, $imt, $posX + ((int) round(($stepSizePX / 2) - ($w / 2))), $posY + $this->margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $stepSizePX - $this->margins - $this->margins, $placeSizeY, $w, $h);
             }
 
-            imagedashedline($im, $posX + $stepSizePX - 1, 0, $posX + $stepSizePX - 1, $heightPX,  $black);
+            if ($hasBorderInter) {
+                imagedashedline($im, $posX + $stepSizePX - 1, 0, $posX + $stepSizePX - 1, $heightPX, $black);
+            }
         }
 
         if ($invert) {
@@ -466,6 +481,12 @@ $tv = json_decode($_POST['tv']);
 $isDev = intval(trim(($_POST['isDev'] ?? '0'))) === 1;
 $model = trim(filter_string_polyfill($_POST['model']));
 
+$displayOptions = isset($options['options']) ? $options['options'] : null;
+$hasBorderLeft = isset($displayOptions['borders']) && isset($displayOptions['borders']['left']) ? $displayOptions['borders']['left'] === true : false;
+$hasBorderTop = isset($displayOptions['borders']) && isset($displayOptions['borders']['top']) ? $displayOptions['borders']['top'] === true : false;
+$hasBorderRight = isset($displayOptions['borders']) && isset($displayOptions['borders']['right']) ? $displayOptions['borders']['right'] === true : false;
+$hasBorderBottom = isset($displayOptions['borders']) && isset($displayOptions['borders']['bottom']) ? $displayOptions['borders']['bottom'] === true : false;
+
 $tl = new TiquettesLabeler($model, $options);
 
 $rowImages = [];
@@ -473,7 +494,6 @@ for ($rowIndex = 0; $rowIndex < count($switchboard->rows); $rowIndex++) {
     if (!in_array($rowIndex, $selections)) {
         continue;
     }
-
     $img = $tl->Output($rowIndex);
     if (!is_null($img)) {
         $rowImages[] = [
@@ -503,6 +523,23 @@ foreach ($rowImages as $img) {
     if (file_exists($f)) {
         unlink($f);
     }
+
+    $sx = imagesx($img['stream']);
+    $sy = imagesy($img['stream']);
+    $black = imagecolorallocate($img['stream'], 0, 0, 0);
+    if ($hasBorderLeft) {
+        imagedashedline($img['stream'], 0, 0, 0, $sy, $black);
+    }
+    if ($hasBorderRight) {
+        imagedashedline($img['stream'], $sx - 1, 0, $sx - 1, $sy, $black);
+    }
+    if ($hasBorderTop) {
+        imagedashedline($img['stream'], 0, 0, $sx, 0, $black);
+    }
+    if ($hasBorderBottom) {
+        imagedashedline($img['stream'], 0, $sy - 1, $sx, $sy - 1, $black);
+    }
+
     if (imagepng($img['stream'], $f)) {
         $zip->addFileFromPath(basename($f), $f);
     }

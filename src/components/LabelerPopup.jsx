@@ -29,6 +29,11 @@ import exportLabelerTextSize1Icon from "../assets/text-size-1.svg";
 import exportLabelerTextSize2Icon from "../assets/text-size-2.svg";
 import exportLabelerTextSize3Icon from "../assets/text-size-3.svg";
 import downloadIcon from "../assets/download.svg";
+import borderLeftIcon from "../assets/border-left.svg";
+import borderTopIcon from "../assets/border-top.svg";
+import borderRightIcon from "../assets/border-right.svg";
+import borderBottomIcon from "../assets/border-bottom.svg";
+import borderInterIcon from "../assets/border-inter.svg";
 
 import Popup from "./Popup.jsx";
 
@@ -53,7 +58,7 @@ export default function LabelerPopup({
             $groups[group].push(labeler);
         }
         setLabelersList($groups);
-    }, [labelersOptions]);
+    }, [labelersOptions, model]);
 
     const defaultOptions = useMemo(() => {
         if (!model) return null;
@@ -73,7 +78,7 @@ export default function LabelerPopup({
         showCloseButton={true}
         showOkButton={true}
         showCancelButton={true}
-        width={440}
+        width={500}
         onOk={apply}
         okButtonDisabled={!model || !options}
         onCancel={onCancel}
@@ -91,7 +96,7 @@ export default function LabelerPopup({
                 paddingBottom: "1em",
                 marginBottom: "1em",
             }}>
-                <label htmlFor={`labeler_model`}>Étiqueteuse</label>
+                <label htmlFor={`labeler_model`}><b>Étiqueteuse</b></label>
                 <select name="labeler_model" id={`labeler_model`} value={model} onChange={(e) => setModel(e.target.value)} autoFocus={true}>
                     <option value="" disabled>--Sélectionner un modèle--</option>
                     {Object.keys(labelersList).map((group) => {
@@ -150,6 +155,24 @@ export default function LabelerPopup({
                     </select>
                 </div>
             )}
+            {options?.ribbon?.range && (
+                <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
+                    <label htmlFor={`labeler_ribbon_range`}>Hauteur du ruban</label>
+                    <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
+                        <input id={'labeler_ribbon_range'} name={'labeler_ribbon_range'} type="range" min={Math.min(...(options?.ribbon?.range ?? [1, 1]))} max={Math.max(...(options?.ribbon?.range ?? [1, 1]))} step={1} value={options.ribbon.value} onChange={(e) => setOptions((old) => {
+                            const newOptions = {
+                                ...old,
+                                ribbon: {
+                                    ...old.ribbon,
+                                    value: e.target.value
+                                }
+                            }
+                            return newOptions;
+                        })} />
+                        <span style={{ fontSize: '90%', width: '50px', textAlign: 'right' }}>{options.ribbon.value} mm</span>
+                    </div>
+                </div>
+            )}
 
             {options &&
                 <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
@@ -195,23 +218,114 @@ export default function LabelerPopup({
                                 })} />
                             </div>
                         )}
+                        {options &&
+                            <>
+                                <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+                                    <label>Bordures</label>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
+                                        <input type="checkbox" name={'labeler_borders_inter'} id={'labeler_borders_inter'} checked={(options.options?.borders?.inter ?? true) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        inter: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={borderInterIcon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
+                                        <input type="checkbox" name={'labeler_borders_left'} id={'labeler_borders_left'} checked={(options.options?.borders?.left ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        left: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={borderLeftIcon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
+                                        <input type="checkbox" name={'labeler_borders_top'} id={'labeler_borders_top'} checked={(options.options?.borders?.top ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        top: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={borderTopIcon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
+                                        <input type="checkbox" name={'labeler_borders_right'} id={'labeler_borders_right'} checked={(options.options?.borders?.right ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        right: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={borderRightIcon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
+                                        <input type="checkbox" name={'labeler_borders_bottom'} id={'labeler_borders_bottom'} checked={(options.options?.borders?.bottom ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        bottom: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={borderBottomIcon} width={18} height={18} />
+                                    </div>
+                                </div>
+                                <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
+                            </>
+                        }
                         {options?.options?.icons?.has === true && (
-                            <div className="popup_row-flex" style={{ alignItems: 'center' }}>
-                                <label>Afficher les icônes</label>
-                                <input type="checkbox" name={`labeler_icons`} id={`labeler_icons`} checked={options.options.icons.value} onChange={(e) => setOptions((old) => {
-                                    const newOptions = {
-                                        ...old,
-                                        options: {
-                                            ...old.options,
-                                            icons: {
-                                                ...old.options.icons,
-                                                value: e.target.checked
+                            <>
+                                <div className="popup_row-flex" style={{ alignItems: 'center' }}>
+                                    <label>Afficher les icônes</label>
+                                    <input type="checkbox" name={`labeler_icons`} id={`labeler_icons`} checked={options.options.icons.value} onChange={(e) => setOptions((old) => {
+                                        const newOptions = {
+                                            ...old,
+                                            options: {
+                                                ...old.options,
+                                                icons: {
+                                                    ...old.options.icons,
+                                                    value: e.target.checked
+                                                }
                                             }
                                         }
-                                    }
-                                    return newOptions;
-                                })} />
-                            </div>
+                                        return newOptions;
+                                    })} />
+                                </div>
+                                <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
+                            </>
                         )}
                         {options?.options?.text?.has === true && (
                             <div className="popup_row-flex" style={{ alignItems: 'center' }}>
@@ -267,7 +381,7 @@ export default function LabelerPopup({
                                         })} />
                                         <img src={exportLabelerTextSize2Icon} width={18} height={18} />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5rem', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
                                         <input type="checkbox" name={'labeler_text_size'} id={'labeler_text_size'} checked={options.options?.textSize?.value === 'large'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
@@ -286,7 +400,7 @@ export default function LabelerPopup({
                                 </div>
                                 <div className="popup_row-flex" style={{ alignItems: 'center', margin: 0, gap: '0.75rem' }}>
                                     <div style={{ marginLeft: '1rem' }}>Orientation</div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5rem', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
                                         <input type="checkbox" name={'labeler_text_orientation'} id={'labeler_text_orientation'} checked={options.options?.textOrientation?.value === 'horizontal'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
@@ -302,7 +416,7 @@ export default function LabelerPopup({
                                         })} />
                                         <img src={exportLabelerTextOrientationHIcon} width={18} height={18} />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5rem', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
                                         <input type="checkbox" name={'labeler_text_orientation'} id={'labeler_text_orientation'} checked={options.options?.textOrientation?.value === 'vertical'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
@@ -327,6 +441,7 @@ export default function LabelerPopup({
                     </div>
                 </div>
             )}
+
         </div>
     </Popup>
 }
