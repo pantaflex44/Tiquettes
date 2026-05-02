@@ -490,11 +490,16 @@ foreach ($files as $file) {
 }
 rmdir($tmppath);
 
-ob_end_clean();
-flush();
-
-header("Content-disposition: attachment; filename=$basename");
-header("Content-type: application/zip");
+header("Pragma: public");
+header("Expires: 0");
+header("Cache-Control: must-revalidate");
+header("Cache-Control: public");
+header("Content-Description: File Transfer");
+header("Content-Disposition: attachment; filename=$basename");
+header("Content-Type: application/octet-stream");
 header("Content-Length: $filesize");
 header("Content-Transfer-Encoding: binary");
+
+ob_end_clean();
+flush();
 print $fileData;
