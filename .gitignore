@@ -28,18 +28,21 @@ dist-ssr
 
 google205542c04daca98b.html
 
-sftp.js
-
 public/api/.idea/*
+
 public/api/libs/toPdf/themes/icons
-public/api/libs/toLabeler/icons
 public/api/libs/toPdf/assets/schema_functions.json
+
+public/api/libs/toLabeler/icons
+public/api/libs/toLabeler/tmp
+
 public/api/tiquettes.db
+
 public/api/libs/constants.php
 public/api/libs/constants.production.php
 public/api/libs/constants.development.php
 
 public/api/templates
+
 src/css/twofaInput.css
 src/TwofaInput.jsx
-package-base - OLD.json
