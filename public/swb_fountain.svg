@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
+   width="1000"
+   height="1000"
+   viewBox="0 0 25 25"
    fill="none"
    stroke="currentColor"
    stroke-width="2"
@@ -28,9 +28,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.291667"
-     inkscape:cx="11.984981"
-     inkscape:cy="12"
+     inkscape:zoom="0.5201823"
+     inkscape:cx="-42.292866"
+     inkscape:cy="452.7259"
      inkscape:window-width="1920"
      inkscape:window-height="1008"
      inkscape:window-x="0"
@@ -39,27 +39,27 @@
      inkscape:current-layer="svg6" />
   <path
      stroke="none"
-     d="M0 0h24v24H0z"
+     d="M 0,0 H 24 V 24 H 0 Z"
      fill="none"
      id="path1" />
   <path
-     d="M9 16v-5a2 2 0 1 0 -4 0"
+     d="m 9.1105381,16.990038 v -5.696871 a 2.2787485,2.2787485 0 1 0 -4.5574969,0"
      id="path2"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;stroke:#000000;stroke-width:2.27875;stroke-opacity:1" />
   <path
-     d="M15 16v-5a2 2 0 1 1 4 0"
+     d="m 15.946784,16.990038 v -5.696871 a 2.2787485,2.2787485 0 1 1 4.557497,0"
      id="path3"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;stroke:#000000;stroke-width:2.27875;stroke-opacity:1" />
   <path
-     d="M12 16v-10a3 3 0 0 1 6 0"
+     d="M 12.528661,16.990038 V 5.5962953 a 3.4181227,3.4181227 0 0 1 6.836245,0"
      id="path4"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;stroke:#000000;stroke-width:2.27875;stroke-opacity:1" />
   <path
-     d="M6 6a3 3 0 0 1 6 0"
+     d="m 5.6924155,5.5962953 a 3.4181228,3.4181228 0 0 1 6.8362455,0"
      id="path5"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;stroke:#000000;stroke-width:2.27875;stroke-opacity:1" />
   <path
-     d="M3 16h18v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-2"
+     d="M 2.2742928,16.990038 H 22.783029 v 2.278748 a 3.4181227,3.4181227 0 0 1 -3.418123,3.418123 H 5.6924155 A 3.4181227,3.4181227 0 0 1 2.2742928,19.268786 v -2.278748"
      id="path6"
-     style="fill:none;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;stroke:#000000;stroke-width:2.27875;stroke-opacity:1" />
 </svg>

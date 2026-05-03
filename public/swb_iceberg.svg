@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
+   width="1000"
+   height="1000"
+   viewBox="0 0 25 25"
    fill="none"
    stroke="currentColor"
    stroke-width="2"
@@ -28,9 +28,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="33.291667"
-     inkscape:cx="11.984981"
-     inkscape:cy="12"
+     inkscape:zoom="0.36782443"
+     inkscape:cx="-133.21573"
+     inkscape:cy="207.97966"
      inkscape:window-width="1920"
      inkscape:window-height="1008"
      inkscape:window-x="0"
@@ -39,15 +39,15 @@
      inkscape:current-layer="svg3" />
   <path
      stroke="none"
-     d="M0 0h24v24H0z"
+     d="M 0,0 H 24 V 24 H 0 Z"
      fill="none"
      id="path1" />
   <path
-     d="M19 10l-2 9l-4 3l-3 -5l-3 -1l-2 -6l2 -5l3 -2l3 3l4 1l2 3"
+     d="M 20.178101,9.7248946 17.958016,19.715278 13.517846,23.045405 10.187718,17.495192 6.8575906,16.38515 4.6375055,9.7248946 6.8575906,4.1746819 10.187718,1.9545968 l 3.330128,3.3301277 4.44017,1.1100425 2.220085,3.3301276"
      id="path2"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.22009;stroke-opacity:1" />
   <path
-     d="M3 10h18"
+     d="M 2.4174204,9.7248946 H 22.398186"
      id="path3"
-     style="stroke:#000000;stroke-opacity:1;fill:none" />
+     style="fill:none;stroke:#000000;stroke-width:2.22009;stroke-opacity:1" />
 </svg>
