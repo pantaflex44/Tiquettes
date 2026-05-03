@@ -659,8 +659,10 @@ class TiquettesPDF extends FPDF
             $svg = file_get_contents($path . $name);
 
             foreach ([3, 4, 8, 6] as $size) {
-                $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
+                $svg = preg_replace("/([\s]+)width[\s]*=[\"'][\s]*(.+?)[\s]*[\"']/i", '$1width="1000"', $svg);
+                $svg = preg_replace("/([\s]+)height[\s]*=[\"'][\s]*(.+?)[\s]*[\"']/i", '$1height="1000"', $svg);
 
+                $colorPattern = "(#[0-9a-zA-Z]{{$size}})";
                 $svg = preg_replace("/\"(\s*){$colorPattern}(\s*)\"/i", "\"{$color}\"", $svg);
                 $svg = preg_replace('/\"(\s*)currentColor(\s*)\"/i', "\"{$color}\"", $svg);
 
