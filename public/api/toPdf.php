@@ -127,11 +127,13 @@ class TiquettesPDF extends FPDF
         } catch (\Exception $ex) {
         }
 
-        try {
-            $retval = 0;
-            $ret = exec('convert -version', result_code: $retval);
-            $response['modules']['convert'] = $ret !== false && $retval === 0;
-        } catch (\Exception $ex) {
+        if ($response['modules']['magick'] === false) {
+            try {
+                $retval = 0;
+                $ret = exec('convert -version', result_code: $retval);
+                $response['modules']['convert'] = $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+            }
         }
 
         $response['ok'] = $response['modules']['php']
@@ -588,7 +590,7 @@ class TiquettesPDF extends FPDF
             $image->writeImage($pngFilepath);
 
             return file_exists($pngFilepath);
-            /*} else if ($this->required['modules']['magick'] === true || $isDev) {
+        } else if ($this->required['modules']['magick'] === true || $isDev) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
@@ -603,8 +605,8 @@ class TiquettesPDF extends FPDF
                 return $ret !== false && $retval === 0;
             } catch (\Exception $ex) {
                 return false;
-            }*/
-        } else if ($this->required['modules']['convert'] === true || $isDev) {
+            }
+        } else if ($this->required['modules']['convert'] === true) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
@@ -754,7 +756,7 @@ class TiquettesPDF extends FPDF
         if ($this->PageNo() === 1 && $printOptions->firstPage) {
             $this->SetTextColor(170, 170, 170);
             $this->SetFont('Arial', '', 8);
-            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : ($this->required['modules']['convert'] ? 'ImageMagick Convert' : 'ImageMagick CLI'))), 0, 0, 'R');
+            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI ' . trim($this->required['modules']['magick'] ? '(Magick)' : ($this->required['modules']['convert'] ? '(Convert)' : '')))), 0, 0, 'R');
         }
 
         if ($this->subTitle !== "" && ($this->PageNo() > 1 || !$printOptions->firstPage)) {

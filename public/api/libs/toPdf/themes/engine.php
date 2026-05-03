@@ -101,7 +101,8 @@ class Theme
             $data = array_map(fn($k) => array_merge($k, [
                 'position' => $k['position'] === 'top' ? 0 : ($k['position'] === 'middle' ? 1 : 2),
             ]), $data);
-            array_multisort(array_column($data, 'position'), SORT_ASC, $data);
+            $ndata = array_column($data, 'position');
+            array_multisort($ndata, SORT_ASC, $data);
             $pos = 0;
             $np = $workBox['y'];
             $nbFh = [];
@@ -297,6 +298,12 @@ class Theme
                     }
                 } else if ($key === 'icon') { // draw icons
                     if ($data[$key]['type'] === 'icon' && $module->icon) { // icon format
+
+                        $iconOnly = $key === 'icon' && !array_key_exists('id', $data) && !array_key_exists('text', $data);
+                        if ($iconOnly) {
+                            $posY = $r['y'] + (($r['h'] / 2) - ($data[$key]['place']['w'] / 2));
+                            $pdf->SetXY($posX, $posY);
+                        }
 
                         $colorGroup = self::getColorGroup('fgcolorUseGrp', $data[$key], $module);
                         $colorType = self::getColorType('color', $data[$key], $module);

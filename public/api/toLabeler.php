@@ -110,11 +110,13 @@ class TiquettesLabeler
         } catch (\Exception $ex) {
         }
 
-        try {
-            $retval = 0;
-            $ret = exec('convert -version', result_code: $retval);
-            $response['modules']['convert'] = $ret !== false && $retval === 0;
-        } catch (\Exception $ex) {
+        if ($response['modules']['magick'] === false) {
+            try {
+                $retval = 0;
+                $ret = exec('convert -version', result_code: $retval);
+                $response['modules']['convert'] = $ret !== false && $retval === 0;
+            } catch (\Exception $ex) {
+            }
         }
 
         $response['ok'] = $response['modules']['php']
@@ -149,7 +151,7 @@ class TiquettesLabeler
                 $image->writeImage($pngFilepath);
 
                 return file_exists($pngFilepath);
-                /*} else if ($this->required['modules']['magick'] === true || $isDev) {
+            } else if ($this->required['modules']['magick'] === true || $isDev) {
                 $f = basename($pngFilepath, '.png');
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
@@ -164,8 +166,8 @@ class TiquettesLabeler
                     return $ret !== false && $retval === 0;
                 } catch (\Exception $ex) {
                     return false;
-                }*/
-            } else if ($this->required['modules']['convert'] === true || $isDev) {
+                }
+            } else if ($this->required['modules']['convert'] === true) {
                 $f = basename($pngFilepath, '.png');
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
