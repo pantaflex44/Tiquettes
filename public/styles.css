@@ -367,6 +367,22 @@ button:disabled img,
     filter: invert(31%) sepia(93%) saturate(903%) hue-rotate(145deg) brightness(102%) contrast(101%);
 }
 
+button.link {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    color: var(--primary-color);
+    font-size: 95%;
+    font-weight: 500;
+    text-align: left;
+    justify-content: flex-start;
+    font-weight: bold;
+}
+
+button.link:hover {
+    background-color: transparent;
+}
+
 input[type="file"] {
     min-height: 32px;
     cursor: pointer;

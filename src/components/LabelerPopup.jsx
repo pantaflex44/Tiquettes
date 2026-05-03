@@ -19,9 +19,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useMemo, useState } from "react";
 
-import labelersOptions from "../labelers_options.json";
-
 import "../css/labelerPopup.css";
+import * as pkg from '../../package.json';
+import labelersOptions from "../labelers_options.json";
 
 import exportLabelerTextOrientationHIcon from "../assets/text-orientation-h.svg";
 import exportLabelerTextOrientationVIcon from "../assets/text-orientation-v.svg";
@@ -43,9 +43,29 @@ export default function LabelerPopup({
     onApply,
     onCancel
 }) {
+    const getSavedLabelersOptions = () => {
+        if (sessionStorage.getItem(pkg.name + '_labelersOptions')) {
+            const merge = (a, b) => [a, b].reduce((r, o) => Object
+                .entries(o)
+                .reduce((q, [k, v]) => ({
+                    ...q,
+                    [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
+                }), r),
+                {});
+            return merge(labelersOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_labelersOptions')));
+        }
+        return { ...labelersOptions };
+    }
+
     const [model, setModel] = useState('');
     const [options, setOptions] = useState(null);
     const [labelersList, setLabelersList] = useState({});
+
+    useEffect(() => {
+        if (labelersOptions && Object.keys(labelersOptions).includes(model) && options && JSON.stringify(labelersOptions[model]) !== JSON.stringify(options)) {
+            sessionStorage.setItem(pkg.name + '_labelersOptions_' + model, JSON.stringify({ ...labelersOptions[model], ...options }));
+        }
+    }, [options]);
 
     useEffect(() => {
         let $groups = {};
@@ -60,12 +80,23 @@ export default function LabelerPopup({
         setLabelersList($groups);
     }, [labelersOptions, model]);
 
-    const defaultOptions = useMemo(() => {
-        if (!model) return null;
-        const labeler = labelersOptions[model];
-        const o = labeler ?? null;
-        setOptions(o);
-        return o;
+    useEffect(() => {
+        if (model && labelersOptions) {
+            const savedOptions = sessionStorage.getItem(pkg.name + '_labelersOptions_' + model);
+            let o = {};
+
+            if (savedOptions) {
+                o = { ...labelersOptions[model], ...JSON.parse(savedOptions) };
+            } else {
+                const labeler = labelersOptions[model];
+                o = labeler ?? {};
+            }
+
+            if (o.ribbon?.steps && typeof o.ribbon.steps === 'object' && !Array.isArray(o.ribbon.steps)) {
+                o = { ...o, ribbon: { ...o.ribbon, steps: Object.values(o.ribbon.steps) } };
+            }
+            setOptions(o);
+        }
     }, [labelersOptions, model]);
 
     const apply = () => {
@@ -92,9 +123,7 @@ export default function LabelerPopup({
     >
         <div style={{ flex: 1 }}>
             <div className="popup_row" style={{
-                "--left_column_size": "160px", alignItems: 'center', borderBottom: `1px solid ${options?.ribbon ? 'lightgray' : 'transparent'}`,
-                paddingBottom: "1em",
-                marginBottom: "1em",
+                "--left_column_size": "160px", alignItems: 'center'
             }}>
                 <label htmlFor={`labeler_model`}><b>Étiqueteuse</b></label>
                 <select name="labeler_model" id={`labeler_model`} value={model} onChange={(e) => setModel(e.target.value)} autoFocus={true}>
@@ -108,6 +137,23 @@ export default function LabelerPopup({
                     })}
                 </select>
             </div>
+            {options && (
+                <div className="popup_row" style={{
+                    "--left_column_size": "160px", alignItems: 'center', borderBottom: `1px solid ${options?.ribbon ? 'lightgray' : 'transparent'}`,
+                    paddingBottom: "1em",
+                    marginBottom: "1em",
+                }}>
+                    <label htmlFor={`labeler_init`}>Paramètres courants</label>
+                    <button id={`labeler_init`} name={`labeler_init`} className="link" onClick={() => {
+                        if (confirm("Voulez-vous remplacer les paramètres locaux par les paramètres originaux pour cette étiqueteuse ?")) {
+                            sessionStorage.removeItem(pkg.name + '_labelersOptions_' + model);
+                            setOptions(labelersOptions[model] ?? {});
+                        }
+                    }}>
+                        Réinitialiser
+                    </button>
+                </div>
+            )}
             {options?.dpi && (
                 <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
                     <label htmlFor={`labeler_dpi_x`}>Résolutions</label>

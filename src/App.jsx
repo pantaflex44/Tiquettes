@@ -107,33 +107,6 @@ function App() {
 
     const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
 
-    /*const defaultLabelersOptions = useMemo(() => ({
-        PT_P710BT: {
-            height: 18,
-            withIcons: true,
-            withText: true,
-            textOrientation: 'H',
-            fontSize: 2,
-            invert: false,
-            dpiX: 180,
-            dpiY: 360
-        }
-    }), []);
-    const getSavedLabelersOptions = () => {
-        if (sessionStorage.getItem(pkg.name + '_labelersOptions')) {
-            const merge = (a, b) => [a, b].reduce((r, o) => Object
-                .entries(o)
-                .reduce((q, [k, v]) => ({
-                    ...q,
-                    [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
-                }), r),
-                {});
-            return merge(defaultLabelersOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_labelersOptions')));
-        }
-        return { ...defaultLabelersOptions };
-    }
-    const [labelersOptions, setLabelersOptions] = useState(getSavedLabelersOptions());*/
-
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
         labels: true,
