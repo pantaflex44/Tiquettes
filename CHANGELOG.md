@@ -1,16 +1,17 @@
 # ChangeLog
 
-## [2.2.8] - 2026-05-02
+## [2.2.8] - 2026-05-03
 
 ### Corrections
 
+- Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'.
+- [[Issue #85](https://github.com/pantaflex44/Tiquettes/issues/85)] Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.
 - Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement.
 - [[Issue #71](https://github.com/pantaflex44/Tiquettes/issues/71)] Correction du suivi des folios dans le système d'impression PDF.
 - [[Issue #27](https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203)] Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.
 
 ### Modifications
 
-- [[Issue #85](https://github.com/pantaflex44/Tiquettes/issues/85)] Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
 - [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
 - Mise à jour des médias pour OG / Github / Twitter.

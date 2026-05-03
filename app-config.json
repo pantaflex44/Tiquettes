@@ -25,9 +25,19 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-05-02",
+            "date": "2026-05-03",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'."
+                    },
+                    {
+                        "text": "Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.",
+                        "from": {
+                            "name": "Issue #85",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/85"
+                        }
+                    },
                     {
                         "text": "Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement."
                     },
@@ -47,13 +57,6 @@
                     }
                 ],
                 "updates": [
-                    {
-                        "text": "Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.",
-                        "from": {
-                            "name": "Issue #85",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/85"
-                        }
-                    },
                     {
                         "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
                     },

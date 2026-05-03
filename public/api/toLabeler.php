@@ -151,12 +151,12 @@ class TiquettesLabeler
                 $image->writeImage($pngFilepath);
 
                 return file_exists($pngFilepath);
-            } else if ($this->required['modules']['magick'] === true || $isDev) {
+            } else if ($this->required['modules']['magick'] === true) {
                 $f = basename($pngFilepath, '.png');
                 $d = dirname($pngFilepath);
                 $s = "{$d}/{$f}.svg";
                 file_put_contents($s, $svgContent);
-                $cmd = "magick {$s} -antialias -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                $cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
 
                 try {
                     $retval = 0;
