@@ -435,12 +435,12 @@ export default function Editor({
                                         marginBottom: "2em",
                                     }}
                                 >
-                                    <label htmlFor={`editor_modtype_${ed.currentModule.modtype.trim()}`}>Type</label>
+                                    <label htmlFor={`editor_modtype_${(ed.currentModule?.modtype ?? '').trim()}`}>Type</label>
                                     <input
                                         type="text"
                                         name="editor_modtype"
-                                        id={`editor_modtype_${ed.currentModule.modtype.trim()}`}
-                                        value={ed.currentModule.modtype}
+                                        id={`editor_modtype_${(ed.currentModule?.modtype ?? '').trim()}`}
+                                        value={(ed.currentModule?.modtype ?? '')}
                                         onChange={(e) => {
                                             onUpdateModuleEditor({ modtype: e.target.value });
                                             setIsCustomFunction((old) => {

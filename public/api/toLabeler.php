@@ -327,6 +327,10 @@ class TiquettesLabeler
             array_pop($modules);
         }
 
+        if (count($modules) === 0) {
+            return null;
+        }
+
         $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
 
         $hasBorderInter = isset($displayOptions['borders']) && isset($displayOptions['borders']['inter']) ? $displayOptions['borders']['inter'] === true : true;
@@ -355,7 +359,9 @@ class TiquettesLabeler
             $stepSize = $switchboard->stepSize;
         }
 
-        $widthMM = count($modules) * $stepSize;
+        $widthMM = array_sum(array_map(function ($m) use ($stepSize) {
+            return $m->span * $stepSize;
+        }, $modules));
         $widthPX = (int)round($widthMM * ($dpiX / 25.4));
         $heightMM = $this->options['ribbon']['value'];
         $heightPX = (int)round($heightMM * ($dpiY / 25.4));
@@ -386,10 +392,12 @@ class TiquettesLabeler
         $placeSizeX = (int) round($placeSizeX);
         $placeSizeY = (int) round($placeSizeY);
 
+        $posX = 0;
+
         for ($i = 0; $i < count($modules); $i++) {
             $module = $modules[$i];
 
-            $posX = $i * $stepSizePX;
+            $currentWidthPx = $stepSizePX * $module->span;
             $posY = 0;
 
             if (isset($module->icon) && !is_null($module->icon) && is_string($module->icon) && $displayMode === 'BOTH' || $displayMode === 'ICONS') {
@@ -399,7 +407,7 @@ class TiquettesLabeler
                     $sx = imagesx($iconIm);
                     $sy = imagesy($iconIm);
 
-                    $centerX = (int)round(($stepSizePX / 2) - ($sx / 2));
+                    $centerX = (int)round(($currentWidthPx / 2) - ($sx / 2));
                     $centerY = (int) round((($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) / 2) - ($sy / 2));
 
                     imagecopy($im, $iconIm, $posX + $centerX, $posY + $centerY, 0, 0, $sx, $sy);
@@ -407,7 +415,7 @@ class TiquettesLabeler
             }
 
             if (isset($module->text) && is_string($module->text) && trim($module->text) !== "" && $displayMode === 'BOTH' || $displayMode === 'TEXT') {
-                $w = (int)$stepSizePX - $this->margins - $this->margins;
+                $w = (int)$currentWidthPx - $this->margins - $this->margins;
                 $h = (int) round($placeSizeY / $r);
 
                 $imt = imagecreatetruecolor($w, $h);
@@ -436,12 +444,14 @@ class TiquettesLabeler
 
                 imagettftext($imt, $fontSize, $angle, $tx, $ty,  $black2, $font, $module->text);
 
-                imagecopyresampled($im, $imt, $posX + ((int) round(($stepSizePX / 2) - ($w / 2))), $posY + $this->margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $stepSizePX - $this->margins - $this->margins, $placeSizeY, $w, $h);
+                imagecopyresampled($im, $imt, $posX + ((int) round(($currentWidthPx / 2) - ($w / 2))), $posY + $this->margins + ($displayMode === 'BOTH' ? (int) round($heightPX / 2) : 0), 0, 0, $currentWidthPx - $this->margins - $this->margins, $placeSizeY, $w, $h);
             }
 
             if ($hasBorderInter) {
-                imagedashedline($im, $posX + $stepSizePX - 1, 0, $posX + $stepSizePX - 1, $heightPX, $black);
+                imagedashedline($im, $posX + $currentWidthPx - 1, 0, $posX + $currentWidthPx - 1, $heightPX, $black);
             }
+
+            $posX += $currentWidthPx;
         }
 
         if ($invert) {
