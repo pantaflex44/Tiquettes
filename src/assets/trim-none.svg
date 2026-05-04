@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1000mm"
+   height="1000mm"
+   viewBox="0 0 1000 1000"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   sodipodi:docname="trim-none.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="true"
+     inkscape:zoom="0.11313708"
+     inkscape:cx="654.0738"
+     inkscape:cy="2161.0952"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath52">
+      <path
+         id="path52"
+         style="stroke-width:0.1;stroke-linecap:square;paint-order:markers fill stroke;stop-color:#000000"
+         d="m -880.82767,-187.29769 h 1640.84 v 73.28155 h -1640.84 z" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40,160;stroke-opacity:1;stroke-dashoffset:36"
+       id="rect1-3-5"
+       width="274.57544"
+       height="720.41675"
+       x="362.4216"
+       y="139.20586" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40,160;stroke-opacity:1;stroke-dashoffset:36"
+       id="rect1-3-5-1"
+       width="274.57544"
+       height="720.41675"
+       x="636.78729"
+       y="139.09474" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40,160;stroke-opacity:1;stroke-dashoffset:36"
+       id="rect1-3-5-6"
+       width="274.57544"
+       height="720.41675"
+       x="87.257965"
+       y="139.3141" />
+  </g>
+</svg>

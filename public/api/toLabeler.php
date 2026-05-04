@@ -312,24 +312,33 @@ class TiquettesLabeler
     {
         global $switchboard;
 
-        $dpiX = isset($this->options['dpi']) && isset($this->options['dpi']['x']) ? intval($this->options['dpi']['x']['value'] ?? 180) : 180;
-        $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y']['value'] ?? 360) : 360;
-
         $modules = $switchboard->rows[$rowIndex];
 
-        // trim free modules at the start of the row
-        while (count($modules) > 0 && isset($modules[0]->free) && $modules[0]->free === true) {
-            array_shift($modules);
+        $trim = isset($this->options['options']['trim'])  ? $this->options['options']['trim'] : 'ext';
+        if ($trim === 'all') {
+            for ($i = 1; $i < count($modules) - 1; $i++) {
+                if (isset($modules[$i]->free) && $modules[$i]->free === true) {
+                    array_splice($modules, $i, 1);
+                    $i--;
+                }
+            }
         }
-
-        // trim free modules at the end of the row
-        while (count($modules) > 0 && isset($modules[count($modules) - 1]->free) && $modules[count($modules) - 1]->free === true) {
-            array_pop($modules);
+        if ($trim === 'all' || $trim === 'ext') {
+            // trim left
+            while (count($modules) > 0 && isset($modules[0]->free) && $modules[0]->free === true) {
+                array_shift($modules);
+            }
+            // trim right
+            while (count($modules) > 0 && isset($modules[count($modules) - 1]->free) && $modules[count($modules) - 1]->free === true) {
+                array_pop($modules);
+            }
         }
-
         if (count($modules) === 0) {
             return null;
         }
+
+        $dpiX = isset($this->options['dpi']) && isset($this->options['dpi']['x']) ? intval($this->options['dpi']['x']['value'] ?? 180) : 180;
+        $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y']['value'] ?? 360) : 360;
 
         $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
 

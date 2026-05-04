@@ -34,6 +34,11 @@ import borderTopIcon from "../assets/border-top.svg";
 import borderRightIcon from "../assets/border-right.svg";
 import borderBottomIcon from "../assets/border-bottom.svg";
 import borderInterIcon from "../assets/border-inter.svg";
+import trimExtIcon from "../assets/trim-ext.svg";
+import trimAllIcon from "../assets/trim-all.svg";
+import trimNoneIcon from "../assets/trim-none.svg";
+import containerIcon from "../assets/container.svg";
+import containerInvertIcon from "../assets/container-invert.svg";
 
 import Popup from "./Popup.jsx";
 
@@ -246,112 +251,7 @@ export default function LabelerPopup({
                 }}>
                     <label htmlFor={`labeler_ribbon`}>Options d'affichage</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {options?.options?.invert?.has === true && (
-                            <div className="popup_row-flex" style={{ alignItems: 'center' }}>
-                                <label>Inverser</label>
-                                <input type="checkbox" name={`labeler_invert`} id={`labeler_invert`} checked={options.options.invert.value} onChange={(e) => setOptions((old) => {
-                                    const newOptions = {
-                                        ...old,
-                                        options: {
-                                            ...old.options,
-                                            invert: {
-                                                ...old.options.invert,
-                                                value: e.target.checked
-                                            }
-                                        }
-                                    }
-                                    return newOptions;
-                                })} />
-                            </div>
-                        )}
-                        {options &&
-                            <>
-                                <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
-                                    <label>Bordures</label>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_borders_inter'} id={'labeler_borders_inter'} checked={(options.options?.borders?.inter ?? true) === true} onChange={(e) => setOptions((old) => {
-                                            const newOptions = {
-                                                ...old,
-                                                options: {
-                                                    ...old.options,
-                                                    borders: {
-                                                        ...old.options.borders,
-                                                        inter: e.target.checked
-                                                    }
-                                                }
-                                            }
-                                            return newOptions;
-                                        })} />
-                                        <img src={borderInterIcon} width={18} height={18} />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_borders_left'} id={'labeler_borders_left'} checked={(options.options?.borders?.left ?? false) === true} onChange={(e) => setOptions((old) => {
-                                            const newOptions = {
-                                                ...old,
-                                                options: {
-                                                    ...old.options,
-                                                    borders: {
-                                                        ...old.options.borders,
-                                                        left: e.target.checked
-                                                    }
-                                                }
-                                            }
-                                            return newOptions;
-                                        })} />
-                                        <img src={borderLeftIcon} width={18} height={18} />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_borders_top'} id={'labeler_borders_top'} checked={(options.options?.borders?.top ?? false) === true} onChange={(e) => setOptions((old) => {
-                                            const newOptions = {
-                                                ...old,
-                                                options: {
-                                                    ...old.options,
-                                                    borders: {
-                                                        ...old.options.borders,
-                                                        top: e.target.checked
-                                                    }
-                                                }
-                                            }
-                                            return newOptions;
-                                        })} />
-                                        <img src={borderTopIcon} width={18} height={18} />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_borders_right'} id={'labeler_borders_right'} checked={(options.options?.borders?.right ?? false) === true} onChange={(e) => setOptions((old) => {
-                                            const newOptions = {
-                                                ...old,
-                                                options: {
-                                                    ...old.options,
-                                                    borders: {
-                                                        ...old.options.borders,
-                                                        right: e.target.checked
-                                                    }
-                                                }
-                                            }
-                                            return newOptions;
-                                        })} />
-                                        <img src={borderRightIcon} width={18} height={18} />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_borders_bottom'} id={'labeler_borders_bottom'} checked={(options.options?.borders?.bottom ?? false) === true} onChange={(e) => setOptions((old) => {
-                                            const newOptions = {
-                                                ...old,
-                                                options: {
-                                                    ...old.options,
-                                                    borders: {
-                                                        ...old.options.borders,
-                                                        bottom: e.target.checked
-                                                    }
-                                                }
-                                            }
-                                            return newOptions;
-                                        })} />
-                                        <img src={borderBottomIcon} width={18} height={18} />
-                                    </div>
-                                </div>
-                                <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
-                            </>
-                        }
+
                         {options?.options?.icons?.has === true && (
                             <>
                                 <div className="popup_row-flex" style={{ alignItems: 'center' }}>
@@ -479,9 +379,178 @@ export default function LabelerPopup({
                                         <img src={exportLabelerTextOrientationVIcon} width={18} height={18} />
                                     </div>
                                 </div>
+                                <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
                             </>
                         )}
-
+                        {options?.options?.invert?.has === true && (
+                            <>
+                                <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+                                    <label>Affichage</label>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Noir sur fond blanc (normal)"}>
+                                        <input type="checkbox" name={`labeler_invert_no`} id={`labeler_invert_no`} checked={options.options.invert.value === false} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    invert: {
+                                                        ...old.options.invert,
+                                                        value: false
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={containerIcon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Blanc sur fond noir (inversé)"}>
+                                        <input type="checkbox" name={`labeler_invert_yes`} id={`labeler_invert_yes`} checked={options.options.invert.value === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    invert: {
+                                                        ...old.options.invert,
+                                                        value: true
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={containerInvertIcon} width={18} height={18} />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {options &&
+                            <>
+                            <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+                                <label>Bordures</label>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Afficher les bordures entre les modules imprimés"}>
+                                    <input type="checkbox" name={'labeler_borders_inter'} id={'labeler_borders_inter'} checked={(options.options?.borders?.inter ?? true) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        inter: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={borderInterIcon} width={18} height={18} />
+                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Afficher les bordures à gauche des modules imprimés"}>
+                                    <input type="checkbox" name={'labeler_borders_left'} id={'labeler_borders_left'} checked={(options.options?.borders?.left ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        left: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={borderLeftIcon} width={18} height={18} />
+                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Afficher les bordures en haut des modules imprimés"}>
+                                    <input type="checkbox" name={'labeler_borders_top'} id={'labeler_borders_top'} checked={(options.options?.borders?.top ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        top: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={borderTopIcon} width={18} height={18} />
+                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Afficher les bordures à droite des modules imprimés"}>
+                                    <input type="checkbox" name={'labeler_borders_right'} id={'labeler_borders_right'} checked={(options.options?.borders?.right ?? false) === true} onChange={(e) => setOptions((old) => {
+                                        const newOptions = {
+                                            ...old,
+                                            options: {
+                                                ...old.options,
+                                                borders: {
+                                                    ...old.options.borders,
+                                                    right: e.target.checked
+                                                }
+                                            }
+                                        }
+                                        return newOptions;
+                                    })} />
+                                    <img src={borderRightIcon} width={18} height={18} />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Afficher les bordures en bas des modules imprimés"}>
+                                    <input type="checkbox" name={'labeler_borders_bottom'} id={'labeler_borders_bottom'} checked={(options.options?.borders?.bottom ?? false) === true} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    borders: {
+                                                        ...old.options.borders,
+                                                        bottom: e.target.checked
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={borderBottomIcon} width={18} height={18} />
+                                </div>
+                            </div>
+                            <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+                                <label>Découpes</label>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Conserver tous les modules vides"}>
+                                    <input type="checkbox" name={'labeler_trim_none'} id={'labeler_trim_none'} checked={(options.options?.trim ?? 'ext') !== 'ext' && (options.options?.trim ?? 'ext') !== 'all'} onChange={(e) => setOptions((old) => {
+                                        const newOptions = {
+                                            ...old,
+                                            options: {
+                                                ...old.options,
+                                                trim: ''
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={trimNoneIcon} width={18} height={18} />
+                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Supprimer les modules vides au début et à la fin des rangées"}>
+                                    <input type="checkbox" name={'labeler_trim_ext'} id={'labeler_trim_ext'} checked={(options.options?.trim ?? 'ext') === 'ext'} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    trim: 'ext'
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={trimExtIcon} width={18} height={18} />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Supprimer tous les modules vides"}>
+                                    <input type="checkbox" name={'labeler_trim_all'} id={'labeler_trim_all'} checked={(options.options?.trim ?? 'ext') === 'all'} onChange={(e) => setOptions((old) => {
+                                        const newOptions = {
+                                            ...old,
+                                            options: {
+                                                ...old.options,
+                                                trim: 'all'
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                    <img src={trimAllIcon} width={18} height={18} />
+                                    </div>
+                                </div>
+                            <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
+                            </>
+                        }
 
 
                     </div>
