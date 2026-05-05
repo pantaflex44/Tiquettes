@@ -28,6 +28,9 @@ import exportLabelerTextOrientationVIcon from "../assets/text-orientation-v.svg"
 import exportLabelerTextSize1Icon from "../assets/text-size-1.svg";
 import exportLabelerTextSize2Icon from "../assets/text-size-2.svg";
 import exportLabelerTextSize3Icon from "../assets/text-size-3.svg";
+import exportLabelerIconSize1Icon from "../assets/icon-size-1.svg";
+import exportLabelerIconSize2Icon from "../assets/icon-size-2.svg";
+import exportLabelerIconSize3Icon from "../assets/icon-size-3.svg";
 import downloadIcon from "../assets/download.svg";
 import borderLeftIcon from "../assets/border-left.svg";
 import borderTopIcon from "../assets/border-top.svg";
@@ -270,6 +273,61 @@ export default function LabelerPopup({
                                         return newOptions;
                                     })} />
                                 </div>
+                            </>
+                        )}
+                        {options?.options?.icons?.has === true && options?.options?.icons?.value === true && (
+                            <>
+                                <div className="popup_row-flex" style={{ alignItems: 'center', margin: 0, gap: '0.75rem' }}>
+                                    <div style={{ marginLeft: '1rem' }}>Taille</div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Petite taille"}>
+                                        <input type="checkbox" name={'labeler_icons_size_small'} id={'labeler_icons_size_small'} checked={(options.options?.iconsSize?.value ?? 'normal') === 'small'} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    iconsSize: {
+                                                        ...old.options.iconsSize,
+                                                        value: 'small'
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={exportLabelerIconSize1Icon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Taille normale"}>
+                                        <input type="checkbox" name={'labeler_icons_size_normal'} id={'labeler_icons_size_normal'} checked={(options.options?.iconsSize?.value ?? 'normal') === 'normal'} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    iconsSize: {
+                                                        ...old.options.iconsSize,
+                                                        value: 'normal'
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={exportLabelerIconSize2Icon} width={18} height={18} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Grande taille"}>
+                                        <input type="checkbox" name={'labeler_icons_size_large'} id={'labeler_icons_size_large'} checked={(options.options?.iconsSize?.value ?? 'normal') === 'large'} onChange={(e) => setOptions((old) => {
+                                            const newOptions = {
+                                                ...old,
+                                                options: {
+                                                    ...old.options,
+                                                    iconsSize: {
+                                                        ...old.options.iconsSize,
+                                                        value: 'large'
+                                                    }
+                                                }
+                                            }
+                                            return newOptions;
+                                        })} />
+                                        <img src={exportLabelerIconSize3Icon} width={18} height={18} />
+                                    </div>
+                                </div>
                                 <div style={{ height: '1px', width: '100%', backgroundColor: '#ccc' }}></div>
                             </>
                         )}
@@ -295,8 +353,8 @@ export default function LabelerPopup({
                             <>
                                 <div className="popup_row-flex" style={{ alignItems: 'center', margin: 0, gap: '0.75rem' }}>
                                     <div style={{ marginLeft: '1rem' }}>Taille</div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_text_size'} id={'labeler_text_size'} checked={options.options?.textSize?.value === 'small'} onChange={(e) => setOptions((old) => {
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Petite taille"}>
+                                        <input type="checkbox" name={'labeler_text_size_small'} id={'labeler_text_size_small'} checked={(options.options?.textSize?.value ?? 'normal') === 'small'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
                                                 options: {
@@ -311,8 +369,8 @@ export default function LabelerPopup({
                                         })} />
                                         <img src={exportLabelerTextSize1Icon} width={18} height={18} />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_text_size'} id={'labeler_text_size'} checked={options.options?.textSize?.value === 'normal'} onChange={(e) => setOptions((old) => {
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Taille normale"}>
+                                        <input type="checkbox" name={'labeler_text_size_normal'} id={'labeler_text_size_normal'} checked={(options.options?.textSize?.value ?? 'normal') === 'normal'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
                                                 options: {
@@ -327,8 +385,8 @@ export default function LabelerPopup({
                                         })} />
                                         <img src={exportLabelerTextSize2Icon} width={18} height={18} />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_text_size'} id={'labeler_text_size'} checked={options.options?.textSize?.value === 'large'} onChange={(e) => setOptions((old) => {
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Grande taille"}>
+                                        <input type="checkbox" name={'labeler_text_size_large'} id={'labeler_text_size_large'} checked={(options.options?.textSize?.value ?? 'normal') === 'large'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
                                                 options: {
@@ -346,8 +404,8 @@ export default function LabelerPopup({
                                 </div>
                                 <div className="popup_row-flex" style={{ alignItems: 'center', margin: 0, gap: '0.75rem' }}>
                                     <div style={{ marginLeft: '1rem' }}>Orientation</div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_text_orientation'} id={'labeler_text_orientation'} checked={options.options?.textOrientation?.value === 'horizontal'} onChange={(e) => setOptions((old) => {
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Orientation horizontale"}>
+                                        <input type="checkbox" name={'labeler_text_orientation_horizontal'} id={'labeler_text_orientation_horizontal'} checked={(options.options?.textOrientation?.value && 'horizontal') === 'horizontal'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
                                                 options: {
@@ -362,8 +420,8 @@ export default function LabelerPopup({
                                         })} />
                                         <img src={exportLabelerTextOrientationHIcon} width={18} height={18} />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }}>
-                                        <input type="checkbox" name={'labeler_text_orientation'} id={'labeler_text_orientation'} checked={options.options?.textOrientation?.value === 'vertical'} onChange={(e) => setOptions((old) => {
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '0.25rem', alignItems: 'center' }} title={"Orientation verticale"}>
+                                        <input type="checkbox" name={'labeler_text_orientation_vertical'} id={'labeler_text_orientation_vertical'} checked={(options.options?.textOrientation?.value && 'horizontal') === 'vertical'} onChange={(e) => setOptions((old) => {
                                             const newOptions = {
                                                 ...old,
                                                 options: {

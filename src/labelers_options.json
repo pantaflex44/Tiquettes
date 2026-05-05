@@ -24,6 +24,14 @@
                 "has": true,
                 "value": false
             },
+            "iconsSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            },
             "text": {
                 "has": true,
                 "value": true
@@ -71,6 +79,14 @@
             "icons": {
                 "has": true,
                 "value": true
+            },
+            "iconsSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
             },
             "text": {
                 "has": true,
@@ -121,6 +137,14 @@
             "icons": {
                 "has": true,
                 "value": true
+            },
+            "iconsSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
             },
             "text": {
                 "has": true,
@@ -173,6 +197,14 @@
                 "has": true,
                 "value": true
             },
+            "iconsSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
+            },
             "text": {
                 "has": true,
                 "value": true
@@ -223,6 +255,14 @@
             "icons": {
                 "has": true,
                 "value": true
+            },
+            "iconsSize": {
+                "value": "normal",
+                "options": [
+                    "small",
+                    "normal",
+                    "large"
+                ]
             },
             "text": {
                 "has": true,

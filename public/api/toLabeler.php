@@ -350,6 +350,8 @@ class TiquettesLabeler
         $iconsOptions = isset($displayOptions['icons']) ? $displayOptions['icons'] : ['has' => false, 'value' => false];
         $withIcons = ($iconsOptions['has'] ?? false) === true && ($iconsOptions['value'] ?? false) === true;
 
+        $iconsSize = strtoupper(trim(isset($displayOptions['iconsSize']) ? $displayOptions['iconsSize']['value'] ?? 'normal' : 'normal'));
+
         $textOptions = isset($displayOptions['text']) ? $displayOptions['text'] : ['has' => false, 'value' => false];
         $withText = ($textOptions['has'] ?? false) === true && ($textOptions['value'] ?? false) === true;
 
@@ -387,6 +389,13 @@ class TiquettesLabeler
 
         $r = $dpiY / $dpiX;
         $w = $stepSizePX - $this->margins;
+
+        if ($iconsSize === 'NORMAL') {
+            $w = (int) round($w * 0.5);
+        } else if ($iconsSize === 'SMALL') {
+            $w = (int) round($w * 0.25);
+        }
+
         $h = ($displayMode === 'BOTH' ? $heightPX / 2 : $heightPX) - $this->margins;
         $placeSizeX = $w;
         $placeSizeY = $h;
