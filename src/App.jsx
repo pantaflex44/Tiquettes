@@ -56,14 +56,6 @@ import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
 import downloadIcon from "./assets/download.svg";
-import exportLabelerIconOnlyIcon from "./assets/exportLabelerIconOnly.svg";
-import exportLabelerTextOnlyIcon from "./assets/exportLabelerTextOnly.svg";
-import exportLabelerIconTextIcon from "./assets/exportLabelerIconText.svg";
-import exportLabelerTextOrientationHIcon from "./assets/text-orientation-h.svg";
-import exportLabelerTextOrientationVIcon from "./assets/text-orientation-v.svg";
-import exportLabelerTextSize1Icon from "./assets/text-size-1.svg";
-import exportLabelerTextSize2Icon from "./assets/text-size-2.svg";
-import exportLabelerTextSize3Icon from "./assets/text-size-3.svg";
 
 import Editor from "./components/Editor.jsx";
 import NewProjectEditor from "./components/NewProjectEditor.jsx";
@@ -121,7 +113,8 @@ function App() {
             printCurrents: false,
             labelsPrintFormat: 'A4',
             schemaPrintFormat: 'A4',
-            summaryPrintFormat: 'A4'
+            summaryPrintFormat: 'A4',
+            schemaFolioStart: 1
         },
         firstPageOptions: {
             photo: false,
@@ -2044,6 +2037,16 @@ function App() {
                                         pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.schemaPrintFormat }
                                     }))} disabled={!printOptions.schema} />
                                 <label htmlFor="print_schema_format_A3" style={{ flex: 0 }}>A3</label>
+                            </div>
+                            <div className="dropdown_item"
+                                title="Premier folio">
+                                <label htmlFor="print_schema_folio_start" style={{ flex: 1 }}>Numéro du premier Folio :</label>
+                                <input id="print_schema_folio_start" name="print_schema_folio_start" type="number" style={{ width: '40px' }}
+                                    value={printOptions.pdfOptions.schemaFolioStart ?? 1}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        pdfOptions: { ...old.pdfOptions, schemaFolioStart: parseInt(e.target.value) || 1 }
+                                    }))} disabled={!printOptions.schema} />
                             </div>
                         </>}
 
