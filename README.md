@@ -387,6 +387,20 @@ Pour ce faire, dans les propriétés du disjoncteur Q2, nous remplaçons le libe
 
 Et voila! La magie de Tiquettes.fr à encore opérée. :-)
 
+#### Allocation d'un module a ses enfants
+
+Dans certains cas il est utile de partager un module pour alimenter plusieurs enfants. Par exemple, vous voulez indiquer la présence d'un voyant dans votre tableau électrique:
+
+![Allocation multiple](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_alloc_bi.png?raw=true)
+
+Sur le schéma ci-dessus, le disjoncteur Q1 alimente l'arrosage extérieur mais aussi le voyant modulaire, état de fonctionnement de cet arrosage.
+
+Pour permettre ce montage, il faut indiquer à l'application de partager la source d'un circuit via cette fonction:
+
+![Allocation multiple - Fonction](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_alloc_bi_icon.png?raw=true)
+
+Une manière simple et rapide d'indiquer à l'application que vous souhaitez partager un module.
+
 
 ### Génération du schéma unifilaire
 

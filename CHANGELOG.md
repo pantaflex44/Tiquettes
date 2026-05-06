@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-05-03
+## [2.2.8] - 2026-05-06
 
 ### Corrections
 
@@ -21,6 +21,7 @@
 
 ### Ajouts
 
+- Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire.
 - [[Issue #84](https://github.com/pantaflex44/Tiquettes/issues/84)] Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire
 - [[Issue #70](https://github.com/pantaflex44/Tiquettes/issues/70)] Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!
 - Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion.

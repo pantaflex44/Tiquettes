@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-05-03",
+            "date": "2026-05-06",
             "actions": {
                 "patches": [
                     {
@@ -85,6 +85,9 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire."
+                    },
                     {
                         "text": "Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire",
                         "from": {
