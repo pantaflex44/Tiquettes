@@ -1893,10 +1893,10 @@ function App() {
                         <div style={{ fontSize: '90%', color: '#777', marginBottom: '1rem' }}>
                             <span>Exporter les rangées d'étiquettes au format compatible.</span>
                         </div>
-                        <div className="dropdown_item_flex head">
-                            <div className="dropdown_item_flex_left">
-                                <span style={{ fontSize: '100%' }}>Rangées à exporter:</span>
-                                <input type="text" name="" id="" ref={labelerRef} value={labelerOptionsRowsSelection ?? `1-${switchboard.rows.length}`} onChange={(e) => setLabelerOptionsRowsSelection(e.target.value)} placeholder="1, 2, 3-6" style={{ width: '100px', height: '28px', marginLeft: '0.5rem' }} />
+                        <div className="dropdown_item_flex head" style={{ justifyContent: 'space-between' }}>
+                            <div className="dropdown_item_flex_left" style={{ gap: '0.5rem' }}>
+                                <span style={{ fontSize: '100%' }}>Exporter les rangées:</span>
+                                <input type="text" name="" id="" ref={labelerRef} value={labelerOptionsRowsSelection ?? `1-${switchboard.rows.length}`} onChange={(e) => setLabelerOptionsRowsSelection(e.target.value)} placeholder="1,2,3-6" style={{ width: '50px', height: '28px', marginLeft: '0.5rem', textAlign: 'center', letterSpacing: '1px' }} />
                             </div>
                             <div className="dropdown_item_flex_right">
                                 <div className="fakeButton discreet" style={{ flex: 1, marginBlock: '0' }} title="Exporter les étiquettes" onClick={() => setLabelerOptionsPopup(true)}>
