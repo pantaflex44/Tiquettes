@@ -82,6 +82,27 @@ Immédiatement, celui-ci s'affichera dans la zone de travail!
 
 ### Exporter
 
+![Menu d'exportations](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_export_menu_.png?raw=true)
+
+Pour ne jamais perdre votre travail, l'application vous donne la possibilité d'exporter votre projet.
+
+Le menu ```Exporter``` vous donne accès à différentes options.
+
+#### Exporter le projet complet
+
+En choisissant cette option, un fichier de type JSON vous sera proposé au téléchargement. Ce fichier contient l'ensemble de votre travail ainsi que certaines préférences, comme les réglages d'impression, les caractéristiques de votre projet, mais aussi les données personnelles renseignées.
+
+Ce fichier pour être importé à tout moment pour retravailler votre projet.
+
+#### Exporter pour les étiqueteuses
+
+Les étiqueteuses sont des appareils très pratique sur les chantiers pour imprimer à la volée, les étiquettes de votre tableau. Tiquettes.fr est compatible avec certains modèles connus.
+
+En choisissant les rangées à exporter, un fichier ZIP contenant une image des étiquettes par rangée vous sera proposé au téléchargement. Il ne vous restera plus qu'à les envoyer dans l'étiqueteuse correspondante pour les imprimer !
+
+Plusieurs réglages sont à votre disposition:
+
+![Exporter pour une étiqueteuse](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup_export_labeller.png?raw=true)
 
 
 ---
