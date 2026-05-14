@@ -219,7 +219,7 @@ export default function Editor({
                     onOk={() => {
                         onApplyModuleEditor({ ...ed });
                     }}
-                    width={440}
+                    width={470}
                     className="popup_flex"
                     additionalButtons={[
                         {

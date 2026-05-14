@@ -141,7 +141,7 @@ export default function LabelerPopup({
         showCloseButton={true}
         showOkButton={true}
         showCancelButton={true}
-        width={440}
+        width={475}
         onOk={apply}
         okButtonDisabled={!model || !options}
         onCancel={cancel}

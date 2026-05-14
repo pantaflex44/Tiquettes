@@ -56,6 +56,7 @@ import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
 import downloadIcon from "./assets/download.svg";
+import fpsettingsIcon from "./assets/fp-settings.svg";
 
 import Editor from "./components/Editor.jsx";
 import NewProjectEditor from "./components/NewProjectEditor.jsx";
@@ -64,6 +65,7 @@ import SchemaTab from "./components/SchemaTab.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
 import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 import LabelerPopup from "./components/LabelerPopup.jsx";
+import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 
 import { action, choices } from "../public/api/stats.js";
 
@@ -78,6 +80,7 @@ function App() {
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
     const labelerRef = useRef();
+    const printMenuRef = useRef();
 
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
@@ -96,8 +99,51 @@ function App() {
     const [uniqueChoices, setUniqueChoices] = useState([]);
     const [labelerOptionsRowsSelection, setLabelerOptionsRowsSelection] = useState(null);
     const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
+    const [firstpageOptionsPopup, setFirstpageOptionsPopup] = useState(false);
 
     const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
+
+    const defaultFirstpageOptions = {
+        infos: { // to switchboad.firstPageInfos
+            from: {
+                photo: null,
+                name: null,
+                siret: null,
+                postalAddress: null,
+                email: null,
+                phone: null
+            },
+            to: {
+                name: null,
+                postalAddress: null,
+                email: null,
+                phone: null
+            }
+        },
+        views: { // to printOptions.firstPageView
+            projectName: true,
+            projectVersion: true,
+            projectCreated: true,
+            projectUpdated: true,
+            projectType: true,
+            projectVRef: true,
+            from: {
+                photo: false,
+                name: false,
+                siret: false,
+                postalAddress: false,
+                email: false,
+                phone: false
+            },
+            to: {
+                name: false,
+                postalAddress: false,
+                email: false,
+                phone: false
+            }
+        }
+
+    };
 
     const defaultPrintOptions = useMemo(() => ({
         firstPage: false,
@@ -114,21 +160,8 @@ function App() {
             labelsPrintFormat: 'A4',
             schemaPrintFormat: 'A4',
             summaryPrintFormat: 'A4',
-            schemaFolioStart: 1
-        },
-        firstPageOptions: {
-            photo: false,
-            name: false,
-            siret: false,
-            postalAddress: false,
-            contacts: false,
-            phones: false,
-            projectName: true,
-            projectRevision: true,
-            projectCreated: true,
-            projectUpdated: true,
-            projectElectricalType: true,
-            projectElectricalVoltage: true
+            schemaFolioStart: 1,
+            firstPageView: { ...defaultFirstpageOptions.views }
         }
     }), []);
     const getSavedPrintOptions = () => {
@@ -319,12 +352,7 @@ function App() {
         summaryColumnLabel: true,
         summaryColumnDescription: true,
 
-        firstPagePhoto: null,
-        firstPageName: null,
-        firstPageSiret: null,
-        firstPagePostalAddress: null,
-        firstPageContacts: null,
-        firstPagePhones: null
+        firstPageInfos: { ...defaultFirstpageOptions.infos }
 
     }), [defaultProjectName, defaultProjectType, defaultVRef, defaultTheme, defaultHRow, defaultStepsPerRows, defaultStepSize, createRow, defaultNpRows, defaultProjectProperties.db]);
 
@@ -1852,9 +1880,15 @@ function App() {
                 setClipboardMode(null);
             }
         }} >
+            {/** ----------------------------------------------------------- */}
             {/** TOOLBAR **/}
+            {/** ----------------------------------------------------------- */}
 
             <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()} style={{ position: 'sticky', top: '0.25rem', zIndex: 5000 }}>
+
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR PROJECTS **/}
+                {/** ----------------------------------------------------------- */}
 
                 <button className={`button_group-new_project active`.trim()}
                     onClick={() => {
@@ -1866,15 +1900,27 @@ function App() {
 
                 <div className="button_group-separator"></div>
 
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR IMPORT **/}
+                {/** ----------------------------------------------------------- */}
+
                 <input id="importfile" ref={importRef} type="file" onChange={(e) => {
                     if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
                 }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
+
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR EXPORTS **/}
+                {/** ----------------------------------------------------------- */}
 
                 <button className="button_group-export_project dropdown_container" title="Exporter...">
                     <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
                     <span>Exporter</span>
                     <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '213px', minWidth: '320px' }}>
                         <div className="dropdown_header">Exportation</div>
+
+                        {/** ----------------------------------------------------------- */}
+                        {/** PROJECT EXPORT **/}
+                        {/** ----------------------------------------------------------- */}
 
                         <div className="dropdown_item_flex head">
                             <div className="dropdown_item_flex_left">
@@ -1888,6 +1934,10 @@ function App() {
                                 </div>
                             </div>
                         </div>
+
+                        {/** ----------------------------------------------------------- */}
+                        {/** LABELERS **/}
+                        {/** ----------------------------------------------------------- */}
 
                         <div className="dropdown_header" style={{ marginTop: '1.5rem' }}>Étiqueteuses</div>
                         <div style={{ fontSize: '90%', color: '#777', marginBottom: '1rem' }}>
@@ -1908,24 +1958,39 @@ function App() {
                     </div>
                 </button>
 
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR PRINT **/}
+                {/** ----------------------------------------------------------- */}
 
-                <button className="button_group-print_project dropdown_container" title="Imprimer...">
+                <button ref={printMenuRef} className="button_group-print_project dropdown_container" title="Imprimer..." onMouseLeave={() => printMenuRef.current.classList.remove('clicked')} onBlur={() => printMenuRef.current.classList.remove('clicked')}>
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
                     <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '70px' }}>
                         <div className="dropdown_header">Options</div>
 
-                        <div className="dropdown_item head"
+                        {/** ----------------------------------------------------------- */}
+                        {/** FIRSTPAGE **/}
+                        {/** ----------------------------------------------------------- */}
+
+                        <div className="dropdown_item head parent"
                             title="Imprimer la page de garde">
                             <input id="print_firstPage" name="print_firstPage" type="checkbox"
-                                checked={printOptions.firstPage && (printOptions.schema || printOptions.summary)}
+                                checked={printOptions.firstPage}
                                 onChange={(e) => setPrintOptions((old) => ({
                                     ...old,
                                     firstPage: e.target.checked
                                 }))}
-                                disabled={!printOptions.schema && !printOptions.summary} />
+                            />
                             <label htmlFor="print_firstPage">Page de garde</label>
+                            {printOptions.firstPage &&
+                                <img src={fpsettingsIcon} width={16} height={16} alt={"Paramètres"}
+                                    title={"Paramètres de la page de garde"}
+                                    onClick={() => setFirstpageOptionsPopup(true)} />}
                         </div>
+
+                        {/** ----------------------------------------------------------- */}
+                        {/** LABELS **/}
+                        {/** ----------------------------------------------------------- */}
 
                         <div className="dropdown_item head parent" title="Imprimer les étiquettes">
                             <input id="print_labels" name="print_labels" type="checkbox"
@@ -1995,6 +2060,10 @@ function App() {
                             </div>
                         </>}
 
+                        {/** ----------------------------------------------------------- */}
+                        {/** SCHEMA **/}
+                        {/** ----------------------------------------------------------- */}
+
                         <div className="dropdown_item head parent" title="Imprimer le schéma unifilaire">
                             <input id="print_schema" name="print_schema" type="checkbox"
                                 checked={printOptions.schema}
@@ -2050,6 +2119,10 @@ function App() {
                             </div>
                         </>}
 
+                        {/** ----------------------------------------------------------- */}
+                        {/** SUMMARY **/}
+                        {/** ----------------------------------------------------------- */}
+
                         <div className="dropdown_item head parent" title="Imprimer la nomenclature">
                             <input id="print_summary" name="print_summary" type="checkbox"
                                 checked={printOptions.summary}
@@ -2095,6 +2168,10 @@ function App() {
                             </div>
                         </>}
 
+                        {/** ----------------------------------------------------------- */}
+                        {/** OTHER PRINT OPTIONS **/}
+                        {/** ----------------------------------------------------------- */}
+
                         <div className="dropdown_separator"></div>
                         <div className="dropdown_item head"
                             title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
@@ -2120,6 +2197,10 @@ function App() {
 
                         {/*<div className="dropdown_separator2"></div>*/}
 
+                        {/** ----------------------------------------------------------- */}
+                        {/** PRINT BUTTON **/}
+                        {/** ----------------------------------------------------------- */}
+
                         <div className="dropdown_footer">
                             <div className="fakeButton" style={{ fontSize: '100%' }} title="Lancer l&apos;impression" onClick={() => {
                                 printProject();
@@ -2131,6 +2212,10 @@ function App() {
 
                 <div className="button_group-separator"></div>
 
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR RESET **/}
+                {/** ----------------------------------------------------------- */}
+
                 <button className="button_group-clear_project" onClick={() => {
                     if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
                 }} title="Réinitialiser le projet">
@@ -2140,8 +2225,11 @@ function App() {
 
                 <div className="button_group-separator"></div>
 
-                <div className="button_group-separator" style={{ marginLeft: 'auto' }}></div>
+                {/** ----------------------------------------------------------- */}
+                {/** TOOLBAR WORKBOX VIEW MODE **/}
+                {/** ----------------------------------------------------------- */}
 
+                <div className="button_group-separator" style={{ marginLeft: 'auto' }}></div>
                 <button className={`button_group-resize end ${autoSpaceSize ? 'checked' : ''}`} onClick={() => setAutoSpaceSize((old) => !old)} title="Redimensionner automatiquement l'espace de travail">
                     <img src={autoSpaceSize ? resizeIcon : resizeOffIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Redimensionner automatiquement"} />
                 </button>
@@ -2149,9 +2237,9 @@ function App() {
 
             </nav>
 
-            {/** SWITCHBOARD PROJECT **/}
-
-            {/** PROJECT TITLE **/}
+            {/** ----------------------------------------------------------- */}
+            {/** SWITCHBOARD PROJECT TITLE **/}
+            {/** ----------------------------------------------------------- */}
 
             <h3 className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
                 <img src={projectIcon} width={24} height={24} alt="Projet courant" />
@@ -2175,7 +2263,9 @@ function App() {
                 />
             </h3>
 
-            {/** PROJECT DETAILS **/}
+            {/** ----------------------------------------------------------- */}
+            {/** SWITCHBOARD PROJECT DETAILS **/}
+            {/** ----------------------------------------------------------- */}
 
             <ul className="project">
                 <li title="Révision">
@@ -2196,7 +2286,9 @@ function App() {
                 </li>
             </ul>
 
+            {/** ----------------------------------------------------------- */}
             {/** TABPAGES SELECTOR **/}
+            {/** ----------------------------------------------------------- */}
 
             <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
                 <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()}
@@ -2216,9 +2308,10 @@ function App() {
                 </div>
             </nav>
 
-            {/** TABPAGES **/}
-
+            {/** ----------------------------------------------------------- */}
             {/** SWITCHBOARD TAB **/}
+            {/** ----------------------------------------------------------- */}
+
             <div ref={switchboardRef}
                 className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
                 title={freeSpaceMessage}>
@@ -2456,7 +2549,10 @@ function App() {
                 ))}
             </div>
 
+            {/** ----------------------------------------------------------- */}
             {/** SCHEMA TAB **/}
+            {/** ----------------------------------------------------------- */}
+
             <SchemaTab
                 tab={tab}
                 switchboard={switchboard}
@@ -2468,7 +2564,10 @@ function App() {
                 onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
             />
 
+            {/** ----------------------------------------------------------- */}
             {/** SUMMARY TAB **/}
+            {/** ----------------------------------------------------------- */}
+
             <SummaryTab
                 tab={tab}
                 switchboard={switchboard}
@@ -2479,7 +2578,9 @@ function App() {
                 onEdit={(rowIndex, moduleIndex, tab, focus) => editModule(rowIndex, moduleIndex, tab, focus)}
             />
 
+            {/** ----------------------------------------------------------- */}
             {/** POPUPS **/}
+            {/** ----------------------------------------------------------- */}
 
             {
                 editor && <Editor
@@ -2551,6 +2652,37 @@ function App() {
                 />
             }
 
+            {
+                firstpageOptionsPopup && <FirstpageOptionsPopup
+                    defaultFirstpageOptions={defaultFirstpageOptions}
+                    switchboard={switchboard}
+                    printOptions={printOptions}
+                    onApply={(options) => {
+                        setSwitchboard(old => ({
+                            ...old,
+                            firstPageInfos: { ...options.infos }
+                        }));
+
+                        setPrintOptions(old => ({
+                            ...old,
+                            pdfOptions: {
+                                ...old.pdfOptions,
+                                firstPageView: options.views
+                            }
+                        }));
+
+                        printMenuRef.current.classList.add('clicked');
+                        printMenuRef.current.focus();
+                        setFirstpageOptionsPopup(false);
+                    }}
+                    onCancel={() => {
+                        printMenuRef.current.classList.add('clicked');
+                        printMenuRef.current.focus();
+                        setFirstpageOptionsPopup(false)
+                    }}
+                />
+            }
+
 
 
         </div >
@@ -2560,10 +2692,7 @@ function App() {
 export default App
 
 
-//TODO: Doc: Refaire les screenshots
-//TODO: OK - Doc: Inclure dans la renumérotation auto
-//TODO: OK - Doc: Allocation d'un module à ses enfants seuelement ou conserver une alimentation directe en //
-//TODO: OK - Doc: Asservissement partiel / total d'un contact
-//TODO: Doc: Exportation pour les étiqueteuses
-//TODO: OK - Doc: Gestion des numéros de folios
-//TODO: Doc: Nouvelle boite de dialogue pour le renseignement des infos personnelles
+//FIXME: Doc: Refaire les screenshots
+//FIXME: Doc: Nouvelle boite de dialogue pour le renseignement des infos personnelles
+
+//TODO: Ajouter les calibres 300mA et 650mA pour le DB

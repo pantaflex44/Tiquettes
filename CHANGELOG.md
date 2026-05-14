@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-05-06
+## [2.2.8] - 2026-05-14
 
 ### Corrections
 
@@ -12,6 +12,7 @@
 
 ### Modifications
 
+- Amélioration de l'ergonomie et l'expérience utilisateur.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
 - [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
 - Mise à jour des médias pour OG / Github / Twitter.
@@ -21,6 +22,7 @@
 
 ### Ajouts
 
+- [[Issue #79](https://github.com/pantaflex44/Tiquettes/issues/79)] Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.
 - Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire.
 - [[Issue #84](https://github.com/pantaflex44/Tiquettes/issues/84)] Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire
 - [[Issue #70](https://github.com/pantaflex44/Tiquettes/issues/70)] Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!

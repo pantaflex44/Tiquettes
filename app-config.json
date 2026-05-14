@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-05-06",
+            "date": "2026-05-14",
             "actions": {
                 "patches": [
                     {
@@ -58,6 +58,9 @@
                 ],
                 "updates": [
                     {
+                        "text": "Amélioration de l'ergonomie et l'expérience utilisateur."
+                    },
+                    {
                         "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
                     },
                     {
@@ -85,6 +88,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.",
+                        "from": {
+                            "name": "Issue #79",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/79"
+                        }
+                    },
                     {
                         "text": "Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire."
                     },

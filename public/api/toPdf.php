@@ -74,7 +74,7 @@ function toFrenchDate(string $date, $withDate = true, $withHours = true): string
 class TiquettesPDF extends FPDF
 {
 
-    const VERSION = "1.6";
+    const VERSION = "1.7";
 
     protected $javascript;
     protected $n_js;
@@ -572,6 +572,44 @@ class TiquettesPDF extends FPDF
         $this->IncludeJS($script);
     }
 
+    function resize(string $imagefile, int $maxWidth, int $maxHeight): array
+    {
+        $imageDimensions = getimagesize($imagefile);
+
+        $imageWidth = $imageDimensions[0];
+        $imageHeight = $imageDimensions[1];
+
+        $imageSize['width'] = $imageWidth;
+        $imageSize['height'] = $imageHeight;
+
+        if ($imageWidth > $imageHeight) {
+            if ($imageWidth < $maxWidth)
+                $newwidth = $imageWidth;
+            else
+                $newwidth =  $maxWidth;
+
+            $divisor = $imageWidth / $newwidth;
+            $newheight = floor($imageHeight / $divisor);
+        } else {
+            if ($imageHeight < $maxHeight)
+                $newheight = $imageHeight;
+            else
+                $newheight =  $maxHeight;
+
+            $divisor = $imageHeight / $newheight;
+            $newwidth = floor($imageWidth / $divisor);
+            if ($newwidth > $maxWidth) {
+                $newwidth =  $maxWidth;
+                $divisor = $imageWidth / $newwidth;
+                $newheight = floor($imageHeight / $divisor);
+            }
+        }
+        $imageSize['width'] = (int)$newwidth;
+        $imageSize['height'] = (int)$newheight;
+
+        return $imageSize;
+    }
+
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
         global $isDev;
@@ -626,6 +664,90 @@ class TiquettesPDF extends FPDF
         }
 
         return false;
+    }
+
+    function pixelToMM(int $pixel): float
+    {
+        return $pixel * 0.2645833333;
+    }
+
+    function mmToPixel(float $mm): int
+    {
+        return (int)round($mm / 0.2645833333);
+    }
+
+    function Photo(string $url, int $mm_x, int $mm_y, int $mm_mw, int $mm_mh): void
+    {
+        $photoPath = '';
+        try {
+            $pmw = $this->mmToPixel($mm_mw);
+            $pmh = $this->mmToPixel($mm_mh);
+
+            $tmpPath = './libs/toPdf/tmp/';
+            if (!is_dir($tmpPath)) {
+                mkdir($tmpPath, 0777);
+            }
+
+            if (file_exists($url)) {
+                $photoContent = @file_get_contents($url);
+            } else {
+                $ua = isset($_SERVER['HTTP_USER_AGENT'])
+                    ? $_SERVER['HTTP_USER_AGENT']
+                    : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_USERAGENT, $ua);
+                $photoContent = curl_exec($ch);
+            }
+            if ($photoContent === false) {
+                return;
+            }
+
+            $urlExtension = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+            $urlFilename = strtolower(pathinfo($url, PATHINFO_FILENAME));
+
+            $ok = false;
+            if ($urlExtension === 'svg') {
+                $photoPath = $tmpPath . $urlFilename . '.png';
+                if ($this->svg2png($photoContent, $photoPath, $pmw, $pmh) === false) {
+                    if (file_exists($photoPath)) {
+                        @unlink($photoPath);
+                    }
+                    return;
+                }
+                $ok = true;
+            } else if ($urlExtension === 'png' || $urlExtension === 'jpg' || $urlExtension === 'jpeg' || $urlExtension === 'gif') {
+                $photoPath = $tmpPath . $urlFilename . '.' . $urlExtension;
+                if (@file_put_contents($photoPath, $photoContent) === false) {
+                    if (file_exists($photoPath)) {
+                        @unlink($photoPath);
+                    }
+                    return;
+                }
+                $ok = true;
+            } else {
+                return;
+            }
+
+            if ($ok && file_exists($photoPath)) {
+                $size = $this->resize($photoPath, $pmw, $pmh);
+                $mm_w = $this->pixelToMM($size['width']);
+                $mm_h = $this->pixelToMM($size['height']);
+                $mm_nx = $mm_x + (($mm_mw - $mm_w) / 2);
+                $mm_ny = $mm_y + (($mm_mh - $mm_h) / 2);
+                $this->Image($photoPath, $mm_nx, $mm_ny, $mm_w, $mm_h);
+                /*$this->Rect($mm_nx, $mm_ny, $mm_w, $mm_h, 'D');
+                $this->Rect($mm_x, $mm_y, $mm_mw, $mm_mh, 'D');*/
+                @unlink($photoPath);
+            }
+        } catch (\Exception $ex) {
+            if (file_exists($photoPath)) {
+                @unlink($photoPath);
+            }
+            var_dump($ex);
+            exit();
+        }
     }
 
     function getIcon(string|null $name, string|false $color = false, int $iconSize = 100): string
@@ -818,13 +940,318 @@ class TiquettesPDF extends FPDF
 
     function AddFirstPage()
     {
-        global $switchboard, $printOptions;
+        global $switchboard, $printOptions, $tv;
 
         $this->grid = false;
         $this->StartPageGroup();
         $this->AddPage('P', 'A4', 0);
         $this->SetVisibility('all');
 
+        $this->SetDrawColor(100, 100, 100);
+        $this->SetTextColor(0, 0, 0);
+        $this->SetLineWidth(0.05);
+
+        // Titre
+        $this->SetY($this->pageMargin + 15);
+        $this->SetFont('Arial', 'B', 36);
+        $this->Cell(0, 15, str('Tableau électrique'), 0, 0, 'C');
+
+        // Cadre installateur
+        $this->SetY($this->pageMargin + 45);
+        $this->SetX($this->pageMargin);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
+        $this->Line($this->GetX(), $this->GetY() + 60, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetX(), $this->GetY() + 60);
+        $this->Line($this->GetPageWidth() - $this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
+        $this->SetY($this->pageMargin + 45);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 10, str('Installateur'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->from?->photo ?? false) === true) {
+            $photo = trim($switchboard?->firstPageInfos?->from?->photo ?? "");
+            if ($photo !== "") {
+                $left = $this->pageMargin + 2 + 7;
+                $top = $this->pageMargin + 45 + 2 + 11;
+                $sizeMax = 30;
+                $this->Photo($photo, $left, $top, $sizeMax, $sizeMax);
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->from?->siret ?? false) === true) {
+            $siret = trim($switchboard?->firstPageInfos?->from?->siret ?? "");
+            if ($siret !== "") {
+                $this->SetY($this->pageMargin + 45 + 50);
+                $this->SetX($this->pageMargin + 6);
+                $this->SetFont('Arial', '', 10);
+                $this->Cell(0, 10, str('S / ' . $siret), 0, 0, '');
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->from?->name ?? false) === true) {
+            $name = trim($switchboard?->firstPageInfos?->from?->name ?? "");
+            if ($name !== "") {
+                $this->SetY($this->pageMargin + 45 + 6);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', 'B', 16);
+                $this->Cell(0, 7, str($name), 0, 0, '');
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->from?->postalAddress ?? false) === true) {
+            $postalAddress = trim($switchboard?->firstPageInfos?->from?->postalAddress ?? "");
+            if ($postalAddress !== "") {
+                $this->SetY($this->pageMargin + 45 + 15);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->MultiCell(0, 5, str($postalAddress), 0, 'L', false, 4);
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->from?->email ?? false) === true) {
+            $email = trim($switchboard?->firstPageInfos?->from?->email ?? "");
+            if ($email !== "") {
+                $this->SetY($this->pageMargin + 45 + 42);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->Cell(0, 5, str('Email:'), 0, 0, '');
+                $this->SetY($this->pageMargin + 45 + 42);
+                $this->SetX($this->pageMargin + 65 + 30);
+                $this->SetFont('Arial', 'B', 12);
+                $this->Cell(0, 5, str($email), 0, 0, '');
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->from?->phone ?? false) === true) {
+            $phone = trim($switchboard?->firstPageInfos?->from?->phone ?? "");
+            if ($phone !== "") {
+                $this->SetY($this->pageMargin + 45 + 49);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
+                $this->SetY($this->pageMargin + 45 + 49);
+                $this->SetX($this->pageMargin + 65 + 30);
+                $this->SetFont('Arial', 'B', 12);
+                $this->Cell(0, 5, str($phone), 0, 0, '');
+            }
+        }
+
+        // Cadre client
+        $this->SetY($this->pageMargin + 45 + 60 + 5);
+        $this->SetX($this->pageMargin);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
+        $this->Line($this->GetX(), $this->GetY() + 60, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetX(), $this->GetY() + 60);
+        $this->Line($this->GetPageWidth() - $this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
+        $this->SetY($this->pageMargin + 45 + 60 + 5);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 10, str('Client'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+
+        $left = $this->pageMargin + 2 + 7;
+        $top = $this->pageMargin + 45 + 60 + 5 + 11;
+        $sizeMax = 30;
+        $this->Photo('../android-chrome-192x192.png', $left, $top, $sizeMax, $sizeMax);
+
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 48);
+        $this->SetX($this->pageMargin + 8);
+        $this->SetFont('Arial', '', 10);
+        $this->Cell(0, 4, str('Dossier réalisé avec'), 0, 0, '');
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 52);
+        $this->SetX($this->pageMargin + 8);
+        $this->SetFont('Arial', 'B', 10);
+        $this->Cell(0, 4, str('Tiquettes.fr ' . $tv), 0, 0, '');
+        if (($printOptions->pdfOptions?->firstPageView?->to?->name ?? false) === true) {
+            $name = trim($switchboard?->firstPageInfos?->to?->name ?? "");
+            if ($name !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 6);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', 'B', 16);
+                $this->Cell(0, 7, str($name), 0, 0, '');
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->to?->postalAddress ?? false) === true) {
+            $postalAddress = trim($switchboard?->firstPageInfos?->to?->postalAddress ?? "");
+            if ($postalAddress !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 15);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->MultiCell(0, 5, str($postalAddress), 0, 'L', false, 4);
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->to?->email ?? false) === true) {
+            $email = trim($switchboard?->firstPageInfos?->to?->email ?? "");
+            if ($email !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 42);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->Cell(0, 5, str('Email:'), 0, 0, '');
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 42);
+                $this->SetX($this->pageMargin + 65 + 30);
+                $this->SetFont('Arial', 'B', 12);
+                $this->Cell(0, 5, str($email), 0, 0, '');
+            }
+        }
+        if (($printOptions->pdfOptions?->firstPageView?->to?->phone ?? false) === true) {
+            $phone = trim($switchboard?->firstPageInfos?->to?->phone ?? "");
+            if ($phone !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 49);
+                $this->SetX($this->pageMargin + 65);
+                $this->SetFont('Arial', '', 12);
+                $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 49);
+                $this->SetX($this->pageMargin + 65 + 30);
+                $this->SetFont('Arial', 'B', 12);
+                $this->Cell(0, 5, str($phone), 0, 0, '');
+            }
+        }
+
+        // Cadre projet
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5);
+        $this->SetX($this->pageMargin);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
+        $this->Line($this->GetX(), $this->GetY() + 100, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 100);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetX(), $this->GetY() + 100);
+        $this->Line($this->GetPageWidth() - $this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY() + 100);
+        $this->Line($this->GetX(), $this->GetY() + 35, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 35);
+        $this->Line($this->GetX(), $this->GetY() + 46, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 46);
+        $this->Line($this->GetX(), $this->GetY() + 56, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 56);
+        $this->Line($this->GetX(), $this->GetY() + 66, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 66);
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 10, str('Nom du projet'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectName ?? false) === true) {
+            $prjname = trim($switchboard?->prjname ?? "");
+            if ($prjname !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 10);
+                $this->SetX($this->pageMargin + 8);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str($prjname), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 39);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str('Révision'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectVersion ?? false) === true) {
+            $prjversion = trim($switchboard?->prjversion ?? "");
+            if ($prjversion !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 38.5);
+                $this->SetX($this->pageMargin + 40);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str($prjversion), 0, 'L', false, 4);
+            }
+            $appversion = trim($switchboard?->appversion ?? "");
+            if ($appversion !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 39);
+                $this->SetX($this->pageMargin + 60);
+                $this->SetFont('Arial', '', 10);
+                $this->MultiCell(0, 4, str($appversion), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 49);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str('Date de création'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectCreated ?? false) === true) {
+            $prjcreated = trim($switchboard?->prjcreated ?? "");
+            if ($prjcreated !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 48.5);
+                $this->SetX($this->pageMargin + 40);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str(toFrenchDate($prjcreated, true, false)), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 49);
+        $this->SetX($this->pageMargin + 95);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str('Dernière modification'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectUpdated ?? false) === true) {
+            $prjupdated = trim($switchboard?->prjupdated ?? "");
+            if ($prjupdated !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 48.5);
+                $this->SetX($this->pageMargin + 140);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str(toFrenchDate($prjupdated, true, false)), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 59);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str("Type d'installation"), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectType ?? false) === true) {
+            $projectType = trim($switchboard?->projectType ?? "");
+            if ($projectType === 'R') {
+                $projectType = 'Résidentiel';
+            } else if ($projectType === 'T') {
+                $projectType = 'Tertiaire';
+            }
+            if ($projectType !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 58.5);
+                $this->SetX($this->pageMargin + 40);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str($projectType), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 59);
+        $this->SetX($this->pageMargin + 95);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str('Tension de référence'), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+        if (($printOptions->pdfOptions?->firstPageView?->projectVRef ?? false) === true) {
+            $vref = trim($switchboard?->vref ?? "");
+            if ($vref !== "") {
+                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 58.5);
+                $this->SetX($this->pageMargin + 140);
+                $this->SetFont('Arial', 'B', 12);
+                $this->MultiCell(0, 5, str($vref . 'V'), 0, 'L', false, 4);
+            }
+        }
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 68);
+        $this->SetX($this->pageMargin + 2);
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 139, 139);
+        $this->Cell(0, 4, str("Ce dossier contient"), 0, 0, '');
+        $this->SetTextColor(0, 0, 0);
+
+        $squareIcon = $this->getIcon('square.svg', false, 32);
+        $squareCheckIcon = $this->getIcon('square-check.svg', false, 32);
+
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 78);
+        $this->SetX($this->pageMargin + 8 + 1);
+        $this->Image($printOptions->schema ? $squareCheckIcon : $squareIcon, $this->GetX(), $this->GetY(), 5, 5, 'PNG');
+
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 78 + 0.30);
+        $this->SetX($this->pageMargin + 8 + 7);
+        $this->SetFont('Arial', 'B', 12);
+        $this->MultiCell(0, 5, str('Schéma unifilaire'), 0, 'L', false, 4);
+
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 86);
+        $this->SetX($this->pageMargin + 8 + 1);
+        $this->Image($printOptions->summary ? $squareCheckIcon : $squareIcon, $this->GetX(), $this->GetY(), 5, 5, 'PNG');
+
+        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 86 + 0.30);
+        $this->SetX($this->pageMargin + 8 + 7);
+        $this->SetFont('Arial', 'B', 12);
+        $this->MultiCell(0, 5, str('Nomenclature'), 0, 'L', false, 4);
+
+
+
+
+
+
+
+        /*
         // Titre
 
         $this->SetY(70);
@@ -903,7 +1330,7 @@ class TiquettesPDF extends FPDF
         $this->SetDrawColor(255, 0, 0);
         $this->MultiCell($w, 5, str("ATTENTION:\n\nImprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression."), 1, 'L', true);
         $this->SetVisibility('all');
-
+*/
 
         $this->SetDrawColor(0, 0, 0);
     }
@@ -916,7 +1343,7 @@ class TiquettesPDF extends FPDF
                 $this->SetLineWidth(0.075);
                 $this->SetDash(1, 1);
                 $this->Line($cutLine[0], $cutLine[1], $cutLine[2], $cutLine[3]);
-                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');;
+                $this->Image('./libs/toPdf/assets/cut.png', $cutLine[0] + 1.5, $cutLine[1] - 1.25, 2.5, 2.5, 'PNG');
             }
             $this->SetDash();
             $cutLines = [];
@@ -1691,5 +2118,13 @@ if ($printOptions->labels === true)
     $pdf->AddLabelsPage();
 if ($auto)
     $pdf->AutoPrint(true);
+
+/*if (!headers_sent()) {
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache"); // HTTP/1.0
+    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+}*/
 
 echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - Tiquettes " . $tv . ".pdf", true);

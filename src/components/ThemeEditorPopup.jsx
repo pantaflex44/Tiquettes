@@ -246,7 +246,7 @@ export default function ThemeEditorPopup({
         onCancel={() => onCancel()}
         onOk={() => onApply(editedTheme)}
         showOkButton={true}
-        width={800}
+        width={820}
         additionalButtons={[
             {
                 text: (

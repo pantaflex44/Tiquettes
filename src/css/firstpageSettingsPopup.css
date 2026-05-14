@@ -1,0 +1,144 @@
+.fppage-container {
+    background-color: #fff;
+    border: 1px solid #999;
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-width: max-content;
+    max-height: 100%;
+    box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+        rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.fppage {
+    --padding-inline: 10mm;
+    --padding-block: 11mm;
+    width: calc(210mm - (var(--padding-inline) * 2));
+    height: calc(297mm - (var(--padding-block) * 2));
+    background-color: #fff;
+    margin-inline: auto;
+    padding-inline: var(--padding-inline);
+    padding-block: var(--padding-block);
+    font-family: "Arial";
+    font-size: 11pt;
+    position: relative;
+}
+
+.fppage-header {
+    text-align: center;
+    font-size: 36pt;
+    font-weight: bold;
+    padding-top: 15mm;
+    width: 100%;
+    border-top: 1px solid #000;
+}
+
+.fppage-header::before {
+    position: absolute;
+    color: #999;
+    content: attr(data-margin-top, "tiquettes.fr");
+    top: 5mm;
+    right: 10mm;
+    font-size: 9pt;
+}
+
+.ffpage-box {
+    position: absolute;
+    border: 1px solid #000;
+}
+
+.ffpage-item {
+    position: absolute;
+}
+
+.ffpage-line {
+    position: absolute;
+    height: 1px;
+    background-color: #000;
+}
+
+.data-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-auto-rows: max-content;
+    gap: 1rem;
+}
+
+.data-grid-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    row-gap: 1rem;
+    background: linear-gradient(to bottom, var(--secondary-color-light-light), white);
+    border-radius: 7px;
+}
+
+.data-grid-column h5 {
+    width: 100%;
+    margin: 0;
+    color: #000000;
+    border-bottom: 2px solid var(--primary-color);
+    font-size: 92%;
+    font-weight: 600;
+    padding-bottom: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+}
+
+.data-grid-blocks {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: calc(100% - 2rem);
+    margin-block: 0.5rem;
+    padding-inline: 0.5rem;
+}
+
+.data-grid-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+.data-grid-block .data-grid-block_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.data-grid-block .data-grid-block_title label {
+    font-size: 80%;
+    color: #999;
+}
+
+.data-grid-block .data-grid-block_title input[type="checkbox"]:checked ~ label {
+    color: #000;
+}
+
+.data-grid-block input:not([type="checkbox"]) {
+    width: 100%;
+    height: 30px;
+    font-size: 95%;
+}
+
+.data-grid-block textarea {
+    width: 100%;
+    min-height: 30px;
+    font-size: 95%;
+    resize: vertical;
+    font-family: sans-serif;
+}

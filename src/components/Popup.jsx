@@ -31,6 +31,7 @@ export default function Popup({
     title,
     children,
     style = {},
+    popupStyle = {},
     className = null,
     width = 440,
     showCloseButton = true,
@@ -97,11 +98,13 @@ export default function Popup({
 
     return (
         <div className={`popup-overflow ${withOverflow ? '' : 'transparent'}`.trim()}>
-            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ width: `${width}px` }}>
-                <div className="popup_title">{title}</div>
-                {buttons.close &&
-                    <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
-                        height={24} /></div>}
+            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ ...popupStyle, width: `${width}px`, position: 'relative' }}>
+                <div className="popup_title-box" style={{ position: 'sticky', top: 0, background: '#FFF', paddingBottom: '0.1rem' }}>
+                    <div className="popup_title">{title}</div>
+                    {buttons.close &&
+                        <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
+                            height={24} /></div>}
+                </div>
 
                 <div className={`popup_content ${className}`} style={style}>
                     {children}
