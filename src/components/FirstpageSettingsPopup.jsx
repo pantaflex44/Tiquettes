@@ -630,7 +630,7 @@ export default function FirstpageSettingsPopup({
                             >
                                 {Array(4)
                                     .fill()
-                                    .map((_, i) => <option value={(i + 1) * 2.5 * 10}>{(i + 1) * 2.5 * 10}%</option>)}
+                                    .map((_, i) => <option value={(i + 1) * 2.5 * 10} key={i}>{(i + 1) * 2.5 * 10}%</option>)}
                             </select>
                             <button style={{ height: '34px' }}
                                 title="Taille réelle"
@@ -845,7 +845,7 @@ export default function FirstpageSettingsPopup({
                                 }}></div>
                                 <span className="ffpage-item" style={{
                                     left: '2mm',
-                                    top: '38mm',
+                                    top: '38.7mm',
                                     fontSize: '10pt',
                                     color: 'var(--primary-color)'
                                 }}>Révision</span>
@@ -869,7 +869,7 @@ export default function FirstpageSettingsPopup({
                                 }}></div>
                                 <span className="ffpage-item" style={{
                                     left: '2mm',
-                                    top: '48mm',
+                                    top: '48.7mm',
                                     fontSize: '10pt',
                                     color: 'var(--primary-color)'
                                 }}>Date de création</span>
@@ -882,7 +882,7 @@ export default function FirstpageSettingsPopup({
                                 }
                                 <span className="ffpage-item" style={{
                                     left: '95mm',
-                                    top: '48mm',
+                                    top: '48.7mm',
                                     fontSize: '10pt',
                                     color: 'var(--primary-color)'
                                 }}>Dernière modification</span>
@@ -900,7 +900,7 @@ export default function FirstpageSettingsPopup({
                                 }}></div>
                                 <span className="ffpage-item" style={{
                                     left: '2mm',
-                                    top: '58mm',
+                                    top: '58.7mm',
                                     fontSize: '10pt',
                                     color: 'var(--primary-color)'
                                 }}>Type d'installation</span>
@@ -913,7 +913,7 @@ export default function FirstpageSettingsPopup({
                                 }
                                 <span className="ffpage-item" style={{
                                     left: '95mm',
-                                    top: '58mm',
+                                    top: '58.7mm',
                                     fontSize: '10pt',
                                     color: 'var(--primary-color)'
                                 }}>Tension de référence</span>
