@@ -34,6 +34,7 @@ export default function Popup({
     popupStyle = {},
     className = null,
     width = 440,
+    noPadding = false,
     showCloseButton = true,
     showCancelButton = true,
     showOkButton = true,
@@ -99,14 +100,14 @@ export default function Popup({
     return (
         <div className={`popup-overflow ${withOverflow ? '' : 'transparent'}`.trim()}>
             <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ ...popupStyle, width: `${width}px`, position: 'relative' }}>
-                <div className="popup_title-box" style={{ position: 'sticky', top: 0, background: '#FFF', paddingBottom: '0.1rem' }}>
+                <div className="popup_title-box" style={{ position: 'sticky', top: 0, background: '#FFF', paddingBottom: '0.1rem', marginBottom: noPadding ? 0 : '1rem' }}>
                     <div className="popup_title">{title}</div>
                     {buttons.close &&
                         <div className="popup_cancel" onClick={onCancel}><img src={cancelIcon} alt="Annuler" width={24}
                             height={24} /></div>}
                 </div>
 
-                <div className={`popup_content ${className}`} style={style}>
+                <div className={`popup_content ${className}`} style={noPadding ? { ...style, marginInline: noPadding ? 0 : '1.5rem' } : style}>
                     {children}
                 </div>
 
@@ -117,7 +118,7 @@ export default function Popup({
                     </div>
                 )}
 
-                <div className="popup_buttons">
+                <div className="popup_buttons" style={{ marginTop: noPadding ? 0 : '1.5rem' }}>
                     <div className="popup_buttons_box">
                         {Array.isArray(additionalButtons) && additionalButtons.map((b, i) => {
                             if (!b.text || !b.callback) return null;

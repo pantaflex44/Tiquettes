@@ -58,6 +58,9 @@
                 ],
                 "updates": [
                     {
+                        "text": "Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client."
+                    },
+                    {
                         "text": "Amélioration de l'ergonomie et l'expérience utilisateur."
                     },
                     {

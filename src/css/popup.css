@@ -44,7 +44,7 @@ body:has(.popup-overflow) {
     transform: translate(-50%, -50%);
     width: 440px;
     max-width: 85%;
-    max-height: 97%;
+    max-height: 95vh;
     overflow-y: auto;
     background: linear-gradient(to bottom, white, #f0f0f0);
     border-radius: 7px;

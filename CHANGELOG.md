@@ -12,6 +12,7 @@
 
 ### Modifications
 
+- Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client.
 - Amélioration de l'ergonomie et l'expérience utilisateur.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
 - [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).

@@ -707,6 +707,7 @@ class TiquettesPDF extends FPDF
             $urlExtension = strtolower(pathinfo($url, PATHINFO_EXTENSION));
             $urlFilename = strtolower(pathinfo($url, PATHINFO_FILENAME));
 
+            $originalPhotoPath = $tmpPath . $urlFilename . '.' . $urlExtension;
             $ok = false;
             if ($urlExtension === 'svg') {
                 $photoPath = $tmpPath . $urlFilename . '.png';
@@ -718,7 +719,7 @@ class TiquettesPDF extends FPDF
                 }
                 $ok = true;
             } else if ($urlExtension === 'png' || $urlExtension === 'jpg' || $urlExtension === 'jpeg' || $urlExtension === 'gif') {
-                $photoPath = $tmpPath . $urlFilename . '.' . $urlExtension;
+                $photoPath = $originalPhotoPath;
                 if (@file_put_contents($photoPath, $photoContent) === false) {
                     if (file_exists($photoPath)) {
                         @unlink($photoPath);
@@ -737,9 +738,11 @@ class TiquettesPDF extends FPDF
                 $mm_nx = $mm_x + (($mm_mw - $mm_w) / 2);
                 $mm_ny = $mm_y + (($mm_mh - $mm_h) / 2);
                 $this->Image($photoPath, $mm_nx, $mm_ny, $mm_w, $mm_h);
-                /*$this->Rect($mm_nx, $mm_ny, $mm_w, $mm_h, 'D');
-                $this->Rect($mm_x, $mm_y, $mm_mw, $mm_mh, 'D');*/
+
                 @unlink($photoPath);
+                if (file_exists($originalPhotoPath)) {
+                    @unlink($originalPhotoPath);
+                }
             }
         } catch (\Exception $ex) {
             if (file_exists($photoPath)) {
@@ -954,16 +957,16 @@ class TiquettesPDF extends FPDF
         // Titre
         $this->SetY($this->pageMargin + 15);
         $this->SetFont('Arial', 'B', 36);
-        $this->Cell(0, 15, str('Tableau électrique'), 0, 0, 'C');
+        $this->Cell(0, 10, str('Tableau électrique'), 0, 0, 'C');
 
         // Cadre installateur
-        $this->SetY($this->pageMargin + 45);
+        $this->SetY($this->pageMargin + 40);
         $this->SetX($this->pageMargin);
         $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
         $this->Line($this->GetX(), $this->GetY() + 60, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
         $this->Line($this->GetX(), $this->GetY(), $this->GetX(), $this->GetY() + 60);
         $this->Line($this->GetPageWidth() - $this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
-        $this->SetY($this->pageMargin + 45);
+        $this->SetY($this->pageMargin + 40);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -973,7 +976,7 @@ class TiquettesPDF extends FPDF
             $photo = trim($switchboard?->firstPageInfos?->from?->photo ?? "");
             if ($photo !== "") {
                 $left = $this->pageMargin + 2 + 7;
-                $top = $this->pageMargin + 45 + 2 + 11;
+                $top = $this->pageMargin + 40 + 2 + 11;
                 $sizeMax = 30;
                 $this->Photo($photo, $left, $top, $sizeMax, $sizeMax);
             }
@@ -981,7 +984,7 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->from?->siret ?? false) === true) {
             $siret = trim($switchboard?->firstPageInfos?->from?->siret ?? "");
             if ($siret !== "") {
-                $this->SetY($this->pageMargin + 45 + 50);
+                $this->SetY($this->pageMargin + 40 + 50);
                 $this->SetX($this->pageMargin + 6);
                 $this->SetFont('Arial', '', 10);
                 $this->Cell(0, 10, str('S / ' . $siret), 0, 0, '');
@@ -990,7 +993,7 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->from?->name ?? false) === true) {
             $name = trim($switchboard?->firstPageInfos?->from?->name ?? "");
             if ($name !== "") {
-                $this->SetY($this->pageMargin + 45 + 6);
+                $this->SetY($this->pageMargin + 40 + 6);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', 'B', 16);
                 $this->Cell(0, 7, str($name), 0, 0, '');
@@ -999,7 +1002,7 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->from?->postalAddress ?? false) === true) {
             $postalAddress = trim($switchboard?->firstPageInfos?->from?->postalAddress ?? "");
             if ($postalAddress !== "") {
-                $this->SetY($this->pageMargin + 45 + 15);
+                $this->SetY($this->pageMargin + 40 + 15);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->MultiCell(0, 5, str($postalAddress), 0, 'L', false, 4);
@@ -1008,11 +1011,11 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->from?->email ?? false) === true) {
             $email = trim($switchboard?->firstPageInfos?->from?->email ?? "");
             if ($email !== "") {
-                $this->SetY($this->pageMargin + 45 + 42);
+                $this->SetY($this->pageMargin + 40 + 42);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->Cell(0, 5, str('Email:'), 0, 0, '');
-                $this->SetY($this->pageMargin + 45 + 42);
+                $this->SetY($this->pageMargin + 40 + 42);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
                 $this->Cell(0, 5, str($email), 0, 0, '');
@@ -1021,11 +1024,11 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->from?->phone ?? false) === true) {
             $phone = trim($switchboard?->firstPageInfos?->from?->phone ?? "");
             if ($phone !== "") {
-                $this->SetY($this->pageMargin + 45 + 49);
+                $this->SetY($this->pageMargin + 40 + 49);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
-                $this->SetY($this->pageMargin + 45 + 49);
+                $this->SetY($this->pageMargin + 40 + 49);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
                 $this->Cell(0, 5, str($phone), 0, 0, '');
@@ -1033,13 +1036,13 @@ class TiquettesPDF extends FPDF
         }
 
         // Cadre client
-        $this->SetY($this->pageMargin + 45 + 60 + 5);
+        $this->SetY($this->pageMargin + 40 + 60 + 5);
         $this->SetX($this->pageMargin);
         $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
         $this->Line($this->GetX(), $this->GetY() + 60, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
         $this->Line($this->GetX(), $this->GetY(), $this->GetX(), $this->GetY() + 60);
         $this->Line($this->GetPageWidth() - $this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY() + 60);
-        $this->SetY($this->pageMargin + 45 + 60 + 5);
+        $this->SetY($this->pageMargin + 40 + 60 + 5);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1047,22 +1050,22 @@ class TiquettesPDF extends FPDF
         $this->SetTextColor(0, 0, 0);
 
         $left = $this->pageMargin + 2 + 7;
-        $top = $this->pageMargin + 45 + 60 + 5 + 11;
+        $top = $this->pageMargin + 40 + 60 + 5 + 11;
         $sizeMax = 30;
         $this->Photo('../android-chrome-192x192.png', $left, $top, $sizeMax, $sizeMax);
 
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 48);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 48);
         $this->SetX($this->pageMargin + 8);
         $this->SetFont('Arial', '', 10);
         $this->Cell(0, 4, str('Dossier réalisé avec'), 0, 0, '');
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 52);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 52);
         $this->SetX($this->pageMargin + 8);
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(0, 4, str('Tiquettes.fr ' . $tv), 0, 0, '');
         if (($printOptions->pdfOptions?->firstPageView?->to?->name ?? false) === true) {
             $name = trim($switchboard?->firstPageInfos?->to?->name ?? "");
             if ($name !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 6);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 6);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', 'B', 16);
                 $this->Cell(0, 7, str($name), 0, 0, '');
@@ -1071,7 +1074,7 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->to?->postalAddress ?? false) === true) {
             $postalAddress = trim($switchboard?->firstPageInfos?->to?->postalAddress ?? "");
             if ($postalAddress !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 15);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 15);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->MultiCell(0, 5, str($postalAddress), 0, 'L', false, 4);
@@ -1080,11 +1083,11 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->to?->email ?? false) === true) {
             $email = trim($switchboard?->firstPageInfos?->to?->email ?? "");
             if ($email !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 42);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 42);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->Cell(0, 5, str('Email:'), 0, 0, '');
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 42);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 42);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
                 $this->Cell(0, 5, str($email), 0, 0, '');
@@ -1093,11 +1096,11 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->to?->phone ?? false) === true) {
             $phone = trim($switchboard?->firstPageInfos?->to?->phone ?? "");
             if ($phone !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 49);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 49);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
                 $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 49);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 49);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
                 $this->Cell(0, 5, str($phone), 0, 0, '');
@@ -1105,7 +1108,7 @@ class TiquettesPDF extends FPDF
         }
 
         // Cadre projet
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5);
         $this->SetX($this->pageMargin);
         $this->Line($this->GetX(), $this->GetY(), $this->GetPageWidth() - $this->GetX(), $this->GetY());
         $this->Line($this->GetX(), $this->GetY() + 100, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 100);
@@ -1115,7 +1118,7 @@ class TiquettesPDF extends FPDF
         $this->Line($this->GetX(), $this->GetY() + 46, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 46);
         $this->Line($this->GetX(), $this->GetY() + 56, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 56);
         $this->Line($this->GetX(), $this->GetY() + 66, $this->GetPageWidth() - $this->GetX(), $this->GetY() + 66);
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1124,13 +1127,13 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->projectName ?? false) === true) {
             $prjname = trim($switchboard?->prjname ?? "");
             if ($prjname !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 10);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 10);
                 $this->SetX($this->pageMargin + 8);
                 $this->SetFont('Arial', 'B', 12);
                 $this->MultiCell(0, 5, str($prjname), 0, 'L', false, 4);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 39);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 39);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1139,20 +1142,20 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->projectVersion ?? false) === true) {
             $prjversion = trim($switchboard?->prjversion ?? "");
             if ($prjversion !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 38.5);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 38.5);
                 $this->SetX($this->pageMargin + 40);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str($prjversion), 0, 'L', false, 4);
+                $this->MultiCell(0, 5, str($prjversion), 0, 'L', false, 1);
             }
             $appversion = trim($switchboard?->appversion ?? "");
             if ($appversion !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 39);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 39);
                 $this->SetX($this->pageMargin + 60);
                 $this->SetFont('Arial', '', 10);
-                $this->MultiCell(0, 4, str($appversion), 0, 'L', false, 4);
+                $this->MultiCell(0, 4, str($appversion), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 49);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 49);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1161,13 +1164,13 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->projectCreated ?? false) === true) {
             $prjcreated = trim($switchboard?->prjcreated ?? "");
             if ($prjcreated !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 48.5);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 48.5);
                 $this->SetX($this->pageMargin + 40);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str(toFrenchDate($prjcreated, true, false)), 0, 'L', false, 4);
+                $this->MultiCell(0, 5, str(toFrenchDate($prjcreated, true, false)), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 49);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 49);
         $this->SetX($this->pageMargin + 95);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1176,13 +1179,13 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->projectUpdated ?? false) === true) {
             $prjupdated = trim($switchboard?->prjupdated ?? "");
             if ($prjupdated !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 48.5);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 48.5);
                 $this->SetX($this->pageMargin + 140);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str(toFrenchDate($prjupdated, true, false)), 0, 'L', false, 4);
+                $this->MultiCell(0, 5, str(toFrenchDate($prjupdated, true, false)), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 59);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 59);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1196,13 +1199,13 @@ class TiquettesPDF extends FPDF
                 $projectType = 'Tertiaire';
             }
             if ($projectType !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 58.5);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 58.5);
                 $this->SetX($this->pageMargin + 40);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str($projectType), 0, 'L', false, 4);
+                $this->MultiCell(0, 5, str($projectType), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 59);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 59);
         $this->SetX($this->pageMargin + 95);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1211,13 +1214,13 @@ class TiquettesPDF extends FPDF
         if (($printOptions->pdfOptions?->firstPageView?->projectVRef ?? false) === true) {
             $vref = trim($switchboard?->vref ?? "");
             if ($vref !== "") {
-                $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 58.5);
+                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 58.5);
                 $this->SetX($this->pageMargin + 140);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str($vref . 'V'), 0, 'L', false, 4);
+                $this->MultiCell(0, 5, str($vref . 'V'), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 68);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 68);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
@@ -1227,110 +1230,51 @@ class TiquettesPDF extends FPDF
         $squareIcon = $this->getIcon('square.svg', false, 32);
         $squareCheckIcon = $this->getIcon('square-check.svg', false, 32);
 
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 78);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 78);
         $this->SetX($this->pageMargin + 8 + 1);
         $this->Image($printOptions->schema ? $squareCheckIcon : $squareIcon, $this->GetX(), $this->GetY(), 5, 5, 'PNG');
 
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 78 + 0.30);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 78 + 0.30);
         $this->SetX($this->pageMargin + 8 + 7);
         $this->SetFont('Arial', 'B', 12);
-        $this->MultiCell(0, 5, str('Schéma unifilaire'), 0, 'L', false, 4);
+        $this->MultiCell(0, 5, str('Schéma unifilaire'), 0, 'L', false, 1);
 
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 86);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 86);
         $this->SetX($this->pageMargin + 8 + 1);
         $this->Image($printOptions->summary ? $squareCheckIcon : $squareIcon, $this->GetX(), $this->GetY(), 5, 5, 'PNG');
 
-        $this->SetY($this->pageMargin + 45 + 60 + 5 + 60 + 5 + 86 + 0.30);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 86 + 0.30);
         $this->SetX($this->pageMargin + 8 + 7);
         $this->SetFont('Arial', 'B', 12);
-        $this->MultiCell(0, 5, str('Nomenclature'), 0, 'L', false, 4);
+        $this->MultiCell(0, 5, str('Nomenclature'), 0, 'L', false, 1);
 
-
-
-
-
-
-
-        /*
-        // Titre
-
-        $this->SetY(70);
-        $this->SetFont('Arial', 'B', 36);
-        $this->Cell(0, 15, str('Tableau électrique'), 0, 0, 'C');
-
-        // Contenu du dossier
-
-        $this->SetY(110);
-        $this->SetX($this->pageMargin + 23);
-        $this->SetFont('Arial', 'B', 14);
-        $this->MultiCell(0, 7, cutStr(str("Ce dossier contient :")), 0, 'L', false);
-        $this->Ln(5);
-        $this->SetFont('Arial', '', 14);
-        $contains = [];
-        if ($printOptions->schema === true)
-            $contains[] = "Le schéma unifilaire";
-        if ($printOptions->summary === true)
-            $contains[] = "La nomenclature";
-        if (count($contains) === 0)
-            $contains[] = "Rien du tout !";
-        foreach ($contains as $title) {
-            $this->SetX($this->pageMargin + 28);
-            $this->MultiCell(0, 7, cutStr(str("- " . $title)), 0, 'L', false);
-            $this->Ln(2);
-        }
-
-        // Cartouche principal
-
-        $this->SetFont('Arial', 'B', 14);
-        $this->SetY(150);
-        $this->SetDrawColor(150, 150, 150);
-        $this->SetTextColor(0, 0, 0);
-        $this->SetLineWidth(0.05);
-        $this->Line($this->pageMargin + 20, $this->GetY(), $this->GetPageWidth() - ($this->pageMargin + 20), $this->GetY());
-        $this->Ln(2);
-        $infos = [
-            "Nom du projet :" => cutStr($switchboard->prjname, 100),
-            "Révision :" => $switchboard->prjversion . " (" . $switchboard->appversion . ")",
-            "Créé le :" => toFrenchDate($switchboard->prjcreated),
-            "Modifié le :" => toFrenchDate($switchboard->prjupdated),
-            "" => "",
-            "Type :" => $switchboard->projectType === 'R' ? "Résidentiel" : ($switchboard->projectType === 'T' ? "Tertiaire" : "Divers"),
-            "Tension de référence :" => $switchboard->vref . "V",
-        ];
-        foreach ($infos as $title => $value) {
-            $this->SetX($this->pageMargin + 23);
-            $this->SetFont('Arial', 'B', 14);
-            $this->Cell(($this->GetPageWidth() / 2) - $this->pageMargin - ($this->pageMargin / 2) - 23, 7, str($title), 0, 0, 'L');
-
-            $this->SetX(($this->GetPageWidth() / 2) - $this->pageMargin + + ($this->pageMargin / 2));
-            $this->SetFont('Arial', '', 14);
-            $this->MultiCell(($this->GetPageWidth() / 2) - $this->pageMargin - ($this->pageMargin / 2) - 23, 7, cutStr(str($value)), 0, 'L', false);
-
-            $this->Ln(2);
-
-            $this->SetLineWidth(0.05);
-            $this->Line($this->pageMargin + 20, $this->GetY(), $this->GetPageWidth() - ($this->pageMargin + 20), $this->GetY());
-            $this->Ln(2);
-        }
-        $this->SetDrawColor(150, 150, 150);
-        $this->SetLineWidth(0.1);
-        $this->Line($this->pageMargin + 20, 107, $this->GetPageWidth() - ($this->pageMargin + 20), 107);
-        $this->Line($this->pageMargin + 20, 107, $this->pageMargin + 20, $this->GetY() - 2);
-        $this->Line($this->GetPageWidth() - ($this->pageMargin + 20), 107, $this->GetPageWidth() - ($this->pageMargin + 20), $this->GetY() - 2);
+        $this->SetFont('Arial', '', 8);
+        $this->SetTextColor(100, 100, 100);
+        $txt = "Ce document est remis à titre indicatif et confidentiel. Toute reproduction est interdite.";
+        $x = ($this->GetPageWidth() / 2) - ($this->GetStringWidth($txt) / 2);
+        $y = $this->pageMargin + 40 + 60 + 5 + 60 + 5 + 100 + 7;
+        $this->Text($x, $y, str($txt));
 
         // Alerte d'impression
-
-        $this->SetY(260);
         $this->SetVisibility('screen');
-        $this->SetFont('Helvetica', 'B', 13);
-        $w = $this->GetPageWidth() - (2 * ($this->pageMargin + 20));
+
+        $this->SetFont('Helvetica', 'B', 12);
+        $this->SetFillColor(255, 240, 240);
+        $this->SetTextColor(255, 50, 50);
+
+        $w = $this->GetPageWidth() - (2 * $this->pageMargin);
         $this->SetX(($this->GetPageWidth() / 2) - ($w / 2));
-        $this->SetFillColor(255, 230, 230);
-        $this->SetTextColor(255, 0, 0);
-        $this->SetDrawColor(255, 0, 0);
-        $this->MultiCell($w, 5, str("ATTENTION:\n\nImprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression."), 1, 'L', true);
+        $this->SetY(11);
+        $this->MultiCell($w, 5, str("ATTENTION: Imprimer ce document en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression."), 0, 'L', true);
+
+        $w = $this->GetPageWidth() - (2 * $this->pageMargin);
+        $this->SetX(($this->GetPageWidth() / 2) - ($w / 2));
+        $this->SetY(41);
+        $this->MultiCell($w, 5, str("Cette alerte est visuelle et ne sera pas imprimée sur vos documents."), 0, 'L', true);
+
         $this->SetVisibility('all');
-*/
+
+
 
         $this->SetDrawColor(0, 0, 0);
     }
@@ -2097,9 +2041,11 @@ foreach ($flattenModules as $module) {
 
 $pdf = new TiquettesPDF();
 
-$pdf->SetAuthor('tiquettes.fr' . ' ' . $tv, true);
-$pdf->SetCreator('tiquettes.fr' . ' ' . $tv, true);
+$fromName = trim($switchboard?->firstPageInfos?->from?->name ?? "");
+$pdf->SetAuthor($fromName !== "" ? $fromName : 'tiquettes.fr' . ' ' . $tv, true);
+$pdf->SetCreator($fromName !== "" ? $fromName : 'tiquettes.fr' . ' ' . $tv, true);
 $pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
+$pdf->SetSubject("Projet d'un tableau électrique réalisé avec l'application tiquettes.fr " . $tv . " (https://www.tiquettes.fr/app/).", true);
 $pdf->SetCompression(true);
 $pdf->SetDisplayMode('real', 'default');
 $pdf->SetMargins(10, 10);

@@ -1,0 +1,135 @@
+.wizard-page {
+    width: 100%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: flex-start;
+    align-items: stretch;
+    font-size: 95%;
+    user-select: none;
+}
+.wizard-page * {
+    user-select: none;
+}
+
+.wizard-page-left {
+    background-color: #fff;
+    padding: 1rem;
+    width: 220px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.2rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    counter-reset: titleCounter;
+}
+
+.wizard-page-left-title {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    font-weight: normal;
+    color: #777;
+    margin-top: 0.5rem;
+    counter-increment: titleCounter;
+}
+
+.wizard-page-left-title.current {
+    border-color: var(--primary-color);
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.wizard-page-left-title::before {
+    content: counter(titleCounter, titleCounterStyle);
+    display: inline-block;
+    font-size: 70%;
+    width: 1.5rem;
+}
+
+.wizard-page-left-picture {
+    margin-top: 3rem;
+    width: 120px;
+    height: 240px;
+    align-self: center;
+}
+
+.wizard-page-right {
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+}
+
+.wizard-page-right h3 {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+
+.wizard-page-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 3rem;
+}
+
+.wizard-page-form-row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.wizard-page-form-row label {
+    font-weight: 500;
+}
+
+.wizard-page-form-row-flex {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.wizard-page-form-row-indicator,
+.wizard-page-form-row-indicator-left,
+.wizard-page-form-row-indicator-right {
+    font-size: 90%;
+    font-weight: bold;
+    color: #999;
+}
+
+.wizard-page-tooltip,
+.wizard-form-tooltip {
+    margin-top: 0.5rem;
+    font-size: 80%;
+    color: #777;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1rem;
+}
+
+@media screen and (max-width: 690px) {
+    .wizard-page-left {
+        display: none;
+    }
+}
+
+@counter-style titleCounterStyle {
+    system: extends decimal;
+    suffix: "";
+    pad: 2 "0";
+}

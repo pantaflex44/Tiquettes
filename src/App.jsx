@@ -40,7 +40,6 @@ import projectIcon from './assets/project.svg';
 import summaryIcon from './assets/list.svg';
 import resizeIcon from './assets/aspect-ratio.svg';
 import resizeOffIcon from './assets/aspect-ratio-off.svg';
-import settingsIcon from './assets/settings.svg';
 
 import schemaIcon from './assets/schema.svg';
 import monitorIcon from "./assets/monitor.svg";
@@ -59,7 +58,6 @@ import downloadIcon from "./assets/download.svg";
 import fpsettingsIcon from "./assets/fp-settings.svg";
 
 import Editor from "./components/Editor.jsx";
-import NewProjectEditor from "./components/NewProjectEditor.jsx";
 import SummaryTab from "./components/SummaryTab.jsx";
 import SchemaTab from "./components/SchemaTab.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
@@ -70,6 +68,7 @@ import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 import { action, choices } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
+import NewProjectPopup from "./components/NewProjectPopup.jsx";
 
 
 function App() {
@@ -100,8 +99,17 @@ function App() {
     const [labelerOptionsRowsSelection, setLabelerOptionsRowsSelection] = useState(null);
     const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
     const [firstpageOptionsPopup, setFirstpageOptionsPopup] = useState(false);
+    const [newProjectPopup, setNewProjectPopup] = useState(false);
 
-    const UIFrozen = useMemo(() => clipboard !== null || themeEditor || welcome || editor !== null || newProjectProperties !== null, [clipboard, themeEditor, welcome, editor, newProjectProperties]);
+    const UIFrozen = useMemo(() => {
+        return clipboard !== null
+            || themeEditor
+            || welcome
+            || editor !== null
+            || firstpageOptionsPopup
+            || labelerOptionsPopup
+            || newProjectPopup
+    }, [clipboard, themeEditor, welcome, editor, firstpageOptionsPopup, labelerOptionsPopup, newProjectPopup]);
 
     const defaultFirstpageOptions = {
         infos: { // to switchboad.firstPageInfos
@@ -352,9 +360,21 @@ function App() {
         summaryColumnLabel: true,
         summaryColumnDescription: true,
 
-        firstPageInfos: { ...defaultFirstpageOptions.infos }
-
-    }), [defaultProjectName, defaultProjectType, defaultVRef, defaultTheme, defaultHRow, defaultStepsPerRows, defaultStepSize, createRow, defaultNpRows, defaultProjectProperties.db]);
+        firstPageInfos: { ...defaultFirstpageOptions.infos },
+        printOptions: { ...defaultPrintOptions }
+    }), [
+        defaultProjectName,
+        defaultProjectType,
+        defaultVRef,
+        defaultTheme,
+        defaultHRow,
+        defaultStepsPerRows,
+        defaultStepSize,
+        createRow,
+        defaultNpRows,
+        defaultProjectProperties.db,
+        defaultFirstpageOptions.infos
+    ]);
 
     const autoUpdateProjectProperties = (swb) => {
         const theme = themeEngineCompatibility(swb);
@@ -680,7 +700,7 @@ function App() {
     }
     const [theme, setTheme] = useState((switchboard?.theme ?? defaultTheme));
 
-    const createProject = useCallback((name, stepsPerRows, rowsCount, height) => {
+    const createProject = useCallback((name, stepsPerRows, rowsCount, height, stepSize, views = null, infos = null, printFirstpage = null) => {
         importRef.current.value = "";
 
         setTheme(defaultTheme);
@@ -689,17 +709,25 @@ function App() {
                 ...defaultProject,
                 prjid: generateUUID(),
                 prjname: name,
-                height: height,
+                height,
                 stepsPerRows,
-                stepSize: defaultStepSize,
+                stepSize,
                 rows: createRow(stepsPerRows, rowsCount),
+                firstPageInfos: { ...infos }
             });
         });
 
         setClipboard(null);
         setClipboardMode(null);
         setUniqueChoices([]);
-        setPrintOptions({ ...defaultPrintOptions });
+        setPrintOptions({
+            ...defaultPrintOptions,
+            firstPage: printFirstpage ?? defaultPrintOptions.firstPage,
+            pdfOptions: {
+                ...defaultPrintOptions.pdfOptions,
+                firstPageView: { ...views }
+            }
+        });
         setDocumentTitle(name);
         setTab(1);
         setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
@@ -717,8 +745,8 @@ function App() {
         setTheme(defaultTheme);
         setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
 
-        createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow);
-    }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme]);
+        createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow, defaultStepSize);
+    }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultStepSize]);
 
     const _importProject = (data) => {
         try {
@@ -1279,38 +1307,9 @@ function App() {
         replaceUrlHistory();
     };
 
-    const openProjectPropertiesEditor = (urlParams) => {
-
-        let title = getUrlParam('t', 'string', defaultProjectProperties.name);
-        if (title === "") title = defaultProjectProperties.name;
-
-        let rows = getUrlParam('r', 'int', defaultProjectProperties.npRows);
-        if (rows < 1) rows = 1;
-        if (rows > 15) rows = 15;
-
-        let size = getUrlParam('s', 'int', defaultProjectProperties.spr);
-        if (size !== 13 && size !== 18 && size !== 24) size = 13;
-
-        let height = getUrlParam('h', 'int', defaultProjectProperties.hRow);
-        if (height < 10) height = 10;
-        if (height > 100) height = 100;
-
-        let newProject = {
-            ...defaultProjectProperties,
-            name: title,
-            npRows: rows,
-            spr: size,
-            hRow: height
-        };
-
-        resetProject();
-        setNewProjectProperties(newProject);
-        replaceUrlHistory();
-    };
-
-    const updateProjectProperties = (data) => {
+    {/*const updateProjectProperties = (data) => {
         setNewProjectProperties((old) => ({ ...old, ...data }));
-    };
+    };*/}
 
     const handleScrollRight = () => {
         if (switchboardRef.current.scrollLeft + 10 < switchboardRef.current.scrollWidth) {
@@ -1822,10 +1821,10 @@ function App() {
 
     useEffect(() => {
         if (window) {
-            const ovf = editor || newProjectProperties ? 'hidden' : 'auto';
+            const ovf = editor || labelerOptionsPopup || firstpageOptionsPopup || newProjectPopup ? 'hidden' : 'auto';
             if (window.document.body.style.overflow !== ovf) window.document.body.style.overflow = ovf;
         }
-    }, [editor, newProjectProperties]);
+    }, [editor, labelerOptionsPopup, firstpageOptionsPopup, newProjectPopup]);
 
     useEffect(() => {
         if (monitorOpened) monitorRef.current.focus();
@@ -1860,7 +1859,6 @@ function App() {
 
         const extraParams = {
             enjoy: () => openWelcome(),
-            new: () => openProjectPropertiesEditor(),
             import: () => importFromOutside(),
             print: () => printProjectFromOutside(),
         };
@@ -2596,24 +2594,39 @@ function App() {
                 />
             }
 
-            {
-                newProjectProperties && <NewProjectEditor
-                    newProjectProperties={newProjectProperties}
-                    onSetNewProjectProperties={setNewProjectProperties}
-                    rowsMin={rowsMin}
-                    rowsMax={rowsMax}
-                    heightMin={heightMin}
-                    heightMax={{ heightMax }}
-                    onCreateProject={createProject}
-                    onUpdateProjectProperties={updateProjectProperties}
-                />
-            }
+            {newProjectPopup && <NewProjectPopup
+                onCancel={() => setNewProjectPopup(false)}
+                onApply={(properties) => {
+                    const printFirstpage = properties.infos.from.name
+                        || properties.infos.from.siret
+                        || properties.infos.from.postalAddress
+                        || properties.infos.from.email
+                        || properties.infos.from.phone
+                        || properties.infos.to.name
+                        || properties.infos.to.postalAddress
+                        || properties.infos.to.email
+                        || properties.infos.to.phone;
+
+                    createProject(
+                        properties.name,
+                        properties.stepsPerRows,
+                        properties.rowsCount,
+                        properties.height,
+                        properties.stepSize,
+                        properties.views,
+                        properties.infos,
+                        printFirstpage
+                    );
+                    setNewProjectPopup(false);
+                }}
+                defaultFirstpageOptions={defaultFirstpageOptions}
+            />}
 
             {
                 welcome && <WelcomePopup
                     onCancel={() => setWelcome(false)}
                     onNewProject={() => {
-                        setNewProjectProperties(() => ({ ...defaultProjectProperties }));
+                        setNewProjectPopup(true);
                         setWelcome(false);
                     }}
                     onImportProject={() => {
@@ -2654,6 +2667,8 @@ function App() {
 
             {
                 firstpageOptionsPopup && <FirstpageOptionsPopup
+                    withPreview={true}
+                    withViewSelector={true}
                     defaultFirstpageOptions={defaultFirstpageOptions}
                     switchboard={switchboard}
                     printOptions={printOptions}
