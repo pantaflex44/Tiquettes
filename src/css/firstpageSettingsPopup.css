@@ -135,6 +135,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 }
 
 .data-grid-block .data-grid-block_title label {

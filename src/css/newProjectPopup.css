@@ -8,10 +8,6 @@
     justify-content: flex-start;
     align-items: stretch;
     font-size: 95%;
-    user-select: none;
-}
-.wizard-page * {
-    user-select: none;
 }
 
 .wizard-page-left {

@@ -442,6 +442,12 @@ select:focus {
     border-color: var(--primary-color);
 }
 
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]).invalid,
+textarea.invalid,
+select.invalid {
+    border-color: red;
+}
+
 input[type="checkbox"],
 input[type="radio"],
 input[type="checkbox"]+label,

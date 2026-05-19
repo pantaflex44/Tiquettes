@@ -2070,12 +2070,12 @@ function App() {
                                         ...old,
                                         schema: e.target.checked
                                     };
-                                    if (!ret.schema && !ret.summary) {
+                                    /*if (!ret.schema && !ret.summary) {
                                         ret = {
                                             ...ret,
                                             firstPage: false
                                         }
-                                    }
+                                    }*/
                                     return ret;
                                 })} />
                             <label htmlFor="print_schema">Schéma unifilaire</label>
@@ -2129,12 +2129,12 @@ function App() {
                                         ...old,
                                         summary: e.target.checked
                                     };
-                                    if (!ret.schema && !ret.summary) {
+                                    /*if (!ret.schema && !ret.summary) {
                                         ret = {
                                             ...ret,
                                             firstPage: false
                                         }
-                                    }
+                                    }*/
                                     return ret;
                                 })} />
                             <label htmlFor="print_summary">Nomenclature</label>

@@ -18,7 +18,7 @@
 
 /* eslint-disable react/prop-types */
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../css/firstpageSettingsPopup.css";
 import * as pkg from '../../package.json';
 
@@ -32,6 +32,11 @@ import zoomOutIcon from '../assets/zoom-out.svg';
 import zoomInIcon from '../assets/zoom-in.svg';
 import zoomRealIcon from '../assets/zoom-scan.svg';
 import clearIcon from '../assets/clear.svg';
+import currentLocationIcon from '../assets/current-location.svg';
+import sendIcon from '../assets/send.svg';
+import callIcon from '../assets/phone-call.svg';
+import infoIcon from '../assets/info-circle.svg';
+import photoIcon from '../assets/photo.svg';
 
 export default function FirstpageSettingsPopup({
     defaultFirstpageOptions,
@@ -47,6 +52,18 @@ export default function FirstpageSettingsPopup({
 }) {
     const [tab, setTab] = useState(1);
     const [zoom, setZoom] = useState(100);
+
+    const fromNameRef = useRef();
+    const fromPhotoRef = useRef();
+    const fromSiretRef = useRef();
+    const fromPostalAddressRef = useRef();
+    const fromEmailRef = useRef();
+    const fromPhoneRef = useRef();
+
+    const toNameRef = useRef();
+    const toPostalAddressRef = useRef();
+    const toEmailRef = useRef();
+    const toPhoneRef = useRef();
 
     const importRef = useRef();
 
@@ -111,12 +128,206 @@ export default function FirstpageSettingsPopup({
         });
     }
 
+    function url_validation(url, withHttp = true) {
+        if (!withHttp) {
+            const regexp = new RegExp("^((http|https)://)?(www[.])?([a-zA-Z0-9]|-)+([.][a-zA-Z0-9(-|/|=|?)?]+)+$");
+            return regexp.test(url);
+        } else {
+            const regexp = new RegExp("^((http|https)://){1}(www[.])?([a-zA-Z0-9]|-)+([.][a-zA-Z0-9(-|/|=|?)?]+)+$");
+            return regexp.test(url);
+        }
+    }
+
+    function siret_validation(siret) {
+        const validate = (number, size) => {
+            const n = number.replace(/\s/g, "");
+            if (isNaN(n) || n.length != size) return false;
+            var bal = 0;
+            var total = 0;
+            for (var i = size - 1; i >= 0; i--) {
+                var step = (n.charCodeAt(i) - 48) * (bal + 1);
+                /*if (step>9) { step -= 9; }
+                 total += step;*/
+                total += (step > 9) ? step - 9 : step;
+                bal = 1 - bal;
+            }
+            return (total % 10 == 0) ? true : false;
+        }
+        const isSiret = () => validate(siret, 14);
+        const isSiren = () => validate(siret, 9);
+        return { isSiret, isSiren };
+    }
+
+    function email_validation(email) {
+        return email.match(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    }
+
+    function name_validation(name) {
+        return name.trim().length > 1;
+    }
+
+    function phone_validation(phone) {
+        return true;
+    }
+
+    function postalAddress_validation(address) {
+        return true;
+    }
+
+    useEffect(() => {
+        if (options?.infos?.from?.name && options.infos.from.name.trim() !== '' && !name_validation(options.infos.from.name.trim())) {
+            fromNameRef.current.classList.add('invalid');
+        } else {
+            fromNameRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.from?.photo && options.infos.from.photo.trim() !== '' && !url_validation(options.infos.from.photo.trim())) {
+            fromPhotoRef.current.classList.add('invalid');
+        } else {
+            fromPhotoRef.current.classList.remove('invalid');
+        }
+
+        const validate = siret_validation((options?.infos?.from?.siret ?? '').trim());
+        if (options?.infos?.from?.siret && options.infos.from.siret.trim() !== '' && !validate.isSiret() && !validate.isSiren()) {
+            fromSiretRef.current.classList.add('invalid');
+        } else {
+            fromSiretRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.from?.postalAddress && options.infos.from.postalAddress.trim() !== '' && !postalAddress_validation(options.infos.from.postalAddress.trim())) {
+            fromPostalAddressRef.current.classList.add('invalid');
+        } else {
+            fromPostalAddressRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.from?.email && options.infos.from.email.trim() !== '' && !email_validation(options.infos.from.email.trim())) {
+            fromEmailRef.current.classList.add('invalid');
+        } else {
+            fromEmailRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.from?.phone && options.infos.from.phone.trim() !== '' && !phone_validation(options.infos.from.phone.trim())) {
+            fromPhoneRef.current.classList.add('invalid');
+        } else {
+            fromPhoneRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.to?.name && options.infos.to.name.trim() !== '' && !name_validation(options.infos.to.name.trim())) {
+            toNameRef.current.classList.add('invalid');
+        } else {
+            toNameRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.to?.postalAddress && options.infos.to.postalAddress.trim() !== '' && !postalAddress_validation(options.infos.to.postalAddress.trim())) {
+            toPostalAddressRef.current.classList.add('invalid');
+        } else {
+            toPostalAddressRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.to?.email && options.infos.to.email.trim() !== '' && !email_validation(options.infos.to.email.trim())) {
+            toEmailRef.current.classList.add('invalid');
+        } else {
+            toEmailRef.current.classList.remove('invalid');
+        }
+
+        if (options?.infos?.to?.phone && options.infos.to.phone.trim() !== '' && !phone_validation(options.infos.to.phone.trim())) {
+            toPhoneRef.current.classList.add('invalid');
+        } else {
+            toPhoneRef.current.classList.remove('invalid');
+        }
+    }, [options]);
+
     const cancel = () => {
         if (onCancel) onCancel();
     }
 
     const apply = () => {
-        if (onApply) onApply(options);
+        if (onApply) {
+            const fromName = (options.infos.from.name ?? "").trim();
+            if (fromName !== "") {
+                if (!name_validation(fromName)) {
+                    alert("Nom de l'installateur incorrect.");
+                    return;
+                }
+            }
+
+            const fromPhoto = (options.infos.from.photo ?? "").trim();
+            if (fromPhoto !== "") {
+                if (!url_validation(fromPhoto)) {
+                    alert("L'url du logo de l'installateur est incorrecte.");
+                    return;
+                }
+            }
+
+            const fromSiret = (options.infos.from.siret ?? "").trim();
+            if (fromSiret !== "") {
+                const fromSiretValidation = siret_validation(fromSiret);
+                if (!fromSiretValidation.isSiren() && !fromSiretValidation.isSiret()) {
+                    alert("Le numéro de SIRET / SIREN est incorrect.");
+                    return;
+                }
+            }
+
+            const fromPostalAddress = (options.infos.from.postalAddress ?? "").trim();
+            if (fromPostalAddress !== "") {
+                if (!postalAddress_validation(fromPostalAddress)) {
+                    alert("Adresse postale de l'installateur incorrecte.");
+                    return;
+                }
+            }
+
+            const fromEmail = (options.infos.from.email ?? "").trim();
+            if (fromEmail !== "") {
+                if (!email_validation(fromEmail)) {
+                    alert("L'adresse email de l'installateur est incorrecte.");
+                    return;
+                }
+            }
+
+            const fromPhone = (options.infos.from.phone ?? "").trim();
+            if (fromPhone !== "") {
+                if (!phone_validation(fromPhone)) {
+                    alert("Le numéro de téléphone de l'installateur est incorrect.");
+                    return;
+                }
+            }
+
+            const toName = (options.infos.to.name ?? "").trim();
+            if (toName !== "") {
+                if (!name_validation(toName)) {
+                    alert("Nom du client incorrect.");
+                    return;
+                }
+            }
+
+            const toPostalAddress = (options.infos.to.postalAddress ?? "").trim();
+            if (toPostalAddress !== "") {
+                if (!postalAddress_validation(toPostalAddress)) {
+                    alert("Adresse postale du client incorrecte.");
+                    return;
+                }
+            }
+
+            const toEmail = (options.infos.to.email ?? "").trim();
+            if (toEmail !== "") {
+                if (!email_validation(toEmail)) {
+                    alert("L'adresse email du client est incorrecte.");
+                    return;
+                }
+            }
+
+            const toPhone = (options.infos.to.phone ?? "").trim();
+            if (toPhone !== "") {
+                if (!phone_validation(toPhone)) {
+                    alert("Le numéro de téléphone du client est incorrect.");
+                    return;
+                }
+            }
+
+            onApply(options);
+        }
     }
 
     return <Popup
@@ -217,7 +428,7 @@ export default function FirstpageSettingsPopup({
                                 )}
                                 <label htmlFor="from_name"><b>Dénomination / Raison sociale</b></label>
                             </div>
-                            <input className={(options?.views?.from?.name ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_name" id="from_name" value={options?.infos?.from?.name ?? ''} onChange={(e) => {
+                            <input ref={fromNameRef} className={(options?.views?.from?.name ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_name" id="from_name" value={options?.infos?.from?.name ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -234,20 +445,23 @@ export default function FirstpageSettingsPopup({
                         <div className="data-grid-block" >
                             <div className="data-grid-block_title" >
                                 {withViewSelector && (
-                                    <input type="checkbox" checked={(options?.views?.from?.photo ?? false)} onChange={(e) => setOptions(old => ({
-                                        ...old,
-                                        views: {
-                                            ...(old.views ?? {}),
-                                            from: {
-                                                ...(old.views?.from ?? {}),
-                                                photo: e.target.checked
+                                    <input type="checkbox" checked={(options?.views?.from?.photo ?? false)} onChange={(e) => {
+                                        setOptions(old => ({
+                                            ...old,
+                                            views: {
+                                                ...(old.views ?? {}),
+                                                from: {
+                                                    ...(old.views?.from ?? {}),
+                                                    photo: e.target.checked
+                                                }
                                             }
-                                        }
-                                    }))} title={(options?.views?.from?.photo ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
+                                        }));
+                                    }} title={(options?.views?.from?.photo ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_photo"><b>Logo</b></label>
+                                <img title="Visualiser" src={photoIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open((options?.infos?.from?.photo ?? '').trim(), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.from?.photo ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_photo" id="from_photo" value={options?.infos?.from?.photo ?? ''} onChange={(e) => {
+                            <input ref={fromPhotoRef} className={(options?.views?.from?.photo ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_photo" id="from_photo" value={options?.infos?.from?.photo ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -257,7 +471,7 @@ export default function FirstpageSettingsPopup({
                                             photo: e.target.value
                                         }
                                     }
-                                }))
+                                }));
                             }} placeholder="url valide de votre logo" disabled={(options?.views?.from?.photo ?? false) === false && withViewSelector} />
                         </div>
 
@@ -276,18 +490,22 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.siret ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_siret"><b>Numéro de SIRET / SIREN</b></label>
+                                <img title="Informations" src={infoIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://annuaire-entreprises.data.gouv.fr/entreprise/' + encodeURIComponent((options?.infos?.from?.siret ?? '').trim().replace(/\s/g, "")), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.from?.siret ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_siret" id="from_siret" value={options?.infos?.from?.siret ?? ''} onChange={(e) => {
-                                setOptions(old => ({
-                                    ...old,
-                                    infos: {
-                                        ...(old.infos ?? {}),
-                                        from: {
-                                            ...(old.infos?.from ?? {}),
-                                            siret: e.target.value
+                            <input ref={fromSiretRef} className={(options?.views?.from?.siret ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_siret" id="from_siret" value={options?.infos?.from?.siret ?? ''} onChange={(e) => {
+                                setOptions(old => {
+                                    let o = {
+                                        ...old,
+                                        infos: {
+                                            ...(old.infos ?? {}),
+                                            from: {
+                                                ...(old.infos?.from ?? {}),
+                                                siret: e.target.value
+                                            }
                                         }
-                                    }
-                                }))
+                                    };
+                                    return o;
+                                })
                             }} placeholder="" disabled={(options?.views?.from?.siret ?? false) === false && withViewSelector} />
                         </div>
 
@@ -306,8 +524,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.postalAddress ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_postalAddress"><b>Adresse postale</b></label>
+                                <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.from?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
                             </div>
-                            <textarea rows={4} className={(options?.views?.from?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_postalAddress" id="from_postalAddress" value={options?.infos?.from?.postalAddress ?? ''} onChange={(e) => {
+                            <textarea ref={fromPostalAddressRef} rows={4} className={(options?.views?.from?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_postalAddress" id="from_postalAddress" value={options?.infos?.from?.postalAddress ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -336,18 +555,22 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.email ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_email"><b>Adresse email</b></label>
+                                <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.from?.email ?? '').trim()), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.from?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="from_email" id="from_email" value={options?.infos?.from?.email ?? ''} onChange={(e) => {
-                                setOptions(old => ({
-                                    ...old,
-                                    infos: {
-                                        ...(old.infos ?? {}),
-                                        from: {
-                                            ...(old.infos?.from ?? {}),
-                                            email: e.target.value
+                            <input ref={fromEmailRef} className={(options?.views?.from?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="from_email" id="from_email" value={options?.infos?.from?.email ?? ''} onChange={(e) => {
+                                setOptions(old => {
+                                    const o = {
+                                        ...old,
+                                        infos: {
+                                            ...(old.infos ?? {}),
+                                            from: {
+                                                ...(old.infos?.from ?? {}),
+                                                email: e.target.value
+                                            }
                                         }
-                                    }
-                                }))
+                                    };
+                                    return o;
+                                })
                             }} placeholder="" disabled={(options?.views?.from?.email ?? false) === false && withViewSelector} />
                         </div>
 
@@ -366,8 +589,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.phone ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_phone"><b>Numéro de téléphone</b></label>
+                                <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.from?.phone ?? '').trim()), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.from?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="from_phone" id="from_phone" value={options?.infos?.from?.phone ?? ''} onChange={(e) => {
+                            <input ref={fromPhoneRef} className={(options?.views?.from?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="from_phone" id="from_phone" value={options?.infos?.from?.phone ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -402,7 +626,7 @@ export default function FirstpageSettingsPopup({
                                 )}
                                 <label htmlFor="to_name"><b>Nom du client</b></label>
                             </div>
-                            <input className={(options?.views?.to?.name ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="to_name" id="to_name" value={options?.infos?.to?.name ?? ''} onChange={(e) => {
+                            <input ref={toNameRef} className={(options?.views?.to?.name ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="to_name" id="to_name" value={options?.infos?.to?.name ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -431,8 +655,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.postalAddress ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_postalAddress"><b>Adresse postale</b></label>
+                                <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.to?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
                             </div>
-                            <textarea rows={4} className={(options?.views?.to?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="to_postalAddress" id="to_postalAddress" value={options?.infos?.to?.postalAddress ?? ''} onChange={(e) => {
+                            <textarea ref={toPostalAddressRef} rows={4} className={(options?.views?.to?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="to_postalAddress" id="to_postalAddress" value={options?.infos?.to?.postalAddress ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -461,19 +686,18 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.email ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_email"><b>Adresse email</b></label>
+                                <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.to?.email ?? '').trim()), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.to?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="to_email" id="to_email" value={options?.infos?.to?.email ?? ''} onChange={(e) => {
-                                setOptions(old => ({
-                                    ...old,
-                                    infos: {
-                                        ...(old.infos ?? {}),
-                                        to: {
-                                            ...(old.infos?.to ?? {}),
-                                            email: e.target.value
-                                        }
+                            <input ref={toEmailRef} className={(options?.views?.to?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="to_email" id="to_email" value={options?.infos?.to?.email ?? ''} onChange={(e) => setOptions(old => ({
+                                ...old,
+                                infos: {
+                                    ...(old.infos ?? {}),
+                                    to: {
+                                        ...(old.infos?.to ?? {}),
+                                        email: e.target.value
                                     }
-                                }))
-                            }} placeholder="" disabled={(options?.views?.to?.email ?? false) === false && withViewSelector} />
+                                }
+                            }))} placeholder="" disabled={(options?.views?.to?.email ?? false) === false && withViewSelector} />
                         </div>
 
                         <div className="data-grid-block" >
@@ -491,8 +715,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.phone ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_phone"><b>Numéro de téléphone</b></label>
+                                <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.to?.phone ?? '').trim()), '_blank').focus()} />
                             </div>
-                            <input className={(options?.views?.to?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="to_phone" id="to_phone" value={options?.infos?.to?.phone ?? ''} onChange={(e) => {
+                            <input ref={toPhoneRef} className={(options?.views?.to?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="to_phone" id="to_phone" value={options?.infos?.to?.phone ?? ''} onChange={(e) => {
                                 setOptions(old => ({
                                     ...old,
                                     infos: {
@@ -679,7 +904,7 @@ export default function FirstpageSettingsPopup({
                                 }}>Installateur</span>
 
                                 {(options?.views?.from?.photo ?? false) === true
-                                    && options?.infos?.from?.photo
+                                    && options?.infos?.from?.photo && url_validation(options.infos.from.photo)
                                     && <div className="ffpage-item" style={{
                                         left: '11mm',
                                         top: '12mm',

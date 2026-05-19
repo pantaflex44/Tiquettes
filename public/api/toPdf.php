@@ -2054,7 +2054,7 @@ $pdf->AliasNbPages();
 $pdf->SetGridColor($schemaGridColor);
 $pdf->SetShowCutLines($labelsCutLines);
 
-if (!$hasOnlyLabels && $printOptions->firstPage === true)
+if ($printOptions->firstPage === true)
     $pdf->AddFirstPage();
 if ($printOptions->schema === true)
     $pdf->AddSchemaPage();
