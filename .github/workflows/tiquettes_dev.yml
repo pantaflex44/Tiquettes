@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up Node
@@ -27,7 +27,7 @@ jobs:
       - name: Build dev
         run: npm run build:dev
       - name: Upload files
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
         with:
           sftp_only: true
           server: ${{ secrets.FTPSERVER }}
