@@ -2000,15 +2000,17 @@ foreach ($flattenModules as $module) {
         if (count($kcModule) === 1) {
             $kcModule = $kcModule[0];
 
-            if ($module->partialKc === true && !existsInFlattenModules('| ' . $module->id)) {
-                $flattenModules[] = (object) array_merge((array) $module, [
-                    'kcId' => '',
-                    'id' => '| ' . $module->id,
-                    'parentId' => $module->id,
-                    'func' => 'o',
-                    'icon' => $module->icon,
-                    'text' => $module->text
-                ]);
+            if (property_exists($module, 'partialKc')) {
+                if ($module->partialKc === true && !existsInFlattenModules('| ' . $module->id)) {
+                    $flattenModules[] = (object) array_merge((array) $module, [
+                        'kcId' => '',
+                        'id' => '| ' . $module->id,
+                        'parentId' => $module->id,
+                        'func' => 'o',
+                        'icon' => $module->icon,
+                        'text' => $module->text
+                    ]);
+                }
             }
 
             $flattenModules[] = (object) array_merge((array) $kcModule, [
@@ -2017,15 +2019,15 @@ foreach ($flattenModules as $module) {
                 'parentId' => $module->id,
                 'func' => 'k',
                 'icon' => $module->icon,
-                'text' => $module->partialKc === true ? $kcModule->text : $module->text,
-                'desc' => $module->partialKc === true ? $kcModule->desc : $module->desc,
+                'text' => property_exists($module, 'partialKc') && $module->partialKc === true ? $kcModule->text : $module->text,
+                'desc' => property_exists($module, 'partialKc') && $module->partialKc === true ? $kcModule->desc : $module->desc,
                 'pole' => $module->pole,
                 'wire' => $module->wire ?? ''
             ]);
         }
     }
 
-    if ($schemaFunctions[$module->func]['hasShareWithChilds'] === true && $module->onlyChilds === false) {
+    if ($schemaFunctions[$module->func]['hasShareWithChilds'] === true && property_exists($module, 'onlyChilds') && $module->onlyChilds === false) {
         $flattenModules[] = (object) array_merge((array) $module, [
             'kcId' => '',
             'onlyChilds' => true,
