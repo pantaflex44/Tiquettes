@@ -146,8 +146,6 @@ export default function FirstpageSettingsPopup({
             var total = 0;
             for (var i = size - 1; i >= 0; i--) {
                 var step = (n.charCodeAt(i) - 48) * (bal + 1);
-                /*if (step>9) { step -= 9; }
-                 total += step;*/
                 total += (step > 9) ? step - 9 : step;
                 bal = 1 - bal;
             }
@@ -406,10 +404,6 @@ export default function FirstpageSettingsPopup({
                 <div className="data-grid-column" style={{ gridRow: 'span 2', background: 'initial' }}>
                     <h5>
                         <span style={{ flex: 1 }}>Informations de l'installateur</span>
-                        {/*<img src={exportIcon} alt={"Remonter"} width={16} height={16} style={{ cursor: 'pointer' }} title="Importer mes données" onClick={() => {
-                            document.getElementById('importdatafile').click();
-                        }} />
-                        <img src={importIcon} alt={"Remonter"} width={16} height={16} style={{ cursor: 'pointer' }} title="Exporter mes données" onClick={() => exportData()} />*/}
                     </h5>
                     <div className="data-grid-blocks" >
                         <div className="data-grid-block" >
