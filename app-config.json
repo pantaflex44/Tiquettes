@@ -29,6 +29,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Mise à jour des modules Node.js."
+                    },
+                    {
                         "text": "Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'."
                     },
                     {

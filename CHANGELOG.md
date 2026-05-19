@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- Mise à jour des modules Node.js.
 - Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'.
 - [[Issue #85](https://github.com/pantaflex44/Tiquettes/issues/85)] Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.
 - Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement.
