@@ -139,14 +139,12 @@ Il vous sera aussi demandé la largeur des modules. Ce paramètre est de nos jou
 
 La hauteur des étiquettes est aussi un paramètre important. Chaque enveloppe possède un espace dédié pour "fixer" les étiquettes. Mesurez bien la hauteur disponible pour renseigner le paramètre.
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > Ne pas hésiter à soustraire 1 mm de la hauteur des étiquettes.
 > 
 > Les emplacements sont souvent protégés par des plastrons transparents à bascule. Les "charnières" sont épaissent et peuvent masquer le bas des étiquettes !
 > 
----
 
 ### Importer un projet
 
@@ -189,14 +187,12 @@ Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-
 Sous le nom du projet, vous retrouvez le numéro de la dernière version exportée, les caractéristiques de l'enveloppe,
 ainsi que dans l'ordre, la date de création et la date de dernière modification.
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre
 > clavier. A contrario, la touche `Echap` annule les modifications.
 >
 > ![Modifier le nom du projet](./docs/_edit_project_name.png)
----
 
 Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
@@ -279,14 +275,12 @@ Pour supprimer une rangée, cliquez sur l'icône `Corbeille`, à gauche du nom d
 
 ![Supprimer une rangée](./docs/_delete_row.png)
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
 > dans l'onglet ```Éditeur``` et ```Schéma```.
----
 
 Une option est disponible dans l'éditeur de modules permettant d'empêcher ou non le réassignement automatique de l'identifiant d'un module:
 
@@ -296,7 +290,6 @@ En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actue
 
 ![Réassignement non autorisé](./docs/_autoid_ko.png)
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour une enveloppe de 13 modules. Toutefois, si vous possédez un écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
@@ -306,7 +299,6 @@ En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actue
 >
 > <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
 >![Taille de la zone de travail par défaut](./docs/_autoResizeOn.png)
----
 
 
 ## Édition d'un module
@@ -323,7 +315,6 @@ temps réel.
 - _Libellé_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
 - _Pictogramme_ : Une petite image illustrant l'environnement du module.
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto Next ID](./docs/_next_id.png)
@@ -331,7 +322,6 @@ temps réel.
 > Il est parfois difficile de suivre les identifiants déjà utilisés par les précédents modules, c'est pourquoi un bouton
 > est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module
 > définie dans l'onglet ```Schéma```.
----
 
 
 ### Les actions disponibles
@@ -515,14 +505,12 @@ Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du
 
 ![Schéma unifilaire](./docs/_schema.png)
 
----
 > <b>🛈 Bon à savoir</b>
 >
 > ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
 > dans l'onglet ```Éditeur``` et ```Schéma```.
----
 
 
 Pour éditer un module, il suffit juste de cliquer dessus ;-)
