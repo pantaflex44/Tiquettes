@@ -37,7 +37,7 @@ Vous pouvez tester Tiquettes en cours de développement avant la sortie officiel
 
 ---
 
-# Bienvenue dans la documentation de Tiquettes.fr
+# Bienvenue dans la documentation de Tiquettes
 
 ![Tiquettes](./docs/_sample.png)
 
