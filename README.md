@@ -49,42 +49,79 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
 ## Sommaire
 
 1) [Etiquetter son tableau électrique, plus qu'une affaire de design](#etiquetter-son-tableau-électrique-plus-quune-affaire-de-design)
+
     1) [La sécurité avant tout](#la-sécurité-avant-tout)
+
     2) [Au premier coup d'œil](#au-premier-coup-dœil)
+
 1) [Le projet](#le-projet)
+
     1) [Créer un nouveau projet libre](#créer-un-nouveau-projet-libre)
+
     2) [Importer un projet](#importer-un-projet)
+
     3) [Exporter son travail](#exporter-son-travail)
+
 2) [L'espace de travail](#lespace-de-travail)
+
     1) [Résumé du projet](#résumé-du-projet)
+
     2) [Descriptif](#descriptif)
+
     3) [Menu contextuel du haut](#menu-contextuel-du-haut)
+
     4) [Menu contextuel du bas](#menu-contextuel-du-bas)
+
         1) [Copier / Couper / Coller](#copier--couper--coller)
+
         2) [Supprimer](#supprimer)
+
         3) [Inter-changer](#inter-changer)
+
     5) [Manipuler les rangées](#manipuler-les-rangées)
+
 4) [Édition d'un module](#édition-dun-module)
+
     1) [Les actions disponibles](#les-actions-disponibles)
+
     2) [Les pictogrammes](#les-pictogrammes)
+
     3) [Les groupes](#les-groupes)
+
 5) [Décorer ses étiquettes](#décorer-ses-étiquettes)
+
     1) [Personnaliser la décoration](#personnaliser-la-décoration)
+
     2) [Bibliothèque de thèmes](#bibliothèque-de-thèmes)
+
 6) [Schéma unifilaire](#schéma-unifilaire)
+
     1) [Édition des caractéristiques](#édition-des-caractéristiques)
+
         1) [L'asservissement](#lasservissement)
+
         2) [Allocation d'un module a ses enfants](#allocation-dun-module-a-ses-enfants)
+
     2) [Génération du schéma unifilaire](#génération-du-schéma-unifilaire)
+
 7) [Moniteur de surveillance](#moniteur-de-surveillance)
+
 8) [Nomenclature / Résumé](#nomenclature--résumé)
+
 9) [Impression](#impression)
+
     1) [Page de garde](#page-de-garde)
+
     2) [Etiquettes](#etiquettes)
+
     3) [Schéma unifilaire](#schéma-unifilaire)
+
     4) [Nomenclature](#nomenclature)
+
 10) [Les étiquetteuses](#les-étiquetteuses)
+
 11) [Remerciements ❤ !](#remerciements--)
+
 
 
 ## Etiquetter son tableau électrique, plus qu'une affaire de design
