@@ -64,7 +64,6 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
         2) [Supprimer](#supprimer)
         3) [Inter-changer](#inter-changer)
     5) [Manipuler les rangées](#manipuler-les-rangées)
-    6) [Raccourcis claviers / souris](#raccourcis-claviers--souris)
 4) [Édition d'un module](#édition-dun-module)
     1) [Les actions disponibles](#les-actions-disponibles)
     2) [Les pictogrammes](#les-pictogrammes)
