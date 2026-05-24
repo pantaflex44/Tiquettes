@@ -11,17 +11,13 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 <img alt="Création" src="https://img.shields.io/badge/Date%20de%20création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Finfos.json&query=%24.version&label=Version%20actuelle&color=%23fff">&nbsp;&nbsp;
-<img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff"><br />
+<img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff"><br />
 
-<img alt="Temps réel" src="https://img.shields.io/badge/Quelques%20chiffres%20en%20temps%20r%C3%A9el-darkcyan">&nbsp;&nbsp;
 <img alt="Projets" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.create&label=Projets&color=%23fff">&nbsp;&nbsp;
 <img alt="Impressions" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.print&label=Impressions&color=%23fff">&nbsp;&nbsp;
 
 
----
-
-## 📢 Bon à savoir
 
 ### Une question ? Des idées à partager / proposer ?
 
@@ -41,38 +37,116 @@ Vous pouvez tester Tiquettes en cours de développement avant la sortie officiel
 
 ---
 
-# Bienvenue dans la documentation de Tiquettes
+# Bienvenue dans la documentation de Tiquettes.fr
 
-![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_sample.png?raw=true)
+![Tiquettes](./docs/_sample.png)
+
+Quoi de mieux que de pouvoir sublimer son tableau électrique, tout en répondant aux besoins de la norme en vigueur ?
+
+Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensibles ! Tiquettes peut vous apporter une solution normalisée et esthétique.
+
+
+## Sommaire
+
+1) [Etiquetter son tableau électrique, plus qu'une affaire de design](#etiquetter-son-tableau-électrique-plus-quune-affaire-de-design)
+    1) [La sécurité avant tout](#la-sécurité-avant-tout)
+    2) [Au premier coup d'œil](#au-premier-coup-dœil)
+1) [Le projet](#le-projet)
+    1) [Créer un nouveau projet libre](#créer-un-nouveau-projet-libre)
+    2) [Importer un projet](#importer-un-projet)
+    3) [Exporter son travail](#exporter-son-travail)
+2) [L'espace de travail](#lespace-de-travail)
+    1) [Résumé du projet](#résumé-du-projet)
+    2) [Descriptif](#descriptif)
+    3) [Menu contextuel du haut](#menu-contextuel-du-haut)
+    4) [Menu contextuel du bas](#menu-contextuel-du-bas)
+        1) [Copier / Couper / Coller](#copier--couper--coller)
+        2) [Supprimer](#supprimer)
+        3) [Inter-changer](#inter-changer)
+    5) [Manipuler les rangées](#manipuler-les-rangées)
+    6) [Raccourcis claviers / souris](#raccourcis-claviers--souris)
+4) [Édition d'un module](#édition-dun-module)
+    1) [Les actions disponibles](#les-actions-disponibles)
+    2) [Les pictogrammes](#les-pictogrammes)
+    3) [Les groupes](#les-groupes)
+5) [Décorer ses étiquettes](#décorer-ses-étiquettes)
+    1) [Personnaliser la décoration](#personnaliser-la-décoration)
+    2) [Bibliothèque de thèmes](#bibliothèque-de-thèmes)
+6) [Schéma unifilaire](#schéma-unifilaire)
+    1) [Édition des caractéristiques](#édition-des-caractéristiques)
+        1) [L'asservissement](#lasservissement)
+        2) [Allocation d'un module a ses enfants](#allocation-dun-module-a-ses-enfants)
+    2) [Génération du schéma unifilaire](#génération-du-schéma-unifilaire)
+7) [Moniteur de surveillance](#moniteur-de-surveillance)
+8) [Nomenclature / Résumé](#nomenclature--résumé)
+9) [Impression](#impression)
+    1) [Page de garde](#page-de-garde)
+    2) [Etiquettes](#etiquettes)
+    3) [Schéma unifilaire](#schéma-unifilaire)
+    4) [Nomenclature](#nomenclature)
+10) [Les étiquetteuses](#les-étiquetteuses)
+11) [Remerciements ❤ !](#remerciements--)
+
+
+## Etiquetter son tableau électrique, plus qu'une affaire de design
+
+Si la manière d'étiqueter son tableau électrique est laissée libre à chacun, le faire est une obligation reposant sur des critères comme la sécurité et l'information.
+
+### La sécurité avant tout
+
+Le but premier étant de permettre aux utilisateurs de repérer rapidement chaque circuit que compose son installation. En cas d'urgence, il est primordial que vous puissiez couper le circuit en défaut le plus rapidement possible. Vous en conviendrez, un étiquetage clair et illustré remplira parfaitement ce besoin.
+
+La norme NF C 15-100 insiste sur ce point. Cette norme de référence pour l’installation de circuits électriques précise que « chacun des circuits doit être repéré par une indication appropriée, correspondant aux besoins de l’usager et du professionnel. Ce repérage doit préciser les locaux desservis et la fonction ».
+
+En premier lieu, devra être indiqué, la pièce et la fonction correspondante pour chaque circuit.
+
+### Au premier coup d'œil
+
+Les étiquettes ne sont que de petits espaces. Il est impossible d'écrire, en détail, tous les éléments de correspondances. N'hésitez pas à utiliser des abréviations claires pour aller à l'essentiel.
+
+Il est de tradition moderne d'accompagner le texte d'un pictogramme simple et rapidement compréhensible. Cette pratique améliore grandement le repérage du circuit recherché.
+
+Pour ajouter de plus amples informations, Tiquettes vous propose la rédaction automatique d'une nomenclature. Chaque module possède un champ « annotations » dans lequel vous pouvez indiquer toute information complémentaire. Ce champ ne sera ajouté qu'à la nomenclature.
+
 
 ## Le projet
 
-Tout commence par l'initialisation de son projet.
+![Vue](./public/github_1280x640.webp)
 
-Deux possibilités proposées dans la barre à outils :
+Tout commence par la création de votre projet.<br />
+Deux possibilités principales sont à votre disposition:
 
 - Créer un nouveau projet
-- Importer un projet sauvegardé
+- Importer un projet existant
 
-![Nouveau projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_project_actions1.png)
+Tiquettes.fr est une application web ne proposant pas d'espace de stockage pour conserver ses projets, mais une fonctionnalité d'exportation est disponible pour sauvegarder à votre guise l'ensemble de vos travaux.
 
-Ou bien même, directement dans la fenêtre de bienvenue :
+Commençons par le menu:
 
-![Nouveau projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_welcome.png?raw=true)
+![Projet](./docs/_project_actions1.png)
 
-### Créer un nouveau projet par défaut
+![Projet](./docs/_welcome.png)
 
-![Nouveau projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_new_project.png?raw=true)
+### Créer un nouveau projet libre
 
-L'application définie automatiquement un tableau électrique de 4 rangées, 13 modules par rangée avec une hauteur des
-étiquettes de 30mm.
+Démarrer librement un nouveau projet. C'est à vous de renseigner toutes les informations nécessaires à l'aide de l'assistant.
 
-Bien évidement, vous pouvez modifier ces valeurs en agissant sur les réglages proposés. Commencez par le réglage du
-nombre de modules, puis de rangées, et finissez avec la hauteur des étiquettes.
+![Nouveau projet](./docs/_new_project.png)
+![Nouveau projet](./docs/_new_project_2.png)
 
-Le nouveau tableau s'ajustera automatiquement.
+Une enveloppe (carcasse du tableau électrique) comporte plusieurs informations normalisées. Il vous sera demandé de renseigner le nombre de rangées ainsi que le nombre de modules par rangée.
 
-### Importer un projet sauvegardé
+Il vous sera aussi demandé la largeur des modules. Ce paramètre est de nos jours normalisé à 18mm mais certains anciens modules avaient une largeur de 17,5mm. Si votre installation est ancienne et que vous avez un doute sur la largeur des modules, vous pourrez corriger à tout moment cette valeur. L'impression de vos étiquettes vous servira de guide.
+
+La hauteur des étiquettes est aussi un paramètre important. Chaque enveloppe possède un espace dédié pour "fixer" les étiquettes. Mesurez bien la hauteur disponible pour renseigner le paramètre.
+
+---
+> <b>🛈 Bon à savoir</b>
+>
+> Ne pas hésiter à soustraire 1 mm de la hauteur des étiquettes. Les emplacements sont souvent protégés par des plastrons transparents à bascule. Les "charnières" sont épaissent et peuvent masquer le bas des étiquettes !
+---
+
+### Importer un projet
 
 Tiquettes vous propose d'importer et d'exporter votre travail pour l'archiver ou y retravailler ultérieurement. Une
 sauvegarde automatique de votre session de travail est aussi intégrée au système.
@@ -80,67 +154,20 @@ sauvegarde automatique de votre session de travail est aussi intégrée au syst�
 Pour importer un projet, cliquez sur le bouton `Importer` puis chargez le fichier correspondant à votre projet.
 Immédiatement, celui-ci s'affichera dans la zone de travail!
 
-### Exporter
+### Exporter son travail
 
-![Menu d'exportations](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_export_menu_.png?raw=true)
+Tel un chef d'oeuvre, il est important ne sauvegarder son travail. Tiquettes.fr vous permet d'exporter l'intégralité du projet dans un fichier JSON.
 
-Pour ne jamais perdre votre travail, l'application vous donne la possibilité d'exporter votre projet.
+![Exporter](./docs/_export_menu.png)
 
-Le menu ```Exporter``` vous donne accès à différentes options.
+Ce fichier contient l'ensemble de votre travail ainsi que certaines préférences, comme les réglages d'impression, les caractéristiques de votre projet, mais aussi les données personnelles renseignées.
 
-#### Exporter le projet complet
-
-En choisissant cette option, un fichier de type JSON vous sera proposé au téléchargement. Ce fichier contient l'ensemble de votre travail ainsi que certaines préférences, comme les réglages d'impression, les caractéristiques de votre projet, mais aussi les données personnelles renseignées.
-
-Ce fichier pour être importé à tout moment pour retravailler votre projet.
-
-#### Exporter pour les étiqueteuses
-
-Les étiqueteuses sont des appareils très pratique sur les chantiers pour imprimer à la volée, les étiquettes de votre tableau. Tiquettes.fr est compatible avec certains modèles connus.
-
-En choisissant les rangées à exporter, un fichier ZIP contenant une image des étiquettes par rangée vous sera proposé au téléchargement. Il ne vous restera plus qu'à les envoyer dans l'étiqueteuse correspondante pour les imprimer !
-
-Plusieurs réglages sont à votre disposition:
-
-![Exporter pour une étiqueteuse](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup_export_labeller.png?raw=true)
+Ce fichier peut être importé à tout moment pour retravailler votre projet.
 
 
----
-> <b>🛈 Bon à savoir</b>
->
-> Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour une enveloppe de 13 modules. Toutefois, si vous possédez un écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
->
-> <small>**Taille de la zone de travail par défaut**</small><br />
->![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOff.png?raw=true)
->
-> <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
->![Taille de la zone de travail par défaut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoResizeOn.png?raw=true)
----
+## L'espace de travail
 
-
-### Résumé du projet
-
-Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
-
-
-
-![Nouveau projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_project_resume.png?raw=true)
-
-Sous le nom du projet, vous retrouvez le numéro de la dernière version exportée, les caractéristiques de l'enveloppe,
-ainsi que dans l'ordre, la date de création et la date de dernière modification.
-
-> <b>🛈 Bon à savoir</b>
->
-> Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre
-> clavier. A contrario, la touche `Echap` annule les modifications.
->
-> ![Modifier le nom du projet](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_edit_project_name.png?raw=true)
-
-Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
-
-## L'éditeur
-
-![Éditeur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_editeur.png?raw=true)
+![Éditeur](./docs/_editeur.png)
 
 ### Descriptif
 
@@ -150,9 +177,31 @@ Chaque module peut avoir une largeur et/ou une position réglable en fonction de
 pourrez l'étendre jusqu'à rencontrer, soit le bout de la rangée, soit un autre module déjà défini. Vous devrez libérer
 celui-ci pour poursuivre son expansion. Idem pour le déplacer, seulement possible dans les espaces libres.
 
+### Résumé du projet
+
+Une fois le projet chargé, vous retrouverez un résumé de ses propriétés au-dessus de la zone de travail.
+
+
+![Résumé](./docs/_project_resume.png)
+
+Sous le nom du projet, vous retrouvez le numéro de la dernière version exportée, les caractéristiques de l'enveloppe,
+ainsi que dans l'ordre, la date de création et la date de dernière modification.
+
+---
+> <b>🛈 Bon à savoir</b>
+>
+> Pour modifier le nom du projet, cliquez dessus puis validez les modifications avec la touche `Entrée` de votre
+> clavier. A contrario, la touche `Echap` annule les modifications.
+>
+> ![Modifier le nom du projet](./docs/_edit_project_name.png)
+---
+
+Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
+
+
 ### Menu contextuel du haut
 
-![Menu contextuel du haut](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_top.png?raw=true)
+![Menu contextuel du haut](./docs/_top.png)
 
 Le symbole `+` vous permet d'agrandir le module d'une largeur sur sa droite.
 
@@ -164,7 +213,7 @@ Le symbole `→` vous permet de déplacer le module d'une position sur la droite
 
 ### Menu contextuel du bas
 
-![Menu contextuel du bas](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_bottom.png?raw=true)
+![Menu contextuel du bas](./docs/_bottom.png)
 
 Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le module en question.
 
@@ -174,21 +223,47 @@ Le symbole suivant permet de copier le module. Cela permet de copier, le libell�
 module pour le dupliquer ailleurs sur le tableau. Une fois le module mis dans le presse papier, l'application vous met
 en avant les emplacements disponibles en fonction de la largeur initiale du module copié.
 
-![Copier](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_copy.png?raw=true)
+![Copier](./docs/_copy.png)
 
 Exemple d'emplacements disponibles :
 
-![Coller aux emplacements disponibles](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_pasteall.png?raw=true)
+![Coller aux emplacements disponibles](./docs/_pasteall.png)
 
 Cliquer sur l'icône pour dupliquer / d&placer le module à cet emplacement.
 
 Pour annuler, soit, cliquer sur l'icône ci-dessous, soit appuyer sur la touche `Echap`:
 
-![Annuler](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_paste_cancel.png?raw=true)
+![Annuler](./docs/_paste_cancel.png)
 
 Et voilà!
 
-![Collé!](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_pasted.png?raw=true)
+![Collé!](./docs/_pasted.png)
+
+#### Supprimer
+
+Après confirmation, le module sélectionné sera supprimé!
+
+#### Inter-changer
+
+![Inter-changer!](./docs/_move.png)
+
+Si vous souhaitez intervertir 2 modules, cette icône est faite pour vous.
+
+Une fois cliquée, choisissez le module compatible pour l'échange. Les modules compatibles sont indiqués en les survolant:
+
+Depuis:
+
+![Inter-changer!](./docs/_move_1.png)
+
+Vers:
+
+![Inter-changer!](./docs/_move_2.png)
+
+Et voila !
+
+![Inter-changer!](./docs/_move_3.png)
+
+
 
 ### Manipuler les rangées
 
@@ -196,40 +271,41 @@ Au cours de l'édition de votre planche d'étiquette, il peut parfois être util
 
 Pour insérer une rangée, cliquez sur le raccourci présent entre chacune des rangées existantes:
 
-![Insérer une rangée](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_add_row.png?raw=true)
+![Insérer une rangée](./docs/_add_row.png)
 
 Pour supprimer une rangée, cliquez sur l'icône `Corbeille`, à gauche du nom de la rangée souhaitée:
 
-![Supprimer une rangée](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_delete_row.png?raw=true)
+![Supprimer une rangée](./docs/_delete_row.png)
 
-#### Raccourcis claviers / souris
-
-Lors de la définition de votre planche d'étiquettes, vous pouvez utiliser votre clavier pour interagir sur les rangées
-et les modules.
-
-- Pour faire défiler les rangées verticalement, vous pouvez utiliser les flèches `haut` et `bas` de votre clavier,
-  l'ascenseur de la fenêtre ou la roulette de votre souris.
-- Pour faire défiler les rangées horizontalement, vous pouvez utiliser l'ascenseur de la fenêtre ou la roulette de votre
-  souris (en appuyant simultanément sur une des touches `shift` de votre clavier).
-- Pour déplacer un module horizontalement, sélectionnez-le avec votre souris, puis appuyez sur les flèches `gauche` et
-  `droite` de votre clavier.
-- Pour redimensionner un module, sélectionnez-le avec votre souris, puis appuyez sur les touches `+` et `-` de votre
-  clavier.
-
+---
 > <b>🛈 Bon à savoir</b>
 >
-> ![Auto ID](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_auto_id.png?raw=true)
+> ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
 > dans l'onglet ```Éditeur``` et ```Schéma```.
+---
 
 Une option est disponible dans l'éditeur de modules permettant d'empêcher ou non le réassignement automatique de l'identifiant d'un module:
 
-![Réassignement autorisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_autoidok.png?raw=true)
+![Réassignement autorisé](./docs/_autoid_ok.png)
 
 En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actuel:
 
-![Réassignement non autorisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_noautoid.png?raw=true)
+![Réassignement non autorisé](./docs/_autoid_ko.png)
+
+---
+> <b>🛈 Bon à savoir</b>
+>
+> Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour une enveloppe de 13 modules. Toutefois, si vous possédez un écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
+>
+> <small>**Taille de la zone de travail par défaut**</small><br />
+>![Taille de la zone de travail par défaut](./docs/_autoResizeOff.png)
+>
+> <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
+>![Taille de la zone de travail par défaut](./docs/_autoResizeOn.png)
+---
+
 
 ## Édition d'un module
 
@@ -239,19 +315,22 @@ affiner sa définition.
 La partie inférieure de la fenêtre d'édition comporte une zone de démonstration, mettant en scène vos modifications en
 temps réel.
 
-![Édition d'un module](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup.png?raw=true)
+![Édition d'un module](./docs/_popup.png)
 
 - _Identifiant_ : Identifiant technique du module. Seules les lettres, chiffres et le caractère point sont acceptés.
 - _Libellé_ : Une très courte description du module. Les retours à la ligne sont pris en compte.
 - _Pictogramme_ : Une petite image illustrant l'environnement du module.
 
+---
 > <b>🛈 Bon à savoir</b>
 >
-> ![Auto Next ID](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_next_id.png?raw=true)
+> ![Auto Next ID](./docs/_next_id.png)
 >
 > Il est parfois difficile de suivre les identifiants déjà utilisés par les précédents modules, c'est pourquoi un bouton
 > est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module
 > définie dans l'onglet ```Schéma```.
+---
+
 
 ### Les actions disponibles
 
@@ -263,97 +342,97 @@ temps réel.
 
 Une liste de pictogrammes vous est proposée.
 
-![Liste des pictogrammes](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_icon_selector.png?raw=true)
+![Liste des pictogrammes](./docs/_icon_selector.png)
 
 Par ailleurs, vous pouvez aussi rechercher un picto, directement en écrivant une partie de sa description. La liste se
 mettra automatiquement à jour.
 
-![Rechercher un pictogramme](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_icon_selector_search.png?raw=true)
+![Rechercher un pictogramme](./docs/_icon_selector_search.png)
 
 ### Les groupes
 
 Il est parfois plus simple de regrouper les modules par pièces ou par zones par exemple. Pour ce faire, l'application vous propose de définir une couleur de groupe.
 
-![Définir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup_color.png?raw=true)
+![Définir une couleur](./docs/_popup_color.png)
 
 Cette couleur pourra être affichée sur les étiquettes en fonction de la définition du thème sélectionné. Bien évidement, vous pouvez ajuster cet affichage en modifiant les paramètres du thème en cours ou créer votre propre thème !
 
-![Choisir une couleur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_editor_color.png?raw=true)
+![Choisir une couleur](./docs/_theme_custom_editor_color.png)
 
 ## Décorer ses étiquettes
 
-![Sélection du thème](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_selector.png?raw=true)
+![Sélection du thème](./docs/_theme_selector.png)
 
 A chacun son style, à chaque coffret sa marque, quoi de mieux que de pouvoir décorer ses étiquettes au style de la
 marque du matériel installé?
 
 Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes changez en temps réel!
 
-![Sélection du thème](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_selector2.png?raw=true)
+![Sélection du thème](./docs/_theme_selector2.png)
 
 - Thème Simple
 
-![Thème Simple](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_simple.png?raw=true)
+![Thème Simple](./docs/_theme_simple.png)
 
 - Thème Minimal
 
-![Thème Minimal](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_minimal.png?raw=true)
+![Thème Minimal](./docs/_theme_minimal.png)
 
 - Thème Schneider - Standard
 
-![Thème Schneider - Standard](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_schn_std.png?raw=true)
+![Thème Schneider - Standard](./docs/_theme_schn_std.png)
 
 - Thème Schneider - Alternatif
 
-![Thème Schneider - Alternatif](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_schn_alt.png?raw=true)
+![Thème Schneider - Alternatif](./docs/_theme_schn_alt.png)
 
 - Thème Schneider - Nouveau format - Logements
 
-![Thème Schneider - Nouveau format - Logements](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_schn_lgt.png?raw=true)
+![Thème Schneider - Nouveau format - Logements](./docs/_theme_schn_lgt.png)
 
 - Thème Schneider - Nouveau format - Tertiaire
 
-![Thème Schneider - Nouveau format - Tertiaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_schn_ter.png?raw=true)
+![Thème Schneider - Nouveau format - Tertiaire](./docs/_theme_schn_ter.png)
 
 - Thème Hager - Ancien format - Logements
 
-![Thème Hager - Ancien format - Logements](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_hgr_algt.png?raw=true)
+![Thème Hager - Ancien format - Logements](./docs/_theme_hgr_algt.png)
 
 - Thème Hager - Ancien format - Tertiaire
 
-![Thème Hager - Ancien format - Tertiaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_hgr_ater.png?raw=true)
+![Thème Hager - Ancien format - Tertiaire](./docs/_theme_hgr_ater.png)
 
 - Thème Hager - Nouveau format - Logements
 
-![Thème Hager - Nouveau format - Logements](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_hgr_nlgt.png?raw=true)
+![Thème Hager - Nouveau format - Logements](./docs/_theme_hgr_nlgt.png)
 
 - Thème Hager - Nouveau format - Tertiaire
 
-![Thème Hager - Nouveau format - Tertiaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_hgr_nter.png?raw=true)
+![Thème Hager - Nouveau format - Tertiaire](./docs/_theme_hgr_nter.png)
 
 - Thème Legrand - Monochrome - Logements
 
-![Thème Legrand - Monochrome - Logements](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_lgd_mlgt.png?raw=true)
+![Thème Legrand - Monochrome - Logements](./docs/_theme_lgd_mlgt.png)
 
 - Thème Legrand - Monochrome - Tertiaire
 
-![Thème Legrand - Monochrome - Tertiaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_lgd_mter.png?raw=true)
+![Thème Legrand - Monochrome - Tertiaire](./docs/_theme_lgd_mter.png)
 
 - Thème Legrand - Couleur - Logements
 
-![Thème Legrand - Couleur - Logements](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_lgd_clgt.png?raw=true)
+![Thème Legrand - Couleur - Logements](./docs/_theme_lgd_clgt.png)
 
 - Thème Legrand - Couleur - Tertiaire
 
-![Thème Legrand - Couleur - Tertiaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_lgd_cter.png?raw=true)
+![Thème Legrand - Couleur - Tertiaire](./docs/_theme_lgd_cter.png)
 
 ### Personnaliser la décoration
 
 Tiquettes vous propose de décorer plus finement vos étiquettes en créant votre propre thème!
 
-![Thème personnalisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_button.png?raw=true)
+![Thème personnalisé](./docs/_theme_custom_button.png)
 
-![Thème personnalisé](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_theme_custom_editor.png?raw=true)
+![Thème personnalisé](./docs/_theme_custom_editor.png)
 
 Vous pouvez exporter vos thèmes, et même importer les créations d'autrui !
 
@@ -372,7 +451,7 @@ tableau électrique conçu par vos soins.
 La fenêtre d’édition d'un module possède désormais un nouvel onglet ```Schéma``` permettant de définir les
 caractéristiques techniques du module:
 
-![Édition des caractéristiques techniques](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_popup_schema.png?raw=true)
+![Édition des caractéristiques techniques](./docs/_popup_schema.png)
 
 - _Fonction_ : Fonction technique du module : Interrupteur différentiel, Disjoncteur, etc.
 - _Parent_ : Module parent dont dépend le module en cours d'édition. Par exemple, ce disjoncteur dépend d'un module
@@ -393,21 +472,21 @@ Je souhaite alimenter une ampoule qui devra être commandée par un télérupteu
 
 Voici un schéma résumé:
 
-![Asservissement simple](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_schema_asserv_simple.png?raw=true)
+![Asservissement simple](./docs/_schema_asserv_simple.png)
 
 Le disjoncteur Q1 protège la bobine du télérupteur KC1. Le disjoncteur Q2 protège l'éclairage couloir, le télérupteur KC1 asservi le disjoncteur Q2.
 
-![Asservissement simple - Propriétés](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_props_asserv_simple.png?raw=true)
+![Asservissement simple - Propriétés](./docs/_props_asserv_simple.png)
 
 Vous remarquerez le choix du type d'asservissement. Dans notre exemple, le disjoncteur Q2 ne protège que le circuit 'Eclairage couloir', donc c'est un asservissement total.
 
 Autre exemple. Nous souhaitons que le disjoncteur Q2 protège aussi le circuit d'éclairage Salon.
 
-![Asservissement double](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_schema_asserv_double.png?raw=true)
+![Asservissement double](./docs/_schema_asserv_double.png)
 
 Pour ce faire, dans les propriétés du disjoncteur Q2, nous remplaçons le libellé 'Couloir' par 'Salon' puis dans les propriétés du schéma, nous indiquons un asservissement partiel.
 
-![Asservissement double - Propriétés](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_props_asserv_double.png?raw=true)
+![Asservissement double - Propriétés](./docs/_props_asserv_double.png)
 
 Et voila! La magie de Tiquettes.fr à encore opérée. :-)
 
@@ -415,13 +494,13 @@ Et voila! La magie de Tiquettes.fr à encore opérée. :-)
 
 Dans certains cas il est utile de partager un module pour alimenter plusieurs enfants. Par exemple, vous voulez indiquer la présence d'un voyant dans votre tableau électrique:
 
-![Allocation multiple](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_alloc_bi.png?raw=true)
+![Allocation multiple](./docs/_alloc_bi.png)
 
-Sur le schéma ci-dessus, le disjoncteur Q1 alimente l'arrosage extérieur mais aussi le voyant modulaire, état de fonctionnement de cet arrosage.
+Sur le schéma ci-dessus, le disjoncteur Q1 alimente l'éclairage extérieur mais aussi le voyant modulaire, état de fonctionnement de cet éclairage.
 
 Pour permettre ce montage, il faut indiquer à l'application de partager la source d'un circuit via cette fonction:
 
-![Allocation multiple - Fonction](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_alloc_bi_icon.png?raw=true)
+![Allocation multiple - Fonction](./docs/_alloc_bi_icon.png)
 
 Une manière simple et rapide d'indiquer à l'application que vous souhaitez partager un module.
 
@@ -432,44 +511,46 @@ La génération dépend à 100% des données que vous aurez renseignées lors de
 
 Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du tableau de bord :
 
-![Schéma unifilaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_schema.png?raw=true)
+![Schéma unifilaire](./docs/_schema.png)
 
+---
 > <b>🛈 Bon à savoir</b>
 >
-> ![Auto ID](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_auto_id.png?raw=true)
+> ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
 > dans l'onglet ```Éditeur``` et ```Schéma```.
+---
 
 
 Pour éditer un module, il suffit juste de cliquer dessus ;-)
 
-![Schéma unifilaire](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_schema_editor.png?raw=true)
+![Schéma unifilaire](./docs/_schema_editor.png)
 
 Au-dessus du schéma vous retrouverez l'espace ```barre à outils``` vous proposant dans cet onglet, différents réglages.
 
 Pour commencer, vous avez la possibilité d'ajouter un ```Disjoncteur de branchement``` à votre schéma. Vous pouvez
 l'activer ou le désactiver en utilisant cette
-icône ![Disjoncteur de branchement](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_db.svg?raw=true).
+icône ![Disjoncteur de branchement](./docs/_icon_db.svg).
 Différents réglages sont disponibles pour s'adapter au mieux à votre besoin.
 
 S'ensuit la possibilité, via un clic sur cette
-icône ![Bornier de terre](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_icon_ground.svg?raw=true),
+icône ![Bornier de terre](./docs/_icon_ground.svg),
 d'ajouter un bornier / ligne de terre au schéma.
 
-L'icône ![Moniteur](https://github.com/pantaflex44/Tiquettes/blob/main/docs/_icon_monitor.svg?raw=true) permet d'activer
+L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer
 ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
 ## Moniteur de surveillance
 
 Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de
-surveillance ![Moniteur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_icon_monitor.svg?raw=true).
+surveillance ![Moniteur](./docs/_icon_monitor.svg).
 
 Depuis la version 2.0.0 de l'application, Tiquettes vous propose une relative détection des erreurs dans votre projet.
 Ces "erreurs", correspondent à des règles définies dans la norme NFC 15-100 à l'instant T. Vous pouvez bien évidement
 désactiver cette surveillance à tout moment.
 
-![Surveillance - Aucun problème détecté](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_monitor_ok.png?raw=true) ![Surveillance - Erreur détectés](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_monitor_errors.png?raw=true)
+![Surveillance - Aucun problème détecté](./docs/_monitor_ok.png) ![Surveillance - Erreur détectés](./docs/_monitor_errors.png)
 
 Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024) :
 
@@ -482,7 +563,7 @@ Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024)
   au schéma).
 - etc.
 
-![Surveillance - Exemple d'erreur](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_monitor_errors_details.png?raw=true)
+![Surveillance - Exemple d'erreur](./docs/_monitor_errors_details.png)
 
 La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouteront
 au fur et à mesure des prochaines versions!
@@ -493,28 +574,126 @@ Tiquettes vous propose de résumer votre projet.
 
 La nomenclature est générée automatiquement en fonction des définitions indiquées dans l'éditeur.
 
-![Nomenclature](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_summary.png?raw=true)
+![Nomenclature](./docs/_summary.png)
 
 La barre à outils regroupe cette fois, la liste des colonnes que vous souhaitez afficher. Ce paramètre est
 automatiquement associé à votre projet, ce qui signifie qu'il sera, lui aussi, exporté.
 
-## Immortaliser son travail
 
-![Immortaliser](https://raw.githubusercontent.com/pantaflex44/Tiquettes/refs/heads/main/docs/_actions.png?raw=true)
+## Impression
 
-Une fois vos étiquettes réalisées, vous pourrez les imprimer en cliquant sur le bouton adéquat.
+Il est temps de coucher votre oeuvre sur papier.
 
-Le mode `paysage` ainsi que le format A4 sont sélectionnés par défaut.
+### Page de garde
 
-> <b>🛈 Bon à savoir</b>
->
-> Depuis la version 2.2.0, **Tiquettes vous propose l'impression en PDF de vos projets**. Imprimer en PDF permet
-> d'améliorer nettement la qualité de la mise en page de votre projet. Par ailleurs, imprimer en PDF permet de passer
-> outre les manquements et problèmes provoqués par certains navigateurs qui ne respectent pas forcément toutes les
-> possibilités du rendu proposé par Tiquettes.
->
-> **Imprimer en PDF nécessite d'être vigilant au niveau des propriétés de votre imprimante. Veillez à bien
-sélectionner "Taille réelle" ou "Echelle 100%" pour respecter la mise en page proposée par l'application.**
+![Menu - page de garde](./docs/_print_menu_firstpage.png)
+
+Tout dossier comporte une page de garde, décrivant le projet. Tiquettes vous propose d'imprimer cette page de garde et vous donne la possibilité de choisir les données à afficher
+
+En cliquant sur l'icône engrenage vous accédez aux différentes propriétés:
+
+![Imprimer - Options de la page de garde](./docs/_print_firstpage_options.png)
+
+Exemple de rendu:
+
+![Page de garde](./docs/_firstpage.png)
+
+
+### Etiquettes
+
+![Menu - Etiquettes](./docs/_print_menu_labels.png)
+
+Le but principale de l'application est quand même d'imprimer ses étiquettes :-)
+
+Alors cette partie du menu vous permets d'affiner les paramètres d'impression.
+
+```
+Décorer les emplacements libres         : Permet d'appliquer le thème aux emplacements libres (cf image 1)
+
+Imprimer les lignes de coupe            : Inclut des traits de coupe pour les massicots (cf image 2)
+
+Indiquer le calibre sous chaque module  : Inscrit sous l'étiquette le calibre du module (cf image 3)
+pour aider à leur installation
+```
+
+![Image 1](./docs/_labels_print_free.png)
+<small>*image 1*</small>
+
+![Image 2](./docs/_labels_print_cut.png)
+<small>*image 2*</small>
+
+![Image 3](./docs/_labels_print_current.png)
+<small>*image 3*</small>
+
+
+### Schéma unifilaire
+
+![Menu - Schéma unifilaire](./docs/_print_menu_schema.png)
+
+Tiquettes.fr vous propose la génération semi automatique du schéma unifilaire associé à votre tableau électrique. 
+
+En cas de rénovation vous avez la possibilité de démarrer le Folio à la page de votre choix.
+
+
+### Nomenclature
+
+![Menu - Nomenclature](./docs/_print_menu_summary.png)
+
+
+
+## Les étiqueteuses
+
+Depuis la version 2.2.8, l'application vous propose d'exporter vos planches d'étiquettes de manière compatible avec certains modèles d'étiqueteuses. Proposée dans le menu d'exportation, cette fonctionnalité vous demande dans un premier temps les rangées à exporter.
+
+Cette sélection fonctionne comme le système de sélection des pages à imprimer:
+
+```
+1-4         : Sélectionne les rangées de 1 à 4 incluses
+1,3,6       : Sélectionne les rangées 1, 3 et 6
+```
+
+Par ailleurs, vous pouvez assembler les sélections:
+
+```
+1-3, 5-6, 8 : Sélectionne les rangées de 1 à 3 incluses, de 5 à 6 incluses, ainsi que la 8ème rangée
+```
+
+Votre choix fait, il ne vous reste plus qu'à cliquer sur l'icone de téléchargement pour configurer la mise en forme avant exportation.
+
+![Mise en forme pour l'étiqueteuse](./docs/_labelers_options.png)
+
+```
+Etiqueteuse             : Permet de choisir un modèle d'étiqueteuse préprogrammé. 
+                          Chaque modèle mémorise les derniers paramètres modifiés.
+
+Résolutions             : Les appareils ont différentes résolutions. Pour mieux
+                          adapter la qualité des images produites à chaque appareil,
+                          veillez à correctement renseigner ces valeurs.
+
+Hauteur du ruban        : Largeur / Hauteur du ruban sur lequel sera imprimé les rangées.
+
+Largeur des modules     : Largeur des modules du tableau électrique.
+
+Taille des pictogrammes : Vous pouvez choisir de ne pas afficher les pictogrammes ou
+                          de choisir la taille qu'ils prendront sur l'étiquette.
+
+Taille des libellés     : Vous pouvez choisir de ne pas afficher les libellés ou
+                          de choisir la taille qu'ils prendront sur l'étiquette.
+
+Orientation             : Orientation verticale ou horizontale des libellés.
+
+Affichage               : La majorité des étiqueteuses permettent d'imprimer normalement
+                          ou d'inverser les couleurs. Noir sur fond blanc ou Blanc sur fond noir.
+
+Découpes                : Pour économiser les rubans vous pouvez choisir de supprimer tout en
+                          partie les espaces vides. Il vous faudra découper pour assembler.
+
+Bordures                : Pour vous repérer dans le découpage, vous pouvez choisir les
+                          bordures à imprimer.
+```
+
+Les paramètres sont simples et permettent une mise en forme rapide. Le résultat sera exporté sous forme d'un fichier ZIP contenant une image PNG monochrome par rangée.
+
 
 ### Fin!
 
@@ -522,17 +701,18 @@ sélectionner "Taille réelle" ou "Echelle 100%" pour respecter la mise en page 
 
 # Remerciements ❤ !
 
-Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous remercie fortement pour tout celà !
+Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous en remercie fortement pour tout celà !
 
-### 🐛 Remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et les [Discussions](https://github.com/pantaflex44/Tiquettes/discussions)
+### ☕ Dans un premier temps, gros merci pour tous les cafés offerts ;-)
 
-[zoliaaz](https://github.com/zoliaaz), [cnaslain](https://github.com/cnaslain), [ntarocco](https://github.com/ntarocco), [jlecour](https://github.com/jlecour), [plouflechien](https://github.com/plouflechien), [Benoit485](https://github.com/Benoit485), [F4FXL](https://github.com/F4FXL), [dough29](https://github.com/dough29), [karimLG](https://github.com/karimLG), [fmdl](https://github.com/fmdl), [ekozan](https://github.com/ekozan), [Starlight58](https://github.com/Starlight58), [Trinakria23](https://github.com/Trinakria23), [Boubigloubi](https://github.com/Boubigloubi), [martinlbb](https://github.com/martinlbb), [rems64](https://github.com/rems64), [Biodom13](https://github.com/Biodom13), [mmnlfrrr](https://github.com/mmnlfrrr), [LeG2](https://github.com/LeG2), [misterg94](https://github.com/misterg94), [Fanka14](https://github.com/Fanka14), [xhark](https://github.com/blogmotion), [lonewulf](https://github.com/lonewulf), [Yvan13120](https://github.com/Yvan13120), [BenoitCier](https://github.com/BenoitCier)
+### 🐛 Mais aussi pour toutes les remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et vos participations dans les [discussions](https://github.com/pantaflex44/Tiquettes/discussions)
+
+[zoliaaz](https://github.com/zoliaaz), [cnaslain](https://github.com/cnaslain), [ntarocco](https://github.com/ntarocco), [jlecour](https://github.com/jlecour), [plouflechien](https://github.com/plouflechien), [Benoit485](https://github.com/Benoit485), [F4FXL](https://github.com/F4FXL), [dough29](https://github.com/dough29), [karimLG](https://github.com/karimLG), [fmdl](https://github.com/fmdl), [ekozan](https://github.com/ekozan), [Starlight58](https://github.com/Starlight58), [Trinakria23](https://github.com/Trinakria23), [Boubigloubi](https://github.com/Boubigloubi), [martinlbb](https://github.com/martinlbb), [rems64](https://github.com/rems64), [Biodom13](https://github.com/Biodom13), [mmnlfrrr](https://github.com/mmnlfrrr), [LeG2](https://github.com/LeG2), [misterg94](https://github.com/misterg94), [Fanka14](https://github.com/Fanka14), [xhark](https://github.com/blogmotion), [yar0d](https://github.com/yar0d), [BenoitCier](https://github.com/BenoitCier)
+
+### Un remerciement spécial pour vos partages et les articles / messages promouvant Tiquettes.fr sur la toile
+
+- [Tiquettes.fr : faites vos tableaux électriques en OpenSource](https://www.minimachines.net/actu/tiquettes-tableaux-electrique-141182) (**[MiniMachines.net](https://www.minimachines.net)**)
+- [Logiciel gratuit pour imprimer les étiquettes de tableau](https://forum.gce-electronics.com/t/logiciel-gratuit-pour-imprimer-les-etiquettes-de-tableau/19416) (**[Forum GCE Electronics](https://forum.gce-electronics.com)**)
 
 
- ### ☕ Ainsi que pour toutes les personnes m'ayant offert des cafés ;-)
 
----
-
- ![Tiquettes](https://github.com/pantaflex44/Tiquettes/blob/main/public/github_1280x640.png?raw=true)
-
----
