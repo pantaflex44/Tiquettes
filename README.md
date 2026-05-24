@@ -702,8 +702,9 @@ Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des
 
 ### Un remerciement spécial pour vos partages et les articles / messages promouvant Tiquettes.fr sur la toile
 
-- [Tiquettes.fr : faites vos tableaux électriques en OpenSource](https://www.minimachines.net/actu/tiquettes-tableaux-electrique-141182) (**[MiniMachines.net](https://www.minimachines.net)**)
-- [Logiciel gratuit pour imprimer les étiquettes de tableau](https://forum.gce-electronics.com/t/logiciel-gratuit-pour-imprimer-les-etiquettes-de-tableau/19416) (**[Forum GCE Electronics](https://forum.gce-electronics.com)**)
+[Tiquettes.fr : faites vos tableaux électriques en OpenSource](https://www.minimachines.net/actu/tiquettes-tableaux-electrique-141182) (**[MiniMachines.net](https://www.minimachines.net)**)
+
+[Logiciel gratuit pour imprimer les étiquettes de tableau](https://forum.gce-electronics.com/t/logiciel-gratuit-pour-imprimer-les-etiquettes-de-tableau/19416) (**[Forum GCE Electronics](https://forum.gce-electronics.com)**)
 
 
 
