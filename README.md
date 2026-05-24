@@ -56,8 +56,8 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
     - [Importer un projet](#importer-un-projet)
     - [Exporter son travail](#exporter-son-travail)
 - [L'espace de travail](#lespace-de-travail)
-    - [Résumé du projet](#résumé-du-projet)
     - [Descriptif](#descriptif)
+    - [Résumé du projet](#résumé-du-projet)
     - [Menu contextuel du haut](#menu-contextuel-du-haut)
     - [Menu contextuel du bas](#menu-contextuel-du-bas)
         - [Copier / Couper / Coller](#copier--couper--coller)
@@ -87,10 +87,13 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
 - [Remerciements ❤ !](#remerciements--)
 
 
+<div id="etiquetter-son-tableau-électrique-plus-quune-affaire-de-design"></div>
 
 ## Etiquetter son tableau électrique, plus qu'une affaire de design
 
 Si la manière d'étiqueter son tableau électrique est laissée libre à chacun, le faire est une obligation reposant sur des critères comme la sécurité et l'information.
+
+<div id="la-sécurité-avant-tout"></div>
 
 ### La sécurité avant tout
 
@@ -100,6 +103,8 @@ La norme NF C 15-100 insiste sur ce point. Cette norme de référence pour l’i
 
 En premier lieu, devra être indiqué, la pièce et la fonction correspondante pour chaque circuit.
 
+<div id="au-premier-coup-dœil"></div>
+
 ### Au premier coup d'œil
 
 Les étiquettes ne sont que de petits espaces. Il est impossible d'écrire, en détail, tous les éléments de correspondances. N'hésitez pas à utiliser des abréviations claires pour aller à l'essentiel.
@@ -108,6 +113,8 @@ Il est de tradition moderne d'accompagner le texte d'un pictogramme simple et ra
 
 Pour ajouter de plus amples informations, Tiquettes vous propose la rédaction automatique d'une nomenclature. Chaque module possède un champ « annotations » dans lequel vous pouvez indiquer toute information complémentaire. Ce champ ne sera ajouté qu'à la nomenclature.
 
+
+<div id="le-projet"></div>
 
 ## Le projet
 
@@ -126,6 +133,8 @@ Commençons par le menu:
 ![Projet](./docs/_project_actions1.png)
 
 ![Projet](./docs/_welcome.png)
+
+<div id="créer-un-nouveau-projet-libre"></div>
 
 ### Créer un nouveau projet libre
 
@@ -147,6 +156,8 @@ La hauteur des étiquettes est aussi un paramètre important. Chaque enveloppe p
 > Les emplacements sont souvent protégés par des plastrons transparents à bascule. Les "charnières" sont épaissent et peuvent masquer le bas des étiquettes !
 > 
 
+<div id="importer-un-projet"></div>
+
 ### Importer un projet
 
 Tiquettes vous propose d'importer et d'exporter votre travail pour l'archiver ou y retravailler ultérieurement. Une
@@ -154,6 +165,8 @@ sauvegarde automatique de votre session de travail est aussi intégrée au syst�
 
 Pour importer un projet, cliquez sur le bouton `Importer` puis chargez le fichier correspondant à votre projet.
 Immédiatement, celui-ci s'affichera dans la zone de travail!
+
+<div id="exporter-son-travail"></div>
 
 ### Exporter son travail
 
@@ -165,10 +178,13 @@ Ce fichier contient l'ensemble de votre travail ainsi que certaines préférence
 
 Ce fichier peut être importé à tout moment pour retravailler votre projet.
 
+<div id="lespace-de-travail"></div>
 
 ## L'espace de travail
 
 ![Éditeur](./docs/_editeur.png)
+
+<div id="descriptif"></div>
 
 ### Descriptif
 
@@ -177,6 +193,8 @@ Un tableau peut comporter de 1 à 15 rangées, 13, 18 ou 24 modules par rangée.
 Chaque module peut avoir une largeur et/ou une position réglable en fonction de la place disponible autour de lui. Vous
 pourrez l'étendre jusqu'à rencontrer, soit le bout de la rangée, soit un autre module déjà défini. Vous devrez libérer
 celui-ci pour poursuivre son expansion. Idem pour le déplacer, seulement possible dans les espaces libres.
+
+<div id="résumé-du-projet"></div>
 
 ### Résumé du projet
 
@@ -198,6 +216,8 @@ ainsi que dans l'ordre, la date de création et la date de dernière modificatio
 Puis, vous retrouvez les dates de travail ainsi que le descriptif technique.
 
 
+<div id="menu-contextuel-du-haut"></div>
+
 ### Menu contextuel du haut
 
 ![Menu contextuel du haut](./docs/_top.png)
@@ -210,11 +230,15 @@ Le symbole `←` vous permet de déplacer le module d'une position sur la gauche
 
 Le symbole `→` vous permet de déplacer le module d'une position sur la droite.
 
+<div id="menu-contextuel-du-bas"></div>
+
 ### Menu contextuel du bas
 
 ![Menu contextuel du bas](./docs/_bottom.png)
 
 Le symbole `Crayon` (ou la touche `Entrée` du clavier) permet d'éditer le module en question.
+
+<div id="copier--couper--coller"></div>
 
 #### Copier / Couper / Coller
 
@@ -238,9 +262,13 @@ Et voilà!
 
 ![Collé!](./docs/_pasted.png)
 
+<div id="supprimer"></div>
+
 #### Supprimer
 
 Après confirmation, le module sélectionné sera supprimé!
+
+<div id="inter-changer"></div>
 
 #### Inter-changer
 
@@ -263,6 +291,7 @@ Et voila !
 ![Inter-changer!](./docs/_move_3.png)
 
 
+<div id="manipuler-les-rangées"></div>
 
 ### Manipuler les rangées
 
@@ -301,6 +330,7 @@ En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actue
 > <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
 >![Taille de la zone de travail par défaut](./docs/_autoResizeOn.png)
 
+<div id="édition-dun-module"></div>
 
 ## Édition d'un module
 
@@ -324,12 +354,15 @@ temps réel.
 > est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module
 > définie dans l'onglet ```Schéma```.
 
+<div id="les-actions-disponibles"></div>
 
 ### Les actions disponibles
 
 - **Supprimer**: Permet de libérer un module. Supprime toutes les données liées à ce module.
 - **Annuler**: Annule les modifications en cours
 - **Valider**: Accepter et appliquer les modifications en cours
+
+<div id="les-pictogrammes"></div>
 
 ### Les pictogrammes
 
@@ -342,6 +375,8 @@ mettra automatiquement à jour.
 
 ![Rechercher un pictogramme](./docs/_icon_selector_search.png)
 
+<div id="les-groupes"></div>
+
 ### Les groupes
 
 Il est parfois plus simple de regrouper les modules par pièces ou par zones par exemple. Pour ce faire, l'application vous propose de définir une couleur de groupe.
@@ -351,6 +386,8 @@ Il est parfois plus simple de regrouper les modules par pièces ou par zones par
 Cette couleur pourra être affichée sur les étiquettes en fonction de la définition du thème sélectionné. Bien évidement, vous pouvez ajuster cet affichage en modifiant les paramètres du thème en cours ou créer votre propre thème !
 
 ![Choisir une couleur](./docs/_theme_custom_editor_color.png)
+
+<div id="décorer-ses-étiquettes"></div>
 
 ## Décorer ses étiquettes
 
@@ -419,6 +456,8 @@ Sélectionnez le thème de votre choix puis admirez le style de vos étiquettes 
 
 ![Thème Legrand - Couleur - Tertiaire](./docs/_theme_lgd_cter.png)
 
+<div id="personnaliser-la-décoration"></div>
+
 ### Personnaliser la décoration
 
 Tiquettes vous propose de décorer plus finement vos étiquettes en créant votre propre thème!
@@ -429,12 +468,18 @@ Tiquettes vous propose de décorer plus finement vos étiquettes en créant votr
 
 Vous pouvez exporter vos thèmes, et même importer les créations d'autrui !
 
+<div id="bibliothèque-de-thèmes"></div>
+
 ### Bibliothèque de thèmes
 
 Tiquettes.fr propose une bibliothèque de thèmes que vous pouvez importer pour personnaliser vos étiquettes. Rendez-vous
 à la [bibliothèque](https://www.tiquettes.fr/themes.php) pour découvrir et télécharger les créations artistiques proposées ;-)
 
+<div id="schéma-unifilaire"></div>
+
 ## Schéma unifilaire
+
+<div id="édition-des-caractéristiques"></div>
 
 ### Édition des caractéristiques
 
@@ -454,6 +499,8 @@ Les autres informations sont dynamiquement adaptées à la fonction choisie pré
 
 La zone de démonstration affiche la représentation graphique (Symbole) et les caractéristiques techniques telles
 qu'elles seront incluses dans le schéma unifilaire global.
+
+<div id="lasservissement"></div>
 
 #### L'asservissement
 
@@ -483,6 +530,8 @@ Pour ce faire, dans les propriétés du disjoncteur Q2, nous remplaçons le libe
 
 Et voila! La magie de Tiquettes.fr à encore opérée. :-)
 
+<div id="allocation-dun-module-a-ses-enfants"></div>
+
 #### Allocation d'un module a ses enfants
 
 Dans certains cas il est utile de partager un module pour alimenter plusieurs enfants. Par exemple, vous voulez indiquer la présence d'un voyant dans votre tableau électrique:
@@ -497,6 +546,7 @@ Pour permettre ce montage, il faut indiquer à l'application de partager la sour
 
 Une manière simple et rapide d'indiquer à l'application que vous souhaitez partager un module.
 
+<div id="génération-du-schéma-unifilaire"></div>
 
 ### Génération du schéma unifilaire
 
@@ -532,6 +582,8 @@ d'ajouter un bornier / ligne de terre au schéma.
 L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer
 ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
+<div id="moniteur-de-surveillance"></div>
+
 ## Moniteur de surveillance
 
 Certains onglets, se voient ajouté dans leur barre à outils, un bouton d'activation du moniteur de
@@ -559,6 +611,8 @@ Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024)
 La surveillance, lors de la conception de votre projet, s'améliorera avec le temps et de nouvelles règles s'ajouteront
 au fur et à mesure des prochaines versions!
 
+<div id="nomenclature--résumé"></div>
+
 ## Nomenclature / Résumé
 
 Tiquettes vous propose de résumer votre projet.
@@ -571,9 +625,13 @@ La barre à outils regroupe cette fois, la liste des colonnes que vous souhaitez
 automatiquement associé à votre projet, ce qui signifie qu'il sera, lui aussi, exporté.
 
 
+<div id="impression"></div>
+
 ## Impression
 
 Il est temps de coucher votre oeuvre sur papier.
+
+<div id="page-de-garde"></div>
 
 ### Page de garde
 
@@ -589,6 +647,7 @@ Exemple de rendu:
 
 ![Page de garde](./docs/_firstpage.png)
 
+<div id="etiquettes"></div>
 
 ### Etiquettes
 
@@ -616,6 +675,7 @@ pour aider à leur installation
 ![Image 3](./docs/_labels_print_current.png)
 <small>*image 3*</small>
 
+<div id="schéma-unifilaire"></div>
 
 ### Schéma unifilaire
 
@@ -626,11 +686,13 @@ Tiquettes.fr vous propose la génération semi automatique du schéma unifilaire
 En cas de rénovation vous avez la possibilité de démarrer le Folio à la page de votre choix.
 
 
+<div id="nomenclature"></div>
+
 ### Nomenclature
 
 ![Menu - Nomenclature](./docs/_print_menu_summary.png)
 
-
+<div id="les-étiquetteuses"></div>
 
 ## Les étiqueteuses
 
@@ -689,6 +751,8 @@ Les paramètres sont simples et permettent une mise en forme rapide. Le résulta
 ### Fin!
 
 ---
+
+<div class="remerciements--"></div>
 
 # Remerciements ❤ !
 
