@@ -190,6 +190,7 @@ export default function LabelerPopup({
                 </div>
             )}
             {options?.dpi && (
+                <>
                 <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
                     <label htmlFor={`labeler_dpi_x`}>Résolutions</label>
                     <div className="popup_row-flex" style={{ display: 'grid', gridTemplateColumns: '1fr 10px 1fr', gridTemplateRows: '1fr', alignItems: 'center', gap: '0.75rem' }}>
@@ -215,7 +216,15 @@ export default function LabelerPopup({
                             return newOptions;
                         })} />
                     </div>
-                </div>
+                    </div>
+                    <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
+                        <div></div>
+                        <label style={{ fontSize: "small", color: "#777" }}>
+                            └ résolution standard: <b>72 x 72 dpi</b>
+                        </label>
+                        <span></span>
+                    </div>
+                </>
             )}
             {options?.ribbon?.steps && (
                 <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>

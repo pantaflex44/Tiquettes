@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-05-19
+## [2.2.8] - 2026-05-24
 
 ### Corrections
 
@@ -13,6 +13,7 @@
 
 ### Modifications
 
+- Mise à jour de la documentation.
 - Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client.
 - Amélioration de l'ergonomie et l'expérience utilisateur.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
