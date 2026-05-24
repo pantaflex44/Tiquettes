@@ -2707,7 +2707,5 @@ function App() {
 export default App
 
 
-//FIXME: Doc: Refaire les screenshots
-//FIXME: Doc: Nouvelle boite de dialogue pour le renseignement des infos personnelles
 
 //TODO: Ajouter les calibres 300mA et 650mA pour le DB

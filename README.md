@@ -142,7 +142,9 @@ La hauteur des étiquettes est aussi un paramètre important. Chaque enveloppe p
 ---
 > <b>🛈 Bon à savoir</b>
 >
-> Ne pas hésiter à soustraire 1 mm de la hauteur des étiquettes. Les emplacements sont souvent protégés par des plastrons transparents à bascule. Les "charnières" sont épaissent et peuvent masquer le bas des étiquettes !
+> Ne pas hésiter à soustraire 1 mm de la hauteur des étiquettes.
+> Les emplacements sont souvent protégés par des plastrons transparents à bascule. Les "charnières" sont épaissent et peuvent masquer le bas des étiquettes !
+> 
 ---
 
 ### Importer un projet
