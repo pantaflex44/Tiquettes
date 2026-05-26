@@ -28,8 +28,8 @@ export default function EditorContactTypeSelector({ id, value, disabled = false,
             <span>NO</span>
         </div>
         <div className={`buttons_box-button ${value.trim().toUpperCase() === "NC" ? 'selected' : ''}`.trim()} style={{ width: 'initial', flex: 1 }} title="Normalement fermé" onClick={() => onChange("NC")}>
-            <img src={kcNCIcon} width={24} height={24} alt="NC" />
-            <span>NC</span>
+            <img src={kcNCIcon} width={24} height={24} alt="NF" />
+            <span>NF</span>
         </div>
     </div>
 }

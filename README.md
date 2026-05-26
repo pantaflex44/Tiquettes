@@ -149,7 +149,7 @@ Il vous sera aussi demandé la largeur des modules. Ce paramètre est de nos jou
 
 La hauteur des étiquettes est aussi un paramètre important. Chaque enveloppe possède un espace dédié pour "fixer" les étiquettes. Mesurez bien la hauteur disponible pour renseigner le paramètre.
 
-> <b>🛈 Bon à savoir</b>
+> <img src="./docs/info-circle.svg" width="16" height="16" /> <b>Bon à savoir</b>
 >
 > Ne pas hésiter à soustraire 1 mm de la hauteur des étiquettes.
 > 

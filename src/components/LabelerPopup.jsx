@@ -191,36 +191,38 @@ export default function LabelerPopup({
             )}
             {options?.dpi && (
                 <>
-                <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
-                    <label htmlFor={`labeler_dpi_x`}>Résolutions</label>
-                    <div className="popup_row-flex" style={{ display: 'grid', gridTemplateColumns: '1fr 10px 1fr', gridTemplateRows: '1fr', alignItems: 'center', gap: '0.75rem' }}>
-                        <input className="minheight" type="number" name={`labeler_dpi_x`} id={`labeler_dpi_x`} value={options.dpi.x} min={72} max={600} onChange={(e) => setOptions((old) => {
-                            const newOptions = {
-                                ...old,
-                                dpi: {
-                                    ...old.dpi,
-                                    x: parseInt(e.target.value)
+                    <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
+                        <label htmlFor={`labeler_dpi_x`}>Résolutions</label>
+                        <div className="popup_row-flex" style={{ display: 'grid', gridTemplateColumns: '1fr 10px 1fr', gridTemplateRows: '1fr', alignItems: 'center', gap: '0.75rem' }}>
+                            <input className="minheight" type="number" name={`labeler_dpi_x`} id={`labeler_dpi_x`} value={options.dpi.x} min={72} max={600} onChange={(e) => setOptions((old) => {
+                                const newOptions = {
+                                    ...old,
+                                    dpi: {
+                                        ...old.dpi,
+                                        x: parseInt(e.target.value)
+                                    }
                                 }
-                            }
-                            return newOptions;
-                        })} />
-                        <span>x</span>
-                        <input className="minheight" type="number" name={`labeler_dpi_y`} id={`labeler_dpi_y`} value={options.dpi.y} min={72} max={600} onChange={(e) => setOptions((old) => {
-                            const newOptions = {
-                                ...old,
-                                dpi: {
-                                    ...old.dpi,
-                                    y: parseInt(e.target.value)
+                                return newOptions;
+                            })} />
+                            <span>x</span>
+                            <input className="minheight" type="number" name={`labeler_dpi_y`} id={`labeler_dpi_y`} value={options.dpi.y} min={72} max={600} onChange={(e) => setOptions((old) => {
+                                const newOptions = {
+                                    ...old,
+                                    dpi: {
+                                        ...old.dpi,
+                                        y: parseInt(e.target.value)
+                                    }
                                 }
-                            }
-                            return newOptions;
-                        })} />
-                    </div>
+                                return newOptions;
+                            })} />
+                        </div>
                     </div>
                     <div className="popup_row" style={{ "--left_column_size": "160px", alignItems: 'center' }}>
                         <div></div>
                         <label style={{ fontSize: "small", color: "#777" }}>
-                            └ résolution standard: <b>72 x 72 dpi</b>
+                            <div>└ Résolutions standards:</div>
+                            <span style={{ marginLeft: '1.1rem', width: '100px', display: 'inline-block' }}>impression:</span><span><b>72 x 72 dpi</b></span><br />
+                            <span style={{ marginLeft: '1.1rem', width: '100px', display: 'inline-block' }}>écran:</span><span><b>96 x 96 dpi</b></span>
                         </label>
                         <span></span>
                     </div>

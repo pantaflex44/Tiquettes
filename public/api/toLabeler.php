@@ -337,8 +337,8 @@ class TiquettesLabeler
             return null;
         }
 
-        $dpiX = isset($this->options['dpi']) && isset($this->options['dpi']['x']) ? intval($this->options['dpi']['x']['value'] ?? 180) : 180;
-        $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y']['value'] ?? 360) : 360;
+        $dpiX = isset($this->options['dpi']) && isset($this->options['dpi']['x']) ? intval($this->options['dpi']['x'] ?? 180) : 180;
+        $dpiY = isset($this->options['dpi']) && isset($this->options['dpi']['y']) ? intval($this->options['dpi']['y'] ?? 360) : 360;
 
         $displayOptions = isset($this->options['options']) ? $this->options['options'] : null;
 

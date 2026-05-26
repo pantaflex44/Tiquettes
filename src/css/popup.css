@@ -238,6 +238,9 @@ body:has(.popup-overflow) {
 .popup_row textarea {
     padding: 0.5em;
     font: inherit;
+}
+
+.popup_row textarea {
     resize: vertical;
 }
 
