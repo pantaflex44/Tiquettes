@@ -287,6 +287,16 @@ h1 sup {
     font-weight: bold;
 }
 
+.by a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.by a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
 .description {
     margin-block-start: 0;
     margin-block-end: 2em;
