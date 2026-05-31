@@ -34,6 +34,7 @@ export default function Popup({
     popupStyle = {},
     className = null,
     width = 440,
+    maxHeight = '95vh',
     noPadding = false,
     showCloseButton = true,
     showCancelButton = true,
@@ -99,7 +100,7 @@ export default function Popup({
 
     return (
         <div className={`popup-overflow ${withOverflow ? '' : 'transparent'}`.trim()}>
-            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ ...popupStyle, width: `${width}px`, position: 'relative' }}>
+            <div className={`popup ${loading ? 'loading' : ''}`.trim()} tabIndex={0} style={{ ...popupStyle, width: `${width}px`, position: 'relative', maxHeight: `${maxHeight}` }}>
                 <div className="popup_title-box" style={{ position: 'sticky', top: 0, background: '#FFF', paddingBottom: '0.1rem', marginBottom: noPadding ? 0 : '1rem' }}>
                     <div className="popup_title">{title}</div>
                     {buttons.close &&
@@ -118,7 +119,7 @@ export default function Popup({
                     </div>
                 )}
 
-                <div className="popup_buttons" style={{ marginTop: noPadding ? 0 : '1.5rem' }}>
+                <div className="popup_buttons" style={{ marginTop: noPadding ? 0 : '1rem' }}>
                     <div className="popup_buttons_box">
                         {Array.isArray(additionalButtons) && additionalButtons.map((b, i) => {
                             if (!b.text || !b.callback) return null;

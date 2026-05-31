@@ -54,6 +54,7 @@ body:has(.popup-overflow) {
     padding-top: 1px;
     padding-bottom: 0;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.7);
+    font-size: initial;
 }
 
 .popup.loading,
@@ -123,7 +124,7 @@ body:has(.popup-overflow) {
     justify-content: space-between;
     align-items: center;
     gap: 1em;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     position: sticky;
     bottom: 0;
     background-color: #FFF;
@@ -187,10 +188,21 @@ body:has(.popup-overflow) {
     filter: invert(88%) sepia(29%) saturate(1%) hue-rotate(314deg) brightness(88%) contrast(101%);
 }
 
+.popup_rows {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1rem;
+}
+
 .popup_row {
     display: grid;
     grid-template-columns: var(--left_column_size) 1fr;
-    margin-block: 1em;
+    /*margin-block: 1em;*/
     /*margin-inline: 1.1em;*/
     align-items: baseline;
     font-size: smaller;

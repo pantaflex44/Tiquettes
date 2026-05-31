@@ -220,6 +220,7 @@ export default function Editor({
                         onApplyModuleEditor({ ...ed });
                     }}
                     width={470}
+                    maxHeight={'96vh'}
                     className="popup_flex"
                     additionalButtons={[
                         {
@@ -234,7 +235,7 @@ export default function Editor({
                         },
                     ]}
                 >
-                    <div style={{ flex: 1, minHeight: "690px" }}>
+                    <div className="popup_rows" style={{ minHeight: "710px" }}>
                         <div className={"editor_tabpages"}>
                             <input
                                 type="checkbox"
@@ -380,7 +381,6 @@ export default function Editor({
                                         "--left_column_size": "100px",
                                         borderTop: "1px solid lightgray",
                                         paddingTop: "1em",
-                                        marginTop: "2em",
                                     }}
                                 >
                                     <label>Fonction</label>
@@ -432,7 +432,6 @@ export default function Editor({
                                         "--left_column_size": "100px",
                                         borderBottom: "1px solid lightgray",
                                         paddingBottom: "1em",
-                                        marginBottom: "2em",
                                     }}
                                 >
                                     <label htmlFor={`editor_modtype_${(ed.currentModule?.modtype ?? '').trim()}`}>Type</label>
@@ -476,10 +475,12 @@ export default function Editor({
                                         display: "flex",
                                         flexDirection: "column",
                                         marginInline: "auto",
-                                        marginTop: "2em",
                                         alignItems: "center",
                                         width: "100%",
-                                        borderBottom: "1px solid lightgray",
+                                        marginTop: "auto",
+                                        height: `calc(${switchboard.height}mm + 1mm + 2.1em)`,
+                                        minHeight: `calc(${switchboard.height}mm + 1mm + 2.1em)`,
+                                        maxHeight: `calc(${switchboard.height}mm + 1mm + 2.1em)`,
                                     }}
                                 >
                                     <h5
@@ -490,7 +491,7 @@ export default function Editor({
                                             margin: 0,
                                         }}
                                     >
-                                        Démonstration
+                                        Etiquette de démonstration
                                     </h5>
                                     <div
                                         style={{
@@ -499,8 +500,10 @@ export default function Editor({
                                             width: "min-content",
                                             maxWidth: "100%",
                                             overflowX: "auto",
-                                            marginBlock: "1em",
+                                            marginTop: "1em",
+                                            height: `calc(${switchboard.height}mm + 1mm)`,
                                             minHeight: `calc(${switchboard.height}mm + 1mm)`,
+                                            maxHeight: `calc(${switchboard.height}mm + 1mm)`,
                                             overflowY: "hidden",
                                         }}
                                     >
@@ -577,10 +580,7 @@ export default function Editor({
                                                     schemaFunctions[ed.currentModule.func]?.supportContacts === true
                                                         ? "initial"
                                                         : "1em",
-                                                marginBottom:
-                                                    schemaFunctions[ed.currentModule.func]?.supportContacts === true
-                                                        ? "initial"
-                                                        : "2em",
+
                                             }}
                                         >
                                             <div></div>
@@ -590,44 +590,7 @@ export default function Editor({
                                             </label>
                                         </div>
 
-                                        {schemaFunctions[ed.currentModule.func]?.supportContacts === true && (
-                                            <>
-                                                <div
-                                                    className="popup_row"
-                                                    style={{
-                                                        "--left_column_size": "100px",
-                                                    }}
-                                                >
-                                                    <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>
-                                                        Asservi par
-                                                    </label>
-                                                    <div className="popup_row-flex">
-                                                        <EditorMultiContactSelector
-                                                            id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
-                                                            value={ed.currentModule.kcId}
-                                                            currentModuleId={ed.currentModule.id}
-                                                            filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                            onChange={(value) => {
-                                                                onUpdateModuleEditor({ kcId: value });
-                                                                if (value.length === 0)
-                                                                    onUpdateModuleEditor({ partialKc: false });
-                                                            }}
-                                                        />
-                                                        <EditorContactAsservSelector
-                                                            id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`}
-                                                            disabled={
-                                                                ed.currentModule.kcId ===
-                                                                "" /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/
-                                                            }
-                                                            value={ed.currentModule.partialKc}
-                                                            onChange={(value) =>
-                                                                onUpdateModuleEditor({ partialKc: value })
-                                                            }
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
+
                                     </>
                                 )}
 
@@ -728,41 +691,87 @@ export default function Editor({
                                 )}
 
                                 {ed.currentModule.func && (
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            marginInline: "auto",
-                                            marginTop: "2em",
-                                            alignItems: "center",
-                                            width: "100%",
-                                            borderBottom: "1px solid lightgray",
-                                        }}
-                                    >
-                                        <h5
-                                            style={{
-                                                color: "gray",
-                                                width: "100%",
-                                                borderBottom: "1px solid lightgray",
-                                                margin: 0,
-                                            }}
-                                        >
-                                            Démonstration
-                                        </h5>
+                                    <>
+                                        {schemaFunctions[ed.currentModule.func]?.supportContacts === true && (
+                                            <>
+                                                <div
+                                                    className="popup_row"
+                                                    style={{
+                                                        "--left_column_size": "100px",
+                                                        borderTop: "1px solid lightgray",
+                                                        paddingTop: "1em",
+                                                    }}
+                                                >
+                                                    <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>
+                                                        Asservi par
+                                                    </label>
+                                                    <div className="popup_row-flex">
+                                                        <EditorMultiContactSelector
+                                                            id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
+                                                            value={ed.currentModule.kcId}
+                                                            currentModuleId={ed.currentModule.id}
+                                                            filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                            onChange={(value) => {
+                                                                onUpdateModuleEditor({ kcId: value });
+                                                                if (value.length === 0)
+                                                                    onUpdateModuleEditor({ partialKc: false });
+                                                            }}
+                                                        />
+                                                        <EditorContactAsservSelector
+                                                            id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`}
+                                                            disabled={
+                                                                ed.currentModule.kcId ===
+                                                                "" /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/
+                                                            }
+                                                            value={ed.currentModule.partialKc}
+                                                            onChange={(value) =>
+                                                                onUpdateModuleEditor({ partialKc: value })
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </>
+                                )}
+
+                                {ed.currentModule.func && (
+                                    <>
                                         <div
                                             style={{
-                                                width: "100px",
-                                                minWidth: "70px",
-                                                height: "100px",
-                                                maxWidth: "100%",
-                                                overflowX: "auto",
-                                                marginBlock: "1em",
-                                                overflowY: "hidden",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                marginInline: "auto",
+                                                marginTop: "auto",
+                                                alignItems: "center",
+                                                width: "100%",
                                             }}
                                         >
-                                            <SchemaSymbol module={ed.currentModule} />
+                                            <h5
+                                                style={{
+                                                    color: "gray",
+                                                    width: "100%",
+                                                    borderBottom: "1px solid lightgray",
+                                                    margin: 0,
+                                                }}
+                                            >
+                                                Symbole de démonstration
+                                            </h5>
+                                            <div
+                                                style={{
+                                                    width: "100px",
+                                                    minWidth: "70px",
+                                                    height: "100px",
+                                                    maxWidth: "100%",
+                                                    overflowX: "auto",
+                                                    marginTop: "1em",
+                                                    overflowY: "hidden",
+                                                }}
+                                            >
+                                                <SchemaSymbol module={ed.currentModule} />
+                                            </div>
                                         </div>
-                                    </div>
+                                    </>
                                 )}
                             </>
                         )}

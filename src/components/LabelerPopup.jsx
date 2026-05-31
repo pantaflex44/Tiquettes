@@ -153,9 +153,9 @@ export default function LabelerPopup({
             </div>
         }
     >
-        <div style={{ flex: 1 }}>
+        <div className="popup_rows" style={{ flex: 1 }}>
             <div className="popup_row" style={{
-                "--left_column_size": "160px", alignItems: 'center'
+                "--left_column_size": "160px", alignItems: 'center', marginBlock: '1rem'
             }}>
                 <label htmlFor={`labeler_model`}><b>Étiqueteuse</b></label>
                 <select name="labeler_model" id={`labeler_model`} value={model} onChange={(e) => {
@@ -176,7 +176,6 @@ export default function LabelerPopup({
                 <div className="popup_row" style={{
                     "--left_column_size": "160px", alignItems: 'center', borderBottom: '1px solid lightgray',
                     paddingBottom: "1em",
-                    marginBottom: "1em",
                 }}>
                     <label htmlFor={`labeler_init`}>Paramètres courants</label>
                     <button id={`labeler_init`} name={`labeler_init`} className="link" onClick={() => {
@@ -292,7 +291,6 @@ export default function LabelerPopup({
                     <div className="popup_row" style={{
                         "--left_column_size": "160px", alignItems: 'center', borderTop: '1px solid lightgray',
                         paddingTop: "1em",
-                        marginTop: "1em",
                     }}>
                         <label htmlFor={'labeler_iconsSize'}>Taille des pictogramme</label>
                         <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
@@ -334,7 +332,6 @@ export default function LabelerPopup({
                     <div className="popup_row" style={{
                         "--left_column_size": "160px", alignItems: 'center', borderTop: '1px solid lightgray',
                         paddingTop: "1em",
-                        marginTop: "1em",
                     }}>
                         <label style={{ flex: 1 }}>Taille des libellés</label>
                         <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
@@ -402,7 +399,6 @@ export default function LabelerPopup({
                     <div className="popup_row" style={{
                         "--left_column_size": "160px", alignItems: 'center', borderTop: '1px solid lightgray',
                         paddingTop: "1em",
-                        marginTop: "1em",
                     }}>
                         <label style={{ flex: 1 }}>Affichage</label>
                         <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
@@ -432,8 +428,7 @@ export default function LabelerPopup({
                 <>
                     <div className="popup_row" style={{
                         "--left_column_size": "160px", alignItems: 'center', borderTop: '1px solid lightgray',
-                        paddingTop: "1em",
-                        marginTop: "1em",
+                    paddingTop: "1em",
                     }}>
                         <label style={{ flex: 1 }}>Découpes</label>
                         <div className="popup_row-flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
@@ -457,7 +452,7 @@ export default function LabelerPopup({
 
 
                 <div className="popup_row" style={{
-                    "--left_column_size": "160px", alignItems: 'center'
+                    "--left_column_size": "160px", alignItems: 'center', marginBottom: '1rem'
                 }}>
                     <label style={{ flex: 1 }}>Bordures</label>
                     <div className="popup_row-flex" style={{ alignItems: 'center', gap: '1.25rem' }}>

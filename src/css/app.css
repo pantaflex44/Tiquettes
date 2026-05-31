@@ -769,7 +769,6 @@ option[disabled] {
 
 .editor_tabpages {
     width: 100%;
-    flex: 1;
     -webkit-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -779,7 +778,7 @@ option[disabled] {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
 .editor_tabpages input[type="checkbox"] {

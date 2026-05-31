@@ -19,6 +19,7 @@
 
 .bigList {
     margin: 0;
+    margin-block: 1rem;
     padding: 0;
 
     display: flex;
