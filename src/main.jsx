@@ -60,7 +60,7 @@ export default function Main() {
             'doc', 'src', 'license', 'changelog', 'brand-facebook', 'partners', 'ressources'
         ].map(src => {
             return new Promise((resolve, reject) => {
-                const s = `../public/${src}.svg`;
+                const s = `${import.meta.env.VITE_APP_URL}/${src}.svg`;
                 const img = new Image();
                 img.onload = function () {
                     resolve(img);
