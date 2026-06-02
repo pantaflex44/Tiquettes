@@ -247,7 +247,7 @@ function CustomTheme({ item, data, style }) {
                 ? <p style={styles.iconText}>{item.modtype ?? ""}</p>
                 : <img
                     style={styles.iconImg}
-                    alt="Pictogramme"
+                    alt=""
                     src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
                 />}
         </div>}
