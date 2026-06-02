@@ -25,7 +25,7 @@
 
 ### Ajouts
 
-- [[Discussion #94](https://github.com/pantaflex44/Tiquettes/discussions/94)] Ajout du type de module: Coupe Circuit.
+- [[Issue #95](https://github.com/pantaflex44/Tiquettes/issues/95)] Ajout du type de module: Coupe Circuit.
 - [[Issue #79](https://github.com/pantaflex44/Tiquettes/issues/79)] Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.
 - Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire.
 - [[Issue #84](https://github.com/pantaflex44/Tiquettes/issues/84)] Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire

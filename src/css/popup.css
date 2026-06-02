@@ -197,6 +197,8 @@ body:has(.popup-overflow) {
     justify-content: flex-start;
     width: 100%;
     gap: 1rem;
+    overflow: hidden;
+    padding-bottom: 0.5rem;
 }
 
 .popup_row {
