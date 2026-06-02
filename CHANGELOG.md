@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-05-31
+## [2.2.8] - 2026-06-02
 
 ### Corrections
 
@@ -17,7 +17,7 @@
 - Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client.
 - Amélioration de l'ergonomie et l'expérience utilisateur.
 - Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement.
-- [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).
+- [[Issue #49](https://github.com/pantaflex44/Tiquettes/issues/49)] Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NF).
 - Mise à jour des médias pour OG / Github / Twitter.
 - Légère mise à jour de l'arborescence du projet.
 - Intégration des paramètres d'impression dans les fichiers des projets.
@@ -25,6 +25,7 @@
 
 ### Ajouts
 
+- [[Discussion #94](https://github.com/pantaflex44/Tiquettes/discussions/94)] Ajout du type de module: Coupe Circuit.
 - [[Issue #79](https://github.com/pantaflex44/Tiquettes/issues/79)] Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.
 - Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire.
 - [[Issue #84](https://github.com/pantaflex44/Tiquettes/issues/84)] Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire

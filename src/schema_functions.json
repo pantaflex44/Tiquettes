@@ -77,6 +77,19 @@
         "hasShareWithChilds": true,
         "hasNONCChoice": false
     },
+    "cc": {
+        "name": "Coupe Circuit",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": true,
+        "hasWire": true,
+        "hasContacts": false,
+        "supportContacts": true,
+        "selectable": true,
+        "hasShareWithChilds": true,
+        "hasNONCChoice": false
+    },
     "trf": {
         "name": "Transformateur",
         "hasType": false,

@@ -18,7 +18,7 @@
 
 /* eslint-disable react/prop-types */
 
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import caretDownIcon from '../assets/caret-down.svg';
 import caretUpIcon from '../assets/caret-up.svg';
@@ -48,7 +48,7 @@ export default function EditorMultiContactSelector({ id, value, currentModuleId,
     }, [list]);
 
     return (
-        <div style={{ position: 'relative' }} className="icon_selector" id={id} ref={listContainerRef}  >
+        <div className="icon_selector" style={{ position: 'relative', flex: 1 }} id={id} ref={listContainerRef}  >
             <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -58,12 +58,12 @@ export default function EditorMultiContactSelector({ id, value, currentModuleId,
                 columnGap: '1em',
                 minWidth: '19px',
                 width: 'calc(100% - 0.75rem)',
-                minHeight: 'calc(34px - 0.60rem)',
+                minHeight: 'calc((34px * 1) - 0.60rem)',
                 border: '1px solid darkgray',
                 borderRadius: '5px',
                 padding: '0.25rem',
                 fontWeight: 500,
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
             }}
                 onClick={() => setOpened((old) => !old)}
             >

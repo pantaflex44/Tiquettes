@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-05-31",
+            "date": "2026-06-02",
             "actions": {
                 "patches": [
                     {
@@ -73,7 +73,7 @@
                         "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
                     },
                     {
-                        "text": "Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NC).",
+                        "text": "Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NF).",
                         "from": {
                             "name": "Issue #49",
                             "link": "https://github.com/pantaflex44/Tiquettes/issues/49"
@@ -97,6 +97,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout du type de module: Coupe Circuit.",
+                        "from": {
+                            "name": "Discussion #94",
+                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/94"
+                        }
+                    },
                     {
                         "text": "Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.",
                         "from": {

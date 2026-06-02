@@ -45,6 +45,7 @@ import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorMultiContactSelector from "./EditorMultiContactSelector.jsx";
 import EditorParallelSelector from "./EditorParallelSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
+import EditorContactOrderSelector from "./EditorContactOrderSelector.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -107,7 +108,7 @@ export default function Editor({
         250: 150,
     };
 
-    const lastFreeId = useMemo(() => {
+    const getLastFreeId = (func) => {
         let rows = switchboard.rows;
 
         let ids = [];
@@ -117,7 +118,7 @@ export default function Editor({
             });
         });
 
-        let prefix = (ed.currentModule.func ?? defaultModuleId).trim().toUpperCase();
+        let prefix = (func ?? defaultModuleId).trim().toUpperCase();
         if (prefix === "") prefix = defaultModuleId;
 
         let found = "";
@@ -126,6 +127,10 @@ export default function Editor({
         found = `${prefix}${count}`;
 
         return found;
+    };
+
+    const lastFreeId = useMemo(() => {
+        return getLastFreeId(ed.currentModule.func);
     }, [switchboard, defaultModuleId, ed.currentModule.func]);
 
     const onUpdateModuleEditor = (data) => {
@@ -194,6 +199,13 @@ export default function Editor({
             onUpdateModuleEditor({ pole: switchboard.db.pole, line: "" });
     }, [hasBlankId, ed.currentModule.func]);
 
+    const [fidc, setFidc] = useState(false);
+    useEffect(() => {
+        if (fidc) {
+            console.log(ed.currentModule.id);
+        }
+    }, [fidc, ed.currentModule.id]);
+
     return (
         ed && (
             <>
@@ -219,7 +231,7 @@ export default function Editor({
                     onOk={() => {
                         onApplyModuleEditor({ ...ed });
                     }}
-                    width={470}
+                    width={500}
                     maxHeight={'96vh'}
                     className="popup_flex"
                     additionalButtons={[
@@ -277,12 +289,22 @@ export default function Editor({
                                             name="editor_id"
                                             id={`editor_id_${ed.currentModule.id.trim()}`}
                                             value={ed.currentModule.id}
-                                            onChange={(e) => onUpdateModuleEditor({ id: e.target.value })}
+                                            onChange={(e) => {
+                                                onUpdateModuleEditor({ id: e.target.value });
+                                                if (!fidc) {
+                                                    setFidc(true);
+                                                }
+                                            }}
                                             autoFocus={!!(ed?.focusedInputName === "id")}
                                         />
                                         <button
                                             title="Trouver le prochain identifiant disponible."
-                                            onClick={() => onUpdateModuleEditor({ id: lastFreeId })}
+                                            onClick={() => {
+                                                onUpdateModuleEditor({ id: lastFreeId });
+                                                if (!fidc) {
+                                                    setFidc(true);
+                                                }
+                                            }}
                                         >
                                             <img
                                                 src={assignIdIcon}
@@ -536,18 +558,17 @@ export default function Editor({
                                             value={ed.currentModule.func}
                                             onChange={(value) => {
                                                 onUpdateModuleEditor({ func: value });
-                                                if (
-                                                    schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true
-                                                ) {
+                                                if (schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true) {
                                                     onUpdateModuleEditor({ onlyChilds: true });
+                                                }
+                                                if (!fidc) {
+                                                    onUpdateModuleEditor({ id: getLastFreeId(value) });
                                                 }
                                             }}
                                         />
                                         <EditorParallelSelector
                                             id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
-                                            disabled={
-                                                schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true
-                                            }
+                                            disabled={schemaFunctions[ed.currentModule.func]?.hasShareWithChilds !== true}
                                             value={ed.currentModule.onlyChilds ?? true}
                                             onChange={(value) => onUpdateModuleEditor({ onlyChilds: value })}
                                         />
@@ -591,6 +612,47 @@ export default function Editor({
                                         </div>
 
 
+                                    </>
+                                )}
+
+                                {ed.currentModule.func && schemaFunctions[ed.currentModule.func]?.supportContacts === true && (
+                                    <>
+                                        <div
+                                            className="popup_row"
+                                            style={{
+                                                "--left_column_size": "100px",
+                                                "alignItems": "center",
+                                            }}
+                                        >
+                                            <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>
+                                                Asservi par
+                                            </label>
+                                            <div className="popup_row-flex">
+                                                <EditorContactOrderSelector
+                                                    id={`editor_contact_order_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.kcOrder ?? "after"}
+                                                    onChange={(value) => onUpdateModuleEditor({ kcOrder: value })}
+                                                    disabled={ed.currentModule.kcId === ""}
+                                                />
+                                                <EditorMultiContactSelector
+                                                    id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.kcId}
+                                                    currentModuleId={ed.currentModule.id}
+                                                    filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                    onChange={(value) => {
+                                                        onUpdateModuleEditor({ kcId: value });
+                                                        if (value.length === 0)
+                                                            onUpdateModuleEditor({ partialKc: false });
+                                                    }}
+                                                />
+                                                <EditorContactAsservSelector
+                                                    id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`}
+                                                    disabled={ed.currentModule.kcId === ""}
+                                                    value={ed.currentModule.partialKc ?? false}
+                                                    onChange={(value) => onUpdateModuleEditor({ partialKc: value })}
+                                                />
+                                            </div>
+                                        </div>
                                     </>
                                 )}
 
@@ -687,51 +749,6 @@ export default function Editor({
                                                 />
                                             )}
                                         </div>
-                                    </>
-                                )}
-
-                                {ed.currentModule.func && (
-                                    <>
-                                        {schemaFunctions[ed.currentModule.func]?.supportContacts === true && (
-                                            <>
-                                                <div
-                                                    className="popup_row"
-                                                    style={{
-                                                        "--left_column_size": "100px",
-                                                        borderTop: "1px solid lightgray",
-                                                        paddingTop: "1em",
-                                                    }}
-                                                >
-                                                    <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>
-                                                        Asservi par
-                                                    </label>
-                                                    <div className="popup_row-flex">
-                                                        <EditorMultiContactSelector
-                                                            id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
-                                                            value={ed.currentModule.kcId}
-                                                            currentModuleId={ed.currentModule.id}
-                                                            filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                            onChange={(value) => {
-                                                                onUpdateModuleEditor({ kcId: value });
-                                                                if (value.length === 0)
-                                                                    onUpdateModuleEditor({ partialKc: false });
-                                                            }}
-                                                        />
-                                                        <EditorContactAsservSelector
-                                                            id={`editor_contacts_asserv_${ed.currentModule.id.trim()}`}
-                                                            disabled={
-                                                                ed.currentModule.kcId ===
-                                                                "" /*|| (typeof ed.currentModule.kcId === 'string' ? ed.currentModule.kcId : '').split('|').length !== 1*/
-                                                            }
-                                                            value={ed.currentModule.partialKc}
-                                                            onChange={(value) =>
-                                                                onUpdateModuleEditor({ partialKc: value })
-                                                            }
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
                                     </>
                                 )}
 

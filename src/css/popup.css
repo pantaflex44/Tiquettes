@@ -307,6 +307,7 @@ body:has(.popup-overflow) {
 .popup_content {
     margin-inline: 1.5rem;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .popup_loading_box {

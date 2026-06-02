@@ -243,6 +243,7 @@ function App() {
         parentId: "",
         kcId: "",
         kcType: "NO",
+        kcOrder: "after",
         partialKc: false,
         onlyChilds: true,
         noAutoId: false,
@@ -269,6 +270,7 @@ function App() {
             parentId: "",
             kcId: "",
             kcType: "NO",
+            kcOrder: "after",
             partialKc: false,
             onlyChilds: true,
             noAutoId: false,
@@ -789,6 +791,9 @@ function App() {
                     if (!nm.kcType) nm = { ...nm, kcType: "NO" };
                     if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
 
+                    // <=2.2.8 : add kcOrder property
+                    if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
+
                     return nm;
                 });
             });
@@ -1098,6 +1103,7 @@ function App() {
         const parentId = (data.currentModule.parentId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
         const kcType = (data.currentModule.kcType ?? "NO").trim();
+        const kcOrder = (data.currentModule.kcOrder ?? "after").trim();
         const partialKc = data.currentModule.partialKc ?? false;
         const noAutoId = data.currentModule.noAutoId ?? false;
         const onlyChilds = data.currentModule.onlyChilds ?? true;
@@ -1160,6 +1166,7 @@ function App() {
                         parentId,
                         kcId,
                         kcType,
+                        kcOrder,
                         partialKc,
                         onlyChilds,
                         noAutoId,
@@ -1464,6 +1471,7 @@ function App() {
                         parentId: clipboard.parentId,
                         kcId: clipboard.kcId,
                         kcType: clipboard.kcType,
+                        kcOrder: clipboard.ksOrder,
                         partialKc: clipboard.partialKc,
                         onlyChilds: clipboard.onlyChilds,
                         noAutoId: clipboard.noAutoId,
