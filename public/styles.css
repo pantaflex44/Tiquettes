@@ -205,11 +205,13 @@ nav.header ul li a:hover img {
     list-style: none;
     margin: 0;
     padding: 0em;
-    display: flex;
+    /*display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: stretch;
+    align-items: stretch;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
     gap: 1em;
 }
 
@@ -221,8 +223,8 @@ nav.header ul li a:hover img {
     align-items: stretch;
     gap: 0.75em;
     padding: 1em;
-    width: calc(350px - 2em);
-    max-width: calc(100% - 2em);
+    /*width: calc(330px - 2em);
+    max-width: calc(100% - 2em);*/
     background-color: #fbfbfb;
     border-top: 2px solid #f0f0f0;
     border-radius: 7px;

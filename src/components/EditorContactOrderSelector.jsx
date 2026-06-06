@@ -26,14 +26,14 @@ export default function EditorContactOrderSelector({ id, value, disabled = false
         <div className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()} style={{ flex: 0, marginRight: '3px' }} id={id} name={id}>
             <div
                 className={`buttons_box-button ${value === "before" ? "selected" : ""}`.trim()}
-                title="Asservissement en amont du module"
+                title="Les contacteurs sont positionnés en amont du module"
                 onClick={() => onChange("before")}
             >
                 <img src={asservOrderBefore} width={24} height={24} alt="Asservissement en amont du module" />
             </div>
             <div
                 className={`buttons_box-button ${value === "after" ? "selected" : ""}`.trim()}
-                title="Asservissement en aval du module"
+                title="Les contacteurs sont positionnés en aval du module pour piloter le circuit associé"
                 onClick={() => onChange("after")}
             >
                 <img src={asservOrderAfter} width={24} height={24} alt="Asservissement en aval du module" />

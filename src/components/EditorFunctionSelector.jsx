@@ -23,7 +23,7 @@ export default function EditorFunctionSelector({ id, value, onChange = null }) {
     return <select id={id} name={id} value={value}
         onChange={(e) => {
             if (onChange) onChange(e.target.value)
-        }}>
+        }} style={{ flex: 1 }}>
         <option value={""}>-</option>
         {Object.keys(schemaFunctions)
             .filter(key => (schemaFunctions[key].selectable ?? false) === true)

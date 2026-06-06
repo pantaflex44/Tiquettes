@@ -93,60 +93,63 @@ export default function SchemaTab({
         moduleList.forEach((module, i) => {
             let _childs = getChilds(module.id);
 
-            // si un module est asservi par un contacteur, on ajoute les contacts sous ce module pour indiquer l'asservissement
-            const kcId = (module.kcId ?? "");
-            const kcId_a = kcId.split("|");
-            kcId_a.forEach((k) => {
-                const kcModule = getModuleById(k.trim()).module;
-                if (kcModule) {
-                    if (module.partialKc === true) {
+            // si un module est asservi par un contacteur et que cet asservissement est positionné après le module, 
+            // alors on ajoute les contacts sous ce module pour indiquer l'asservissement
+            if ((module.kcOrder ?? "after") !== "before") {
+                const kcId = (module.kcId ?? "");
+                const kcId_a = kcId.split("|");
+                kcId_a.forEach((k) => {
+                    const kcModule = getModuleById(k.trim()).module;
+                    if (kcModule) {
+                        if (module.partialKc === true) {
+                            _childs.push({
+                                ...module,
+                                kcId: '',
+                                id: `↓${module.id}`,
+                                parentId: module.id,
+                                func: 'o',
+                                icon: module.icon,
+                                text: module.text,
+                            });
+                        }
                         _childs.push({
-                            ...module,
+                            ...kcModule,
                             kcId: '',
-                            id: `↓${module.id}`,
+                            id: `¤_${kcModule.id}`,
                             parentId: module.id,
-                            func: 'o',
+                            func: 'k',
                             icon: module.icon,
-                            text: module.text,
+                            text: module.partialKc === true ? kcModule.text : module.text,
+                            desc: module.partialKc === true ? kcModule.desc : module.desc,
+                            pole: module.pole,
+                            wire: module.wire
                         });
                     }
+                });
+
+                if (_childs.length > 0 && schemaFunctions[module.func]?.hasShareWithChilds === true && module.onlyChilds === false) {
                     _childs.push({
-                        ...kcModule,
+                        ...module,
+                        onlyChilds: true,
+                        partialKc: false,
                         kcId: '',
-                        id: `¤_${kcModule.id}`,
+                        id: `↓_${module.id}`,
                         parentId: module.id,
-                        func: 'k',
+                        func: 'o',
                         icon: module.icon,
-                        text: module.partialKc === true ? kcModule.text : module.text,
-                        desc: module.partialKc === true ? kcModule.desc : module.desc,
-                        pole: module.pole,
-                        wire: module.wire
+                        text: module.text,
                     });
                 }
-            });
 
-            if (_childs.length > 0 && schemaFunctions[module.func]?.hasShareWithChilds === true && module.onlyChilds === false) {
-                _childs.push({
-                    ...module,
-                    onlyChilds: true,
-                    partialKc: false,
-                    kcId: '',
-                    id: `↓_${module.id}`,
-                    parentId: module.id,
-                    func: 'o',
-                    icon: module.icon,
-                    text: module.text,
-                });
+                const childs = getRow(_childs);
+
+                l[module.id] = {
+                    module,
+                    childs,
+                    isLast: Object.keys(childs).length === 0,
+                    hasBrothers: Object.keys(getChilds(module.parentId) ?? {}).length > 0,
+                };
             }
-
-            const childs = getRow(_childs);
-
-            l[module.id] = {
-                module,
-                childs,
-                isLast: Object.keys(childs).length === 0,
-                hasBrothers: Object.keys(getChilds(module.parentId) ?? {}).length > 0,
-            };
         });
 
         let e = Object.entries(l);
@@ -458,7 +461,9 @@ export default function SchemaTab({
                             ...old,
                             db: { ...old.db, sensibility: e.target.value }
                         }))} disabled={!switchboard.withDb}>
+                            <option value="300mA">300mA</option>
                             <option value="500mA">500mA</option>
+                            <option value="650mA">650mA</option>
                         </select>
                     </div>
                     <div className="tabPageBandCol">

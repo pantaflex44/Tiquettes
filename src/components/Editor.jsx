@@ -232,7 +232,7 @@ export default function Editor({
                         onApplyModuleEditor({ ...ed });
                     }}
                     width={500}
-                    maxHeight={'96vh'}
+                    maxHeight={'97dvh'}
                     className="popup_flex"
                     additionalButtons={[
                         {

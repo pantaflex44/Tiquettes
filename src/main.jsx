@@ -62,12 +62,8 @@ export default function Main() {
             return new Promise((resolve, reject) => {
                 const s = `${import.meta.env.VITE_APP_URL}/${src}.svg`;
                 const img = new Image();
-                img.onload = function () {
-                    resolve(img);
-                }
-                img.onerror = img.onabort = function () {
-                    reject(s);
-                }
+                img.onload = function () { resolve(img); }
+                img.onerror = img.onabort = function () { reject(s); }
                 img.src = s;
             })
         });
