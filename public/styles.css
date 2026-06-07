@@ -182,6 +182,28 @@ nav.header ul li a:hover img {
     filter: initial;
 }
 
+nav.header ul li a.dons {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+nav.header ul li a.dons:hover {
+    background-color: var(--secondary-color);
+    color: black;
+}
+
+nav.header ul li a.dons span.love {
+    color: red;
+    font-size: 130%;
+}
+
 .box {
     width: calc(100% - 2em);
     padding: 1em;
@@ -393,6 +415,11 @@ button.link {
 
 button.link:hover {
     background-color: transparent;
+}
+
+button.dons {
+    background-color: black;
+    color: white;
 }
 
 input[type="file"] {

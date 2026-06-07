@@ -6,8 +6,9 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 
 [<img alt="URL" src="https://img.shields.io/badge/🠊-https://www.tiquettes.fr-%3CCOLOR%3E?style=for-the-badge&color=darkcyan&labelColor=darkcyan">](https://www.tiquettes.fr)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T61BPPX0)
+
+<a href="https://www.tiquettes.fr/dons.php" style="text-decoration: none; background: black; color: white; padding-inline: 1.5rem; padding-block: 1rem; font-size: 0.9rem; font-weight: 600; margin: 0;">Nous soutenir en faisant un don <span style="color: red; margin-left: 0.5rem; font-size: 1.1rem;">♥</span></a>
+<br /><br />
 
 <img alt="Création" src="https://img.shields.io/badge/Date%20de%20création-26/05/2024-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Finfos.json&query=%24.version&label=Version%20actuelle&color=%23fff">&nbsp;&nbsp;
@@ -758,7 +759,9 @@ Les paramètres sont simples et permettent une mise en forme rapide. Le résulta
 
 Au travers vos utilisations de Tiquettes, vous n'hésitez pas à me remonter des bugs, proposer de nouvelles idées, et vous m'offrez un café donc je vous en remercie fortement pour tout celà !
 
-### ☕ Dans un premier temps, gros merci pour tous les cafés offerts ;-)
+### ☕ Dans un premier temps, gros merci pour tous vos soutiens financiers ;-)
+
+Si vous souhaitez nous soutenir, c'est par ici: [Faire un don](https://www.tiquettes.fr/dons.php)
 
 ### 🐛 Mais aussi pour toutes les remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et vos participations dans les [discussions](https://github.com/pantaflex44/Tiquettes/discussions)
 
