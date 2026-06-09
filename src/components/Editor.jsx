@@ -628,12 +628,12 @@ export default function Editor({
                                                 Asservi par
                                             </label>
                                             <div className="popup_row-flex">
-                                                <EditorContactOrderSelector
+                                                {/*<EditorContactOrderSelector
                                                     id={`editor_contact_order_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.kcOrder ?? "after"}
                                                     onChange={(value) => onUpdateModuleEditor({ kcOrder: value })}
                                                     disabled={ed.currentModule.kcId === ""}
-                                                />
+                                                />*/}
                                                 <EditorMultiContactSelector
                                                     id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.kcId}

@@ -716,35 +716,25 @@ Votre choix fait, il ne vous reste plus qu'à cliquer sur l'icone de télécharg
 
 ![Mise en forme pour l'étiqueteuse](./docs/_labelers_options.png)
 
-```
-Etiqueteuse             : Permet de choisir un modèle d'étiqueteuse préprogrammé. 
-                          Chaque modèle mémorise les derniers paramètres modifiés.
+**Etiqueteuse**: Permet de choisir un modèle d'étiqueteuse préprogrammé. Chaque modèle mémorise les derniers paramètres modifiés.
 
-Résolutions             : Les appareils ont différentes résolutions. Pour mieux
-                          adapter la qualité des images produites à chaque appareil,
-                          veillez à correctement renseigner ces valeurs.
+**Résolutions**: Les appareils ont différentes résolutions. Pour mieux adapter la qualité des images produites à chaque appareil, veillez à correctement renseigner ces valeurs.
 
-Hauteur du ruban        : Largeur / Hauteur du ruban sur lequel sera imprimé les rangées.
+**Hauteur du ruban**: Largeur / Hauteur du ruban sur lequel sera imprimé les  rangées.
 
-Largeur des modules     : Largeur des modules du tableau électrique.
+**Largeur des modules**: Largeur des modules du tableau électrique.
 
-Taille des pictogrammes : Vous pouvez choisir de ne pas afficher les pictogrammes ou
-                          de choisir la taille qu'ils prendront sur l'étiquette.
+**Taille des pictogrammes**: Vous pouvez choisir de ne pas afficher les pictogrammes ou de choisir la taille qu'ils prendront sur l'étiquette.
 
-Taille des libellés     : Vous pouvez choisir de ne pas afficher les libellés ou
-                          de choisir la taille qu'ils prendront sur l'étiquette.
+**Taille des libellés**: Vous pouvez choisir de ne pas afficher les libellés ou de choisir la taille qu'ils prendront sur l'étiquette.
 
-Orientation             : Orientation verticale ou horizontale des libellés.
+**Orientation**: Orientation verticale ou horizontale des libellés.
 
-Affichage               : La majorité des étiqueteuses permettent d'imprimer normalement
-                          ou d'inverser les couleurs. Noir sur fond blanc ou Blanc sur fond noir.
+**Affichage**: La majorité des étiqueteuses permettent d'imprimer normalement ou d'inverser les couleurs. Noir sur fond blanc ou Blanc sur fond noir.
 
-Découpes                : Pour économiser les rubans vous pouvez choisir de supprimer tout en
-                          partie les espaces vides. Il vous faudra découper pour assembler.
+**Découpes**: Pour économiser les rubans vous pouvez choisir de supprimer tout en partie les espaces vides. Il vous faudra découper pour assembler.
 
-Bordures                : Pour vous repérer dans le découpage, vous pouvez choisir les
-                          bordures à imprimer.
-```
+**Bordures**: Pour vous repérer dans le découpage, vous pouvez choisir les bordures à imprimer.
 
 Les paramètres sont simples et permettent une mise en forme rapide. Le résultat sera exporté sous forme d'un fichier ZIP contenant une image PNG monochrome par rangée.
 
