@@ -192,6 +192,7 @@ nav.header ul li a.dons {
     justify-content: center;
     align-items: center;
     gap: 0.65rem;
+    padding-block: 0.55em;
 }
 
 nav.header ul li a.dons:hover {
