@@ -598,12 +598,12 @@ désactiver cette surveillance à tout moment.
 
 Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024) :
 
-- ```Étiquettes```: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
-- ```Schéma```: Le nombre de circuits associés à un interrupteur différentiel : 8 (sauf pour le tertiaire).
-- ```Schéma```: Le nombre minimum d'interrupteurs différentiels : 2.
-- ```Schéma```: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et
+- **Étiquettes**: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
+- **Schéma**: Le nombre de circuits associés à un interrupteur différentiel : 8 (sauf pour le tertiaire).
+- **Schéma**: Le nombre minimum d'interrupteurs différentiels : 2.
+- **Schéma****: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et
   Bornes/Prises de recharge : Type A.
-- ```Schéma```: Le calibre de l'interrupteur sectionneur en fonction du calibre du disjoncteur de branchement (si ajouté
+- **Schéma**: Le calibre de l'interrupteur sectionneur en fonction du calibre du disjoncteur de branchement (si ajouté
   au schéma).
 - etc.
 
@@ -658,14 +658,14 @@ Le but principale de l'application est quand même d'imprimer ses étiquettes :-
 
 Alors cette partie du menu vous permets d'affiner les paramètres d'impression.
 
-```
-Décorer les emplacements libres         : Permet d'appliquer le thème aux emplacements libres (cf image 1)
 
-Imprimer les lignes de coupe            : Inclut des traits de coupe pour les massicots (cf image 2)
+**Décorer les emplacements libres**: Permet d'appliquer le thème aux emplacements libres (cf image 1)
 
-Indiquer le calibre sous chaque module  : Inscrit sous l'étiquette le calibre du module (cf image 3)
+**Imprimer les lignes de coupe**: Inclut des traits de coupe pour les massicots (cf image 2)
+
+**Indiquer le calibre sous chaque module**: Inscrit sous l'étiquette le calibre du module (cf image 3)
 pour aider à leur installation
-```
+
 
 ![Image 1](./docs/_labels_print_free.png)
 <small>*image 1*</small>
@@ -701,16 +701,16 @@ Depuis la version 2.2.8, l'application vous propose d'exporter vos planches d'é
 
 Cette sélection fonctionne comme le système de sélection des pages à imprimer:
 
-```
-1-4         : Sélectionne les rangées de 1 à 4 incluses
-1,3,6       : Sélectionne les rangées 1, 3 et 6
-```
+
+**1-4**: Sélectionne les rangées de 1 à 4 incluses
+**1,3,6**: Sélectionne les rangées 1, 3 et 6
+
 
 Par ailleurs, vous pouvez assembler les sélections:
 
-```
-1-3, 5-6, 8 : Sélectionne les rangées de 1 à 3 incluses, de 5 à 6 incluses, ainsi que la 8ème rangée
-```
+
+**1-3, 5-6, 8** : Sélectionne les rangées de 1 à 3 incluses, de 5 à 6 incluses, ainsi que la 8ème rangée
+
 
 Votre choix fait, il ne vous reste plus qu'à cliquer sur l'icone de téléchargement pour configurer la mise en forme avant exportation.
 
