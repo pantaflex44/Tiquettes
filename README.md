@@ -601,7 +601,7 @@ Le moniteur surveillera l'application des règles suivantes (NFC 15-100 09/2024)
 - **Étiquettes**: Le respect du minimum de 20% d'espace libre dans l'enveloppe du tableau.
 - **Schéma**: Le nombre de circuits associés à un interrupteur différentiel : 8 (sauf pour le tertiaire).
 - **Schéma**: Le nombre minimum d'interrupteurs différentiels : 2.
-- **Schéma****: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et
+- **Schéma**: Le type de protection différentielle parente pour les circuits Plaque de cuisson, Chauffages et
   Bornes/Prises de recharge : Type A.
 - **Schéma**: Le calibre de l'interrupteur sectionneur en fonction du calibre du disjoncteur de branchement (si ajouté
   au schéma).
