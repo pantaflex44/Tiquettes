@@ -134,7 +134,6 @@ function App() {
             projectCreated: true,
             projectUpdated: true,
             projectType: true,
-            projectVRef: true,
             from: {
                 photo: false,
                 name: false,
@@ -158,6 +157,7 @@ function App() {
         labels: true,
         summary: false,
         schema: false,
+        modulelist: false,
         freeModules: false,
         pdfOptions: {
             openWindow: true,
@@ -218,7 +218,6 @@ function App() {
     const defaultTheme = themesList.filter((t) => t.default)[0];
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
     const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
-    const defaultVRef = parseInt(import.meta.env.VITE_DEFAULT_VREF);
     const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN);
     const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX);
     const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN);
@@ -234,6 +233,7 @@ function App() {
         crb: "",
         modtype: "",
         current: "",
+        vref: import.meta.env.VITE_VREF_230V,
         sensibility: "",
         coef: 0.5,
         pole: "",
@@ -258,7 +258,6 @@ function App() {
         hRow: defaultHRow,
         spr: defaultStepsPerRows,
         projectType: defaultProjectType,
-        vref: defaultVRef,
         db: {
             crb: "",
             current: "30/60A",
@@ -271,6 +270,7 @@ function App() {
             kcId: "",
             kcType: "NO",
             kcOrder: "after",
+            vref: import.meta.env.VITE_VREF_230V,
             partialKc: false,
             onlyChilds: true,
             noAutoId: false,
@@ -284,7 +284,7 @@ function App() {
             text: "Disjonteur de branchement",
             type: "S",
         }
-    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType, defaultVRef]);
+    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType]);
 
     const createRow = useCallback((steps, rowsCount) => {
         return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
@@ -337,7 +337,6 @@ function App() {
         prjupdated: new Date(),
         prjversion: 1,
         projectType: defaultProjectType,
-        vref: defaultVRef,
 
         theme: defaultTheme,
 
@@ -367,7 +366,6 @@ function App() {
     }), [
         defaultProjectName,
         defaultProjectType,
-        defaultVRef,
         defaultTheme,
         defaultHRow,
         defaultStepsPerRows,
@@ -391,7 +389,6 @@ function App() {
             prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
             // <2.0.0
             projectType: swb.projectType ?? defaultProjectType,
-            vref: swb.vref ? parseInt(swb.vref) : defaultVRef,
             db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
             withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
             withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
@@ -786,13 +783,12 @@ function App() {
                     // <=2.2.6 : add partialKc property
                     if (!nm.partialKc) nm = { ...nm, partialKc: false };
 
-                    // <=2.2.8 : add onlyChilds property
+                    // <=2.2.8 : add new properties
                     if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
                     if (!nm.kcType) nm = { ...nm, kcType: "NO" };
                     if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
-
-                    // <=2.2.8 : add kcOrder property
                     if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
+                    if (!nm.vref) nm = { ...nm, vref: import.meta.env.VITE_VREF_230V };
 
                     return nm;
                 });
@@ -936,6 +932,7 @@ function App() {
         if (printOptions.labels) types.push('print_labels');
         if (printOptions.schema) types.push('print_schema');
         if (printOptions.summary) types.push('print_summary');
+        if (printOptions.modulelist) types.push('print_modulelist');
     };
 
     const toPdf = (withConfirm = true, printOptionsEx = null) => {
@@ -985,6 +982,7 @@ function App() {
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
             if (po.schema) sc.push('Schéma unifilaire');
+            if (po.modulelist) sc.push('Liste des modules');
             sendChoice('print', sc);
 
             let sf = ['total'];
@@ -1013,6 +1011,7 @@ function App() {
             const labels = getUrlParam('vl', 'boolean', defaultPrintOptions.labels);
             const schema = getUrlParam('vh', 'boolean', defaultPrintOptions.schema);
             const summary = getUrlParam('vs', 'boolean', defaultPrintOptions.summary);
+            const modulelist = getUrlParam('ml', 'boolean', defaultPrintOptions.modulelist);
             const autoPrint = getUrlParam('ap', 'boolean', defaultPrintOptions.pdfOptions.autoPrint);
             const labelsCutLines = getUrlParam('lcl', 'boolean', defaultPrintOptions.pdfOptions.labelsCutLines);
             const printCurrents = getUrlParam('pc', 'boolean', defaultPrintOptions.pdfOptions.printCurrents);
@@ -1030,6 +1029,7 @@ function App() {
                 labels,
                 schema,
                 summary,
+                modulelist,
                 pdfOptions: {
                     ...defaultPrintOptions.pdfOptions,
                     autoPrint,
@@ -1114,6 +1114,7 @@ function App() {
         const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
         const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
         const coef = data.currentModule.coef ?? 0.5;
+        const vref = (data.currentModule.vref ?? import.meta.env.VITE_VREF_230V).trim();
         const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
         const wire = (schemaFunctions[data.currentModule.func]?.hasWire ? (data.currentModule.wire ?? "") : "").trim();
         const grp = (data.currentModule.grp ?? "").trim();
@@ -1178,6 +1179,7 @@ function App() {
                         sensibility,
                         coef,
                         pole,
+                        vref,
                         wire,
                         line,
                         grp,
@@ -1483,6 +1485,7 @@ function App() {
                         sensibility: clipboard.sensibility,
                         coef: clipboard.coef,
                         pole: clipboard.pole,
+                        vref: clipboard.vref,
                         wire: clipboard.wire,
                         line: clipboard.line,
                         grp: clipboard.grp,
@@ -2173,6 +2176,20 @@ function App() {
                                 <label htmlFor="print_summary_format_A3" style={{ flex: 0 }}>A3</label>
                             </div>
                         </>}
+
+                        {/** ----------------------------------------------------------- */}
+                        {/** MODULE LIST **/}
+                        {/** ----------------------------------------------------------- */}
+
+                        <div className="dropdown_item head parent" title="Imprimer la liste des modules">
+                            <input id="print_modulelist" name="print_modulelist" type="checkbox"
+                                checked={printOptions.modulelist}
+                                onChange={(e) => setPrintOptions((old) => ({
+                                    ...old,
+                                    modulelist: e.target.checked
+                                }))} />
+                            <label htmlFor="print_modulelist">Liste des modules</label>
+                        </div>
 
                         {/** ----------------------------------------------------------- */}
                         {/** OTHER PRINT OPTIONS **/}

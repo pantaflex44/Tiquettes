@@ -693,6 +693,16 @@ En cas de rénovation vous avez la possibilité de démarrer le Folio à la page
 
 ![Menu - Nomenclature](./docs/_print_menu_summary.png)
 
+
+<div id="listedesmodules"></div>
+
+### Liste des modules
+
+![Menu - Liste des modules](./docs/_print_menu_modulelist.png)
+
+Imprime une page regroupant les modules par leurs caractéristiques globales ainsi que les quantités calculées. Celà peut être très pratique pour aider à préparer une liste de matériel à commander.
+
+
 <div id="les-étiquetteuses"></div>
 
 ## Les étiqueteuses

@@ -20,7 +20,7 @@
 
 import { useMemo } from "react";
 
-export default function EditorPoleSelector({ id, parentModule, value, db, style = {}, onChange = null }) {
+export default function EditorPoleSelector({ id, parentModule, value, db = null, style = {}, onChange = null }) {
     const polesCounter = (pole) => {
         let p = parseInt(pole.replace(/\D/g, ''));
         if (p === 1 && pole.includes('+N')) p = 2;
@@ -35,11 +35,11 @@ export default function EditorPoleSelector({ id, parentModule, value, db, style 
     }, [db]);
 
     const allowedPoles = [
-        { key: "1P+N", name: "Monophasé unipolaire (1P+N)" },
-        { key: "2P", name: "Monophasé bipolaire (2P)" }, 
-        { key: "3P", name: "Triphasé (3P)" },
-        { key: "3P+N", name: "Triphasé (3P+N)" },
-        { key: "4P", name: "Tétrapolaire (4P)" }
+        { key: "1P+N", name: `Monophasé unipolaire ${import.meta.env.VITE_VREF_230V} (1P+N)`, vref: import.meta.env.VITE_VREF_230V },
+        { key: "2P", name: `Monophasé bipolaire ${import.meta.env.VITE_VREF_230V} (2P)`, vref: import.meta.env.VITE_VREF_230V },
+        { key: "3P", name: `Triphasé ${import.meta.env.VITE_VREF_400V} (3P)`, vref: import.meta.env.VITE_VREF_400V },
+        { key: "3P+N", name: `Triphasé ${import.meta.env.VITE_VREF_230V} (3P+N)`, vref: import.meta.env.VITE_VREF_230V },
+        { key: "4P", name: `Tétrapolaire ${import.meta.env.VITE_VREF_230V} (4P)`, vref: import.meta.env.VITE_VREF_230V }
     ].filter(currentPole => {
         const p = polesCounter(currentPole.key);
         if (p <= dbPole) {
@@ -50,11 +50,21 @@ export default function EditorPoleSelector({ id, parentModule, value, db, style 
         return false;
     });
 
-    return <select id={id} name={id} value={value}
-        onChange={(e) => {
-            if (onChange) onChange(e.target.value)
-        }} style={{ ...style }}>
-        <option value={""}>-</option>
-        {allowedPoles.map((pole, i) => <option key={i} value={pole.key}>{pole.name}</option>)}
-    </select>
+    const getVrefFromPole = (pole) => {
+        const found = allowedPoles.find(p => p.key === pole);
+        return found ? found.vref : import.meta.env.VITE_VREF_230V;
+    };
+
+    return (
+        <>
+            <select id={id} name={id} value={value}
+                onChange={(e) => {
+                    if (onChange) onChange(e.target.value, getVrefFromPole(e.target.value))
+                }} style={{ ...style }}>
+                <option value={""}>-</option>
+                {allowedPoles.map((pole, i) => <option key={i} value={pole.key}>{pole.name}</option>)}
+            </select>
+
+        </>
+    );
 }

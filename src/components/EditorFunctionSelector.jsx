@@ -19,8 +19,8 @@
 /* eslint-disable react/prop-types */
 import schemaFunctions from '../schema_functions.json';
 
-export default function EditorFunctionSelector({ id, value, onChange = null }) {
-    return <select id={id} name={id} value={value}
+export default function EditorFunctionSelector({ id, value, title = null, onChange = null }) {
+    return <select id={id} name={id} value={value} title={title ?? ''}
         onChange={(e) => {
             if (onChange) onChange(e.target.value)
         }} style={{ flex: 1 }}>

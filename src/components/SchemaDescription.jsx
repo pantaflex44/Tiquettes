@@ -46,7 +46,7 @@ export default function SchemaDescription({
         let pole = module.pole ?? "";
 
         /*const parentModule = getModuleById(module.parentId).module;
-        if (module.func === 'kc' && parentModule) {
+        if ((k === 'kc' || k === 'tl') && parentModule) {
             icon = parentModule.icon;
             text = parentModule.text;
             pole = parentModule.pole;

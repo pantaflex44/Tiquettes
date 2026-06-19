@@ -36,7 +36,7 @@ export default function EditorMultiContactSelector({ id, value, currentModuleId,
     });
 
     function getModuleTextById(id) {
-        return filteredModulesListBySchemaFuncs.kc.find(m => m.id === id)?.text ?? '';
+        return ([...(filteredModulesListBySchemaFuncs['kc'] ?? []), ...(filteredModulesListBySchemaFuncs['tl'] ?? [])]).find(m => m.id === id)?.text ?? '';
     }
 
     function handleKeyUp(e) {
@@ -104,7 +104,7 @@ export default function EditorMultiContactSelector({ id, value, currentModuleId,
                 justifyContent: 'flex-start',
                 gap: '0rem'
             }}>
-                {(filteredModulesListBySchemaFuncs.kc ?? []).map((module) => {
+                {([...(filteredModulesListBySchemaFuncs['kc'] ?? []), ...(filteredModulesListBySchemaFuncs['tl'] ?? [])]).map((module) => {
                     return module.id !== currentModuleId
                         ? <li key={module.id} style={{
                             display: 'flex',

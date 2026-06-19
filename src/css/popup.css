@@ -71,7 +71,9 @@ body:has(.popup-overflow) {
     margin-bottom: 1rem;
     z-index: 9000;
     border-bottom: 1px solid #999;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 12px 0px;
+    box-shadow:
+        rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+        rgba(14, 30, 37, 0.32) 0px 2px 12px 0px;
 }
 
 .popup_title {
@@ -127,11 +129,13 @@ body:has(.popup-overflow) {
     margin-top: 1rem;
     position: sticky;
     bottom: 0;
-    background-color: #FFF;
+    background-color: #fff;
     padding-block: 1rem;
     padding-inline: 1.5rem;
     border-top: 1px solid #999;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 12px 0px;
+    box-shadow:
+        rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+        rgba(14, 30, 37, 0.32) 0px 2px 12px 0px;
 }
 
 .popup_buttons_box {
@@ -300,6 +304,10 @@ body:has(.popup-overflow) {
     row-gap: 1.5em;
     justify-content: center;
     align-items: start;*/
+}
+
+.popup.internal_popup_opened {
+    background-color: red;
 }
 
 .popup_row-flex > *:first-child {

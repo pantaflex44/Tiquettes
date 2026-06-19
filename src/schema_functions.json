@@ -1,6 +1,7 @@
 {
     "sw": {
         "name": "Interrupteur sectionneur",
+        "description": "Un interrupteur sectionneur, c'est la combinaison d’un interrupteur et d’un sectionneur, destiné à isoler mécaniquement un circuit déjà coupé afin de sécuriser une intervention.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -14,6 +15,7 @@
     },
     "id": {
         "name": "Interrupteur différentiel",
+        "description": "Un interrupteur différentiel, placé en amont des circuits d’un tableau électrique, protège les personnes dans leur logement. Tandis que les disjoncteurs font office de protection des biens du logement, les interrupteurs différentiels assurent la protection des personnes. Grâce à sa sensibilité, il détecte les potentielles fuites de courant et coupe l'alimentation.",
         "hasType": true,
         "hasCrb": false,
         "hasCurrent": true,
@@ -27,6 +29,7 @@
     },
     "dd": {
         "name": "Disjoncteur différentiel",
+        "description": "Un disjoncteur différentiel est un dispositif de protection modulaire qui vient se placer dans le tableau électrique grâce à des bornes automatiques ou à vis. Le disjoncteur différentiel est un DDR (Dispositif Différentiel Résiduel).  Il existe plusieurs types de disjoncteurs : le disjoncteur général ou de branchement, les disjoncteurs divisionnaires et les disjoncteurs différentiels. L’intérêt du disjoncteur différentiel, c’est qu’il agit à la fois comme un disjoncteur classique et comme un interrupteur différentiel, il protège les biens et les personnes.",
         "hasType": true,
         "hasCrb": true,
         "hasCurrent": true,
@@ -40,6 +43,7 @@
     },
     "q": {
         "name": "Disjoncteur",
+        "description": "Placé dans le tableau électrique en aval de l’interrupteur différentiel, le disjoncteur divisionnaire a pour mission d’assurer la protection d’un circuit électrique auquel il est dédié. Le disjoncteur est calibré selon les besoins en puissance du circuit qu’il alimente en adéquation avec la section des conducteurs, et coupe ce dernier en cas de court-circuit ou de surcharge électrique.",
         "hasType": false,
         "hasCrb": true,
         "hasCurrent": true,
@@ -53,6 +57,7 @@
     },
     "prd": {
         "name": "Parafoudre",
+        "description": "Un parafoudre est un dispositif de protection qui protège les installations électriques contre les surtensions dues aux foudres ou aux perturbations du réseau électrique.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -66,6 +71,7 @@
     },
     "fus": {
         "name": "Fusible",
+        "description": "Un fusible est un dispositif de protection électrique qui protège les installations électriques contre les surintensités. Il est constitué d’un fil métallique qui fond lorsque le courant dépasse une valeur prédéterminée, interrompant ainsi le circuit électrique et protégeant les équipements en aval.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -79,6 +85,7 @@
     },
     "cc": {
         "name": "Coupe Circuit",
+        "description": "Un coupe-circuit est un dispositif de protection électrique qui protège les installations électriques contre les surintensités. Il est constitué d’un mécanisme qui déclenche l’ouverture du circuit lorsque le courant dépasse une valeur prédéterminée.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -92,6 +99,7 @@
     },
     "trf": {
         "name": "Transformateur",
+        "description": "Un transformateur est un dispositif électrique qui permet de transformer la tension et le courant d'un circuit électrique. Il est utilisé pour adapter la tension électrique aux besoins des appareils électriques.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -105,6 +113,7 @@
     },
     "i": {
         "name": "Interrupteur",
+        "description": "Un interrupteur est un dispositif électrique qui permet d'ouvrir ou de fermer un circuit électrique. Il est utilisé pour contrôler l'alimentation des appareils électriques.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -118,6 +127,21 @@
     },
     "kc": {
         "name": "Contacteur",
+        "description": "Un contacteur est un dispositif électrique qui permet d'ouvrir ou de fermer un circuit électrique de manière automatique. Il est utilisé pour contrôler l'alimentation des moteurs et autres appareils électriques. Il peut être un télérupteur, un relais, une minuterie ou tout autre élément possédant une bobine pilotant un ou plusieurs contacts.",
+        "hasType": false,
+        "hasCrb": false,
+        "hasCurrent": true,
+        "hasPole": false,
+        "hasWire": false,
+        "hasContacts": true,
+        "supportContacts": true,
+        "selectable": true,
+        "hasShareWithChilds": true,
+        "hasNONCChoice": true
+    },
+    "tl": {
+        "name": "Télérupteur",
+        "description": "Un télérupteur est un appareil qui commande un circuit d’éclairage comportant au moins trois points de commande ; contrairement au va-et-vient pour deux points de commande maximum.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -131,6 +155,7 @@
     },
     "cpt": {
         "name": "Sous-comptage",
+        "description": "Un sous-comptage est un dispositif qui permet de mesurer la consommation d'énergie d'un circuit électrique spécifique. Il est utilisé pour surveiller et facturer la consommation d'énergie d'un utilisateur ou d'un appareil.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -144,6 +169,7 @@
     },
     "o": {
         "name": "Autre",
+        "description": "Autre dispositif électrique",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -157,6 +183,7 @@
     },
     "c": {
         "name": "Commande",
+        "description": "Un dispositif de commande électrique",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -170,6 +197,7 @@
     },
     "cno": {
         "name": "Commande NO",
+        "description": "Un dispositif de commande électrique Normalement Ouvert (NO)",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -183,6 +211,7 @@
     },
     "cnf": {
         "name": "Commande NF",
+        "description": "Un dispositif de commande électrique Normalement Fermé (NF)",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -196,6 +225,7 @@
     },
     "bpno": {
         "name": "Bouton poussoir NO",
+        "description": "Un bouton poussoir Normalement Ouvert (NO) est un dispositif de commande électrique qui permet d'ouvrir un circuit électrique lorsqu'il est actionné. Il est utilisé pour contrôler l'alimentation des appareils électriques.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -209,6 +239,7 @@
     },
     "bpnf": {
         "name": "Bouton poussoir NF",
+        "description": "Un bouton poussoir Normalement Fermé (NF) est un dispositif de commande électrique qui permet de fermer un circuit électrique lorsqu'il est actionné. Il est utilisé pour contrôler l'alimentation des appareils électriques.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -222,6 +253,7 @@
     },
     "led": {
         "name": "Voyant",
+        "description": "Un voyant est un dispositif lumineux qui indique l'état d'un circuit électrique. Il peut être utilisé pour signaler la mise sous tension, la présence de courant ou tout autre état spécifique d'un circuit.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": false,
@@ -235,6 +267,7 @@
     },
     "son": {
         "name": "Carillon",
+        "description": "Un carillon est un dispositif sonore qui émet un signal sonore lorsqu'il est actionné. Il peut être utilisé pour signaler l'arrivée d'une personne, l'ouverture d'une porte ou tout autre événement spécifique.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": false,
@@ -248,6 +281,7 @@
     },
     "telec": {
         "name": "Télécommande",
+        "description": "Une télécommande est un dispositif qui permet de contrôler à distance un appareil électrique. Elle peut être utilisée pour allumer ou éteindre un appareil, ajuster ses paramètres ou effectuer d'autres actions spécifiques. Elle peut être filaire ou sans fil via un module récepteur placé dans le tableau électrique.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,
@@ -261,6 +295,7 @@
     },
     "pc": {
         "name": "Prise modulaire",
+        "description": "Une prise modulaire est un dispositif d'interface électrique qui permet de connecter des appareils électriques à un circuit. Elle peut être utilisée pour alimenter des appareils électriques ou pour les connecter à un système de commande.",
         "hasType": false,
         "hasCrb": false,
         "hasCurrent": true,

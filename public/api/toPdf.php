@@ -1205,21 +1205,9 @@ class TiquettesPDF extends FPDF
                 $this->MultiCell(0, 5, str($projectType), 0, 'L', false, 1);
             }
         }
-        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 59);
-        $this->SetX($this->pageMargin + 95);
-        $this->SetFont('Arial', '', 10);
-        $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str('Tension de référence'), 0, 0, '');
-        $this->SetTextColor(0, 0, 0);
-        if (($printOptions->pdfOptions?->firstPageView?->projectVRef ?? false) === true) {
-            $vref = trim($switchboard?->vref ?? "");
-            if ($vref !== "") {
-                $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 58.5);
-                $this->SetX($this->pageMargin + 140);
-                $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str($vref . 'V'), 0, 'L', false, 1);
-            }
-        }
+        /*$this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 59);
+        $this->SetX($this->pageMargin + 95);*/
+
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 68);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
@@ -1239,11 +1227,11 @@ class TiquettesPDF extends FPDF
         $this->SetFont('Arial', 'B', 12);
         $this->MultiCell(0, 5, str('Schéma unifilaire'), 0, 'L', false, 1);
 
-        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 86);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 84);
         $this->SetX($this->pageMargin + 8 + 1);
         $this->Image($printOptions->summary ? $squareCheckIcon : $squareIcon, $this->GetX(), $this->GetY(), 5, 5, 'PNG');
 
-        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 86 + 0.30);
+        $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 84 + 0.30);
         $this->SetX($this->pageMargin + 8 + 7);
         $this->SetFont('Arial', 'B', 12);
         $this->MultiCell(0, 5, str('Nomenclature'), 0, 'L', false, 1);
@@ -1631,7 +1619,7 @@ class TiquettesPDF extends FPDF
 
         if ($level < $this->grid[$this->gridOrientation]['schemaMaxLevels']) {
             $sff = $module->func;
-            if ($module->func === 'k' && $schemaFunctions['kc']['hasNONCChoice'] === true && strtoupper(trim($module->kcType ?? "")) === 'NC') {
+            if ($module->func === 'k' && ($schemaFunctions['kc']['hasNONCChoice'] === true || $schemaFunctions['tl']['hasNONCChoice'] === true) && strtoupper(trim($module->kcType ?? "")) === 'NC') {
                 $sff .= '_nc';
             }
             $symbol = $this->getSymbol($sff);
@@ -1901,6 +1889,79 @@ class TiquettesPDF extends FPDF
             $this->Ln(3);
         }
     }
+
+    function AddModuleListPage()
+    {
+        global $switchboard, $printOptions, $schemaFunctions;
+
+        $this->grid = false;
+        $this->subTitle = "Liste des modules";
+        $this->StartPageGroup();
+        $this->AddPage('P', 'A4', 0);
+        $this->SetVisibility('all');
+
+        $this->SetY($this->pageMargin + 3);
+        $oldPosX = $this->pageMargin;
+
+        $modules = [];
+
+        $totalRows = count($switchboard->rows);
+        for ($i = 0; $i < $totalRows; $i++) {
+            $totalModules = count($switchboard->rows[$i]);
+            for ($j = 0; $j < $totalModules; $j++) {
+                $module = $switchboard->rows[$i][$j];
+                if (!is_null($module) && ($module->func ?? '') !== '' && ($module->func ?? '') !== 'o'  && !$module->free) {
+                    $fname = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '');
+                    $ftype = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? 'Type ' . trim($module->type) : '') : '');
+                    $fcrb = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? 'Courbe ' . trim($module->crb) : '') : '');
+                    $fsensibility = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '');
+                    $fcurrent = trim($module->current ?? "");
+                    $fpole = trim($module->pole ?? '');
+                    $fdetails = array_filter([trim($fname), trim($ftype), trim($fsensibility), trim($fcrb), trim($fcurrent), trim($fpole)], fn($v) => $v !== '');
+                    $fdetails = implode('  ', $fdetails);
+                    if (!isset($modules[$fdetails])) {
+                        $modules[$fdetails] = 0;
+                    }
+                    $modules[$fdetails]++;
+                }
+            }
+        }
+        ksort($modules);
+
+        $columns = [
+            ['id' => 'name', 'text' => 'Désignation', 'w' => 170, 'align' => 'L'],
+            ['id' => 'quantity', 'text' => 'Quantité', 'w' => 20, 'align' => 'R'],
+        ];
+        $this->SetFont('Arial', 'B', 11);
+        $this->SetTextColor(0, 0, 0);
+        foreach ($columns as $column) {
+            $this->SetX($oldPosX);
+            $this->Cell($column['w'], 7, str($column['text']), 0, 0, $column['align']);
+            $oldPosX += $column['w'];
+        }
+        $this->Ln(12);
+        $this->SetFillColor(220, 220, 220);
+        $this->Rect($this->pageMargin, $this->GetY() - 2.5, $this->GetPageWidth() - $this->pageMargin - $this->pageMargin, 0.5, 'F');
+
+        $this->SetFont('Arial', '', 10);
+        $this->SetTextColor(0, 0, 0);
+        $vls = array_values($modules);
+        $counterMax = count($vls) > 0 ? max($vls) : 0;
+        foreach ($modules as $k => $v) {
+            $oldPosX = $this->pageMargin;
+
+            $this->SetX($oldPosX);
+            $this->Cell($columns[0]['w'], 8, str($k), 0, 0, 'L');
+
+            $counter = str_pad($v, $counterMax < 10 ? 2 : strlen(strval($counterMax)), ' ', STR_PAD_LEFT);
+            $this->SetX($oldPosX + $columns[0]['w']);
+            $this->Cell($columns[1]['w'], 8, str($counter), 0, 0, 'R');
+
+            $this->Ln(7);
+            $this->SetDrawColor(220, 220, 220);
+            $this->Line($this->pageMargin, $this->GetY() + 0.3, $this->GetPageWidth() - $this->pageMargin, $this->GetY() + 0.3);
+        }
+    }
 }
 
 
@@ -1945,7 +2006,8 @@ $labelsCutLines = intval(trim(($_POST['labelsCutLines'] ?? '0'))) === 1;
 $hasSchema = $printOptions->schema === true;
 $hasSummary = $printOptions->summary === true;
 $hasLabels = $printOptions->labels === true;
-$hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary;
+$hasModuleList = $printOptions->modulelist === true;
+$hasOnlyLabels = $hasLabels && !$hasSchema && !$hasSummary && !$hasModuleList;
 
 $summaryPrintFormat = strtoupper(trim((string) ($printOptions->pdfOptions?->summaryPrintFormat ?? 'A4')));
 if ($summaryPrintFormat !== 'A4' && $summaryPrintFormat !== 'A3')
@@ -2062,8 +2124,11 @@ if ($printOptions->schema === true)
     $pdf->AddSchemaPage();
 if ($printOptions->summary === true)
     $pdf->AddSummaryPage();
+if ($printOptions->modulelist === true)
+    $pdf->AddModuleListPage();
 if ($printOptions->labels === true)
     $pdf->AddLabelsPage();
+
 if ($auto)
     $pdf->AutoPrint(true);
 

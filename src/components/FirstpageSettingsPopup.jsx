@@ -795,19 +795,6 @@ export default function FirstpageSettingsPopup({
                                     <label htmlFor="to_name" style={{ fontSize: '90%' }}>Afficher le type de l'installation</label>
                                 </div>
                             </div>
-
-                            <div className="data-grid-block" >
-                                <div className="data-grid-block_title" >
-                                    <input type="checkbox" checked={(options?.views?.projectVRef ?? false)} onChange={(e) => setOptions(old => ({
-                                        ...old,
-                                        views: {
-                                            ...(old.views ?? {}),
-                                            projectVRef: e.target.checked
-                                        }
-                                    }))} title={(options?.views?.projectVRef ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
-                                    <label htmlFor="to_name" style={{ fontSize: '90%' }}>Afficher la tension de l'installation</label>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 )}
@@ -1129,19 +1116,6 @@ export default function FirstpageSettingsPopup({
                                         top: '58mm',
                                         fontSize: '15pt',
                                     }}><b>{switchboard.projectType === 'R' ? 'Résidentiel' : (switchboard.projectType === 'T' ? 'Tertiaire' : '')}</b></span>
-                                }
-                                <span className="ffpage-item" style={{
-                                    left: '95mm',
-                                    top: '58.7mm',
-                                    fontSize: '10pt',
-                                    color: 'var(--primary-color)'
-                                }}>Tension de référence</span>
-                                {(options?.views?.projectVRef ?? false) === true &&
-                                    <span className="ffpage-item" style={{
-                                        left: '140mm',
-                                        top: '58mm',
-                                        fontSize: '15pt',
-                                    }}><b>{switchboard.vref}V</b></span>
                                 }
                                 <div className="ffpage-line" style={{
                                     left: 0,

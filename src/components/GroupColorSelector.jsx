@@ -31,7 +31,8 @@ import { ChromePicker } from "react-color";
 export default function GroupColorSelector({
     switchboard,
     value = '',
-    onChange = null
+    onChange = null,
+    onOpened = null
 }) {
     const [opened, setOpened] = useState(false);
     const [paletteOpened, setPaletteOpened] = useState(false);
@@ -73,6 +74,10 @@ export default function GroupColorSelector({
         const c = selected?.color ?? '';
         if (c !== value && onChange) onChange(c);
     }, [selected]);
+
+    useEffect(() => {
+        if (onOpened) onOpened(paletteOpened);
+    }, [paletteOpened]);
 
     return (
         <>

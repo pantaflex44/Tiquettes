@@ -491,7 +491,7 @@
         "title": "Telerupteur",
         "modtype": "Divers",
         "coef": 0.5,
-        "func": "kc",
+        "func": "tl",
         "current": "16A",
         "wire": "2.5"
     },

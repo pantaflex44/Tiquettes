@@ -68,6 +68,7 @@ export default function Editor({
     const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
     const [ed, setEd] = useState(editor);
     const [isCustomFunction, setIsCustomFunction] = useState(false);
+    const [internalPopupOpened, setInternalPopupOpened] = useState(false);
 
     const [editorTab, setEditorTab] = useState(ed?.tabPage ?? "main");
     const prevModule = useMemo(() => getModuleById(ed?.prevModule?.parentId), [ed?.prevModule?.parentId]);
@@ -233,7 +234,8 @@ export default function Editor({
                     }}
                     width={500}
                     maxHeight={'97dvh'}
-                    className="popup_flex"
+                    className={`popup_flex`.trim()}
+                    popupStyle={{ overflow: internalPopupOpened ? 'hidden' : null }}
                     additionalButtons={[
                         {
                             text: "Supprimer",
@@ -384,6 +386,7 @@ export default function Editor({
                                             switchboard={switchboard}
                                             value={ed.currentModule.grp}
                                             onChange={(value) => onUpdateModuleEditor({ grp: value })}
+                                            onOpened={(state) => setInternalPopupOpened(state)}
                                         />
                                         <div
                                             style={{
@@ -565,6 +568,7 @@ export default function Editor({
                                                     onUpdateModuleEditor({ id: getLastFreeId(value) });
                                                 }
                                             }}
+                                            title={schemaFunctions[ed.currentModule.func]?.description ?? "Sélectionner la fonction"}
                                         />
                                         <EditorParallelSelector
                                             id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
@@ -738,7 +742,9 @@ export default function Editor({
                                                 parentModule={getParentById(ed.currentModule.parentId)}
                                                 value={ed.currentModule.pole}
                                                 db={switchboard.withDb ? switchboard.db : null}
-                                                onChange={(value) => onUpdateModuleEditor({ pole: value })}
+                                                onChange={(value, vref) => {
+                                                    onUpdateModuleEditor({ pole: value, vref });
+                                                }}
                                                 style={{ flex: 1 }}
                                             />
                                             {hasLine && (

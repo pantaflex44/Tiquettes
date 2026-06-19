@@ -222,6 +222,12 @@ export default function SchemaTab({
                     return 0;
                 };
 
+                const getVref = (module) => {
+                    const _currentVref = (module?.vref ?? import.meta.env.VITE_VREF_230V).split('/');
+                    if (_currentVref.length > 0) return parseInt(_currentVref[_currentVref.length - 1].replace(/\D/g, ''));
+                    return 0;
+                };
+
                 const getFunc = (module) => {
                     return module?.func;
                 }
@@ -267,8 +273,8 @@ export default function SchemaTab({
                 const currentPole = getPole(data.module);
                 const currentFunc = getFunc(data.module);
                 const currentCurrent = getCurrent(data.module);
-                const currentPower = currentCurrent * switchboard.vref;
-                const vDivider = switchboard.vref * (isTri(currentPole) ? 3 : (isMono(currentPole) ? 1 : 1));
+                const currentPower = currentCurrent * getVref(data.module);
+                const vDivider = getVref(data.module) * (isTri(currentPole) ? 3 : (isMono(currentPole) ? 1 : 1));
 
 
                 // Le module courant est un disjoncteur de branchement
@@ -288,7 +294,7 @@ export default function SchemaTab({
                 // Le module courant est un interrupteur différentiel
                 if (currentFunc === 'id' && getId(data.module)) {
                     const powers = Object.entries(data.childs).map(([_, cdata]) => {
-                        if (getFunc(cdata.module) === 'q') return ((getCurrent(cdata.module) * getTrueCoef(cdata.module)) / getTrueFactor(cdata.module)) * switchboard.vref;
+                        if (getFunc(cdata.module) === 'q') return ((getCurrent(cdata.module) * getTrueCoef(cdata.module)) / getTrueFactor(cdata.module)) * getVref(cdata.module);
                         return 0;
                     });
                     const total = Math.ceil((powers.reduce((partialSum, a) => partialSum + a, 0)) / vDivider);
@@ -387,18 +393,8 @@ export default function SchemaTab({
                         </label>
                     </div>
                 </div>
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Tension de<br />référence:</span>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="number" name="schemaVRef" id="schemaVRef" step={1} min={0} max={400}
-                            value={switchboard.vref}
-                            onChange={(e) => setSwitchboard((old) => ({ ...old, vref: e.target.value }))} />
-                    </div>
-                </div>
 
-                <div className="tabPageBandSeparator"></div>
+
 
                 <div className="tabPageBandGroup">
                     <div className="tabPageBandCol">
@@ -471,11 +467,53 @@ export default function SchemaTab({
                             ...old,
                             db: { ...old.db, current: e.target.value }
                         }))} disabled={!switchboard.withDb}>
-                            <option value="10/30A">10/30A</option>
-                            <option value="15/45A">15/45A</option>
-                            <option value="30/60A">30/60A</option>
-                            <option value="60/90A">60/90A</option>
-                            <option value="60A">60A mono-calibre</option>
+                            {switchboard.db.pole === "3P+N" && (
+                                <>
+                                    <option value="" disabled={true}>Tarifs bleus</option>
+                                    <option value="30A">30A - 6kVA</option>
+                                    <option value="45A">45A - 9kVA</option>
+                                    <option value="60A">60A - 12kVA</option>
+                                    <option value="75A">75A - 15kVA</option>
+                                    <option value="90A">90A - 18kVA</option>
+                                    <option value="120A">120A - 24kVA</option>
+                                    <option value="150A">150A - 30kVA</option>
+                                    <option value="180A">180A - 36kVA</option>
+                                    <option value="" disabled={true}>Tarifs jaunes</option>
+                                    <option value="183A">183A - 42kVA</option>
+                                    <option value="207A">207A - 48kVA</option>
+                                    <option value="234A">234A - 54kVA</option>
+                                    <option value="285A">285A - 66kVA</option>
+                                    <option value="312A">312A - 72kVA</option>
+                                    <option value="339A">339A - 78kVA</option>
+                                    <option value="363A">363A - 84kVA</option>
+
+                                    <option value="390A">390A - 90kVA</option>
+                                    <option value="417A">417A - 96kVA</option>
+                                    <option value="441A">441A - 102kVA</option>
+                                    <option value="468A">468A - 108kVA</option>
+                                    <option value="519A">519A - 120kVA</option>
+                                    <option value="573A">573A - 132kVA</option>
+                                    <option value="624A">624A - 144kVA</option>
+                                    <option value="675A">675A - 156kVA</option>
+                                    <option value="726A">726A - 168kVA</option>
+                                    <option value="780A">780A - 180kVA</option>
+                                    <option value="831A">831A - 192kVA</option>
+                                    <option value="363A">363A - 84kVA</option>
+                                    <option value="363A">363A - 84kVA</option>
+                                    <option value="363A">363A - 84kVA</option>
+                                    <option value="363A">363A - 84kVA</option>
+                                </>
+                            )}
+
+                            {switchboard.db.pole === "1P+N" && (
+                                <>
+                                    <option value="10/30A">10/30A</option>
+                                    <option value="15/45A">15/45A</option>
+                                    <option value="30/60A">30/60A</option>
+                                    <option value="60/90A">60/90A</option>
+                                    <option value="60A">60A mono-calibre</option>
+                                </>
+                            )}
                         </select>
                     </div>
                     <div className="tabPageBandCol">
@@ -489,8 +527,7 @@ export default function SchemaTab({
                                 width={24} height={24} />
                         </label>
                     </div>
-                    {/**<div className="tabPageBandSeparator"></div>**/}
-                </div>
+                </div >
 
                 <div className="tabPageBandNL"></div>
 

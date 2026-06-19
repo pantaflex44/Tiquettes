@@ -37,7 +37,7 @@
         "build:web": "cross-env NODE_ENV=web vite build --mode web",
         "prebuild:dev": "concurrently \"npm run copies\"",
         "build:dev": "cross-env NODE_ENV=dev vite build --mode dev",
-        "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+        "lint": "oxlint && eslint",
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
         "gitpush:dev": "func() { git checkout dev && npm run compile && git add . && git commit -m \"$1\" && git push origin dev; }; func",
@@ -68,6 +68,7 @@
         "concurrently": "^9.2.1",
         "cross-env": "^10.1.0",
         "eslint": "^9.39.3",
+        "eslint-plugin-oxlint": "^1.69.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.5.2",
@@ -76,5 +77,10 @@
         "vite-plugin-mkcert": "^2.0.0",
         "vite-plugin-open-graph": "^2.0.6",
         "vite-plugin-sitemap": "^0.8.2"
+    },
+    "allowScripts": {
+        "sharp@0.33.5": true,
+        "sharp@0.34.5": true,
+        "core-js@2.6.12": true
     }
 }
