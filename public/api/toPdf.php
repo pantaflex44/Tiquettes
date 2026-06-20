@@ -921,9 +921,9 @@ class TiquettesPDF extends FPDF
 
     function Footer()
     {
-        global $tv;
+        global $tv, $printOptions;
 
-        if ($this->PageNo() > 1) {
+        if ($this->PageNo() > 1 || $printOptions->firstPage !== true) {
             $this->SetY(-$this->pageBottomMargin);
 
             $align = 'C';
@@ -1489,7 +1489,7 @@ class TiquettesPDF extends FPDF
 
     protected function drawPowerLine(object|null $m, int $level, int $pos): void
     {
-        if (is_null($m) || $pos > 0)
+        if (is_null($m) /*|| $pos > 0*/)
             return;
 
         if (trim($m->parentId ?? '') === '') {
@@ -1517,9 +1517,9 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    protected function drawPreviousLine(bool $isNew, int $pos, int $level): void
+    protected function drawPreviousLine(bool $fm, bool $isNew, int $pos, int $level): void
     {
-        if ($pos > 0 && in_array("L{$level}", array_keys($this->schemaLastPos)) && $this->schemaLastPos["L{$level}"]['x'] && $this->schemaLastPos["L{$level}"]['y']) {
+        if (!$fm && $pos > 0 && in_array("L{$level}", array_keys($this->schemaLastPos)) && $this->schemaLastPos["L{$level}"]['x'] && $this->schemaLastPos["L{$level}"]['y']) {
             $lx = $isNew || $this->schemaCurrentPosX < $this->schemaLastPos["L{$level}"]['x']
                 ? $this->grid[$this->gridOrientation]['left']
                 : $this->schemaLastPos["L{$level}"]['x'] + ($this->schemaSymbolSize['w'] / 2);
@@ -1552,7 +1552,7 @@ class TiquettesPDF extends FPDF
         global $flattenModules;
 
         $gsc = $this->getSiblingCount($m);
-        if (!is_null($m) && $gsc > 1) {
+        if ($m->parentId !== '' && !is_null($m) && $gsc > 1) {
             // $this->schemaLastPos["L{$l}"]['index']
             // $this->schemaLastPos["L{$l}"]['total']
             // $this->schemaLastPos["L{$l}"]['islast']
@@ -1601,7 +1601,7 @@ class TiquettesPDF extends FPDF
             $sf = ['hasType' => false, 'hasCrb' => false, 'hasCurrent' => true];
         }
 
-        $isNew = ($this->schemaCurrentPosX + $this->schemaSymbolSize['w']) > $this->grid[$this->gridOrientation]['right'];
+        $isNew = (($this->schemaCurrentPosX + $this->schemaSymbolSize['w']) > $this->grid[$this->gridOrientation]['right']) || ($lastModule !== null && $module->parentId === '');
         $currentPosY = $this->schemaInitialPos['y'] + ($this->schemaSymbolSize['h'] * $level) - 0.125;
         $directChildsCount = $this->getDirectChildsCount($module);
 
@@ -1704,7 +1704,7 @@ class TiquettesPDF extends FPDF
             }
         }
 
-        $this->drawPreviousLine($isNew, $pos, $level);
+        $this->drawPreviousLine(($lastModule !== null && $module->parentId === ''), $isNew, $pos, $level);
         $this->drawPowerLine($module, $level, $pos);
 
         $this->schemaLastPos["L{$level}"] = [
