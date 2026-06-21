@@ -104,11 +104,23 @@
 }*/
 
 .schemaItemFirstIcon {
+    display: block;
     position: absolute;
-    top: -5px;
+    top: -8px;
     left: -4px;
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
+    transform: rotate(180deg);
+}
+
+.schemaItemFirstIconTitle {
+    top: -12px;
+    left: 10px;
+    height: max-content;
+    position: absolute;
+    display: block;
+    font-size: 50%;    
+    color: #555;
 }
 
 .schemaItemChilds {

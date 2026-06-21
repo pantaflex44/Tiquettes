@@ -44,11 +44,12 @@ export default function SchemaItem({
                 data-hasnext={item.hasNext}
             >
                 {isFirst && <img className="schemaItemFirstIcon" src={firstIcon} />}
+                {isFirst && <div className="schemaItemFirstIconTitle">{item.module.id === 'DB' ? "Réseau" : "Répartiteur"}</div>}
 
                 {(isFirst || (item.hasPrev || item.hasNext)) && <div
-                    className={`schemaItemPrevLine ${!item.hasNext ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}
+                    className={`schemaItemPrevLine ${!item.hasNext || isFirst ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}
 
-                {item.hasNext && <div className="schemaItemNextLine"></div>}
+                {!isFirst && item.hasNext && <div className="schemaItemNextLine"></div>}
 
                 <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module}
                     onEdit={(module) => { onEditSymbol(module) }}
