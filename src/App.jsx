@@ -241,6 +241,7 @@ function App() {
         line: "",
         grp: "",
         parentId: "",
+        srcId: "",
         kcId: "",
         kcType: "NO",
         kcOrder: "after",
@@ -267,6 +268,7 @@ function App() {
             icon: "swb_puissance.svg",
             id: "DB",
             parentId: "",
+            srcId: import.meta.env.VITE_DB_SRCNAME,
             kcId: "",
             kcType: "NO",
             kcOrder: "after",
@@ -346,6 +348,7 @@ function App() {
         rows: createRow(defaultStepsPerRows, defaultNpRows),
 
         db: { ...defaultProjectProperties.db },
+        sources: [],
 
         withDb: false,
         withGroundLine: false,
@@ -407,6 +410,8 @@ function App() {
             theme,
             // <2.2.2
             prjid: swb.prjid ?? generateUUID(),
+            // <2.2.8
+            sources: swb.sources ?? import.meta.env.VITE_SOURCES.split('|').map(v => v.trim()).filter(v => v !== ''),
 
         };
     }
@@ -789,6 +794,7 @@ function App() {
                     if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
                     if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
                     if (!nm.vref) nm = { ...nm, vref: import.meta.env.VITE_VREF_230V };
+                    if (!nm.srcId) nm = { ...nm, srcId: "" };
 
                     return nm;
                 });
@@ -1101,6 +1107,7 @@ function App() {
         const text = (data.currentModule.text ?? "").trimRight().replace(/ [ \r\n]+/gm, "\n");
         const desc = (data.currentModule.desc ?? "").trim();
         const parentId = (data.currentModule.parentId ?? "").trim();
+        const srcId = (data.currentModule.srcId ?? "").trim();
         const kcId = (data.currentModule.kcId ?? "").trim();
         const kcType = (data.currentModule.kcType ?? "NO").trim();
         const kcOrder = (data.currentModule.kcOrder ?? "after").trim();
@@ -1165,6 +1172,7 @@ function App() {
                         text,
                         desc,
                         parentId,
+                        srcId,
                         kcId,
                         kcType,
                         kcOrder,
@@ -1471,6 +1479,7 @@ function App() {
                         text: clipboard.text,
                         desc: clipboard.desc,
                         parentId: clipboard.parentId,
+                        srcId: clipboard.srcId,
                         kcId: clipboard.kcId,
                         kcType: clipboard.kcType,
                         kcOrder: clipboard.ksOrder,

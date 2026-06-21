@@ -26,7 +26,7 @@ export default function EditorParentSelector({ id, value, currentModuleId, filte
     return <select id={id} name={id} value={value}
         onChange={(e) => {
             if (onChange) onChange(e.target.value)
-        }} >
+        }} style={{ flex: 1 }}>
         <option value={""}>- aucun -</option>
         {Object.entries(filteredModulesListBySchemaFuncs)
             .map(([k, l]) => {

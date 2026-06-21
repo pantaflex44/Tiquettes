@@ -46,6 +46,7 @@ import EditorMultiContactSelector from "./EditorMultiContactSelector.jsx";
 import EditorParallelSelector from "./EditorParallelSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
 import EditorContactOrderSelector from "./EditorContactOrderSelector.jsx";
+import EditorSrcName from "./EditorSrcName.jsx";
 
 const IconSelector = lazy(() => import("./IconSelector.jsx"));
 
@@ -585,13 +586,30 @@ export default function Editor({
                                             <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>
                                                 Parent
                                             </label>
-                                            <EditorParentSelector
-                                                id={`editor_schparent_${ed.currentModule.id.trim()}`}
-                                                value={ed.currentModule.parentId}
-                                                currentModuleId={ed.currentModule.id}
-                                                filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                onChange={(value) => onUpdateModuleEditor({ parentId: value })}
-                                            />
+                                            <div className="popup_row-flex" style={{ width: ed.currentModule.parentId ? 'initial' : 'calc(100% - var(--left_column_size) + 0.35em)' }}>
+                                                <EditorParentSelector
+                                                    id={`editor_schparent_${ed.currentModule.id.trim()}`}
+                                                    value={ed.currentModule.parentId}
+                                                    currentModuleId={ed.currentModule.id}
+                                                    filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+                                                    onChange={(value) => {
+                                                        onUpdateModuleEditor({ parentId: value });
+                                                        const prt = getParentById(value);
+                                                        const srcId = prt?.srcId ?? (!prt && switchboard.withDb ? import.meta.env.VITE_DB_SRCNAME : (ed.currentModule.srcId ?? ""));
+                                                        onUpdateModuleEditor({ srcId });
+                                                    }}
+                                                />
+                                                {!ed.currentModule.parentId && (
+                                                    <EditorSrcName
+                                                        id={`editor_srcname_${ed.currentModule.id.trim()}`}
+                                                        value={ed.currentModule.srcId}
+                                                        onChange={(value) => {
+                                                            onUpdateModuleEditor({ srcId: value ?? "" });
+                                                        }}
+                                                        sources={switchboard.sources ?? import.meta.env.VITE_SOURCES.split('|').map(v => v.trim()).filter(v => v !== '')}
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
                                         <div
                                             className="popup_row"

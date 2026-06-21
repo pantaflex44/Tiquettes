@@ -44,7 +44,7 @@ export default function SchemaItem({
                 data-hasnext={item.hasNext}
             >
                 {isFirst && <img className="schemaItemFirstIcon" src={firstIcon} />}
-                {isFirst && <div className="schemaItemFirstIconTitle">{item.module.id === 'DB' ? "Réseau" : "Répartiteur"}</div>}
+                {isFirst && <div className="schemaItemFirstIconTitle">{item.module.srcId ?? ""}</div>}
 
                 {(isFirst || (item.hasPrev || item.hasNext)) && <div
                     className={`schemaItemPrevLine ${!item.hasNext || isFirst ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}

@@ -1512,7 +1512,7 @@ class TiquettesPDF extends FPDF
             ], 'F');
 
             $this->SetFont('Arial', '', 5);
-            $fs = str($m->id === 'DB' ? "Réseau" : "Répartiteur");
+            $fs = str($m->id === 'DB' ? "Réseau" : "");
             $this->Text($lx + 3, $ly - 1, $fs);
         }
     }
