@@ -179,7 +179,6 @@ function EditorSrcName({ sources = [], value = null, onChange = null, onOpenStat
                 justifyContent: 'flex-start',
                 columnGap: '1em',
                 minWidth: '19px',
-                width: `calc(100% - 1rem + 2px ${addAllowed ? '- 16px - 1em' : '+ 0rem'})`,
                 minHeight: '19px',
                 border: '1px solid darkgray',
                 borderRadius: '5px',
@@ -189,7 +188,7 @@ function EditorSrcName({ sources = [], value = null, onChange = null, onOpenStat
             }}
             >
                 <input type="text" value={search ?? ''} onKeyUp={handleKeyUp} onChange={handleSearchInput}
-                    placeholder="Source ..." style={{ border: 0, padding: 0, width: 'initial', flex: 1 }} onInput={handleSearchEnter} />
+                    placeholder="Source ..." style={{ border: 0, padding: 0, flex: 1 }} onInput={handleSearchEnter} />
 
                 {addAllowed && <img loading={'lazy'} src={addIcon} width={16} height={16}
                     style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Ajouter"
@@ -207,7 +206,7 @@ function EditorSrcName({ sources = [], value = null, onChange = null, onOpenStat
                 borderRadius: '5px',
                 padding: '0.5em',
                 fontWeight: 400,
-                width: `calc(100% - 1rem + 2px ${addAllowed ? '- 16px - 1em' : '+ 0rem'})`,
+                width: `calc(100% - 1rem + 1px ${addAllowed ? '- 16px - 1em' : '+ 0rem'})`,
                 margin: 0,
                 marginTop: '0em',
                 height: '16em',

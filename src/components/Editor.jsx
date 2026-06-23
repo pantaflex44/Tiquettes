@@ -586,7 +586,7 @@ export default function Editor({
                                             <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>
                                                 Parent
                                             </label>
-                                            <div className="popup_row-flex" style={{ width: ed.currentModule.parentId ? 'initial' : 'calc(100% - var(--left_column_size) + 0.35em)' }}>
+                                            <div className="popup_row-grid" style={{ gridTemplateColumns: ed.currentModule.parentId ? '1fr' : '0.6fr 1.4fr' }}>
                                                 <EditorParentSelector
                                                     id={`editor_schparent_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.parentId}
