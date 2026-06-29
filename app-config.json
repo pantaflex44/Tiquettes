@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.8": {
-            "date": "2026-06-19",
+            "date": "2026-06-29",
             "actions": {
                 "patches": [
                     {
@@ -97,6 +97,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Gestion des sources d'alimentations comme parents possibles pour les modules de tête.",
+                        "from": {
+                            "name": "Issue #51",
+                            "link": "https://github.com/pantaflex44/Tiquettes/issues/51"
+                        }
+                    },
                     {
                         "text": "Ajout du type de module: Coupe Circuit.",
                         "from": {

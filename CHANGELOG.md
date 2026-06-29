@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.8] - 2026-06-19
+## [2.2.8] - 2026-06-29
 
 ### Corrections
 
@@ -25,6 +25,7 @@
 
 ### Ajouts
 
+- [[Issue #51](https://github.com/pantaflex44/Tiquettes/issues/51)] Gestion des sources d'alimentations comme parents possibles pour les modules de tête.
 - [[Issue #95](https://github.com/pantaflex44/Tiquettes/issues/95)] Ajout du type de module: Coupe Circuit.
 - [[Issue #79](https://github.com/pantaflex44/Tiquettes/issues/79)] Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.
 - Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire.
