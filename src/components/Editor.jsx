@@ -556,7 +556,7 @@ export default function Editor({
                             <>
                                 <div className="popup_row" style={{ "--left_column_size": "100px" }}>
                                     <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
-                                    <div className="popup_row-flex">
+                                    <div className="popup_row-grid" style={{ gridTemplateColumns: '1fr 67px' }}>
                                         <EditorFunctionSelector
                                             id={`editor_func_${ed.currentModule.id.trim()}`}
                                             value={ed.currentModule.func}
@@ -586,29 +586,25 @@ export default function Editor({
                                             <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>
                                                 Parent
                                             </label>
-                                            <div className="popup_row-grid" style={{ gridTemplateColumns: ed.currentModule.parentId ? '1fr' : '0.6fr 1.4fr' }}>
+                                            <div className="popup_row-grid" style={{ gridTemplateColumns: '1fr' }}>
                                                 <EditorParentSelector
                                                     id={`editor_schparent_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.parentId}
+                                                    currentParentId={(ed.currentModule.parentId ?? "").trim()}
+                                                    currentSourceId={(ed.currentModule.srcId ?? "").trim()}
                                                     currentModuleId={ed.currentModule.id}
                                                     filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-                                                    onChange={(value) => {
+                                                    sources={switchboard.sources ?? import.meta.env.VITE_SOURCES.split('|').map(v => v.trim()).filter(v => v !== '').sort((a, b) => a.localeCompare(b))}
+                                                    onParentChange={(value) => {
                                                         onUpdateModuleEditor({ parentId: value });
                                                         const prt = getParentById(value);
                                                         const srcId = prt?.srcId ?? (!prt && switchboard.withDb ? import.meta.env.VITE_DB_SRCNAME : (ed.currentModule.srcId ?? ""));
                                                         onUpdateModuleEditor({ srcId });
                                                     }}
+                                                    onSourceChange={(value) => {
+                                                        onUpdateModuleEditor({ parentId: "" });
+                                                        onUpdateModuleEditor({ srcId: value });
+                                                    }}
                                                 />
-                                                {!ed.currentModule.parentId && (
-                                                    <EditorSrcName
-                                                        id={`editor_srcname_${ed.currentModule.id.trim()}`}
-                                                        value={ed.currentModule.srcId}
-                                                        onChange={(value) => {
-                                                            onUpdateModuleEditor({ srcId: value ?? "" });
-                                                        }}
-                                                        sources={switchboard.sources ?? import.meta.env.VITE_SOURCES.split('|').map(v => v.trim()).filter(v => v !== '')}
-                                                    />
-                                                )}
                                             </div>
                                         </div>
                                         <div
@@ -649,13 +645,7 @@ export default function Editor({
                                             <label htmlFor={`editor_contacts_${ed.currentModule.id.trim()}`}>
                                                 Asservi par
                                             </label>
-                                            <div className="popup_row-flex">
-                                                {/*<EditorContactOrderSelector
-                                                    id={`editor_contact_order_${ed.currentModule.id.trim()}`}
-                                                    value={ed.currentModule.kcOrder ?? "after"}
-                                                    onChange={(value) => onUpdateModuleEditor({ kcOrder: value })}
-                                                    disabled={ed.currentModule.kcId === ""}
-                                                />*/}
+                                            <div className="popup_row-grid" style={{ gridTemplateColumns: '1fr 67px' }}>
                                                 <EditorMultiContactSelector
                                                     id={`editor_multi_contacts_${ed.currentModule.id.trim()}`}
                                                     value={ed.currentModule.kcId}

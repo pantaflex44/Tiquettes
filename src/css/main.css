@@ -16,8 +16,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-body{
+body {
     accent-color: var(--primary-color);
+}
+
+*::selection {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+*::-moz-selection {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+*::-webkit-selection {
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
 p.devmode {
@@ -39,7 +54,6 @@ p.devmode.blink {
         opacity: 0;
     }
 }
-
 
 @media print {
     .footer {

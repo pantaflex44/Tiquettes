@@ -198,6 +198,10 @@ option[disabled] {
     transition: all 250ms ease;
 }
 
+.buttons_box:not(.disabled) .buttons_box-button:not(.disabled) {
+    background-color: #fff;
+}
+
 .buttons_box-button:first-of-type {
     border-left: 1px solid darkgray;
     border-top-left-radius: 5px;
@@ -237,15 +241,17 @@ option[disabled] {
     border-color: var(--primary-color);
 }
 
-.buttons_box.disabled {
+.buttons_box.disabled,
+.buttons_box .buttons_box-button.disabled {
     -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
     cursor: default;
 }
 
-.buttons_box.disabled .buttons_box-button {
-    filter: grayscale(1) opacity(0.5);
+.buttons_box.disabled .buttons_box-button,
+.buttons_box .buttons_box-button.disabled {
+    filter: grayscale(1) opacity(0.3);
 }
 
 .button_group {

@@ -1511,8 +1511,11 @@ class TiquettesPDF extends FPDF
                 $ly
             ], 'F');
 
-            $this->SetFont('Arial', '', 5);
-            $fs = str($m->id === 'DB' ? "Réseau" : "");
+            $this->SetTextColor(50, 50, 50);
+            $this->SetFont('Arial', '', 6);
+            $t = $m->id === 'DB' ? "Réseau" : ($m->srcId ?? "");
+            $t = substr($t, 0, 50);
+            $fs = str($t);
             $this->Text($lx + 3, $ly - 1, $fs);
         }
     }

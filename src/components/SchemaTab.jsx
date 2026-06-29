@@ -37,6 +37,9 @@ import cancelIcon from "../assets/cancel.svg";
 import numbersIcon from "../assets/numbers.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
+import sourcesIcon from "../assets/sources.svg";
+import LabelerPopup from "./LabelerPopup.jsx";
+import SourcesPopup from "./SourcesPopup.jsx";
 
 export default function SchemaTab({
     tab,
@@ -49,6 +52,7 @@ export default function SchemaTab({
     onEditSymbol = null,
 }) {
     const [monitorOpened, setMonitorOpened] = useState(false);
+    const [sourcesOpened, setSourcesOpened] = useState(false);
     const [zoomed, setZoomed] = useState(false);
     const monitorRef = useRef(null);
     let dbCurrent = 0;
@@ -169,22 +173,24 @@ export default function SchemaTab({
     }, [switchboard.rows, switchboard.withDb]
     );
 
-    const tree = useMemo(() => switchboard.withDb
-        ? ({
-            childs: ({
-                "DB": {
-                    module: { ...switchboard.db },
-                    hasNext: false,
-                    hasPrev: false,
-                    isLast: false,
-                    childs: getRow(head),
-                    hasBrothers: false
-                }
+    const tree = useMemo(() => {
+        return switchboard.withDb
+            ? ({
+                childs: ({
+                    "DB": {
+                        module: { ...switchboard.db },
+                        hasNext: false,
+                        hasPrev: false,
+                        isLast: false,
+                        childs: getRow(head),
+                        hasBrothers: false
+                    }
+                })
             })
-        })
-        : ({
-            childs: getRow(head)
-        }),
+            : ({
+                childs: getRow(head)
+            });
+    },
         [head, switchboard.withDb, switchboard.db]
     );
 
@@ -369,269 +375,302 @@ export default function SchemaTab({
     const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
 
     return (
-        <div
-            className={`schema ${tab === 2 ? 'selected' : ''} ${printOptions.schema ? 'printable' : 'notprintable'}`.trim()}
-            style={{ '--schema-scale': zoomed ? '1.5' : '1' }}
-        >
-            <div className="tabPageBand notprintable">
+        <>
+            <div
+                className={`schema ${tab === 2 ? 'selected' : ''} ${printOptions.schema ? 'printable' : 'notprintable'}`.trim()}
+                style={{ '--schema-scale': zoomed ? '1.5' : '1' }}
+            >
+                <div className="tabPageBand notprintable">
 
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Type<br />d'installation:</span>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR"
-                            checked={switchboard.projectType === "R"}
-                            onChange={() => setSwitchboard((old) => ({ ...old, projectType: "R" }))} />
-                        <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
-                            <img src={homeIcon} alt="Project résidentiel" width={24} height={24} />
-                        </label>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT"
-                            checked={switchboard.projectType === "T"}
-                            onChange={() => setSwitchboard((old) => ({ ...old, projectType: "T" }))} />
-                        <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
-                            <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24} />
-                        </label>
-                    </div>
-                </div>
-
-
-
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Disjoncteur<br />de branchement:</span>
-                    </div>
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice"
-                            checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({
-                                ...old,
-                                db: { ...old.db, func: 'db' },
-                                withDb: !old.withDb
-                            }))} />
-                        <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
-                            <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement"
-                                width={24} height={24} />
-                        </label>
-                    </div>
-                    {switchboard.withDb && (
-                        <>
-                            <div className="tabPageBandCol">
-                                <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({
-                                    ...old,
-                                    db: { ...old.db, type: e.target.value }
-                                }))} disabled={!switchboard.withDb}>
-                                    <option value="">Instantané</option>
-                                    <option value="S">Sélectif</option>
-                                </select>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => {
-                                    let sw = {
-                                        ...old,
-                                        db: { ...old.db, pole: e.target.value }
-                                    };
-
-
-                                    if (e.target.value === "1P+N") {
-                                        sw = {
-                                            ...sw,
-                                            rows: sw.rows.map((row) => row.map((module) => {
-                                                let modulePoleCounter = polesCounter(module.pole);
-                                    //if (modulePoleCounter === 1) modulePoleCounter = 2;
-                                    //if (modulePoleCounter === 3) modulePoleCounter = 4;
-
-                                                let dbPoleCounter = polesCounter(e.target.value);
-                                                //if (dbPoleCounter === 1) dbPoleCounter = 2;
-                                                //if (dbPoleCounter === 3) dbPoleCounter = 4;
-
-                                                if (modulePoleCounter > dbPoleCounter) {
-                                                    return { ...module, pole: e.target.value };
-                                                }
-                                                return module;
-                                            }))
-                                        };
-                                    }
-
-                                    return sw;
-                                })} disabled={!switchboard.withDb}>
-                                    <option value="1P+N">Monophasé</option>
-                                    <option value="3P+N">Triphasé</option>
-                                </select>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({
-                                    ...old,
-                                    db: { ...old.db, sensibility: e.target.value }
-                                }))} disabled={!switchboard.withDb}>
-                                    <option value="300mA">300mA</option>
-                                    <option value="500mA">500mA</option>
-                                    <option value="650mA">650mA</option>
-                                </select>
-                            </div>
-                            <div className="tabPageBandCol">
-                                <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({
-                                    ...old,
-                                    db: { ...old.db, current: e.target.value }
-                                }))} disabled={!switchboard.withDb}>
-                                    {switchboard.db.pole === "3P+N" && (
-                                        <>
-                                            <option value="" disabled={true}>Tarifs bleus</option>
-                                            <option value="30A">30A - 6kVA</option>
-                                            <option value="45A">45A - 9kVA</option>
-                                            <option value="60A">60A - 12kVA</option>
-                                            <option value="75A">75A - 15kVA</option>
-                                            <option value="90A">90A - 18kVA</option>
-                                            <option value="120A">120A - 24kVA</option>
-                                            <option value="150A">150A - 30kVA</option>
-                                            <option value="180A">180A - 36kVA</option>
-                                            <option value="" disabled={true}>Tarifs jaunes</option>
-                                            <option value="183A">183A - 42kVA</option>
-                                            <option value="207A">207A - 48kVA</option>
-                                            <option value="234A">234A - 54kVA</option>
-                                            <option value="285A">285A - 66kVA</option>
-                                            <option value="312A">312A - 72kVA</option>
-                                            <option value="339A">339A - 78kVA</option>
-                                            <option value="363A">363A - 84kVA</option>
-
-                                            <option value="390A">390A - 90kVA</option>
-                                            <option value="417A">417A - 96kVA</option>
-                                            <option value="441A">441A - 102kVA</option>
-                                            <option value="468A">468A - 108kVA</option>
-                                            <option value="519A">519A - 120kVA</option>
-                                            <option value="573A">573A - 132kVA</option>
-                                            <option value="624A">624A - 144kVA</option>
-                                            <option value="675A">675A - 156kVA</option>
-                                            <option value="726A">726A - 168kVA</option>
-                                            <option value="780A">780A - 180kVA</option>
-                                            <option value="831A">831A - 192kVA</option>
-                                            <option value="363A">363A - 84kVA</option>
-                                            <option value="363A">363A - 84kVA</option>
-                                            <option value="363A">363A - 84kVA</option>
-                                            <option value="363A">363A - 84kVA</option>
-                                        </>
-                                    )}
-
-                                    {switchboard.db.pole === "1P+N" && (
-                                        <>
-                                            <option value="10/30A">10/30A</option>
-                                            <option value="15/45A">15/45A</option>
-                                            <option value="30/60A">30/60A</option>
-                                            <option value="60/90A">60/90A</option>
-                                            <option value="60A">60A mono-calibre</option>
-                                        </>
-                                    )}
-                                </select>
-                            </div>
-                        </>
-                    )}
-                </div>
-
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice"
-                            checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({
-                                ...old,
-                                withGroundLine: !old.withGroundLine
-                            }))} />
-                        <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
-                            <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre"
-                                width={24} height={24} />
-                        </label>
-                    </div>
-                </div>
-
-                <div className="tabPageBandNL"></div>
-
-                <div className="tabPageBandGroup">
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaMonitorZoom" id="schemaMonitorZoom"
-                            checked={zoomed}
-                            onChange={() => setZoomed(old => !old)} />
-                        <label htmlFor="schemaMonitorZoom" title="Agrandir visuellement le schéma">
-                            <img src={zoomed ? zoomMinusIcon : zoomPlusIcon}
-                                alt="Zoom" width={24} height={24} />
-                        </label>
-                    </div>
-
-                    <div className="tabPageBandSeparator"></div>
-                    <div className="tabPageBandCol">
-                        <button style={{ height: '34px' }}
-                            title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                            onClick={() => reassignModules()}>
-                            <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
-                                height={22} />
-                        </button>
-                    </div>
-
-                    <div className="tabPageBandCol">
-                        <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice"
-                            checked={switchboard.schemaMonitor}
-                            onChange={() => setSwitchboard((old) => ({ ...old, schemaMonitor: !old.schemaMonitor }))} />
-                        <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)"
-                            className={`${monitor.errors ? 'error' : ''}`}>
-                            <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon}
-                                alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24} />
-                        </label>
-                    </div>
-                    {switchboard.schemaMonitor && (
+                    <div className="tabPageBandGroup">
                         <div className="tabPageBandCol">
-                            {monitorWarningsLength > 0
-                                ? <>
-                                    <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                    <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs"
-                                        width={20} height={20} style={{ cursor: 'pointer', padding: '4px' }}
-                                        onClick={() => setMonitorOpened(old => !old)} />
-                                </>
-                                : <span>Aucune erreur détectée.</span>
-                            }
+                            <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Type<br />d'installation:</span>
+                        </div>
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaProjectTypeR" id="schemaProjectTypeR"
+                                checked={switchboard.projectType === "R"}
+                                onChange={() => setSwitchboard((old) => ({ ...old, projectType: "R" }))} />
+                            <label htmlFor="schemaProjectTypeR" title="Project résidentiel">
+                                <img src={homeIcon} alt="Project résidentiel" width={24} height={24} />
+                            </label>
+                        </div>
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaProjectTypeT" id="schemaProjectTypeT"
+                                checked={switchboard.projectType === "T"}
+                                onChange={() => setSwitchboard((old) => ({ ...old, projectType: "T" }))} />
+                            <label htmlFor="schemaProjectTypeT" title="Project tertiaire">
+                                <img src={compagnyIcon} alt="Project tertiaire" width={24} height={24} />
+                            </label>
+                        </div>
+                    </div>
+
+
+
+                    <div className="tabPageBandGroup">
+                        <div className="tabPageBandCol">
+                            <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Sources:</span>
+                        </div>
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaWithDbChoice" id="schemaWithDbChoice"
+                                checked={switchboard.withDb} onChange={() => setSwitchboard((old) => ({
+                                    ...old,
+                                    db: { ...old.db, func: 'db' },
+                                    withDb: !old.withDb
+                                }))} />
+                            <label htmlFor="schemaWithDbChoice" title="Intégrer un disjoncteur de branchement">
+                                <img src={switchboard.withDb ? boltIcon : noboltIcon} alt="Disjoncteur de branchement"
+                                    width={24} height={24} />
+                            </label>
+                        </div>
+                        {switchboard.withDb
+                            ? (<>
+                                <div className="tabPageBandCol">
+                                    <select value={switchboard.db.type} onChange={(e) => setSwitchboard((old) => ({
+                                        ...old,
+                                        db: { ...old.db, type: e.target.value }
+                                    }))} disabled={!switchboard.withDb}>
+                                        <option value="">Instantané</option>
+                                        <option value="S">Sélectif</option>
+                                    </select>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select value={switchboard.db.pole} onChange={(e) => setSwitchboard((old) => {
+                                        let sw = {
+                                            ...old,
+                                            db: { ...old.db, pole: e.target.value }
+                                        };
+
+
+                                        if (e.target.value === "1P+N") {
+                                            sw = {
+                                                ...sw,
+                                                rows: sw.rows.map((row) => row.map((module) => {
+                                                    let modulePoleCounter = polesCounter(module.pole);
+                                        //if (modulePoleCounter === 1) modulePoleCounter = 2;
+                                        //if (modulePoleCounter === 3) modulePoleCounter = 4;
+
+                                                    let dbPoleCounter = polesCounter(e.target.value);
+                                                    //if (dbPoleCounter === 1) dbPoleCounter = 2;
+                                                    //if (dbPoleCounter === 3) dbPoleCounter = 4;
+
+                                                    if (modulePoleCounter > dbPoleCounter) {
+                                                        return { ...module, pole: e.target.value };
+                                                    }
+                                                    return module;
+                                                }))
+                                            };
+                                        }
+
+                                        return sw;
+                                    })} disabled={!switchboard.withDb}>
+                                        <option value="1P+N">Monophasé</option>
+                                        <option value="3P+N">Triphasé</option>
+                                    </select>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select value={switchboard.db.sensibility} onChange={(e) => setSwitchboard((old) => ({
+                                        ...old,
+                                        db: { ...old.db, sensibility: e.target.value }
+                                    }))} disabled={!switchboard.withDb}>
+                                        <option value="300mA">300mA</option>
+                                        <option value="500mA">500mA</option>
+                                        <option value="650mA">650mA</option>
+                                    </select>
+                                </div>
+                                <div className="tabPageBandCol">
+                                    <select value={switchboard.db.current} onChange={(e) => setSwitchboard((old) => ({
+                                        ...old,
+                                        db: { ...old.db, current: e.target.value }
+                                    }))} disabled={!switchboard.withDb}>
+                                        {switchboard.db.pole === "3P+N" && (
+                                            <>
+                                                <option value="" disabled={true}>Tarifs bleus</option>
+                                                <option value="30A">30A - 6kVA</option>
+                                                <option value="45A">45A - 9kVA</option>
+                                                <option value="60A">60A - 12kVA</option>
+                                                <option value="75A">75A - 15kVA</option>
+                                                <option value="90A">90A - 18kVA</option>
+                                                <option value="120A">120A - 24kVA</option>
+                                                <option value="150A">150A - 30kVA</option>
+                                                <option value="180A">180A - 36kVA</option>
+                                                <option value="" disabled={true}>Tarifs jaunes</option>
+                                                <option value="183A">183A - 42kVA</option>
+                                                <option value="207A">207A - 48kVA</option>
+                                                <option value="234A">234A - 54kVA</option>
+                                                <option value="285A">285A - 66kVA</option>
+                                                <option value="312A">312A - 72kVA</option>
+                                                <option value="339A">339A - 78kVA</option>
+                                                <option value="363A">363A - 84kVA</option>
+
+                                                <option value="390A">390A - 90kVA</option>
+                                                <option value="417A">417A - 96kVA</option>
+                                                <option value="441A">441A - 102kVA</option>
+                                                <option value="468A">468A - 108kVA</option>
+                                                <option value="519A">519A - 120kVA</option>
+                                                <option value="573A">573A - 132kVA</option>
+                                                <option value="624A">624A - 144kVA</option>
+                                                <option value="675A">675A - 156kVA</option>
+                                                <option value="726A">726A - 168kVA</option>
+                                                <option value="780A">780A - 180kVA</option>
+                                                <option value="831A">831A - 192kVA</option>
+                                                <option value="363A">363A - 84kVA</option>
+                                                <option value="363A">363A - 84kVA</option>
+                                                <option value="363A">363A - 84kVA</option>
+                                                <option value="363A">363A - 84kVA</option>
+                                            </>
+                                        )}
+
+                                        {switchboard.db.pole === "1P+N" && (
+                                            <>
+                                                <option value="10/30A">10/30A</option>
+                                                <option value="15/45A">15/45A</option>
+                                                <option value="30/60A">30/60A</option>
+                                                <option value="60/90A">60/90A</option>
+                                                <option value="60A">60A mono-calibre</option>
+                                            </>
+                                        )}
+                                    </select>
+                                </div>
+                            </>)
+                            : (<>
+                                <div className="tabPageBandCol">
+                                    <button style={{ height: '34px' }}
+                                        title="Gérer les sources"
+                                        onClick={() => setSourcesOpened(true)}>
+                                        <img src={sourcesIcon} alt="Gérer les sources" width={22}
+                                            height={22} />
+                                    </button>
+                                </div>
+                            </>)}
+                    </div>
+
+                    <div className="tabPageBandGroup">
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaWithGroundChoice" id="schemaWithGroundChoice"
+                                checked={switchboard.withGroundLine} onChange={() => setSwitchboard((old) => ({
+                                    ...old,
+                                    withGroundLine: !old.withGroundLine
+                                }))} />
+                            <label htmlFor="schemaWithGroundChoice" title="Représenter le bornier de terre">
+                                <img src={switchboard.withGroundLine ? groundIcon : nogroundIcon} alt="Bornier de terre"
+                                    width={24} height={24} />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="tabPageBandNL"></div>
+
+                    <div className="tabPageBandGroup">
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaMonitorZoom" id="schemaMonitorZoom"
+                                checked={zoomed}
+                                onChange={() => setZoomed(old => !old)} />
+                            <label htmlFor="schemaMonitorZoom" title="Agrandir visuellement le schéma">
+                                <img src={zoomed ? zoomMinusIcon : zoomPlusIcon}
+                                    alt="Zoom" width={24} height={24} />
+                            </label>
+                        </div>
+
+                        <div className="tabPageBandSeparator"></div>
+                        <div className="tabPageBandCol">
+                            <button style={{ height: '34px' }}
+                                title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+                                onClick={() => reassignModules()}>
+                                <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants" width={22}
+                                    height={22} />
+                            </button>
+                        </div>
+
+                        <div className="tabPageBandCol">
+                            <input type="checkbox" name="schemaMonitorChoice" id="schemaMonitorChoice"
+                                checked={switchboard.schemaMonitor}
+                                onChange={() => setSwitchboard((old) => ({ ...old, schemaMonitor: !old.schemaMonitor }))} />
+                            <label htmlFor="schemaMonitorChoice" title="Conseils et Surveillance (NFC 15-100)"
+                                className={`${monitor.errors ? 'error' : ''}`}>
+                                <img src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon}
+                                    alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24} />
+                            </label>
+                        </div>
+                        {switchboard.schemaMonitor && (
+                            <div className="tabPageBandCol">
+                                {monitorWarningsLength > 0
+                                    ? <>
+                                        <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
+                                        <img src={info2Icon} alt="Détails des erreurs" title="Détails des erreurs"
+                                            width={20} height={20} style={{ cursor: 'pointer', padding: '4px' }}
+                                            onClick={() => setMonitorOpened(old => !old)} />
+                                    </>
+                                    : <span>Aucune erreur détectée.</span>
+                                }
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {
+                    switchboard.schemaMonitor && monitorOpened && monitor.errors && (
+                        <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
+                            onBlur={() => setMonitorOpened(false)}>
+                            <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
+                                <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+                            </div>
+                            <div className="tabPageBandCol"
+                                style={{ height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content' }}>
+                                <ul>
+                                    {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+                                        <li key={i} className="tabPageErrors">
+                                            <div>{id}:</div>
+                                            <ul>
+                                                {errors.map((error, j) => <li key={j} className="tabPageError">
+                                                    <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs"
+                                                        width={16} height={16} />
+                                                    <span>{error}</span>
+                                                </li>)}
+                                            </ul>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+
+                <div className="schemaGrid">
+                    <div className="schemaItemSeparator first"></div>
+                    <SchemaItem switchboard={switchboard} childs={tree.childs}
+                        isFirst={true} parentIsFirst={true} onEditSymbol={(module) => handleEditSymbol(module)}
+                        monitor={monitor} />
+
+                    {switchboard.withGroundLine && (
+                        <div className="schemaGroundLine">
+                            <img className="" src={`${import.meta.env.VITE_APP_BASE}circuit-ground.svg`} width={24}
+                                height={24} />
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
 
-            {
-                switchboard.schemaMonitor && monitorOpened && monitor.errors && (
-                    <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
-                        onBlur={() => setMonitorOpened(false)}>
-                        <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
-                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
-                        </div>
-                        <div className="tabPageBandCol"
-                            style={{ height: 'max-content', minHeight: 'max-content', maxHeight: 'max-content' }}>
-                            <ul>
-                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
-                                    <li key={i} className="tabPageErrors">
-                                        <div>{id}:</div>
-                                        <ul>
-                                            {errors.map((error, j) => <li key={j} className="tabPageError">
-                                                <img src={`${import.meta.env.BASE_URL}schema_warning.svg`} alt="Erreurs"
-                                                    width={16} height={16} />
-                                                <span>{error}</span>
-                                            </li>)}
-                                        </ul>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )
-            }
+            {sourcesOpened && (
+                <SourcesPopup
+                    switchboard={switchboard}
+                    onApply={(sources) => {
+                        setSwitchboard(old => {
+                            return {
+                                ...old,
+                                sources,
+                                rows: old.rows.map(r => {
+                                    return r.map(m => {
+                                        return !sources.includes(m.srcId) ? { ...m, srcId: '' } : m;
+                                    })
+                                })
+                            }
+                        });
 
-            <div className="schemaGrid">
-                <div className="schemaItemSeparator first"></div>
-                <SchemaItem switchboard={switchboard} childs={tree.childs}
-                    isFirst={true} parentIsFirst={true} onEditSymbol={(module) => handleEditSymbol(module)}
-                    monitor={monitor} />
-
-                {switchboard.withGroundLine && (
-                    <div className="schemaGroundLine">
-                        <img className="" src={`${import.meta.env.VITE_APP_BASE}circuit-ground.svg`} width={24}
-                            height={24} />
-                    </div>
-                )}
-            </div>
-        </div >
+                        setSourcesOpened(false);
+                    }}
+                    onCancel={() => setSourcesOpened(false)}
+                />
+            )}
+        </>
     );
 }
