@@ -76,7 +76,9 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
     - [Édition des caractéristiques](#édition-des-caractéristiques)
         - [L'asservissement](#lasservissement)
         - [Allocation d'un module a ses enfants](#allocation-dun-module-a-ses-enfants)
+        - [Les liens de parenté](#les-liens-de-parenté)
     - [Génération du schéma unifilaire](#génération-du-schéma-unifilaire)
+        - [Les sources d'alimentations](#les-sources-dalimentations)
 - [Moniteur de surveillance](#moniteur-de-surveillance)
 - [Nomenclature / Résumé](#nomenclature--résumé)
 - [Impression](#impression)
@@ -84,7 +86,7 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
     - [Etiquettes](#etiquettes)
     - [Schéma unifilaire](#schéma-unifilaire)
     - [Nomenclature](#nomenclature)
-- [Les étiquetteuses](#les-étiquetteuses)
+- [Les étiquetteuses  (en cours de développement)](#les-étiquetteuses)
 - [Remerciements ❤ !](#remerciements--)
 
 
@@ -549,6 +551,19 @@ Une manière simple et rapide d'indiquer à l'application que vous souhaitez par
 
 <div id="génération-du-schéma-unifilaire"></div>
 
+#### Les liens de parenté
+
+Un montage électrique possède bien souvent une hiérarchie. Cette notion peut se caractériser par des liens de parenté. Un disjonteur protégeant un circuit, va être un des enfants d'un interrupteur différentiel, qui lui, pourra être l'enfant d'un sectionneur générale, etc.
+
+Cette hiérarchie se traduit par un sélecteur dans l'édition d'un module, onglet ```Schéma```:
+
+![Les parents](./docs/_schema_parents.png)
+
+Une liste vous propose les différents modules présents dans votre tableau électrique, ainsi que [les sources d'alimentations définies](#les-sources-dalimentations).
+
+
+
+
 ### Génération du schéma unifilaire
 
 La génération dépend à 100% des données que vous aurez renseignées lors de l'édition d'un module.
@@ -584,6 +599,18 @@ L'icône ![Moniteur](./docs/_icon_monitor.svg) permet d'activer
 ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
 <div id="moniteur-de-surveillance"></div>
+
+#### Les sources d'alimentations
+
+L'application vous permet d'identifier la ou les sources alimentant les différentes sections de votre tableau électrique. Que ce soit un disjonteur de branchement, un répartiteur ou des panneaux photo-voltaïque, une option pour les définir est à votre disposition via ce bouton:
+
+![Schéma unifilaire](./docs/_schema_parents_edit.png)
+
+En cliquant sur ce bouton, vous pourrez ajouter et / ou supprimer autant de sources que vous le souhaitez:
+
+![Schéma unifilaire](./docs/_schema_parents_editor.png)
+
+
 
 ## Moniteur de surveillance
 
@@ -705,7 +732,7 @@ Imprime une page regroupant les modules par leurs caractéristiques globales ain
 
 <div id="les-étiquetteuses"></div>
 
-## Les étiqueteuses
+## Les étiqueteuses  (en cours de développement)
 
 Depuis la version 2.2.8, l'application vous propose d'exporter vos planches d'étiquettes de manière compatible avec certains modèles d'étiqueteuses. Proposée dans le menu d'exportation, cette fonctionnalité vous demande dans un premier temps les rangées à exporter.
 
