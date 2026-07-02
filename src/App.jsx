@@ -1957,7 +1957,7 @@ function App() {
                         {/** LABELERS **/}
                         {/** ----------------------------------------------------------- */}
 
-                        <div className="dropdown_header" style={{ marginTop: '1.5rem' }}>Étiqueteuses</div>
+                        <div className="dropdown_header" style={{ marginTop: '1.5rem' }}>Étiqueteuses (βeta)</div>
                         <div style={{ fontSize: '90%', color: '#777', marginBottom: '1rem' }}>
                             <span>Exporter les rangées d'étiquettes au format compatible.</span>
                         </div>

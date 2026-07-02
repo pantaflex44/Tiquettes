@@ -137,7 +137,7 @@ export default function LabelerPopup({
     }, []);
 
     return <Popup
-        title={"Paramètres d'exportation"}
+        title={"Paramètres d'exportation (βeta)"}
         showCloseButton={true}
         showOkButton={true}
         showCancelButton={true}
