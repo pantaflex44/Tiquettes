@@ -20,6 +20,8 @@
 
 import "../css/welcomePopup.css";
 
+import * as pkg from '../../package.json';
+
 import projectIcon from "../assets/project.svg";
 import importIcon from "../assets/upload.svg";
 
@@ -32,7 +34,7 @@ export default function WelcomePopup({
 }) {
 
     return <Popup
-        title={"Bienvenue sur Tiquettes"}
+        title={"Bienvenue sur Tiquettes v" + pkg.version}
         showCloseButton={false}
         onCancel={() => onCancel()}
         showOkButton={false}
