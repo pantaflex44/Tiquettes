@@ -1214,7 +1214,7 @@ function App() {
 
         if (isEmpty) {
             action('create');
-            trackEvent({ category: 'actions', action: 'nouveau projet' });
+            trackEvent({ category: 'actions', action: 'creation' });
         }
 
         setEditor(null);
