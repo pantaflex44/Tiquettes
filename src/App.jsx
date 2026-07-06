@@ -818,6 +818,7 @@ function App() {
             scrollToProject();
 
             action('import');
+            _paq.push(['trackEvent', 'Application', 'Actions', 'Importation']);
 
             return true;
             // eslint-disable-next-line no-unused-vars
@@ -871,6 +872,7 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
+        _paq.push(['trackEvent', 'Application', 'Actions', 'Exportation']);
         sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
@@ -981,6 +983,7 @@ function App() {
             form = null;
 
             action('print');
+            _paq.push(['trackEvent', 'Application', 'Actions', 'Impression']);
             sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
@@ -1201,7 +1204,10 @@ function App() {
         // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
         reassignAllParents(data.originalModule?.id, id);
 
-        if (isEmpty) action('create');
+        if (isEmpty) {
+            action('create');
+            _paq.push(['trackEvent', 'Application', 'Actions', 'Nouveau projet']);
+        }
 
         setEditor(null);
     }

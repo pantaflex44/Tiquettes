@@ -58,8 +58,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="google-site-verification" content="1_uFkwuXuhMsxhatDHhbjJJdnV20ojFpYwz4r6kREPw" />
-
     <title>Tiquettes - Tableaux et armoires électriques.</title>
     <meta name="description" content="Générateur d'étiquettes pour tableaux et armoires électriques." />
     <meta name="keywords" content="électricité,tableau,armoire,étiquette,générateur,norme,propre,15-100" />
@@ -103,16 +101,43 @@
         });
     </script>
 
+    <!-- Matomo -->
+    <script>
+        var _paq = window._paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(["setDoNotTrack", true]);
+        _paq.push(["disableCookies"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "https://www.tiquettes.fr/analytics/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', import.meta.env.VITE_APP_MODE === 'development' ? '3' : '2']);
+            var d = document,
+                g = d.createElement('script'),
+                s = d.getElementsByTagName('script')[0];
+            g.async = true;
+            g.src = u + 'matomo.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Matomo Code -->
+    
+    <!-- Matomo Tag Manager -->
+    <script>
+        var _mtm = window._mtm = window._mtm || [];
+        _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start' });
+        (function () {
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = 'https://www.tiquettes.fr/analytics/js/' + (import.meta.env.VITE_APP_MODE === 'development' ? 'container_idfrDl3e.js' : 'container_KJbctTa6.js'); s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Matomo Tag Manager -->
+
 </head>
 
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRJRWCN4" height="0" width="0"
-            style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <!-- Description -->
     <p class="description" style="visibility: hidden; height: 0; position: absolute;">
         <b>Générateur d'étiquettes pour tableaux et armoires électriques.</b><br />
@@ -223,11 +248,11 @@
                     <a class="box_list_link" href="https://www.minimachines.net/la-mini-boutique" target="_blank" rel="noopener">
                         Soutenir MiniMachines.net
                     </a>
-</li>
-<li>
-    <div class="box_list_title">GCE Electronics
-        <sup title="Partenaire favoris">⭐</sup>
-    </div>
+                </li>
+                <li>
+                    <div class="box_list_title">GCE Electronics
+                        <sup title="Partenaire favoris">⭐</sup>
+                    </div>
                     <div class="box_list_description">
                         GCE Electronics, fabricant français de solutions connectées : automatismes, domotique filaire,
                         mesure et supervision
