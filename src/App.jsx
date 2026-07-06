@@ -818,7 +818,12 @@ function App() {
             scrollToProject();
 
             action('import');
-            _paq.push(['trackEvent', 'Application', 'Actions', 'Importation']);
+            _paq.push([
+                'trackEvent',
+                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
+                'Actions',
+                'Importation'
+            ]);
 
             return true;
             // eslint-disable-next-line no-unused-vars
@@ -872,7 +877,12 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        _paq.push(['trackEvent', 'Application', 'Actions', 'Exportation']);
+        _paq.push([
+            'trackEvent',
+            'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
+            'Actions',
+            'Exportation'
+        ]);
         sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
@@ -983,7 +993,12 @@ function App() {
             form = null;
 
             action('print');
-            _paq.push(['trackEvent', 'Application', 'Actions', 'Impression']);
+            _paq.push([
+                'trackEvent',
+                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
+                'Actions',
+                'Impression'
+            ]);
             sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
@@ -1206,7 +1221,12 @@ function App() {
 
         if (isEmpty) {
             action('create');
-            _paq.push(['trackEvent', 'Application', 'Actions', 'Nouveau projet']);
+            _paq.push([
+                'trackEvent',
+                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
+                'Actions',
+                'Nouveau projet'
+            ]);
         }
 
         setEditor(null);
