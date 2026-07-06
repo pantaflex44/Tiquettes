@@ -137,7 +137,7 @@ export default function Main() {
     }, []);
 
     const instance = createInstance({
-        urlBase: 'https://www.tiquettes.fr/app/',
+        urlBase: 'https://www.tiquettes.fr/analytics/',
         siteId: 2,
     });
 
