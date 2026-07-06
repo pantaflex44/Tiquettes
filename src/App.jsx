@@ -66,7 +66,6 @@ import LabelerPopup from "./components/LabelerPopup.jsx";
 import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 
 import { action, choices } from "../public/api/stats.js";
-import { useMatomo } from '@datapunt/matomo-tracker-react'
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
@@ -75,10 +74,6 @@ import NewProjectPopup from "./components/NewProjectPopup.jsx";
 
 
 function App() {
-    const { trackPageView, trackEvent } = useMatomo();
-    useEffect(() => {
-        trackPageView();
-    }, []);
 
     const documentIsVisible = useDocumentVisibility();
 
@@ -826,7 +821,6 @@ function App() {
             scrollToProject();
 
             action('import');
-            trackEvent({ category: 'actions', action: 'importation' });
 
             return true;
             // eslint-disable-next-line no-unused-vars
@@ -880,7 +874,6 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        trackEvent({ category: 'actions', action: 'exportation' });
         sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
@@ -991,7 +984,6 @@ function App() {
             form = null;
 
             action('print');
-            trackEvent({ category: 'actions', action: 'impression' });
             sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
@@ -1214,7 +1206,6 @@ function App() {
 
         if (isEmpty) {
             action('create');
-            trackEvent({ category: 'actions', action: 'creation' });
         }
 
         setEditor(null);

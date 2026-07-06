@@ -30,7 +30,6 @@ import './css/main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './components/NewVersionPopup.jsx';
 
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
 
 
 
@@ -136,14 +135,10 @@ export default function Main() {
 
     }, []);
 
-    const instance = createInstance({
-        urlBase: 'https://www.tiquettes.fr/analytics/',
-        siteId: 2,
-    });
 
 
     return (
-        <MatomoProvider value={instance}>
+        <>
             <App />
             <Footer />
 
@@ -153,7 +148,7 @@ export default function Main() {
                     window.location.reload(true);
                 }}
             />}
-        </MatomoProvider>
+        </>
     );
 }
 
