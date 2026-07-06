@@ -66,12 +66,20 @@ import LabelerPopup from "./components/LabelerPopup.jsx";
 import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 
 import { action, choices } from "../public/api/stats.js";
+import { useMatomo } from '@datapunt/matomo-tracker-react'
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
 
 
+
+
 function App() {
+    const { trackPageView, trackEvent } = useMatomo();
+    useEffect(() => {
+        trackPageView();
+    }, []);
+
     const documentIsVisible = useDocumentVisibility();
 
     const importRef = useRef();
@@ -818,12 +826,7 @@ function App() {
             scrollToProject();
 
             action('import');
-            _paq.push([
-                'trackEvent',
-                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
-                'Actions',
-                'Importation'
-            ]);
+            trackEvent({ category: 'actions', action: 'importation' });
 
             return true;
             // eslint-disable-next-line no-unused-vars
@@ -877,12 +880,7 @@ function App() {
         setSwitchboard(swb);
 
         action('export');
-        _paq.push([
-            'trackEvent',
-            'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
-            'Actions',
-            'Exportation'
-        ]);
+        trackEvent({ category: 'actions', action: 'exportation' });
         sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
@@ -993,12 +991,7 @@ function App() {
             form = null;
 
             action('print');
-            _paq.push([
-                'trackEvent',
-                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
-                'Actions',
-                'Impression'
-            ]);
+            trackEvent({ category: 'actions', action: 'impression' });
             sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
             let sc = ['total'];
@@ -1221,12 +1214,7 @@ function App() {
 
         if (isEmpty) {
             action('create');
-            _paq.push([
-                'trackEvent',
-                'Application' + (import.meta.env.VITE_APP_MODE === 'development' ? ' (Development)' : ''),
-                'Actions',
-                'Nouveau projet'
-            ]);
+            trackEvent({ category: 'actions', action: 'nouveau projet' });
         }
 
         setEditor(null);
