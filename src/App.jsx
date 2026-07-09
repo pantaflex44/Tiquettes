@@ -65,7 +65,7 @@ import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 import LabelerPopup from "./components/LabelerPopup.jsx";
 import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 
-import { action, choices } from "../public/api/stats.js";
+import { statsPush } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
@@ -431,10 +431,10 @@ function App() {
 
         if (unique && !uniqueChoices.includes(choiceName)) {
             setUniqueChoices(old => ([...old, choiceName]));
-            choices(choiceName, ks);
+            statsPush('choice', choiceName, ks);
         }
 
-        if (!unique) choices(choiceName, ks);
+        if (!unique) statsPush('choice', choiceName, ks);
     }
 
     const scrollToProject = () => {
@@ -820,7 +820,7 @@ function App() {
             setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
             scrollToProject();
 
-            action('import');
+            statsPush('action', 'import');
 
             return true;
             // eslint-disable-next-line no-unused-vars
@@ -873,8 +873,8 @@ function App() {
 
         setSwitchboard(swb);
 
-        action('export');
-        sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+        statsPush('action', 'export');
+        sendChoice('theme', [/*'total',*/ `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
 
@@ -924,6 +924,8 @@ function App() {
         }));
 
         form.submit();
+
+        statsPush('action', 'export_labellers');
 
         Object.entries(params).forEach(([_, value]) => {
             form.removeChild(value.input);
@@ -983,10 +985,10 @@ function App() {
             document.body.removeChild(form);
             form = null;
 
-            action('print');
-            sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+            statsPush('action', 'print');
+            sendChoice('theme', [/*'total',*/ `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
-            let sc = ['total'];
+            let sc = [/*'total',*/];
             if (po.firstPage) sc.push('Page de garde');
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
@@ -994,7 +996,7 @@ function App() {
             if (po.modulelist) sc.push('Liste des modules');
             sendChoice('print', sc);
 
-            let sf = ['total'];
+            let sf = [/*'total',*/];
             if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
             if (po.summary) sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
             if (po.schema) sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
@@ -1205,7 +1207,7 @@ function App() {
         reassignAllParents(data.originalModule?.id, id);
 
         if (isEmpty) {
-            action('create');
+            statsPush('action', 'create');
         }
 
         setEditor(null);

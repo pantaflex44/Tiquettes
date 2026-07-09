@@ -88,8 +88,6 @@ export default function Main() {
         const domains = ['tiquettes.fr', 'www.tiquettes.fr'];
         const pathes = [
             '/app/',
-            '/app/api/reports.php',
-            '/app/api/resume.php',
             '/app/infos.json',
             '/api/',
             '/dev/'

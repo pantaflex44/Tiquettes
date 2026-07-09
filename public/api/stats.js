@@ -25,10 +25,9 @@ function formatURL(url, args = {}) {
     return u + l;
 }
 
-function fetchURL(filename, struct, args = {}) {
+function fetchURL(filename, args = {}) {
     const url = formatURL(import.meta.env.VITE_APP_API_URL + filename, {
         m: import.meta.env.VITE_APP_MODE,
-        s: struct,
         ...args
     });
     fetch(url)
@@ -45,14 +44,6 @@ function fetchURL(filename, struct, args = {}) {
 
 }
 
-export function visit(struct = 'web') {
-    fetchURL('visit.php', struct);
-}
-
-export function action(actionName, struct = 'app') {
-    fetchURL('action.php', struct, { a: actionName });
-}
-
-export function choices(choiceName, keys = [], struct = 'app') {
-    fetchURL('choices.php', struct, { c: choiceName, k: keys.join('|') });
+export function statsPush(type, name, keys = []) {
+    fetchURL('stats_push.php', { type, name, keys: keys.join('|') });
 }

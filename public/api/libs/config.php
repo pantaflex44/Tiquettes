@@ -493,16 +493,14 @@ define('NOW_TIMESTAMP', NOW->getTimestamp());
 // referer
 $rfr = isset($_GET['rfr']) ? stripslashes(trim(rawurldecode($_GET['rfr']))) : ($_SERVER['HTTP_REFERER'] ?? $_SERVER['HTTP_HOST'] ?? '');
 define('REFERER', $rfr);
-if (MODE !== 'development') {
-    $hostIsAllowed = in_array(true, array_map(fn($allowedHost) => stripos(REFERER, $allowedHost, 0) !== false, [
-        'localhost',
-        '127.0.0.1',
-        'www.tiquettes.fr'
-    ]));
-    if (!$hostIsAllowed) {
-        header("HTTP/1.1 401 Unauthorized");
-        exit(0);
-    }
+$hostIsAllowed = in_array(true, array_map(fn($allowedHost) => stripos(REFERER, $allowedHost, 0) !== false, [
+    'localhost',
+    '127.0.0.1',
+    'www.tiquettes.fr'
+]));
+if (!$hostIsAllowed) {
+    header("HTTP/1.1 401 Unauthorized");
+    exit(0);
 }
 
 

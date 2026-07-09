@@ -36,51 +36,7 @@ function dateTimeFrom(string $from): \DateTime
 }
 
 
-define('STATS_ALLOWED', !STATS_IGNORE_LOCALHOST || (STATS_IGNORE_LOCALHOST && !CLIENT_FROM_LOCALHOST));
 
-$stmt = DB->prepare("SELECT * FROM stats_allowed_structs");
-$stmt->execute();
-$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-define('STATS_ALLOWED_STRUCTURES_FULL', $result);
-define('STATS_ALLOWED_STRUCTURES', array_map(fn($i) => $i['key'], $result));
-$statsStructure = isset($_GET['s']) ? strtolower(rawurldecode(trim($_GET['s']))) : '';
-define('STATS_STRUCTURE_ALLOWED', in_array($statsStructure, STATS_ALLOWED_STRUCTURES));
-define('STATS_STRUCTURE', STATS_STRUCTURE_ALLOWED ? $statsStructure : '');
-
-$stmt = DB->prepare("SELECT * FROM stats_allowed_actions");
-$stmt->execute();
-$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-define('STATS_ALLOWED_ACTIONS_FULL', $result);
-define('STATS_ALLOWED_ACTIONS', array_map(fn($i) => $i['key'], $result));
-$statsAction = isset($_GET['a']) ? strtolower(rawurldecode(trim($_GET['a']))) : '';
-define('STATS_ACTION_ALLOWED', in_array($statsAction, STATS_ALLOWED_ACTIONS, true));
-define('STATS_ACTION', STATS_ACTION_ALLOWED ? $statsAction : '');
-
-$stmt = DB->prepare("SELECT * FROM stats_allowed_choices");
-$stmt->execute();
-$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-define('STATS_ALLOWED_CHOICES_FULL', $result);
-define('STATS_ALLOWED_CHOICES', array_map(fn($i) => $i['key'], $result));
-$statsChoice = isset($_GET['c']) ? strtolower(rawurldecode(trim($_GET['c']))) : '';
-define('STATS_CHOICE_ALLOWED', in_array($statsChoice, STATS_ALLOWED_CHOICES, true));
-define('STATS_CHOICE', STATS_CHOICE_ALLOWED ? $statsChoice : '');
-
-define('STATS_ALLOWED_PERIODS', [
-    '-1d' => ['start' => dateTimeFrom('yesterday'), 'end' => dateTimeFrom('yesterday'), 'text' => "Hier"],
-    'd' => ['start' => dateTimeFrom('today'), 'end' => dateTimeFrom('today'), 'text' => "Aujourd'hui"],
-    '-7d' => ['start' => dateTimeFrom('today -7 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 7 derniers jours"],
-    'w' => ['start' => dateTimeFrom('Monday this week'), 'end' => dateTimeFrom('Sunday this week'), 'text' => "Cette semaine"],
-    '-w' => ['start' => dateTimeFrom('Monday last week'), 'end' => dateTimeFrom('Sunday last week'), 'text' => "La semaine dernière"],
-    '-30d' => ['start' => dateTimeFrom('today -30 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 30 derniers jours"],
-    '-60d' => ['start' => dateTimeFrom('today -60 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 60 derniers jours"],
-    '-90d' => ['start' => dateTimeFrom('today -90 days'), 'end' => dateTimeFrom('today'), 'text' => "Les 90 derniers jours"],
-    'm' => ['start' => dateTimeFrom('first day of this month'), 'end' => dateTimeFrom(from: 'last day of this month'), 'text' => "Ce mois ci"],
-    '-m' => ['start' => dateTimeFrom('first day of last month'), 'end' => dateTimeFrom(from: 'last day of last month'), 'text' => "Le mois dernier"],
-    'y' => ['start' => dateTimeFrom('first day of this year'), 'end' => dateTimeFrom(from: 'last day of this year'), 'text' => "Cette année"],
-    '-y' => ['start' => dateTimeFrom('first day of last year'), 'end' => dateTimeFrom(from: 'last day of last year'), 'text' => "L'année dernière"],
-]);
-
-define('STATS_ALLOWED_RESOLUTIONS', [
-    'h' => ['text' => 'Moyennes par heures'],
-    'd' => ['text' => 'Moyennes par jours']
-]);
+$mode = htmlspecialchars(isset($_GET['m']) ? $_GET['m'] : '');
+if (!in_array($mode, ['production', 'development']))
+    exit();
