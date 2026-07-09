@@ -874,7 +874,7 @@ function App() {
         setSwitchboard(swb);
 
         statsPush('action', 'export');
-        sendChoice('theme', [/*'total',*/ `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+        sendChoice('theme', [total, `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
     };
 
@@ -986,9 +986,9 @@ function App() {
             form = null;
 
             statsPush('action', 'print');
-            sendChoice('theme', [/*'total',*/ `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+            sendChoice('theme', [total, `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
-            let sc = [/*'total',*/];
+            let sc = [total];
             if (po.firstPage) sc.push('Page de garde');
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
@@ -996,7 +996,7 @@ function App() {
             if (po.modulelist) sc.push('Liste des modules');
             sendChoice('print', sc);
 
-            let sf = [/*'total',*/];
+            let sf = [total];
             if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
             if (po.summary) sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
             if (po.schema) sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
