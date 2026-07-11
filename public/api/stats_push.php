@@ -44,10 +44,10 @@ if ($type === 'action') {
 
     // 07/07/2026
     $default_counters = [
-        'create'  => 32782,
-        'import'  => 14203,
-        'export'  => 54478,
-        'print'   => 61689,
+        'create'  => 0, //32782,
+        'import'  => 0, //104203,
+        'export'  => 0, //54478,
+        'print'   => 0, //61689,
         'export_labellers' => 0
     ];
 

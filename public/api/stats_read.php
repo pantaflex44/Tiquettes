@@ -28,7 +28,7 @@ $stmt->execute([MYSQL_BASE]);
 $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 $tables = array_map(fn($i) => substr($i['table_name'], 6), $tables);
-$actions = ['totals' => []];
+$actions = ['totals' => [], 'day_averages' => []];
 $choices = [];
 $keys = ['action', 'choice'];
 foreach ($tables as $table) {
@@ -71,6 +71,18 @@ foreach ($tables as $table) {
                 $choices[$choice][$name] = 0;
             }
             $choices[$choice][$name] += $result[$i]['counter'];
+        }
+    }
+}
+
+foreach ($actions as $key => $value) {
+    if (!str_starts_with($key, 'totals') && !str_starts_with($key, 'day_averages')) {
+        foreach ($value as $action => $counter) {
+            if (!isset($actions['day_averages'][$action])) {
+                $actions['day_averages'][$action] = ['total' => 0, 'count' => 0];
+            }
+            $actions['day_averages'][$action]['total']++;
+            $actions['day_averages'][$action]['count'] += $counter;
         }
     }
 }
