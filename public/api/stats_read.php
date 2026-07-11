@@ -79,10 +79,11 @@ foreach ($actions as $key => $value) {
     if (!str_starts_with($key, 'totals') && !str_starts_with($key, 'day_averages')) {
         foreach ($value as $action => $counter) {
             if (!isset($actions['day_averages'][$action])) {
-                $actions['day_averages'][$action] = ['total' => 0, 'count' => 0];
+                $actions['day_averages'][$action] = ['total' => 0, 'count' => 0, 'average' => 0];
             }
             $actions['day_averages'][$action]['total']++;
             $actions['day_averages'][$action]['count'] += $counter;
+            $actions['day_averages'][$action]['average'] = round($actions['day_averages'][$action]['count'] / $actions['day_averages'][$action]['total']);
         }
     }
 }
