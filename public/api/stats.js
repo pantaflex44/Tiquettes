@@ -38,7 +38,7 @@ function fetchURL(filename, args = {}) {
             if (text === "") text = "no content";
             /*if (import.meta.env.VITE_APP_MODE === 'development') {
                 console.log(`Fetch response ${response.status} ${response.statusText} from ${url} [${text}]`)
-            }*/
+            }*/ 
         })
         .catch((error) => console.error(error));
 
