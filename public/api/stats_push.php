@@ -58,8 +58,8 @@ if ($type === 'action') {
         $sql = "CREATE TABLE " . $tableName . " (date DATE NOT NULL DEFAULT current_timestamp(), counter INT(11) NOT NULL DEFAULT " . $default_counters[$name] . ", PRIMARY KEY (date)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
         $stmt = DB->prepare($sql);
         $stmt->execute();
-        $stmt = DB->prepare("INSERT INTO " . $tableName . " (date, counter) VALUES(:date, :counter)");
-        $stmt->execute([':date' => $yesterday, ':counter' => $default_counters[$name]]);
+        /*$stmt = DB->prepare("INSERT INTO " . $tableName . " (date, counter) VALUES(:date, :counter)");
+        $stmt->execute([':date' => $yesterday, ':counter' => $default_counters[$name]]);*/
     }
 
     $stmt = DB->prepare("SELECT counter FROM " . $tableName . " WHERE date = :date");
