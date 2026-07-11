@@ -28,9 +28,20 @@ $stmt->execute([MYSQL_BASE]);
 $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 $tables = array_map(fn($i) => substr($i['table_name'], 6), $tables);
+
 $actions = ['totals' => [], 'day_averages' => []];
 $choices = [];
 $keys = ['action', 'choice'];
+
+// 07/07/2026
+$defaultCounters = [
+    'create'  => 32782,
+    'import'  => 104203,
+    'export'  => 54478,
+    'print'   => 61689,
+    'export_labellers' => 0
+];
+
 foreach ($tables as $table) {
     $tableName = 'stats_' . $table;
 
@@ -49,7 +60,7 @@ foreach ($tables as $table) {
             $actions[$date][$action] = $counter;
 
             if (!isset($actions['totals'][$action])) {
-                $actions['totals'][$action] = 0;
+                $actions['totals'][$action] =  isset($defaultCounters[$action]) ? $defaultCounters[$action] : 0;
             }
             $actions['totals'][$action] += $result[$i]['counter'];
         }

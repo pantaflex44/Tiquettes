@@ -42,24 +42,13 @@ if ($type === 'action') {
 
     $tableName = 'stats_' . $type . '_' . $name;
 
-    // 07/07/2026
-    $default_counters = [
-        'create'  => 0, //32782,
-        'import'  => 0, //104203,
-        'export'  => 0, //54478,
-        'print'   => 0, //61689,
-        'export_labellers' => 0
-    ];
-
     $stmt = DB->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1");
     $stmt->execute([MYSQL_BASE, $tableName]);
     $count = $stmt->fetchColumn(0);
     if ($count === 0) {
-        $sql = "CREATE TABLE " . $tableName . " (date DATE NOT NULL DEFAULT current_timestamp(), counter INT(11) NOT NULL DEFAULT " . $default_counters[$name] . ", PRIMARY KEY (date)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+        $sql = "CREATE TABLE " . $tableName . " (date DATE NOT NULL DEFAULT current_timestamp(), counter INT(11) NOT NULL DEFAULT 0, PRIMARY KEY (date)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
         $stmt = DB->prepare($sql);
         $stmt->execute();
-        /*$stmt = DB->prepare("INSERT INTO " . $tableName . " (date, counter) VALUES(:date, :counter)");
-        $stmt->execute([':date' => $yesterday, ':counter' => $default_counters[$name]]);*/
     }
 
     $stmt = DB->prepare("SELECT counter FROM " . $tableName . " WHERE date = :date");
