@@ -35,8 +35,3 @@ function dateTimeFrom(string $from): \DateTime
     return new \DateTime($from, new \DateTimeZone("UTC"));
 }
 
-
-
-$mode = htmlspecialchars(isset($_GET['m']) ? $_GET['m'] : '');
-if (!in_array($mode, ['production', 'development']))
-    exit();

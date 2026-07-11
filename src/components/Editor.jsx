@@ -276,7 +276,7 @@ export default function Editor({
                         </div>
 
                         {ed.errors.map((error, i) => (
-                            <div key={i} className="popup_row" style={{ "--left_column_size": "100px" }}>
+                            <div key={i} className="popup_row" style={{ "--left_column_size": "120px" }}>
                                 <div>&nbsp;</div>
                                 <div className="popup_error">{error}</div>
                             </div>
@@ -284,7 +284,7 @@ export default function Editor({
 
                         {editorTab === "main" && (
                             <>
-                                <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                     <label htmlFor={`editor_id_${ed.currentModule.id.trim()}`}>Identifiant</label>
                                     <div className="popup_row-flex">
                                         <input
@@ -346,14 +346,14 @@ export default function Editor({
                                         </button>
                                     </div>
                                 </div>
-                                <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                     <div></div>
                                     <label style={{ fontSize: "small", color: "#777" }}>
                                         └ Identifiant du module précédent: <b>{ed.prevModule?.id ?? "-"}</b>
                                     </label>
                                 </div>
 
-                                <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                     <label htmlFor={`editor_text_${ed.currentModule.id.trim()}`}>Libellé</label>
                                     <textarea
                                         name="editor_text"
@@ -369,7 +369,7 @@ export default function Editor({
                                     className="popup_row"
                                     style={{
                                         alignItems: "center",
-                                        "--left_column_size": "100px",
+                                        "--left_column_size": "120px",
                                         gridTemplateColumns: "var(--left_column_size) calc(100% - 100px)",
                                         maxWidth: "100%",
                                     }}
@@ -404,12 +404,12 @@ export default function Editor({
                                     className="popup_row"
                                     style={{
                                         alignItems: "center",
-                                        "--left_column_size": "100px",
+                                        "--left_column_size": "120px",
                                         borderTop: "1px solid lightgray",
                                         paddingTop: "1em",
                                     }}
                                 >
-                                    <label>Fonction</label>
+                                    <label>Pictogramme</label>
                                     <Suspense fallback={<div style={{ lineHeight: "40px" }}>...</div>}>
                                         <IconSelector
                                             value={ed.currentModule.icon}
@@ -455,7 +455,7 @@ export default function Editor({
                                 <div
                                     className="popup_row"
                                     style={{
-                                        "--left_column_size": "100px",
+                                        "--left_column_size": "120px",
                                         borderBottom: "1px solid lightgray",
                                         paddingBottom: "1em",
                                     }}
@@ -480,7 +480,7 @@ export default function Editor({
                                     />
                                 </div>
 
-                                <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                     <label htmlFor={`editor_desc_${ed.currentModule.id.trim()}`}>
                                         Annotations
                                         <br />
@@ -554,7 +554,7 @@ export default function Editor({
 
                         {editorTab === "schema" && (
                             <>
-                                <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                     <label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>Fonction</label>
                                     <div className="popup_row-grid" style={{ gridTemplateColumns: '1fr 67px' }}>
                                         <EditorFunctionSelector
@@ -582,7 +582,7 @@ export default function Editor({
 
                                 {ed.currentModule.func && (
                                     <>
-                                        <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                        <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                             <label htmlFor={`editor_schparent_${ed.currentModule.id.trim()}`}>
                                                 Parent
                                             </label>
@@ -610,7 +610,7 @@ export default function Editor({
                                         <div
                                             className="popup_row"
                                             style={{
-                                                "--left_column_size": "100px",
+                                                "--left_column_size": "120px",
                                                 borderBottom:
                                                     schemaFunctions[ed.currentModule.func]?.supportContacts === true
                                                         ? "initial"
@@ -638,7 +638,7 @@ export default function Editor({
                                         <div
                                             className="popup_row"
                                             style={{
-                                                "--left_column_size": "100px",
+                                                "--left_column_size": "120px",
                                                 "alignItems": "center",
                                             }}
                                         >
@@ -669,7 +669,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasType && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>Type</label>
                                         <EditorTypeSelector
                                             id={`editor_type_${ed.currentModule.id.trim()}`}
@@ -680,7 +680,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasCrb && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_crb_${ed.currentModule.id.trim()}`}>Courbe</label>
                                         <EditorCrbSelector
                                             id={`editor_crb_${ed.currentModule.id.trim()}`}
@@ -691,7 +691,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasType && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_sensibility_${ed.currentModule.id.trim()}`}>
                                             Sensibilité
                                         </label>
@@ -704,7 +704,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasNONCChoice && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Type</label>
                                         <EditorContactTypeSelector
                                             id={`editor_contact_type_${ed.currentModule.id.trim()}`}
@@ -715,7 +715,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasCurrent && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_current_${ed.currentModule.id.trim()}`}>Calibre</label>
                                         <EditorCurrentSelector
                                             id={`editor_current_${ed.currentModule.id.trim()}`}
@@ -726,7 +726,7 @@ export default function Editor({
                                 )}
 
                                 {schemaFunctions[ed.currentModule.func]?.hasWire && (
-                                    <div className="popup_row" style={{ "--left_column_size": "100px" }}>
+                                    <div className="popup_row" style={{ "--left_column_size": "120px" }}>
                                         <label htmlFor={`editor_wire_${ed.currentModule.id.trim()}`}>Section</label>
                                         <EditorWireSelector
                                             id={`editor_wire_${ed.currentModule.id.trim()}`}
@@ -742,7 +742,7 @@ export default function Editor({
                                     <>
                                         <div
                                             className={`popup_row ${hasLine ? "three" : ""}`.trim()}
-                                            style={{ "--left_column_size": "100px" }}
+                                            style={{ "--left_column_size": "120px" }}
                                         >
                                             <label htmlFor={`editor_pole_${ed.currentModule.id.trim()}`}>Pôles</label>
                                             <EditorPoleSelector

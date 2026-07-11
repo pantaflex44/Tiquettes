@@ -425,7 +425,7 @@ function App() {
     };
 
     const sendChoice = (choiceName, keys = [], unique = false) => {
-        const ks = keys.map(k => typeof k === 'string' ? k.trim() : null).filter(k => k !== null);
+        const ks = keys.map(k => typeof k === 'string' ? k.trim() : `${k}`).filter(k => k !== null);
 
         if (ks.length === 0) return;
 
@@ -874,8 +874,6 @@ function App() {
         setSwitchboard(swb);
 
         statsPush('action', 'export');
-        sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
-
     };
 
     const toLabeler = (model, options) => {
@@ -986,9 +984,9 @@ function App() {
             form = null;
 
             statsPush('action', 'print');
-            sendChoice('theme', ['total', `${switchboard.theme.group} - ${switchboard.theme.title}`], true);
+            sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
 
-            let sc = ['total'];
+            let sc = [];
             if (po.firstPage) sc.push('Page de garde');
             if (po.labels) sc.push('Etiquettes');
             if (po.summary) sc.push('Nomenclature');
@@ -996,11 +994,15 @@ function App() {
             if (po.modulelist) sc.push('Liste des modules');
             sendChoice('print', sc);
 
-            let sf = ['total'];
+            let sf = [];
             if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
             if (po.summary) sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
             if (po.schema) sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
             sendChoice('print_format', sf);
+
+            sendChoice('labels_module_height_mm', [switchboard.height]);
+            sendChoice('labels_module_width_mm', [switchboard.stepSize]);
+            sendChoice('labels_rows_length', [switchboard.stepsPerRows]);
 
 
             /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));

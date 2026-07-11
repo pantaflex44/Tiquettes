@@ -27,7 +27,7 @@ function formatURL(url, args = {}) {
 
 function fetchURL(filename, args = {}) {
     const url = formatURL(import.meta.env.VITE_APP_API_URL + filename, {
-        m: import.meta.env.VITE_APP_MODE,
+        /*m: import.meta.env.VITE_APP_MODE,*/
         ...args
     });
     fetch(url)

@@ -31,7 +31,13 @@ $currentDate = NOW->format('Y-m-d');
 $yesterday = (new DateTime('yesterday'))->format('Y-m-d');
 
 if ($type === 'action') {
-    if (!in_array($name, ['create', 'import', 'export', 'print', 'export_labellers']))
+    if (!in_array($name, [
+        'create',
+        'import',
+        'export',
+        'print',
+        'export_labellers'
+    ]))
         exit();
 
     $tableName = 'stats_' . $type . '_' . $name;
@@ -67,7 +73,14 @@ if ($type === 'action') {
 }
 
 if ($type === 'choice') {
-    if (!in_array($name, ['theme', 'print', 'print_format']))
+    if (!in_array($name, [
+        'theme',
+        'print',
+        'print_format',
+        'labels_module_height_mm',
+        'labels_module_width_mm',
+        'labels_rows_length'
+    ]))
         exit();
 
     $tableName = 'stats_' . $type . '_' . $name;
@@ -82,7 +95,7 @@ if ($type === 'choice') {
     }
 
     $keys = explode('|', trim(htmlspecialchars(isset($_GET['keys']) ? $_GET['keys'] : '')));
-    if (count($keys) > 1) {
+    if (count($keys) > 0) {
         foreach ($keys as $ki) {
             $key = trim($ki);
             if ($key === '')
