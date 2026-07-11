@@ -90,6 +90,8 @@ export default function Main() {
             '/app/',
             '/app/infos.json',
             '/api/',
+            '/api/stats_read.php',
+            '/app/api/stats_read.php',
             '/dev/'
         ];
 

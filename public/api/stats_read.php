@@ -76,7 +76,7 @@ foreach ($tables as $table) {
 }
 
 foreach ($actions as $key => $value) {
-    if (!str_starts_with($key, 'totals') && !str_starts_with($key, 'day_averages')) {
+    if (!str_starts_with($key, 'totals') && !str_starts_with($key, 'day_averages') && $key !== $currentDate) {
         foreach ($value as $action => $counter) {
             if (!isset($actions['day_averages'][$action])) {
                 $actions['day_averages'][$action] = ['total' => 0, 'count' => 0, 'average' => 0];
