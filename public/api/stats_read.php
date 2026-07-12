@@ -46,7 +46,7 @@ foreach ($tables as $table) {
     $tableName = 'stats_' . $table;
 
     if (str_starts_with($table, 'action_')) {
-        $stmt = DB->prepare("SELECT date, counter FROM " . $tableName . " ORDER BY date ASC");
+        $stmt = DB->prepare("SELECT date, counter FROM " . $tableName . " WHERE date >= DATE_SUB(NOW(), INTERVAL 365 DAY) ORDER BY date ASC");
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         for ($i = 0; $i < count($result); $i++) {
