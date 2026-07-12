@@ -22,13 +22,34 @@ require_once(__DIR__ . '/libs/config.php');
 require_once(__DIR__ . '/stats.php');
 
 $type = htmlspecialchars(isset($_GET['type']) ? $_GET['type'] : '');
-if (!in_array($type, ['action', 'choice']))
+if (!in_array($type, ['action', 'choice', 'referer', 'user_agent']))
     exit();
 
 $name = htmlspecialchars(isset($_GET['name']) ? $_GET['name'] : '');
+$keys = explode('|', trim(htmlspecialchars(isset($_GET['keys']) ? $_GET['keys'] : '')));
 
 $currentDate = NOW->format('Y-m-d');
 $yesterday = (new DateTime('yesterday'))->format('Y-m-d');
+
+if ($type === 'referer') {
+    $type = 'choice';
+    $name = (isBot() ? 'bot' : 'visitor') . '_referer';
+    $keys = [];
+    if (REFERER !== '') {
+        $keys[] = REFERER;
+    }
+    if (PARENT_REFERER !== '' && PARENT_REFERER !== REFERER) {
+        $keys[] = PARENT_REFERER;
+    }
+    if (count($keys) === 0)
+        exit();
+}
+
+if ($type === 'user_agent') {
+    $type = 'choice';
+    $name = (isBot() ? 'bot' : 'visitor') . '_user_agent';
+    $keys = [USER_AGENT];
+}
 
 if ($type === 'action') {
     if (!in_array($name, [
@@ -68,7 +89,16 @@ if ($type === 'choice') {
         'print_format',
         'labels_module_height_mm',
         'labels_module_width_mm',
-        'labels_rows_length'
+        'labels_rows_length',
+        'bot_referer',
+        'bot_user_agent',
+        'visitor_referer',
+        'visitor_user_agent',
+        'screen_size',
+        'screen_type',
+        'device_type',
+        'os',
+        'browser'
     ]))
         exit();
 
@@ -83,7 +113,7 @@ if ($type === 'choice') {
         $stmt->execute();
     }
 
-    $keys = explode('|', trim(htmlspecialchars(isset($_GET['keys']) ? $_GET['keys'] : '')));
+
     if (count($keys) > 0) {
         foreach ($keys as $ki) {
             $key = trim($ki);

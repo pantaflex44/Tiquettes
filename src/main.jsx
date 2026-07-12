@@ -30,6 +30,8 @@ import './css/main.css';
 import * as pkg from '../package.json';
 import NewVersionPopup from './components/NewVersionPopup.jsx';
 
+import { statsPush } from "../public/api/stats.js";
+
 
 
 
@@ -53,6 +55,7 @@ function Footer() {
 
 export default function Main() {
     const [newVersionAvaillable, setNewVersionAvaillable] = useState(null);
+    const [statsSended, setStatsSended] = useState(false);
 
     const imagesPreloader = () => {
         return [
@@ -132,6 +135,19 @@ export default function Main() {
                 }
             })
             .catch(error => console.error("Unable to verify app version : ", error));
+
+        if (!statsSended) {
+            setStatsSended(() => {
+                statsPush('referer');
+                statsPush('user_agent');
+                statsPush('screen_size');
+                statsPush('screen_type');
+                statsPush('device_type');
+                statsPush('os');
+                statsPush('browser');
+                return true;
+            })
+        }
 
     }, []);
 
