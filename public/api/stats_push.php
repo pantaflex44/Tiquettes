@@ -98,7 +98,8 @@ if ($type === 'choice') {
         'screen_type',
         'device_type',
         'os',
-        'browser'
+        'browser',
+        'referer'
     ]))
         exit();
 

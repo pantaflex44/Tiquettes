@@ -138,7 +138,7 @@ export default function Main() {
 
         if (!statsSended) {
             setStatsSended(() => {
-                statsPush('referer');
+                statsPush('choice', 'referer', [document.referer ?? 'Direct']);
                 statsPush('user_agent');
                 statsPush('screen_size');
                 statsPush('screen_type');
