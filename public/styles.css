@@ -183,8 +183,6 @@ nav.header ul li a:hover img {
 }
 
 nav.header ul li a.dons {
-    background-color: black;
-    color: white;
     font-weight: bold;
     display: inline-flex;
     flex-direction: row;
