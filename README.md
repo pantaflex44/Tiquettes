@@ -15,8 +15,10 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 <img alt="Licence" src="https://img.shields.io/badge/Licence-AGPL v3-%3CCOLOR%3E?style=flat&color=fff">&nbsp;&nbsp;
 <img alt="Auteur" src="https://img.shields.io/badge/Auteur-Christophe LEMOINE <contact (at) tiquettes (dot) fr>-%3CCOLOR%3E?style=flat&color=fff"><br />
 
-<img alt="Projets" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.create&label=Projets&color=%23fff">&nbsp;&nbsp;
-<img alt="Impressions" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fresume.php%3Fm%3Dproduction&query=%24.print&label=Impressions&color=%23fff">&nbsp;&nbsp;
+<img alt="Projets" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fstats_read.php%3Fm%3Dproduction&query=%24.actions.totals.create
+&label=Projets&color=%23fff">&nbsp;&nbsp;
+<img alt="Impressions" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.tiquettes.fr%2Fapp%2Fapi%2Fstats_read.php%3Fm%3Dproduction&query=%24.actions.totals.print
+&label=Impressions&color=%23fff">&nbsp;&nbsp;
 
 
 
