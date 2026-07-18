@@ -1,5 +1,17 @@
 # ChangeLog
 
+## [2.2.9] - 2026-07-18
+
+### Corrections
+
+- Mise à jour du fichier README.md
+- Mise à jour de la documentation
+
+### Modifications
+
+- Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
+
+
 ## [2.2.8] - 2026-07-03
 
 ### Corrections

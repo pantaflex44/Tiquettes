@@ -24,6 +24,24 @@
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
     "changelog": {
+        "2.2.9": {
+            "date": "2026-07-18",
+            "actions": {
+                "patches": [
+                    {
+                        "text": "Mise à jour du fichier README.md"
+                    },
+                    {
+                        "text": "Mise à jour de la documentation"
+                    }
+                ],
+                "updates": [
+                    {
+                        "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
+                    }
+                ]
+            }
+        },
         "2.2.8": {
             "date": "2026-07-03",
             "actions": {
