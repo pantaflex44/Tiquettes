@@ -29,7 +29,6 @@ $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 $tables = array_map(fn($i) => substr($i['table_name'], 6), $tables);
 
-$infos = [];
 $actions = [
     'totals' => [],
     'day_averages' => []
@@ -104,7 +103,6 @@ foreach ($actions as $key => $value) {
 }
 
 echo json_encode([
-    'infos' => $infos,
     'actions' => $actions,
     'choices' => $choices
 ]);
