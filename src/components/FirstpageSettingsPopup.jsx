@@ -21,6 +21,7 @@
 import { useEffect, useRef, useState } from "react";
 import "../css/firstpageSettingsPopup.css";
 import * as pkg from '../../package.json';
+import { humanFileSize, mimeTypeToExtension, sanitizeFileName } from "../others/files.js";
 
 import Popup from "./Popup.jsx";
 
@@ -36,7 +37,10 @@ import currentLocationIcon from '../assets/current-location.svg';
 import sendIcon from '../assets/send.svg';
 import callIcon from '../assets/phone-call.svg';
 import infoIcon from '../assets/info-circle.svg';
-import photoIcon from '../assets/photo.svg';
+import photoOffIcon from '../assets/photo-off.svg';
+import trashIcon from '../assets/trash.svg';
+import downloadIcon from '../assets/download.svg';
+
 
 export default function FirstpageSettingsPopup({
     defaultFirstpageOptions,
@@ -50,11 +54,13 @@ export default function FirstpageSettingsPopup({
     currentInfos = null,
     currentViews = null,
 }) {
+    const importLogoRef = useRef();
+
     const [tab, setTab] = useState(1);
     const [zoom, setZoom] = useState(100);
 
     const fromNameRef = useRef();
-    const fromPhotoRef = useRef();
+    const fromLogoRef = useRef();
     const fromSiretRef = useRef();
     const fromPostalAddressRef = useRef();
     const fromEmailRef = useRef();
@@ -121,6 +127,67 @@ export default function FirstpageSettingsPopup({
         }
     }
 
+    const importLogo = (file) => {
+        try {
+            if (file) {
+                const maxFileSize = 1 * 1024 * 1024;
+                if (file.size > maxFileSize) { // 1Mo
+                    alert("Votre logo ne doit pas dépasser le poids de " + humanFileSize(maxFileSize) + ". Poids retenu pour ce fichier: " + humanFileSize(file.size) + ".");
+                    return;
+                }
+
+                const fileReader = new FileReader();
+                fileReader.onloadend = () => {
+                    const dataURL = fileReader.result;
+                    setOptions(old => ({
+                        ...old,
+                        infos: {
+                            ...(old.infos ?? {}),
+                            from: {
+                                ...(old.infos?.from ?? {}),
+                                logo: dataURL
+                            }
+                        }
+                    }));
+                };
+                fileReader.readAsDataURL(file);
+            } else {
+                importLogoRef.current.value = "";
+                alert("Aucun logo à importer!");
+            }
+        } catch (err) {
+            console.log(err)
+            importLogoRef.current.value = "";
+            alert("Impossible d'importer le logo.");
+            return false;
+        }
+    }
+
+    const exportLogo = () => {
+        const fromName = (options.infos.from.name ?? "logo").trim();
+        const fromLogo = (options.infos.from.logo ?? "").trim();
+        if (fromLogo === '') {
+            alert("Aucun logo à exporter!");
+            return;
+        }
+
+        const mimetype = fromLogo.substring(fromLogo.indexOf(":") + 1, fromLogo.indexOf(";"));
+        const byteString = atob(fromLogo.split(',')[1]);
+
+        const ab = new ArrayBuffer(byteString.length);
+        let ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        const url = URL.createObjectURL(new Blob([ab], { type: mimetype }));
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = sanitizeFileName(`${fromName}.${mimeTypeToExtension(mimetype)}`);
+        link.click();
+    }
+
     const resetOptions = () => {
         setOptions({
             infos: defaultFirstpageOptions.infos,
@@ -181,12 +248,6 @@ export default function FirstpageSettingsPopup({
             fromNameRef.current.classList.remove('invalid');
         }
 
-        if (options?.infos?.from?.photo && options.infos.from.photo.trim() !== '' && !url_validation(options.infos.from.photo.trim())) {
-            fromPhotoRef.current.classList.add('invalid');
-        } else {
-            fromPhotoRef.current.classList.remove('invalid');
-        }
-
         const validate = siret_validation((options?.infos?.from?.siret ?? '').trim());
         if (options?.infos?.from?.siret && options.infos.from.siret.trim() !== '' && !validate.isSiret() && !validate.isSiren()) {
             fromSiretRef.current.classList.add('invalid');
@@ -242,8 +303,10 @@ export default function FirstpageSettingsPopup({
     }
 
     const apply = () => {
+        let finalOptions = { ...options };
+
         if (onApply) {
-            const fromName = (options.infos.from.name ?? "").trim();
+            const fromName = (finalOptions.infos.from.name ?? "").trim();
             if (fromName !== "") {
                 if (!name_validation(fromName)) {
                     alert("Nom de l'installateur incorrect.");
@@ -251,15 +314,21 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const fromPhoto = (options.infos.from.photo ?? "").trim();
-            if (fromPhoto !== "") {
-                if (!url_validation(fromPhoto)) {
-                    alert("L'url du logo de l'installateur est incorrecte.");
-                    return;
+            const fromLogo = (finalOptions.infos.from.logo ?? "").trim();
+            if (fromLogo === "") {
+                finalOptions = {
+                    ...finalOptions,
+                    views: {
+                        ...(finalOptions.views ?? {}),
+                        from: {
+                            ...(finalOptions.views?.from ?? {}),
+                            logo: false
+                        }
+                    }
                 }
             }
 
-            const fromSiret = (options.infos.from.siret ?? "").trim();
+            const fromSiret = (finalOptions.infos.from.siret ?? "").trim();
             if (fromSiret !== "") {
                 const fromSiretValidation = siret_validation(fromSiret);
                 if (!fromSiretValidation.isSiren() && !fromSiretValidation.isSiret()) {
@@ -268,7 +337,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const fromPostalAddress = (options.infos.from.postalAddress ?? "").trim();
+            const fromPostalAddress = (finalOptions.infos.from.postalAddress ?? "").trim();
             if (fromPostalAddress !== "") {
                 if (!postalAddress_validation(fromPostalAddress)) {
                     alert("Adresse postale de l'installateur incorrecte.");
@@ -276,7 +345,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const fromEmail = (options.infos.from.email ?? "").trim();
+            const fromEmail = (finalOptions.infos.from.email ?? "").trim();
             if (fromEmail !== "") {
                 if (!email_validation(fromEmail)) {
                     alert("L'adresse email de l'installateur est incorrecte.");
@@ -284,7 +353,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const fromPhone = (options.infos.from.phone ?? "").trim();
+            const fromPhone = (finalOptions.infos.from.phone ?? "").trim();
             if (fromPhone !== "") {
                 if (!phone_validation(fromPhone)) {
                     alert("Le numéro de téléphone de l'installateur est incorrect.");
@@ -292,7 +361,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const toName = (options.infos.to.name ?? "").trim();
+            const toName = (finalOptions.infos.to.name ?? "").trim();
             if (toName !== "") {
                 if (!name_validation(toName)) {
                     alert("Nom du client incorrect.");
@@ -300,7 +369,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const toPostalAddress = (options.infos.to.postalAddress ?? "").trim();
+            const toPostalAddress = (finalOptions.infos.to.postalAddress ?? "").trim();
             if (toPostalAddress !== "") {
                 if (!postalAddress_validation(toPostalAddress)) {
                     alert("Adresse postale du client incorrecte.");
@@ -308,7 +377,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const toEmail = (options.infos.to.email ?? "").trim();
+            const toEmail = (finalOptions.infos.to.email ?? "").trim();
             if (toEmail !== "") {
                 if (!email_validation(toEmail)) {
                     alert("L'adresse email du client est incorrecte.");
@@ -316,7 +385,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            const toPhone = (options.infos.to.phone ?? "").trim();
+            const toPhone = (finalOptions.infos.to.phone ?? "").trim();
             if (toPhone !== "") {
                 if (!phone_validation(toPhone)) {
                     alert("Le numéro de téléphone du client est incorrect.");
@@ -324,7 +393,7 @@ export default function FirstpageSettingsPopup({
                 }
             }
 
-            onApply(options);
+            onApply(finalOptions);
         }
     }
 
@@ -339,6 +408,10 @@ export default function FirstpageSettingsPopup({
         okButtonDisabled={!options}
         onCancel={cancel}
     >
+        <input id="importlogo" ref={importLogoRef} type="file" accept="image/png,image/jpeg,image/jpg" onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) importLogo(e.target.files[0]);
+        }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
+
         <nav className="tabPages" style={{ marginTop: 0 }}>
             <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()}
                 onClick={() => setTab(1)}>
@@ -439,34 +512,72 @@ export default function FirstpageSettingsPopup({
                         <div className="data-grid-block" >
                             <div className="data-grid-block_title" >
                                 {withViewSelector && (
-                                    <input type="checkbox" checked={(options?.views?.from?.photo ?? false)} onChange={(e) => {
+                                    <input type="checkbox" checked={(options?.views?.from?.logo ?? false)} onChange={(e) => {
                                         setOptions(old => ({
                                             ...old,
                                             views: {
                                                 ...(old.views ?? {}),
                                                 from: {
                                                     ...(old.views?.from ?? {}),
-                                                    photo: e.target.checked
+                                                    logo: e.target.checked
                                                 }
                                             }
                                         }));
-                                    }} title={(options?.views?.from?.photo ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
+                                    }} title={(options?.views?.from?.logo ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_photo"><b>Logo</b></label>
-                                <img title="Visualiser" src={photoIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open((options?.infos?.from?.photo ?? '').trim(), '_blank').focus()} />
+                                {(options?.views?.from?.logo ?? false) === true &&
+                                    <>
+                                        <button style={{ minHeight: 'auto', marginLeft: 'auto', border: 0, background: 'none', padding: 0 }}
+                                            title="Importer son logo"
+                                            onClick={() => {
+                                                document.getElementById('importlogo').click();
+                                            }}
+                                        >
+                                            <img src={importIcon} alt="Importer"
+                                                width={18} height={18} />
+                                        </button>
+                                        {options?.infos?.from?.logo && <>
+                                            <button style={{ minHeight: 'auto', border: 0, background: 'none', padding: 0 }}
+                                                title="Supprimer le logo"
+                                                onClick={() => {
+                                                    if (confirm("Êtes-vous certain de vouloir supprimer ce logo ?")) {
+                                                        setOptions(old => ({
+                                                            ...old,
+                                                            infos: {
+                                                                ...(old.infos ?? {}),
+                                                                from: {
+                                                                    ...(old.infos?.from ?? {}),
+                                                                    logo: null
+                                                                }
+                                                            }
+                                                        }));
+                                                    }
+                                                }}
+                                            >
+                                                <img src={trashIcon} alt="Supprimer"
+                                                    width={18} height={18} />
+                                            </button>
+                                            <button style={{ minHeight: 'auto', border: 0, background: 'none', padding: 0 }}
+                                                title="Télécharger le logo"
+                                                onClick={() => {
+                                                    exportLogo();
+                                                }}
+                                            >
+                                                <img src={downloadIcon} alt="Télécharger"
+                                                    width={18} height={18} />
+                                            </button>
+                                        </>}
+                                    </>
+                                }
                             </div>
-                            <input ref={fromPhotoRef} className={(options?.views?.from?.photo ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_photo" id="from_photo" value={options?.infos?.from?.photo ?? ''} onChange={(e) => {
-                                setOptions(old => ({
-                                    ...old,
-                                    infos: {
-                                        ...(old.infos ?? {}),
-                                        from: {
-                                            ...(old.infos?.from ?? {}),
-                                            photo: e.target.value
-                                        }
-                                    }
-                                }));
-                            }} placeholder="url valide de votre logo" disabled={(options?.views?.from?.photo ?? false) === false && withViewSelector} />
+                            {(options?.views?.from?.logo ?? false) === true &&
+                                <div className="data-grid-block_title" >
+                                    <div style={{ width: 'calc(100% - 1rem)', padding: '0.5rem', maxHeight: '160px', aspectRatio: '1/0.5', border: '1px solid darkgray', borderRadius: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <img src={(options?.infos?.from?.logo ?? photoOffIcon).trim()} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                                    </div>
+                                </div>
+                            }
                         </div>
 
                         <div className="data-grid-block" >
@@ -884,8 +995,8 @@ export default function FirstpageSettingsPopup({
                                     color: 'var(--primary-color)'
                                 }}>Installateur</span>
 
-                                {(options?.views?.from?.photo ?? false) === true
-                                    && options?.infos?.from?.photo && url_validation(options.infos.from.photo)
+                                {(options?.views?.from?.logo ?? false) === true
+                                    && options?.infos?.from?.logo
                                     && <div className="ffpage-item" style={{
                                         left: '11mm',
                                         top: '12mm',
@@ -894,7 +1005,7 @@ export default function FirstpageSettingsPopup({
                                         display: 'grid',
                                         placeItems: 'center'
                                     }}>
-                                        <img src={options?.infos?.from?.photo} style={{
+                                        <img src={options?.infos?.from?.logo} style={{
                                             maxWidth: '100%'
                                         }} />
                                     </div>}

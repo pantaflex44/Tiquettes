@@ -117,7 +117,7 @@ function App() {
     const defaultFirstpageOptions = {
         infos: { // to switchboad.firstPageInfos
             from: {
-                photo: null,
+                logo: null,
                 name: null,
                 siret: null,
                 postalAddress: null,
@@ -138,7 +138,7 @@ function App() {
             projectUpdated: true,
             projectType: true,
             from: {
-                photo: false,
+                logo: false,
                 name: false,
                 siret: false,
                 postalAddress: false,

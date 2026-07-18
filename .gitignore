@@ -44,7 +44,8 @@ public/api/libs/constants.development.php
 
 public/api/templates
 
+public/tiquettes_stickers.svg
+public/tiquettes_stickers.pdf
+
 src/css/twofaInput.css
 src/TwofaInput.jsx
-README2.md
-old.eslint.package-base.json

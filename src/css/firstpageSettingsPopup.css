@@ -134,7 +134,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 1rem;
-    width: calc(100% - 2rem);
+    width: calc(100% - 1rem);
     margin-block: 0.5rem;
     padding-inline: 0.5rem;
 }
@@ -172,13 +172,13 @@
 }
 
 .data-grid-block input:not([type="checkbox"]) {
-    width: 100%;
+    width: calc(100% - 1em - 2px);
     height: 30px;
     font-size: 95%;
 }
 
 .data-grid-block textarea {
-    width: 100%;
+    width: calc(100% - 1em - 2px);
     min-height: 30px;
     font-size: 95%;
     resize: vertical;
