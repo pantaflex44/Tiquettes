@@ -595,7 +595,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.siret ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_siret"><b>Numéro de SIRET / SIREN</b></label>
-                                <img title="Informations" src={infoIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://annuaire-entreprises.data.gouv.fr/entreprise/' + encodeURIComponent((options?.infos?.from?.siret ?? '').trim().replace(/\s/g, "")), '_blank').focus()} />
+                                {(options?.views?.from?.siret ?? false) &&
+                                    <img title="Informations" src={infoIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://annuaire-entreprises.data.gouv.fr/entreprise/' + encodeURIComponent((options?.infos?.from?.siret ?? '').trim().replace(/\s/g, "")), '_blank').focus()} />
+                                }
                             </div>
                             <input ref={fromSiretRef} className={(options?.views?.from?.siret ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_siret" id="from_siret" value={options?.infos?.from?.siret ?? ''} onChange={(e) => {
                                 setOptions(old => {
@@ -629,7 +631,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.postalAddress ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_postalAddress"><b>Adresse postale</b></label>
-                                <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.from?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
+                                {(options?.views?.from?.postalAddress ?? false) &&
+                                    <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.from?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
+                                }
                             </div>
                             <textarea ref={fromPostalAddressRef} rows={4} className={(options?.views?.from?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="from_postalAddress" id="from_postalAddress" value={options?.infos?.from?.postalAddress ?? ''} onChange={(e) => {
                                 setOptions(old => ({
@@ -660,7 +664,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.email ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_email"><b>Adresse email</b></label>
-                                <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.from?.email ?? '').trim()), '_blank').focus()} />
+                                {(options?.views?.from?.email ?? false) &&
+                                    <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.from?.email ?? '').trim()), '_blank').focus()} />
+                                }
                             </div>
                             <input ref={fromEmailRef} className={(options?.views?.from?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="from_email" id="from_email" value={options?.infos?.from?.email ?? ''} onChange={(e) => {
                                 setOptions(old => {
@@ -694,7 +700,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.from?.phone ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="from_phone"><b>Numéro de téléphone</b></label>
-                                <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.from?.phone ?? '').trim()), '_blank').focus()} />
+                                {(options?.views?.from?.phone ?? false) &&
+                                    <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.from?.phone ?? '').trim()), '_blank').focus()} />
+                                }
                             </div>
                             <input ref={fromPhoneRef} className={(options?.views?.from?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="from_phone" id="from_phone" value={options?.infos?.from?.phone ?? ''} onChange={(e) => {
                                 setOptions(old => ({
@@ -760,7 +768,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.postalAddress ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_postalAddress"><b>Adresse postale</b></label>
-                                <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.to?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
+                                {(options?.views?.to?.postalAddress ?? false) &&
+                                    <img title="Localiser" src={currentLocationIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('https://nominatim.openstreetmap.org/ui/search.html?q=' + encodeURIComponent((options?.infos?.to?.postalAddress ?? '').trim().replace((/  |\r\n|\n|\r/gm), " ")), '_blank').focus()} />
+                                }
                             </div>
                             <textarea ref={toPostalAddressRef} rows={4} className={(options?.views?.to?.postalAddress ?? false) === false && withViewSelector ? 'disabled' : ''} type="text" name="to_postalAddress" id="to_postalAddress" value={options?.infos?.to?.postalAddress ?? ''} onChange={(e) => {
                                 setOptions(old => ({
@@ -791,7 +801,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.email ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_email"><b>Adresse email</b></label>
-                                <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.to?.email ?? '').trim()), '_blank').focus()} />
+                                {(options?.views?.to?.email ?? false) &&
+                                    <img title="Envoyer un message" src={sendIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('mailto:' + encodeURIComponent((options?.infos?.to?.email ?? '').trim()), '_blank').focus()} />
+                                }
                             </div>
                             <input ref={toEmailRef} className={(options?.views?.to?.email ?? false) === false && withViewSelector ? 'disabled' : ''} type="email" name="to_email" id="to_email" value={options?.infos?.to?.email ?? ''} onChange={(e) => setOptions(old => ({
                                 ...old,
@@ -820,7 +832,9 @@ export default function FirstpageSettingsPopup({
                                     }))} title={(options?.views?.to?.phone ?? false) === true ? "Masquer cet élément" : "Afficher cet élément"} />
                                 )}
                                 <label htmlFor="to_phone"><b>Numéro de téléphone</b></label>
-                                <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.to?.phone ?? '').trim()), '_blank').focus()} />
+                                {(options?.views?.to?.phone ?? false) &&
+                                    <img title="Appeler" src={callIcon} width={16} height={16} style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => window.open('tel:' + encodeURIComponent((options?.infos?.to?.phone ?? '').trim()), '_blank').focus()} />
+                                }
                             </div>
                             <input ref={toPhoneRef} className={(options?.views?.to?.phone ?? false) === false && withViewSelector ? 'disabled' : ''} type="tel" name="to_phone" id="to_phone" value={options?.infos?.to?.phone ?? ''} onChange={(e) => {
                                 setOptions(old => ({
