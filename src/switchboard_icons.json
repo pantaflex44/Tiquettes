@@ -95,6 +95,16 @@
         "wire": "2.5"
     },
     {
+        "filename": "swb_eclpc.svg",
+        "title": "Eclairages / Prises (RGIE)",
+        "modtype": "Eclairage",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A",
+        "wire": "1.5"
+    },
+    {
         "filename": "swb_alim_eco.svg",
         "title": "Economie d'energie",
         "modtype": "Alim",

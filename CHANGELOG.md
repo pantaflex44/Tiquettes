@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.9] - 2026-07-18
+## [2.2.9] - 2026-08-08
 
 ### Corrections
 
@@ -10,6 +10,11 @@
 ### Modifications
 
 - Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
+- Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG.
+
+### Ajouts
+
+- Ajout de nouveaux pictogrammes: Eclairages / Prises (RGIE)
 
 
 ## [2.2.8] - 2026-07-03

@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.9": {
-            "date": "2026-07-18",
+            "date": "2026-08-08",
             "actions": {
                 "patches": [
                     {
@@ -38,6 +38,14 @@
                 "updates": [
                     {
                         "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
+                    },
+                    {
+                        "text": "Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG."
+                    }
+                ],
+                "adds": [
+                    {
+                        "text": "Ajout de nouveaux pictogrammes: Eclairages / Prises (RGIE)"
                     }
                 ]
             }

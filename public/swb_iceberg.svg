@@ -12,7 +12,7 @@
    version="1.1"
    id="svg3"
    sodipodi:docname="swb_iceberg.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -30,24 +30,26 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.36782443"
      inkscape:cx="-133.21573"
-     inkscape:cy="207.97966"
+     inkscape:cy="206.62032"
      inkscape:window-width="1920"
-     inkscape:window-height="1008"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3" />
-  <path
-     stroke="none"
-     d="M 0,0 H 24 V 24 H 0 Z"
-     fill="none"
-     id="path1" />
-  <path
-     d="M 20.178101,9.7248946 17.958016,19.715278 13.517846,23.045405 10.187718,17.495192 6.8575906,16.38515 4.6375055,9.7248946 6.8575906,4.1746819 10.187718,1.9545968 l 3.330128,3.3301277 4.44017,1.1100425 2.220085,3.3301276"
-     id="path2"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.22009;stroke-opacity:1" />
+     inkscape:current-layer="svg3"
+     showguides="true">
+    <sodipodi:guide
+       position="15.441831,15.344939"
+       orientation="0,-1"
+       id="guide1"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
   <path
      d="M 2.4174204,9.7248946 H 22.398186"
      id="path3"
      style="fill:none;stroke:#000000;stroke-width:2.22009;stroke-opacity:1" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-dasharray:none"
+     d="M 4.893639,9.5833765 6.796721,4.1459998 10.059147,2.1749507 13.457508,5.3014423 17.943343,6.456885 19.914392,9.5833765 17.943343,19.710491 13.729376,22.769015 10.195082,17.53554 6.8646883,16.244163 Z"
+     id="path4" />
 </svg>

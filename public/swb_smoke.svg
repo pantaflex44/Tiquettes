@@ -12,7 +12,7 @@
    version="1.1"
    id="svg10"
    sodipodi:docname="swb_smoke.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -31,27 +31,24 @@
      showgrid="false"
      inkscape:zoom="0.868"
      inkscape:cx="426.26728"
-     inkscape:cy="500.57604"
+     inkscape:cy="316.82028"
      inkscape:window-width="1920"
-     inkscape:window-height="1008"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg10" />
-  <path
-     d="M0 0h24v24H0Z"
-     stroke="none"
-     id="path2" />
+     inkscape:current-layer="svg10"
+     showguides="true" />
   <path
      d="m18 8-.8 3a1.25 1.25 0 0 1-1.2 1H8a1.25 1.25 0 0 1-1.2-1L6 8M12 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25"
      id="path4"
      style="stroke:#000000;stroke-opacity:1;fill:none" />
   <path
-     style="display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.87106;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M3.137 2.57h17.618v5.265H3.137z"
-     id="path6" />
-  <path
      d="M7 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25M17 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25"
      id="path8"
      style="fill:none;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.92"
+     d="M 3.1244239,2.6267281 H 20.654378 V 7.7142856 H 3.1244239 Z"
+     id="path1" />
 </svg>
