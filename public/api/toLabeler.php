@@ -83,7 +83,7 @@ function filter_string_polyfill(string $string): string
 class TiquettesLabeler
 {
 
-    const VERSION = "1.0";
+    const VERSION = "1.1";
 
     protected string $model = '';
     protected array $options = [];
