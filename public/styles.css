@@ -890,7 +890,7 @@ input[type="range"]:focus {
 
 .bubble-item:not(.first) {
     cursor: pointer;
-    padding-block: 0.5rem;
+    padding-block: 0.75rem;
 }
 
 .bubble-item .bubble-item-inside {
@@ -927,15 +927,19 @@ input[type="range"]:focus {
 .bubble-item .bubble-item-inside span,
 .bubble-item .bubble-item-inside .span,
 .bubble-item .bubble-item-inside .bubble-form {
-    width: calc(var(--max-size) - var(--icon-container-size) - 0.5rem);
+    width: calc(var(--max-size) - var(--icon-container-size) - 1.5rem );
     transition: all 200ms ease;
-    padding-right: 0.5rem;
     align-self: center;
+    text-align: justify;
+    padding-right: 1rem;
+    padding-left: 0.5rem;
 }
 
 .bubble-item .bubble-item-inside span,
 .bubble-item .bubble-item-inside .span {
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 105%;
+    line-height: 1.5;
 }
 
 .bubble-item .bubble-item-inside span a,
