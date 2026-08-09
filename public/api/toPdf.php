@@ -38,9 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-
-require('./libs/fpdf186/fpdf.php');
 define('EURO', chr(128));
+
+//require('./libs/fpdf186/fpdf.php');
+require('./libs/fpdf19/fpdf.php');
 
 $schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
 
@@ -266,8 +267,6 @@ function mime2ext($mime)
 class TiquettesPDF extends FPDF
 {
 
-    const VERSION = "1.7";
-
     protected $javascript;
     protected $n_js;
     protected $visibility = 'all';
@@ -303,7 +302,8 @@ class TiquettesPDF extends FPDF
         $response = [
             'modules' => [
                 'php' => version_compare(phpversion(), '8.3', '>='),
-                'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
+                //'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
+                'fpdf' => file_exists('./libs/fpdf19/fpdf.php'),
                 'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
                 'php_imagick' => extension_loaded('imagick'),
                 'magick' => false,
@@ -1099,7 +1099,7 @@ class TiquettesPDF extends FPDF
         if ($this->PageNo() === 1 && $printOptions->firstPage) {
             $this->SetTextColor(170, 170, 170);
             $this->SetFont('Arial', '', 8);
-            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . $this::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI ' . trim($this->required['modules']['magick'] ? '(Magick)' : ($this->required['modules']['convert'] ? '(Convert)' : '')))), 0, 0, 'R');
+            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . FPDF::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI ' . trim($this->required['modules']['magick'] ? '(Magick)' : ($this->required['modules']['convert'] ? '(Convert)' : '')))), 0, 0, 'R');
         }
 
         if ($this->subTitle !== "" && ($this->PageNo() > 1 || !$printOptions->firstPage)) {

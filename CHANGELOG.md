@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.9] - 2026-08-08
+## [2.2.9] - 2026-08-09
 
 ### Corrections
 
@@ -9,6 +9,7 @@
 
 ### Modifications
 
+- Mise à jour de la librairie FPDF 1.8.6 => 1.9 .
 - Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
 - Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG.
 
