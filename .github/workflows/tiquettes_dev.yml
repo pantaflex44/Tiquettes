@@ -29,12 +29,14 @@ jobs:
       - name: Build dev
         run: npm run build:dev
       - name: Upload files
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        uses: eiserv/easySFTP@v3
         with:
-          sftp_only: true
-          server: ${{ secrets.FTPSERVER }}
+          host: ${{ secrets.FTPSERVER }}
           username: ${{ secrets.FTPUSERNAME }}
           password: ${{ secrets.FTPPASSWORD }}
           port: 22
-          local_path: "./dist/*"
-          remote_path: "./public/dev/"
+          source: dist
+          target: "./public/dev/"
+          # Keeps the previous trust model. Swap for
+          # known-hosts: ${{ secrets.SFTP_KNOWN_HOSTS }} once that secret exists.
+          allow-any-host-key: true
