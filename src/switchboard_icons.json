@@ -702,6 +702,16 @@
         "wire": "1.5"
     },
     {
+        "filename": "swb_circu.svg",
+        "title": "Circulateur / Pompe chauffage",
+        "modtype": "Chauffage",
+        "coef": 0.5,
+        "func": "q",
+        "crb": "C",
+        "current": "10A",
+        "wire": "1.5"
+    },
+    {
         "filename": "swb_chauffage.svg",
         "title": "Chauffage electrique / Convecteur / Radiateur",
         "modtype": "Chauffage",

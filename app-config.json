@@ -25,7 +25,7 @@
     },
     "changelog": {
         "2.2.9": {
-            "date": "2026-08-09",
+            "date": "2026-08-16",
             "actions": {
                 "patches": [
                     {
@@ -47,6 +47,13 @@
                     }
                 ],
                 "adds": [
+                    {
+                        "text": "Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage.",
+                        "from": {
+                            "name": "Formulaire de contact #1",
+                            "link": "https://www.tiquettes.fr/app/"
+                        }
+                    },
                     {
                         "text": "Ajout de nouveaux pictogrammes: Eclairages / Prises (RGIE)"
                     }

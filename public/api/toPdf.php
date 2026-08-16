@@ -18,8 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*error_reporting(E_ALL);
-ini_set('display_errors', '1');*/
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 set_time_limit(120); // 2 min
 
