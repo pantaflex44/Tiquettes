@@ -8,7 +8,7 @@ on:
 
 jobs:
   web-deploy:
-    name: FTP Deploy
+    name: FTP Deploy (tiquettes.fr - DEV)
 
     runs-on: ubuntu-latest
     env:
