@@ -1,0 +1,24 @@
+<?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
+
+const SMTP_DEBUG = SMTP::DEBUG_OFF;
+const SMTP_HOST = 'smtp.mail.fr';
+const SMTP_AUTH = true;
+const SMTP_USERNAME = 'username';
+const SMTP_PASSWORD = 'password';
+const SMTP_SECURE = PHPMailer::ENCRYPTION_SMTPS;
+const SMTP_PORT = 465;
+const SMTP_FROM = ['from mail', 'from name'];
+const SMTP_SUBJECT_PREFIX = "subject prefix or empty ";
+
+const MYSQL_HOST = "localhost";
+const MYSQL_PORT = 3306;
+const MYSQL_USER = "username";
+const MYSQL_PASS = "password";
+const MYSQL_BASE = "database name";
+
+const STATS_IGNORE_LOCALHOST = false;
+const STATS_VISITS_INTERVAL = '15 minutes';
