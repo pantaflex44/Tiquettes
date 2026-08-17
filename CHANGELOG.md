@@ -4,12 +4,12 @@
 
 ### Corrections
 
+- Mise à jour de la librairie FPDF 1.8.6 => 1.9 .
 - Mise à jour du fichier README.md
 - Mise à jour de la documentation
 
 ### Modifications
 
-- Mise à jour de la librairie FPDF 1.8.6 => 1.9 .
 - Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
 - Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG.
 

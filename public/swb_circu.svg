@@ -30,7 +30,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.79999999"
      inkscape:cx="498.75001"
-     inkscape:cy="501.25001"
+     inkscape:cy="601.25001"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -62,26 +62,27 @@
        id="path1"
        style="stroke-width:5.33333" />
     <g
-       id="g7">
+       id="g7"
+       style="stroke-width:3.84;stroke-dasharray:none">
       <path
          d="m 18.602667,32.096 c 1e-6,-7.363796 5.969537,-13.333332 13.333333,-13.333333"
          id="path2"
-         style="stroke-width:5.33333"
+         style="stroke-width:3.84;stroke-dasharray:none"
          sodipodi:nodetypes="cc" />
       <path
          d="m 45.536,31.552 c -1e-6,7.363796 -5.969537,13.333332 -13.333333,13.333333"
          id="path2-7"
-         style="stroke-width:5.33333"
+         style="stroke-width:3.84;stroke-dasharray:none"
          sodipodi:nodetypes="cc" />
       <circle
-         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.12;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.84;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;stroke-dasharray:none"
          cx="32.096001"
          cy="32.133335"
          r="5.848"
          stroke="none"
          id="circle2" />
       <circle
-         style="display:inline;fill:none;stroke:#000000;stroke-width:5.12;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:3.84;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;stroke-dasharray:none"
          cx="31.973333"
          cy="32.133335"
          r="24.120001"

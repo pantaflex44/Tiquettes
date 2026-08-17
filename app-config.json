@@ -29,6 +29,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
+                    },
+                    {
                         "text": "Mise à jour du fichier README.md"
                     },
                     {
@@ -36,9 +39,6 @@
                     }
                 ],
                 "updates": [
-                    {
-                        "text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
-                    },
                     {
                         "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
                     },
