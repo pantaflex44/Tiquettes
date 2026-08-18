@@ -55,17 +55,11 @@ ini_set('display_errors', '1');
 
 set_time_limit(120); // 2 min
 
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'cors.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./cors.php');
-}
-
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'functions.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./functions.php');
-}
+include_once('./cors.php');
+include_once('./functions.php');
 
 class TiquettesLabeler
 {
-
     const VERSION = "1.1";
 
     protected string $model = '';

@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'cors.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./cors.php');
-}
-
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'functions.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./functions.php');
-}
+include_once('./cors.php');
+include_once('./functions.php');
 
 $availlable_languages = get_availlable_languages();
 
@@ -41,7 +36,21 @@ putenv("LANG=" . $lang);
 setlocale(LC_ALL, $lang);
 
 $domain = "messages";
-bindtextdomain($domain, './locale/nocache');
+$language_files_found = glob('./locale/' . $lang . '/LC_MESSAGES/messages-v*.mo');
+if (is_array($language_files_found) && count($language_files_found) > 0) {
+    usort($language_files_found, function ($a, $b) {
+        $mtime_a = filemtime($a);
+        $mtime_b = filemtime($b);
+        if ($mtime_b > $mtime_a) {
+            return 1;
+        } else if ($mtime_b < $mtime_a) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+    $domain = basename($language_files_found[0], '.mo');
+}
 bindtextdomain($domain, './locale');
 textdomain($domain);
 

@@ -27,17 +27,9 @@ error_reporting(E_ALL);
 set_time_limit(120); // 2 min
 define('EURO', chr(128));
 
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'cors.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./cors.php');
-}
-
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'functions.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./functions.php');
-}
-
-if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'i18n.php'), get_included_files()), fn($r) => $r === true)) === 0) {
-    include_once('./i18n.php');
-}
+include_once('./cors.php');
+include_once('./functions.php');
+include_once('./i18n.php');
 
 require('./libs/fpdf19/fpdf.php');
 
@@ -70,7 +62,6 @@ class TiquettesPDF extends FPDF
     protected $showLabelsCutLines = false;
     protected $angle = 0;
 
-
     public $pageMargin = 10;
     public $pageBottomMargin = 12;
 
@@ -81,7 +72,6 @@ class TiquettesPDF extends FPDF
         $response = [
             'modules' => [
                 'php' => version_compare(phpversion(), '8.3', '>='),
-                //'fpdf' => file_exists('./libs/fpdf186/fpdf.php'),
                 'fpdf' => file_exists('./libs/fpdf19/fpdf.php'),
                 'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
                 'php_imagick' => extension_loaded('imagick'),
