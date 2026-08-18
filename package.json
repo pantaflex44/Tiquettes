@@ -24,6 +24,16 @@
         "type": "git",
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
+    "funding": [
+        {
+            "type": "individual",
+            "url": "https://www.tiquettes.fr/dons.php"
+        },
+        {
+            "type": "Ko-fi",
+            "url": "https://ko-fi.com/pantaflex44"
+        }
+    ],
     "type": "module",
     "scripts": {
         "update:all": "npx npm-check-updates -u && npm install",

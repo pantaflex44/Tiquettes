@@ -23,6 +23,16 @@
         "type": "git",
         "url": "https://github.com/pantaflex44/Tiquettes"
     },
+    "funding": [
+        {
+            "type": "individual",
+            "url": "https://www.tiquettes.fr/dons.php"
+        },
+        {
+            "type": "Ko-fi",
+            "url": "https://ko-fi.com/pantaflex44"
+        }
+    ],
     "changelog": {
         "2.2.9": {
             "date": "2026-08-18",

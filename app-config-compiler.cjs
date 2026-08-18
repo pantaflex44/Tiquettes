@@ -47,6 +47,7 @@ pkg = {
     license: appConfig.license,
     homepage: appConfig.homepage,
     repository: appConfig.repository,
+    funding: appConfig.funding,
     version,
 };
 writeFile("./package.json", pkg);
@@ -60,6 +61,7 @@ const infos = {
     author: pkg.author ?? "",
     repository: pkg.repository?.url ?? "",
     homepage: pkg.homepage ?? "",
+    funding: (pkg.funding ?? []).map(f => f.url).filter(f => typeof f === 'string'),
 };
 writeFile("./public/infos.json", infos);
 

@@ -6,5 +6,9 @@
     "license": "AGPL-3.0",
     "author": "Christophe LEMOINE",
     "repository": "https://github.com/pantaflex44/Tiquettes",
-    "homepage": "https://www.tiquettes.fr/app/"
+    "homepage": "https://www.tiquettes.fr/app/",
+    "funding": [
+        "https://www.tiquettes.fr/dons.php",
+        "https://ko-fi.com/pantaflex44"
+    ]
 }
