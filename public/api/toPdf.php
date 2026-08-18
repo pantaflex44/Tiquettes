@@ -603,33 +603,36 @@ class TiquettesPDF extends FPDF
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
-            file_put_contents($s, $svgContent);
-            $cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+            if (file_put_contents($s, $svgContent) !== false) {
+                try {
+                    $cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    $retval = 0;
+                    $output = [];
+                    $ret = exec($cmd, $output, $retval);
 
-            try {
-                $retval = 0;
-                $output = [];
-                $ret = exec($cmd, $output, $retval);
-
-                return $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
+                    return $ret !== false && $retval === 0;
+                } catch (\Exception $ex) {
+                    return false;
+                }
+            } else {
                 return false;
             }
         } else if ($this->required['modules']['convert'] === true) {
             $f = basename($pngFilepath, '.png');
             $d = dirname($pngFilepath);
             $s = "{$d}/{$f}.svg";
-            file_put_contents($s, $svgContent);
+            if (file_put_contents($s, $svgContent) !== false) {
+                try {
+                    $cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    $retval = 0;
+                    $output = [];
+                    $ret = exec($cmd, $output, $retval);
 
-            $cmd = "convert {$s} -size 100x100 -transparent white png24:{$pngFilepath}";
-
-            try {
-                $retval = 0;
-                $output = [];
-                $ret = exec($cmd, $output, $retval);
-
-                return $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
+                    return $ret !== false && $retval === 0;
+                } catch (\Exception $ex) {
+                    return false;
+                }
+            } else {
                 return false;
             }
         }
@@ -699,8 +702,6 @@ class TiquettesPDF extends FPDF
             if ($photoContent === false) {
                 return;
             }
-
-
 
             $originalPhotoPath = $tmpPath . $urlFilename . '.' . $urlExtension;
             $ok = false;
