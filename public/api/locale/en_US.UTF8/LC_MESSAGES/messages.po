@@ -1,0 +1,283 @@
+#
+# Christophe LEMOINE <pantaflex@tuta.io>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiquettes to PDF locale en_US\n"
+"POT-Creation-Date: 2026-08-18 06:45+0200\n"
+"PO-Revision-Date: 2026-08-18 14:13+0200\n"
+"Last-Translator: Christophe LEMOINE <pantaflex@tuta.io>\n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: Interrupteur différentiel\n"
+"X-Poedit-SearchPath-0: toPdf.php\n"
+
+#: toPdf.php:1161
+msgid "Tableau électrique"
+msgstr "Electrical panel"
+
+#: toPdf.php:1173
+msgid "Installateur"
+msgstr "Installer"
+
+#: toPdf.php:1217 toPdf.php:1289
+msgid "Email:"
+msgstr "Email:"
+
+#: toPdf.php:1230 toPdf.php:1302
+msgid "Téléphone:"
+msgstr "Phone:"
+
+#: toPdf.php:1249
+msgid "Client"
+msgstr "Customer"
+
+#: toPdf.php:1260
+msgid "Dossier réalisé avec"
+msgstr "Project created with"
+
+#: toPdf.php:1325
+msgid "Nom du projet"
+msgstr "Project name"
+
+#: toPdf.php:1340
+msgid "Révision"
+msgstr "Revision"
+
+#: toPdf.php:1365
+msgid "Date de création"
+msgstr "Creation date"
+
+#: toPdf.php:1380
+msgid "Dernière modification"
+msgstr "Last modified"
+
+#: toPdf.php:1395
+msgid "Type d'installation"
+msgstr "Installation type"
+
+#: toPdf.php:1400
+msgid "Résidentiel"
+msgstr "Residential"
+
+#: toPdf.php:1402
+msgid "Tertiaire"
+msgstr "Commercial"
+
+#: toPdf.php:1418
+msgid "Ce dossier contient"
+msgstr "This project contains"
+
+#: toPdf.php:1431
+msgid "Schéma unifilaire"
+msgstr "Single-line diagram"
+
+#: toPdf.php:1440 toPdf.php:1952
+msgid "Nomenclature"
+msgstr "Bill of materials"
+
+#: toPdf.php:1444
+msgid ""
+"Ce document est remis à titre indicatif et confidentiel. Toute reproduction est "
+"interdite."
+msgstr ""
+"This document is provided for informational and confidential purposes. Any "
+"reproduction is prohibited."
+
+#: toPdf.php:1459
+msgid ""
+"ATTENTION: Imprimer ce document en 'Taille réelle' ou 'Echelle 100%'. Ne pas "
+"'ajuster à la page' dans les paramètres d'impression."
+msgstr ""
+"WARNING: Print this document at 'Actual size' or '100% scale'. Do not select 'Fit "
+"to page' in the print settings."
+
+#: toPdf.php:1464
+msgid "Cette alerte est visuelle et ne sera pas imprimée sur vos documents."
+msgstr "This warning is visual and will not be printed on your documents."
+
+#: toPdf.php:1502
+#, php-format
+msgid "Etiquettes à découper: %d x %d module  /  largeur %s  /  hauteur %s"
+msgid_plural "Etiquettes à découper: %d x %d modules  /  largeur %s  /  hauteur %s"
+msgstr[0] "Labels: %d x %d module  /  width %s  /  height %s"
+msgstr[1] "Labels to cut: %d x %d modules  /  width %s  /  height %s"
+
+#: toPdf.php:1516 toPdf.php:1986
+#, php-format
+msgid "Rangée %d"
+msgstr "Row %d"
+
+#: toPdf.php:1624 toPdf.php:1818
+#, php-format
+msgid "Schéma unifilaire - Folio %d"
+msgstr "Single-line diagram - Sheet %d"
+
+#: toPdf.php:1719
+msgid "Réseau"
+msgstr "Grid"
+
+#: toPdf.php:1750 toPdf.php:1785
+#, php-format
+msgid "Folio %d"
+msgstr "Sheet %d"
+
+#: toPdf.php:1841 toPdf.php:2049 toPdf.php:2120
+#, php-format
+msgid "Type %s"
+msgstr "Type %s"
+
+#: toPdf.php:1962
+msgid "Rangée"
+msgstr "Row"
+
+#: toPdf.php:1963
+msgid "Position"
+msgstr "Position"
+
+#: toPdf.php:1964
+msgid "Type"
+msgstr "Type"
+
+#: toPdf.php:1965
+msgid "Id"
+msgstr "ID"
+
+#: toPdf.php:1966
+msgid "Fonction"
+msgstr "Function"
+
+#: toPdf.php:1967
+msgid "Libellé"
+msgstr "Label"
+
+#: toPdf.php:1968
+msgid "Annotations"
+msgstr "Annotations"
+
+#: toPdf.php:2019
+#, php-format
+msgid "P%s"
+msgstr "P%s"
+
+#: toPdf.php:2048
+msgid "-"
+msgstr "-"
+
+#: toPdf.php:2050 toPdf.php:2121
+#, php-format
+msgid "Courbe %s"
+msgstr "Curve %s"
+
+#: toPdf.php:2089
+msgid "vide"
+msgstr "empty"
+
+#: toPdf.php:2103
+msgid "Liste des modules"
+msgstr "Module list"
+
+#: toPdf.php:2137
+msgid "Désignation"
+msgstr "Description"
+
+#: toPdf.php:2138
+msgid "Quantité"
+msgstr "Quantity"
+
+#: toPdf.php:2186
+msgid ""
+"<b>Chargement du document impossible.</b><br />Veuillez relancer une impression "
+"directement via l'application."
+msgstr ""
+"<b>Unable to load the document.</b><br />Please start a new print job directly "
+"from the application."
+
+#: toPdf.php:2312
+#, php-format
+msgid "Projet '%s'"
+msgstr "Project '%s'"
+
+#: toPdf.php:2313
+#, php-format
+msgid ""
+"Projet d'un tableau électrique réalisé avec l'application tiquettes.fr %s (%s)."
+msgstr "Electrical panel project created with the tiquettes.fr application %s (%s)."
+
+#: toPdf.php:2344
+#, php-format
+msgid "Projet %s - Tiquettes %s.pdf"
+msgstr "Project %s - Tiquettes %s.pdf"
+
+msgid "Interrupteur sectionneur"
+msgstr "Switch disconnector"
+
+msgid "Interrupteur différentiel"
+msgstr "Residual-current device"
+
+msgid "Disjoncteur différentiel"
+msgstr "Residual-current circuit breaker"
+
+msgid "Disjoncteur"
+msgstr "Circuit breaker"
+
+msgid "Parafoudre"
+msgstr "Surge protective device"
+
+msgid "Fusible"
+msgstr "Fuse"
+
+msgid "Coupe Circuit"
+msgstr "Circuit isolator"
+
+msgid "Transformateur"
+msgstr "Transformer"
+
+msgid "Interrupteur"
+msgstr "Switch"
+
+msgid "Contacteur"
+msgstr "Contactor"
+
+msgid "Télérupteur"
+msgstr "Impulse relay"
+
+msgid "Sous-comptage"
+msgstr "Submetering"
+
+msgid "Autre"
+msgstr "Other"
+
+msgid "Commande"
+msgstr "Control"
+
+msgid "Commande NO"
+msgstr "NO control"
+
+msgid "Commande NF"
+msgstr "NC control"
+
+msgid "Bouton poussoir NO"
+msgstr "NO push button"
+
+msgid "Bouton poussoir NF"
+msgstr "NC push button"
+
+msgid "Voyant"
+msgstr "Indicator light"
+
+msgid "Carillon"
+msgstr "Chime"
+
+msgid "Télécommande"
+msgstr "Remote control"
+
+msgid "Prise modulaire"
+msgstr "Modular outlet"

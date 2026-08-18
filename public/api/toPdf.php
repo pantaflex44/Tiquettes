@@ -18,251 +18,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+declare(strict_types=1);
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('display_errors', '1');
 
 set_time_limit(120); // 2 min
-
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Credentials: true');
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-}
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
-}
-
 define('EURO', chr(128));
 
-//require('./libs/fpdf186/fpdf.php');
+if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'cors.php'), get_included_files()), fn($r) => $r === true)) === 0) {
+    include_once('./cors.php');
+}
+
+if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'functions.php'), get_included_files()), fn($r) => $r === true)) === 0) {
+    include_once('./functions.php');
+}
+
+if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'i18n.php'), get_included_files()), fn($r) => $r === true)) === 0) {
+    include_once('./i18n.php');
+}
+
 require('./libs/fpdf19/fpdf.php');
 
 $schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_functions.json'), true);
-
-
-function str(string $str): string|false
-{
-    return iconv('UTF-8', 'windows-1252', $str);
-}
-
-function cutStr(string $str, int $length = 50): string
-{
-    return strtok(wordwrap($str, $length, "...\n"), "\n");
-}
-
-function toFrenchDate(string $date, $withDate = true, $withHours = true): string
-{
-    $date = new \DateTimeImmutable($date);
-
-    $f = [];
-    $df = 'd/m/Y';
-    $hf = 'H:i';
-    if ($withDate)
-        $f[] = $df;
-    if ($withHours)
-        $f[] = $hf;
-    $f = implode(' à ', $f);
-
-    return $date->format($f ?: 'd/m/Y à H:i');
-}
-
-function mime2ext($mime)
-{
-    $mime_map = [
-        'video/3gpp2'                                                               => '3g2',
-        'video/3gp'                                                                 => '3gp',
-        'video/3gpp'                                                                => '3gp',
-        'application/x-compressed'                                                  => '7zip',
-        'audio/x-acc'                                                               => 'aac',
-        'audio/ac3'                                                                 => 'ac3',
-        'application/postscript'                                                    => 'ai',
-        'audio/x-aiff'                                                              => 'aif',
-        'audio/aiff'                                                                => 'aif',
-        'audio/x-au'                                                                => 'au',
-        'video/x-msvideo'                                                           => 'avi',
-        'video/msvideo'                                                             => 'avi',
-        'video/avi'                                                                 => 'avi',
-        'application/x-troff-msvideo'                                               => 'avi',
-        'application/macbinary'                                                     => 'bin',
-        'application/mac-binary'                                                    => 'bin',
-        'application/x-binary'                                                      => 'bin',
-        'application/x-macbinary'                                                   => 'bin',
-        'image/bmp'                                                                 => 'bmp',
-        'image/x-bmp'                                                               => 'bmp',
-        'image/x-bitmap'                                                            => 'bmp',
-        'image/x-xbitmap'                                                           => 'bmp',
-        'image/x-win-bitmap'                                                        => 'bmp',
-        'image/x-windows-bmp'                                                       => 'bmp',
-        'image/ms-bmp'                                                              => 'bmp',
-        'image/x-ms-bmp'                                                            => 'bmp',
-        'application/bmp'                                                           => 'bmp',
-        'application/x-bmp'                                                         => 'bmp',
-        'application/x-win-bitmap'                                                  => 'bmp',
-        'application/cdr'                                                           => 'cdr',
-        'application/coreldraw'                                                     => 'cdr',
-        'application/x-cdr'                                                         => 'cdr',
-        'application/x-coreldraw'                                                   => 'cdr',
-        'image/cdr'                                                                 => 'cdr',
-        'image/x-cdr'                                                               => 'cdr',
-        'zz-application/zz-winassoc-cdr'                                            => 'cdr',
-        'application/mac-compactpro'                                                => 'cpt',
-        'application/pkix-crl'                                                      => 'crl',
-        'application/pkcs-crl'                                                      => 'crl',
-        'application/x-x509-ca-cert'                                                => 'crt',
-        'application/pkix-cert'                                                     => 'crt',
-        'text/css'                                                                  => 'css',
-        'text/x-comma-separated-values'                                             => 'csv',
-        'text/comma-separated-values'                                               => 'csv',
-        'application/vnd.msexcel'                                                   => 'csv',
-        'application/x-director'                                                    => 'dcr',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => 'docx',
-        'application/x-dvi'                                                         => 'dvi',
-        'message/rfc822'                                                            => 'eml',
-        'application/x-msdownload'                                                  => 'exe',
-        'video/x-f4v'                                                               => 'f4v',
-        'audio/x-flac'                                                              => 'flac',
-        'video/x-flv'                                                               => 'flv',
-        'image/gif'                                                                 => 'gif',
-        'application/gpg-keys'                                                      => 'gpg',
-        'application/x-gtar'                                                        => 'gtar',
-        'application/x-gzip'                                                        => 'gzip',
-        'application/mac-binhex40'                                                  => 'hqx',
-        'application/mac-binhex'                                                    => 'hqx',
-        'application/x-binhex40'                                                    => 'hqx',
-        'application/x-mac-binhex40'                                                => 'hqx',
-        'text/html'                                                                 => 'html',
-        'image/x-icon'                                                              => 'ico',
-        'image/x-ico'                                                               => 'ico',
-        'image/vnd.microsoft.icon'                                                  => 'ico',
-        'text/calendar'                                                             => 'ics',
-        'application/java-archive'                                                  => 'jar',
-        'application/x-java-application'                                            => 'jar',
-        'application/x-jar'                                                         => 'jar',
-        'image/jp2'                                                                 => 'jp2',
-        'video/mj2'                                                                 => 'jp2',
-        'image/jpx'                                                                 => 'jp2',
-        'image/jpm'                                                                 => 'jp2',
-        'image/jpeg'                                                                => 'jpg',
-        'image/pjpeg'                                                               => 'jpg',
-        'application/x-javascript'                                                  => 'js',
-        'application/json'                                                          => 'json',
-        'text/json'                                                                 => 'json',
-        'application/vnd.google-earth.kml+xml'                                      => 'kml',
-        'application/vnd.google-earth.kmz'                                          => 'kmz',
-        'text/x-log'                                                                => 'log',
-        'audio/x-m4a'                                                               => 'm4a',
-        'audio/mp4'                                                                 => 'm4a',
-        'application/vnd.mpegurl'                                                   => 'm4u',
-        'audio/midi'                                                                => 'mid',
-        'application/vnd.mif'                                                       => 'mif',
-        'video/quicktime'                                                           => 'mov',
-        'video/x-sgi-movie'                                                         => 'movie',
-        'audio/mpeg'                                                                => 'mp3',
-        'audio/mpg'                                                                 => 'mp3',
-        'audio/mpeg3'                                                               => 'mp3',
-        'audio/mp3'                                                                 => 'mp3',
-        'video/mp4'                                                                 => 'mp4',
-        'video/mpeg'                                                                => 'mpeg',
-        'application/oda'                                                           => 'oda',
-        'audio/ogg'                                                                 => 'ogg',
-        'video/ogg'                                                                 => 'ogg',
-        'application/ogg'                                                           => 'ogg',
-        'font/otf'                                                                  => 'otf',
-        'application/x-pkcs10'                                                      => 'p10',
-        'application/pkcs10'                                                        => 'p10',
-        'application/x-pkcs12'                                                      => 'p12',
-        'application/x-pkcs7-signature'                                             => 'p7a',
-        'application/pkcs7-mime'                                                    => 'p7c',
-        'application/x-pkcs7-mime'                                                  => 'p7c',
-        'application/x-pkcs7-certreqresp'                                           => 'p7r',
-        'application/pkcs7-signature'                                               => 'p7s',
-        'application/pdf'                                                           => 'pdf',
-        'application/octet-stream'                                                  => 'pdf',
-        'application/x-x509-user-cert'                                              => 'pem',
-        'application/x-pem-file'                                                    => 'pem',
-        'application/pgp'                                                           => 'pgp',
-        'application/x-httpd-php'                                                   => 'php',
-        'application/php'                                                           => 'php',
-        'application/x-php'                                                         => 'php',
-        'text/php'                                                                  => 'php',
-        'text/x-php'                                                                => 'php',
-        'application/x-httpd-php-source'                                            => 'php',
-        'image/png'                                                                 => 'png',
-        'image/x-png'                                                               => 'png',
-        'application/powerpoint'                                                    => 'ppt',
-        'application/vnd.ms-powerpoint'                                             => 'ppt',
-        'application/vnd.ms-office'                                                 => 'ppt',
-        'application/msword'                                                        => 'doc',
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
-        'application/x-photoshop'                                                   => 'psd',
-        'image/vnd.adobe.photoshop'                                                 => 'psd',
-        'audio/x-realaudio'                                                         => 'ra',
-        'audio/x-pn-realaudio'                                                      => 'ram',
-        'application/x-rar'                                                         => 'rar',
-        'application/rar'                                                           => 'rar',
-        'application/x-rar-compressed'                                              => 'rar',
-        'audio/x-pn-realaudio-plugin'                                               => 'rpm',
-        'application/x-pkcs7'                                                       => 'rsa',
-        'text/rtf'                                                                  => 'rtf',
-        'text/richtext'                                                             => 'rtx',
-        'video/vnd.rn-realvideo'                                                    => 'rv',
-        'application/x-stuffit'                                                     => 'sit',
-        'application/smil'                                                          => 'smil',
-        'text/srt'                                                                  => 'srt',
-        'image/svg+xml'                                                             => 'svg',
-        'application/x-shockwave-flash'                                             => 'swf',
-        'application/x-tar'                                                         => 'tar',
-        'application/x-gzip-compressed'                                             => 'tgz',
-        'image/tiff'                                                                => 'tiff',
-        'font/ttf'                                                                  => 'ttf',
-        'text/plain'                                                                => 'txt',
-        'text/x-vcard'                                                              => 'vcf',
-        'application/videolan'                                                      => 'vlc',
-        'text/vtt'                                                                  => 'vtt',
-        'audio/x-wav'                                                               => 'wav',
-        'audio/wave'                                                                => 'wav',
-        'audio/wav'                                                                 => 'wav',
-        'application/wbxml'                                                         => 'wbxml',
-        'video/webm'                                                                => 'webm',
-        'image/webp'                                                                => 'webp',
-        'audio/x-ms-wma'                                                            => 'wma',
-        'application/wmlc'                                                          => 'wmlc',
-        'video/x-ms-wmv'                                                            => 'wmv',
-        'video/x-ms-asf'                                                            => 'wmv',
-        'font/woff'                                                                 => 'woff',
-        'font/woff2'                                                                => 'woff2',
-        'application/xhtml+xml'                                                     => 'xhtml',
-        'application/excel'                                                         => 'xl',
-        'application/msexcel'                                                       => 'xls',
-        'application/x-msexcel'                                                     => 'xls',
-        'application/x-ms-excel'                                                    => 'xls',
-        'application/x-excel'                                                       => 'xls',
-        'application/x-dos_ms_excel'                                                => 'xls',
-        'application/xls'                                                           => 'xls',
-        'application/x-xls'                                                         => 'xls',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'         => 'xlsx',
-        'application/vnd.ms-excel'                                                  => 'xlsx',
-        'application/xml'                                                           => 'xml',
-        'text/xml'                                                                  => 'xml',
-        'text/xsl'                                                                  => 'xsl',
-        'application/xspf+xml'                                                      => 'xspf',
-        'application/x-compress'                                                    => 'z',
-        'application/x-zip'                                                         => 'zip',
-        'application/zip'                                                           => 'zip',
-        'application/x-zip-compressed'                                              => 'zip',
-        'application/s-compressed'                                                  => 'zip',
-        'multipart/x-zip'                                                           => 'zip',
-        'text/x-scriptzsh'                                                          => 'zsh',
-    ];
-
-    return isset($mime_map[$mime]) ? $mime_map[$mime] : false;
-}
 
 class TiquettesPDF extends FPDF
 {
@@ -662,7 +441,7 @@ class TiquettesPDF extends FPDF
             // do page number replacement
             foreach ($this->PageGroups as $k => $v) {
                 for ($n = 1; $n <= $nb; $n++) {
-                    $this->pages[$n] = str_replace($k, $v, $this->pages[$n]);
+                    $this->pages[$n] = str_replace($k, "{$v}", $this->pages[$n]);
                 }
             }
         }
@@ -1173,8 +952,7 @@ class TiquettesPDF extends FPDF
         // Titre
         $this->SetY($this->pageMargin + 15);
         $this->SetFont('Arial', 'B', 36);
-        $this->Cell(0, 10, str('Tableau électrique'), 0, 0, 'C');
-
+        $this->Cell(0, 10, str(_('Tableau électrique')), 0, 0, 'C');
         // Cadre installateur
         $this->SetY($this->pageMargin + 40);
         $this->SetX($this->pageMargin);
@@ -1186,7 +964,7 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 10, str('Installateur'), 0, 0, '');
+        $this->Cell(0, 10, str(_('Installateur')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->from?->logo ?? false) === true) {
             $logo = trim($switchboard?->firstPageInfos?->from?->logo ?? "");
@@ -1230,7 +1008,7 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 42);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
-                $this->Cell(0, 5, str('Email:'), 0, 0, '');
+                $this->Cell(0, 5, str(_('Email:')), 0, 0, '');
                 $this->SetY($this->pageMargin + 40 + 42);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
@@ -1243,7 +1021,7 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 49);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
-                $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
+                $this->Cell(0, 5, str(_('Téléphone:')), 0, 0, '');
                 $this->SetY($this->pageMargin + 40 + 49);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
@@ -1262,7 +1040,7 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 10, str('Client'), 0, 0, '');
+        $this->Cell(0, 10, str(_('Client')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
 
         $left = $this->pageMargin + 2 + 7;
@@ -1273,7 +1051,7 @@ class TiquettesPDF extends FPDF
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 48);
         $this->SetX($this->pageMargin + 8);
         $this->SetFont('Arial', '', 10);
-        $this->Cell(0, 4, str('Dossier réalisé avec'), 0, 0, '');
+        $this->Cell(0, 4, str(_('Dossier réalisé avec')), 0, 0, '');
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 52);
         $this->SetX($this->pageMargin + 8);
         $this->SetFont('Arial', 'B', 10);
@@ -1302,7 +1080,7 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 42);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
-                $this->Cell(0, 5, str('Email:'), 0, 0, '');
+                $this->Cell(0, 5, str(_('Email:')), 0, 0, '');
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 42);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
@@ -1315,7 +1093,7 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 49);
                 $this->SetX($this->pageMargin + 65);
                 $this->SetFont('Arial', '', 12);
-                $this->Cell(0, 5, str('Téléphone:'), 0, 0, '');
+                $this->Cell(0, 5, str(_('Téléphone:')), 0, 0, '');
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 49);
                 $this->SetX($this->pageMargin + 65 + 30);
                 $this->SetFont('Arial', 'B', 12);
@@ -1338,7 +1116,7 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 10, str('Nom du projet'), 0, 0, '');
+        $this->Cell(0, 10, str(_('Nom du projet')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->projectName ?? false) === true) {
             $prjname = trim($switchboard?->prjname ?? "");
@@ -1353,10 +1131,13 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str('Révision'), 0, 0, '');
+        $this->Cell(0, 4, str(_('Révision')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->projectVersion ?? false) === true) {
-            $prjversion = trim($switchboard?->prjversion ?? "");
+            $prjversion = $switchboard?->prjversion ?? "";
+            if (!is_string($prjversion))
+                $prjversion = "{$prjversion}";
+            $prjversion = trim($prjversion);
             if ($prjversion !== "") {
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 38.5);
                 $this->SetX($this->pageMargin + 40);
@@ -1375,7 +1156,7 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str('Date de création'), 0, 0, '');
+        $this->Cell(0, 4, str(_('Date de création')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->projectCreated ?? false) === true) {
             $prjcreated = trim($switchboard?->prjcreated ?? "");
@@ -1383,14 +1164,14 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 48.5);
                 $this->SetX($this->pageMargin + 40);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str(toFrenchDate($prjcreated, true, false)), 0, 'L', false, 1);
+                $this->MultiCell(0, 5, str(i18n_datetime($prjcreated, IntlDateFormatter::SHORT, IntlDateFormatter::NONE)), 0, 'L', false, 1);
             }
         }
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 49);
         $this->SetX($this->pageMargin + 95);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str('Dernière modification'), 0, 0, '');
+        $this->Cell(0, 4, str(_('Dernière modification')), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->projectUpdated ?? false) === true) {
             $prjupdated = trim($switchboard?->prjupdated ?? "");
@@ -1398,21 +1179,21 @@ class TiquettesPDF extends FPDF
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 48.5);
                 $this->SetX($this->pageMargin + 140);
                 $this->SetFont('Arial', 'B', 12);
-                $this->MultiCell(0, 5, str(toFrenchDate($prjupdated, true, false)), 0, 'L', false, 1);
+                $this->MultiCell(0, 5, str(i18n_datetime($prjupdated, IntlDateFormatter::SHORT, IntlDateFormatter::NONE)), 0, 'L', false, 1);
             }
         }
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 59);
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str("Type d'installation"), 0, 0, '');
+        $this->Cell(0, 4, str(_("Type d'installation")), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
         if (($printOptions->pdfOptions?->firstPageView?->projectType ?? false) === true) {
             $projectType = trim($switchboard?->projectType ?? "");
             if ($projectType === 'R') {
-                $projectType = 'Résidentiel';
+                $projectType = _('Résidentiel');
             } else if ($projectType === 'T') {
-                $projectType = 'Tertiaire';
+                $projectType = _('Tertiaire');
             }
             if ($projectType !== "") {
                 $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 58.5);
@@ -1428,7 +1209,7 @@ class TiquettesPDF extends FPDF
         $this->SetX($this->pageMargin + 2);
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 139, 139);
-        $this->Cell(0, 4, str("Ce dossier contient"), 0, 0, '');
+        $this->Cell(0, 4, str(_("Ce dossier contient")), 0, 0, '');
         $this->SetTextColor(0, 0, 0);
 
         $squareIcon = $this->getIcon('square.svg', false, 32);
@@ -1441,7 +1222,7 @@ class TiquettesPDF extends FPDF
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 78 + 0.30);
         $this->SetX($this->pageMargin + 8 + 7);
         $this->SetFont('Arial', 'B', 12);
-        $this->MultiCell(0, 5, str('Schéma unifilaire'), 0, 'L', false, 1);
+        $this->MultiCell(0, 5, str(_('Schéma unifilaire')), 0, 'L', false, 1);
 
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 84);
         $this->SetX($this->pageMargin + 8 + 1);
@@ -1450,11 +1231,11 @@ class TiquettesPDF extends FPDF
         $this->SetY($this->pageMargin + 40 + 60 + 5 + 60 + 5 + 84 + 0.30);
         $this->SetX($this->pageMargin + 8 + 7);
         $this->SetFont('Arial', 'B', 12);
-        $this->MultiCell(0, 5, str('Nomenclature'), 0, 'L', false, 1);
+        $this->MultiCell(0, 5, str(_('Nomenclature')), 0, 'L', false, 1);
 
         $this->SetFont('Arial', '', 8);
         $this->SetTextColor(100, 100, 100);
-        $txt = "Ce document est remis à titre indicatif et confidentiel. Toute reproduction est interdite.";
+        $txt = _("Ce document est remis à titre indicatif et confidentiel. Toute reproduction est interdite.");
         $x = ($this->GetPageWidth() / 2) - ($this->GetStringWidth($txt) / 2);
         $y = $this->pageMargin + 40 + 60 + 5 + 60 + 5 + 100 + 7;
         $this->Text($x, $y, str($txt));
@@ -1469,12 +1250,12 @@ class TiquettesPDF extends FPDF
         $w = $this->GetPageWidth() - (2 * $this->pageMargin);
         $this->SetX(($this->GetPageWidth() / 2) - ($w / 2));
         $this->SetY(11);
-        $this->MultiCell($w, 5, str("ATTENTION: Imprimer ce document en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression."), 0, 'L', true);
+        $this->MultiCell($w, 5, str(_("ATTENTION: Imprimer ce document en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression.")), 0, 'L', true);
 
         $w = $this->GetPageWidth() - (2 * $this->pageMargin);
         $this->SetX(($this->GetPageWidth() / 2) - ($w / 2));
         $this->SetY(41);
-        $this->MultiCell($w, 5, str("Cette alerte est visuelle et ne sera pas imprimée sur vos documents."), 0, 'L', true);
+        $this->MultiCell($w, 5, str(_("Cette alerte est visuelle et ne sera pas imprimée sur vos documents.")), 0, 'L', true);
 
         $this->SetVisibility('all');
 
@@ -1512,7 +1293,7 @@ class TiquettesPDF extends FPDF
             $this->grid = false;
             $rowsCount = count($switchboard->rows);
             $modulesCount = $switchboard->stepsPerRows;
-            $this->subTitle = "Etiquettes à découper: {$rowsCount} x {$modulesCount} module" . ($modulesCount > 1 ? "s" : "") . "  /  largeur {$w}mm  /  hauteur {$h}mm";
+            $this->subTitle = sprintf(ngettext("Etiquettes à découper: %d x %d module  /  largeur %s  /  hauteur %s", "Etiquettes à découper: %d x %d modules  /  largeur %s  /  hauteur %s", $modulesCount), $rowsCount, $modulesCount, i18n_size_mm($w, true), i18n_size_mm($h, true));
             $this->StartPageGroup();
             $this->AddPage('L', $labelsPrintFormat, 0);
             $this->SetVisibility('all');
@@ -1526,7 +1307,7 @@ class TiquettesPDF extends FPDF
 
                 $this->SetTextColor(170, 170, 170);
                 $this->SetFont('Arial', '', 10);
-                $this->Cell(0, 7, str("Rangée " . ($i + 1)), 0, 0, 'L');
+                $this->Cell(0, 7, str(sprintf(_("Rangée %d"), $i + 1)), 0, 0, 'L');
                 $this->Ln(7);
 
                 $x = $this->pageMargin;
@@ -1634,7 +1415,7 @@ class TiquettesPDF extends FPDF
         $this->StartPageGroup();
 
         $this->schemaCurrentFolio = $schemaFolioStart;
-        $this->subTitle = "Schéma unifilaire - Folio " . $this->schemaCurrentFolio;
+        $this->subTitle = sprintf(_("Schéma unifilaire - Folio %d"), $this->schemaCurrentFolio);
         $this->AddPage($this->gridOrientation, $schemaPrintFormat, 0);
         $this->drawGroundLine();
 
@@ -1729,7 +1510,7 @@ class TiquettesPDF extends FPDF
 
             $this->SetTextColor(50, 50, 50);
             $this->SetFont('Arial', '', 6);
-            $t = $m->id === 'DB' ? "Réseau" : ($m->srcId ?? "");
+            $t = $m->id === 'DB' ? _("Réseau") : ($m->srcId ?? "");
             $t = substr($t, 0, 50);
             $fs = str($t);
             $this->Text($lx + 3, $ly - 1, $fs);
@@ -1760,7 +1541,7 @@ class TiquettesPDF extends FPDF
 
                 $this->SetFont('Arial', '', 5);
                 $folio = $this->schemaCurrentFolio - 1;
-                $fs = str("Folio {$folio}");
+                $fs = str(sprintf(_("Folio %d"), $folio));
                 $this->Text($lx + 2.5, $ly - 1, $fs);
             }
         }
@@ -1795,7 +1576,7 @@ class TiquettesPDF extends FPDF
 
                 $this->SetFont('Arial', '', 5);
                 $folio = $this->schemaCurrentFolio + 1;
-                $fs = str("Folio {$folio}");
+                $fs = str(sprintf(_("Folio %d"), $folio));
                 $this->Text($lx - $this->GetStringWidth($fs) - 2.5, $ly - 1, $fs);
 
                 $pms = array_values(array_filter($flattenModules, fn($pm) => $m->parentId === $pm->id));
@@ -1828,7 +1609,7 @@ class TiquettesPDF extends FPDF
             $this->drawNextLine($lastModule, $level);
 
             $this->schemaCurrentFolio++;
-            $this->subTitle = "Schéma unifilaire - Folio " . $this->schemaCurrentFolio;
+            $this->subTitle = sprintf(_("Schéma unifilaire - Folio %d"), $this->schemaCurrentFolio);
             $this->AddPage($this->gridOrientation, $schemaPrintFormat, 0);
             $this->drawGroundLine();
             $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
@@ -1851,7 +1632,7 @@ class TiquettesPDF extends FPDF
             $this->SetFont('Arial', '', 6);
 
             $lines = [
-                $sf['hasType'] && $module->type ? str("Type " . $module->type ?? '') : '',
+                $sf['hasType'] && $module->type ? str(sprintf(_("Type %s"), $module->type) ?? '') : '',
                 $sf['hasType'] && $module->type ? str($module->sensibility ?? '') : '',
                 str(trim(($sf['hasCrb'] && $module->crb ? ($module->crb ?? '') : '') . ' ' . ($sf['hasCurrent'] && $module->current ? ($module->current ?? '') : ''))),
                 str($module->pole ?? '')
@@ -1962,7 +1743,7 @@ class TiquettesPDF extends FPDF
         global $switchboard, $printOptions, $summaryPrintFormat, $schemaFunctions;
 
         $this->grid = false;
-        $this->subTitle = "Nomenclature";
+        $this->subTitle = _("Nomenclature");
         $this->StartPageGroup();
         $this->AddPage('L', $summaryPrintFormat, 0);
         $this->SetVisibility('all');
@@ -1972,13 +1753,13 @@ class TiquettesPDF extends FPDF
         $this->SetTextColor(0, 0, 0);
         $oldPosX = $this->pageMargin;
         $columns = [
-            ['id' => 'row', 'text' => 'Rangée', 'w' => 28, 'align' => 'L'],
-            ['id' => 'column', 'text' => 'Position', 'w' => 17, 'align' => 'L'],
-            ['id' => 'type', 'text' => 'Type', 'w' => 15, 'align' => 'C'],
-            ['id' => 'identifiant', 'text' => 'Id', 'w' => 20, 'align' => 'L'],
-            ['id' => 'function', 'text' => 'Fonction', 'w' => 53, 'align' => 'L'],
-            ['id' => 'label', 'text' => 'Libellé', 'w' => 70, 'align' => 'L'],
-            ['id' => 'description', 'text' => 'Annotations', 'w' => 74, 'align' => 'L'],
+            ['id' => 'row', 'text' => _('Rangée'), 'w' => 28, 'align' => 'L'],
+            ['id' => 'column', 'text' => _('Position'), 'w' => 17, 'align' => 'L'],
+            ['id' => 'type', 'text' => _('Type'), 'w' => 15, 'align' => 'C'],
+            ['id' => 'identifiant', 'text' => _('Id'), 'w' => 20, 'align' => 'L'],
+            ['id' => 'function', 'text' => _('Fonction'), 'w' => 53, 'align' => 'L'],
+            ['id' => 'label', 'text' => _('Libellé'), 'w' => 70, 'align' => 'L'],
+            ['id' => 'description', 'text' => _('Annotations'), 'w' => 74, 'align' => 'L'],
         ];
         foreach ($columns as $column) {
             $this->SetX($oldPosX);
@@ -1991,12 +1772,12 @@ class TiquettesPDF extends FPDF
             $oldPosX = $this->pageMargin;
 
             $rowPosition = $i + 1;
-            $rowPositionText = str_pad($rowPosition, strlen(strval(count($switchboard->rows))), '0', STR_PAD_LEFT);
+            $rowPositionText = str_pad("{$rowPosition}", strlen(strval(count($switchboard->rows))), '0', STR_PAD_LEFT);
 
             $this->SetFont('Arial', '', 10);
             $this->SetTextColor(0, 0, 0);
             $this->SetX($oldPosX + 5);
-            $this->Cell($columns[0]['w'], 8, str("Rangée {$rowPositionText}"), 0, 0, $columns[0]['align']);
+            $this->Cell($columns[0]['w'], 8, str(sprintf(_("Rangée %d"), $rowPositionText)), 0, 0, $columns[0]['align']);
             $this->SetX($oldPosX);
             $this->Image('./libs/toPdf/assets/summary_row.png', $oldPosX, $this->GetY() + 1.9, 4, 4, 'PNG');
 
@@ -2007,7 +1788,7 @@ class TiquettesPDF extends FPDF
 
                 $oldPosX = $this->pageMargin + $columns[0]['w'];
                 $columnPosition = $j + 1;
-                $columnPositionText = str_pad($columnPosition, strlen(strval(count($switchboard->rows[$i]))), '0', STR_PAD_LEFT);
+                $columnPositionText = str_pad("{$columnPosition}", strlen(strval(count($switchboard->rows[$i]))), '0', STR_PAD_LEFT);
 
                 $module = $switchboard->rows[$i][$j];
                 if (!$module->free && ($module->func ?? '') !== '') {
@@ -2029,7 +1810,7 @@ class TiquettesPDF extends FPDF
 
                     $this->SetFont('Arial', '', 10);
                     $this->SetX($oldPosX + 5);
-                    $this->Cell($columns[1]['w'], 8, str("P{$columnPositionText}"), 0, 0, $columns[1]['align']);
+                    $this->Cell($columns[1]['w'], 8, str(sprintf(_("P%s"), $columnPositionText)), 0, 0, $columns[1]['align']);
                     $this->SetX($oldPosX);
                     $this->Image('./libs/toPdf/assets/summary_position.png', $oldPosX, $this->GetY() + 1.9, 4, 4, 'PNG');
                     $oldPosX += $columns[1]['w'];
@@ -2056,12 +1837,11 @@ class TiquettesPDF extends FPDF
                         $maxheight = $this->GetY();
 
                     $oldPosY = $this->GetY();
-
                     $this->SetFont('Arial', '', 9);
                     $this->SetX($oldPosX);
-                    $fname = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '-';
-                    $ftype = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? 'Type ' . trim($module->type) : '') : '-';
-                    $fcrb = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? 'Courbe ' . trim($module->crb) : '') : '-';
+                    $fname = _(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '-');
+                    $ftype = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? sprintf(_('Type %s'), trim($module->type)) : '') : '-';
+                    $fcrb = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '-';
                     $fsensibility = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '-';
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
@@ -2100,7 +1880,7 @@ class TiquettesPDF extends FPDF
                 $this->SetFont('Arial', '', 8);
                 $this->SetTextColor(100, 100, 100);
                 $this->SetX($this->pageMargin + $columns[0]['w'] + 5);
-                $this->Cell(0, 8, str("vide"), 0, 0, 'L');
+                $this->Cell(0, 8, str(_("vide")), 0, 0, 'L');
 
                 $this->Ln(3);
             }
@@ -2114,7 +1894,7 @@ class TiquettesPDF extends FPDF
         global $switchboard, $printOptions, $schemaFunctions;
 
         $this->grid = false;
-        $this->subTitle = "Liste des modules";
+        $this->subTitle = _("Liste des modules");
         $this->StartPageGroup();
         $this->AddPage('P', 'A4', 0);
         $this->SetVisibility('all');
@@ -2130,9 +1910,9 @@ class TiquettesPDF extends FPDF
             for ($j = 0; $j < $totalModules; $j++) {
                 $module = $switchboard->rows[$i][$j];
                 if (!is_null($module) && ($module->func ?? '') !== '' && ($module->func ?? '') !== 'o'  && !$module->free) {
-                    $fname = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '');
-                    $ftype = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? 'Type ' . trim($module->type) : '') : '');
-                    $fcrb = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? 'Courbe ' . trim($module->crb) : '') : '');
+                    $fname = _(trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : ''));
+                    $ftype = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? sprintf(_('Type %s'), trim($module->type)) : '') : '');
+                    $fcrb = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '');
                     $fsensibility = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '');
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
@@ -2148,8 +1928,8 @@ class TiquettesPDF extends FPDF
         ksort($modules);
 
         $columns = [
-            ['id' => 'name', 'text' => 'Désignation', 'w' => 170, 'align' => 'L'],
-            ['id' => 'quantity', 'text' => 'Quantité', 'w' => 20, 'align' => 'R'],
+            ['id' => 'name', 'text' => _('Désignation'), 'w' => 170, 'align' => 'L'],
+            ['id' => 'quantity', 'text' => _('Quantité'), 'w' => 20, 'align' => 'R'],
         ];
         $this->SetFont('Arial', 'B', 11);
         $this->SetTextColor(0, 0, 0);
@@ -2172,7 +1952,7 @@ class TiquettesPDF extends FPDF
             $this->SetX($oldPosX);
             $this->Cell($columns[0]['w'], 8, str($k), 0, 0, 'L');
 
-            $counter = str_pad($v, $counterMax < 10 ? 2 : strlen(strval($counterMax)), ' ', STR_PAD_LEFT);
+            $counter = str_pad("{$v}", $counterMax < 10 ? 2 : strlen(strval($counterMax)), ' ', STR_PAD_LEFT);
             $this->SetX($oldPosX + $columns[0]['w']);
             $this->Cell($columns[1]['w'], 8, str($counter), 0, 0, 'R');
 
@@ -2192,16 +1972,12 @@ if (isset($_GET['require'])) {
 }
 
 
-if (!isset($_POST['switchboard'])) {
-    echo 'Missing switchboard parameter';
-    exit;
-}
-if (!isset($_POST['printOptions'])) {
-    echo 'Missing printOptions parameter';
-    exit;
-}
-if (!isset($_POST['tv'])) {
-    echo 'Missing tv parameter';
+if (
+    !isset($_POST['switchboard']) ||
+    !isset($_POST['printOptions']) ||
+    !isset($_POST['tv'])
+) {
+    echo _("<b>Chargement du document impossible.</b><br />Veuillez relancer une impression directement via l'application.");
     exit;
 }
 
@@ -2264,14 +2040,6 @@ if ($switchboard->withDb) {
     ]);
 }
 
-function existsInFlattenModules(string $id): bool
-{
-    global $flattenModules;
-
-    $found = array_values(array_filter($flattenModules, fn($m) => $m->id === $id));
-    return count($found) === 1;
-}
-
 foreach ($flattenModules as $module) {
     $kcId = trim($module->kcId ?? '');
     $kcId_a = explode('|', $kcId);
@@ -2282,7 +2050,7 @@ foreach ($flattenModules as $module) {
             $kcModule = $kcModule[0];
 
             if (property_exists($module, 'partialKc')) {
-                if ($module->partialKc === true && !existsInFlattenModules('| ' . $module->id)) {
+                if ($module->partialKc === true && !existsInFlattenModules($flattenModules, '| ' . $module->id)) {
                     $flattenModules[] = (object) array_merge((array) $module, [
                         'kcId' => '',
                         'id' => '| ' . $module->id,
@@ -2327,8 +2095,8 @@ $pdf = new TiquettesPDF();
 $fromName = trim($switchboard?->firstPageInfos?->from?->name ?? "");
 $pdf->SetAuthor($fromName !== "" ? $fromName : 'tiquettes.fr' . ' ' . $tv, true);
 $pdf->SetCreator($fromName !== "" ? $fromName : 'tiquettes.fr' . ' ' . $tv, true);
-$pdf->SetTitle("Projet '" . $switchboard->prjname . "'", true);
-$pdf->SetSubject("Projet d'un tableau électrique réalisé avec l'application tiquettes.fr " . $tv . " (https://www.tiquettes.fr/app/).", true);
+$pdf->SetTitle(sprintf(_("Projet '%s'"), $switchboard->prjname), true);
+$pdf->SetSubject(sprintf(_("Projet d'un tableau électrique réalisé avec l'application tiquettes.fr %s (%s)."), $tv, 'https://www.tiquettes.fr/app/'), true);
 $pdf->SetCompression(true);
 $pdf->SetDisplayMode('real', 'default');
 $pdf->SetMargins(10, 10);
@@ -2351,12 +2119,5 @@ if ($printOptions->labels === true)
 if ($auto)
     $pdf->AutoPrint(true);
 
-/*if (!headers_sent()) {
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache"); // HTTP/1.0
-    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-}*/
-
-echo $pdf->Output('I', "Projet " . $switchboard->prjname . " - Tiquettes " . $tv . ".pdf", true);
+headers_no_cache();
+echo $pdf->Output('I', sprintf(_("Projet %s - Tiquettes %s.pdf"), $switchboard->prjname, $tv), true);

@@ -103,6 +103,7 @@ function App() {
     const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
     const [firstpageOptionsPopup, setFirstpageOptionsPopup] = useState(false);
     const [newProjectPopup, setNewProjectPopup] = useState(false);
+    const [apiAvaillableLanguages, setApiAvaillableLanguages] = useState([]);
 
     const UIFrozen = useMemo(() => {
         return clipboard !== null
@@ -156,6 +157,7 @@ function App() {
     };
 
     const defaultPrintOptions = useMemo(() => ({
+        lang: 'fr_FR',
         firstPage: false,
         labels: true,
         summary: false,
@@ -954,7 +956,7 @@ function App() {
             form.style.display = "none";
             form.name = "toPdfForm";
             form.method = 'POST';
-            form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php";
+            form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php?lang=" + po.lang;
             if (po.pdfOptions.openWindow) form.target = '_blank';
 
             let params = Object.fromEntries(Object.entries({
@@ -1019,6 +1021,7 @@ function App() {
             data = atob(data);
             _importProject(data);
 
+            const lang = getUrlParam('lng', 'string', defaultPrintOptions.lang);
             const firstPage = getUrlParam('fp', 'boolean', defaultPrintOptions.firstPage);
             const freeModules = getUrlParam('fm', 'boolean', defaultPrintOptions.freeModules);
             const labels = getUrlParam('vl', 'boolean', defaultPrintOptions.labels);
@@ -1037,6 +1040,7 @@ function App() {
 
             toPdf(false, {
                 ...defaultPrintOptions,
+                lang,
                 firstPage,
                 freeModules,
                 labels,
@@ -1898,6 +1902,26 @@ function App() {
             }
             return true;
         });
+
+        fetch(import.meta.env.VITE_APP_API_URL + "i18n.php?api_availlable", {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setApiAvaillableLanguages(data);
+                } else {
+                    setApiAvaillableLanguages([]);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                setApiAvaillableLanguages([]);
+            });
+
     }, []);
 
     return (
@@ -1989,7 +2013,14 @@ function App() {
                 {/** TOOLBAR PRINT **/}
                 {/** ----------------------------------------------------------- */}
 
-                <button ref={printMenuRef} className="button_group-print_project dropdown_container" title="Imprimer..." onMouseLeave={() => printMenuRef.current.classList.remove('clicked')} onBlur={() => printMenuRef.current.classList.remove('clicked')}>
+                <button ref={printMenuRef} className="button_group-print_project dropdown_container" title="Imprimer..."
+                    onMouseLeave={() => {
+                        printMenuRef.current.classList.remove('clicked');
+                    }}
+                    onBlur={() => {
+                        printMenuRef.current.classList.remove('clicked');
+                    }}
+                >
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
                     <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '70px' }}>
@@ -2236,7 +2267,27 @@ function App() {
                                 d&#39;impressions</label>
                         </div>
 
-                        {/*<div className="dropdown_separator2"></div>*/}
+                        {Array.isArray(apiAvaillableLanguages) && apiAvaillableLanguages.length > 0 && <>
+                            <div className="dropdown_separator"></div>
+                            <div className="dropdown_item head"
+                                title="Traduire le projet imprimé">
+                                <label style={{ fontWeight: 500 }} htmlFor="print_language">Langue du projet imprimé:</label>
+                            </div>
+                            <div className="dropdown_item head"
+                                title="Traduire le projet imprimé">
+                                <select style={{ width: '100%' }} name="print_language" id="print_language" value={printOptions.lang}
+                                    onChange={(e) => setPrintOptions((old) => ({
+                                        ...old,
+                                        lang: e.target.value
+                                    }))}
+                                    onFocus={() => {
+                                        printMenuRef.current.classList.add('clicked');
+                                    }}
+                                >
+                                    {apiAvaillableLanguages.map(l => <option key={l.locale} value={l.locale}>{l.display.name}</option>)}
+                                </select>
+                            </div>
+                        </>}
 
                         {/** ----------------------------------------------------------- */}
                         {/** PRINT BUTTON **/}

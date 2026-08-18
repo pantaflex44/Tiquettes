@@ -55,30 +55,13 @@ ini_set('display_errors', '1');
 
 set_time_limit(120); // 2 min
 
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Credentials: true');
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-}
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers:{$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
+if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'cors.php'), get_included_files()), fn($r) => $r === true)) === 0) {
+    include_once('./cors.php');
 }
 
-
-function filter_string_polyfill(string $string): string
-{
-    $str = preg_replace('/\x00|<[^>]*>?/', '', $string);
-    return str_replace(["'", '"'], ['&#39;', '&#34;'], $str);
+if (count(array_filter(array_map(fn($f) => false !== strpos($f, 'functions.php'), get_included_files()), fn($r) => $r === true)) === 0) {
+    include_once('./functions.php');
 }
-
-
-
 
 class TiquettesLabeler
 {

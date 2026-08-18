@@ -408,6 +408,11 @@ option[disabled] {
     display: flex;
 }
 
+.dropdown_container:not(:disabled) .dropdown:has(.dropdown_item option:hover) {
+    border-color: red !important;
+    display: flex !important;
+}
+
 .dropdown_container .dropdown .dropdown_item {
     display: flex;
     flex-direction: row;
@@ -533,11 +538,11 @@ option[disabled] {
 }
 
 .dropdown_container .dropdown .dropdown_separator2 {
-    width: calc(100% - 1rem);
+    width: calc(100% - 2rem);
     height: 1px;
     background-color: #ddd;
     margin-block: 0.5em;
-    margin-left: 1rem;
+    margin-inline: 1rem;
 }
 
 .dropdown_container .dropdown .dropdown_header {

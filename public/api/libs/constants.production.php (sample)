@@ -19,6 +19,3 @@ const MYSQL_PORT = 3306;
 const MYSQL_USER = "username";
 const MYSQL_PASS = "password";
 const MYSQL_BASE = "database name";
-
-const STATS_IGNORE_LOCALHOST = false;
-const STATS_VISITS_INTERVAL = '15 minutes';
