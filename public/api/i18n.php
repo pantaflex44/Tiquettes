@@ -36,11 +36,15 @@ if (!in_array($lang, $availlable_languages)) {
     $lang = 'fr_FR';
 }
 $lang .= '.UTF8';
+
 putenv("LANG=" . $lang);
 setlocale(LC_ALL, $lang);
+
 $domain = "messages";
-bindtextdomain($domain, "locale");
+bindtextdomain($domain, './locale/nocache');
+bindtextdomain($domain, './locale');
 textdomain($domain);
+
 bind_textdomain_codeset($domain, 'UTF-8');
 
 define('LANG', $lang);
