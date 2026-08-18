@@ -6,7 +6,7 @@
    version="1.1"
    id="svg4"
    sodipodi:docname="schema_kc.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.799"
      inkscape:cx="350.43805"
-     inkscape:cy="500"
+     inkscape:cy="499.37422"
      inkscape:window-width="1920"
-     inkscape:window-height="1008"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -37,15 +37,14 @@
      id="path1" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
-     transform="matrix(.92746 -.37393 .28298 .95913 0 0)"
-     d="M5.793 8.97h.313v8.447h-.313z"
-     id="path2" />
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
      d="M9.088 14.555h.265v11.904h-.265z"
      id="path3" />
   <path
-     style="fill:none;stroke:#000000;stroke-width:0.23810143;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1"
+     style="fill:#ffffff;stroke:#000000;stroke-width:0.23810143;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1"
      d="M7.93 6.373h2.603v8.199H7.93z"
      id="path4" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.238101"
+     d="m 8.0128684,6.456293 2.4171046,8.012868"
+     id="path2" />
 </svg>

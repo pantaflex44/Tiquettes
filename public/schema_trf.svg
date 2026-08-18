@@ -6,7 +6,7 @@
    version="1.1"
    id="svg2"
    sodipodi:docname="schema_trf.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,27 +24,27 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.799"
      inkscape:cx="350.43805"
-     inkscape:cy="500"
+     inkscape:cy="499.37422"
      inkscape:window-width="1920"
-     inkscape:window-height="1008"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
+  <path
+     d="M9.131.043h.265v14.44h-.265Zm-.039 22.902h.265v3.527h-.265Z"
+     style="fill:#000000;stroke-width:0;stroke-dasharray:none;fill-opacity:1;stroke:none"
+     id="path2" />
   <circle
      cx="9.269"
      cy="17.265"
      r="2.735"
-     style="fill:none;fill-opacity:1;stroke:#0a0a0a;stroke-width:0.23810143;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#0a0a0a;stroke-width:0.23810143;stroke-dasharray:none;stroke-opacity:1"
      id="circle1" />
   <circle
      cx="9.247"
      cy="20.202"
      r="2.735"
-     style="fill:none;fill-opacity:1;stroke:#0a0a0a;stroke-width:0.23810143;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#0a0a0a;stroke-width:0.23810143;stroke-dasharray:none;stroke-opacity:1"
      id="circle2" />
-  <path
-     d="M9.131.043h.265v14.44h-.265Zm-.039 22.902h.265v3.527h-.265Z"
-     style="fill:#000000;stroke-width:0;stroke-dasharray:none;fill-opacity:1;stroke:none"
-     id="path2" />
 </svg>
