@@ -2271,7 +2271,7 @@ function App() {
                             <div className="dropdown_separator"></div>
                             <div className="dropdown_item head"
                                 title="Traduire le projet imprimé">
-                                <label style={{ fontWeight: 500 }} htmlFor="print_language">Langue du projet imprimé:</label>
+                                <label style={{ fontWeight: 500 }} htmlFor="print_language">Langue du projet généré:</label>
                             </div>
                             <div className="dropdown_item head"
                                 title="Traduire le projet imprimé">

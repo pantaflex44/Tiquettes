@@ -24,15 +24,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="0.64285023"
-     inkscape:cx="51.333885"
-     inkscape:cy="262.89172"
+     inkscape:zoom="2.5714009"
+     inkscape:cx="345.33705"
+     inkscape:cy="674.34059"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="svg5"
+     showguides="true">
     <inkscape:grid
        type="xygrid"
        id="grid88"
@@ -41,23 +42,38 @@
        spacingy="1"
        spacingx="1"
        units="px" />
+    <sodipodi:guide
+       position="10.714493,9.5870791"
+       orientation="0,-1"
+       id="guide1"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="9.2654677,10.284746"
+       orientation="1,0"
+       id="guide2"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="6.2948772,9.9447137"
+       orientation="1,0"
+       id="guide3"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="12.276608,9.5081494"
+       orientation="1,0"
+       id="guide4"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <defs
      id="defs2" />
-  <g
-     inkscape:label="Calque 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="fill:#000000;stroke-width:0;stroke:none;stroke-dasharray:none"
-       id="rect218"
-       width="0.26458359"
-       height="16.910925"
-       x="9.1305103"
-       y="6.7515571e-10" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.23809524;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1"
-       d="m 6.2727268,16.875558 c 0,0 0.041153,3.004148 3.0041473,3.004148 2.9629949,0 3.0041479,-2.962996 3.0041479,-2.962996 z"
-       id="path1" />
-  </g>
+  <rect
+     style="fill:#000000;stroke-width:0;stroke:none;stroke-dasharray:none"
+     id="rect218"
+     width="0.26458359"
+     height="16.910925"
+     x="9.1305103"
+     y="6.7515571e-10" />
+  <path
+     style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.238095;stroke-linejoin:round"
+     d="m 6.2860768,16.862323 h 5.9877192 c 0,0 -0.06173,3.014437 -3.0247241,3.014437 -2.9629951,0 -2.9629951,-3.014437 -2.9629951,-3.014437 z"
+     id="path4" />
 </svg>

@@ -67,6 +67,11 @@ class TiquettesPDF extends FPDF
 
     public array $required = [];
 
+    private array $svg2pngCmdLines = [
+        'magick' => 'magick %1$s -size %2$dx%3$d -transparent white png24:%4$',
+        'convert' => 'convert %1$s -size %2$dx%3$d -transparent white png24:%4$s'
+    ];
+
     public static function requirements()
     {
         $response = [
@@ -595,7 +600,8 @@ class TiquettesPDF extends FPDF
             $s = "{$d}/{$f}.svg";
             if (file_put_contents($s, $svgContent) !== false) {
                 try {
-                    $cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    //$cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    $cmd = sprintf($this->svg2pngCmdLines['magick'], $s, $width, $height, $pngFilepath);
                     $retval = 0;
                     $output = [];
                     $ret = exec($cmd, $output, $retval);
@@ -613,7 +619,8 @@ class TiquettesPDF extends FPDF
             $s = "{$d}/{$f}.svg";
             if (file_put_contents($s, $svgContent) !== false) {
                 try {
-                    $cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    //$cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
+                    $cmd = sprintf($this->svg2pngCmdLines['convert'], $s, $width, $height, $pngFilepath);
                     $retval = 0;
                     $output = [];
                     $ret = exec($cmd, $output, $retval);
