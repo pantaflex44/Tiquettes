@@ -69,6 +69,7 @@ import { statsPush } from "../public/api/stats.js";
 
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
+import useWindowSize from "./hooks/useWindowSize.jsx";
 
 
 
@@ -82,7 +83,14 @@ function App() {
     const switchboardRef = useRef();
     const monitorRef = useRef(null);
     const labelerRef = useRef();
+
+    const navRef = useRef();
     const printMenuRef = useRef();
+    const printMenuDropdownRef = useRef();
+    const exportMenuRef = useRef();
+    const exportMenuDropdownRef = useRef();
+
+    const [wsWidth, wsHeight] = useWindowSize();
 
     const [tab, setTab] = useState(1);
     const [editor, setEditor] = useState(null);
@@ -1337,10 +1345,6 @@ function App() {
         replaceUrlHistory();
     };
 
-    {/*const updateProjectProperties = (data) => {
-        setNewProjectProperties((old) => ({ ...old, ...data }));
-    };*/}
-
     const handleScrollRight = () => {
         if (switchboardRef.current.scrollLeft + 10 < switchboardRef.current.scrollWidth) {
             switchboardRef.current.scrollLeft += 10;
@@ -1924,6 +1928,28 @@ function App() {
 
     }, []);
 
+    function menuPlacement(containerRef, buttonRef, dropdownRef, wsWidth, wsHeight) {
+        if (containerRef) {
+            if (buttonRef && dropdownRef) {
+                const dropdownWidth = parseInt(dropdownRef.current.style.width.replace(/\D/g, ""));
+                let printLeft = 0;
+                if (containerRef.current.offsetLeft + buttonRef.current.offsetLeft + printLeft + dropdownWidth + 50 > wsWidth) {
+                    printLeft = wsWidth - (dropdownWidth + 50 + containerRef.current.offsetLeft + buttonRef.current.offsetLeft);
+                }
+                if (-printLeft > (containerRef.current.offsetLeft, buttonRef.current.offsetLeft)) {
+                    printLeft = -(containerRef.current.offsetLeft, buttonRef.current.offsetLeft);
+                }
+                dropdownRef.current.style.left = printLeft + "px";
+            }
+        }
+    }
+
+    // Listen window size for dropdown placement
+    useEffect(() => {
+        menuPlacement(navRef, exportMenuRef, exportMenuDropdownRef, wsWidth, wsHeight);
+        menuPlacement(navRef, printMenuRef, printMenuDropdownRef, wsWidth, wsHeight);
+    }, [wsWidth, wsHeight]);
+
     return (
         <div ref={projectRef} tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
@@ -1935,7 +1961,7 @@ function App() {
             {/** TOOLBAR **/}
             {/** ----------------------------------------------------------- */}
 
-            <nav className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()} style={{ position: 'sticky', top: '0.25rem', zIndex: 5000 }}>
+            <nav ref={navRef} className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()} style={{ position: 'sticky', top: '0.25rem', zIndex: 5000 }}>
 
                 {/** ----------------------------------------------------------- */}
                 {/** TOOLBAR PROJECTS **/}
@@ -1963,10 +1989,10 @@ function App() {
                 {/** TOOLBAR EXPORTS **/}
                 {/** ----------------------------------------------------------- */}
 
-                <button className="button_group-export_project dropdown_container" title="Exporter...">
+                <button ref={exportMenuRef} className="button_group-export_project dropdown_container" title="Exporter...">
                     <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
                     <span>Exporter</span>
-                    <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '213px', minWidth: '320px' }}>
+                    <div ref={exportMenuDropdownRef} className="dropdown" style={{ width: '300px' }}>
                         <div className="dropdown_header">Exportation</div>
 
                         {/** ----------------------------------------------------------- */}
@@ -2023,7 +2049,7 @@ function App() {
                 >
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
-                    <div className="dropdown" style={{ left: /*isLimited ? '200px' :*/ '70px' }}>
+                    <div className="dropdown" ref={printMenuDropdownRef} style={{ width: '250px' }}>
                         <div className="dropdown_header">Options</div>
 
                         {/** ----------------------------------------------------------- */}

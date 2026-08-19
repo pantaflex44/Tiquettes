@@ -39,6 +39,9 @@
             "actions": {
                 "patches": [
                     {
+                        "text": "Correction de l'ergonomie des menus déroulants de la barre de naviguation."
+                    },
+                    {
                         "text": "Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF."
                     },
                     {

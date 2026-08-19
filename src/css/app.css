@@ -357,9 +357,9 @@ option[disabled] {
     position: absolute;
     display: none;
     top: 30px;
-    left: 35%;
-    transform: translateX(-65%);
-    min-width: 260px;
+    /*left: 35%;*/
+    /*transform: translateX(-65%);*/
+    /*min-width: 260px;*/
     padding: 1.5em;
     border: 1px solid darkgray;
     border-radius: 7px;
@@ -458,7 +458,6 @@ option[disabled] {
 .dropdown_container .dropdown .dropdown_item:not(.head):not(.menuitem) label {
     color: #444;
     font-size: smaller;
-    font-weight: 300;
 }
 
 .dropdown_container .dropdown .dropdown_item.menuitem {

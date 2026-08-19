@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- Correction de l'ergonomie des menus déroulants de la barre de naviguation.
 - Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF.
 - Mise à jour de la librairie FPDF 1.8.6 => 1.9 .
 - Mise à jour du fichier README.md
