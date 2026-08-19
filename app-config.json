@@ -61,7 +61,7 @@
                 ],
                 "adds": [
                     {
-                        "text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français et en Anglais le projet imprimé.",
+                        "text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.",
                         "from": {
                             "name": "Discussion #98",
                             "link": "https://github.com/pantaflex44/Tiquettes/discussions/98"

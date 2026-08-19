@@ -68,7 +68,7 @@ class TiquettesPDF extends FPDF
     public array $required = [];
 
     private array $svg2pngCmdLines = [
-        'magick' => 'magick %1$s -size %2$dx%3$d -transparent white png24:%4$',
+        'magick' => 'magick %1$s -size %2$dx%3$d -transparent white png24:%4$s',
         'convert' => 'convert %1$s -size %2$dx%3$d -transparent white png24:%4$s'
     ];
 

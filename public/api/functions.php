@@ -36,7 +36,6 @@ function i18n_size_mm(float $mm_value, bool $withUnit = false, int $precision = 
 
     $converter = match ($current_primary_language) {
         'en' => ['unit' => 'in', 'divide' => 25.4],
-        'fr' => ['unit' => 'mm', 'divide' => 1],
         default => ['unit' => 'mm', 'divide' => 1]
     };
     $converted_value = round($mm_value / $converter['divide'], $precision);
