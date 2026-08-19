@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.2.9] - 2026-08-18
+## [2.2.9] - 2026-08-19
 
 ### Corrections
 
+- Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF.
 - Mise à jour de la librairie FPDF 1.8.6 => 1.9 .
 - Mise à jour du fichier README.md
 - Mise à jour de la documentation

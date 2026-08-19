@@ -189,6 +189,7 @@ nav.header ul li a.dons {
     align-items: center;
     gap: 0.65rem;
     padding-block: 0.55em;
+    background-color: #E0FFFF33;
 }
 
 nav.header ul li a.dons:hover {

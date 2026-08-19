@@ -35,9 +35,12 @@
     ],
     "changelog": {
         "2.2.9": {
-            "date": "2026-08-18",
+            "date": "2026-08-19",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF."
+                    },
                     {
                         "text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
                     },
