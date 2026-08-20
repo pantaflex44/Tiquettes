@@ -138,9 +138,9 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
             }}
             >
                 {search && search.filename
-                    ? <img loading={'lazy'} src={`${import.meta.env.VITE_APP_BASE}${search.filename}`} width={24} height={24}
+                    ? <img loading={'lazy'} src={`${import.meta.env.VITE_APP_BASE}${search.filename}`} width={21} height={21}
                         alt={search.title} onClick={handleIconListToggler} />
-                    : <div style={{ width: '24px', height: '24px' }} onClick={handleIconListToggler}></div>
+                    : <div style={{ width: '21px', height: '21px' }} onClick={handleIconListToggler}></div>
                 }
                 <input type="text" value={search ? search.title : ''} onKeyUp={handleKeyUp} onChange={handleSearchInput}
                     placeholder="Rechercher ..." style={{ border: 0, padding: 0 }} onInput={handleSearchEnter} />

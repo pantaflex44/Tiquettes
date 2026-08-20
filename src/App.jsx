@@ -70,6 +70,7 @@ import { statsPush } from "../public/api/stats.js";
 import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
 import useWindowSize from "./hooks/useWindowSize.jsx";
+import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
 
 
 
@@ -86,9 +87,10 @@ function App() {
 
     const navRef = useRef();
     const printMenuRef = useRef();
-    const printMenuDropdownRef = useRef();
     const exportMenuRef = useRef();
-    const exportMenuDropdownRef = useRef();
+
+    const exportDropdownMenuPlacement = useDropdownToolbarMenuPlacing(navRef, exportMenuRef, 320, 50);
+    const printDropdownMenuPlacement = useDropdownToolbarMenuPlacing(navRef, printMenuRef, 250, 50);
 
     const [wsWidth, wsHeight] = useWindowSize();
 
@@ -1928,28 +1930,6 @@ function App() {
 
     }, []);
 
-    function menuPlacement(containerRef, buttonRef, dropdownRef, wsWidth, wsHeight) {
-        if (containerRef) {
-            if (buttonRef && dropdownRef) {
-                const dropdownWidth = parseInt(dropdownRef.current.style.width.replace(/\D/g, ""));
-                let printLeft = 0;
-                if (containerRef.current.offsetLeft + buttonRef.current.offsetLeft + printLeft + dropdownWidth + 50 > wsWidth) {
-                    printLeft = wsWidth - (dropdownWidth + 50 + containerRef.current.offsetLeft + buttonRef.current.offsetLeft);
-                }
-                if (-printLeft > (containerRef.current.offsetLeft, buttonRef.current.offsetLeft)) {
-                    printLeft = -(containerRef.current.offsetLeft, buttonRef.current.offsetLeft);
-                }
-                dropdownRef.current.style.left = printLeft + "px";
-            }
-        }
-    }
-
-    // Listen window size for dropdown placement
-    useEffect(() => {
-        menuPlacement(navRef, exportMenuRef, exportMenuDropdownRef, wsWidth, wsHeight);
-        menuPlacement(navRef, printMenuRef, printMenuDropdownRef, wsWidth, wsHeight);
-    }, [wsWidth, wsHeight]);
-
     return (
         <div ref={projectRef} tabIndex={-1} onKeyUp={(e) => {
             if (e.key === 'Escape') {
@@ -1992,7 +1972,7 @@ function App() {
                 <button ref={exportMenuRef} className="button_group-export_project dropdown_container" title="Exporter...">
                     <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
                     <span>Exporter</span>
-                    <div ref={exportMenuDropdownRef} className="dropdown" style={{ width: '300px' }}>
+                    <div className="dropdown" style={{ left: exportDropdownMenuPlacement[0] + "px", width: exportDropdownMenuPlacement[1] + "px" }}>
                         <div className="dropdown_header">Exportation</div>
 
                         {/** ----------------------------------------------------------- */}
@@ -2049,7 +2029,7 @@ function App() {
                 >
                     <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
                     <span>Imprimer...</span>
-                    <div className="dropdown" ref={printMenuDropdownRef} style={{ width: '250px' }}>
+                    <div className="dropdown" style={{ left: printDropdownMenuPlacement[0] + "px", width: printDropdownMenuPlacement[1] + "px" }}>
                         <div className="dropdown_header">Options</div>
 
                         {/** ----------------------------------------------------------- */}
@@ -2714,33 +2694,35 @@ function App() {
                 />
             }
 
-            {newProjectPopup && <NewProjectPopup
-                onCancel={() => setNewProjectPopup(false)}
-                onApply={(properties) => {
-                    const printFirstpage = properties.infos.from.name
-                        || properties.infos.from.siret
-                        || properties.infos.from.postalAddress
-                        || properties.infos.from.email
-                        || properties.infos.from.phone
-                        || properties.infos.to.name
-                        || properties.infos.to.postalAddress
-                        || properties.infos.to.email
-                        || properties.infos.to.phone;
+            {
+                newProjectPopup && <NewProjectPopup
+                    onCancel={() => setNewProjectPopup(false)}
+                    onApply={(properties) => {
+                        const printFirstpage = properties.infos.from.name
+                            || properties.infos.from.siret
+                            || properties.infos.from.postalAddress
+                            || properties.infos.from.email
+                            || properties.infos.from.phone
+                            || properties.infos.to.name
+                            || properties.infos.to.postalAddress
+                            || properties.infos.to.email
+                            || properties.infos.to.phone;
 
-                    createProject(
-                        properties.name,
-                        properties.stepsPerRows,
-                        properties.rowsCount,
-                        properties.height,
-                        properties.stepSize,
-                        properties.views,
-                        properties.infos,
-                        printFirstpage
-                    );
-                    setNewProjectPopup(false);
-                }}
-                defaultFirstpageOptions={defaultFirstpageOptions}
-            />}
+                        createProject(
+                            properties.name,
+                            properties.stepsPerRows,
+                            properties.rowsCount,
+                            properties.height,
+                            properties.stepSize,
+                            properties.views,
+                            properties.infos,
+                            printFirstpage
+                        );
+                        setNewProjectPopup(false);
+                    }}
+                    defaultFirstpageOptions={defaultFirstpageOptions}
+                />
+            }
 
             {
                 welcome && <WelcomePopup

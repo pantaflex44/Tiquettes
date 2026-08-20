@@ -1150,6 +1150,7 @@ option[disabled] {
 
 .icon_selector_box {
     cursor: pointer;
+    height: calc(34px - 1em - 2px);
 }
 
 .icon_selector_box:focus-within,

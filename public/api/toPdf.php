@@ -69,7 +69,8 @@ class TiquettesPDF extends FPDF
 
     private array $svg2pngCmdLines = [
         'magick' => 'magick %1$s -size %2$dx%3$d -transparent white png24:%4$s',
-        'convert' => 'convert %1$s -size %2$dx%3$d -transparent white png24:%4$s'
+        'convert' => 'convert %1$s -size %2$dx%3$d -transparent white png24:%4$s',
+        'java_batik' => 'java -jar ./libs/batik-1.19/batik-rasterizer-1.19.jar -m image/png -w %2$d -h %3$d -d %4$s %1$s'
     ];
 
     public static function requirements()
@@ -82,6 +83,7 @@ class TiquettesPDF extends FPDF
                 'php_imagick' => extension_loaded('imagick'),
                 'magick' => false,
                 'convert' => false,
+                'java_batik' => false
             ],
             'ok' => false
         ];
@@ -102,10 +104,19 @@ class TiquettesPDF extends FPDF
             }
         }
 
+        if ($response['modules']['convert'] === false) {
+            try {
+                $retval = 0;
+                $ret = exec('java -version', result_code: $retval);
+                $response['modules']['java_batik'] = $ret !== false && $retval === 0 && file_exists("./libs/batik-1.19/batik-rasterizer-1.19.jar");
+            } catch (\Exception $ex) {
+            }
+        }
+
         $response['ok'] = $response['modules']['php']
             && $response['modules']['fpdf']
             && $response['modules']['schema_functions.json']
-            && ($response['modules']['php_imagick'] || $response['modules']['magick'] || $response['modules']['convert']);
+            && ($response['modules']['php_imagick'] || $response['modules']['magick'] || $response['modules']['convert'] || $response['modules']['java_batik']);
 
         return $response;
     }
@@ -600,7 +611,6 @@ class TiquettesPDF extends FPDF
             $s = "{$d}/{$f}.svg";
             if (file_put_contents($s, $svgContent) !== false) {
                 try {
-                    //$cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
                     $cmd = sprintf($this->svg2pngCmdLines['magick'], $s, $width, $height, $pngFilepath);
                     $retval = 0;
                     $output = [];
@@ -619,13 +629,30 @@ class TiquettesPDF extends FPDF
             $s = "{$d}/{$f}.svg";
             if (file_put_contents($s, $svgContent) !== false) {
                 try {
-                    //$cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
                     $cmd = sprintf($this->svg2pngCmdLines['convert'], $s, $width, $height, $pngFilepath);
                     $retval = 0;
                     $output = [];
                     $ret = exec($cmd, $output, $retval);
 
                     return $ret !== false && $retval === 0;
+                } catch (\Exception $ex) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if ($this->required['modules']['java_batik'] === true) {
+            $f = basename($pngFilepath, '.png');
+            $d = dirname($pngFilepath);
+            $s = "{$d}/{$f}.svg";
+            if (file_put_contents($s, $svgContent) !== false) {
+                try {
+                    $cmd = sprintf($this->svg2pngCmdLines['java_batik'], $s, $width, $height, $pngFilepath);
+                    $retval = 0;
+                    $output = [];
+                    $ret = exec($cmd, $output, $retval);
+
+                    return $ret !== false && is_string($ret) && $retval === 0 && str_contains($ret, 'success');
                 } catch (\Exception $ex) {
                     return false;
                 }
