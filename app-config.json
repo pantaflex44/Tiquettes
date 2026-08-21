@@ -35,14 +35,25 @@
     ],
     "changelog": {
         "2.2.9": {
-            "date": "2026-08-19",
+            "date": "2026-08-21",
             "actions": {
                 "patches": [
+                    {
+                        "text": "Diverses refactorisations / optimisations du code source de l'application."
+                    },
                     {
                         "text": "Correction de l'ergonomie des menus déroulants de la barre de naviguation."
                     },
                     {
                         "text": "Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF."
+                    }
+                ],
+                "updates": [
+                    {
+                        "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
+                    },
+                    {
+                        "text": "Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG."
                     },
                     {
                         "text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
@@ -54,14 +65,6 @@
                         "text": "Mise à jour de la documentation"
                     }
                 ],
-                "updates": [
-                    {
-                        "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
-                    },
-                    {
-                        "text": "Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG."
-                    }
-                ],
                 "adds": [
                     {
                         "text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.",
@@ -71,14 +74,11 @@
                         }
                     },
                     {
-                        "text": "Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage.",
+                        "text": "Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage, Eclairages / Prises (RGIE).",
                         "from": {
                             "name": "Formulaire de contact #1",
                             "link": "https://www.tiquettes.fr/app/"
                         }
-                    },
-                    {
-                        "text": "Ajout de nouveaux pictogrammes: Eclairages / Prises (RGIE)"
                     }
                 ]
             }
