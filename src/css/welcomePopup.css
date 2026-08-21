@@ -15,75 +15,75 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+/** biome-ignore-all lint/style/noDescendingSpecificity: wanted */
 
 .bigList {
-    margin: 0;
-    margin-block: 1rem;
-    padding: 0;
+	margin: 0;
+	margin-block: 1rem;
+	padding: 0;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 1rem;
 
-    list-style: none;
+	list-style: none;
 }
 
 .bigList li {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 94px;
-    padding-inline: 1rem;
-    padding-block: 1.25rem;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 94px;
+	padding-inline: 1rem;
+	padding-block: 1.25rem;
 
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    gap: 1rem;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	gap: 1rem;
 
-    border: 1px solid darkgray;
-    border-radius: 7px;
-    cursor: pointer;
+	border: 1px solid darkgray;
+	border-radius: 7px;
+	cursor: pointer;
 }
 
 .bigList li:not(.disabled):hover {
-    background-color: var(--primary-color);
-    color: white;
+	background-color: var(--primary-color);
+	color: white;
 }
 
 .bigList li:not(.disabled):hover img {
-    filter: invert();
+	filter: invert();
 }
 
 .bigList li.disabled {
-    cursor: default;
-    color: #ccc;
-    border-color: #ccc;
+	cursor: default;
+	color: #ccc;
+	border-color: #ccc;
 }
 
 .bigList li.disabled img {
-    filter: opacity(0.1);
-    pointer-events: none;
+	filter: opacity(0.1);
+	pointer-events: none;
 }
 
 .bigList li .bigList-content {
-    width: 100%;
+	width: 100%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 0.75rem;
 }
 
 .bigList li .bigList-content .bigList-content_title {
-    font-weight: bolder;
+	font-weight: bolder;
 }
 
 .bigList li .bigList-content .bigList-content_description {
-    font-size: smaller;
+	font-size: smaller;
 }

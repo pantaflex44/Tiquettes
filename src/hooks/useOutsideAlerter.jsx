@@ -16,20 +16,21 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export default function useOutsideAlerter(ref, callback = null) {
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target) && callback) {
-                callback();
-            }
-        }
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (ref.current && !ref.current.contains(event.target) && callback) {
+				callback();
+			}
+		}
 
-        document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener("mousedown", handleClickOutside);
 
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref]);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [ref]);
 }

@@ -37,10 +37,10 @@
   var svgns   = "http://www.w3.org/2000/svg";
   var xlinkns = "http://www.w3.org/1999/xlink";
 
-  var ids = new Array("simple", "tspans", "dxdy", "xy", 
+  var ids = ["simple", "tspans", "dxdy", "xy", 
                       "tp_start", "tp_middle", "tp_end", "test",
                       "tp_ag_middle", "ag1", "ag2", "ag3", "ag4",
-                      "ligature", "tp_lig", "lig2", "tp_lig2");
+                      "ligature", "tp_lig", "lig2", "tp_lig2"];
   for (var i=0; i<ids.length; i++) {
     var elem = document.getElementById(ids[i]);
     showCharactersInfo(elem);

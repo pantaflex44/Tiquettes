@@ -16,55 +16,88 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 import { useMemo } from "react";
 
-export default function EditorPoleSelector({ id, parentModule, value, db = null, style = {}, onChange = null }) {
-    const polesCounter = (pole) => {
-        let p = parseInt(pole.replace(/\D/g, ''));
-        if (p === 1 && pole.includes('+N')) p = 2;
-        if (p === 3 && pole.includes('+N')) p = 4;
-        return p;
-    };
+export default function EditorPoleSelector({
+	id,
+	parentModule,
+	value,
+	db = null,
+	style = {},
+	onChange = null,
+}) {
+	const polesCounter = (pole) => {
+		let p = parseInt(pole.replace(/\D/g, ""), 10);
+		if (p === 1 && pole.includes("+N")) p = 2;
+		if (p === 3 && pole.includes("+N")) p = 4;
+		return p;
+	};
 
-    const dbPole = useMemo(() => {
-        if (!db || !db?.pole) return 4;
-        let pole = db.pole.trim().toUpperCase();
-        return polesCounter(pole);
-    }, [db]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	const dbPole = useMemo(() => {
+		if (!db?.pole) return 4;
+		const pole = db.pole.trim().toUpperCase();
+		return polesCounter(pole);
+	}, [db]);
 
-    const allowedPoles = [
-        { key: "1P+N", name: `Monophasé unipolaire ${import.meta.env.VITE_VREF_230V} (1P+N)`, vref: import.meta.env.VITE_VREF_230V },
-        { key: "2P", name: `Monophasé bipolaire ${import.meta.env.VITE_VREF_230V} (2P)`, vref: import.meta.env.VITE_VREF_230V },
-        { key: "3P", name: `Triphasé ${import.meta.env.VITE_VREF_400V} (3P)`, vref: import.meta.env.VITE_VREF_400V },
-        { key: "3P+N", name: `Triphasé ${import.meta.env.VITE_VREF_230V} (3P+N)`, vref: import.meta.env.VITE_VREF_230V },
-        { key: "4P", name: `Tétrapolaire ${import.meta.env.VITE_VREF_230V} (4P)`, vref: import.meta.env.VITE_VREF_230V }
-    ].filter(currentPole => {
-        const p = polesCounter(currentPole.key);
-        if (p <= dbPole) {
-            if (!parentModule || !parentModule?.pole) return true;
-            let parentPole = parentModule.pole.trim().toUpperCase();
-            return p <= polesCounter(parentPole);
-        }
-        return false;
-    });
+	const allowedPoles = [
+		{
+			key: "1P+N",
+			name: `Monophasé unipolaire ${import.meta.env.VITE_VREF_230V} (1P+N)`,
+			vref: import.meta.env.VITE_VREF_230V,
+		},
+		{
+			key: "2P",
+			name: `Monophasé bipolaire ${import.meta.env.VITE_VREF_230V} (2P)`,
+			vref: import.meta.env.VITE_VREF_230V,
+		},
+		{
+			key: "3P",
+			name: `Triphasé ${import.meta.env.VITE_VREF_400V} (3P)`,
+			vref: import.meta.env.VITE_VREF_400V,
+		},
+		{
+			key: "3P+N",
+			name: `Triphasé ${import.meta.env.VITE_VREF_230V} (3P+N)`,
+			vref: import.meta.env.VITE_VREF_230V,
+		},
+		{
+			key: "4P",
+			name: `Tétrapolaire ${import.meta.env.VITE_VREF_230V} (4P)`,
+			vref: import.meta.env.VITE_VREF_230V,
+		},
+	].filter((currentPole) => {
+		const p = polesCounter(currentPole.key);
+		if (p <= dbPole) {
+			if (!parentModule?.pole) return true;
+			const parentPole = parentModule.pole.trim().toUpperCase();
+			return p <= polesCounter(parentPole);
+		}
+		return false;
+	});
 
-    const getVrefFromPole = (pole) => {
-        const found = allowedPoles.find(p => p.key === pole);
-        return found ? found.vref : import.meta.env.VITE_VREF_230V;
-    };
+	const getVrefFromPole = (pole) => {
+		const found = allowedPoles.find((p) => p.key === pole);
+		return found ? found.vref : import.meta.env.VITE_VREF_230V;
+	};
 
-    return (
-        <>
-            <select id={id} name={id} value={value}
-                onChange={(e) => {
-                    if (onChange) onChange(e.target.value, getVrefFromPole(e.target.value))
-                }} style={{ ...style }}>
-                <option value={""}>-</option>
-                {allowedPoles.map((pole, i) => <option key={i} value={pole.key}>{pole.name}</option>)}
-            </select>
-
-        </>
-    );
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value, getVrefFromPole(e.target.value));
+			}}
+			style={{ ...style }}
+		>
+			<option value={""}>-</option>
+			{allowedPoles.map((pole, i) => (
+				// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+				<option key={i} value={pole.key}>
+					{pole.name}
+				</option>
+			))}
+		</select>
+	);
 }

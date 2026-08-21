@@ -16,57 +16,76 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 import "../css/schema.css";
 
 import { Fragment } from "react";
-
-import SchemaSymbol from "./SchemaSymbol.jsx";
-import SchemaDescription from "./SchemaDescription.jsx";
-
 import firstIcon from "../assets/caret-down-light.svg";
+import SchemaDescription from "./SchemaDescription.jsx";
+import SchemaSymbol from "./SchemaSymbol.jsx";
 
 export default function SchemaItem({
-    switchboard,
-    baseId = null,
-    isFirst = false,
-    childs,
-    onEditSymbol,
-    monitor = {}
+	switchboard,
+	baseId = null,
+	isFirst = false,
+	childs,
+	onEditSymbol,
+	monitor = {},
 }) {
-    return Object.entries(childs ?? {}).map(([id, item], j) => (
-        <Fragment key={id}>
-            <div className={`schemaItem ${isFirst ? 'isFirst' : ''} ${item.isLast ? 'isLast' : ''}`.trim()}
-                data-isfirst={isFirst}
-                data-islast={item.isLast}
-                data-hasprev={item.hasPrev}
-                data-hasnext={item.hasNext}
-            >
-                {isFirst && <img className="schemaItemFirstIcon" src={firstIcon} />}
-                {isFirst && <div className="schemaItemFirstIconTitle">{(item.module.srcId ?? "").substring(0, 50)}</div>}
+	return Object.entries(childs ?? {}).map(([id, item], j) => (
+		<Fragment key={id}>
+			<div
+				className={`schemaItem ${isFirst ? "isFirst" : ""} ${item.isLast ? "isLast" : ""}`.trim()}
+				data-isfirst={isFirst}
+				data-islast={item.isLast}
+				data-hasprev={item.hasPrev}
+				data-hasnext={item.hasNext}
+			>
+				{isFirst && (
+					<img className="schemaItemFirstIcon" src={firstIcon} alt="" />
+				)}
+				{isFirst && (
+					<div className="schemaItemFirstIconTitle">
+						{(item.module.srcId ?? "").substring(0, 50)}
+					</div>
+				)}
 
-                {(isFirst || (item.hasPrev || item.hasNext)) && <div
-                    className={`schemaItemPrevLine ${!item.hasNext || isFirst ? 'noNext' : ''} ${!item.hasPrev && !isFirst ? 'noPrev' : ''}`.trim()}></div>}
+				{(isFirst || item.hasPrev || item.hasNext) && (
+					<div
+						className={`schemaItemPrevLine ${!item.hasNext || isFirst ? "noNext" : ""} ${!item.hasPrev && !isFirst ? "noPrev" : ""}`.trim()}
+					></div>
+				)}
 
-                {!isFirst && item.hasNext && <div className="schemaItemNextLine"></div>}
+				{!isFirst && item.hasNext && <div className="schemaItemNextLine"></div>}
 
-                <SchemaSymbol switchboard={switchboard} isLast={item.isLast} module={item.module}
-                    onEdit={(module) => { onEditSymbol(module) }}
-                    monitor={monitor} />
+				<SchemaSymbol
+					isLast={item.isLast}
+					module={item.module}
+					onEdit={(module) => {
+						onEditSymbol(module);
+					}}
+					monitor={monitor}
+				/>
 
-                {item.isLast ? (
-                    <SchemaDescription switchboard={switchboard} module={item.module} />
-                ) : (
-                    <div className="schemaItemChilds">
-                        <SchemaItem switchboard={switchboard} childs={item.childs}
-                            baseId={baseId ?? item.module.id} onEditSymbol={(module) => { onEditSymbol(module) }}
-                            monitor={monitor} />
-                    </div>
-                )}
-            </div>
+				{item.isLast ? (
+					<SchemaDescription module={item.module} />
+				) : (
+					<div className="schemaItemChilds">
+						<SchemaItem
+							switchboard={switchboard}
+							childs={item.childs}
+							baseId={baseId ?? item.module.id}
+							onEditSymbol={(module) => {
+								onEditSymbol(module);
+							}}
+							monitor={monitor}
+						/>
+					</div>
+				)}
+			</div>
 
-            {isFirst && j < Object.keys(childs).length - 1 && <div className="schemaItemSeparator"></div>}
-        </Fragment>
-    ))
+			{isFirst && j < Object.keys(childs).length - 1 && (
+				<div className="schemaItemSeparator"></div>
+			)}
+		</Fragment>
+	));
 }

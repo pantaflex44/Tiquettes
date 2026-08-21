@@ -15,34 +15,67 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
 
-/* eslint-disable react/prop-types */
-
-import upIcon from "../assets/caret-up.svg";
 import downIcon from "../assets/caret-down.svg";
+import upIcon from "../assets/caret-up.svg";
 
 export default function ThemeEditorPartColumnTitle({
-    propName,
-    title,
-    shownCount,
-    positions,
-    setEditedTheme,
-    up,
-    down
+	propName,
+	title,
+	shownCount,
+	positions,
+	setEditedTheme,
+	up,
+	down,
 }) {
-    return <h5>
-        <input type={'checkbox'} checked={positions[propName].shown}
-            title={title}
-            onChange={(e) => setEditedTheme(old => ({
-                ...old,
-                data: { ...old.data, [propName]: { ...(old.data[propName] ?? {}), shown: e.target.checked } }
-            }))} />
-        <img src={upIcon} alt={"Remonter"} width={16} height={16}
-            className={!positions[propName].shown || positions[propName].order <= 0 ? 'disabled' : null}
-            style={{ cursor: 'pointer' }} onClick={() => up(propName)} />
-        <img src={downIcon} alt={"Descendre"} width={16} height={16}
-            className={!positions[propName].shown || positions[propName].order >= shownCount - 1 ? 'disabled' : null}
-            style={{ cursor: 'pointer' }} onClick={() => down(propName)} />
-        <span>{title}</span>
-    </h5>
+	return (
+		<h5>
+			<input
+				type={"checkbox"}
+				checked={positions[propName].shown}
+				title={title}
+				onChange={(e) =>
+					setEditedTheme((old) => ({
+						...old,
+						data: {
+							...old.data,
+							[propName]: {
+								...(old.data[propName] ?? {}),
+								shown: e.target.checked,
+							},
+						},
+					}))
+				}
+			/>
+			<img
+				src={upIcon}
+				alt={"Remonter"}
+				width={16}
+				height={16}
+				className={
+					!positions[propName].shown || positions[propName].order <= 0
+						? "disabled"
+						: null
+				}
+				style={{ cursor: "pointer" }}
+				onClick={() => up(propName)}
+			/>
+			<img
+				src={downIcon}
+				alt={"Descendre"}
+				width={16}
+				height={16}
+				className={
+					!positions[propName].shown ||
+					positions[propName].order >= shownCount - 1
+						? "disabled"
+						: null
+				}
+				style={{ cursor: "pointer" }}
+				onClick={() => down(propName)}
+			/>
+			<span>{title}</span>
+		</h5>
+	);
 }

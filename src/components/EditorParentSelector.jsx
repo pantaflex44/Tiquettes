@@ -16,63 +16,86 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
+import { Fragment, useMemo } from "react";
 
-import { Fragment, useEffect, useMemo } from "react";
+import schemaFunctions from "../schema_functions.json";
 
-import schemaFunctions from '../schema_functions.json';
+export default function EditorParentSelector({
+	id,
+	currentParentId,
+	currentSourceId,
+	currentModuleId,
+	filteredModulesListBySchemaFuncs,
+	sources,
+	onParentChange = null,
+	onSourceChange = null,
+}) {
+	const currentValue = useMemo(() => {
+		if (currentParentId !== "") {
+			return JSON.stringify({ type: "module", id: currentParentId });
+		} else if (currentSourceId) {
+			return JSON.stringify({ type: "source", id: currentSourceId });
+		}
+	}, [currentParentId, currentSourceId]);
 
-export default function EditorParentSelector({ id, currentParentId, currentSourceId, currentModuleId, filteredModulesListBySchemaFuncs, sources, onParentChange = null, onSourceChange = null }) {
-    const currentValue = useMemo(() => {
-        if (currentParentId !== "") {
-            return JSON.stringify({ type: 'module', id: currentParentId });
-        } else if (currentSourceId) {
-            return JSON.stringify({ type: 'source', id: currentSourceId });
-        }
-    }, [currentParentId, currentSourceId]);
+	return (
+		<select
+			id={id}
+			name={id}
+			value={currentValue}
+			onChange={(e) => {
+				let v = e.target.value.trim();
+				if (v === "") {
+					if (onSourceChange) onSourceChange("");
+				} else {
+					v = JSON.parse(v);
+					if (v.type === "module") {
+						if (onParentChange) onParentChange(v.id);
+					} else if (v.type === "source") {
+						if (onSourceChange) onSourceChange(v.id ?? "");
+					}
+				}
+			}}
+			style={{ flex: 1 }}
+		>
+			{/* Aucun parent */}
+			<option value={""}>- aucun -</option>
 
-    return (
-        <>
-            <select id={id} name={id} value={currentValue}
-                onChange={(e) => {
-                    let v = e.target.value.trim();
-                    if (v === "") {
-                        if (onSourceChange) onSourceChange("");
-                    } else {
-                        v = JSON.parse(v);
-                        if (v.type === 'module') {
-                            if (onParentChange) onParentChange(v.id);
-                        } else if (v.type === 'source') {
-                            if (onSourceChange) onSourceChange(v.id ?? "");
-                        }
-                    }
-                }} style={{ flex: 1 }}>
+			{/* Sources personnelles */}
+			<option value={""} disabled={true}>
+				Sources d'alimentations
+			</option>
+			{sources.map((s) => (
+				<option
+					key={s.trim()}
+					value={JSON.stringify({ type: "source", id: s.trim() })}
+				>
+					{s.trim()}
+				</option>
+			))}
 
-                {/* Aucun parent */}
-                <option value={""}>- aucun -</option>
-
-                {/* Sources personnelles */}
-                <option value={""} disabled={true}>Sources d'alimentations</option>
-                {sources.map(s => <option key={s.trim()} value={JSON.stringify({ type: 'source', id: s.trim() })}>{s.trim()}</option>)}
-
-                {/* Modules */}
-                {Object.entries(filteredModulesListBySchemaFuncs)
-                    .map(([k, l]) => {
-                        return (
-                            <Fragment key={k}>
-                                <option value={""} disabled={true}>{schemaFunctions[k].name}</option>
-                                {l
-                                    .map((module) => (
-                                        currentModuleId !== module.id
-                                            ? <option key={module.id}
-                                                value={JSON.stringify({ type: 'module', id: module.id })}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
-                                            : null
-                                    ))
-                                    .filter(f => f !== null)}
-                            </Fragment>
-                        )
-                    })}
-            </select>
-        </>
-    );
+			{/* Modules */}
+			{Object.entries(filteredModulesListBySchemaFuncs).map(([k, l]) => {
+				return (
+					<Fragment key={k}>
+						<option value={""} disabled={true}>
+							{schemaFunctions[k].name}
+						</option>
+						{l
+							.map((module) =>
+								currentModuleId !== module.id ? (
+									<option
+										key={module.id}
+										value={JSON.stringify({ type: "module", id: module.id })}
+									>
+										{`${module.id} ${module.text ? `- ${module.text}` : ""}`.trim()}
+									</option>
+								) : null,
+							)
+							.filter((f) => f !== null)}
+					</Fragment>
+				);
+			})}
+		</select>
+	);
 }

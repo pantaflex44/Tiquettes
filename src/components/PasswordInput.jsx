@@ -16,56 +16,66 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 import { useRef } from "react";
 
 import eyeIcon from "../assets/eye.svg";
 import eyeOffIcon from "../assets/eye-off.svg";
 
 function PasswordInput({
-    id = '',
-    name = '',
-    placeholder = '',
-    value = '',
-    onChange = null,
-    onFocus = null,
-    onBlur = null,
-    ...props
+	id = "",
+	name = "",
+	placeholder = "",
+	value = "",
+	onChange = null,
+	onFocus = null,
+	onBlur = null,
+	...props
 }) {
-    const passwordInputRef = useRef(null);
-    const passwordImgRef = useRef(null);
+	const passwordInputRef = useRef(null);
+	const passwordImgRef = useRef(null);
 
-    return (
-        <div className={'password_form_row'}>
-            <input type={'password'} id={id} name={name} placeholder={placeholder}
-                ref={passwordInputRef}
-                style={{ minHeight: '32px' }}
-                autoComplete={'new-password'}
-                value={value}
-                onChange={onChange}
-                onInput={(e) => {
-                    if (e.target.type !== 'password') {
-                        e.target.type = 'password';
-                        passwordImgRef.current.src = eyeIcon;
-                    }
-                }}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                {...props}
-            />
-            <img src={eyeIcon} ref={passwordImgRef} width={18} height={18} onClick={(e) => {
-                if (passwordInputRef.current.type === 'password') {
-                    passwordInputRef.current.type = 'text';
-                    e.target.src = eyeOffIcon;
-                } else {
-                    passwordInputRef.current.type = 'password';
-                    e.target.src = eyeIcon;
-                }
-                passwordInputRef.current.focus();
-            }} />
-        </div>
-    );
+	return (
+		<div className={"password_form_row"}>
+			<input
+				type={"password"}
+				id={id}
+				name={name}
+				placeholder={placeholder}
+				ref={passwordInputRef}
+				style={{ minHeight: "32px" }}
+				autoComplete={"new-password"}
+				value={value}
+				onChange={onChange}
+				onInput={(e) => {
+					if (e.target.type !== "password") {
+						e.target.type = "password";
+						passwordImgRef.current.src = eyeIcon;
+					}
+				}}
+				onFocus={onFocus}
+				onBlur={onBlur}
+				{...props}
+			/>
+			{/** biome-ignore lint/a11y/useAltText: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<img
+				src={eyeIcon}
+				ref={passwordImgRef}
+				width={18}
+				height={18}
+				onClick={(e) => {
+					if (passwordInputRef.current.type === "password") {
+						passwordInputRef.current.type = "text";
+						e.target.src = eyeOffIcon;
+					} else {
+						passwordInputRef.current.type = "password";
+						e.target.src = eyeIcon;
+					}
+					passwordInputRef.current.focus();
+				}}
+			/>
+		</div>
+	);
 }
 
 export default PasswordInput;

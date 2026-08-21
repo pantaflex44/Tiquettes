@@ -16,174 +16,196 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict'
-
+import axios from "axios";
 import { useEffect, useState } from "react";
-import axios from 'axios';
 
-import { SpaceContext } from './SpaceContext.jsx';
+import { SpaceContext } from "./SpaceContext.jsx";
 
 export default function SpaceProvider({ children }) {
-    const [project, setProject] = useState(null);
-    const [instanceId, setInstanceId] = useState(null);
-    const [params, setParams] = useState(null);
-    const [error, setError] = useState(null);
-    const [isLimited, setIsLimited] = useState(false);
+	const [project, setProject] = useState(null);
+	const [instanceId, setInstanceId] = useState(null);
+	const [params, setParams] = useState(null);
+	const [error, setError] = useState(null);
+	const [isLimited, setIsLimited] = useState(false);
 
-    const [loadState, setLoadState] = useState(null);
-    const [saveState, setSaveState] = useState(null);
+	const [loadState, setLoadState] = useState(null);
+	const [saveState, setSaveState] = useState(null);
 
-    const apiSend = (url, ufiid, args = {}, thenCallback = null, errorCallback = null) => {
-        axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+	const apiSend = (
+		url,
+		ufiid,
+		args = {},
+		thenCallback = null,
+		errorCallback = null,
+	) => {
+		axios.defaults.headers.post["Content-Type"] =
+			"application/x-www-form-urlencoded";
 
-        let axiosConfig = {
-            headers: {
-                'X-UFIID': ufiid ?? '',
-            }
-        };
-        axios
-            .post(url, args, axiosConfig)
-            .then(response => {
-                if (response.status === 200 || response.status === 201) {
-                    const data = response.data;
-                    if (data.error) {
-                        throw new Error(data.error);
-                    } else {
-                        if (thenCallback) thenCallback(data);
-                    }
-                }
-            })
-            .catch(error => {
-                if (errorCallback) errorCallback(error);
-            });
-    };
+		const axiosConfig = {
+			headers: {
+				"X-UFIID": ufiid ?? "",
+			},
+		};
+		axios
+			.post(url, args, axiosConfig)
+			.then((response) => {
+				if (response.status === 200 || response.status === 201) {
+					const data = response.data;
+					if (data.error) {
+						throw new Error(data.error);
+					} else {
+						if (thenCallback) thenCallback(data);
+					}
+				}
+			})
+			.catch((error) => {
+				if (errorCallback) errorCallback(error);
+			});
+	};
 
-    const closeAll = (noProject = false, noError = false) => {
-        if (noProject === false) {
-            setProject(null);
-            setParams(null);
-            setInstanceId(null);
-        }
-        setLoadState('closed');
-        setSaveState(null);
-        if (noError == false) {
-            setError(null);
-        }
-    };
+	const closeAll = (noProject = false, noError = false) => {
+		if (noProject === false) {
+			setProject(null);
+			setParams(null);
+			setInstanceId(null);
+		}
+		setLoadState("closed");
+		setSaveState(null);
+		if (noError === false) {
+			setError(null);
+		}
+	};
 
-    const apiError = (error) => {
-        console.error(error);
-        if (error.response) {
-            setError({
-                code: 'RESPONSE_ERROR',
-                message: error.message ?? "Oh la, il apparait que nous venons de rencontrer le Professeur Tournesol ... La réponse ne correspond pas à la demande.<br /><br />Impossible de charger le projet dans ces conditions.",
-            });
-        } else if (error.request) {
-            setError({
-                code: 'REQUEST_ERROR',
-                message: error.message ?? "Hum, j'ai l'impression que quelqu'un boude dans son coin. Aucune réponse et aucun contenu à charger !<br /><br />Si le problème persiste, veuillez, s'il vous plait, nous contacter pour que l'on puisse corriger ce comportement.",
-            });
-        } else {
-            setError({
-                code: 'COMMON_ERROR',
-                message: error.message ?? "Nous venons de retrouver un insecte dans les transistors provoquant une erreur générale.",
-            });
-        }
-    };
+	const apiError = (error) => {
+		console.error(error);
+		if (error.response) {
+			setError({
+				code: "RESPONSE_ERROR",
+				message:
+					error.message ??
+					"Oh la, il apparait que nous venons de rencontrer le Professeur Tournesol ... La réponse ne correspond pas à la demande.<br /><br />Impossible de charger le projet dans ces conditions.",
+			});
+		} else if (error.request) {
+			setError({
+				code: "REQUEST_ERROR",
+				message:
+					error.message ??
+					"Hum, j'ai l'impression que quelqu'un boude dans son coin. Aucune réponse et aucun contenu à charger !<br /><br />Si le problème persiste, veuillez, s'il vous plait, nous contacter pour que l'on puisse corriger ce comportement.",
+			});
+		} else {
+			setError({
+				code: "COMMON_ERROR",
+				message:
+					error.message ??
+					"Nous venons de retrouver un insecte dans les transistors provoquant une erreur générale.",
+			});
+		}
+	};
 
-    const load = (ufiid) => {
-        setLoadState('loading');
-        apiSend(
-            import.meta.env.VITE_APP_SPACE_API_URL + "load.php",
-            ufiid,
-            {},
-            (data) => {
-                if (!data.instanceId || data.instanceId !== ufiid || !data.project || !data.params) {
-                    throw new Error("Impossible de charger ce projet.");
-                } else {
-                    if (!data.project || !data.project.switchboard) {
-                        throw new Error("Impossible de lire le contenu de ce projet. Document corrompu.");
-                    }
-                    setProject(data.project);
-                    setParams(data.params);
-                    setInstanceId(data.instanceId);
-                    setIsLimited(data.params?.limited ?? false);
-                    setLoadState('loaded');
-                }
-            },
-            (error) => {
-                apiError(error);
-                closeAll(false, true);
-            }
-        );
-    };
+	const load = (ufiid) => {
+		setLoadState("loading");
+		apiSend(
+			`${import.meta.env.VITE_APP_SPACE_API_URL}load.php`,
+			ufiid,
+			{},
+			(data) => {
+				if (
+					!data.instanceId ||
+					data.instanceId !== ufiid ||
+					!data.project ||
+					!data.params
+				) {
+					throw new Error("Impossible de charger ce projet.");
+				} else {
+					if (!data.project?.switchboard) {
+						throw new Error(
+							"Impossible de lire le contenu de ce projet. Document corrompu.",
+						);
+					}
+					setProject(data.project);
+					setParams(data.params);
+					setInstanceId(data.instanceId);
+					setIsLimited(data.params?.limited ?? false);
+					setLoadState("loaded");
+				}
+			},
+			(error) => {
+				apiError(error);
+				closeAll(false, true);
+			},
+		);
+	};
 
-    const save = (switchboard, auto = false) => {
-        if (isLimited) return;
+	const save = (switchboard, auto = false) => {
+		if (isLimited) return;
 
-        setSaveState('saving');
-        if (instanceId) {
-            apiSend(
-                import.meta.env.VITE_APP_SPACE_API_URL + "save.php",
-                instanceId,
-                {
-                    switchboard: JSON.stringify(switchboard),
-                },
-                (data) => {
-                    if (!data.instanceId || data.instanceId !== instanceId || !data.ok) {
-                        throw new Error("Impossible de sauvegarder ce projet.");
-                    } else {
-                        setSaveState('saved');
-                    }
-                },
-                (error) => {
-                    if (auto) {
-                        setSaveState('error');
-                    } else {
-                        apiError(error);
-                    }
-                }
-            );
-        } else {
-            if (auto) {
-                setSaveState('error');
-            } else {
-                apiError(new Error("Impossible de sauvegarder pour le moment..."));
-            }
-        }
-    };
+		setSaveState("saving");
+		if (instanceId) {
+			apiSend(
+				`${import.meta.env.VITE_APP_SPACE_API_URL}save.php`,
+				instanceId,
+				{
+					switchboard: JSON.stringify(switchboard),
+				},
+				(data) => {
+					if (!data.instanceId || data.instanceId !== instanceId || !data.ok) {
+						throw new Error("Impossible de sauvegarder ce projet.");
+					} else {
+						setSaveState("saved");
+					}
+				},
+				(error) => {
+					if (auto) {
+						setSaveState("error");
+					} else {
+						apiError(error);
+					}
+				},
+			);
+		} else {
+			if (auto) {
+				setSaveState("error");
+			} else {
+				apiError(new Error("Impossible de sauvegarder pour le moment..."));
+			}
+		}
+	};
 
-    useEffect(() => {
-        if (project === null) {
-            closeAll(true);
-        }
-    }, [project]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		if (project === null) {
+			closeAll(true);
+		}
+	}, [project]);
 
-    useEffect(() => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
 
-        const ufiid = urlParams.get('ufiid');
-        if (typeof ufiid === 'string') {
-            load(ufiid);
-        }
+		const ufiid = urlParams.get("ufiid");
+		if (typeof ufiid === "string") {
+			load(ufiid);
+		}
 
-        return () => {
-            closeAll();
-        };
-    }, []);
+		return () => {
+			closeAll();
+		};
+	}, []);
 
-    return (
-        <SpaceContext value={{
-            project,
-            params,
-            loadState,
-            saveState,
-            error,
-            isLimited,
-            save
-        }}>
-            {children}
-        </SpaceContext>
-    );
+	return (
+		<SpaceContext
+			value={{
+				project,
+				params,
+				loadState,
+				saveState,
+				error,
+				isLimited,
+				save,
+			}}
+		>
+			{children}
+		</SpaceContext>
+	);
 }

@@ -46,7 +46,7 @@
     var BOARD = new Board(cg, dragGroup);
     BOARD.setNotifyMoveDone(solitareMoveDone);
 
-    var DECK_PILES = new Array();
+    var DECK_PILES = [];
     DECK_PILES[0] = new Pile(BOARD, 2.5, 5,   75, 105, 0, 0, 0, 0);
     DECK_PILES[1] = new Pile(BOARD, 2.5, 120, 75, 105, 0, 0, 0, 0);
     DECK_PILES[2] = new Pile(BOARD, 2.5, 235, 75, 105, 0, 0, 0, 0);
@@ -85,8 +85,8 @@
         DECK_PILES[i].setDropCheck(deckDropCheck);
       }
 
-      pileDown = new Array();
-      pileUp   = new Array();
+      pileDown = [];
+      pileUp   = [];
       for (var i=0; i<7; i++) {
          pileDown[i] = new Pile(BOARD, 80*(i+1), 65, 75, 105, 0, 10, 0, -10);
          pileUp[i]   = new Pile(BOARD, 80*(i+1), 75, 75, 105, 0, 25, 0, 0);
@@ -165,7 +165,7 @@
       for (var i=0; i<7; i++) {
         if (pileUp[i].size() == 0) {
           var len = pile.size();
-          var cards = new Array()
+          var cards = []
           for (var j=0; j<len; j++) {
             cards.push(pile.cards[j]);
           }

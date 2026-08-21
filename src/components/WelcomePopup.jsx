@@ -15,12 +15,11 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-/* eslint-disable react/prop-types */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
 
 import "../css/welcomePopup.css";
 
-import * as pkg from '../../package.json';
+import * as pkg from "../../package.json";
 
 import projectIcon from "../assets/project.svg";
 import importIcon from "../assets/upload.svg";
@@ -28,40 +27,53 @@ import importIcon from "../assets/upload.svg";
 import Popup from "./Popup.jsx";
 
 export default function WelcomePopup({
-    onCancel,
-    onNewProject,
-    onImportProject,
+	onCancel,
+	onNewProject,
+	onImportProject,
 }) {
-
-    return <Popup
-        title={"Bienvenue sur Tiquettes v" + pkg.version}
-        showCloseButton={false}
-        onCancel={() => onCancel()}
-        showOkButton={false}
-    >
-        <ul className="bigList">
-            <li onClick={() => {
-                onNewProject();
-            }}>
-                <img src={projectIcon} width={48} height={48} alt="Nouveau projet" />
-                <div className="bigList-content">
-                    <div className="bigList-content_title">Nouveau projet libre</div>
-                    <div className="bigList-content_description">Démarrez librement votre nouveau projet. C&#39;est à
-                        vous de renseigner toutes les informations requises.
-                    </div>
-                </div>
-            </li>
-            <li onClick={() => {
-                onImportProject();
-            }}>
-                <img src={importIcon} width={48} height={48} alt="Importer un projet" />
-                <div className="bigList-content">
-                    <div className="bigList-content_title">Importer un projet existant</div>
-                    <div className="bigList-content_description">Chargez facilement un ancien projet depuis votre
-                        ordinateur.
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </Popup>
+	return (
+		<Popup
+			title={`Bienvenue sur Tiquettes v${pkg.version}`}
+			showCloseButton={false}
+			onCancel={() => onCancel()}
+			showOkButton={false}
+		>
+			<ul className="bigList">
+				<li
+					onClick={() => {
+						onNewProject();
+					}}
+				>
+					<img src={projectIcon} width={48} height={48} alt="Nouveau projet" />
+					<div className="bigList-content">
+						<div className="bigList-content_title">Nouveau projet libre</div>
+						<div className="bigList-content_description">
+							Démarrez librement votre nouveau projet. C&#39;est à vous de
+							renseigner toutes les informations requises.
+						</div>
+					</div>
+				</li>
+				<li
+					onClick={() => {
+						onImportProject();
+					}}
+				>
+					<img
+						src={importIcon}
+						width={48}
+						height={48}
+						alt="Importer un projet"
+					/>
+					<div className="bigList-content">
+						<div className="bigList-content_title">
+							Importer un projet existant
+						</div>
+						<div className="bigList-content_description">
+							Chargez facilement un ancien projet depuis votre ordinateur.
+						</div>
+					</div>
+				</li>
+			</ul>
+		</Popup>
+	);
 }

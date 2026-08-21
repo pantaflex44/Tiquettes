@@ -16,24 +16,34 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect } from "react";
-
-/* eslint-disable react/prop-types */
-
-export default function EditorContactSelector({ id, value, currentModuleId, filteredModulesListBySchemaFuncs, onChange = null }) {
-    return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
-        <option value={""}>- aucun contacteur -</option>
-        {Object.entries(filteredModulesListBySchemaFuncs)
-            .map(([k, l]) => {
-                return (l.map((module) => (
-                    currentModuleId !== module.id && (k === 'kc' || k === 'tl')
-                        ? <option key={`${k}-${module.id}`}
-                                  value={module.id}>{`${module.id} ${module.text ? '- ' + module.text : ''}`.trim()}</option>
-                        : null
-                )).filter(f => f !== null))
-            })}
-    </select>
+export default function EditorContactSelector({
+	id,
+	value,
+	currentModuleId,
+	filteredModulesListBySchemaFuncs,
+	onChange = null,
+}) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+		>
+			<option value={""}>- aucun contacteur -</option>
+			{Object.entries(filteredModulesListBySchemaFuncs).map(([k, l]) => {
+				return l
+					.map((module) =>
+						currentModuleId !== module.id && (k === "kc" || k === "tl") ? (
+							<option key={`${k}-${module.id}`} value={module.id}>
+								{`${module.id} ${module.text ? `- ${module.text}` : ""}`.trim()}
+							</option>
+						) : null,
+					)
+					.filter((f) => f !== null);
+			})}
+		</select>
+	);
 }

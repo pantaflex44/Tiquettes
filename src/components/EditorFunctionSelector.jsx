@@ -16,18 +16,34 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-import schemaFunctions from '../schema_functions.json';
+import schemaFunctions from "../schema_functions.json";
 
-export default function EditorFunctionSelector({ id, value, title = null, onChange = null }) {
-    return <select id={id} name={id} value={value} title={title ?? ''}
-        onChange={(e) => {
-            if (onChange) onChange(e.target.value)
-        }} style={{ flex: 1 }}>
-        <option value={""}>-</option>
-        {Object.keys(schemaFunctions)
-            .filter(key => (schemaFunctions[key].selectable ?? false) === true)
-            .map((key, i) => <option key={i}
-                value={key}>{schemaFunctions[key].name}</option>)}
-    </select>
+export default function EditorFunctionSelector({
+	id,
+	value,
+	title = null,
+	onChange = null,
+}) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			title={title ?? ""}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+			style={{ flex: 1 }}
+		>
+			<option value={""}>-</option>
+			{Object.keys(schemaFunctions)
+				.filter((key) => (schemaFunctions[key].selectable ?? false) === true)
+				.map((key, i) => (
+					// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+					<option key={i} value={key}>
+						{schemaFunctions[key].name}
+					</option>
+				))}
+		</select>
+	);
 }

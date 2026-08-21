@@ -16,165 +16,227 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import "../css/groupColorSelector.css";
 
-import caretDownIcon from '../assets/caret-down.svg';
-import caretUpIcon from '../assets/caret-up.svg';
+import { ChromePicker } from "react-color";
+import caretDownIcon from "../assets/caret-down.svg";
+import caretUpIcon from "../assets/caret-up.svg";
 import GroupColorSelectorItem from "./GroupColorSelectorItem";
 import GroupColorSelectorSeparator from "./GroupColorSelectorSeparator";
 import Popup from "./Popup";
-import { ChromePicker } from "react-color";
 
 export default function GroupColorSelector({
-    switchboard,
-    value = '',
-    onChange = null,
-    onOpened = null
+	switchboard,
+	value = "",
+	onChange = null,
+	onOpened = null,
 }) {
-    const [opened, setOpened] = useState(false);
-    const [paletteOpened, setPaletteOpened] = useState(false);
-    const [hoveredItem, setHoveredItem] = useState(false);
-    const [selected, setSelected] = useState({ key: value, color: value, title: '' });
-    const found = useMemo(() => {
-        let f = {};
-        switchboard.rows.forEach((r) => {
-            r.forEach((m) => {
-                const grp = (m.grp ?? '').trim();
-                if (grp !== '') {
-                    if (!f[grp]) f[grp] = [];
-                    f[grp].push(m);
-                }
-            })
-        });
-        return f;
-    }, [switchboard.rows]);
+	const [opened, setOpened] = useState(false);
+	const [paletteOpened, setPaletteOpened] = useState(false);
+	const [hoveredItem, setHoveredItem] = useState(false);
+	const [selected, setSelected] = useState({
+		key: value,
+		color: value,
+		title: "",
+	});
+	const found = useMemo(() => {
+		const f = {};
+		switchboard.rows.forEach((r) => {
+			r.forEach((m) => {
+				const grp = (m.grp ?? "").trim();
+				if (grp !== "") {
+					if (!f[grp]) f[grp] = [];
+					f[grp].push(m);
+				}
+			});
+		});
+		return f;
+	}, [switchboard.rows]);
 
-    const listRef = useRef();
+	const listRef = useRef();
 
-    function handleColorListToggler() {
-        setOpened((old) => {
-            return !old;
-        });
-        setTimeout(() => listRef.current.focus(), 200);
-    }
+	function handleColorListToggler() {
+		setOpened((old) => {
+			return !old;
+		});
+		setTimeout(() => listRef.current.focus(), 200);
+	}
 
-    function handleKeyUp(e) {
-        if (e.key === 'Escape') setOpened(false);
-    }
+	function handleKeyUp(e) {
+		if (e.key === "Escape") setOpened(false);
+	}
 
-    function handleColorItemSelected(selected) {
-        setSelected(() => selected);
-        setOpened(false);
-    }
+	function handleColorItemSelected(selected) {
+		setSelected(() => selected);
+		setOpened(false);
+	}
 
-    useEffect(() => {
-        const c = selected?.color ?? '';
-        if (c !== value && onChange) onChange(c);
-    }, [selected]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		const c = selected?.color ?? "";
+		if (c !== value && onChange) onChange(c);
+	}, [selected]);
 
-    useEffect(() => {
-        if (onOpened) onOpened(paletteOpened);
-    }, [paletteOpened]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		if (onOpened) onOpened(paletteOpened);
+	}, [paletteOpened]);
 
-    return (
-        <>
-            <div style={{ position: 'relative' }} className="icon_selector">
-                <div className={`icon_selector_box ${opened ? 'focused' : ''}`} style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start',
-                    columnGap: '1em',
-                    minWidth: '19px',
-                    width: 'calc(100% - 1.3em)',
-                    minHeight: '19px',
-                    border: '1px solid darkgray',
-                    borderRadius: '5px',
-                    padding: '0.5em',
-                    fontWeight: 500,
-                    backgroundColor: '#fff'
-                }}
-                    onClick={handleColorListToggler}
-                >
-                    <div style={{ width: '30px', height: '20px', backgroundColor: selected.color }}></div>
-                    <img loading={'lazy'} src={opened ? caretUpIcon : caretDownIcon} width={16} height={16}
-                        style={{ padding: '0px', cursor: 'pointer', marginTop: '2px' }} alt="Choisir une couleur"
-                        title="Liste des couleurs" />
-                </div>
+	return (
+		<>
+			<div style={{ position: "relative" }} className="icon_selector">
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+				<div
+					className={`icon_selector_box ${opened ? "focused" : ""}`}
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						flexWrap: "nowrap",
+						alignItems: "center",
+						justifyContent: "flex-start",
+						columnGap: "1em",
+						minWidth: "19px",
+						width: "calc(100% - 1.3em)",
+						minHeight: "19px",
+						border: "1px solid darkgray",
+						borderRadius: "5px",
+						padding: "0.5em",
+						fontWeight: 500,
+						backgroundColor: "#fff",
+					}}
+					onClick={handleColorListToggler}
+				>
+					<div
+						style={{
+							width: "30px",
+							height: "20px",
+							backgroundColor: selected.color,
+						}}
+					></div>
+					<img
+						loading={"lazy"}
+						src={opened ? caretUpIcon : caretDownIcon}
+						width={16}
+						height={16}
+						style={{ padding: "0px", cursor: "pointer", marginTop: "2px" }}
+						alt="Choisir une couleur"
+						title="Liste des couleurs"
+					/>
+				</div>
 
-                <ul tabIndex={-1} onKeyUp={handleKeyUp} ref={listRef} style={{
-                    zIndex: 1,
-                    visibility: (opened ? 'visible' : 'hidden'),
-                    position: 'absolute',
-                    border: '1px solid darkgray',
-                    borderRadius: '5px',
-                    padding: '0.5em',
-                    fontWeight: 400,
-                    width: '16em',
-                    margin: 0,
-                    marginTop: '0em',
-                    height: 'max-content',
-                    maxHeight: '24em',
-                    overflowY: 'auto',
-                    backgroundColor: '#fff',
-                    listStyle: 'none'
-                }} onMouseOut={() => setHoveredItem(null)} onBlur={() => setOpened(false)}>
-                    <GroupColorSelectorItem
-                        value={{ key: '', color: '', title: '' }}
-                        selected={selected}
-                        handleColorItemSelected={handleColorItemSelected}
-                        hoveredItem={hoveredItem}
-                        setHoveredItem={setHoveredItem}
-                    />
-                    <GroupColorSelectorItem
-                        value={{ key: '_new_', color: '', title: '' }}
-                        selected={selected}
-                        handleColorItemSelected={() => {
-                            let c = (selected?.color ?? 'transparent').trim();
-                            if (c === '') c = 'transparent';
-                            setPaletteOpened(true);
-                        }}
-                        hoveredItem={hoveredItem}
-                        setHoveredItem={setHoveredItem}
-                    />
-                    {Object.keys(found).length > 0 && <>
-                        <GroupColorSelectorSeparator />
-                        {Object.keys(found).map((color) => {
-                            let t = found[color].map((m) => `<small><b>${m.id}</b></small> ${m.text}`.trim());
-                            return <GroupColorSelectorItem
-                                key={color}
-                                value={{ key: color, color, title: t.join('<br />') }}
-                                selected={selected}
-                                handleColorItemSelected={handleColorItemSelected}
-                                hoveredItem={hoveredItem}
-                                setHoveredItem={setHoveredItem}
-                            />;
-                        })}
-                    </>}
-                </ul>
-            </div>
+				<ul
+					tabIndex={-1}
+					onKeyUp={handleKeyUp}
+					ref={listRef}
+					style={{
+						zIndex: 1,
+						visibility: opened ? "visible" : "hidden",
+						position: "absolute",
+						border: "1px solid darkgray",
+						borderRadius: "5px",
+						padding: "0.5em",
+						fontWeight: 400,
+						width: "16em",
+						margin: 0,
+						marginTop: "0em",
+						height: "max-content",
+						maxHeight: "24em",
+						overflowY: "auto",
+						backgroundColor: "#fff",
+						listStyle: "none",
+					}}
+					onMouseOut={() => setHoveredItem(null)}
+					onBlur={() => setOpened(false)}
+				>
+					<GroupColorSelectorItem
+						value={{ key: "", color: "", title: "" }}
+						selected={selected}
+						handleColorItemSelected={handleColorItemSelected}
+						hoveredItem={hoveredItem}
+						setHoveredItem={setHoveredItem}
+					/>
+					<GroupColorSelectorItem
+						value={{ key: "_new_", color: "", title: "" }}
+						selected={selected}
+						handleColorItemSelected={() => {
+							let c = (selected?.color ?? "transparent").trim();
+							if (c === "") c = "transparent";
+							setPaletteOpened(true);
+						}}
+						hoveredItem={hoveredItem}
+						setHoveredItem={setHoveredItem}
+					/>
+					{Object.keys(found).length > 0 && (
+						<>
+							<GroupColorSelectorSeparator />
+							{Object.keys(found).map((color) => {
+								const t = found[color].map((m) =>
+									`<small><b>${m.id}</b></small> ${m.text}`.trim(),
+								);
+								return (
+									<GroupColorSelectorItem
+										key={color}
+										value={{ key: color, color, title: t.join("<br />") }}
+										selected={selected}
+										handleColorItemSelected={handleColorItemSelected}
+										hoveredItem={hoveredItem}
+										setHoveredItem={setHoveredItem}
+									/>
+								);
+							})}
+						</>
+					)}
+				</ul>
+			</div>
 
-            {paletteOpened && <Popup
-                title={"Nouvelle couleur de groupe"}
-                showCloseButton={false}
-                showCancelButton={false}
-                showOkButton={true}
-                withOverflow={false}
-                width={315}
-                onOk={() => setPaletteOpened(false)}
-            >
-                <div style={{ boxSizing: 'border-box', width: '100%', height: 'max-content', border: '1px solid #ccc', borderTopLeftRadius: '7px', borderTopRightRadius: '7px' }}>
-                    <div style={{ boxSizing: 'border-box', width: '100%', height: '30px', backgroundColor: selected.color, marginBottom: '0', borderTopLeftRadius: '7px', borderTopRightRadius: '7px' }}></div>
-                    <ChromePicker disableAlpha={true} color={selected.color} onChange={(c) => setSelected({
-                        key: c.hex,
-                        color: c.hex
-                    })} width={300} />
-                </div>
-            </Popup>}
-        </>
-    );
+			{paletteOpened && (
+				<Popup
+					title={"Nouvelle couleur de groupe"}
+					showCloseButton={false}
+					showCancelButton={false}
+					showOkButton={true}
+					withOverflow={false}
+					width={315}
+					onOk={() => setPaletteOpened(false)}
+				>
+					<div
+						style={{
+							boxSizing: "border-box",
+							width: "100%",
+							height: "max-content",
+							border: "1px solid #ccc",
+							borderTopLeftRadius: "7px",
+							borderTopRightRadius: "7px",
+						}}
+					>
+						<div
+							style={{
+								boxSizing: "border-box",
+								width: "100%",
+								height: "30px",
+								backgroundColor: selected.color,
+								marginBottom: "0",
+								borderTopLeftRadius: "7px",
+								borderTopRightRadius: "7px",
+							}}
+						></div>
+						<ChromePicker
+							disableAlpha={true}
+							color={selected.color}
+							onChange={(c) =>
+								setSelected({
+									key: c.hex,
+									color: c.hex,
+								})
+							}
+							width={300}
+						/>
+					</div>
+				</Popup>
+			)}
+		</>
+	);
 }

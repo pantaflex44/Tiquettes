@@ -1,981 +1,981 @@
 {
-    "name": "tiquettes",
-    "title": "Tiquettes",
-    "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
-    "keywords": [
-        "étiquette",
-        "schéma",
-        "tableau",
-        "armoire",
-        "électrique",
-        "électricité",
-        "unifilaire",
-        "créer",
-        "générateur",
-        "schneider",
-        "hager",
-        "legrand"
-    ],
-    "author": "Christophe LEMOINE",
-    "license": "AGPL-3.0",
-    "homepage": "https://www.tiquettes.fr/app/",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/pantaflex44/Tiquettes"
-    },
-    "funding": [
-        {
-            "type": "individual",
-            "url": "https://www.tiquettes.fr/dons.php"
-        },
-        {
-            "type": "Ko-fi",
-            "url": "https://ko-fi.com/pantaflex44"
-        }
-    ],
-    "changelog": {
-        "2.2.9": {
-            "date": "2026-08-21",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Diverses refactorisations / optimisations du code source de l'application."
-                    },
-                    {
-                        "text": "Correction de l'ergonomie des menus déroulants de la barre de naviguation."
-                    },
-                    {
-                        "text": "Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF."
-                    }
-                ],
-                "updates": [
-                    {
-                        "text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
-                    },
-                    {
-                        "text": "Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG."
-                    },
-                    {
-                        "text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
-                    },
-                    {
-                        "text": "Mise à jour du fichier README.md"
-                    },
-                    {
-                        "text": "Mise à jour de la documentation"
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.",
-                        "from": {
-                            "name": "Discussion #98",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/98"
-                        }
-                    },
-                    {
-                        "text": "Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage, Eclairages / Prises (RGIE).",
-                        "from": {
-                            "name": "Formulaire de contact #1",
-                            "link": "https://www.tiquettes.fr/app/"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.2.8": {
-            "date": "2026-07-03",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Mise à jour des modules Node.js."
-                    },
-                    {
-                        "text": "Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'."
-                    },
-                    {
-                        "text": "Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.",
-                        "from": {
-                            "name": "Issue #85",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/85"
-                        }
-                    },
-                    {
-                        "text": "Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement."
-                    },
-                    {
-                        "text": "Correction du suivi des folios dans le système d'impression PDF.",
-                        "from": {
-                            "name": "Issue #71",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/71"
-                        }
-                    },
-                    {
-                        "text": "Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.",
-                        "from": {
-                            "name": "Issue #27",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203"
-                        }
-                    }
-                ],
-                "updates": [
-                    {
-                        "text": "Mise à jour de la documentation."
-                    },
-                    {
-                        "text": "Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client."
-                    },
-                    {
-                        "text": "Amélioration de l'ergonomie et l'expérience utilisateur."
-                    },
-                    {
-                        "text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
-                    },
-                    {
-                        "text": "Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NF).",
-                        "from": {
-                            "name": "Issue #49",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/49"
-                        }
-                    },
-                    {
-                        "text": "Mise à jour des médias pour OG / Github / Twitter."
-                    },
-                    {
-                        "text": "Légère mise à jour de l'arborescence du projet."
-                    },
-                    {
-                        "text": "Intégration des paramètres d'impression dans les fichiers des projets."
-                    },
-                    {
-                        "text": "Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.",
-                        "from": {
-                            "name": "Discussion #43",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Gestion des sources d'alimentations comme parents possibles pour les modules de tête.",
-                        "from": {
-                            "name": "Issue #51",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/51"
-                        }
-                    },
-                    {
-                        "text": "Ajout du type de module: Coupe Circuit.",
-                        "from": {
-                            "name": "Issue #95",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/95"
-                        }
-                    },
-                    {
-                        "text": "Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.",
-                        "from": {
-                            "name": "Issue #79",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/79"
-                        }
-                    },
-                    {
-                        "text": "Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire."
-                    },
-                    {
-                        "text": "Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire",
-                        "from": {
-                            "name": "Issue #84",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/84"
-                        }
-                    },
-                    {
-                        "text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!",
-                        "from": {
-                            "name": "Issue #70",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/70"
-                        }
-                    },
-                    {
-                        "text": "Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion."
-                    },
-                    {
-                        "text": "Ajout de la possibilité d'exclure un module de la numérotation automatique.",
-                        "from": {
-                            "name": "Issue #77",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/77"
-                        }
-                    },
-                    {
-                        "text": "Ajout de la polarisation 2P.",
-                        "from": {
-                            "name": "Issue #75",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/75"
-                        }
-                    },
-                    {
-                        "text": "Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.",
-                        "from": {
-                            "name": "Issue #72",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/72"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.2.7": {
-            "date": "2026-03-27",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug lors de la ré-identification automatique des modules",
-                        "from": {
-                            "name": "Issue #67",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/67"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Redimmensionnement de la zone de travail",
-                        "from": {
-                            "name": "Discussion #68",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/68"
-                        }
-                    },
-                    {
-                        "text": "Ajouter des lignes vides au début des libellés des étiquettes.",
-                        "from": {
-                            "name": "Issue #66",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/66"
-                        }
-                    },
-                    {
-                        "text": "Ajout de la possibilité d'échanger 2 modules en lieu et place.",
-                        "from": {
-                            "name": "Discussion #65",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/65"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.2.6": {
-            "date": "2026-01-05",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction typographique Tiquettes/src/EditorCurrentSelector.jsx par https://github.com/mmnlfrrr.",
-                        "from": {
-                            "name": "PR #54",
-                            "link": "https://github.com/pantaflex44/Tiquettes/pull/54"
-                        }
-                    },
-                    {
-                        "text": "Correction d'un bug empechant l'affichage du sélecteur de couleur de groupe.",
-                        "from": {
-                            "name": "Issue #47",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/47"
-                        }
-                    },
-                    {
-                        "text": "Modification du rendu du schéma unifilaire pour améliorer sa lecture."
-                    },
-                    {
-                        "text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seulement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
-                        "from": {
-                            "name": "Discussion #43",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/43"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouvelle fonctionnalité permettant d'indiquer une nouvelle version disponible de l'application. L'utilisateur devra recharger la page de l'application pour en bénéficier."
-                    },
-                    {
-                        "text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
-                    },
-                    {
-                        "text": "Ajout d'un nouveau pictogramme: 'Réseau électrique'.",
-                        "from": {
-                            "name": "Discussion #44",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/44"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.2.5": {
-            "date": "2025-10-03",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Mise à jour globale de toutes les dépendances."
-                    },
-                    {
-                        "text": "Correction des pictogrammes qui possédaient un problème de colorisation lors du rendu PDF."
-                    },
-                    {
-                        "text": "Correction du moteur de rendu PDF pour la création d'étiquettes de très petites hauteurs.",
-                        "from": {
-                            "name": "Issue #40",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/40"
-                        }
-                    },
-                    {
-                        "text": "Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème."
-                    },
-                    {
-                        "text": "Légère correction de la position des éléments dans chaque thème imprimable."
-                    },
-                    {
-                        "text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
-                    },
-                    {
-                        "text": "Suppression de la limite de 3 lignes lors de l'impression des propriétés d'un module pour former la nomenclature.",
-                        "from": {
-                            "name": "Issue #28",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/28"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouvelle propriété permettant de renseigner la phase utilisée lors d'une distribution monophasée à partir d'un parent triphasé.",
-                        "from": {
-                            "name": "Issue #41",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/41"
-                        }
-                    },
-                    {
-                        "text": "Nouveau bouton 'zoom' dans la vue schéma de l'éditeur. Permet de légerement agrandir visuellement le schéma affiché."
-                    },
-                    {
-                        "text": "Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.",
-                        "from": {
-                            "name": "Issue #38",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/38"
-                        }
-                    },
-                    {
-                        "text": "Réponse à une proposition, nouvelle fonctionnalité qui permet d'associer un module à un groupe via une couleur. Couleur utilisée (si disponible et si demandée) par les thèmes.",
-                        "from": {
-                            "name": "Discussion #36",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/36"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.2.4": {
-            "date": "2025-09-07",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug rendant obligatoire la définition de la section des conducteurs affiliés à chaque module.  3 nouvelles possibilité:\n\t- Détection automatique : défini automatiquement la section en fonction du calibre\n\t- Inconnue : pas de section définie\n\t- Xmm² : définition arbitraire"
-                    }
-                ]
-            }
-        },
-        "2.2.3": {
-            "date": "2025-08-25",
-            "actions": {
-                "adds": [
-                    {
-                        "text": "Ajout de la propriété '_Fonction_' pour chaque module. Représentation textuelle de la fonction d'un module (Type). Permets de réaliser des étiquettes où l'icône est remplacée par sa fonction textuelle.",
-                        "from": {
-                            "name": "zoliaaz",
-                            "link": "https://github.com/zoliaaz"
-                        }
-                    },
-                    {
-                        "text": "Création d'un nouveau thème pour l'occasion : '_Type et Description seulement_'.",
-                        "from": {
-                            "name": "zoliaaz",
-                            "link": "https://github.com/zoliaaz"
-                        }
-                    },
-                    {
-                        "text": "Ajout d'une option d'impression permettant d'indiquer, hors zone de coupe, le calibre sous chaque module pour faciliter l'installation de ceux-ci.",
-                        "from": {
-                            "name": "zoliaaz",
-                            "link": "https://github.com/zoliaaz"
-                        }
-                    },
-                    {
-                        "text": "Ajout de la propriété '_Section des conducteurs_' pour chaque module.",
-                        "from": {
-                            "name": "zoliaaz",
-                            "link": "https://github.com/zoliaaz"
-                        }
-                    },
-                    {
-                        "text": "Possibilité d'imprimer ou non la page de garde.",
-                        "from": {
-                            "name": "Discussion #29",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/29#discussioncomment-13903864"
-                        }
-                    },
-                    {
-                        "text": "Ajout de nouveaux types de modules pour le schéma unifilaire : '_Fusible_', '_Carillon_', '_Voyant_', '_Commande NO et NF_', '_Bouton poussoir NO et NF_'."
-                    }
-                ],
-                "patches": [
-                    {
-                        "text": "Retour du raccourci pour supprimer rapidement un module.",
-                        "from": {
-                            "name": "zoliaaz",
-                            "link": "https://github.com/zoliaaz"
-                        }
-                    },
-                    {
-                        "text": "Edition d'un module en cliquant sur ses propriétés depuis la nomenclature."
-                    }
-                ],
-                "updates": [
-                    {
-                        "text": "Retrait du système d'impression standard. L'impression PDF est devenue le seul mode disponible."
-                    }
-                ]
-            }
-        },
-        "2.2.2": {
-            "date": "2025-05-23",
-            "actions": {
-                "adds": [
-                    {
-                        "text": "Ajout de lignes de coupe pour les massicots."
-                    },
-                    {
-                        "text": "Ajout de nouvelles propriétés d'impression."
-                    },
-                    {
-                        "text": "Ajout de quelques statistiques accessibles publiquement à l'adresse : https://www.tiquettes.fr/stats.php"
-                    }
-                ]
-            }
-        },
-        "2.2.1": {
-            "date": "2025-05-12",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Gros correctif suite à la dernière mise à jour majeure.\n\t- Téléchargement des thèmes : corrigé\n\t- Impression au format PDF : corrigé"
-                    }
-                ]
-            }
-        },
-        "2.2.0": {
-            "date": "2025-05-11",
-            "actions": {
-                "adds": [
-                    {
-                        "text": "Grosse nouveauté, ajout de la fonction 'Imprimer au format PDF' dans le menu d'impression d'un projet. Cette nouvelle fonctionnalité permet de résoudre les problèmes de compatibilité avec certains navigateurs basés sur Gecko (Firefox, etc.) et Webkit (Safari, etc.). Une fois la case cochée, le projet est converti en un fichier PDF pour être imprimé correctement en toutes circonstances !",
-                        "from": {
-                            "name": "Issue #8",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/8"
-                        }
-                    },
-                    {
-                        "text": "Nouveau service externe de conversion d'un projet Tiquettes (>= 2.1.5) en document PDF accessible à l'adresse : https://www.tiquettes.fr/pdf.php."
-                    },
-                    {
-                        "text": "Mise à disposition d'une bibliothèque de thèmes à télécharger pour embellir ses étiquettes (https://www.tiquettes.fr/themes.php)."
-                    }
-                ],
-                "patches": [
-                    {
-                        "text": "Mise à jour de toutes les dépendances."
-                    },
-                    {
-                        "text": "Nette amélioration de la qualité visuelle des pictogrammes et symboles électriques."
-                    },
-                    {
-                        "text": "Possibilité d'éditer tous les thèmes proposés !"
-                    }
-                ]
-            }
-        },
-        "2.1.5": {
-            "date": "2025-04-23",
-            "actions": {
-                "adds": [
-                    {
-                        "text": "Nouveaux pictogrammes:\n\t- Horloge Journaliere\n\t- Horloge Hebdomadaire\n\t- Moteur Electrique\n\t- Chargeur\n\t- Maison / Dépendance / Extension\n\t- Onduleur\n\t- Interrupteur différentiel",
-                        "from": {
-                            "name": "PR #21",
-                            "link": "https://github.com/pantaflex44/Tiquettes/pull/21"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.1.4": {
-            "date": "2025-04-22",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug affectant la représentation correcte d'un contacteur si son parent et le disjoncteur asservi sont les mêmes (télérupteur par exemple asservissant son disjoncteur parent).",
-                        "from": {
-                            "name": "Discussions #17",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/17"
-                        }
-                    },
-                    {
-                        "text": "Correction des fautes d'orthographes dans les noms des icônes.",
-                        "from": {
-                            "name": "PR #18",
-                            "link": "https://github.com/pantaflex44/Tiquettes/pull/18"
-                        }
-                    },
-                    {
-                        "text": "Séparation des icônes 'Volet roulant / Store / Porte de garage' en 3 icônes indépendantes.",
-                        "from": {
-                            "name": "Discussion #19",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/19"
-                        }
-                    },
-                    {
-                        "text": "Adaptation automatique des anciens projets au nouveau système de thème."
-                    }
-                ],
-                "updates": [
-                    {
-                        "text": "Modification du système de thèmes."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouveau pictogramme:\n\t- Pompe de relevage",
-                        "from": {
-                            "name": "Discussions #19",
-                            "link": "https://github.com/pantaflex44/Tiquettes/discussions/19"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.1.3": {
-            "date": "2025-04-11",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction du fichier README.md.",
-                        "from": {
-                            "name": "PR #12",
-                            "link": "https://github.com/pantaflex44/Tiquettes/pull/12"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouveau pictogramme:\n\t- Détecteur de fumées\n\t- Sonnette / Carillon\n\t- Alarme intrusion\n\t- Transformateur",
-                        "from": {
-                            "name": "Issue #13",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/13"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.1.2": {
-            "date": "2025-03-23",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug affectant la sélection d'un pictogramme dans l'éditeur de module.",
-                        "from": {
-                            "name": "Issue #11",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/11"
-                        }
-                    }
-                ]
-            }
-        },
-        "2.1.1": {
-            "date": "2025-03-21",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Amélioration des performances dans l'éditeur de modules."
-                    },
-                    {
-                        "text": "Amélioration légère de l'ergonomie."
-                    },
-                    {
-                        "text": "Réécriture partielle du système de Copier / Coller et intégration de la fonction Couper."
-                    },
-                    {
-                        "text": "Correction de divers bugs lors de la manipulation des modules."
-                    }
-                ]
-            }
-        },
-        "2.1.0": {
-            "date": "2025-03-12",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Prise en compte de la règle de l'amont dans le monitoring des interrupteurs différentiels.",
-                        "from": {
-                            "name": "Issue #9",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/9"
-                        }
-                    },
-                    {
-                        "text": "Modification de la représentation des contacteurs (J/N, télérupteurs, minuteries, etc). Il est désormais possible d'asservir un départ avec un contacteur précédement ajouté.",
-                        "from": {
-                            "name": "Issue #10",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/10"
-                        }
-                    },
-                    {
-                        "text": "Correction d'un bug empêchant le ré-assignement automatique des identifiants parents lors de la modification de l'identifiant d'un module."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouveau pictogramme:\n\t- Telerupteur\n\t- Parafoudre"
-                    },
-                    {
-                        "text": "Ajout d'un éditeur pour personnaliser le thème de ses étiquettes."
-                    },
-                    {
-                        "text": "Ajout de 2 nouveaux thèmes personnalisés dans la rubrique 'Créations: GoldenWine, 'Créations: Orange is the new dark'."
-                    }
-                ]
-            }
-        },
-        "2.0.5": {
-            "date": "2025-02-12",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Légère correction de bugs dans l'interface."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Pour améliorer la compatibilité avec les anciens tableaux électriques, il est désormais possible de régler la largeur des étiquettes. 17.5mm ou 18mm par module."
-                    }
-                ]
-            }
-        },
-        "2.0.4": {
-            "date": "2025-01-27",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction du symbole 'Interrupteur Sectionneur'.",
-                        "from": {
-                            "name": "Issue #7",
-                            "link": "https://github.com/pantaflex44/Tiquettes/issues/7"
-                        }
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Il est désormais possible de réduire d'une demi taille, un module ayant une taille de plus d'un emplacement (fonctionnalité en cours de test)."
-                    }
-                ]
-            }
-        },
-        "2.0.3": {
-            "date": "2024-12-31",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Nouvelle fenêtre d'accueil lors de la création d'un nouveau projet."
-                    },
-                    {
-                        "text": "Amélioration de la mise en page lors de l'impression du projet."
-                    },
-                    {
-                        "text": "Nouvelle routine d'assignation des identifiants des modules avec correction des doublons, et filtrage des modules libres."
-                    },
-                    {
-                        "text": "Possibilité de réassigner automatiquement les identifiants des modules de l'ensemble du projet sur simple action manuelle (nouveau bouton dans la barre à outils des étiquettes)."
-                    }
-                ]
-            }
-        },
-        "2.0.2": {
-            "date": "2024-12-26",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Affichage de la boite de dialogue 'Nouveau projet' lorsque l'utilisateur arrive de tiquettes.fr."
-                    },
-                    {
-                        "text": "Possibilité d'importer un projet directement depuis la boite de dialogue 'Nouveau projet'."
-                    },
-                    {
-                        "text": "Correction d'un bug permettant les doublons pour les identifiants de chaque module, cassant la génération du schéma."
-                    }
-                ]
-            }
-        },
-        "2.0.1": {
-            "date": "2024-12-24",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Nouveau design pour les barres à outils."
-                    }
-                ]
-            }
-        },
-        "2.0.0": {
-            "date": "2024-12-01",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Changement de licence. Tiquettes passe désormais à la licence AGPL v3."
-                    },
-                    {
-                        "text": "Mise à jour de tous les packages de l'application."
-                    },
-                    {
-                        "text": "Amélioration globale de l'UI."
-                    },
-                    {
-                        "text": "Amélioration de l'ergonomie."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Ajout de la fonction 'schéma unifilaire'. Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module."
-                    },
-                    {
-                        "text": "Ajout du moniteur de surveillance permettant la détection d'erreurs liées à la norme NFC 15-100."
-                    },
-                    {
-                        "text": "Ajout de 2 nouveaux thèmes après demande: 'Petit pictogramme et grand descriptif' et 'Identifiant, petit pictogramme et grand descriptif'."
-                    }
-                ]
-            }
-        },
-        "1.7.2": {
-            "date": "2024-09-13",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction de bugs mineurs."
-                    },
-                    {
-                        "text": "Correction d'un bug dans la gestion de l'impression sous Firefox."
-                    }
-                ]
-            }
-        },
-        "1.7.0": {
-            "date": "2024-08-02",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Nouvelle liste de sélection d'un pictogramme (Affichage en liste déroulante, Possibilité de rechercher un pictogramme par sa description)."
-                    }
-                ],
-                "updates": [
-                    {
-                        "text": "Déplacement du bouton permettant de libérer (supprimer les données) un module dans la fenêtre d'édition de celui-ci."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Nouveaux pictogrammes:\n\t- Alarme incendie\n\t- Lingerie / Repassage\n\t- Bateaux / Ponton / Port\n\t- Audio / Musique / Multimédia\n\t- Télévision / Ecran / Projecteur"
-                    },
-                    {
-                        "text": "Ajout d'une prévisualisation (démo) du module en cours d'édition."
-                    },
-                    {
-                        "text": "Nouvelle fonctionnalité permettant de duppliquer un module (Copier / Coller) vers un emplacement suffisament grand de n'importe quelle rangée."
-                    }
-                ]
-            }
-        },
-        "1.6.2": {
-            "date": "2024-07-05",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Modification des icones pour une amélioration de la qualité d'impression."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Ajout d'annotations pour chaque module. Seulement visible sur la nomenclature."
-                    }
-                ]
-            }
-        },
-        "1.6.0": {
-            "date": "2024-06-15",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Amélioration des 4 thèmes Schneider."
-                    },
-                    {
-                        "text": "Correction du dimensionnement des modules lors de l'impression."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Ajout d'une nomenclature automatique aux projets."
-                    },
-                    {
-                        "text": "Ajout d'options pour l'impression."
-                    },
-                    {
-                        "text": "Compatibilité PWA. Tiquettes est désormais installable, telle une application native, sur les appareils compatibles."
-                    }
-                ]
-            }
-        },
-        "1.5.0": {
-            "date": "2024-06-08",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Amélioration de l'expérience utilisateur avec une interface graphique plus ergonomique."
-                    },
-                    {
-                        "text": "Léger nettoyage du code."
-                    },
-                    {
-                        "text": "Récriture du système de gestion des thèmes."
-                    },
-                    {
-                        "text": "Nouvelle documentation."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA."
-                    },
-                    {
-                        "text": "Ajout des fichiers sitemap.xml et robots.txt."
-                    },
-                    {
-                        "text": "Il est désormais possible de nommer son projet lors de sa création."
-                    },
-                    {
-                        "text": "Ajout d'une date de création, d'une date de modification et d'un numéro de version à chaque projet."
-                    },
-                    {
-                        "text": "Une date de modification est automatiquement mise à jour après chaque intervention de l'utilisateur."
-                    },
-                    {
-                        "text": "Chaque exportation met à jour la version interne du projet."
-                    },
-                    {
-                        "text": "Nouveau partenaire: AZ Reso (Artisan électricien du pays Nantais - https://www.google.com/search?q=az+reso+nantes)"
-                    }
-                ]
-            }
-        },
-        "1.4.0": {
-            "date": "2024-06-02",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Auto identification des modules libres."
-                    },
-                    {
-                        "text": "Affichage de l'identifiant du module précédent lors de l'édition d'un module."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Ajout, insertion, et suppression de rangées au cours du déroulement d'un projet."
-                    }
-                ]
-            }
-        },
-        "1.3.4": {
-            "date": "2024-06-02",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Nouvelle règle d'écriture de l'identifiant d'un module: de 0 à 255 caracatères composés de a-Z A-Z 0-9 _."
-                    }
-                ]
-            }
-        },
-        "1.3.3": {
-            "date": "2024-06-02",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug altérant la sélection par défaut du thème des étiquettes lors du chargement de l'application."
-                    }
-                ]
-            }
-        },
-        "1.3.2": {
-            "date": "2024-06-02",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Amélioration de l'interface utilisateur."
-                    }
-                ]
-            }
-        },
-        "1.3.1": {
-            "date": "2024-06-01",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'un bug empechant la modification du thème."
-                    }
-                ]
-            }
-        },
-        "1.3.0": {
-            "date": "2024-06-01",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Meilleurs performances globales."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Gestion de thèmes en temps réel, applicables aux étiquettes du projet."
-                    }
-                ]
-            }
-        },
-        "1.2.0": {
-            "date": "2024-05-29",
-            "actions": {
-                "patches": [
-                    {
-                        "text": "Correction d'une erreur empêchant de mettre correctement en page les étiquettes aux formats suprérieurs au A4."
-                    },
-                    {
-                        "text": "Correction de la largeur des modules (18mm normalisé / module) lors de l'impression des étiquettes."
-                    },
-                    {
-                        "text": "Amélioration notable de l'ergonomie de l'application suivant les changements proposés par le groupe de testeurs volontaires."
-                    }
-                ],
-                "adds": [
-                    {
-                        "text": "Compatibilité avec de nouveaux paramètres d'impression."
-                    },
-                    {
-                        "text": "Possibilité de déplacer horizontalement un module dans l'espace libre à ses cotés en utilisant les icones flèches."
-                    },
-                    {
-                        "text": "Possibilité de sélectionner un module puis de le déplacer ou le redimmensionner en utilisant le clavier [-] [+] [←] [→] [Entrée] [Suppr]."
-                    },
-                    {
-                        "text": "Ajout d'un fichier CHANGELOG.md."
-                    }
-                ]
-            }
-        }
-    }
+	"name": "tiquettes",
+	"title": "Tiquettes",
+	"description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
+	"keywords": [
+		"étiquette",
+		"schéma",
+		"tableau",
+		"armoire",
+		"électrique",
+		"électricité",
+		"unifilaire",
+		"créer",
+		"générateur",
+		"schneider",
+		"hager",
+		"legrand"
+	],
+	"author": "Christophe LEMOINE",
+	"license": "AGPL-3.0",
+	"homepage": "https://www.tiquettes.fr/app/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pantaflex44/Tiquettes"
+	},
+	"funding": [
+		{
+			"type": "individual",
+			"url": "https://www.tiquettes.fr/dons.php"
+		},
+		{
+			"type": "Ko-fi",
+			"url": "https://ko-fi.com/pantaflex44"
+		}
+	],
+	"changelog": {
+		"2.2.9": {
+			"date": "2026-08-21",
+			"actions": {
+				"patches": [
+					{
+						"text": "Diverses refactorisations / optimisations du code source de l'application."
+					},
+					{
+						"text": "Correction de l'ergonomie des menus déroulants de la barre de naviguation."
+					},
+					{
+						"text": "Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF."
+					}
+				],
+				"updates": [
+					{
+						"text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
+					},
+					{
+						"text": "Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG."
+					},
+					{
+						"text": "Mise à jour de la librairie FPDF 1.8.6 => 1.9 ."
+					},
+					{
+						"text": "Mise à jour du fichier README.md"
+					},
+					{
+						"text": "Mise à jour de la documentation"
+					}
+				],
+				"adds": [
+					{
+						"text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.",
+						"from": {
+							"name": "Discussion #98",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/98"
+						}
+					},
+					{
+						"text": "Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage, Eclairages / Prises (RGIE).",
+						"from": {
+							"name": "Formulaire de contact #1",
+							"link": "https://www.tiquettes.fr/app/"
+						}
+					}
+				]
+			}
+		},
+		"2.2.8": {
+			"date": "2026-07-03",
+			"actions": {
+				"patches": [
+					{
+						"text": "Mise à jour des modules Node.js."
+					},
+					{
+						"text": "Mise à jour du choix du CLI pour la conversion des SVG en PNG si l'extension PHP 'imagick' n'est pas présente. Utilisation de 'Magick' à la place du déprécié 'Convert'."
+					},
+					{
+						"text": "Modification du PDF généré pour l'impression. Ajout des informations en marges de chaques pages même sans page de garde.",
+						"from": {
+							"name": "Issue #85",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/85"
+						}
+					},
+					{
+						"text": "Correction d'un bug empèchant d'imprimer plusieurs fois le même asservissement."
+					},
+					{
+						"text": "Correction du suivi des folios dans le système d'impression PDF.",
+						"from": {
+							"name": "Issue #71",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/71"
+						}
+					},
+					{
+						"text": "Bug au niveau du système d'impression des étiquettes corrigé. Désormais les demis modules sont correctement décorés et les thèmes sont correctement appliqués.",
+						"from": {
+							"name": "Issue #27",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/27#issuecomment-4244250203"
+						}
+					}
+				],
+				"updates": [
+					{
+						"text": "Mise à jour de la documentation."
+					},
+					{
+						"text": "Remplacement de la fenêtre basique dédiée à la création d'un nouveau projet par un assistant guidé permettant désormais le renseignement des données installateur et client."
+					},
+					{
+						"text": "Amélioration de l'ergonomie et l'expérience utilisateur."
+					},
+					{
+						"text": "Mise à jour du système de thèmes. Il est désormais possible d'orienter l'identifiant et le libellé verticalement ou horizontalement."
+					},
+					{
+						"text": "Il est désormais possible de choisir la possibilité d'indiquer si un contacteur est de type Normalement Ouvert ou de type Normalement Fermé (NO / NF).",
+						"from": {
+							"name": "Issue #49",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/49"
+						}
+					},
+					{
+						"text": "Mise à jour des médias pour OG / Github / Twitter."
+					},
+					{
+						"text": "Légère mise à jour de l'arborescence du projet."
+					},
+					{
+						"text": "Intégration des paramètres d'impression dans les fichiers des projets."
+					},
+					{
+						"text": "Modification du système indiquant l'asservissement d'un module. Il est désormais possible d'indiquer plusieurs asservissements pour un même module, et de différencier les asservissements partiels des asservissements totaux.",
+						"from": {
+							"name": "Discussion #43",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/43#discussioncomment-16495084"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Gestion des sources d'alimentations comme parents possibles pour les modules de tête.",
+						"from": {
+							"name": "Issue #51",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/51"
+						}
+					},
+					{
+						"text": "Ajout du type de module: Coupe Circuit.",
+						"from": {
+							"name": "Issue #95",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/95"
+						}
+					},
+					{
+						"text": "Nouvelle fenêtre permettant le renseignement des données inscrites sur la page de garde.",
+						"from": {
+							"name": "Issue #79",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/79"
+						}
+					},
+					{
+						"text": "Ajout d'un paramètre d'impression permettant d'indiquer le numéro du premier Folio du schéma unifilaire."
+					},
+					{
+						"text": "Ajout de nouveaux pictogrammes: Machine a glaçons, Fontaine à eau, Lave verres, Chauffe-plats, Prises en crédence, Machine à café / Bouilloire",
+						"from": {
+							"name": "Issue #84",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/84"
+						}
+					},
+					{
+						"text": "Tiquettes.fr est désormais compatible avec les imprimantes d'étiquettes de la famille Brother P-touch CUBE!",
+						"from": {
+							"name": "Issue #70",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/70"
+						}
+					},
+					{
+						"text": "Nouvelle possibilité de personnalisation dans l'éditeur de thèmes. Il est désormais possible de positionner verticalement l'identifiant et/ou le libellé. Ajout du thème 'VertiView' pour l'occasion."
+					},
+					{
+						"text": "Ajout de la possibilité d'exclure un module de la numérotation automatique.",
+						"from": {
+							"name": "Issue #77",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/77"
+						}
+					},
+					{
+						"text": "Ajout de la polarisation 2P.",
+						"from": {
+							"name": "Issue #75",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/75"
+						}
+					},
+					{
+						"text": "Ajout d'une fonctionnalité permettant d'indiquer si un départ doit alimenter seulement ses enfants ou s'il peut alimenter autre chose en parallèle de ses enfants.",
+						"from": {
+							"name": "Issue #72",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/72"
+						}
+					}
+				]
+			}
+		},
+		"2.2.7": {
+			"date": "2026-03-27",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug lors de la ré-identification automatique des modules",
+						"from": {
+							"name": "Issue #67",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/67"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Redimmensionnement de la zone de travail",
+						"from": {
+							"name": "Discussion #68",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/68"
+						}
+					},
+					{
+						"text": "Ajouter des lignes vides au début des libellés des étiquettes.",
+						"from": {
+							"name": "Issue #66",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/66"
+						}
+					},
+					{
+						"text": "Ajout de la possibilité d'échanger 2 modules en lieu et place.",
+						"from": {
+							"name": "Discussion #65",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/65"
+						}
+					}
+				]
+			}
+		},
+		"2.2.6": {
+			"date": "2026-01-05",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction typographique Tiquettes/src/EditorCurrentSelector.jsx par https://github.com/mmnlfrrr.",
+						"from": {
+							"name": "PR #54",
+							"link": "https://github.com/pantaflex44/Tiquettes/pull/54"
+						}
+					},
+					{
+						"text": "Correction d'un bug empechant l'affichage du sélecteur de couleur de groupe.",
+						"from": {
+							"name": "Issue #47",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/47"
+						}
+					},
+					{
+						"text": "Modification du rendu du schéma unifilaire pour améliorer sa lecture."
+					},
+					{
+						"text": "Modification de la déclaration d'asservissement d'un module. Il est désormais possible de définir un asservissement partiel, permettant d'indiquer qu'un module peut non seulement être asservi par un contacteur mais aussi alimenter directement les autres sources.",
+						"from": {
+							"name": "Discussion #43",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/43"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouvelle fonctionnalité permettant d'indiquer une nouvelle version disponible de l'application. L'utilisateur devra recharger la page de l'application pour en bénéficier."
+					},
+					{
+						"text": "Ajout de la fonction 'Prise modulaire' dans l'éditeur de schéma (Demande directe d'un utilisateur)."
+					},
+					{
+						"text": "Ajout d'un nouveau pictogramme: 'Réseau électrique'.",
+						"from": {
+							"name": "Discussion #44",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/44"
+						}
+					}
+				]
+			}
+		},
+		"2.2.5": {
+			"date": "2025-10-03",
+			"actions": {
+				"patches": [
+					{
+						"text": "Mise à jour globale de toutes les dépendances."
+					},
+					{
+						"text": "Correction des pictogrammes qui possédaient un problème de colorisation lors du rendu PDF."
+					},
+					{
+						"text": "Correction du moteur de rendu PDF pour la création d'étiquettes de très petites hauteurs.",
+						"from": {
+							"name": "Issue #40",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/40"
+						}
+					},
+					{
+						"text": "Correction d'un bug qui empèchait de renseigner correctement le groupe lors de l'exportation d'un thème."
+					},
+					{
+						"text": "Légère correction de la position des éléments dans chaque thème imprimable."
+					},
+					{
+						"text": "Optimisation des pictogrammes pour améliorer le rendu dans les documents PDF."
+					},
+					{
+						"text": "Suppression de la limite de 3 lignes lors de l'impression des propriétés d'un module pour former la nomenclature.",
+						"from": {
+							"name": "Issue #28",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/28"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouvelle propriété permettant de renseigner la phase utilisée lors d'une distribution monophasée à partir d'un parent triphasé.",
+						"from": {
+							"name": "Issue #41",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/41"
+						}
+					},
+					{
+						"text": "Nouveau bouton 'zoom' dans la vue schéma de l'éditeur. Permet de légerement agrandir visuellement le schéma affiché."
+					},
+					{
+						"text": "Nouvelle fonctionnalité permettant le choix du format d'impression pour les pages relatives aux étiquettes, schéma unifilaire et nomenclature. 2 choix possibles: A4 et A3.",
+						"from": {
+							"name": "Issue #38",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/38"
+						}
+					},
+					{
+						"text": "Réponse à une proposition, nouvelle fonctionnalité qui permet d'associer un module à un groupe via une couleur. Couleur utilisée (si disponible et si demandée) par les thèmes.",
+						"from": {
+							"name": "Discussion #36",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/36"
+						}
+					}
+				]
+			}
+		},
+		"2.2.4": {
+			"date": "2025-09-07",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug rendant obligatoire la définition de la section des conducteurs affiliés à chaque module.  3 nouvelles possibilité:\n\t- Détection automatique : défini automatiquement la section en fonction du calibre\n\t- Inconnue : pas de section définie\n\t- Xmm² : définition arbitraire"
+					}
+				]
+			}
+		},
+		"2.2.3": {
+			"date": "2025-08-25",
+			"actions": {
+				"adds": [
+					{
+						"text": "Ajout de la propriété '_Fonction_' pour chaque module. Représentation textuelle de la fonction d'un module (Type). Permets de réaliser des étiquettes où l'icône est remplacée par sa fonction textuelle.",
+						"from": {
+							"name": "zoliaaz",
+							"link": "https://github.com/zoliaaz"
+						}
+					},
+					{
+						"text": "Création d'un nouveau thème pour l'occasion : '_Type et Description seulement_'.",
+						"from": {
+							"name": "zoliaaz",
+							"link": "https://github.com/zoliaaz"
+						}
+					},
+					{
+						"text": "Ajout d'une option d'impression permettant d'indiquer, hors zone de coupe, le calibre sous chaque module pour faciliter l'installation de ceux-ci.",
+						"from": {
+							"name": "zoliaaz",
+							"link": "https://github.com/zoliaaz"
+						}
+					},
+					{
+						"text": "Ajout de la propriété '_Section des conducteurs_' pour chaque module.",
+						"from": {
+							"name": "zoliaaz",
+							"link": "https://github.com/zoliaaz"
+						}
+					},
+					{
+						"text": "Possibilité d'imprimer ou non la page de garde.",
+						"from": {
+							"name": "Discussion #29",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/29#discussioncomment-13903864"
+						}
+					},
+					{
+						"text": "Ajout de nouveaux types de modules pour le schéma unifilaire : '_Fusible_', '_Carillon_', '_Voyant_', '_Commande NO et NF_', '_Bouton poussoir NO et NF_'."
+					}
+				],
+				"patches": [
+					{
+						"text": "Retour du raccourci pour supprimer rapidement un module.",
+						"from": {
+							"name": "zoliaaz",
+							"link": "https://github.com/zoliaaz"
+						}
+					},
+					{
+						"text": "Edition d'un module en cliquant sur ses propriétés depuis la nomenclature."
+					}
+				],
+				"updates": [
+					{
+						"text": "Retrait du système d'impression standard. L'impression PDF est devenue le seul mode disponible."
+					}
+				]
+			}
+		},
+		"2.2.2": {
+			"date": "2025-05-23",
+			"actions": {
+				"adds": [
+					{
+						"text": "Ajout de lignes de coupe pour les massicots."
+					},
+					{
+						"text": "Ajout de nouvelles propriétés d'impression."
+					},
+					{
+						"text": "Ajout de quelques statistiques accessibles publiquement à l'adresse : https://www.tiquettes.fr/stats.php"
+					}
+				]
+			}
+		},
+		"2.2.1": {
+			"date": "2025-05-12",
+			"actions": {
+				"patches": [
+					{
+						"text": "Gros correctif suite à la dernière mise à jour majeure.\n\t- Téléchargement des thèmes : corrigé\n\t- Impression au format PDF : corrigé"
+					}
+				]
+			}
+		},
+		"2.2.0": {
+			"date": "2025-05-11",
+			"actions": {
+				"adds": [
+					{
+						"text": "Grosse nouveauté, ajout de la fonction 'Imprimer au format PDF' dans le menu d'impression d'un projet. Cette nouvelle fonctionnalité permet de résoudre les problèmes de compatibilité avec certains navigateurs basés sur Gecko (Firefox, etc.) et Webkit (Safari, etc.). Une fois la case cochée, le projet est converti en un fichier PDF pour être imprimé correctement en toutes circonstances !",
+						"from": {
+							"name": "Issue #8",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/8"
+						}
+					},
+					{
+						"text": "Nouveau service externe de conversion d'un projet Tiquettes (>= 2.1.5) en document PDF accessible à l'adresse : https://www.tiquettes.fr/pdf.php."
+					},
+					{
+						"text": "Mise à disposition d'une bibliothèque de thèmes à télécharger pour embellir ses étiquettes (https://www.tiquettes.fr/themes.php)."
+					}
+				],
+				"patches": [
+					{
+						"text": "Mise à jour de toutes les dépendances."
+					},
+					{
+						"text": "Nette amélioration de la qualité visuelle des pictogrammes et symboles électriques."
+					},
+					{
+						"text": "Possibilité d'éditer tous les thèmes proposés !"
+					}
+				]
+			}
+		},
+		"2.1.5": {
+			"date": "2025-04-23",
+			"actions": {
+				"adds": [
+					{
+						"text": "Nouveaux pictogrammes:\n\t- Horloge Journaliere\n\t- Horloge Hebdomadaire\n\t- Moteur Electrique\n\t- Chargeur\n\t- Maison / Dépendance / Extension\n\t- Onduleur\n\t- Interrupteur différentiel",
+						"from": {
+							"name": "PR #21",
+							"link": "https://github.com/pantaflex44/Tiquettes/pull/21"
+						}
+					}
+				]
+			}
+		},
+		"2.1.4": {
+			"date": "2025-04-22",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug affectant la représentation correcte d'un contacteur si son parent et le disjoncteur asservi sont les mêmes (télérupteur par exemple asservissant son disjoncteur parent).",
+						"from": {
+							"name": "Discussions #17",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/17"
+						}
+					},
+					{
+						"text": "Correction des fautes d'orthographes dans les noms des icônes.",
+						"from": {
+							"name": "PR #18",
+							"link": "https://github.com/pantaflex44/Tiquettes/pull/18"
+						}
+					},
+					{
+						"text": "Séparation des icônes 'Volet roulant / Store / Porte de garage' en 3 icônes indépendantes.",
+						"from": {
+							"name": "Discussion #19",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/19"
+						}
+					},
+					{
+						"text": "Adaptation automatique des anciens projets au nouveau système de thème."
+					}
+				],
+				"updates": [
+					{
+						"text": "Modification du système de thèmes."
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouveau pictogramme:\n\t- Pompe de relevage",
+						"from": {
+							"name": "Discussions #19",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/19"
+						}
+					}
+				]
+			}
+		},
+		"2.1.3": {
+			"date": "2025-04-11",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction du fichier README.md.",
+						"from": {
+							"name": "PR #12",
+							"link": "https://github.com/pantaflex44/Tiquettes/pull/12"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouveau pictogramme:\n\t- Détecteur de fumées\n\t- Sonnette / Carillon\n\t- Alarme intrusion\n\t- Transformateur",
+						"from": {
+							"name": "Issue #13",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/13"
+						}
+					}
+				]
+			}
+		},
+		"2.1.2": {
+			"date": "2025-03-23",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug affectant la sélection d'un pictogramme dans l'éditeur de module.",
+						"from": {
+							"name": "Issue #11",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/11"
+						}
+					}
+				]
+			}
+		},
+		"2.1.1": {
+			"date": "2025-03-21",
+			"actions": {
+				"patches": [
+					{
+						"text": "Amélioration des performances dans l'éditeur de modules."
+					},
+					{
+						"text": "Amélioration légère de l'ergonomie."
+					},
+					{
+						"text": "Réécriture partielle du système de Copier / Coller et intégration de la fonction Couper."
+					},
+					{
+						"text": "Correction de divers bugs lors de la manipulation des modules."
+					}
+				]
+			}
+		},
+		"2.1.0": {
+			"date": "2025-03-12",
+			"actions": {
+				"patches": [
+					{
+						"text": "Prise en compte de la règle de l'amont dans le monitoring des interrupteurs différentiels.",
+						"from": {
+							"name": "Issue #9",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/9"
+						}
+					},
+					{
+						"text": "Modification de la représentation des contacteurs (J/N, télérupteurs, minuteries, etc). Il est désormais possible d'asservir un départ avec un contacteur précédement ajouté.",
+						"from": {
+							"name": "Issue #10",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/10"
+						}
+					},
+					{
+						"text": "Correction d'un bug empêchant le ré-assignement automatique des identifiants parents lors de la modification de l'identifiant d'un module."
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouveau pictogramme:\n\t- Telerupteur\n\t- Parafoudre"
+					},
+					{
+						"text": "Ajout d'un éditeur pour personnaliser le thème de ses étiquettes."
+					},
+					{
+						"text": "Ajout de 2 nouveaux thèmes personnalisés dans la rubrique 'Créations: GoldenWine, 'Créations: Orange is the new dark'."
+					}
+				]
+			}
+		},
+		"2.0.5": {
+			"date": "2025-02-12",
+			"actions": {
+				"patches": [
+					{
+						"text": "Légère correction de bugs dans l'interface."
+					}
+				],
+				"adds": [
+					{
+						"text": "Pour améliorer la compatibilité avec les anciens tableaux électriques, il est désormais possible de régler la largeur des étiquettes. 17.5mm ou 18mm par module."
+					}
+				]
+			}
+		},
+		"2.0.4": {
+			"date": "2025-01-27",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction du symbole 'Interrupteur Sectionneur'.",
+						"from": {
+							"name": "Issue #7",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/7"
+						}
+					}
+				],
+				"adds": [
+					{
+						"text": "Il est désormais possible de réduire d'une demi taille, un module ayant une taille de plus d'un emplacement (fonctionnalité en cours de test)."
+					}
+				]
+			}
+		},
+		"2.0.3": {
+			"date": "2024-12-31",
+			"actions": {
+				"patches": [
+					{
+						"text": "Nouvelle fenêtre d'accueil lors de la création d'un nouveau projet."
+					},
+					{
+						"text": "Amélioration de la mise en page lors de l'impression du projet."
+					},
+					{
+						"text": "Nouvelle routine d'assignation des identifiants des modules avec correction des doublons, et filtrage des modules libres."
+					},
+					{
+						"text": "Possibilité de réassigner automatiquement les identifiants des modules de l'ensemble du projet sur simple action manuelle (nouveau bouton dans la barre à outils des étiquettes)."
+					}
+				]
+			}
+		},
+		"2.0.2": {
+			"date": "2024-12-26",
+			"actions": {
+				"patches": [
+					{
+						"text": "Affichage de la boite de dialogue 'Nouveau projet' lorsque l'utilisateur arrive de tiquettes.fr."
+					},
+					{
+						"text": "Possibilité d'importer un projet directement depuis la boite de dialogue 'Nouveau projet'."
+					},
+					{
+						"text": "Correction d'un bug permettant les doublons pour les identifiants de chaque module, cassant la génération du schéma."
+					}
+				]
+			}
+		},
+		"2.0.1": {
+			"date": "2024-12-24",
+			"actions": {
+				"patches": [
+					{
+						"text": "Nouveau design pour les barres à outils."
+					}
+				]
+			}
+		},
+		"2.0.0": {
+			"date": "2024-12-01",
+			"actions": {
+				"patches": [
+					{
+						"text": "Changement de licence. Tiquettes passe désormais à la licence AGPL v3."
+					},
+					{
+						"text": "Mise à jour de tous les packages de l'application."
+					},
+					{
+						"text": "Amélioration globale de l'UI."
+					},
+					{
+						"text": "Amélioration de l'ergonomie."
+					}
+				],
+				"adds": [
+					{
+						"text": "Ajout de la fonction 'schéma unifilaire'. Permet la génération d'un schéma unifilaire en fonction des données renseignées lors de l'édition d'un module."
+					},
+					{
+						"text": "Ajout du moniteur de surveillance permettant la détection d'erreurs liées à la norme NFC 15-100."
+					},
+					{
+						"text": "Ajout de 2 nouveaux thèmes après demande: 'Petit pictogramme et grand descriptif' et 'Identifiant, petit pictogramme et grand descriptif'."
+					}
+				]
+			}
+		},
+		"1.7.2": {
+			"date": "2024-09-13",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction de bugs mineurs."
+					},
+					{
+						"text": "Correction d'un bug dans la gestion de l'impression sous Firefox."
+					}
+				]
+			}
+		},
+		"1.7.0": {
+			"date": "2024-08-02",
+			"actions": {
+				"patches": [
+					{
+						"text": "Nouvelle liste de sélection d'un pictogramme (Affichage en liste déroulante, Possibilité de rechercher un pictogramme par sa description)."
+					}
+				],
+				"updates": [
+					{
+						"text": "Déplacement du bouton permettant de libérer (supprimer les données) un module dans la fenêtre d'édition de celui-ci."
+					}
+				],
+				"adds": [
+					{
+						"text": "Nouveaux pictogrammes:\n\t- Alarme incendie\n\t- Lingerie / Repassage\n\t- Bateaux / Ponton / Port\n\t- Audio / Musique / Multimédia\n\t- Télévision / Ecran / Projecteur"
+					},
+					{
+						"text": "Ajout d'une prévisualisation (démo) du module en cours d'édition."
+					},
+					{
+						"text": "Nouvelle fonctionnalité permettant de duppliquer un module (Copier / Coller) vers un emplacement suffisament grand de n'importe quelle rangée."
+					}
+				]
+			}
+		},
+		"1.6.2": {
+			"date": "2024-07-05",
+			"actions": {
+				"patches": [
+					{
+						"text": "Modification des icones pour une amélioration de la qualité d'impression."
+					}
+				],
+				"adds": [
+					{
+						"text": "Ajout d'annotations pour chaque module. Seulement visible sur la nomenclature."
+					}
+				]
+			}
+		},
+		"1.6.0": {
+			"date": "2024-06-15",
+			"actions": {
+				"patches": [
+					{
+						"text": "Amélioration des 4 thèmes Schneider."
+					},
+					{
+						"text": "Correction du dimensionnement des modules lors de l'impression."
+					}
+				],
+				"adds": [
+					{
+						"text": "Ajout d'une nomenclature automatique aux projets."
+					},
+					{
+						"text": "Ajout d'options pour l'impression."
+					},
+					{
+						"text": "Compatibilité PWA. Tiquettes est désormais installable, telle une application native, sur les appareils compatibles."
+					}
+				]
+			}
+		},
+		"1.5.0": {
+			"date": "2024-06-08",
+			"actions": {
+				"patches": [
+					{
+						"text": "Amélioration de l'expérience utilisateur avec une interface graphique plus ergonomique."
+					},
+					{
+						"text": "Léger nettoyage du code."
+					},
+					{
+						"text": "Récriture du système de gestion des thèmes."
+					},
+					{
+						"text": "Nouvelle documentation."
+					}
+				],
+				"adds": [
+					{
+						"text": "Ajout de nouveaux pictogrammes: Sèche linge, Sèche serviettes, Chaudière gaz, Piscine et SPA."
+					},
+					{
+						"text": "Ajout des fichiers sitemap.xml et robots.txt."
+					},
+					{
+						"text": "Il est désormais possible de nommer son projet lors de sa création."
+					},
+					{
+						"text": "Ajout d'une date de création, d'une date de modification et d'un numéro de version à chaque projet."
+					},
+					{
+						"text": "Une date de modification est automatiquement mise à jour après chaque intervention de l'utilisateur."
+					},
+					{
+						"text": "Chaque exportation met à jour la version interne du projet."
+					},
+					{
+						"text": "Nouveau partenaire: AZ Reso (Artisan électricien du pays Nantais - https://www.google.com/search?q=az+reso+nantes)"
+					}
+				]
+			}
+		},
+		"1.4.0": {
+			"date": "2024-06-02",
+			"actions": {
+				"patches": [
+					{
+						"text": "Auto identification des modules libres."
+					},
+					{
+						"text": "Affichage de l'identifiant du module précédent lors de l'édition d'un module."
+					}
+				],
+				"adds": [
+					{
+						"text": "Ajout, insertion, et suppression de rangées au cours du déroulement d'un projet."
+					}
+				]
+			}
+		},
+		"1.3.4": {
+			"date": "2024-06-02",
+			"actions": {
+				"patches": [
+					{
+						"text": "Nouvelle règle d'écriture de l'identifiant d'un module: de 0 à 255 caracatères composés de a-Z A-Z 0-9 _."
+					}
+				]
+			}
+		},
+		"1.3.3": {
+			"date": "2024-06-02",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug altérant la sélection par défaut du thème des étiquettes lors du chargement de l'application."
+					}
+				]
+			}
+		},
+		"1.3.2": {
+			"date": "2024-06-02",
+			"actions": {
+				"patches": [
+					{
+						"text": "Amélioration de l'interface utilisateur."
+					}
+				]
+			}
+		},
+		"1.3.1": {
+			"date": "2024-06-01",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'un bug empechant la modification du thème."
+					}
+				]
+			}
+		},
+		"1.3.0": {
+			"date": "2024-06-01",
+			"actions": {
+				"patches": [
+					{
+						"text": "Meilleurs performances globales."
+					}
+				],
+				"adds": [
+					{
+						"text": "Gestion de thèmes en temps réel, applicables aux étiquettes du projet."
+					}
+				]
+			}
+		},
+		"1.2.0": {
+			"date": "2024-05-29",
+			"actions": {
+				"patches": [
+					{
+						"text": "Correction d'une erreur empêchant de mettre correctement en page les étiquettes aux formats suprérieurs au A4."
+					},
+					{
+						"text": "Correction de la largeur des modules (18mm normalisé / module) lors de l'impression des étiquettes."
+					},
+					{
+						"text": "Amélioration notable de l'ergonomie de l'application suivant les changements proposés par le groupe de testeurs volontaires."
+					}
+				],
+				"adds": [
+					{
+						"text": "Compatibilité avec de nouveaux paramètres d'impression."
+					},
+					{
+						"text": "Possibilité de déplacer horizontalement un module dans l'espace libre à ses cotés en utilisant les icones flèches."
+					},
+					{
+						"text": "Possibilité de sélectionner un module puis de le déplacer ou le redimmensionner en utilisant le clavier [-] [+] [←] [→] [Entrée] [Suppr]."
+					},
+					{
+						"text": "Ajout d'un fichier CHANGELOG.md."
+					}
+				]
+			}
+		}
+	}
 }

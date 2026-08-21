@@ -16,17 +16,32 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-import { Fragment } from "react";
-
-export default function EditorSrcName({ id, value, sources = [], onChange = null }) {
-    return <select id={id} name={id} value={value}
-        onChange={(e) => {
-            if (onChange) onChange(e.target.value)
-        }} style={{ flex: 1 }} >
-        <option value={null}>Source générique</option>
-        <option value="" disabled={true}>Sources personnelles</option>
-        {sources.map(s => <option value={s}>{s}</option>)}
-    </select>
+export default function EditorSrcName({
+	id,
+	value,
+	sources = [],
+	onChange = null,
+}) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+			style={{ flex: 1 }}
+		>
+			<option value={null}>Source générique</option>
+			<option value="" disabled={true}>
+				Sources personnelles
+			</option>
+			{sources.map((s, i) => (
+				// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+				<option key={i} value={s}>
+					{s}
+				</option>
+			))}
+		</select>
+	);
 }

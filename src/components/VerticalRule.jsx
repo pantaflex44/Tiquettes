@@ -16,11 +16,15 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-import '../css/verticalRule.css';
+import "../css/verticalRule.css";
 
 export default function VerticalRule({ size }) {
-    return (
-        <div className={'verticalRule noprint'} style={{ '--ruleHeight': `calc(${size}mm + 1mm)` }}><span>{size}mm</span></div>
-    );
+	return (
+		<div
+			className={"verticalRule noprint"}
+			style={{ "--ruleHeight": `calc(${size}mm + 1mm)` }}
+		>
+			<span>{size}mm</span>
+		</div>
+	);
 }

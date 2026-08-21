@@ -16,36 +16,37 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {useState, useEffect} from 'react';
+import { useEffect, useState } from "react";
 
 function useDocumentVisibility() {
-    const [isDocumentVisible, setIsDocumentVisible] = useState(!document.hidden);
+	const [isDocumentVisible, setIsDocumentVisible] = useState(!document.hidden);
 
-    const handleVisibilityChange = () => {
-        setIsDocumentVisible(!document.hidden);
-    };
+	const handleVisibilityChange = () => {
+		setIsDocumentVisible(!document.hidden);
+	};
 
-    const handleBlurChange = () => {
-        setIsDocumentVisible(false);
-    };
+	const handleBlurChange = () => {
+		setIsDocumentVisible(false);
+	};
 
-    const handleFocusChange = () => {
-        setIsDocumentVisible(true);
-    };
+	const handleFocusChange = () => {
+		setIsDocumentVisible(true);
+	};
 
-    useEffect(() => {
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('blur', handleBlurChange);
-        window.addEventListener('focus', handleFocusChange);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		window.addEventListener("blur", handleBlurChange);
+		window.addEventListener("focus", handleFocusChange);
 
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('blur', handleBlurChange);
-            window.removeEventListener('focus', handleFocusChange);
-        };
-    }, []);
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+			window.removeEventListener("blur", handleBlurChange);
+			window.removeEventListener("focus", handleFocusChange);
+		};
+	}, []);
 
-    return isDocumentVisible;
+	return isDocumentVisible;
 }
 
 export default useDocumentVisibility;

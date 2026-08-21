@@ -15,81 +15,85 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/** biome-ignore-all lint/complexity/noImportantStyles: wanted */
 
 @page schemaCartbridge {
-    size: landscape;
-    margin: 7mm;
+	size: landscape;
+	margin: 7mm;
 }
 
 @page schema {
-    size: landscape;
-    margin: 7mm 7mm;
-    margin-top: 7mm;
-    padding-top: 10mm;
+	size: landscape;
+	margin: 7mm 7mm;
+	margin-top: 7mm;
+	padding-top: 10mm;
 }
 
 .schema {
-    --schema-scale: 1;
+	--schema-scale: 1;
 
-    position: relative;
-    page: schema;
-    padding: 0 !important;
+	position: relative;
+	page: schema;
+	padding: 0 !important;
 
-    gap: 0;
-
+	gap: 0;
 }
 
 .schemaContainer {
-    transform: scale(1.5);
+	transform: scale(1.5);
 }
 
 .schemaGrid {
-    --symbol-width: 70px;
-    --symbol-height: 100px;
+	--symbol-width: 70px;
+	--symbol-height: 100px;
 
-    flex: 1;
+	flex: 1;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    gap: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	gap: 0;
 
-    padding: 40px;
-    /*width: calc(100% - 60px);*/
-    width: min(max-content, 100%);
+	padding: 40px;
+	/*width: calc(100% - 60px);*/
+	width: min(max-content, 100%);
 
-    overflow-x: auto;
+	overflow-x: auto;
 
-    background-position: -5px -4px;
-    background-size: 10px 10px;
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.10) 1px, rgba(0, 0, 0, 0) 1px);
+	background-position: -5px -4px;
+	background-size: 10px 10px;
+	background-image: radial-gradient(
+		circle,
+		rgba(0, 0, 0, 0.1) 1px,
+		rgba(0, 0, 0, 0) 1px
+	);
 
-    page-break-before: always;
-    break-before: page;
+	page-break-before: always;
+	break-before: page;
 
-    transform: scale(var(--schema-scale, 1));
-    transform-origin: 0 0;
+	transform: scale(var(--schema-scale, 1));
+	transform-origin: 0 0;
 }
 
 .schemaItem {
-    display: block;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
+	display: block;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
 
-    position: relative;
-    page-break-inside: avoid;
-    break-inside: avoid;
+	position: relative;
+	page-break-inside: avoid;
+	break-inside: avoid;
 
-    padding-right: 10px;
+	padding-right: 10px;
 }
 
 .schemaItem.isFirst {
-    padding-inline: calc(var(--symbol-width) / 2);
-    /*width: calc(100% - 70px);*/
+	padding-inline: calc(var(--symbol-width) / 2);
+	/*width: calc(100% - 70px);*/
 }
 
 /*.schemaItem.isFirst::before {
@@ -104,75 +108,81 @@
 }*/
 
 .schemaItemFirstIcon {
-    display: block;
-    position: absolute;
-    top: -8px;
-    left: -4px;
-    width: 16px;
-    height: 16px;
-    transform: rotate(180deg);
+	display: block;
+	position: absolute;
+	top: -8px;
+	left: -4px;
+	width: 16px;
+	height: 16px;
+	transform: rotate(180deg);
 }
 
 .schemaItemFirstIconTitle {
-    top: -12px;
-    left: 10px;
-    height: max-content;
-    position: absolute;
-    display: block;
-    font-size: 50%;    
-    color: #555;
+	top: -12px;
+	left: 10px;
+	height: max-content;
+	position: absolute;
+	display: block;
+	font-size: 50%;
+	color: #555;
 }
 
 .schemaItemChilds {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    row-gap: 50px;
-    /*margin-right: 60px;*/
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	row-gap: 50px;
+	/*margin-right: 60px;*/
 }
 
 .schemaItemSymbol {
-    position: relative;
+	position: relative;
 
-    width: var(--symbol-width);
-    min-width: var(--symbol-width);
-    height: var(--symbol-height);
+	width: var(--symbol-width);
+	min-width: var(--symbol-width);
+	height: var(--symbol-height);
 
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: stretch;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: stretch;
 }
 
 .schemaItem .schemaItemSymbol:not(.limited).editable {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .schemaItemSymbolImg {
-    position: absolute;
+	position: absolute;
 
-    width: var(--symbol-width);
-    height: var(--symbol-height);
-    top: 0;
-    left: 0;
+	width: var(--symbol-width);
+	height: var(--symbol-height);
+	top: 0;
+	left: 0;
 }
 
-.schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolImg {
-    filter: invert(38%) sepia(97%) saturate(2333%) hue-rotate(147deg) brightness(96%) contrast(103%);
-    fill: transparent;
+.schemaItem
+	.schemaItemSymbol:not(.limited).editable:hover
+	.schemaItemSymbolImg {
+	filter: invert(38%) sepia(97%) saturate(2333%) hue-rotate(147deg)
+		brightness(96%) contrast(103%);
+	fill: transparent;
 }
 
 .schemaItemSymbolImgPole {
-    position: absolute;
+	position: absolute;
 
-    width: 10px;
-    bottom: 5px;
-    left: calc(50% - 5px);
+	width: 10px;
+	bottom: 5px;
+	left: calc(50% - 5px);
 }
 
-.schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolImgPole {
-    filter: invert(38%) sepia(97%) saturate(2333%) hue-rotate(147deg) brightness(96%) contrast(103%);
+.schemaItem
+	.schemaItemSymbol:not(.limited).editable:hover
+	.schemaItemSymbolImgPole {
+	filter: invert(38%) sepia(97%) saturate(2333%) hue-rotate(147deg)
+		brightness(96%) contrast(103%);
 }
 
 .schemaItemSymbolId,
@@ -180,228 +190,236 @@
 .schemaItemSymbolCurrent,
 .schemaItemSymbolPole,
 .schemaItemSymbolLine {
-    position: absolute;
+	position: absolute;
 
-    top: 10px;
-    left: 61%;
+	top: 10px;
+	left: 61%;
 
-    font-size: 65%;
-    white-space: nowrap;
-    line-height: 1.2;
+	font-size: 65%;
+	white-space: nowrap;
+	line-height: 1.2;
 }
 
 .schemaItemSymbolId {
-    top: 5px;
+	top: 5px;
 }
 
 .schemaItemSymbolType {
-    top: 25px;
-    font-size: 50%;
+	top: 25px;
+	font-size: 50%;
 }
 
 .schemaItemSymbolCurrent {
-    top: 43px;
-    font-size: 50%;
+	top: 43px;
+	font-size: 50%;
 }
 
 .schemaItemSymbolPole {
-    top: 51px;
-    font-size: 50%;
+	top: 51px;
+	font-size: 50%;
 }
 
 .schemaItemSymbolLine {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 65%;
-    font-weight: 600;
-    top: 5px;
-    left: 31%;
-    transform: rotate(-90deg);
-    color: var(--primary-color);
+	font-family: "Courier New", Courier, monospace;
+	font-size: 65%;
+	font-weight: 600;
+	top: 5px;
+	left: 31%;
+	transform: rotate(-90deg);
+	color: var(--primary-color);
 }
 
 .schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolId,
-.schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolType,
-.schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolCurrent,
-.schemaItem .schemaItemSymbol:not(.limited).editable:hover .schemaItemSymbolPole {
-    color: darkcyan;
-    /*font-weight: bold;*/
+.schemaItem
+	.schemaItemSymbol:not(.limited).editable:hover
+	.schemaItemSymbolType,
+.schemaItem
+	.schemaItemSymbol:not(.limited).editable:hover
+	.schemaItemSymbolCurrent,
+.schemaItem
+	.schemaItemSymbol:not(.limited).editable:hover
+	.schemaItemSymbolPole {
+	color: darkcyan;
+	/*font-weight: bold;*/
 }
 
 .schemaItemSymbolWarning {
-    position: absolute;
+	position: absolute;
 
-    width: 16px;
-    height: 16px;
-    top: 6px;
-    left: calc(50% - 22px);
+	width: 16px;
+	height: 16px;
+	top: 6px;
+	left: calc(50% - 22px);
 
-    filter: invert(59%) sepia(28%) saturate(6845%) hue-rotate(14deg) brightness(97%) contrast(101%);
-    animation: blinker 1s linear infinite;
+	filter: invert(59%) sepia(28%) saturate(6845%) hue-rotate(14deg)
+		brightness(97%) contrast(101%);
+	animation: blinker 1s linear infinite;
 }
 
 .schemaItemPrevLine {
-    position: absolute;
+	position: absolute;
 
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 2px;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 2px;
 
-    background-color: #000;
+	background-color: #000;
 }
 
 .schemaItemPrevLine.noNext {
-    width: 35px;
+	width: 35px;
 }
 
-.schemaItem.isFirst>.schemaItemPrevLine.noNext {
-    width: var(--symbol-width);
+.schemaItem.isFirst > .schemaItemPrevLine.noNext {
+	width: var(--symbol-width);
 }
 
 .schemaItemPrevLine.noPrev {
-    width: calc(50% - 35px);
-    left: 35px;
+	width: calc(50% - 35px);
+	left: 35px;
 }
 
-.schemaItem.isFirst>.schemaItemPrevLine.noPrev {
-    left: 0;
+.schemaItem.isFirst > .schemaItemPrevLine.noPrev {
+	left: 0;
 }
 
 .schemaItemPrevLineParentFirst {
-    position: absolute;
+	position: absolute;
 
-    top: 0;
-    left: calc(var(--symbol-width) / 2);
-    width: 50%;
-    height: 2px;
+	top: 0;
+	left: calc(var(--symbol-width) / 2);
+	width: 50%;
+	height: 2px;
 
-    background-color: #000;
+	background-color: #000;
 }
 
 .schemaItemNextLine {
-    position: absolute;
+	position: absolute;
 
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 2px;
+	top: 0;
+	right: 0;
+	width: 50%;
+	height: 2px;
 
-    background: repeating-linear-gradient(90deg,
-            #000 0px,
-            #000 1px,
-            transparent 4px,
-            transparent 8px);
+	background: repeating-linear-gradient(
+		90deg,
+		#000 0px,
+		#000 1px,
+		transparent 4px,
+		transparent 8px
+	);
 
-    overflow-y: hidden;
+	overflow-y: hidden;
 }
 
 .schemaItemNextIcon {
-    position: absolute;
+	position: absolute;
 
-    top: -8px;
-    right: -4px;
-    width: 18px;
-    height: 18px;
+	top: -8px;
+	right: -4px;
+	width: 18px;
+	height: 18px;
 }
 
 .schemaItemLast {
-    width: calc(var(--symbol-width) - 10px);
-    height: calc(var(--symbol-height) - 10px - 10px);
+	width: calc(var(--symbol-width) - 10px);
+	height: calc(var(--symbol-height) - 10px - 10px);
 
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: stretch;
-    align-items: center;
-    text-align: center;
-    row-gap: 10px;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	justify-content: stretch;
+	align-items: center;
+	text-align: center;
+	row-gap: 10px;
 
-    padding-inline: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+	padding-inline: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 
-    font-size: 70%;
+	font-size: 70%;
 }
 
 .schemaItemLastIconContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
 }
 
 .schemaItemLastIcon {
-    text-align: center;
-    margin-inline: auto;
-    margin-top: 10px;
+	text-align: center;
+	margin-inline: auto;
+	margin-top: 10px;
 
-
-    max-width: var(--symbol-width);
+	max-width: var(--symbol-width);
 }
 
 .schemaItemLastText {
-    margin-top: 10px;
-    font-size: 70%;
-    text-align: center;
-    margin-inline: auto;
+	margin-top: 10px;
+	font-size: 70%;
+	text-align: center;
+	margin-inline: auto;
 
-    max-width: var(--symbol-width);
+	max-width: var(--symbol-width);
 }
 
 .schemaItemLastWire {
-    margin-top: 10px;
-    font-size: 60%;
-    text-align: center;
-    margin-inline: auto;
+	margin-top: 10px;
+	font-size: 60%;
+	text-align: center;
+	margin-inline: auto;
 
-    max-width: var(--symbol-width);
-    height: 1.2em;
-    line-height: 1.2em;
+	max-width: var(--symbol-width);
+	height: 1.2em;
+	line-height: 1.2em;
 }
 
 .schemaItemSeparator {
-    display: block;
-    width: 100%;
-    height: 80px;
+	display: block;
+	width: 100%;
+	height: 80px;
 
-    page-break-before: auto;
-    break-before: auto;
+	page-break-before: auto;
+	break-before: auto;
 }
 
 .schemaItemSeparator.first {
-    height: 20px;
+	height: 20px;
 }
 
 .schemaTitle {
-    text-align: center;
-    width: 100%;
+	text-align: center;
+	width: 100%;
 
-    font-size: 200%;
-    font-weight: bold;
-    margin-block: 100px;
+	font-size: 200%;
+	font-weight: bold;
+	margin-block: 100px;
 
-    display: none;
+	display: none;
 }
 
 .schemaGroundLine {
-    position: relative;
+	position: relative;
 
-    width: 100%;
-    height: 2px;
+	width: 100%;
+	height: 2px;
 
-    box-sizing: border-box;
-    border-top: 2px dotted #555;
+	box-sizing: border-box;
+	border-top: 2px dotted #555;
 
-    margin-top: var(--symbol-height);
-    margin-bottom: 40px;
+	margin-top: var(--symbol-height);
+	margin-bottom: 40px;
 }
 
 .schemaGroundLine img {
-    position: absolute;
+	position: absolute;
 
-    top: -5px;
-    right: -12px;
+	top: -5px;
+	right: -12px;
 }
 
 /*.schemaGroundLine::before {
@@ -416,204 +434,204 @@
 }*/
 
 .schemaCartbridgeContainer {
-    page: schemaCartbridge;
+	page: schemaCartbridge;
 
-    display: none;
+	display: none;
 
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 
-    page-break-before: always;
-    break-before: page;
+	page-break-before: always;
+	break-before: page;
 }
 
 .schemaCartbridge {
-    box-sizing: border-box;
+	box-sizing: border-box;
 
-    width: 100%;
-    padding: 20px;
+	width: 100%;
+	padding: 20px;
 
-    display: grid;
-    grid-template-areas: "a b f c"
-        "d b f e";
-    grid-auto-columns: auto 1fr auto auto;
-    gap: 40px;
-    overflow: hidden;
+	display: grid;
+	grid-template-areas:
+		"a b f c"
+		"d b f e";
+	grid-auto-columns: auto 1fr auto auto;
+	gap: 40px;
+	overflow: hidden;
 
-    font-size: 90%;
+	font-size: 90%;
 
-    border: 2px solid #000;
-    background-color: var(--secondary-color-light);
+	border: 2px solid #000;
+	background-color: var(--secondary-color-light);
 }
 
 .schemaCartbridgeA {
-    grid-area: a;
-    position: relative;
+	grid-area: a;
+	position: relative;
 }
 
 .schemaCartbridgeA::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: -20px;
-    right: -20px;
-    height: 1px;
-    background-color: #000;
+	content: "";
+	position: absolute;
+	bottom: -20px;
+	left: -20px;
+	right: -20px;
+	height: 1px;
+	background-color: #000;
 }
 
 .schemaCartbridgeB {
-    grid-area: b;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+	grid-area: b;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 
-    font-size: 130%;
-    font-weight: 600;
-    text-align: center;
+	font-size: 130%;
+	font-weight: 600;
+	text-align: center;
 }
 
 .schemaCartbridgeBContent {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-height: 1.2em;
-    max-height: 3.6em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+	line-height: 1.2em;
+	max-height: 3.6em;
 }
 
 .schemaCartbridgeB::after {
-    content: "";
-    position: absolute;
-    top: -20px;
-    bottom: -20px;
-    left: -20px;
-    width: 1px;
-    background-color: #000;
+	content: "";
+	position: absolute;
+	top: -20px;
+	bottom: -20px;
+	left: -20px;
+	width: 1px;
+	background-color: #000;
 }
 
 .schemaCartbridgeC {
-    grid-area: c;
-    position: relative;
+	grid-area: c;
+	position: relative;
 }
 
 .schemaCartbridgeC::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: -20px;
-    right: -20px;
-    height: 1px;
-    background-color: #000;
+	content: "";
+	position: absolute;
+	bottom: -20px;
+	left: -20px;
+	right: -20px;
+	height: 1px;
+	background-color: #000;
 }
 
 .schemaCartbridgeD {
-    grid-area: d;
+	grid-area: d;
 }
 
 .schemaCartbridgeE {
-    grid-area: e;
+	grid-area: e;
 }
 
 .schemaCartbridgeF {
-    grid-area: f;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+	grid-area: f;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .schemaCartbridgeF::before {
-    content: "";
-    position: absolute;
-    top: -20px;
-    bottom: -20px;
-    left: -20px;
-    width: 1px;
-    background-color: #000;
+	content: "";
+	position: absolute;
+	top: -20px;
+	bottom: -20px;
+	left: -20px;
+	width: 1px;
+	background-color: #000;
 }
 
 .schemaCartbridgeF::after {
-    content: "";
-    position: absolute;
-    top: -20px;
-    bottom: -20px;
-    right: -20px;
-    width: 1px;
-    background-color: #000;
+	content: "";
+	position: absolute;
+	top: -20px;
+	bottom: -20px;
+	right: -20px;
+	width: 1px;
+	background-color: #000;
 }
 
-
-
 @media print {
-    .schema {
-        padding: 0;
-        margin: 0;
+	.schema {
+		padding: 0;
+		margin: 0;
 
-        width: 100%;
-    }
+		width: 100%;
+	}
 
-    .schemaGrid {
-        display: block;
+	.schemaGrid {
+		display: block;
 
-        overflow-x: hidden;
-        background: none;
-        border-top: 0;
-        margin: 0;
+		overflow-x: hidden;
+		background: none;
+		border-top: 0;
+		margin: 0;
 
-        padding: 0;
-        padding-top: 10mm;
-        padding-inline: 10mm;
+		padding: 0;
+		padding-top: 10mm;
+		padding-inline: 10mm;
 
-        width: calc(100% - 20mm);
+		width: calc(100% - 20mm);
 
-        break-inside: avoid;
-    }
+		break-inside: avoid;
+	}
 
-    .schemaItem {
-        display: block;
-        flex-wrap: wrap;
-    }
+	.schemaItem {
+		display: block;
+		flex-wrap: wrap;
+	}
 
-    .schemaItemChilds {
-        flex-wrap: wrap;
-    }
+	.schemaItemChilds {
+		flex-wrap: wrap;
+	}
 
-    .schemaTitle {
-        display: block;
-    }
+	.schemaTitle {
+		display: block;
+	}
 
-    .schemaCartbridgeContainer {
-        display: block;
+	.schemaCartbridgeContainer {
+		display: block;
 
-        break-inside: avoid;
+		break-inside: avoid;
 
-        width: calc(100% - 20mm);
-        margin-left: 10mm;
-    }
+		width: calc(100% - 20mm);
+		margin-left: 10mm;
+	}
 
-    .schemaCartbridge {
-        font-size: 80%;
-    }
+	.schemaCartbridge {
+		font-size: 80%;
+	}
 
-    .schemaItemSeparator {
-        height: calc(var(--symbol-height) / 2);
-    }
+	.schemaItemSeparator {
+		height: calc(var(--symbol-height) / 2);
+	}
 
-    .schemaItemSeparator.first {
-        height: 0;
-    }
+	.schemaItemSeparator.first {
+		height: 0;
+	}
 
-    .schemaGroundLine {
-        width: calc(100% - 20mm - 10mm);
-    }
+	.schemaGroundLine {
+		width: calc(100% - 20mm - 10mm);
+	}
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0;
-    }
+	50% {
+		opacity: 0;
+	}
 }

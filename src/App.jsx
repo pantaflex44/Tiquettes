@@ -15,2799 +15,3719 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/** biome-ignore-all lint/performance/noAccumulatingSpread: wanted */
 
-'use strict'
+import { satisfies } from "compare-versions";
+import {
+	Fragment,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import sanitizeFilename from "sanitize-filename";
 
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { satisfies } from 'compare-versions';
-import sanitizeFilename from 'sanitize-filename';
-
-import './css/app.css';
-import * as pkg from '../package.json';
-import themesList from './themes.json';
-import swbIcons from './switchboard_icons.json';
-import schemaFunctions from './schema_functions.json';
-import labelersOptions from './labelers_options.json';
-
-import Row from "./components/Row.jsx";
-import ContentEditable from "./components/ContentEditable.jsx";
-
-import newProjectIcon from './assets/new_project.svg';
-import clearProjectIcon from './assets/x.svg';
-import exportProjectIcon from './assets/download.svg';
-import printProjectIcon from './assets/printer.svg';
-import projectIcon from './assets/project.svg';
-import summaryIcon from './assets/list.svg';
-import resizeIcon from './assets/aspect-ratio.svg';
-import resizeOffIcon from './assets/aspect-ratio-off.svg';
-
-import schemaIcon from './assets/schema.svg';
-import monitorIcon from "./assets/monitor.svg";
-import nomonitorIcon from "./assets/nomonitor.svg";
-import createdIcon from "./assets/created.svg";
-import updatedIcon from "./assets/updated.svg";
-import infoIcon from "./assets/info.svg";
-import versionIcon from "./assets/versions.svg";
+import "./css/app.css";
+import * as pkg from "../package.json";
+import { statsPush } from "../public/api/stats.js";
+import resizeIcon from "./assets/aspect-ratio.svg";
+import resizeOffIcon from "./assets/aspect-ratio-off.svg";
 import cancelIcon from "./assets/cancel.svg";
-import info2Icon from "./assets/info2.svg";
-import numbersIcon from "./assets/numbers.svg";
-import themeSettingsIcon from "./assets/theme_settings.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
+import createdIcon from "./assets/created.svg";
+import exportProjectIcon from "./assets/download.svg";
 import downloadIcon from "./assets/download.svg";
 import fpsettingsIcon from "./assets/fp-settings.svg";
-
+import infoIcon from "./assets/info.svg";
+import info2Icon from "./assets/info2.svg";
+import summaryIcon from "./assets/list.svg";
+import monitorIcon from "./assets/monitor.svg";
+import newProjectIcon from "./assets/new_project.svg";
+import nomonitorIcon from "./assets/nomonitor.svg";
+import numbersIcon from "./assets/numbers.svg";
+import printProjectIcon from "./assets/printer.svg";
+import projectIcon from "./assets/project.svg";
+import schemaIcon from "./assets/schema.svg";
+import themeSettingsIcon from "./assets/theme_settings.svg";
+import updatedIcon from "./assets/updated.svg";
+import versionIcon from "./assets/versions.svg";
+import clearProjectIcon from "./assets/x.svg";
+import ContentEditable from "./components/ContentEditable.jsx";
 import Editor from "./components/Editor.jsx";
-import SummaryTab from "./components/SummaryTab.jsx";
-import SchemaTab from "./components/SchemaTab.jsx";
-import WelcomePopup from "./components/WelcomePopup.jsx";
-import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
-import LabelerPopup from "./components/LabelerPopup.jsx";
 import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
-
-import { statsPush } from "../public/api/stats.js";
-
-import useDocumentVisibility from "./hooks/useVisibilityChange.jsx";
+import LabelerPopup from "./components/LabelerPopup.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
-import useWindowSize from "./hooks/useWindowSize.jsx";
+import Row from "./components/Row.jsx";
+import SchemaTab from "./components/SchemaTab.jsx";
+import SummaryTab from "./components/SummaryTab.jsx";
+import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
+import WelcomePopup from "./components/WelcomePopup.jsx";
 import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
-
-
-
+import labelersOptions from "./labelers_options.json";
+import schemaFunctions from "./schema_functions.json";
+import swbIcons from "./switchboard_icons.json";
+import themesList from "./themes.json";
 
 function App() {
-
-    const documentIsVisible = useDocumentVisibility();
-
-    const importRef = useRef();
-    const projectRef = useRef();
-    const switchboardRef = useRef();
-    const monitorRef = useRef(null);
-    const labelerRef = useRef();
-
-    const navRef = useRef();
-    const printMenuRef = useRef();
-    const exportMenuRef = useRef();
-
-    const exportDropdownMenuPlacement = useDropdownToolbarMenuPlacing(navRef, exportMenuRef, 320, 50);
-    const printDropdownMenuPlacement = useDropdownToolbarMenuPlacing(navRef, printMenuRef, 250, 50);
-
-    const [wsWidth, wsHeight] = useWindowSize();
-
-    const [tab, setTab] = useState(1);
-    const [editor, setEditor] = useState(null);
-    const [newProjectProperties, setNewProjectProperties] = useState(null);
-    const [monitorOpened, setMonitorOpened] = useState(false);
-    const [welcome, setWelcome] = useState(false);
-    const [themeEditor, setThemeEditor] = useState(false);
-    const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
-    const [clipboard, setClipboard] = useState(null);
-    const [clipboardMode, setClipboardMode] = useState(null);
-    const [subMenus, setSubMenus] = useState({
-        printLabelsOpened: false,
-        printSchemaOpened: false,
-        printSummaryOpened: false
-    });
-    const [uniqueChoices, setUniqueChoices] = useState([]);
-    const [labelerOptionsRowsSelection, setLabelerOptionsRowsSelection] = useState(null);
-    const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
-    const [firstpageOptionsPopup, setFirstpageOptionsPopup] = useState(false);
-    const [newProjectPopup, setNewProjectPopup] = useState(false);
-    const [apiAvaillableLanguages, setApiAvaillableLanguages] = useState([]);
-
-    const UIFrozen = useMemo(() => {
-        return clipboard !== null
-            || themeEditor
-            || welcome
-            || editor !== null
-            || firstpageOptionsPopup
-            || labelerOptionsPopup
-            || newProjectPopup
-    }, [clipboard, themeEditor, welcome, editor, firstpageOptionsPopup, labelerOptionsPopup, newProjectPopup]);
-
-    const defaultFirstpageOptions = {
-        infos: { // to switchboad.firstPageInfos
-            from: {
-                logo: null,
-                name: null,
-                siret: null,
-                postalAddress: null,
-                email: null,
-                phone: null
-            },
-            to: {
-                name: null,
-                postalAddress: null,
-                email: null,
-                phone: null
-            }
-        },
-        views: { // to printOptions.firstPageView
-            projectName: true,
-            projectVersion: true,
-            projectCreated: true,
-            projectUpdated: true,
-            projectType: true,
-            from: {
-                logo: false,
-                name: false,
-                siret: false,
-                postalAddress: false,
-                email: false,
-                phone: false
-            },
-            to: {
-                name: false,
-                postalAddress: false,
-                email: false,
-                phone: false
-            }
-        }
-
-    };
-
-    const defaultPrintOptions = useMemo(() => ({
-        lang: 'fr_FR',
-        firstPage: false,
-        labels: true,
-        summary: false,
-        schema: false,
-        modulelist: false,
-        freeModules: false,
-        pdfOptions: {
-            openWindow: true,
-            autoPrint: false,
-            schemaGridColor: [230, 230, 230],
-            labelsCutLines: true,
-            printCurrents: false,
-            labelsPrintFormat: 'A4',
-            schemaPrintFormat: 'A4',
-            summaryPrintFormat: 'A4',
-            schemaFolioStart: 1,
-            firstPageView: { ...defaultFirstpageOptions.views }
-        }
-    }), []);
-    const getSavedPrintOptions = () => {
-        if (sessionStorage.getItem(pkg.name + '_printOptions')) {
-            const merge = (a, b) => [a, b].reduce((r, o) => Object
-                .entries(o)
-                .reduce((q, [k, v]) => ({
-                    ...q,
-                    [k]: v && typeof v === 'object' ? merge(q[k] || {}, v) : v
-                }), r),
-                {});
-            return merge(defaultPrintOptions, JSON.parse(sessionStorage.getItem(pkg.name + '_printOptions')));
-        }
-        return { ...defaultPrintOptions };
-    }
-    const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
-
-    const _importPrintOptions = (po) => {
-        try {
-            if (typeof po !== "object") throw new Error();
-
-            setPrintOptions({ ...defaultPrintOptions, ...po });
-
-            console.log('Imported project print options loaded.');
-        } catch (error) {
-            setPrintOptions({ ...defaultPrintOptions });
-
-            console.log('No project print options to load or corrupted.');
-        }
-    };
-
-    const getSavedAutoResize = () => {
-        if (sessionStorage.getItem(pkg.name + '_autoResize')) {
-            return sessionStorage.getItem(pkg.name + '_autoResize') === 'true';
-        }
-        return false;
-    }
-    const [spaceSize, setSpaceSize] = useState('1152px');
-    const [autoSpaceSize, setAutoSpaceSize] = useState(getSavedAutoResize());
-
-    const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE);
-    const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
-    const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS);
-    const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT);
-    const defaultStepsPerRows = parseInt(import.meta.env.VITE_DEFAULT_STEPSPERROW);
-    const defaultTheme = themesList.filter((t) => t.default)[0];
-    const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
-    const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
-    const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN);
-    const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX);
-    const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN);
-    const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX);
-
-    const defaultModule = useMemo(() => ({
-        id: '',
-        icon: import.meta.env.VITE_DEFAULT_ICON === "" ? null : import.meta.env.VITE_DEFAULT_ICON,
-        text: import.meta.env.VITE_DEFAULT_TEXT,
-        desc: import.meta.env.VITE_DEFAULT_DESC,
-        func: "",
-        type: "",
-        crb: "",
-        modtype: "",
-        current: "",
-        vref: import.meta.env.VITE_VREF_230V,
-        sensibility: "",
-        coef: 0.5,
-        pole: "",
-        wire: "",
-        line: "",
-        grp: "",
-        parentId: "",
-        srcId: "",
-        kcId: "",
-        kcType: "NO",
-        kcOrder: "after",
-        partialKc: false,
-        onlyChilds: true,
-        noAutoId: false,
-        free: true,
-        span: 1,
-        half: "none",
-    }), []);
-
-    const defaultProjectProperties = useMemo(() => ({
-        name: defaultProjectName,
-        npRows: defaultNpRows,
-        hRow: defaultHRow,
-        spr: defaultStepsPerRows,
-        projectType: defaultProjectType,
-        db: {
-            crb: "",
-            current: "30/60A",
-            desc: "Disjonteur de branchement",
-            free: false,
-            func: "db",
-            icon: "swb_puissance.svg",
-            id: "DB",
-            parentId: "",
-            srcId: import.meta.env.VITE_DB_SRCNAME,
-            kcId: "",
-            kcType: "NO",
-            kcOrder: "after",
-            vref: import.meta.env.VITE_VREF_230V,
-            partialKc: false,
-            onlyChilds: true,
-            noAutoId: false,
-            pole: "1P+N",
-            wire: "16",
-            line: "",
-            grp: "",
-            sensibility: "500mA",
-            coef: 1,
-            span: 4,
-            text: "Disjonteur de branchement",
-            type: "S",
-        }
-    }), [defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultProjectType]);
-
-    const createRow = useCallback((steps, rowsCount) => {
-        return Array(rowsCount).fill([]).map((_, i) => Array(steps).fill({ ...defaultModule }).map((q, j) => ({
-            ...q,
-            id: `Q${(j + 1) + (((i + 1) * steps) - steps)}`
-        })));
-    }, [defaultModule]);
-
-    const generateUUID = () => {
-        let lut = [];
-        for (var i = 0; i < 256; i++) {
-            lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
-        }
-        const d0 = Math.random() * 0xffffffff | 0;
-        const d1 = Math.random() * 0xffffffff | 0;
-        const d2 = Math.random() * 0xffffffff | 0;
-        const d3 = Math.random() * 0xffffffff | 0;
-        return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] + lut[d0 >> 24 & 0xff] + '-' +
-            lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' + lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' +
-            lut[d2 & 0x3f | 0x80] + lut[d2 >> 8 & 0xff] + '-' + lut[d2 >> 16 & 0xff] + lut[d2 >> 24 & 0xff] +
-            lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
-    };
-
-    const getUrlParam = (name, type = 'string', defaultValue = null) => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-
-        let param = urlParams.get(name);
-        if (param === null) return defaultValue;
-        param = decodeURIComponent(param).trim();
-
-        switch (type) {
-            case 'int':
-                return parseInt(param);
-            case 'float':
-                return parseFloat(param);
-            case 'boolean':
-                return param.toLowerCase() === 'true' || param === '1';
-            default:
-                return param;
-        }
-    }
-
-    const defaultProject = useMemo(() => ({
-        appversion: pkg.version,
-
-        prjid: generateUUID(),
-        prjname: defaultProjectName,
-        prjcreated: new Date(),
-        prjupdated: new Date(),
-        prjversion: 1,
-        projectType: defaultProjectType,
-
-        theme: defaultTheme,
-
-        height: defaultHRow,
-        stepsPerRows: defaultStepsPerRows,
-        stepSize: defaultStepSize,
-        rows: createRow(defaultStepsPerRows, defaultNpRows),
-
-        db: { ...defaultProjectProperties.db },
-        sources: [],
-
-        withDb: false,
-        withGroundLine: false,
-
-        schemaMonitor: false,
-        switchboardMonitor: false,
-
-        summaryColumnRow: false,
-        summaryColumnPosition: false,
-        summaryColumnType: true,
-        summaryColumnId: true,
-        summaryColumnFunction: true,
-        summaryColumnLabel: true,
-        summaryColumnDescription: true,
-
-        firstPageInfos: { ...defaultFirstpageOptions.infos },
-        printOptions: { ...defaultPrintOptions }
-    }), [
-        defaultProjectName,
-        defaultProjectType,
-        defaultTheme,
-        defaultHRow,
-        defaultStepsPerRows,
-        defaultStepSize,
-        createRow,
-        defaultNpRows,
-        defaultProjectProperties.db,
-        defaultFirstpageOptions.infos
-    ]);
-
-    const autoUpdateProjectProperties = (swb) => {
-        const theme = themeEngineCompatibility(swb);
-
-        return {
-            ...swb,
-
-            // <1.5.0  : add project metas 
-            // >=1.5.0 : convert data types
-            prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
-            prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
-            prjversion: swb.prjversion ? parseInt(swb.prjversion) : 1,
-            // <2.0.0
-            projectType: swb.projectType ?? defaultProjectType,
-            db: { ...defaultProjectProperties.db, ...(swb.db ?? { ...defaultProjectProperties.db }) },
-            withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
-            withGroundLine: swb.withGroundLine === true || swb.withGroundLine === false ? swb.withGroundLine : false,
-            schemaMonitor: swb.schemaMonitor === true || swb.schemaMonitor === false ? swb.schemaMonitor : false,
-            switchboardMonitor: swb.switchboardMonitor === true || swb.switchboardMonitor === false ? swb.switchboardMonitor : false,
-            summaryColumnRow: swb.summaryColumnRow === true || swb.summaryColumnRow === false ? swb.summaryColumnRow : false,
-            summaryColumnPosition: swb.summaryColumnPosition === true || swb.summaryColumnPosition === false ? swb.summaryColumnPosition : false,
-            summaryColumnType: swb.summaryColumnType === true || swb.summaryColumnType === false ? swb.summaryColumnType : true,
-            summaryColumnId: swb.summaryColumnId === true || swb.summaryColumnId === false ? swb.summaryColumnId : true,
-            summaryColumnFunction: swb.summaryColumnFunction === true || swb.summaryColumnFunction === false ? swb.summaryColumnFunction : true,
-            summaryColumnLabel: swb.summaryColumnLabel === true || swb.summaryColumnLabel === false ? swb.summaryColumnLabel : true,
-            summaryColumnDescription: swb.summaryColumnDescription === true || swb.summaryColumnDescription === false ? swb.summaryColumnDescription : true,
-            // <2.0.5
-            stepSize: swb.stepSize ?? defaultStepSize,
-            // <2.1.4
-            theme,
-            // <2.2.2
-            prjid: swb.prjid ?? generateUUID(),
-            // <2.2.8
-            sources: swb.sources ?? import.meta.env.VITE_SOURCES.split('|').map(v => v.trim()).filter(v => v !== ''),
-
-        };
-    }
-
-    const setDocumentTitle = (title) => {
-        const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
-        document.title = t;
-    };
-
-    const sendChoice = (choiceName, keys = [], unique = false) => {
-        const ks = keys.map(k => typeof k === 'string' ? k.trim() : `${k}`).filter(k => k !== null);
-
-        if (ks.length === 0) return;
-
-        if (unique && !uniqueChoices.includes(choiceName)) {
-            setUniqueChoices(old => ([...old, choiceName]));
-            statsPush('choice', choiceName, ks);
-        }
-
-        if (!unique) statsPush('choice', choiceName, ks);
-    }
-
-    const scrollToProject = () => {
-        projectRef.current && projectRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-            inline: "start"
-        });
-        //window.scrollTo(0, 0);
-    };
-
-    const verifyVersion = (swb) => {
-        if (!swb.appversion) {
-            alert(`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`);
-            return false;
-        }
-
-        const appVersion = swb.appversion;
-        if (!satisfies(appVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
-            alert(`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${appVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`);
-            return false;
-        }
-
-        return true;
-    };
-
-    // correction des identifiants en doublon
-    const modulesAutoId = useCallback((swb) => {
-        let reIndentedSwb = swb;
-        let rows = reIndentedSwb.rows;
-        let ids = [];
-        swb.rows.forEach((row) => {
-            row.forEach((module) => {
-                if (!module.free && module.id.trim() !== '') {
-                    ids.push(module.id.trim());
-                }
-            });
-        });
-
-        rows = rows.map((row) => {
-            return row.map((module) => {
-                if (module.free) {
-                    return {
-                        ...module,
-                        id: ''
-                    };
-                }
-
-                if (module.id.trim() === '') {
-                    let count = 1;
-                    while (ids.includes(`${defaultModuleId}${count}`)) count++;
-
-                    ids.push(`${defaultModuleId}${count}`);
-                    return {
-                        ...module,
-                        id: `${defaultModuleId}${count}`
-                    };
-                }
-
-                return module;
-            });
-        });
-
-        return { ...reIndentedSwb, rows };
-    }, [defaultModuleId]);
-
-    const reassignAllParents = (originalId, newId) => {
-        if (originalId && originalId !== newId) {
-            setSwitchboard((old) => {
-                let rows = old.rows.map((row) => {
-                    return row.map((module) => {
-                        let mm = { ...module };
-                        if (module.parentId === originalId) {
-                            mm = { ...mm, parentId: newId };
-                        }
-
-                        let kcId_a = (module.kcId ?? "").split('|').map(k => k.trim());
-                        if (kcId_a.includes(originalId)) {
-                            mm = { ...mm, kcId: kcId_a.map(k => k === originalId ? newId : k).join('|') };
-                        }
-
-                        return mm;
-                    });
-                });
-
-                return modulesAutoId({ ...old, rows });
-            });
-        }
-    };
-
-    const reassignModules = () => {
-        if (switchboard && confirm("Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.")) {
-            const swb = modulesAutoId(switchboard);
-
-            let counters = {};
-            let from = {};
-
-            // get all modules id from no auto id assignment
-            const keepThem = swb.rows.map((row) => {
-                return row.map((module) => {
-                    if ((module.noAutoId ?? false) === true) {
-                        return module.id;
-                    }
-                    return null;
-                });
-            }).flat().filter(kt => kt !== null);
-
-            // re-assign modules id
-            let rows = swb.rows.map((row) => {
-                return row.map((module) => {
-                    if (module.free) {
-                        return {
-                            ...module,
-                            id: ''
-                        };
-                    }
-
-                    let newModuleId = module.id;
-                    if ((module.noAutoId ?? false) !== true) {
-                        let func = (module.func ?? '').trim().toUpperCase();
-                        if (func === '') func = defaultModuleId;
-
-                        do {
-                            counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
-                            newModuleId = `${func}${counters[func]}`;
-                        } while (keepThem.includes(newModuleId));
-
-                    }
-                    from = { ...from, [module.id]: newModuleId };
-
-                    return {
-                        ...module,
-                        id: newModuleId
-                    };
-                });
-            });
-
-            // re-assign parents
-            rows = rows.map((row) => {
-                return row.map((module) => {
-                    let mm = { ...module };
-                    if (from[module.parentId]) {
-                        mm = {
-                            ...mm,
-                            parentId: from[module.parentId],
-                        };
-                    }
-
-                    mm = {
-                        ...mm,
-                        kcId: (mm.kcId ?? "").split('|')
-                            .map(k => {
-                                if (from[k]) return from[k];
-                                return null
-                            })
-                            .filter(k => k !== null)
-                            .join('|'),
-                    };
-
-                    return mm;
-                });
-            });
-
-            setSwitchboard((old) => ({ ...old, rows }));
-        }
-    }
-
-    const themeEngineCompatibility = (swb) => {
-        let theme = swb?.theme;
-        if (!theme) theme = getThemeOfFirstModuleFound(swb);
-
-        if (!theme.name.startsWith('custom|')) {
-            theme = {
-                ...theme,
-                name: `custom|${theme.name}`
-            };
-        }
-        if (!theme.data) {
-            theme = {
-                ...theme,
-                data: themesList.filter((t) => t.name === theme.name)[0].data
-            };
-        }
-        return theme;
-    }
-
-    const getSavedSwitchboard = () => {
-        if (sessionStorage.getItem(pkg.name)) {
-            let swb = {
-                ...defaultProject,
-                ...JSON.parse(sessionStorage.getItem(pkg.name))
-            };
-            swb = autoUpdateProjectProperties(swb);
-
-            return modulesAutoId({ ...swb });
-        }
-
-        return { ...defaultProject };
-    };
-
-    const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
-    const switchboardIsEmpty = useMemo(() => {
-        let isEmpty = true;
-
-        for (let i = 0; i < switchboard.rows.length; i++) {
-            for (let j = 0; j < switchboard.rows[i].length; j++) {
-                if (switchboard.rows[i][j].free === false) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty === false) break;
-        }
-
-        return isEmpty;
-    }, [switchboard]);
-
-    const allMemoizedIds = useMemo(() => {
-        let ids = [];
-        switchboard.rows.forEach((row) => {
-            row.forEach((module) => {
-                if (!module.free && module.id.trim() !== '') {
-                    ids.push(module.id.trim());
-                }
-            });
-        });
-        return ids;
-    }, [switchboard.rows]);
-
-    const getNextId = (id) => {
-        if (allMemoizedIds.includes(id)) {
-            let ii = id.split('_');
-            let count = 1;
-            while (allMemoizedIds.includes(`${ii[0]}_${count}`)) count++;
-            return `${ii[0]}_${count}`;
-        }
-        return id;
-    };
-
-    const lastFreeId = useMemo(() => {
-        let rows = switchboard.rows;
-
-        let ids = [];
-        rows.forEach((row) => {
-            return row.forEach((module) => {
-                ids.push(module.id);
-            });
-        });
-
-        let found = '';
-        let count = 1;
-        while (ids.includes(`${defaultModuleId}${count}`)) count++;
-        found = `${defaultModuleId}${count}`;
-
-        return found;
-    }, [switchboard, defaultModuleId]);
-
-    const getThemeOfFirstModuleFound = (swb = null) => {
-        let themeFound = null;
-        for (const r of (swb ?? switchboard).rows) {
-            for (const m of r) {
-                if (!m.free) {
-                    themeFound = m.theme;
-                    break;
-                }
-            }
-            if (themeFound) break;
-        }
-        return themeFound ?? defaultTheme;
-    }
-    const [theme, setTheme] = useState((switchboard?.theme ?? defaultTheme));
-
-    const createProject = useCallback((name, stepsPerRows, rowsCount, height, stepSize, views = null, infos = null, printFirstpage = null) => {
-        importRef.current.value = "";
-
-        setTheme(defaultTheme);
-        setSwitchboard(() => {
-            return modulesAutoId({
-                ...defaultProject,
-                prjid: generateUUID(),
-                prjname: name,
-                height,
-                stepsPerRows,
-                stepSize,
-                rows: createRow(stepsPerRows, rowsCount),
-                firstPageInfos: { ...infos }
-            });
-        });
-
-        setClipboard(null);
-        setClipboardMode(null);
-        setUniqueChoices([]);
-        setPrintOptions({
-            ...defaultPrintOptions,
-            firstPage: printFirstpage ?? defaultPrintOptions.firstPage,
-            pdfOptions: {
-                ...defaultPrintOptions.pdfOptions,
-                firstPageView: { ...views }
-            }
-        });
-        setDocumentTitle(name);
-        setTab(1);
-        setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
-        scrollToProject();
-
-    }, [defaultTheme, defaultPrintOptions, defaultStepSize, modulesAutoId, defaultProject, createRow]);
-
-    const resetProject = useCallback(() => {
-        importRef.current.value = "";
-
-        setClipboardMode(null);
-        setUniqueChoices([]);
-        setDocumentTitle(defaultProjectName);
-        setPrintOptions({ ...defaultPrintOptions });
-        setTheme(defaultTheme);
-        setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
-
-        createProject(defaultProjectName, defaultStepsPerRows, defaultNpRows, defaultHRow, defaultStepSize);
-    }, [createProject, defaultHRow, defaultNpRows, defaultProjectName, defaultStepsPerRows, defaultTheme, defaultStepSize]);
-
-    const _importProject = (data) => {
-        try {
-            let swb = typeof data === 'string' ? JSON.parse(data) : data;
-            swb = autoUpdateProjectProperties(swb);
-
-            const rows = swb.rows.map((r) => {
-                return r.map((m) => {
-                    let nm = { ...m };
-
-                    // <=1.4.0 : remove old theme definitions
-                    if (nm.theme) delete nm['theme'];
-
-                    // <=2.0.0 : add module default values fors schema definitions
-                    if (nm.icon) {
-                        const sic = swbIcons.filter((si) => si.filename === nm.icon);
-                        if (sic.length === 1) {
-                            if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
-                        }
-                    }
-
-                    // <=2.0.3 : add half module size
-                    if (!nm.half) nm = { ...nm, half: "none" };
-
-                    // <=2.2.3 : add modtype and wire property
-                    if (!nm.modtype) nm = { ...nm, modtype: "" };
-                    if (!nm.wire) nm = { ...nm, wire: "" };
-
-                    // <=2.2.4 : add grp property
-                    if (!nm.grp) nm = { ...nm, grp: "" };
-
-                    // <=2.2.5 : add line property
-                    if (!nm.line) nm = { ...nm, line: "" };
-
-                    // <=2.2.6 : add partialKc property
-                    if (!nm.partialKc) nm = { ...nm, partialKc: false };
-
-                    // <=2.2.8 : add new properties
-                    if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
-                    if (!nm.kcType) nm = { ...nm, kcType: "NO" };
-                    if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
-                    if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
-                    if (!nm.vref) nm = { ...nm, vref: import.meta.env.VITE_VREF_230V };
-                    if (!nm.srcId) nm = { ...nm, srcId: "" };
-
-                    return nm;
-                });
-            });
-
-            setTheme(swb.theme);
-            setSwitchboard(() => modulesAutoId({ ...swb }));
-
-            //const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
-            //setDocumentTitle(filename);
-
-            setClipboard(null);
-            setClipboardMode(null);
-            setUniqueChoices([]);
-
-            // since 2.2.8 : add print options import from project if exists, default properties if not
-            _importPrintOptions(swb.printOptions);
-
-            setTab(1);
-            setSubMenus(old => ({ ...old, printLabelsOpened: false, printSchemaOpened: false, printSummaryOpened: false }));
-            scrollToProject();
-
-            statsPush('action', 'import');
-
-            return true;
-            // eslint-disable-next-line no-unused-vars
-        } catch (err) {
-            importRef.current.value = "";
-            alert("Impossible d'importer ce projet.");
-
-            return false;
-        }
-    };
-
-    const importProjectChooseFile = () => {
-        document.getElementById('importfile').click();
-    };
-
-    const importFromOutside = () => {
-        let data = getUrlParam('data', 'string', null);
-        if (data !== null) {
-            data = atob(data);
-            _importProject(data);
-        } else {
-            alert("Aucun projet à importer!");
-        }
-    };
-
-    const importProject = (file) => {
-        if (file) {
-            const fileReader = new FileReader();
-            fileReader.readAsText(file, 'UTF-8');
-            fileReader.onload = (e) => _importProject(e.target.result);
-        } else {
-            importRef.current.value = "";
-            alert("Aucun projet à importer!");
-        }
-    };
-
-    const exportProject = () => {
-        let swb = {
-            ...switchboard,
-            prjversion: switchboard.prjversion ? parseInt(switchboard.prjversion) + 1 : 1,
-            appversion: pkg.version,
-            printOptions: { ...printOptions }
-        }
-
-        const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
-        link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? defaultProjectName)} - v${swb.prjversion}.json`;
-        link.click();
-
-        setSwitchboard(swb);
-
-        statsPush('action', 'export');
-    };
-
-    const toLabeler = (model, options) => {
-        const rowPositionMin = 1;
-        const rowPositionMax = switchboard.rows.length;
-        const selectedPositions = (labelerOptionsRowsSelection ?? `1-${rowPositionMax}`)
-            .split(',')
-            .map(p => p.trim())
-            .filter(p => p !== '')
-            .map(p => {
-                let sp = p
-                    .split('-')
-                    .map(x => parseInt(x.trim()))
-                    .map(x => isNaN(x) ? rowPositionMax : (x < rowPositionMin ? rowPositionMin : (x > rowPositionMax ? rowPositionMax : x)));
-                const min = Math.min(...sp);
-                const max = Math.max(...sp);
-                return Array.from({ length: (max - min) + 1 }, (v, k) => k + 1);
-            })
-            .flat();
-        const uniqueSelectedPositions = Array
-            .from(new Set(selectedPositions))
-            .map(x => x - 1) // to zero based index
-            .sort((a, b) => a - b);
-
-        let form = document.createElement("form");
-        document.body.appendChild(form);
-        form.style.display = "none";
-        form.name = "toLabelerForm";
-        form.method = 'POST';
-        form.action = import.meta.env.VITE_APP_API_URL + "toLabeler.php";
-        //form.target = '_blank';
-
-        let params = Object.fromEntries(Object.entries({
-            switchboard: { value: JSON.stringify(switchboard) },
-            model: { value: model },
-            options: { value: JSON.stringify(options) },
-            selections: { value: JSON.stringify(uniqueSelectedPositions) },
-            tv: { value: JSON.stringify(pkg.version) },
-            isDev: { value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0" },
-        }).map(([key, value]) => {
-            const i = document.createElement("input");
-            i.type = "hidden";
-            i.name = key;
-            i.value = value.value;
-            return [key, { ...value, input: form.appendChild(i) }];
-        }));
-
-        form.submit();
-
-        statsPush('action', 'export_labellers');
-
-        Object.entries(params).forEach(([_, value]) => {
-            form.removeChild(value.input);
-        });
-        params = null;
-
-        document.body.removeChild(form);
-        form = null;
-    }
-
-    const printProject = () => {
-        toPdf();
-
-        let types = ['pdf'];
-        if (printOptions.labels) types.push('print_labels');
-        if (printOptions.schema) types.push('print_schema');
-        if (printOptions.summary) types.push('print_summary');
-        if (printOptions.modulelist) types.push('print_modulelist');
-    };
-
-    const toPdf = (withConfirm = true, printOptionsEx = null) => {
-        let po = printOptionsEx ?? printOptions;
-
-        if (!withConfirm || (withConfirm && confirm("ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes."))) {
-
-            let form = document.createElement("form");
-            document.body.appendChild(form);
-            form.style.display = "none";
-            form.name = "toPdfForm";
-            form.method = 'POST';
-            form.action = import.meta.env.VITE_APP_API_URL + "toPdf.php?lang=" + po.lang;
-            if (po.pdfOptions.openWindow) form.target = '_blank';
-
-            let params = Object.fromEntries(Object.entries({
-                switchboard: { value: JSON.stringify(switchboard) },
-                printOptions: { value: JSON.stringify(po) },
-                tv: { value: JSON.stringify(pkg.version) },
-                auto: { value: po.pdfOptions.autoPrint ? "1" : "0" },
-                isDev: { value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0" },
-                schemaGridColor: { value: Array.isArray(po.pdfOptions.schemaGridColor) ? po.pdfOptions.schemaGridColor.join(",") : Object.values(po.pdfOptions.schemaGridColor).join(",") },
-                labelsCutLines: { value: po.pdfOptions.labelsCutLines ? "1" : "0" },
-            }).map(([key, value]) => {
-                const i = document.createElement("input");
-                i.type = "hidden";
-                i.name = key;
-                i.value = value.value;
-                return [key, { ...value, input: form.appendChild(i) }];
-            }));
-
-            form.submit();
-
-            Object.entries(params).forEach(([_, value]) => {
-                form.removeChild(value.input);
-            });
-            params = null;
-
-            document.body.removeChild(form);
-            form = null;
-
-            statsPush('action', 'print');
-            sendChoice('theme', [`${switchboard.theme.group} - ${switchboard.theme.title}`], true);
-
-            let sc = [];
-            if (po.firstPage) sc.push('Page de garde');
-            if (po.labels) sc.push('Etiquettes');
-            if (po.summary) sc.push('Nomenclature');
-            if (po.schema) sc.push('Schéma unifilaire');
-            if (po.modulelist) sc.push('Liste des modules');
-            sendChoice('print', sc);
-
-            let sf = [];
-            if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
-            if (po.summary) sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
-            if (po.schema) sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
-            sendChoice('print_format', sf);
-
-            sendChoice('labels_module_height_mm', [switchboard.height]);
-            sendChoice('labels_module_width_mm', [switchboard.stepSize]);
-            sendChoice('labels_rows_length', [switchboard.stepsPerRows]);
-
-
-            /*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
-            const link = document.createElement("a");
-            link.href = url;
-            link.target = "_blank";
-            link.click();*/
-        }
-    };
-
-    const printProjectFromOutside = () => {
-        let data = getUrlParam('data', 'string', null);
-        if (data !== null) {
-            data = atob(data);
-            _importProject(data);
-
-            const lang = getUrlParam('lng', 'string', defaultPrintOptions.lang);
-            const firstPage = getUrlParam('fp', 'boolean', defaultPrintOptions.firstPage);
-            const freeModules = getUrlParam('fm', 'boolean', defaultPrintOptions.freeModules);
-            const labels = getUrlParam('vl', 'boolean', defaultPrintOptions.labels);
-            const schema = getUrlParam('vh', 'boolean', defaultPrintOptions.schema);
-            const summary = getUrlParam('vs', 'boolean', defaultPrintOptions.summary);
-            const modulelist = getUrlParam('ml', 'boolean', defaultPrintOptions.modulelist);
-            const autoPrint = getUrlParam('ap', 'boolean', defaultPrintOptions.pdfOptions.autoPrint);
-            const labelsCutLines = getUrlParam('lcl', 'boolean', defaultPrintOptions.pdfOptions.labelsCutLines);
-            const printCurrents = getUrlParam('pc', 'boolean', defaultPrintOptions.pdfOptions.printCurrents);
-            let labelsPrintFormat = getUrlParam('lpf', 'string', defaultPrintOptions.pdfOptions.labelsPrintFormat).toUpperCase();
-            if (labelsPrintFormat !== 'A4' && labelsPrintFormat !== 'A3') labelsPrintFormat = 'A4';
-            let schemaPrintFormat = getUrlParam('hpf', 'string', defaultPrintOptions.pdfOptions.schemaPrintFormat).toUpperCase();
-            if (schemaPrintFormat !== 'A4' && schemaPrintFormat !== 'A3') schemaPrintFormat = 'A4';
-            let summaryPrintFormat = getUrlParam('spf', 'string', defaultPrintOptions.pdfOptions.summaryPrintFormat).toUpperCase();
-            if (summaryPrintFormat !== 'A4' && summaryPrintFormat !== 'A3') summaryPrintFormat = 'A4';
-
-            toPdf(false, {
-                ...defaultPrintOptions,
-                lang,
-                firstPage,
-                freeModules,
-                labels,
-                schema,
-                summary,
-                modulelist,
-                pdfOptions: {
-                    ...defaultPrintOptions.pdfOptions,
-                    autoPrint,
-                    labelsCutLines,
-                    labelsPrintFormat,
-                    openWindow: true,
-                    printCurrents,
-                    schemaPrintFormat,
-                    summaryPrintFormat,
-                }
-            });
-        } else {
-            alert("Aucun projet valide à imprimer!");
-        }
-    }
-
-    const editModule = (rowIndex, moduleIndex, tabPage = 'main', focus = null) => {
-        let focusedInputName = focus ?? 'id';
-        let currentModule = switchboard.rows[rowIndex][moduleIndex];
-
-        // si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
-        let hasBlankId = false;
-        if (!currentModule.id || currentModule.id.trim() === '') {
-            currentModule = { ...currentModule, id: lastFreeId };
-            hasBlankId = true;
-        }
-
-        // récupère le module précédent
-        let pr = rowIndex;
-        let pm = moduleIndex - 1;
-        if (pm < 0) {
-            pr -= 1;
-            if (pr >= 0) {
-                pm = switchboard.rows[pr].length - 1;
-            }
-        }
-        let prevModule = null;
-        if (pr >= 0 && pm >= 0) {
-            prevModule = switchboard.rows[pr][pm];
-        }
-
-        // si le parent du module à éditer est inconnu, on propose celui du module précédent
-        if (!currentModule.parentId) {
-            currentModule = { ...currentModule, parentId: prevModule?.parentId };
-        }
-        // edition du module
-        setEditor({
-            rowIndex,
-            moduleIndex,
-            originalModule: { ...currentModule },
-            currentModule,
-            prevModule,
-            theme,
-            tabPage,
-            focusedInputName,
-            errors: [],
-            hasBlankId
-        });
-    };
-
-    const applyModuleEditor = (data) => {
-        setEditor((old) => ({
-            ...old,
-            errors: []
-        }));
-
-        const id = data.currentModule.id.trim().toUpperCase();
-        const icon = data.currentModule.icon;
-        const text = (data.currentModule.text ?? "").trimRight().replace(/ [ \r\n]+/gm, "\n");
-        const desc = (data.currentModule.desc ?? "").trim();
-        const parentId = (data.currentModule.parentId ?? "").trim();
-        const srcId = (data.currentModule.srcId ?? "").trim();
-        const kcId = (data.currentModule.kcId ?? "").trim();
-        const kcType = (data.currentModule.kcType ?? "NO").trim();
-        const kcOrder = (data.currentModule.kcOrder ?? "after").trim();
-        const partialKc = data.currentModule.partialKc ?? false;
-        const noAutoId = data.currentModule.noAutoId ?? false;
-        const onlyChilds = data.currentModule.onlyChilds ?? true;
-        const func = (data.currentModule.func ?? "").trim();
-        const modtype = (data.currentModule.modtype ?? "").trim();
-        const type = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.type ?? "") : "").trim();
-        const crb = (schemaFunctions[data.currentModule.func]?.hasCrb ? (data.currentModule.crb ?? "") : "").trim();
-        const current = (schemaFunctions[data.currentModule.func] ? (data.currentModule.current ?? "") : "").trim();
-        const sensibility = (schemaFunctions[data.currentModule.func]?.hasType ? (data.currentModule.sensibility ?? "") : "").trim();
-        const coef = data.currentModule.coef ?? 0.5;
-        const vref = (data.currentModule.vref ?? import.meta.env.VITE_VREF_230V).trim();
-        const pole = (schemaFunctions[data.currentModule.func]?.hasPole ? (data.currentModule.pole ?? "") : "").trim();
-        const wire = (schemaFunctions[data.currentModule.func]?.hasWire ? (data.currentModule.wire ?? "") : "").trim();
-        const grp = (data.currentModule.grp ?? "").trim();
-        const line = (data.currentModule.line ?? "").trim();
-
-        if (!(/\w*/.test(id)) || id === '') {
-            setEditor((old) => ({
-                ...old,
-                currentModule: { ...old.currentModule, id: "" },
-                errors: [...old.errors, "Un identifiant valide est requis."]
-            }));
-            return;
-        }
-
-        if (!(/\w*/.test(text))) {
-            setEditor((old) => ({
-                ...old,
-                currentModule: { ...old.currentModule, text: "" },
-                errors: [...old.errors, "Une description valide est requise."]
-            }));
-            return;
-        }
-
-        if (!(/\w*/.test(desc))) {
-            setEditor((old) => ({
-                ...old,
-                currentModule: { ...old.currentModule, desc: "" },
-                errors: [...old.errors, "Une description valide est requise."]
-            }));
-            return;
-        }
-
-        const isEmpty = switchboardIsEmpty;
-
-        // applique les modifications
-        setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
-                if (i !== data.rowIndex) return row;
-
-                return row.map((module, j) => {
-                    if (j !== data.moduleIndex) return module;
-
-                    return {
-                        ...module,
-                        free: false,
-                        id,
-                        icon,
-                        text,
-                        desc,
-                        parentId,
-                        srcId,
-                        kcId,
-                        kcType,
-                        kcOrder,
-                        partialKc,
-                        onlyChilds,
-                        noAutoId,
-                        func,
-                        crb,
-                        modtype,
-                        type,
-                        current,
-                        sensibility,
-                        coef,
-                        pole,
-                        vref,
-                        wire,
-                        line,
-                        grp,
-                    };
-                });
-            });
-
-            return modulesAutoId({ ...old, rows });
-        });
-
-        // ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
-        reassignAllParents(data.originalModule?.id, id);
-
-        if (isEmpty) {
-            statsPush('action', 'create');
-        }
-
-        setEditor(null);
-    }
-
-    const moduleGrow = (rowIndex, moduleIndex) => {
-        const nextModuleIndex = moduleIndex + 1;
-
-        setSwitchboard((old) => {
-            const rows = old.rows.map((row, i) => {
-                if (i !== rowIndex) return row;
-
-                let deleted = false;
-                let r = row.map((module, j) => {
-                    if (j !== moduleIndex) {
-                        if (j === nextModuleIndex && !deleted) {
-                            deleted = true;
-                            return null;
-                        }
-                        return module;
-                    }
-                    return { ...module, span: module.span + 1 };
-                });
-
-                return r.filter((rr) => rr !== null);
-            });
-
-            return modulesAutoId({ ...old, rows });
-        });
-    };
-
-    const moduleShrink = (rowIndex, moduleIndex) => {
-        const currentModule = switchboard.rows[rowIndex][moduleIndex];
-
-        if (currentModule.span > 1) {
-            setSwitchboard((old) => {
-                let rows = old.rows.map((row, i) => {
-                    if (i !== rowIndex) return row;
-
-                    let r = row.map((module, j) => {
-                        if (j !== moduleIndex) return module;
-
-                        const s = module.span - 1;
-                        const h = s <= 1 ? "none" : module.half;
-                        return { ...module, span: s, half: h };
-                    });
-
-                    r.splice(moduleIndex + 1, 0, { ...defaultModule });
-
-                    return r;
-                });
-
-                return modulesAutoId({ ...old, rows });
-            });
-        }
-    };
-
-    const moduleClear = (rowIndex, moduleIndex) => {
-        const currentModule = switchboard.rows[rowIndex][moduleIndex];
-
-        if (!currentModule.free) {
-            setSwitchboard((old) => {
-                let rows = old.rows.map((row, i) => {
-                    if (i !== rowIndex) return row;
-
-                    let r = row.map((module, j) => {
-                        if (j !== moduleIndex) return module;
-
-                        return { ...defaultModule, span: 1 };
-                    });
-
-                    for (let o = 0; o < currentModule.span - 1; o++) {
-                        r.splice(moduleIndex + 1, 0, { ...defaultModule });
-                    }
-
-                    return r;
-                });
-
-                return modulesAutoId({ ...old, rows });
-            });
-
-        }
-    };
-
-    const moduleFocus = (rowPosition, modulePosition) => {
-        const m = document.querySelector(`[data-id="${rowPosition}-${modulePosition}"]`);
-        if (m) {
-            m.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "nearest"
-            });
-            m.focus();
-        }
-    }
-
-    const findThemeByName = (name, all = false) => {
-        const found = themesList.filter((t) => t.name === name);
-        return (all ? found : (found.length > 0 ? found[0] : null));
-    }
-
-    const updateTheme = (name) => {
-        const selected = findThemeByName(name);
-        if (selected) {
-            setTheme(selected);
-            setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
-            setTab(1);
-
-
-        }
-    }
-
-    const replaceUrlHistory = () => {
-        const newCurrentUrl = location.protocol + '//' + location.host + location.pathname;
-        window.history.replaceState({}, document.title, newCurrentUrl);
-    }
-
-    const openWelcome = () => {
-        resetProject();
-        setWelcome(true);
-        replaceUrlHistory();
-    };
-
-    const handleScrollRight = () => {
-        if (switchboardRef.current.scrollLeft + 10 < switchboardRef.current.scrollWidth) {
-            switchboardRef.current.scrollLeft += 10;
-        } else {
-            switchboardRef.current.scrollLeft = switchboardRef.current.scrollWidth;
-        }
-    }
-
-    const handleScrollLeft = () => {
-        if (switchboardRef.current.scrollLeft - 10 > 0) {
-            switchboardRef.current.scrollLeft -= 10;
-        } else {
-            switchboardRef.current.scrollLeft = 0;
-        }
-    }
-
-    const handleModuleGrow = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
-
-        if (nextModule?.free === true && nextModule?.span === 1) {
-            moduleGrow(rowIndex, moduleIndex);
-            moduleFocus(rowIndex + 1, moduleIndex + 1);
-        }
-    }
-
-    const handleModuleShrink = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-
-        if (currentModule.span > 1) {
-            moduleShrink(rowIndex, moduleIndex);
-            moduleFocus(rowIndex + 1, moduleIndex + 1);
-        }
-    }
-
-    const handleModuleClear = (rowIndex, moduleIndex, noConfirm = false) => {
-        if (noConfirm === true || confirm("Êtes-vous certain de vouloir libérer ce module?")) {
-            const row = switchboard.rows[rowIndex];
-            const currentModule = row[moduleIndex];
-
-            if (!currentModule.free) {
-                moduleClear(rowIndex, moduleIndex);
-                moduleFocus(rowIndex + 1, moduleIndex + 1);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    const handleModuleEdit = (rowIndex, moduleIndex) => {
-        editModule(rowIndex, moduleIndex);
-        moduleFocus(rowIndex + 1, moduleIndex + 1);
-    }
-
-    const handleModuleMoveLeft = (rowIndex, moduleIndex) => {
-        let rows = switchboard.rows;
-        let row = rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
-
-        if ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && prevModule?.free === true && prevModule?.span === 1) {
-            row[moduleIndex - 1] = currentModule;
-            row[moduleIndex] = prevModule;
-            rows[rowIndex] = row;
-            setSwitchboard((old) => {
-                moduleFocus(rowIndex + 1, moduleIndex);
-                return modulesAutoId({ ...old, rows });
-            })
-        }
-    }
-
-    const handleModuleMoveRight = (rowIndex, moduleIndex) => {
-        let rows = switchboard.rows;
-        let row = rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
-
-        if ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && nextModule?.free === true && nextModule?.span === 1) {
-            row[moduleIndex + 1] = currentModule;
-            row[moduleIndex] = nextModule;
-            rows[rowIndex] = row;
-            setSwitchboard((old) => {
-                moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return modulesAutoId({ ...old, rows });
-            })
-        }
-    }
-
-    const handleModuleCopyCut = (rowIndex, moduleIndex, mode) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-
-        if (!currentModule.free) {
-            setClipboard(currentModule);
-            setClipboardMode({ rowIndex, moduleIndex, mode });
-        }
-    }
-
-    const handleModuleCopy = (rowIndex, moduleIndex) => {
-        handleModuleCopyCut(rowIndex, moduleIndex, 'copy');
-    }
-
-    const handleModuleCut = (rowIndex, moduleIndex) => {
-        handleModuleCopyCut(rowIndex, moduleIndex, 'cut');
-    }
-
-    const handleModulePaste = (rowIndex, moduleIndex) => {
-        if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
-        if (clipboardMode?.mode !== 'cut' && clipboardMode?.mode !== 'copy') return;
-
-        setSwitchboard((old) => {
-            let deleteLength = 0;
-            let addLength = 0;
-            let oldModuleId = '';
-            let newModuleId = '';
-
-            let rows = old.rows.map((row, i) => {
-                let r = row.map((module, j) => {
-
-                    if (clipboardMode.mode === 'cut' && i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
-                        return { ...defaultModule, span: module.span };
-                    }
-
-                    if (i !== rowIndex) return module;
-
-                    if (j === moduleIndex) {
-                        deleteLength = clipboard.span - module.span;
-                        addLength += module.span - clipboard.span;
-                    }
-
-                    // si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
-                    if (j > moduleIndex && deleteLength > 0 && module.free) {
-                        deleteLength--;
-                        return null;
-                    }
-
-                    if (j !== moduleIndex) return module;
-
-                    return {
-                        ...module,
-                        id: clipboardMode.mode !== 'cut' ? getNextId(clipboard.id) : clipboard.id,
-                        free: clipboard.free,
-                        span: clipboard.span,
-                        icon: clipboard.icon,
-                        text: clipboard.text,
-                        desc: clipboard.desc,
-                        parentId: clipboard.parentId,
-                        srcId: clipboard.srcId,
-                        kcId: clipboard.kcId,
-                        kcType: clipboard.kcType,
-                        kcOrder: clipboard.ksOrder,
-                        partialKc: clipboard.partialKc,
-                        onlyChilds: clipboard.onlyChilds,
-                        noAutoId: clipboard.noAutoId,
-                        func: clipboard.func,
-                        crb: clipboard.crb,
-                        modtype: clipboard.modtype,
-                        type: clipboard.type,
-                        current: clipboard.current,
-                        sensibility: clipboard.sensibility,
-                        coef: clipboard.coef,
-                        pole: clipboard.pole,
-                        vref: clipboard.vref,
-                        wire: clipboard.wire,
-                        line: clipboard.line,
-                        grp: clipboard.grp,
-                    };
-                });
-
-                r = r.filter((rr) => rr !== null);
-
-                // si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
-                if (addLength > 0) {
-                    for (let al = 0; al < addLength; al++) {
-                        r.splice(moduleIndex + 1, 0, { ...defaultModule });
-                    }
-                    addLength = 0;
-                }
-
-                return r;
-            });
-
-            /*rows = old.rows.map((row, i) => {
-                let r = row.map((module, j) => {
-                    let mm = { ...module };
-                    if (module.parentId === oldModuleId) {
-                        mm = { ...mm, parentId: newModuleId };
-                    }
-                    if (module.kcId === oldModuleId) {
-                        mm = { ...mm, kcId: newModuleId };
-                    }
-                    return mm;
-                });
-                return r;
-            });*/
-
-            return modulesAutoId({ ...old, rows });
-        });
-
-        setClipboard(null);
-        setClipboardMode(null);
-    }
-
-    const modulePasteAllowed = (rowIndex, moduleIndex) => {
-        if (!clipboard || (clipboardMode.mode !== 'cut' && clipboardMode.mode !== 'copy')) return false;
-
-        const row = switchboard.rows[rowIndex];
-
-        const currentModule = row[moduleIndex];
-        if (currentModule.span >= clipboard.span) return true;
-
-        let allowed = true;
-        let max = clipboard.span;
-        let i = 0;
-        while (max > 0) {
-            const nextModule = (moduleIndex + clipboard.span) < switchboard.stepsPerRows ? row[moduleIndex + i] : null;
-            if (!nextModule || !nextModule.free || nextModule.span !== 1) {
-                allowed = false;
-                break;
-            }
-
-            max -= nextModule.span;
-            i++;
-        }
-        return allowed;
-    }
-
-    const handleCancelPaste = () => {
-        setClipboard(null);
-        setClipboardMode(null);
-    }
-
-    const handleModuleInterCopy = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-
-        if (!currentModule.free) {
-            setClipboard(currentModule);
-            setClipboardMode({ rowIndex, moduleIndex, mode: 'inter' });
-        }
-    }
-
-    const handleModuleInter = (rowIndex, moduleIndex) => {
-        if (!moduleInterAllowed(rowIndex, moduleIndex)) return;
-        if (clipboardMode?.mode !== 'inter') return;
-
-        let prems = null;
-        let snds = null;
-        switchboard.rows.forEach((row, i) => {
-            row.forEach((module, j) => {
-                if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
-                    prems = module;
-                }
-                if (i === rowIndex && j === moduleIndex) {
-                    snds = module;
-                }
-            });
-        });
-        if (prems === null || snds === null) {
-            alert("Impossible de procéder à l'échange de ces 2 modules.");
-            setClipboard(null);
-            setClipboardMode(null);
-            return;
-        }
-
-        setSwitchboard((old) => {
-            let rows = old.rows.map((row, i) => {
-                let r = row.map((module, j) => {
-
-                    if (i === rowIndex && j === moduleIndex) {
-                        return prems;
-                    }
-
-                    if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
-                        return snds;
-                    }
-
-                    if (i !== rowIndex) return module;
-                    if (j !== moduleIndex) return module;
-                });
-
-                r = r.filter((rr) => rr !== null);
-
-                return r;
-            });
-
-            return modulesAutoId({ ...old, rows });
-        });
-
-        setClipboard(null);
-        setClipboardMode(null);
-    }
-
-    const moduleInterAllowed = (rowIndex, moduleIndex) => {
-        if (!clipboard || (clipboardMode.mode !== 'inter')) return false;
-
-        const row = switchboard.rows[rowIndex];
-
-        const currentModule = row[moduleIndex];
-        if (currentModule.span === clipboard.span && currentModule.id !== clipboard.id) return true;
-
-        return false;
-    }
-
-    const handleModuleHalf = (rowIndex, moduleIndex, item, mode) => {
-        let rows = switchboard.rows;
-        let row = rows[rowIndex];
-        const currentModule = row[moduleIndex];
-
-        if (!currentModule.free && (mode === "none" || mode === "left" || mode === "right")) {
-            row[moduleIndex] = {
-                ...currentModule,
-                half: mode
-            };
-            rows[rowIndex] = row;
-            setSwitchboard((old) => {
-                moduleFocus(rowIndex + 1, moduleIndex + 2);
-                return modulesAutoId({ ...old, rows });
-            })
-        }
-    }
-
-    const moduleShrinkAllowed = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-
-        return currentModule.span > 1;
-    }
-
-    const moduleGrowAllowed = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
-
-        return (nextModule?.free === true && nextModule?.span === 1);
-    }
-
-    const moduleMoveLeftAllowed = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const prevModule = (moduleIndex - 1) >= 0 ? row[moduleIndex - 1] : null;
-
-        return ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && prevModule?.free === true && prevModule?.span === 1);
-    }
-
-    const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
-        const row = switchboard.rows[rowIndex];
-        const currentModule = row[moduleIndex];
-        const nextModule = (moduleIndex + currentModule.span) < switchboard.stepsPerRows ? row[moduleIndex + 1] : null;
-
-        return ((!currentModule.free || (currentModule.free && currentModule.span > 1)) && nextModule?.free === true && nextModule?.span === 1);
-    }
-
-    const handleRowAddAfter = (rowIndex) => {
-        let rows = switchboard.rows;
-        if (rows.length >= rowsMax) {
-            alert(`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${rowsMax} rangées`);
-            return;
-        }
-
-        const newRow = createRow(switchboard.stepsPerRows, 1);
-        rows.splice(rowIndex + 1, 0, ...newRow);
-
-        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
-    }
-
-    const handleRowDelete = (rowIndex) => {
-        let rows = switchboard.rows;
-        rows.splice(rowIndex, 1);
-
-        setSwitchboard((old) => modulesAutoId({ ...old, rows }));
-    }
-
-    const rowAddAllowed = () => {
-        return switchboard.rows.length < rowsMax;
-    }
-
-    const rowDeleteAllowed = () => {
-        return switchboard.rows.length > 1;
-    }
-
-    const printFreeModuleAllowed = () => {
-        return printOptions.freeModules;
-    }
-
-    const getFilteredModulesBySchemaFuncs = () => {
-        let m = {};
-        switchboard.rows.forEach((row) => {
-            row.forEach((module) => {
-                if (Object.keys(schemaFunctions).includes(module.func)) {
-                    if (!m[module.func]) m[module.func] = [];
-                    m[module.func].push(module);
-                }
-            });
-        });
-        return m;
-    }
-
-    const getModuleById = (moduleId) => {
-        let m = null;
-        for (const row of switchboard.rows) {
-            for (const module of row) {
-                if (module.id === moduleId) {
-                    m = module;
-                    break;
-                }
-            }
-        }
-        return m;
-    }
-
-    const getModuleByKcId = (moduleId) => {
-        let m = null;
-        for (const row of switchboard.rows) {
-            for (const module of row) {
-                if (module.kcId === moduleId) {
-                    m = module;
-                    break;
-                }
-            }
-        }
-        return m;
-    }
-
-    const getModuleById2 = (moduleId) => {
-        let indexes = { row: -1, module: -1 };
-        let m = { module: null, indexes };
-
-        switchboard.rows.forEach((row, ri) => {
-            row.forEach((module, mi) => {
-                if (!m.module && module.id === moduleId && !module.free) {
-                    m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
-                }
-            })
-        });
-
-        return m;
-    }
-
-    const monitor = useMemo(() => {
-        if (!switchboard.switchboardMonitor) return {};
-
-        let result = {};
-
-        const used = switchboard.rows.map((row) => row.filter((module) => !module.free).reduce((a, b) => a + b.span, 0)).reduce((a, b) => a + b, 0);
-        const total = switchboard.rows.length * switchboard.stepsPerRows;
-        const percentFree = Math.round(100 - ((used / total) * 100));
-
-        setFreeSpaceMessage(`${used} module${used > 1 ? 's' : ''} occupé${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre)`);
-
-        let e_errors = (result.errors ?? [])['Enveloppe'] ?? [];
-        if (percentFree < 20) {
-            const e_error = `La norme NFC 15-100 impose un minimum de 20% d'emplacements libres. Vous occupez ${used} module${used > 1 ? 's' : ''} sur ${total} disponible${used > 1 ? 's' : ''} (${percentFree}% libre).`;
-            if (!e_errors.includes(e_error)) e_errors.push(e_error);
-        }
-        if (e_errors.length > 0) result = { ...result, errors: { ...result.errors, Enveloppe: e_errors } };
-
-        return result;
-    }, [switchboard.rows, switchboard.switchboardMonitor]);
-    const monitorWarningsLength = useMemo(() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length, [monitor]);
-
-    useEffect(() => {
-        setLabelerOptionsRowsSelection(switchboard.rows.length > 1 ? `1-${switchboard.rows.length}` : `${switchboard.rows.length}`);
-    }, [switchboard.rows.length]);
-
-    useEffect(() => {
-        let t = null;
-
-        if (!verifyVersion(switchboard)) {
-            resetProject();
-
-            if (t) clearTimeout(t);
-            return;
-        }
-
-        setDocumentTitle(switchboard.prjname);
-
-        t = setTimeout(() => {
-            const savedProjectIsOutdated = sessionStorage.getItem(pkg.name) !== JSON.stringify(switchboard);
-            if (savedProjectIsOutdated) {
-
-                let updatedProject = {
-                    ...switchboard,
-                    prjupdated: new Date()
-                };
-
-                sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
-                setSwitchboard(updatedProject);
-                setDocumentTitle(updatedProject.prjname);
-            }
-
-            const printOptionsIsOutdated = sessionStorage.getItem(pkg.name + '_printOptions') !== JSON.stringify(printOptions);
-            if (printOptionsIsOutdated) {
-                sessionStorage.setItem(pkg.name + '_printOptions', JSON.stringify(printOptions));
-            }
-
-            const labelersOptionsIsOutdated = sessionStorage.getItem(pkg.name + '_labelersOptions') !== JSON.stringify(labelersOptions);
-            if (labelersOptionsIsOutdated) {
-                sessionStorage.setItem(pkg.name + '_labelersOptions', JSON.stringify(labelersOptions));
-            }
-        }, 1000);
-
-        return () => {
-            if (t) clearTimeout(t);
-        }
-    }, [resetProject, switchboard, printOptions, labelersOptions]);
-
-    useEffect(() => {
-        if (window) {
-            const ovf = editor || labelerOptionsPopup || firstpageOptionsPopup || newProjectPopup ? 'hidden' : 'auto';
-            if (window.document.body.style.overflow !== ovf) window.document.body.style.overflow = ovf;
-        }
-    }, [editor, labelerOptionsPopup, firstpageOptionsPopup, newProjectPopup]);
-
-    useEffect(() => {
-        if (monitorOpened) monitorRef.current.focus();
-    }, [monitorOpened]);
-
-    useEffect(() => {
-        if (!autoSpaceSize && spaceSize !== '1152px') {
-            setSpaceSize('1152px');
-        } else if (autoSpaceSize) {
-            if (switchboard.stepsPerRows === 18 && spaceSize !== '1340px') {
-                setSpaceSize('1340px');
-            } else if (switchboard.stepsPerRows === 24 && spaceSize !== '1760px') {
-                setSpaceSize('1760px');
-            } else if (switchboard.stepsPerRows === 13 && spaceSize !== '1152px') {
-                setSpaceSize('1152px');
-            }
-        }
-
-        sessionStorage.setItem(pkg.name + '_autoResize', autoSpaceSize ? 'true' : 'false');
-    }, [autoSpaceSize, switchboard.stepsPerRows]);
-
-    useEffect(() => {
-        const ctn = document.getElementById('content');
-        if (ctn) {
-            ctn.style.setProperty('--content-size', spaceSize);
-        }
-    }, [spaceSize]);
-
-    useEffect(() => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-
-        const extraParams = {
-            enjoy: () => openWelcome(),
-            import: () => importFromOutside(),
-            print: () => printProjectFromOutside(),
-        };
-        Object.keys(extraParams).every(param => {
-            if (urlParams.get(param) !== null) {
-                extraParams[param]();
-                return false;
-            }
-            return true;
-        });
-
-        fetch(import.meta.env.VITE_APP_API_URL + "i18n.php?api_availlable", {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setApiAvaillableLanguages(data);
-                } else {
-                    setApiAvaillableLanguages([]);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                setApiAvaillableLanguages([]);
-            });
-
-    }, []);
-
-    return (
-        <div ref={projectRef} tabIndex={-1} onKeyUp={(e) => {
-            if (e.key === 'Escape') {
-                setClipboard(null);
-                setClipboardMode(null);
-            }
-        }} >
-            {/** ----------------------------------------------------------- */}
-            {/** TOOLBAR **/}
-            {/** ----------------------------------------------------------- */}
-
-            <nav ref={navRef} className={`button_group ${UIFrozen ? 'disabled' : ''}`.trim()} style={{ position: 'sticky', top: '0.25rem', zIndex: 5000 }}>
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR PROJECTS **/}
-                {/** ----------------------------------------------------------- */}
-
-                <button className={`button_group-new_project active`.trim()}
-                    onClick={() => {
-                        setWelcome(true);
-                    }} title="Créer un nouveau projet">
-                    <img src={newProjectIcon} width={16} height={16} alt={defaultProjectName} />
-                    <span className={'responsive'}>Projets...</span>
-                </button>
-
-                <div className="button_group-separator"></div>
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR IMPORT **/}
-                {/** ----------------------------------------------------------- */}
-
-                <input id="importfile" ref={importRef} type="file" onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) importProject(e.target.files[0]);
-                }} style={{ visibility: 'hidden', position: 'absolute', top: '0', left: '-500000px' }} />
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR EXPORTS **/}
-                {/** ----------------------------------------------------------- */}
-
-                <button ref={exportMenuRef} className="button_group-export_project dropdown_container" title="Exporter...">
-                    <img src={exportProjectIcon} width={16} height={16} alt={"Exporter"} />
-                    <span>Exporter</span>
-                    <div className="dropdown" style={{ left: exportDropdownMenuPlacement[0] + "px", width: exportDropdownMenuPlacement[1] + "px" }}>
-                        <div className="dropdown_header">Exportation</div>
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** PROJECT EXPORT **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item_flex head">
-                            <div className="dropdown_item_flex_left">
-                                Projet complet
-                            </div>
-                            <div className="dropdown_item_flex_right">
-                                <div className="fakeButton discreet" style={{ marginBlock: '0' }} title="Exporter le projet" onClick={() => {
-                                    exportProject();
-                                }}>
-                                    <img src={downloadIcon} width={16} height={16} />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** LABELERS **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_header" style={{ marginTop: '1.5rem' }}>Étiqueteuses (βeta)</div>
-                        <div style={{ fontSize: '90%', color: '#777', marginBottom: '1rem' }}>
-                            <span>Exporter les rangées d'étiquettes au format compatible.</span>
-                        </div>
-                        <div className="dropdown_item_flex head" style={{ justifyContent: 'space-between' }}>
-                            <div className="dropdown_item_flex_left" style={{ gap: '0.5rem' }}>
-                                <span style={{ fontSize: '100%' }}>Exporter les rangées:</span>
-                                <input type="text" name="" id="" ref={labelerRef} value={labelerOptionsRowsSelection ?? `1-${switchboard.rows.length}`} onChange={(e) => setLabelerOptionsRowsSelection(e.target.value)} placeholder="1,2,3-6" style={{ width: '50px', height: '28px', marginLeft: '0.5rem', textAlign: 'center', letterSpacing: '1px' }} />
-                            </div>
-                            <div className="dropdown_item_flex_right">
-                                <div className="fakeButton discreet" style={{ flex: 1, marginBlock: '0' }} title="Exporter les étiquettes" onClick={() => setLabelerOptionsPopup(true)}>
-                                    <img src={downloadIcon} width={16} height={16} />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </button>
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR PRINT **/}
-                {/** ----------------------------------------------------------- */}
-
-                <button ref={printMenuRef} className="button_group-print_project dropdown_container" title="Imprimer..."
-                    onMouseLeave={() => {
-                        printMenuRef.current.classList.remove('clicked');
-                    }}
-                    onBlur={() => {
-                        printMenuRef.current.classList.remove('clicked');
-                    }}
-                >
-                    <img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
-                    <span>Imprimer...</span>
-                    <div className="dropdown" style={{ left: printDropdownMenuPlacement[0] + "px", width: printDropdownMenuPlacement[1] + "px" }}>
-                        <div className="dropdown_header">Options</div>
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** FIRSTPAGE **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item head parent"
-                            title="Imprimer la page de garde">
-                            <input id="print_firstPage" name="print_firstPage" type="checkbox"
-                                checked={printOptions.firstPage}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    firstPage: e.target.checked
-                                }))}
-                            />
-                            <label htmlFor="print_firstPage">Page de garde</label>
-                            {printOptions.firstPage &&
-                                <img src={fpsettingsIcon} width={16} height={16} alt={"Paramètres"}
-                                    title={"Paramètres de la page de garde"}
-                                    onClick={() => setFirstpageOptionsPopup(true)} />}
-                        </div>
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** LABELS **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item head parent" title="Imprimer les étiquettes">
-                            <input id="print_labels" name="print_labels" type="checkbox"
-                                checked={printOptions.labels}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    labels: e.target.checked
-                                }))} />
-                            <label htmlFor="print_labels">Etiquettes</label>
-                            {printOptions.labels &&
-                                <img src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon} width={16}
-                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
-                                        ...old,
-                                        printLabelsOpened: !old.printLabelsOpened
-                                    }))} />}
-                        </div>
-                        {subMenus.printLabelsOpened && printOptions.labels && <>
-                            <div className="dropdown_item"
-                                title="Format d'impression">
-                                <label htmlFor="print_labels_format" style={{ flex: 1 }}>Format d'impression :</label>
-                                <input id="print_labels_format_A4" name="print_labels_format_A4" type="radio"
-                                    checked={printOptions.pdfOptions.labelsPrintFormat === 'A4'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, labelsPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.labelsPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
-                                <label htmlFor="print_labels_format_A4" style={{ flex: 0 }}>A4</label>
-                                <input id="print_labels_format_A3" name="print_labels_format_A3" type="radio"
-                                    checked={printOptions.pdfOptions.labelsPrintFormat === 'A3'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, labelsPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.labelsPrintFormat }
-                                    }))} disabled={!printOptions.labels} />
-                                <label htmlFor="print_labels_format_A3" style={{ flex: 0 }}>A3</label>
-                            </div>
-                            <div className="dropdown_item"
-                                title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes">
-                                <input id="print_free" name="print_free" type="checkbox"
-                                    checked={printOptions.freeModules}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        freeModules: e.target.checked
-                                    }))} disabled={!printOptions.labels} />
-                                <label htmlFor="print_free">Décorer les emplacements libres</label>
-                            </div>
-                            <div className="dropdown_item"
-                                title="Imprimer les lignes de coupe pour cisailles et massicots">
-                                <input id="print_pdf_labelsCutLines" name="print_pdf_labelsCutLines" type="checkbox"
-                                    checked={printOptions.pdfOptions.labelsCutLines}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, labelsCutLines: e.target.checked }
-                                    }))} disabled={!printOptions.labels} />
-                                <label htmlFor="print_pdf_labelsCutLines">Imprimer les lignes de coupe</label>
-                            </div>
-                            <div className="dropdown_item" style={{ marginBottom: '1em' }}
-                                title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)">
-                                <input id="print_pdf_printCurrents" name="print_pdf_printCurrents" type="checkbox"
-                                    checked={printOptions.pdfOptions.printCurrents}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, printCurrents: e.target.checked }
-                                    }))} disabled={!printOptions.labels} />
-                                <label htmlFor="print_pdf_printCurrents">Indiquer le calibre sous chaque module pour
-                                    aider à
-                                    leur installation</label>
-                            </div>
-                        </>}
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** SCHEMA **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item head parent" title="Imprimer le schéma unifilaire">
-                            <input id="print_schema" name="print_schema" type="checkbox"
-                                checked={printOptions.schema}
-                                onChange={(e) => setPrintOptions((old) => {
-                                    let ret = {
-                                        ...old,
-                                        schema: e.target.checked
-                                    };
-                                    /*if (!ret.schema && !ret.summary) {
-                                        ret = {
-                                            ...ret,
-                                            firstPage: false
-                                        }
-                                    }*/
-                                    return ret;
-                                })} />
-                            <label htmlFor="print_schema">Schéma unifilaire</label>
-                            {printOptions.schema &&
-                                <img src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon} width={16}
-                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
-                                        ...old,
-                                        printSchemaOpened: !old.printSchemaOpened
-                                    }))} />}
-                        </div>
-                        {subMenus.printSchemaOpened && printOptions.schema && <>
-                            <div className="dropdown_item"
-                                title="Format d'impression">
-                                <label htmlFor="print_schema_format" style={{ flex: 1 }}>Format d'impression :</label>
-                                <input id="print_schema_format_A4" name="print_schema_format_A4" type="radio"
-                                    checked={printOptions.pdfOptions.schemaPrintFormat === 'A4'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.schemaPrintFormat }
-                                    }))} disabled={!printOptions.schema} />
-                                <label htmlFor="print_schema_format_A4" style={{ flex: 0 }}>A4</label>
-                                <input id="print_schema_format_A3" name="print_schema_format_A3" type="radio"
-                                    checked={printOptions.pdfOptions.schemaPrintFormat === 'A3'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, schemaPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.schemaPrintFormat }
-                                    }))} disabled={!printOptions.schema} />
-                                <label htmlFor="print_schema_format_A3" style={{ flex: 0 }}>A3</label>
-                            </div>
-                            <div className="dropdown_item"
-                                title="Premier folio">
-                                <label htmlFor="print_schema_folio_start" style={{ flex: 1 }}>Numéro du premier Folio :</label>
-                                <input id="print_schema_folio_start" name="print_schema_folio_start" type="number" style={{ width: '40px' }}
-                                    value={printOptions.pdfOptions.schemaFolioStart ?? 1}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, schemaFolioStart: parseInt(e.target.value) || 1 }
-                                    }))} disabled={!printOptions.schema} />
-                            </div>
-                        </>}
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** SUMMARY **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item head parent" title="Imprimer la nomenclature">
-                            <input id="print_summary" name="print_summary" type="checkbox"
-                                checked={printOptions.summary}
-                                onChange={(e) => setPrintOptions((old) => {
-                                    let ret = {
-                                        ...old,
-                                        summary: e.target.checked
-                                    };
-                                    /*if (!ret.schema && !ret.summary) {
-                                        ret = {
-                                            ...ret,
-                                            firstPage: false
-                                        }
-                                    }*/
-                                    return ret;
-                                })} />
-                            <label htmlFor="print_summary">Nomenclature</label>
-                            {printOptions.summary &&
-                                <img src={subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon} width={16}
-                                    height={16} alt={"Menu"} onClick={() => setSubMenus(old => ({
-                                        ...old,
-                                        printSummaryOpened: !old.printSummaryOpened
-                                    }))} />}
-                        </div>
-                        {subMenus.printSummaryOpened && printOptions.summary && <>
-                            <div className="dropdown_item"
-                                title="Format d'impression">
-                                <label htmlFor="print_summary_format" style={{ flex: 1 }}>Format d'impression :</label>
-                                <input id="print_summary_format_A4" name="print_summary_format_A4" type="radio"
-                                    checked={printOptions.pdfOptions.summaryPrintFormat === 'A4'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A4' : old.pdfOptions.summaryPrintFormat }
-                                    }))} disabled={!printOptions.summary} />
-                                <label htmlFor="print_summary_format_A4" style={{ flex: 0 }}>A4</label>
-                                <input id="print_summary_format_A3" name="print_summary_format_A3" type="radio"
-                                    checked={printOptions.pdfOptions.summaryPrintFormat === 'A3'}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        pdfOptions: { ...old.pdfOptions, summaryPrintFormat: e.target.checked ? 'A3' : old.pdfOptions.summaryPrintFormat }
-                                    }))} disabled={!printOptions.summary} />
-                                <label htmlFor="print_summary_format_A3" style={{ flex: 0 }}>A3</label>
-                            </div>
-                        </>}
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** MODULE LIST **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_item head parent" title="Imprimer la liste des modules">
-                            <input id="print_modulelist" name="print_modulelist" type="checkbox"
-                                checked={printOptions.modulelist}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    modulelist: e.target.checked
-                                }))} />
-                            <label htmlFor="print_modulelist">Liste des modules</label>
-                        </div>
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** OTHER PRINT OPTIONS **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_separator"></div>
-                        <div className="dropdown_item head"
-                            title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)">
-                            <input id="print_pdf_openWindow" name="print_pdf_openWindow" type="checkbox"
-                                checked={printOptions.pdfOptions.openWindow}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    pdfOptions: { ...old.pdfOptions, openWindow: e.target.checked }
-                                }))} />
-                            <label htmlFor="print_pdf_openWindow">Ouvrir le document dans un nouvel onglet</label>
-                        </div>
-                        <div className="dropdown_item head"
-                            title="Ouvrir automatiquement les propriétés d'impressions">
-                            <input id="print_pdf_autoPrint" name="print_pdf_autoPrint" type="checkbox"
-                                checked={printOptions.pdfOptions.autoPrint}
-                                onChange={(e) => setPrintOptions((old) => ({
-                                    ...old,
-                                    pdfOptions: { ...old.pdfOptions, autoPrint: e.target.checked }
-                                }))} />
-                            <label htmlFor="print_pdf_autoPrint">Ouvrir automatiquement les propriétés
-                                d&#39;impressions</label>
-                        </div>
-
-                        {Array.isArray(apiAvaillableLanguages) && apiAvaillableLanguages.length > 0 && <>
-                            <div className="dropdown_separator"></div>
-                            <div className="dropdown_item head"
-                                title="Traduire le projet imprimé">
-                                <label style={{ fontWeight: 500 }} htmlFor="print_language">Le document doit être généré en:</label>
-                            </div>
-                            <div className="dropdown_item head"
-                                title="Traduire le projet imprimé">
-                                <select style={{ width: '100%' }} name="print_language" id="print_language" value={printOptions.lang}
-                                    onChange={(e) => setPrintOptions((old) => ({
-                                        ...old,
-                                        lang: e.target.value
-                                    }))}
-                                    onFocus={() => {
-                                        printMenuRef.current.classList.add('clicked');
-                                    }}
-                                >
-                                    {apiAvaillableLanguages.map(l => <option key={l.locale} value={l.locale}>{l.display.name}</option>)}
-                                </select>
-                            </div>
-                        </>}
-
-                        {/** ----------------------------------------------------------- */}
-                        {/** PRINT BUTTON **/}
-                        {/** ----------------------------------------------------------- */}
-
-                        <div className="dropdown_footer">
-                            <div className="fakeButton" style={{ fontSize: '100%' }} title="Lancer l&apos;impression" onClick={() => {
-                                printProject();
-                            }}>Lancer l&apos;impression...
-                            </div>
-                        </div>
-                    </div>
-                </button>
-
-                <div className="button_group-separator"></div>
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR RESET **/}
-                {/** ----------------------------------------------------------- */}
-
-                <button className="button_group-clear_project" onClick={() => {
-                    if (confirm("Êtes-vous certain de vouloir réinitialiser le projet?")) resetProject();
-                }} title="Réinitialiser le projet">
-                    <img src={clearProjectIcon} width={16} height={16} alt={"Réinitialiser"} />
-                    <span>Réinitialiser</span>
-                </button>
-
-                <div className="button_group-separator"></div>
-
-                {/** ----------------------------------------------------------- */}
-                {/** TOOLBAR WORKBOX VIEW MODE **/}
-                {/** ----------------------------------------------------------- */}
-
-                <div className="button_group-separator" style={{ marginLeft: 'auto' }}></div>
-                <button className={`button_group-resize end ${autoSpaceSize ? 'checked' : ''}`} onClick={() => setAutoSpaceSize((old) => !old)} title="Redimensionner automatiquement l'espace de travail">
-                    <img src={autoSpaceSize ? resizeIcon : resizeOffIcon} width={18} height={18} style={{ width: '18px', height: '18px' }} alt={"Redimensionner automatiquement"} />
-                </button>
-
-
-            </nav>
-
-            {/** ----------------------------------------------------------- */}
-            {/** SWITCHBOARD PROJECT TITLE **/}
-            {/** ----------------------------------------------------------- */}
-
-            <h3 className={`${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}>
-                <img src={projectIcon} width={24} height={24} alt="Projet courant" />
-                <ContentEditable
-                    value={switchboard.prjname ?? defaultProjectName}
-                    onChange={(value) => {
-                        let v = value.trim();
-                        if (v === "") v = defaultProjectName;
-                        setSwitchboard((old) => ({
-                            ...old,
-                            prjname: v
-                        }));
-                    }}
-                    editableStyle={{
-                        fontSize: '1em',
-                        fontWeight: 'bold',
-                        maxWidth: '100%'
-                    }}
-                    editable={!UIFrozen}
-                    className={"contentEditable"}
-                />
-            </h3>
-
-            {/** ----------------------------------------------------------- */}
-            {/** SWITCHBOARD PROJECT DETAILS **/}
-            {/** ----------------------------------------------------------- */}
-
-            <ul className="project">
-                <li title="Révision">
-                    <img src={versionIcon} alt="Révision" width={16} height={16} />
-                    <span>Révision {switchboard.prjversion ?? 1}</span>
-                </li>
-                <li title="Description">
-                    <img src={infoIcon} alt="Description" width={16} height={16} />
-                    <span>{switchboard.rows.length} x {switchboard.stepsPerRows} module{switchboard.stepsPerRows > 1 ? 's' : ''} / {switchboard.height}mm</span>
-                </li>
-                <li title="Date de création">
-                    <img src={createdIcon} alt="Date de création" width={16} height={16} />
-                    <span>{(switchboard.prjcreated ?? (new Date())).toLocaleString()}</span>
-                </li>
-                <li title="Date de modification">
-                    <img src={updatedIcon} alt="Date de modification" width={16} height={16} />
-                    <span>{(switchboard.prjupdated ?? (new Date())).toLocaleString()}</span>
-                </li>
-            </ul>
-
-            {/** ----------------------------------------------------------- */}
-            {/** TABPAGES SELECTOR **/}
-            {/** ----------------------------------------------------------- */}
-
-            <nav className={`tabPages ${UIFrozen ? 'disabled' : ''}`.trim()}>
-                <div className={`tabPages_page ${tab === 1 ? 'selected' : ''}`.trim()}
-                    onClick={() => setTab(1)}>
-                    <img src={projectIcon} width={20} height={20} alt="Etiquettes" />
-                    <span>Etiquettes</span>
-                </div>
-                <div className={`tabPages_page ${tab === 2 ? 'selected' : ''}`.trim()}
-                    onClick={() => setTab(2)}>
-                    <img src={schemaIcon} width={20} height={20} alt="Schéma unifilaire" />
-                    <span>Schéma</span>
-                </div>
-                <div className={`tabPages_page ${tab === 3 ? 'selected' : ''}`.trim()}
-                    onClick={() => setTab(3)}>
-                    <img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
-                    <span>Nomenclature</span>
-                </div>
-            </nav>
-
-            {/** ----------------------------------------------------------- */}
-            {/** SWITCHBOARD TAB **/}
-            {/** ----------------------------------------------------------- */}
-
-            <div ref={switchboardRef}
-                className={`switchboard ${tab === 1 ? 'selected' : ''} ${printOptions.labels ? 'printable' : 'notprintable'}`.trim()}
-                title={freeSpaceMessage}>
-                <div className="tabPageBand notprintable">
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{ fontSize: 'smaller', lineHeight: 1.2 }}>Thème<br />courant:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <select
-                                value={theme?.name ?? defaultTheme}
-                                onChange={(e) => {
-                                    updateTheme(e.target.value);
-                                }}
-                                style={{
-                                    maxWidth: '100%',
-                                    width: '280px',
-                                    overflowX: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis'
-                                }}
-                                disabled={UIFrozen}
-                            >
-                                {Object.entries(Object.groupBy(themesList, (({ group }) => group))).map((e) => {
-                                    const g = e[0];
-                                    const l = e[1];
-                                    return <Fragment key={`themes_${g}`}>
-                                        <option key={`group_${g}`} id={`group_${g}`} disabled>- {g} -</option>
-                                        {l.map((t) => <option key={`theme_${t.name}`} id={`theme_${t.name}`}
-                                            value={t.name}>({g}) {t.title}</option>)}
-                                    </Fragment>
-                                })}
-                            </select>
-                        </div>
-                        {theme.name.startsWith('custom') && theme?.data && <div className="tabPageBandCol">
-                            <button style={{ height: '34px' }}
-                                title="Modifier le thème."
-                                onClick={() => {
-                                    setThemeEditor(true)
-                                }}
-                                disabled={UIFrozen}
-                            >
-                                <img src={themeSettingsIcon} alt="Modifier le thème."
-                                    width={22} height={22} />
-                            </button>
-                        </div>}
-                    </div>
-
-
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{
-                                fontSize: 'smaller',
-                                lineHeight: 1.2
-                            }}>Hauteur des<br />étiquettes:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <input type="range" min={heightMin} max={heightMax} step={1}
-                                style={{ width: '100px' }}
-                                value={switchboard.height} onChange={(e) => {
-                                    const value = parseInt(e.target.value);
-                                    if (value >= heightMin) setSwitchboard((old) => ({ ...old, height: value }));
-                                }}
-                                disabled={UIFrozen}
-                                className={UIFrozen ? 'disabled' : ''}
-                            />
-                        </div>
-                        <div className="tabPageBandCol">
-                            <span>{switchboard.height}mm</span>
-                        </div>
-                    </div>
-
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <span style={{
-                                fontSize: 'smaller',
-                                lineHeight: 1.2
-                            }}>Largeur des<br />étiquettes:</span>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <select
-                                value={switchboard.stepSize ?? defaultStepSize}
-                                onChange={(e) => {
-                                    const value = parseFloat(e.target.value);
-                                    if (value === 17.5 || value === 18) setSwitchboard((old) => ({
-                                        ...old,
-                                        stepSize: value
-                                    }));
-                                }}
-                                style={{
-                                    maxWidth: '100%',
-                                    width: 'max-content',
-                                    overflowX: 'hidden',
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis'
-                                }}
-                                disabled={UIFrozen}
-                            >
-                                <option>17.5</option>
-                                <option>18</option>
-                            </select>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <span>mm</span>
-                        </div>
-                    </div>
-
-                    <div className="tabPageBandNL"></div>
-
-                    <div className="tabPageBandGroup">
-                        <div className="tabPageBandCol">
-                            <button style={{ height: '34px' }}
-                                title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
-                                onClick={() => reassignModules()} disabled={UIFrozen}>
-                                <img src={numbersIcon} alt="Ré-assigner automatiquement les identifiants"
-                                    width={22} height={22} />
-                            </button>
-                        </div>
-                        <div className="tabPageBandCol">
-                            <input type="checkbox" name="switchboardMonitorChoice" id="switchboardMonitorChoice"
-                                checked={switchboard.switchboardMonitor}
-                                onChange={() => setSwitchboard((old) => ({
-                                    ...old,
-                                    switchboardMonitor: !old.switchboardMonitor
-                                }))} disabled={UIFrozen} />
-                            <label htmlFor="switchboardMonitorChoice"
-                                title="Conseils et Surveillance (NFC 15-100)"
-                                className={`${monitor.errors ? 'error' : ''}`}>
-                                <img src={switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon}
-                                    alt="Conseils et Surveillance (NFC 15-100)" width={24} height={24} />
-                            </label>
-                        </div>
-                        {switchboard.switchboardMonitor && (
-                            <div className="tabPageBandCol">
-                                {monitorWarningsLength > 0
-                                    ? <>
-                                        <span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? 's' : ''} détectée${monitorWarningsLength > 1 ? 's' : ''}.`}</span>
-                                        <img src={info2Icon} alt="Détails des erreurs"
-                                            title="Détails des erreurs" width={16} height={16}
-                                            style={{ cursor: 'pointer', padding: '4px' }}
-                                            onClick={() => setMonitorOpened(old => !old)} />
-                                    </>
-                                    : <span>Aucune erreur détectée.</span>
-                                }
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
-                    <div className="tabPageBand notprintable errors" ref={monitorRef} tabIndex={-1}
-                        onBlur={() => setMonitorOpened(false)}>
-                        <div className="closeButton" title={"Fermer"} onClick={() => setMonitorOpened(false)}>
-                            <img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
-                        </div>
-                        <div className="tabPageBandCol" style={{
-                            height: 'max-content',
-                            minHeight: 'max-content',
-                            maxHeight: 'max-content'
-                        }}>
-                            <ul>
-                                {Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
-                                    <li key={i} className="tabPageErrors">
-                                        <div>{id}:</div>
-                                        <ul>
-                                            {errors.map((error, j) => <li key={j} className="tabPageError">
-                                                <img src={`${import.meta.env.BASE_URL}schema_warning.svg`}
-                                                    alt="Erreurs" width={16} height={16} />
-                                                <span>{error}</span>
-                                            </li>)}
-                                        </ul>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )}
-
-                {switchboard.rows.map((row, i) => (
-                    <Row
-                        key={i}
-                        rowIndex={i}
-                        rowPosition={i + 1}
-                        items={row.map((m) => ({ ...defaultModule, ...m }))}
-                        stepsPerRows={switchboard.stepsPerRows}
-                        theme={theme}
-                        clipboard={clipboard}
-                        clipboardMode={clipboardMode}
-
-                        style={{
-                            "--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
-                            "--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px
-                            "--c": switchboard.stepsPerRows,
-                            "--sw": `calc(${switchboard.stepSize}mm + 1px)` // 18mm -> 70.03px
-                        }}
-
-                        onScrollLeft={() => handleScrollLeft()}
-                        onScrollRight={() => handleScrollRight()}
-
-                        onModuleGrow={(moduleIndex, item, moduleRef) => handleModuleGrow(i, moduleIndex, item, moduleRef)}
-                        onModuleShrink={(moduleIndex, item, moduleRef) => handleModuleShrink(i, moduleIndex, item, moduleRef)}
-
-                        onModuleClear={(moduleIndex, item) => handleModuleClear(i, moduleIndex, item)}
-                        onModuleEdit={(moduleIndex, item) => handleModuleEdit(i, moduleIndex, item)}
-
-                        onModuleCopy={(moduleIndex, item) => handleModuleCopy(i, moduleIndex, item)}
-                        onModuleCut={(moduleIndex, item) => handleModuleCut(i, moduleIndex, item)}
-                        onModulePaste={(moduleIndex, item) => handleModulePaste(i, moduleIndex, item)}
-                        onModuleCancelPaste={() => handleCancelPaste()}
-                        modulePasteAllowed={(moduleIndex, item) => modulePasteAllowed(i, moduleIndex, item)}
-                        hasClipboard={clipboard !== null}
-
-                        onModuleInterCopy={(moduleIndex, item) => handleModuleInterCopy(i, moduleIndex, item)}
-                        onModuleInter={(moduleIndex, item) => handleModuleInter(i, moduleIndex, item)}
-                        moduleInterAllowed={(moduleIndex, item) => moduleInterAllowed(i, moduleIndex, item)}
-
-                        onModuleMoveLeft={(moduleIndex, item, moduleRef) => handleModuleMoveLeft(i, moduleIndex, item, moduleRef)}
-                        onModuleMoveRight={(moduleIndex, item, moduleRef) => handleModuleMoveRight(i, moduleIndex, item, moduleRef)}
-
-                        onModuleHalf={(moduleIndex, item, mode) => handleModuleHalf(i, moduleIndex, item, mode)}
-
-                        moduleShrinkAllowed={(moduleIndex, item) => moduleShrinkAllowed(i, moduleIndex, item)}
-                        moduleGrowAllowed={(moduleIndex, item) => moduleGrowAllowed(i, moduleIndex, item)}
-                        moduleMoveLeftAllowed={(moduleIndex, item) => moduleMoveLeftAllowed(i, moduleIndex, item)}
-                        moduleMoveRightAllowed={(moduleIndex, item) => moduleMoveRightAllowed(i, moduleIndex, item)}
-
-                        onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
-                        onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
-
-                        rowAddAllowed={() => rowAddAllowed()}
-                        rowDeleteAllowed={() => rowDeleteAllowed()}
-
-                        printFreeModuleAllowed={() => printFreeModuleAllowed()}
-                    />
-                ))}
-            </div>
-
-            {/** ----------------------------------------------------------- */}
-            {/** SCHEMA TAB **/}
-            {/** ----------------------------------------------------------- */}
-
-            <SchemaTab
-                tab={tab}
-                switchboard={switchboard}
-                setSwitchboard={setSwitchboard}
-                printOptions={printOptions}
-                reassignModules={reassignModules}
-                getModuleById={getModuleById2}
-                schemaFunctions={schemaFunctions}
-                onEditSymbol={(rowIndex, moduleIndex) => editModule(rowIndex, moduleIndex, 'schema')}
-            />
-
-            {/** ----------------------------------------------------------- */}
-            {/** SUMMARY TAB **/}
-            {/** ----------------------------------------------------------- */}
-
-            <SummaryTab
-                tab={tab}
-                switchboard={switchboard}
-                setSwitchboard={setSwitchboard}
-                printOptions={printOptions}
-                reassignModules={reassignModules}
-                getModuleById={getModuleById2}
-                onEdit={(rowIndex, moduleIndex, tab, focus) => editModule(rowIndex, moduleIndex, tab, focus)}
-            />
-
-            {/** ----------------------------------------------------------- */}
-            {/** POPUPS **/}
-            {/** ----------------------------------------------------------- */}
-
-            {
-                editor && <Editor
-                    theme={theme}
-                    switchboard={switchboard}
-                    stepSize={switchboard.stepSize}
-                    getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
-                    getModuleById={getModuleById}
-                    editor={editor}
-                    onSetEditor={setEditor}
-                    onApplyModuleEditor={applyModuleEditor}
-                    onHandleModuleClear={handleModuleClear}
-                />
-            }
-
-            {
-                newProjectPopup && <NewProjectPopup
-                    onCancel={() => setNewProjectPopup(false)}
-                    onApply={(properties) => {
-                        const printFirstpage = properties.infos.from.name
-                            || properties.infos.from.siret
-                            || properties.infos.from.postalAddress
-                            || properties.infos.from.email
-                            || properties.infos.from.phone
-                            || properties.infos.to.name
-                            || properties.infos.to.postalAddress
-                            || properties.infos.to.email
-                            || properties.infos.to.phone;
-
-                        createProject(
-                            properties.name,
-                            properties.stepsPerRows,
-                            properties.rowsCount,
-                            properties.height,
-                            properties.stepSize,
-                            properties.views,
-                            properties.infos,
-                            printFirstpage
-                        );
-                        setNewProjectPopup(false);
-                    }}
-                    defaultFirstpageOptions={defaultFirstpageOptions}
-                />
-            }
-
-            {
-                welcome && <WelcomePopup
-                    onCancel={() => setWelcome(false)}
-                    onNewProject={() => {
-                        setNewProjectPopup(true);
-                        setWelcome(false);
-                    }}
-                    onImportProject={() => {
-                        importProjectChooseFile();
-                        setWelcome(false);
-                    }}
-                />
-            }
-
-            {
-                themeEditor && <ThemeEditorPopup
-                    switchboard={switchboard}
-                    stepSize={switchboard.stepSize}
-                    heightMin={heightMin}
-                    heightMax={heightMax}
-                    theme={theme}
-                    onCancel={() => setThemeEditor(false)}
-                    onApply={(editedTheme) => {
-                        setTheme(editedTheme);
-                        setSwitchboard((old) => modulesAutoId({ ...old, theme: editedTheme }));
-                        setThemeEditor(false);
-
-
-                    }}
-                />
-            }
-
-            {
-                labelerOptionsPopup && <LabelerPopup
-                    switchboard={switchboard}
-                    onApply={(model, options) => {
-                        toLabeler(model, options);
-                        setLabelerOptionsPopup(false);
-                    }}
-                    onCancel={() => setLabelerOptionsPopup(false)}
-                />
-            }
-
-            {
-                firstpageOptionsPopup && <FirstpageOptionsPopup
-                    withPreview={true}
-                    withViewSelector={true}
-                    defaultFirstpageOptions={defaultFirstpageOptions}
-                    switchboard={switchboard}
-                    printOptions={printOptions}
-                    onApply={(options) => {
-                        setSwitchboard(old => ({
-                            ...old,
-                            firstPageInfos: { ...options.infos }
-                        }));
-
-                        setPrintOptions(old => ({
-                            ...old,
-                            pdfOptions: {
-                                ...old.pdfOptions,
-                                firstPageView: options.views
-                            }
-                        }));
-
-                        printMenuRef.current.classList.add('clicked');
-                        printMenuRef.current.focus();
-                        setFirstpageOptionsPopup(false);
-                    }}
-                    onCancel={() => {
-                        printMenuRef.current.classList.add('clicked');
-                        printMenuRef.current.focus();
-                        setFirstpageOptionsPopup(false)
-                    }}
-                />
-            }
-
-
-
-        </div >
-    )
+	const importRef = useRef();
+	const projectRef = useRef();
+	const switchboardRef = useRef();
+	const monitorRef = useRef(null);
+	const labelerRef = useRef();
+
+	const navRef = useRef();
+	const printMenuRef = useRef();
+	const exportMenuRef = useRef();
+
+	const exportDropdownMenuPlacement = useDropdownToolbarMenuPlacing(
+		navRef,
+		exportMenuRef,
+		320,
+		50,
+	);
+	const printDropdownMenuPlacement = useDropdownToolbarMenuPlacing(
+		navRef,
+		printMenuRef,
+		250,
+		50,
+	);
+
+	const [tab, setTab] = useState(1);
+	const [editor, setEditor] = useState(null);
+	const [monitorOpened, setMonitorOpened] = useState(false);
+	const [welcome, setWelcome] = useState(false);
+	const [themeEditor, setThemeEditor] = useState(false);
+	const [freeSpaceMessage, setFreeSpaceMessage] = useState("");
+	const [clipboard, setClipboard] = useState(null);
+	const [clipboardMode, setClipboardMode] = useState(null);
+	const [subMenus, setSubMenus] = useState({
+		printLabelsOpened: false,
+		printSchemaOpened: false,
+		printSummaryOpened: false,
+	});
+	const [uniqueChoices, setUniqueChoices] = useState([]);
+	const [labelerOptionsRowsSelection, setLabelerOptionsRowsSelection] =
+		useState(null);
+	const [labelerOptionsPopup, setLabelerOptionsPopup] = useState(false);
+	const [firstpageOptionsPopup, setFirstpageOptionsPopup] = useState(false);
+	const [newProjectPopup, setNewProjectPopup] = useState(false);
+	const [apiAvaillableLanguages, setApiAvaillableLanguages] = useState([]);
+
+	const UIFrozen = useMemo(() => {
+		return (
+			clipboard !== null ||
+			themeEditor ||
+			welcome ||
+			editor !== null ||
+			firstpageOptionsPopup ||
+			labelerOptionsPopup ||
+			newProjectPopup
+		);
+	}, [
+		clipboard,
+		themeEditor,
+		welcome,
+		editor,
+		firstpageOptionsPopup,
+		labelerOptionsPopup,
+		newProjectPopup,
+	]);
+
+	const defaultFirstpageOptions = {
+		infos: {
+			// to switchboad.firstPageInfos
+			from: {
+				logo: null,
+				name: null,
+				siret: null,
+				postalAddress: null,
+				email: null,
+				phone: null,
+			},
+			to: {
+				name: null,
+				postalAddress: null,
+				email: null,
+				phone: null,
+			},
+		},
+		views: {
+			// to printOptions.firstPageView
+			projectName: true,
+			projectVersion: true,
+			projectCreated: true,
+			projectUpdated: true,
+			projectType: true,
+			from: {
+				logo: false,
+				name: false,
+				siret: false,
+				postalAddress: false,
+				email: false,
+				phone: false,
+			},
+			to: {
+				name: false,
+				postalAddress: false,
+				email: false,
+				phone: false,
+			},
+		},
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	const defaultPrintOptions = useMemo(
+		() => ({
+			lang: "fr_FR",
+			firstPage: false,
+			labels: true,
+			summary: false,
+			schema: false,
+			modulelist: false,
+			freeModules: false,
+			pdfOptions: {
+				openWindow: true,
+				autoPrint: false,
+				schemaGridColor: [230, 230, 230],
+				labelsCutLines: true,
+				printCurrents: false,
+				labelsPrintFormat: "A4",
+				schemaPrintFormat: "A4",
+				summaryPrintFormat: "A4",
+				schemaFolioStart: 1,
+				firstPageView: { ...defaultFirstpageOptions.views },
+			},
+		}),
+		[],
+	);
+	const getSavedPrintOptions = () => {
+		if (sessionStorage.getItem(`${pkg.name}_printOptions`)) {
+			const merge = (a, b) =>
+				[a, b].reduce(
+					(r, o) =>
+						Object.entries(o).reduce(
+							(q, [k, v]) => ({
+								...q,
+								[k]: v && typeof v === "object" ? merge(q[k] || {}, v) : v,
+							}),
+							r,
+						),
+					{},
+				);
+			return merge(
+				defaultPrintOptions,
+				JSON.parse(sessionStorage.getItem(`${pkg.name}_printOptions`)),
+			);
+		}
+		return { ...defaultPrintOptions };
+	};
+	const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
+
+	const _importPrintOptions = (po) => {
+		try {
+			if (typeof po !== "object") throw new Error();
+
+			setPrintOptions({ ...defaultPrintOptions, ...po });
+
+			console.log("Imported project print options loaded.");
+		} catch (_error) {
+			setPrintOptions({ ...defaultPrintOptions });
+
+			console.log("No project print options to load or corrupted.");
+		}
+	};
+
+	const getSavedAutoResize = () => {
+		if (sessionStorage.getItem(`${pkg.name}_autoResize`)) {
+			return sessionStorage.getItem(`${pkg.name}_autoResize`) === "true";
+		}
+		return false;
+	};
+	const [spaceSize, setSpaceSize] = useState("1152px");
+	const [autoSpaceSize, setAutoSpaceSize] = useState(getSavedAutoResize());
+
+	const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE, 10);
+	const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
+	const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS, 10);
+	const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT, 10);
+	const defaultStepsPerRows = parseInt(
+		import.meta.env.VITE_DEFAULT_STEPSPERROW,
+		10,
+	);
+	const defaultTheme = themesList.filter((t) => t.default)[0];
+	const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
+	const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
+	//const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN, 10);
+	const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX, 10);
+	const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN, 10);
+	const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX, 10);
+
+	const defaultModule = useMemo(
+		() => ({
+			id: "",
+			icon:
+				import.meta.env.VITE_DEFAULT_ICON === ""
+					? null
+					: import.meta.env.VITE_DEFAULT_ICON,
+			text: import.meta.env.VITE_DEFAULT_TEXT,
+			desc: import.meta.env.VITE_DEFAULT_DESC,
+			func: "",
+			type: "",
+			crb: "",
+			modtype: "",
+			current: "",
+			vref: import.meta.env.VITE_VREF_230V,
+			sensibility: "",
+			coef: 0.5,
+			pole: "",
+			wire: "",
+			line: "",
+			grp: "",
+			parentId: "",
+			srcId: "",
+			kcId: "",
+			kcType: "NO",
+			kcOrder: "after",
+			partialKc: false,
+			onlyChilds: true,
+			noAutoId: false,
+			free: true,
+			span: 1,
+			half: "none",
+		}),
+		[],
+	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: correct
+	const defaultProjectProperties = useMemo(
+		() => ({
+			name: defaultProjectName,
+			npRows: defaultNpRows,
+			hRow: defaultHRow,
+			spr: defaultStepsPerRows,
+			projectType: defaultProjectType,
+			db: {
+				crb: "",
+				current: "30/60A",
+				desc: "Disjonteur de branchement",
+				free: false,
+				func: "db",
+				icon: "swb_puissance.svg",
+				id: "DB",
+				parentId: "",
+				srcId: import.meta.env.VITE_DB_SRCNAME,
+				kcId: "",
+				kcType: "NO",
+				kcOrder: "after",
+				vref: import.meta.env.VITE_VREF_230V,
+				partialKc: false,
+				onlyChilds: true,
+				noAutoId: false,
+				pole: "1P+N",
+				wire: "16",
+				line: "",
+				grp: "",
+				sensibility: "500mA",
+				coef: 1,
+				span: 4,
+				text: "Disjonteur de branchement",
+				type: "S",
+			},
+		}),
+		[
+			defaultHRow,
+			defaultNpRows,
+			defaultProjectName,
+			defaultStepsPerRows,
+			defaultProjectType,
+		],
+	);
+
+	const createRow = useCallback(
+		(steps, rowsCount) => {
+			return Array(rowsCount)
+				.fill([])
+				.map((_, i) =>
+					Array(steps)
+						.fill({ ...defaultModule })
+						.map((q, j) => ({
+							...q,
+							id: `Q${j + 1 + ((i + 1) * steps - steps)}`,
+						})),
+				);
+		},
+		[defaultModule],
+	);
+
+	const generateUUID = () => {
+		const lut = [];
+		for (let i = 0; i < 256; i++) {
+			lut[i] = (i < 16 ? "0" : "") + i.toString(16);
+		}
+		const d0 = (Math.random() * 0xffffffff) | 0;
+		const d1 = (Math.random() * 0xffffffff) | 0;
+		const d2 = (Math.random() * 0xffffffff) | 0;
+		const d3 = (Math.random() * 0xffffffff) | 0;
+		return (
+			lut[d0 & 0xff] +
+			lut[(d0 >> 8) & 0xff] +
+			lut[(d0 >> 16) & 0xff] +
+			lut[(d0 >> 24) & 0xff] +
+			"-" +
+			lut[d1 & 0xff] +
+			lut[(d1 >> 8) & 0xff] +
+			"-" +
+			lut[((d1 >> 16) & 0x0f) | 0x40] +
+			lut[(d1 >> 24) & 0xff] +
+			"-" +
+			lut[(d2 & 0x3f) | 0x80] +
+			lut[(d2 >> 8) & 0xff] +
+			"-" +
+			lut[(d2 >> 16) & 0xff] +
+			lut[(d2 >> 24) & 0xff] +
+			lut[d3 & 0xff] +
+			lut[(d3 >> 8) & 0xff] +
+			lut[(d3 >> 16) & 0xff] +
+			lut[(d3 >> 24) & 0xff]
+		);
+	};
+
+	const getUrlParam = (name, type = "string", defaultValue = null) => {
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+
+		let param = urlParams.get(name);
+		if (param === null) return defaultValue;
+		param = decodeURIComponent(param).trim();
+
+		switch (type) {
+			case "int":
+				return parseInt(param, 10);
+			case "float":
+				return parseFloat(param);
+			case "boolean":
+				return param.toLowerCase() === "true" || param === "1";
+			default:
+				return param;
+		}
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: correct
+	const defaultProject = useMemo(
+		() => ({
+			appversion: pkg.version,
+
+			prjid: generateUUID(),
+			prjname: defaultProjectName,
+			prjcreated: new Date(),
+			prjupdated: new Date(),
+			prjversion: 1,
+			projectType: defaultProjectType,
+
+			theme: defaultTheme,
+
+			height: defaultHRow,
+			stepsPerRows: defaultStepsPerRows,
+			stepSize: defaultStepSize,
+			rows: createRow(defaultStepsPerRows, defaultNpRows),
+
+			db: { ...defaultProjectProperties.db },
+			sources: [],
+
+			withDb: false,
+			withGroundLine: false,
+
+			schemaMonitor: false,
+			switchboardMonitor: false,
+
+			summaryColumnRow: false,
+			summaryColumnPosition: false,
+			summaryColumnType: true,
+			summaryColumnId: true,
+			summaryColumnFunction: true,
+			summaryColumnLabel: true,
+			summaryColumnDescription: true,
+
+			firstPageInfos: { ...defaultFirstpageOptions.infos },
+			printOptions: { ...defaultPrintOptions },
+		}),
+		[
+			defaultProjectName,
+			defaultProjectType,
+			defaultTheme,
+			defaultHRow,
+			defaultStepsPerRows,
+			defaultStepSize,
+			createRow,
+			defaultNpRows,
+			defaultProjectProperties.db,
+			defaultFirstpageOptions.infos,
+		],
+	);
+
+	const autoUpdateProjectProperties = (swb) => {
+		const theme = themeEngineCompatibility(swb);
+
+		return {
+			...swb,
+
+			// <1.5.0  : add project metas
+			// >=1.5.0 : convert data types
+			prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
+			prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
+			prjversion: swb.prjversion ? parseInt(swb.prjversion, 10) : 1,
+			// <2.0.0
+			projectType: swb.projectType ?? defaultProjectType,
+			db: {
+				...defaultProjectProperties.db,
+				...(swb.db ?? { ...defaultProjectProperties.db }),
+			},
+			withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+			withGroundLine:
+				swb.withGroundLine === true || swb.withGroundLine === false
+					? swb.withGroundLine
+					: false,
+			schemaMonitor:
+				swb.schemaMonitor === true || swb.schemaMonitor === false
+					? swb.schemaMonitor
+					: false,
+			switchboardMonitor:
+				swb.switchboardMonitor === true || swb.switchboardMonitor === false
+					? swb.switchboardMonitor
+					: false,
+			summaryColumnRow:
+				swb.summaryColumnRow === true || swb.summaryColumnRow === false
+					? swb.summaryColumnRow
+					: false,
+			summaryColumnPosition:
+				swb.summaryColumnPosition === true ||
+				swb.summaryColumnPosition === false
+					? swb.summaryColumnPosition
+					: false,
+			summaryColumnType:
+				swb.summaryColumnType === true || swb.summaryColumnType === false
+					? swb.summaryColumnType
+					: true,
+			summaryColumnId:
+				swb.summaryColumnId === true || swb.summaryColumnId === false
+					? swb.summaryColumnId
+					: true,
+			summaryColumnFunction:
+				swb.summaryColumnFunction === true ||
+				swb.summaryColumnFunction === false
+					? swb.summaryColumnFunction
+					: true,
+			summaryColumnLabel:
+				swb.summaryColumnLabel === true || swb.summaryColumnLabel === false
+					? swb.summaryColumnLabel
+					: true,
+			summaryColumnDescription:
+				swb.summaryColumnDescription === true ||
+				swb.summaryColumnDescription === false
+					? swb.summaryColumnDescription
+					: true,
+			// <2.0.5
+			stepSize: swb.stepSize ?? defaultStepSize,
+			// <2.1.4
+			theme,
+			// <2.2.2
+			prjid: swb.prjid ?? generateUUID(),
+			// <2.2.8
+			sources:
+				swb.sources ??
+				import.meta.env.VITE_SOURCES.split("|")
+					.map((v) => v.trim())
+					.filter((v) => v !== ""),
+		};
+	};
+
+	const setDocumentTitle = (title) => {
+		const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
+		document.title = t;
+	};
+
+	const sendChoice = (choiceName, keys = [], unique = false) => {
+		const ks = keys
+			.map((k) => (typeof k === "string" ? k.trim() : `${k}`))
+			.filter((k) => k !== null);
+
+		if (ks.length === 0) return;
+
+		if (unique && !uniqueChoices.includes(choiceName)) {
+			setUniqueChoices((old) => [...old, choiceName]);
+			statsPush("choice", choiceName, ks);
+		}
+
+		if (!unique) statsPush("choice", choiceName, ks);
+	};
+
+	const scrollToProject = () => {
+		projectRef.current?.scrollIntoView({
+			behavior: "smooth",
+			block: "start",
+			inline: "start",
+		});
+		//window.scrollTo(0, 0);
+	};
+
+	const verifyVersion = (swb) => {
+		if (!swb.appversion) {
+			alert(
+				`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`,
+			);
+			return false;
+		}
+
+		const appVersion = swb.appversion;
+		if (!satisfies(appVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
+			alert(
+				`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${appVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`,
+			);
+			return false;
+		}
+
+		return true;
+	};
+
+	// correction des identifiants en doublon
+	const modulesAutoId = useCallback((swb) => {
+		const reIndentedSwb = swb;
+		let rows = reIndentedSwb.rows;
+		const ids = [];
+		swb.rows.forEach((row) => {
+			row.forEach((module) => {
+				if (!module.free && module.id.trim() !== "") {
+					ids.push(module.id.trim());
+				}
+			});
+		});
+
+		rows = rows.map((row) => {
+			return row.map((module) => {
+				if (module.free) {
+					return {
+						...module,
+						id: "",
+					};
+				}
+
+				if (module.id.trim() === "") {
+					let count = 1;
+					while (ids.includes(`${defaultModuleId}${count}`)) count++;
+
+					ids.push(`${defaultModuleId}${count}`);
+					return {
+						...module,
+						id: `${defaultModuleId}${count}`,
+					};
+				}
+
+				return module;
+			});
+		});
+
+		return { ...reIndentedSwb, rows };
+	}, []);
+
+	const reassignAllParents = (originalId, newId) => {
+		if (originalId && originalId !== newId) {
+			setSwitchboard((old) => {
+				const rows = old.rows.map((row) => {
+					return row.map((module) => {
+						let mm = { ...module };
+						if (module.parentId === originalId) {
+							mm = { ...mm, parentId: newId };
+						}
+
+						const kcId_a = (module.kcId ?? "").split("|").map((k) => k.trim());
+						if (kcId_a.includes(originalId)) {
+							mm = {
+								...mm,
+								kcId: kcId_a
+									.map((k) => (k === originalId ? newId : k))
+									.join("|"),
+							};
+						}
+
+						return mm;
+					});
+				});
+
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const reassignModules = () => {
+		if (
+			switchboard &&
+			confirm(
+				"Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.",
+			)
+		) {
+			const swb = modulesAutoId(switchboard);
+
+			let counters = {};
+			let from = {};
+
+			// get all modules id from no auto id assignment
+			const keepThem = swb.rows
+				.flatMap((row) => {
+					return row.map((module) => {
+						if ((module.noAutoId ?? false) === true) {
+							return module.id;
+						}
+						return null;
+					});
+				})
+				.filter((kt) => kt !== null);
+
+			// re-assign modules id
+			let rows = swb.rows.map((row) => {
+				return row.map((module) => {
+					if (module.free) {
+						return {
+							...module,
+							id: "",
+						};
+					}
+
+					let newModuleId = module.id;
+					if ((module.noAutoId ?? false) !== true) {
+						let func = (module.func ?? "").trim().toUpperCase();
+						if (func === "") func = defaultModuleId;
+
+						do {
+							counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
+							newModuleId = `${func}${counters[func]}`;
+						} while (keepThem.includes(newModuleId));
+					}
+					from = { ...from, [module.id]: newModuleId };
+
+					return {
+						...module,
+						id: newModuleId,
+					};
+				});
+			});
+
+			// re-assign parents
+			rows = rows.map((row) => {
+				return row.map((module) => {
+					let mm = { ...module };
+					if (from[module.parentId]) {
+						mm = {
+							...mm,
+							parentId: from[module.parentId],
+						};
+					}
+
+					mm = {
+						...mm,
+						kcId: (mm.kcId ?? "")
+							.split("|")
+							.map((k) => {
+								if (from[k]) return from[k];
+								return null;
+							})
+							.filter((k) => k !== null)
+							.join("|"),
+					};
+
+					return mm;
+				});
+			});
+
+			setSwitchboard((old) => ({ ...old, rows }));
+		}
+	};
+
+	const themeEngineCompatibility = (swb) => {
+		let theme = swb?.theme;
+		if (!theme) theme = getThemeOfFirstModuleFound(swb);
+
+		if (!theme.name.startsWith("custom|")) {
+			theme = {
+				...theme,
+				name: `custom|${theme.name}`,
+			};
+		}
+		if (!theme.data) {
+			theme = {
+				...theme,
+				data: themesList.filter((t) => t.name === theme.name)[0].data,
+			};
+		}
+		return theme;
+	};
+
+	const getSavedSwitchboard = () => {
+		if (sessionStorage.getItem(pkg.name)) {
+			let swb = {
+				...defaultProject,
+				...JSON.parse(sessionStorage.getItem(pkg.name)),
+			};
+			swb = autoUpdateProjectProperties(swb);
+
+			return modulesAutoId({ ...swb });
+		}
+
+		return { ...defaultProject };
+	};
+
+	const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
+	const switchboardIsEmpty = useMemo(() => {
+		let isEmpty = true;
+
+		for (let i = 0; i < switchboard.rows.length; i++) {
+			for (let j = 0; j < switchboard.rows[i].length; j++) {
+				if (switchboard.rows[i][j].free === false) {
+					isEmpty = false;
+					break;
+				}
+			}
+			if (isEmpty === false) break;
+		}
+
+		return isEmpty;
+	}, [switchboard]);
+
+	const allMemoizedIds = useMemo(() => {
+		const ids = [];
+		switchboard.rows.forEach((row) => {
+			row.forEach((module) => {
+				if (!module.free && module.id.trim() !== "") {
+					ids.push(module.id.trim());
+				}
+			});
+		});
+		return ids;
+	}, [switchboard.rows]);
+
+	const getNextId = (id) => {
+		if (allMemoizedIds.includes(id)) {
+			const ii = id.split("_");
+			let count = 1;
+			while (allMemoizedIds.includes(`${ii[0]}_${count}`)) count++;
+			return `${ii[0]}_${count}`;
+		}
+		return id;
+	};
+
+	const lastFreeId = useMemo(() => {
+		const rows = switchboard.rows;
+
+		const ids = [];
+		rows.forEach((row) => {
+			row.forEach((module) => {
+				ids.push(module.id);
+			});
+		});
+
+		let found = "";
+		let count = 1;
+		while (ids.includes(`${defaultModuleId}${count}`)) count++;
+		found = `${defaultModuleId}${count}`;
+
+		return found;
+	}, [switchboard]);
+
+	const getThemeOfFirstModuleFound = (swb = null) => {
+		let themeFound = null;
+		for (const r of (swb ?? switchboard).rows) {
+			for (const m of r) {
+				if (!m.free) {
+					themeFound = m.theme;
+					break;
+				}
+			}
+			if (themeFound) break;
+		}
+		return themeFound ?? defaultTheme;
+	};
+	const [theme, setTheme] = useState(switchboard?.theme ?? defaultTheme);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	const createProject = useCallback(
+		(
+			name,
+			stepsPerRows,
+			rowsCount,
+			height,
+			stepSize,
+			views = null,
+			infos = null,
+			printFirstpage = null,
+		) => {
+			importRef.current.value = "";
+
+			setTheme(defaultTheme);
+			setSwitchboard(() => {
+				return modulesAutoId({
+					...defaultProject,
+					prjid: generateUUID(),
+					prjname: name,
+					height,
+					stepsPerRows,
+					stepSize,
+					rows: createRow(stepsPerRows, rowsCount),
+					firstPageInfos: { ...infos },
+				});
+			});
+
+			setClipboard(null);
+			setClipboardMode(null);
+			setUniqueChoices([]);
+			setPrintOptions({
+				...defaultPrintOptions,
+				firstPage: printFirstpage ?? defaultPrintOptions.firstPage,
+				pdfOptions: {
+					...defaultPrintOptions.pdfOptions,
+					firstPageView: { ...views },
+				},
+			});
+			setDocumentTitle(name);
+			setTab(1);
+			setSubMenus((old) => ({
+				...old,
+				printLabelsOpened: false,
+				printSchemaOpened: false,
+				printSummaryOpened: false,
+			}));
+			scrollToProject();
+		},
+		[
+			defaultTheme,
+			defaultPrintOptions,
+			defaultStepSize,
+			modulesAutoId,
+			defaultProject,
+			createRow,
+		],
+	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	const resetProject = useCallback(() => {
+		importRef.current.value = "";
+
+		setClipboardMode(null);
+		setUniqueChoices([]);
+		setDocumentTitle(defaultProjectName);
+		setPrintOptions({ ...defaultPrintOptions });
+		setTheme(defaultTheme);
+		setSubMenus((old) => ({
+			...old,
+			printLabelsOpened: false,
+			printSchemaOpened: false,
+			printSummaryOpened: false,
+		}));
+
+		createProject(
+			defaultProjectName,
+			defaultStepsPerRows,
+			defaultNpRows,
+			defaultHRow,
+			defaultStepSize,
+		);
+	}, [
+		createProject,
+		defaultHRow,
+		defaultNpRows,
+		defaultProjectName,
+		defaultStepsPerRows,
+		defaultTheme,
+		defaultStepSize,
+	]);
+
+	const _importProject = (data) => {
+		try {
+			let swb = typeof data === "string" ? JSON.parse(data) : data;
+			swb = autoUpdateProjectProperties(swb);
+
+			const _rows = swb.rows.map((r) => {
+				return r.map((m) => {
+					let nm = { ...m };
+
+					// <=1.4.0 : remove old theme definitions
+					if (nm.theme) delete nm.theme;
+
+					// <=2.0.0 : add module default values fors schema definitions
+					if (nm.icon) {
+						const sic = swbIcons.filter((si) => si.filename === nm.icon);
+						if (sic.length === 1) {
+							if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
+						}
+					}
+
+					// <=2.0.3 : add half module size
+					if (!nm.half) nm = { ...nm, half: "none" };
+
+					// <=2.2.3 : add modtype and wire property
+					if (!nm.modtype) nm = { ...nm, modtype: "" };
+					if (!nm.wire) nm = { ...nm, wire: "" };
+
+					// <=2.2.4 : add grp property
+					if (!nm.grp) nm = { ...nm, grp: "" };
+
+					// <=2.2.5 : add line property
+					if (!nm.line) nm = { ...nm, line: "" };
+
+					// <=2.2.6 : add partialKc property
+					if (!nm.partialKc) nm = { ...nm, partialKc: false };
+
+					// <=2.2.8 : add new properties
+					if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
+					if (!nm.kcType) nm = { ...nm, kcType: "NO" };
+					if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
+					if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
+					if (!nm.vref) nm = { ...nm, vref: import.meta.env.VITE_VREF_230V };
+					if (!nm.srcId) nm = { ...nm, srcId: "" };
+
+					return nm;
+				});
+			});
+
+			setTheme(swb.theme);
+			setSwitchboard(() => modulesAutoId({ ...swb }));
+
+			//const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
+			//setDocumentTitle(filename);
+
+			setClipboard(null);
+			setClipboardMode(null);
+			setUniqueChoices([]);
+
+			// since 2.2.8 : add print options import from project if exists, default properties if not
+			_importPrintOptions(swb.printOptions);
+
+			setTab(1);
+			setSubMenus((old) => ({
+				...old,
+				printLabelsOpened: false,
+				printSchemaOpened: false,
+				printSummaryOpened: false,
+			}));
+			scrollToProject();
+
+			statsPush("action", "import");
+
+			return true;
+		} catch (_err) {
+			importRef.current.value = "";
+			alert("Impossible d'importer ce projet.");
+
+			return false;
+		}
+	};
+
+	const importProjectChooseFile = () => {
+		document.getElementById("importfile").click();
+	};
+
+	const importFromOutside = () => {
+		let data = getUrlParam("data", "string", null);
+		if (data !== null) {
+			data = atob(data);
+			_importProject(data);
+		} else {
+			alert("Aucun projet à importer!");
+		}
+	};
+
+	const importProject = (file) => {
+		if (file) {
+			const fileReader = new FileReader();
+			fileReader.readAsText(file, "UTF-8");
+			fileReader.onload = (e) => _importProject(e.target.result);
+		} else {
+			importRef.current.value = "";
+			alert("Aucun projet à importer!");
+		}
+	};
+
+	const exportProject = () => {
+		const swb = {
+			...switchboard,
+			prjversion: switchboard.prjversion
+				? parseInt(switchboard.prjversion, 10) + 1
+				: 1,
+			appversion: pkg.version,
+			printOptions: { ...printOptions },
+		};
+
+		const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
+		const link = document.createElement("a");
+		link.href = jsonString;
+		link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? defaultProjectName)} - v${swb.prjversion}.json`;
+		link.click();
+
+		setSwitchboard(swb);
+
+		statsPush("action", "export");
+	};
+
+	const toLabeler = (model, options) => {
+		const rowPositionMin = 1;
+		const rowPositionMax = switchboard.rows.length;
+		const selectedPositions = (
+			labelerOptionsRowsSelection ?? `1-${rowPositionMax}`
+		)
+			.split(",")
+			.map((p) => p.trim())
+			.filter((p) => p !== "")
+			.flatMap((p) => {
+				const sp = p
+					.split("-")
+					.map((x) => parseInt(x.trim(), 10))
+					.map((x) =>
+						Number.isNaN(x)
+							? rowPositionMax
+							: x < rowPositionMin
+								? rowPositionMin
+								: x > rowPositionMax
+									? rowPositionMax
+									: x,
+					);
+				const min = Math.min(...sp);
+				const max = Math.max(...sp);
+				return Array.from({ length: max - min + 1 }, (_v, k) => k + 1);
+			});
+		const uniqueSelectedPositions = Array.from(new Set(selectedPositions))
+			.map((x) => x - 1) // to zero based index
+			.sort((a, b) => a - b);
+
+		let form = document.createElement("form");
+		document.body.appendChild(form);
+		form.style.display = "none";
+		form.name = "toLabelerForm";
+		form.method = "POST";
+		form.action = `${import.meta.env.VITE_APP_API_URL}toLabeler.php`;
+		//form.target = '_blank';
+
+		let params = Object.fromEntries(
+			Object.entries({
+				switchboard: { value: JSON.stringify(switchboard) },
+				model: { value: model },
+				options: { value: JSON.stringify(options) },
+				selections: { value: JSON.stringify(uniqueSelectedPositions) },
+				tv: { value: JSON.stringify(pkg.version) },
+				isDev: {
+					value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0",
+				},
+			}).map(([key, value]) => {
+				const i = document.createElement("input");
+				i.type = "hidden";
+				i.name = key;
+				i.value = value.value;
+				return [key, { ...value, input: form.appendChild(i) }];
+			}),
+		);
+
+		form.submit();
+
+		statsPush("action", "export_labellers");
+
+		Object.entries(params).forEach(([_, value]) => {
+			form.removeChild(value.input);
+		});
+		params = null;
+
+		document.body.removeChild(form);
+		form = null;
+	};
+
+	const printProject = () => {
+		toPdf();
+
+		const types = ["pdf"];
+		if (printOptions.labels) types.push("print_labels");
+		if (printOptions.schema) types.push("print_schema");
+		if (printOptions.summary) types.push("print_summary");
+		if (printOptions.modulelist) types.push("print_modulelist");
+	};
+
+	const toPdf = (withConfirm = true, printOptionsEx = null) => {
+		const po = printOptionsEx ?? printOptions;
+
+		if (
+			!withConfirm ||
+			(withConfirm &&
+				confirm(
+					"ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.",
+				))
+		) {
+			let form = document.createElement("form");
+			document.body.appendChild(form);
+			form.style.display = "none";
+			form.name = "toPdfForm";
+			form.method = "POST";
+			form.action = `${import.meta.env.VITE_APP_API_URL}toPdf.php?lang=${po.lang}`;
+			if (po.pdfOptions.openWindow) form.target = "_blank";
+
+			let params = Object.fromEntries(
+				Object.entries({
+					switchboard: { value: JSON.stringify(switchboard) },
+					printOptions: { value: JSON.stringify(po) },
+					tv: { value: JSON.stringify(pkg.version) },
+					auto: { value: po.pdfOptions.autoPrint ? "1" : "0" },
+					isDev: {
+						value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0",
+					},
+					schemaGridColor: {
+						value: Array.isArray(po.pdfOptions.schemaGridColor)
+							? po.pdfOptions.schemaGridColor.join(",")
+							: Object.values(po.pdfOptions.schemaGridColor).join(","),
+					},
+					labelsCutLines: { value: po.pdfOptions.labelsCutLines ? "1" : "0" },
+				}).map(([key, value]) => {
+					const i = document.createElement("input");
+					i.type = "hidden";
+					i.name = key;
+					i.value = value.value;
+					return [key, { ...value, input: form.appendChild(i) }];
+				}),
+			);
+
+			form.submit();
+
+			Object.entries(params).forEach(([_, value]) => {
+				form.removeChild(value.input);
+			});
+			params = null;
+
+			document.body.removeChild(form);
+			form = null;
+
+			statsPush("action", "print");
+			sendChoice(
+				"theme",
+				[`${switchboard.theme.group} - ${switchboard.theme.title}`],
+				true,
+			);
+
+			const sc = [];
+			if (po.firstPage) sc.push("Page de garde");
+			if (po.labels) sc.push("Etiquettes");
+			if (po.summary) sc.push("Nomenclature");
+			if (po.schema) sc.push("Schéma unifilaire");
+			if (po.modulelist) sc.push("Liste des modules");
+			sendChoice("print", sc);
+
+			const sf = [];
+			if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
+			if (po.summary)
+				sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
+			if (po.schema)
+				sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
+			sendChoice("print_format", sf);
+
+			sendChoice("labels_module_height_mm", [switchboard.height]);
+			sendChoice("labels_module_width_mm", [switchboard.stepSize]);
+			sendChoice("labels_rows_length", [switchboard.stepsPerRows]);
+
+			/*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
+			const link = document.createElement("a");
+			link.href = url;
+			link.target = "_blank";
+			link.click();*/
+		}
+	};
+
+	const printProjectFromOutside = () => {
+		let data = getUrlParam("data", "string", null);
+		if (data !== null) {
+			data = atob(data);
+			_importProject(data);
+
+			const lang = getUrlParam("lng", "string", defaultPrintOptions.lang);
+			const firstPage = getUrlParam(
+				"fp",
+				"boolean",
+				defaultPrintOptions.firstPage,
+			);
+			const freeModules = getUrlParam(
+				"fm",
+				"boolean",
+				defaultPrintOptions.freeModules,
+			);
+			const labels = getUrlParam("vl", "boolean", defaultPrintOptions.labels);
+			const schema = getUrlParam("vh", "boolean", defaultPrintOptions.schema);
+			const summary = getUrlParam("vs", "boolean", defaultPrintOptions.summary);
+			const modulelist = getUrlParam(
+				"ml",
+				"boolean",
+				defaultPrintOptions.modulelist,
+			);
+			const autoPrint = getUrlParam(
+				"ap",
+				"boolean",
+				defaultPrintOptions.pdfOptions.autoPrint,
+			);
+			const labelsCutLines = getUrlParam(
+				"lcl",
+				"boolean",
+				defaultPrintOptions.pdfOptions.labelsCutLines,
+			);
+			const printCurrents = getUrlParam(
+				"pc",
+				"boolean",
+				defaultPrintOptions.pdfOptions.printCurrents,
+			);
+			let labelsPrintFormat = getUrlParam(
+				"lpf",
+				"string",
+				defaultPrintOptions.pdfOptions.labelsPrintFormat,
+			).toUpperCase();
+			if (labelsPrintFormat !== "A4" && labelsPrintFormat !== "A3")
+				labelsPrintFormat = "A4";
+			let schemaPrintFormat = getUrlParam(
+				"hpf",
+				"string",
+				defaultPrintOptions.pdfOptions.schemaPrintFormat,
+			).toUpperCase();
+			if (schemaPrintFormat !== "A4" && schemaPrintFormat !== "A3")
+				schemaPrintFormat = "A4";
+			let summaryPrintFormat = getUrlParam(
+				"spf",
+				"string",
+				defaultPrintOptions.pdfOptions.summaryPrintFormat,
+			).toUpperCase();
+			if (summaryPrintFormat !== "A4" && summaryPrintFormat !== "A3")
+				summaryPrintFormat = "A4";
+
+			toPdf(false, {
+				...defaultPrintOptions,
+				lang,
+				firstPage,
+				freeModules,
+				labels,
+				schema,
+				summary,
+				modulelist,
+				pdfOptions: {
+					...defaultPrintOptions.pdfOptions,
+					autoPrint,
+					labelsCutLines,
+					labelsPrintFormat,
+					openWindow: true,
+					printCurrents,
+					schemaPrintFormat,
+					summaryPrintFormat,
+				},
+			});
+		} else {
+			alert("Aucun projet valide à imprimer!");
+		}
+	};
+
+	const editModule = (
+		rowIndex,
+		moduleIndex,
+		tabPage = "main",
+		focus = null,
+	) => {
+		const focusedInputName = focus ?? "id";
+		let currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+		// si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre
+		let hasBlankId = false;
+		if (!currentModule.id || currentModule.id.trim() === "") {
+			currentModule = { ...currentModule, id: lastFreeId };
+			hasBlankId = true;
+		}
+
+		// récupère le module précédent
+		let pr = rowIndex;
+		let pm = moduleIndex - 1;
+		if (pm < 0) {
+			pr -= 1;
+			if (pr >= 0) {
+				pm = switchboard.rows[pr].length - 1;
+			}
+		}
+		let prevModule = null;
+		if (pr >= 0 && pm >= 0) {
+			prevModule = switchboard.rows[pr][pm];
+		}
+
+		// si le parent du module à éditer est inconnu, on propose celui du module précédent
+		if (!currentModule.parentId) {
+			currentModule = { ...currentModule, parentId: prevModule?.parentId };
+		}
+		// edition du module
+		setEditor({
+			rowIndex,
+			moduleIndex,
+			originalModule: { ...currentModule },
+			currentModule,
+			prevModule,
+			theme,
+			tabPage,
+			focusedInputName,
+			errors: [],
+			hasBlankId,
+		});
+	};
+
+	const applyModuleEditor = (data) => {
+		setEditor((old) => ({
+			...old,
+			errors: [],
+		}));
+
+		const id = data.currentModule.id.trim().toUpperCase();
+		const icon = data.currentModule.icon;
+		const text = (data.currentModule.text ?? "")
+			.trimRight()
+			.replace(/ [ \r\n]+/gm, "\n");
+		const desc = (data.currentModule.desc ?? "").trim();
+		const parentId = (data.currentModule.parentId ?? "").trim();
+		const srcId = (data.currentModule.srcId ?? "").trim();
+		const kcId = (data.currentModule.kcId ?? "").trim();
+		const kcType = (data.currentModule.kcType ?? "NO").trim();
+		const kcOrder = (data.currentModule.kcOrder ?? "after").trim();
+		const partialKc = data.currentModule.partialKc ?? false;
+		const noAutoId = data.currentModule.noAutoId ?? false;
+		const onlyChilds = data.currentModule.onlyChilds ?? true;
+		const func = (data.currentModule.func ?? "").trim();
+		const modtype = (data.currentModule.modtype ?? "").trim();
+		const type = (
+			schemaFunctions[data.currentModule.func]?.hasType
+				? (data.currentModule.type ?? "")
+				: ""
+		).trim();
+		const crb = (
+			schemaFunctions[data.currentModule.func]?.hasCrb
+				? (data.currentModule.crb ?? "")
+				: ""
+		).trim();
+		const current = (
+			schemaFunctions[data.currentModule.func]
+				? (data.currentModule.current ?? "")
+				: ""
+		).trim();
+		const sensibility = (
+			schemaFunctions[data.currentModule.func]?.hasType
+				? (data.currentModule.sensibility ?? "")
+				: ""
+		).trim();
+		const coef = data.currentModule.coef ?? 0.5;
+		const vref = (
+			data.currentModule.vref ?? import.meta.env.VITE_VREF_230V
+		).trim();
+		const pole = (
+			schemaFunctions[data.currentModule.func]?.hasPole
+				? (data.currentModule.pole ?? "")
+				: ""
+		).trim();
+		const wire = (
+			schemaFunctions[data.currentModule.func]?.hasWire
+				? (data.currentModule.wire ?? "")
+				: ""
+		).trim();
+		const grp = (data.currentModule.grp ?? "").trim();
+		const line = (data.currentModule.line ?? "").trim();
+
+		if (!/\w*/.test(id) || id === "") {
+			setEditor((old) => ({
+				...old,
+				currentModule: { ...old.currentModule, id: "" },
+				errors: [...old.errors, "Un identifiant valide est requis."],
+			}));
+			return;
+		}
+
+		if (!/\w*/.test(text)) {
+			setEditor((old) => ({
+				...old,
+				currentModule: { ...old.currentModule, text: "" },
+				errors: [...old.errors, "Une description valide est requise."],
+			}));
+			return;
+		}
+
+		if (!/\w*/.test(desc)) {
+			setEditor((old) => ({
+				...old,
+				currentModule: { ...old.currentModule, desc: "" },
+				errors: [...old.errors, "Une description valide est requise."],
+			}));
+			return;
+		}
+
+		const isEmpty = switchboardIsEmpty;
+
+		// applique les modifications
+		setSwitchboard((old) => {
+			const rows = old.rows.map((row, i) => {
+				if (i !== data.rowIndex) return row;
+
+				return row.map((module, j) => {
+					if (j !== data.moduleIndex) return module;
+
+					return {
+						...module,
+						free: false,
+						id,
+						icon,
+						text,
+						desc,
+						parentId,
+						srcId,
+						kcId,
+						kcType,
+						kcOrder,
+						partialKc,
+						onlyChilds,
+						noAutoId,
+						func,
+						crb,
+						modtype,
+						type,
+						current,
+						sensibility,
+						coef,
+						pole,
+						vref,
+						wire,
+						line,
+						grp,
+					};
+				});
+			});
+
+			return modulesAutoId({ ...old, rows });
+		});
+
+		// ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
+		reassignAllParents(data.originalModule?.id, id);
+
+		if (isEmpty) {
+			statsPush("action", "create");
+		}
+
+		setEditor(null);
+	};
+
+	const moduleGrow = (rowIndex, moduleIndex) => {
+		const nextModuleIndex = moduleIndex + 1;
+
+		setSwitchboard((old) => {
+			const rows = old.rows.map((row, i) => {
+				if (i !== rowIndex) return row;
+
+				let deleted = false;
+				const r = row.map((module, j) => {
+					if (j !== moduleIndex) {
+						if (j === nextModuleIndex && !deleted) {
+							deleted = true;
+							return null;
+						}
+						return module;
+					}
+					return { ...module, span: module.span + 1 };
+				});
+
+				return r.filter((rr) => rr !== null);
+			});
+
+			return modulesAutoId({ ...old, rows });
+		});
+	};
+
+	const moduleShrink = (rowIndex, moduleIndex) => {
+		const currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+		if (currentModule.span > 1) {
+			setSwitchboard((old) => {
+				const rows = old.rows.map((row, i) => {
+					if (i !== rowIndex) return row;
+
+					const r = row.map((module, j) => {
+						if (j !== moduleIndex) return module;
+
+						const s = module.span - 1;
+						const h = s <= 1 ? "none" : module.half;
+						return { ...module, span: s, half: h };
+					});
+
+					r.splice(moduleIndex + 1, 0, { ...defaultModule });
+
+					return r;
+				});
+
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const moduleClear = (rowIndex, moduleIndex) => {
+		const currentModule = switchboard.rows[rowIndex][moduleIndex];
+
+		if (!currentModule.free) {
+			setSwitchboard((old) => {
+				const rows = old.rows.map((row, i) => {
+					if (i !== rowIndex) return row;
+
+					const r = row.map((module, j) => {
+						if (j !== moduleIndex) return module;
+
+						return { ...defaultModule, span: 1 };
+					});
+
+					for (let o = 0; o < currentModule.span - 1; o++) {
+						r.splice(moduleIndex + 1, 0, { ...defaultModule });
+					}
+
+					return r;
+				});
+
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const moduleFocus = (rowPosition, modulePosition) => {
+		const m = document.querySelector(
+			`[data-id="${rowPosition}-${modulePosition}"]`,
+		);
+		if (m) {
+			m.scrollIntoView({
+				behavior: "smooth",
+				block: "nearest",
+				inline: "nearest",
+			});
+			m.focus();
+		}
+	};
+
+	const findThemeByName = (name, all = false) => {
+		const found = themesList.filter((t) => t.name === name);
+		return all ? found : found.length > 0 ? found[0] : null;
+	};
+
+	const updateTheme = (name) => {
+		const selected = findThemeByName(name);
+		if (selected) {
+			setTheme(selected);
+			setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
+			setTab(1);
+		}
+	};
+
+	const replaceUrlHistory = () => {
+		const newCurrentUrl = `${location.protocol}//${location.host}${location.pathname}`;
+		window.history.replaceState({}, document.title, newCurrentUrl);
+	};
+
+	const openWelcome = () => {
+		resetProject();
+		setWelcome(true);
+		replaceUrlHistory();
+	};
+
+	const handleScrollRight = () => {
+		if (
+			switchboardRef.current.scrollLeft + 10 <
+			switchboardRef.current.scrollWidth
+		) {
+			switchboardRef.current.scrollLeft += 10;
+		} else {
+			switchboardRef.current.scrollLeft = switchboardRef.current.scrollWidth;
+		}
+	};
+
+	const handleScrollLeft = () => {
+		if (switchboardRef.current.scrollLeft - 10 > 0) {
+			switchboardRef.current.scrollLeft -= 10;
+		} else {
+			switchboardRef.current.scrollLeft = 0;
+		}
+	};
+
+	const handleModuleGrow = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const nextModule =
+			moduleIndex + currentModule.span < switchboard.stepsPerRows
+				? row[moduleIndex + 1]
+				: null;
+
+		if (nextModule?.free === true && nextModule?.span === 1) {
+			moduleGrow(rowIndex, moduleIndex);
+			moduleFocus(rowIndex + 1, moduleIndex + 1);
+		}
+	};
+
+	const handleModuleShrink = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+
+		if (currentModule.span > 1) {
+			moduleShrink(rowIndex, moduleIndex);
+			moduleFocus(rowIndex + 1, moduleIndex + 1);
+		}
+	};
+
+	const handleModuleClear = (rowIndex, moduleIndex, noConfirm = false) => {
+		if (
+			noConfirm === true ||
+			confirm("Êtes-vous certain de vouloir libérer ce module?")
+		) {
+			const row = switchboard.rows[rowIndex];
+			const currentModule = row[moduleIndex];
+
+			if (!currentModule.free) {
+				moduleClear(rowIndex, moduleIndex);
+				moduleFocus(rowIndex + 1, moduleIndex + 1);
+			}
+
+			return true;
+		}
+
+		return false;
+	};
+
+	const handleModuleEdit = (rowIndex, moduleIndex) => {
+		editModule(rowIndex, moduleIndex);
+		moduleFocus(rowIndex + 1, moduleIndex + 1);
+	};
+
+	const handleModuleMoveLeft = (rowIndex, moduleIndex) => {
+		const rows = switchboard.rows;
+		const row = rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const prevModule = moduleIndex - 1 >= 0 ? row[moduleIndex - 1] : null;
+
+		if (
+			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
+			prevModule?.free === true &&
+			prevModule?.span === 1
+		) {
+			row[moduleIndex - 1] = currentModule;
+			row[moduleIndex] = prevModule;
+			rows[rowIndex] = row;
+			setSwitchboard((old) => {
+				moduleFocus(rowIndex + 1, moduleIndex);
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const handleModuleMoveRight = (rowIndex, moduleIndex) => {
+		const rows = switchboard.rows;
+		const row = rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const nextModule =
+			moduleIndex + currentModule.span < switchboard.stepsPerRows
+				? row[moduleIndex + 1]
+				: null;
+
+		if (
+			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
+			nextModule?.free === true &&
+			nextModule?.span === 1
+		) {
+			row[moduleIndex + 1] = currentModule;
+			row[moduleIndex] = nextModule;
+			rows[rowIndex] = row;
+			setSwitchboard((old) => {
+				moduleFocus(rowIndex + 1, moduleIndex + 2);
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const handleModuleCopyCut = (rowIndex, moduleIndex, mode) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+
+		if (!currentModule.free) {
+			setClipboard(currentModule);
+			setClipboardMode({ rowIndex, moduleIndex, mode });
+		}
+	};
+
+	const handleModuleCopy = (rowIndex, moduleIndex) => {
+		handleModuleCopyCut(rowIndex, moduleIndex, "copy");
+	};
+
+	const handleModuleCut = (rowIndex, moduleIndex) => {
+		handleModuleCopyCut(rowIndex, moduleIndex, "cut");
+	};
+
+	const handleModulePaste = (rowIndex, moduleIndex) => {
+		if (!modulePasteAllowed(rowIndex, moduleIndex)) return;
+		if (clipboardMode?.mode !== "cut" && clipboardMode?.mode !== "copy") return;
+
+		setSwitchboard((old) => {
+			let deleteLength = 0;
+			let addLength = 0;
+
+			const rows = old.rows.map((row, i) => {
+				let r = row.map((module, j) => {
+					if (
+						clipboardMode.mode === "cut" &&
+						i === clipboardMode.rowIndex &&
+						j === clipboardMode.moduleIndex
+					) {
+						return { ...defaultModule, span: module.span };
+					}
+
+					if (i !== rowIndex) return module;
+
+					if (j === moduleIndex) {
+						deleteLength = clipboard.span - module.span;
+						addLength += module.span - clipboard.span;
+					}
+
+					// si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
+					if (j > moduleIndex && deleteLength > 0 && module.free) {
+						deleteLength--;
+						return null;
+					}
+
+					if (j !== moduleIndex) return module;
+
+					return {
+						...module,
+						id:
+							clipboardMode.mode !== "cut"
+								? getNextId(clipboard.id)
+								: clipboard.id,
+						free: clipboard.free,
+						span: clipboard.span,
+						icon: clipboard.icon,
+						text: clipboard.text,
+						desc: clipboard.desc,
+						parentId: clipboard.parentId,
+						srcId: clipboard.srcId,
+						kcId: clipboard.kcId,
+						kcType: clipboard.kcType,
+						kcOrder: clipboard.ksOrder,
+						partialKc: clipboard.partialKc,
+						onlyChilds: clipboard.onlyChilds,
+						noAutoId: clipboard.noAutoId,
+						func: clipboard.func,
+						crb: clipboard.crb,
+						modtype: clipboard.modtype,
+						type: clipboard.type,
+						current: clipboard.current,
+						sensibility: clipboard.sensibility,
+						coef: clipboard.coef,
+						pole: clipboard.pole,
+						vref: clipboard.vref,
+						wire: clipboard.wire,
+						line: clipboard.line,
+						grp: clipboard.grp,
+					};
+				});
+
+				r = r.filter((rr) => rr !== null);
+
+				// si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
+				if (addLength > 0) {
+					for (let al = 0; al < addLength; al++) {
+						r.splice(moduleIndex + 1, 0, { ...defaultModule });
+					}
+					addLength = 0;
+				}
+
+				return r;
+			});
+
+			/*rows = old.rows.map((row, i) => {
+				let r = row.map((module, j) => {
+					let mm = { ...module };
+					if (module.parentId === oldModuleId) {
+						mm = { ...mm, parentId: newModuleId };
+					}
+					if (module.kcId === oldModuleId) {
+						mm = { ...mm, kcId: newModuleId };
+					}
+					return mm;
+				});
+				return r;
+			});*/
+
+			return modulesAutoId({ ...old, rows });
+		});
+
+		setClipboard(null);
+		setClipboardMode(null);
+	};
+
+	const modulePasteAllowed = (rowIndex, moduleIndex) => {
+		if (
+			!clipboard ||
+			(clipboardMode.mode !== "cut" && clipboardMode.mode !== "copy")
+		)
+			return false;
+
+		const row = switchboard.rows[rowIndex];
+
+		const currentModule = row[moduleIndex];
+		if (currentModule.span >= clipboard.span) return true;
+
+		let allowed = true;
+		let max = clipboard.span;
+		let i = 0;
+		while (max > 0) {
+			const nextModule =
+				moduleIndex + clipboard.span < switchboard.stepsPerRows
+					? row[moduleIndex + i]
+					: null;
+			if (!nextModule?.free || nextModule.span !== 1) {
+				allowed = false;
+				break;
+			}
+
+			max -= nextModule.span;
+			i++;
+		}
+		return allowed;
+	};
+
+	const handleCancelPaste = () => {
+		setClipboard(null);
+		setClipboardMode(null);
+	};
+
+	const handleModuleInterCopy = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+
+		if (!currentModule.free) {
+			setClipboard(currentModule);
+			setClipboardMode({ rowIndex, moduleIndex, mode: "inter" });
+		}
+	};
+
+	const handleModuleInter = (rowIndex, moduleIndex) => {
+		if (!moduleInterAllowed(rowIndex, moduleIndex)) return;
+		if (clipboardMode?.mode !== "inter") return;
+
+		let prems = null;
+		let snds = null;
+		switchboard.rows.forEach((row, i) => {
+			row.forEach((module, j) => {
+				if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+					prems = module;
+				}
+				if (i === rowIndex && j === moduleIndex) {
+					snds = module;
+				}
+			});
+		});
+		if (prems === null || snds === null) {
+			alert("Impossible de procéder à l'échange de ces 2 modules.");
+			setClipboard(null);
+			setClipboardMode(null);
+			return;
+		}
+
+		setSwitchboard((old) => {
+			const rows = old.rows.map((row, i) => {
+				let r = row.map((module, j) => {
+					if (i === rowIndex && j === moduleIndex) {
+						return prems;
+					}
+
+					if (i === clipboardMode.rowIndex && j === clipboardMode.moduleIndex) {
+						return snds;
+					}
+
+					return module;
+				});
+
+				r = r.filter((rr) => rr !== null);
+
+				return r;
+			});
+
+			return modulesAutoId({ ...old, rows });
+		});
+
+		setClipboard(null);
+		setClipboardMode(null);
+	};
+
+	const moduleInterAllowed = (rowIndex, moduleIndex) => {
+		if (!clipboard || clipboardMode.mode !== "inter") return false;
+
+		const row = switchboard.rows[rowIndex];
+
+		const currentModule = row[moduleIndex];
+		if (
+			currentModule.span === clipboard.span &&
+			currentModule.id !== clipboard.id
+		)
+			return true;
+
+		return false;
+	};
+
+	const handleModuleHalf = (rowIndex, moduleIndex, _item, mode) => {
+		const rows = switchboard.rows;
+		const row = rows[rowIndex];
+		const currentModule = row[moduleIndex];
+
+		if (
+			!currentModule.free &&
+			(mode === "none" || mode === "left" || mode === "right")
+		) {
+			row[moduleIndex] = {
+				...currentModule,
+				half: mode,
+			};
+			rows[rowIndex] = row;
+			setSwitchboard((old) => {
+				moduleFocus(rowIndex + 1, moduleIndex + 2);
+				return modulesAutoId({ ...old, rows });
+			});
+		}
+	};
+
+	const moduleShrinkAllowed = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+
+		return currentModule.span > 1;
+	};
+
+	const moduleGrowAllowed = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const nextModule =
+			moduleIndex + currentModule.span < switchboard.stepsPerRows
+				? row[moduleIndex + 1]
+				: null;
+
+		return nextModule?.free === true && nextModule?.span === 1;
+	};
+
+	const moduleMoveLeftAllowed = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const prevModule = moduleIndex - 1 >= 0 ? row[moduleIndex - 1] : null;
+
+		return (
+			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
+			prevModule?.free === true &&
+			prevModule?.span === 1
+		);
+	};
+
+	const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
+		const row = switchboard.rows[rowIndex];
+		const currentModule = row[moduleIndex];
+		const nextModule =
+			moduleIndex + currentModule.span < switchboard.stepsPerRows
+				? row[moduleIndex + 1]
+				: null;
+
+		return (
+			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
+			nextModule?.free === true &&
+			nextModule?.span === 1
+		);
+	};
+
+	const handleRowAddAfter = (rowIndex) => {
+		const rows = switchboard.rows;
+		if (rows.length >= rowsMax) {
+			alert(
+				`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${rowsMax} rangées`,
+			);
+			return;
+		}
+
+		const newRow = createRow(switchboard.stepsPerRows, 1);
+		rows.splice(rowIndex + 1, 0, ...newRow);
+
+		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+	};
+
+	const handleRowDelete = (rowIndex) => {
+		const rows = switchboard.rows;
+		rows.splice(rowIndex, 1);
+
+		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+	};
+
+	const rowAddAllowed = () => {
+		return switchboard.rows.length < rowsMax;
+	};
+
+	const rowDeleteAllowed = () => {
+		return switchboard.rows.length > 1;
+	};
+
+	const printFreeModuleAllowed = () => {
+		return printOptions.freeModules;
+	};
+
+	const getFilteredModulesBySchemaFuncs = () => {
+		const m = {};
+		switchboard.rows.forEach((row) => {
+			row.forEach((module) => {
+				if (Object.keys(schemaFunctions).includes(module.func)) {
+					if (!m[module.func]) m[module.func] = [];
+					m[module.func].push(module);
+				}
+			});
+		});
+		return m;
+	};
+
+	const getModuleById = (moduleId) => {
+		let m = null;
+		for (const row of switchboard.rows) {
+			for (const module of row) {
+				if (module.id === moduleId) {
+					m = module;
+					break;
+				}
+			}
+		}
+		return m;
+	};
+
+	const _getModuleByKcId = (moduleId) => {
+		let m = null;
+		for (const row of switchboard.rows) {
+			for (const module of row) {
+				if (module.kcId === moduleId) {
+					m = module;
+					break;
+				}
+			}
+		}
+		return m;
+	};
+
+	const getModuleById2 = (moduleId) => {
+		const indexes = { row: -1, module: -1 };
+		let m = { module: null, indexes };
+
+		switchboard.rows.forEach((row, ri) => {
+			row.forEach((module, mi) => {
+				if (!m.module && module.id === moduleId && !module.free) {
+					m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
+				}
+			});
+		});
+
+		return m;
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	const monitor = useMemo(() => {
+		if (!switchboard.switchboardMonitor) return {};
+
+		let result = {};
+
+		const used = switchboard.rows
+			.map((row) =>
+				row.filter((module) => !module.free).reduce((a, b) => a + b.span, 0),
+			)
+			.reduce((a, b) => a + b, 0);
+		const total = switchboard.rows.length * switchboard.stepsPerRows;
+		const percentFree = Math.round(100 - (used / total) * 100);
+
+		setFreeSpaceMessage(
+			`${used} module${used > 1 ? "s" : ""} occupé${used > 1 ? "s" : ""} sur ${total} disponible${used > 1 ? "s" : ""} (${percentFree}% libre)`,
+		);
+
+		const e_errors = (result.errors ?? []).Enveloppe ?? [];
+		if (percentFree < 20) {
+			const e_error = `La norme NFC 15-100 impose un minimum de 20% d'emplacements libres. Vous occupez ${used} module${used > 1 ? "s" : ""} sur ${total} disponible${used > 1 ? "s" : ""} (${percentFree}% libre).`;
+			if (!e_errors.includes(e_error)) e_errors.push(e_error);
+		}
+		if (e_errors.length > 0)
+			result = { ...result, errors: { ...result.errors, Enveloppe: e_errors } };
+
+		return result;
+	}, [switchboard.rows, switchboard.switchboardMonitor]);
+	const monitorWarningsLength = useMemo(
+		() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length,
+		[monitor],
+	);
+
+	useEffect(() => {
+		setLabelerOptionsRowsSelection(
+			switchboard.rows.length > 1
+				? `1-${switchboard.rows.length}`
+				: `${switchboard.rows.length}`,
+		);
+	}, [switchboard.rows.length]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		let t = null;
+
+		if (!verifyVersion(switchboard)) {
+			resetProject();
+
+			if (t) clearTimeout(t);
+			return;
+		}
+
+		setDocumentTitle(switchboard.prjname);
+
+		t = setTimeout(() => {
+			const savedProjectIsOutdated =
+				sessionStorage.getItem(pkg.name) !== JSON.stringify(switchboard);
+			if (savedProjectIsOutdated) {
+				const updatedProject = {
+					...switchboard,
+					prjupdated: new Date(),
+				};
+
+				sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
+				setSwitchboard(updatedProject);
+				setDocumentTitle(updatedProject.prjname);
+			}
+
+			const printOptionsIsOutdated =
+				sessionStorage.getItem(`${pkg.name}_printOptions`) !==
+				JSON.stringify(printOptions);
+			if (printOptionsIsOutdated) {
+				sessionStorage.setItem(
+					`${pkg.name}_printOptions`,
+					JSON.stringify(printOptions),
+				);
+			}
+
+			const labelersOptionsIsOutdated =
+				sessionStorage.getItem(`${pkg.name}_labelersOptions`) !==
+				JSON.stringify(labelersOptions);
+			if (labelersOptionsIsOutdated) {
+				sessionStorage.setItem(
+					`${pkg.name}_labelersOptions`,
+					JSON.stringify(labelersOptions),
+				);
+			}
+		}, 1000);
+
+		return () => {
+			if (t) clearTimeout(t);
+		};
+	}, [resetProject, switchboard, printOptions, labelersOptions]);
+
+	useEffect(() => {
+		if (window) {
+			const ovf =
+				editor ||
+				labelerOptionsPopup ||
+				firstpageOptionsPopup ||
+				newProjectPopup
+					? "hidden"
+					: "auto";
+			if (window.document.body.style.overflow !== ovf)
+				window.document.body.style.overflow = ovf;
+		}
+	}, [editor, labelerOptionsPopup, firstpageOptionsPopup, newProjectPopup]);
+
+	useEffect(() => {
+		if (monitorOpened) monitorRef.current.focus();
+	}, [monitorOpened]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		if (!autoSpaceSize && spaceSize !== "1152px") {
+			setSpaceSize("1152px");
+		} else if (autoSpaceSize) {
+			if (switchboard.stepsPerRows === 18 && spaceSize !== "1340px") {
+				setSpaceSize("1340px");
+			} else if (switchboard.stepsPerRows === 24 && spaceSize !== "1760px") {
+				setSpaceSize("1760px");
+			} else if (switchboard.stepsPerRows === 13 && spaceSize !== "1152px") {
+				setSpaceSize("1152px");
+			}
+		}
+
+		sessionStorage.setItem(
+			`${pkg.name}_autoResize`,
+			autoSpaceSize ? "true" : "false",
+		);
+	}, [autoSpaceSize, switchboard.stepsPerRows]);
+
+	useEffect(() => {
+		const ctn = document.getElementById("content");
+		if (ctn) {
+			ctn.style.setProperty("--content-size", spaceSize);
+		}
+	}, [spaceSize]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+
+		const extraParams = {
+			enjoy: () => openWelcome(),
+			import: () => importFromOutside(),
+			print: () => printProjectFromOutside(),
+		};
+		Object.keys(extraParams).every((param) => {
+			if (urlParams.get(param) !== null) {
+				extraParams[param]();
+				return false;
+			}
+			return true;
+		});
+
+		fetch(`${import.meta.env.VITE_APP_API_URL}i18n.php?api_availlable`, {
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (Array.isArray(data)) {
+					setApiAvaillableLanguages(data);
+				} else {
+					setApiAvaillableLanguages([]);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				setApiAvaillableLanguages([]);
+			});
+	}, []);
+
+	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: wanted
+		<div
+			ref={projectRef}
+			tabIndex={-1}
+			onKeyUp={(e) => {
+				if (e.key === "Escape") {
+					setClipboard(null);
+					setClipboardMode(null);
+				}
+			}}
+		>
+			{/** ----------------------------------------------------------- */}
+			{/** TOOLBAR **/}
+			{/** ----------------------------------------------------------- */}
+
+			<nav
+				ref={navRef}
+				className={`button_group ${UIFrozen ? "disabled" : ""}`.trim()}
+				style={{ position: "sticky", top: "0.25rem", zIndex: 5000 }}
+			>
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR PROJECTS **/}
+				{/** ----------------------------------------------------------- */}
+
+				{/** biome-ignore lint/a11y/useButtonType: wanted */}
+				<button
+					className={`button_group-new_project active`.trim()}
+					onClick={() => {
+						setWelcome(true);
+					}}
+					title="Créer un nouveau projet"
+				>
+					<img
+						src={newProjectIcon}
+						width={16}
+						height={16}
+						alt={defaultProjectName}
+					/>
+					<span className={"responsive"}>Projets...</span>
+				</button>
+
+				<div className="button_group-separator"></div>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR IMPORT **/}
+				{/** ----------------------------------------------------------- */}
+
+				<input
+					id="importfile"
+					ref={importRef}
+					type="file"
+					onChange={(e) => {
+						if (e.target.files && e.target.files.length > 0)
+							importProject(e.target.files[0]);
+					}}
+					style={{
+						visibility: "hidden",
+						position: "absolute",
+						top: "0",
+						left: "-500000px",
+					}}
+				/>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR EXPORTS **/}
+				{/** ----------------------------------------------------------- */}
+
+				{/** biome-ignore lint/a11y/useButtonType: wanted */}
+				<button
+					ref={exportMenuRef}
+					className="button_group-export_project dropdown_container"
+					title="Exporter..."
+				>
+					<img
+						src={exportProjectIcon}
+						width={16}
+						height={16}
+						alt={"Exporter"}
+					/>
+					<span>Exporter</span>
+					<div
+						className="dropdown"
+						style={{
+							left: `${exportDropdownMenuPlacement[0]}px`,
+							width: `${exportDropdownMenuPlacement[1]}px`,
+						}}
+					>
+						<div className="dropdown_header">Exportation</div>
+
+						{/** ----------------------------------------------------------- */}
+						{/** PROJECT EXPORT **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div className="dropdown_item_flex head">
+							<div className="dropdown_item_flex_left">Projet complet</div>
+							<div className="dropdown_item_flex_right">
+								{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+								{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+								<div
+									className="fakeButton discreet"
+									style={{ marginBlock: "0" }}
+									title="Exporter le projet"
+									onClick={() => {
+										exportProject();
+									}}
+								>
+									<img src={downloadIcon} width={16} height={16} alt="" />
+								</div>
+							</div>
+						</div>
+
+						{/** ----------------------------------------------------------- */}
+						{/** LABELERS **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div className="dropdown_header" style={{ marginTop: "1.5rem" }}>
+							Étiqueteuses (βeta)
+						</div>
+						<div
+							style={{ fontSize: "90%", color: "#777", marginBottom: "1rem" }}
+						>
+							<span>
+								Exporter les rangées d'étiquettes au format compatible.
+							</span>
+						</div>
+						<div
+							className="dropdown_item_flex head"
+							style={{ justifyContent: "space-between" }}
+						>
+							<div
+								className="dropdown_item_flex_left"
+								style={{ gap: "0.5rem" }}
+							>
+								<span style={{ fontSize: "100%" }}>Exporter les rangées:</span>
+								<input
+									type="text"
+									name=""
+									id=""
+									ref={labelerRef}
+									value={
+										labelerOptionsRowsSelection ??
+										`1-${switchboard.rows.length}`
+									}
+									onChange={(e) =>
+										setLabelerOptionsRowsSelection(e.target.value)
+									}
+									placeholder="1,2,3-6"
+									style={{
+										width: "50px",
+										height: "28px",
+										marginLeft: "0.5rem",
+										textAlign: "center",
+										letterSpacing: "1px",
+									}}
+								/>
+							</div>
+							<div className="dropdown_item_flex_right">
+								{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+								{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+								<div
+									className="fakeButton discreet"
+									style={{ flex: 1, marginBlock: "0" }}
+									title="Exporter les étiquettes"
+									onClick={() => setLabelerOptionsPopup(true)}
+								>
+									<img src={downloadIcon} width={16} height={16} alt="" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</button>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR PRINT **/}
+				{/** ----------------------------------------------------------- */}
+
+				{/** biome-ignore lint/a11y/useButtonType: wanted */}
+				<button
+					ref={printMenuRef}
+					className="button_group-print_project dropdown_container"
+					title="Imprimer..."
+					onMouseLeave={() => {
+						printMenuRef.current.classList.remove("clicked");
+					}}
+					onBlur={() => {
+						printMenuRef.current.classList.remove("clicked");
+					}}
+				>
+					<img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
+					<span>Imprimer...</span>
+					<div
+						className="dropdown"
+						style={{
+							left: `${printDropdownMenuPlacement[0]}px`,
+							width: `${printDropdownMenuPlacement[1]}px`,
+						}}
+					>
+						<div className="dropdown_header">Options</div>
+
+						{/** ----------------------------------------------------------- */}
+						{/** FIRSTPAGE **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div
+							className="dropdown_item head parent"
+							title="Imprimer la page de garde"
+						>
+							<input
+								id="print_firstPage"
+								name="print_firstPage"
+								type="checkbox"
+								checked={printOptions.firstPage}
+								onChange={(e) =>
+									setPrintOptions((old) => ({
+										...old,
+										firstPage: e.target.checked,
+									}))
+								}
+							/>
+							<label htmlFor="print_firstPage">Page de garde</label>
+							{printOptions.firstPage && (
+								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+								<img
+									src={fpsettingsIcon}
+									width={16}
+									height={16}
+									alt={"Paramètres"}
+									title={"Paramètres de la page de garde"}
+									onClick={() => setFirstpageOptionsPopup(true)}
+								/>
+							)}
+						</div>
+
+						{/** ----------------------------------------------------------- */}
+						{/** LABELS **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div
+							className="dropdown_item head parent"
+							title="Imprimer les étiquettes"
+						>
+							<input
+								id="print_labels"
+								name="print_labels"
+								type="checkbox"
+								checked={printOptions.labels}
+								onChange={(e) =>
+									setPrintOptions((old) => ({
+										...old,
+										labels: e.target.checked,
+									}))
+								}
+							/>
+							<label htmlFor="print_labels">Etiquettes</label>
+							{printOptions.labels && (
+								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+								<img
+									src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon}
+									width={16}
+									height={16}
+									alt={"Menu"}
+									onClick={() =>
+										setSubMenus((old) => ({
+											...old,
+											printLabelsOpened: !old.printLabelsOpened,
+										}))
+									}
+								/>
+							)}
+						</div>
+						{subMenus.printLabelsOpened && printOptions.labels && (
+							<>
+								<div className="dropdown_item" title="Format d'impression">
+									<label htmlFor="print_labels_format" style={{ flex: 1 }}>
+										Format d'impression :
+									</label>
+									<input
+										id="print_labels_format_A4"
+										name="print_labels_format_A4"
+										type="radio"
+										checked={printOptions.pdfOptions.labelsPrintFormat === "A4"}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													labelsPrintFormat: e.target.checked
+														? "A4"
+														: old.pdfOptions.labelsPrintFormat,
+												},
+											}))
+										}
+										disabled={!printOptions.labels}
+									/>
+									<label htmlFor="print_labels_format_A4" style={{ flex: 0 }}>
+										A4
+									</label>
+									<input
+										id="print_labels_format_A3"
+										name="print_labels_format_A3"
+										type="radio"
+										checked={printOptions.pdfOptions.labelsPrintFormat === "A3"}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													labelsPrintFormat: e.target.checked
+														? "A3"
+														: old.pdfOptions.labelsPrintFormat,
+												},
+											}))
+										}
+										disabled={!printOptions.labels}
+									/>
+									<label htmlFor="print_labels_format_A3" style={{ flex: 0 }}>
+										A3
+									</label>
+								</div>
+								<div
+									className="dropdown_item"
+									title="Imprimer la décoration sur les emplacements libres de chaque rangée d'étiquettes"
+								>
+									<input
+										id="print_free"
+										name="print_free"
+										type="checkbox"
+										checked={printOptions.freeModules}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												freeModules: e.target.checked,
+											}))
+										}
+										disabled={!printOptions.labels}
+									/>
+									<label htmlFor="print_free">
+										Décorer les emplacements libres
+									</label>
+								</div>
+								<div
+									className="dropdown_item"
+									title="Imprimer les lignes de coupe pour cisailles et massicots"
+								>
+									<input
+										id="print_pdf_labelsCutLines"
+										name="print_pdf_labelsCutLines"
+										type="checkbox"
+										checked={printOptions.pdfOptions.labelsCutLines}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													labelsCutLines: e.target.checked,
+												},
+											}))
+										}
+										disabled={!printOptions.labels}
+									/>
+									<label htmlFor="print_pdf_labelsCutLines">
+										Imprimer les lignes de coupe
+									</label>
+								</div>
+								<div
+									className="dropdown_item"
+									style={{ marginBottom: "1em" }}
+									title="Imprimer les calibres des modules pour aider à leurs mise en place (hors découpes)"
+								>
+									<input
+										id="print_pdf_printCurrents"
+										name="print_pdf_printCurrents"
+										type="checkbox"
+										checked={printOptions.pdfOptions.printCurrents}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													printCurrents: e.target.checked,
+												},
+											}))
+										}
+										disabled={!printOptions.labels}
+									/>
+									<label htmlFor="print_pdf_printCurrents">
+										Indiquer le calibre sous chaque module pour aider à leur
+										installation
+									</label>
+								</div>
+							</>
+						)}
+
+						{/** ----------------------------------------------------------- */}
+						{/** SCHEMA **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div
+							className="dropdown_item head parent"
+							title="Imprimer le schéma unifilaire"
+						>
+							<input
+								id="print_schema"
+								name="print_schema"
+								type="checkbox"
+								checked={printOptions.schema}
+								onChange={(e) =>
+									setPrintOptions((old) => {
+										const ret = {
+											...old,
+											schema: e.target.checked,
+										};
+										/*if (!ret.schema && !ret.summary) {
+										ret = {
+											...ret,
+											firstPage: false
+										}
+									}*/
+										return ret;
+									})
+								}
+							/>
+							<label htmlFor="print_schema">Schéma unifilaire</label>
+							{printOptions.schema && (
+								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+								<img
+									src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon}
+									width={16}
+									height={16}
+									alt={"Menu"}
+									onClick={() =>
+										setSubMenus((old) => ({
+											...old,
+											printSchemaOpened: !old.printSchemaOpened,
+										}))
+									}
+								/>
+							)}
+						</div>
+						{subMenus.printSchemaOpened && printOptions.schema && (
+							<>
+								<div className="dropdown_item" title="Format d'impression">
+									<label htmlFor="print_schema_format" style={{ flex: 1 }}>
+										Format d'impression :
+									</label>
+									<input
+										id="print_schema_format_A4"
+										name="print_schema_format_A4"
+										type="radio"
+										checked={printOptions.pdfOptions.schemaPrintFormat === "A4"}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													schemaPrintFormat: e.target.checked
+														? "A4"
+														: old.pdfOptions.schemaPrintFormat,
+												},
+											}))
+										}
+										disabled={!printOptions.schema}
+									/>
+									<label htmlFor="print_schema_format_A4" style={{ flex: 0 }}>
+										A4
+									</label>
+									<input
+										id="print_schema_format_A3"
+										name="print_schema_format_A3"
+										type="radio"
+										checked={printOptions.pdfOptions.schemaPrintFormat === "A3"}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													schemaPrintFormat: e.target.checked
+														? "A3"
+														: old.pdfOptions.schemaPrintFormat,
+												},
+											}))
+										}
+										disabled={!printOptions.schema}
+									/>
+									<label htmlFor="print_schema_format_A3" style={{ flex: 0 }}>
+										A3
+									</label>
+								</div>
+								<div className="dropdown_item" title="Premier folio">
+									<label htmlFor="print_schema_folio_start" style={{ flex: 1 }}>
+										Numéro du premier Folio :
+									</label>
+									<input
+										id="print_schema_folio_start"
+										name="print_schema_folio_start"
+										type="number"
+										style={{ width: "40px" }}
+										value={printOptions.pdfOptions.schemaFolioStart ?? 1}
+										onChange={(e) =>
+											setPrintOptions((old) => ({
+												...old,
+												pdfOptions: {
+													...old.pdfOptions,
+													schemaFolioStart: parseInt(e.target.value, 10) || 1,
+												},
+											}))
+										}
+										disabled={!printOptions.schema}
+									/>
+								</div>
+							</>
+						)}
+
+						{/** ----------------------------------------------------------- */}
+						{/** SUMMARY **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div
+							className="dropdown_item head parent"
+							title="Imprimer la nomenclature"
+						>
+							<input
+								id="print_summary"
+								name="print_summary"
+								type="checkbox"
+								checked={printOptions.summary}
+								onChange={(e) =>
+									setPrintOptions((old) => {
+										const ret = {
+											...old,
+											summary: e.target.checked,
+										};
+										/*if (!ret.schema && !ret.summary) {
+										ret = {
+											...ret,
+											firstPage: false
+										}
+									}*/
+										return ret;
+									})
+								}
+							/>
+							<label htmlFor="print_summary">Nomenclature</label>
+							{printOptions.summary && (
+								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+								<img
+									src={
+										subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon
+									}
+									width={16}
+									height={16}
+									alt={"Menu"}
+									onClick={() =>
+										setSubMenus((old) => ({
+											...old,
+											printSummaryOpened: !old.printSummaryOpened,
+										}))
+									}
+								/>
+							)}
+						</div>
+						{subMenus.printSummaryOpened && printOptions.summary && (
+							<div className="dropdown_item" title="Format d'impression">
+								<label htmlFor="print_summary_format" style={{ flex: 1 }}>
+									Format d'impression :
+								</label>
+								<input
+									id="print_summary_format_A4"
+									name="print_summary_format_A4"
+									type="radio"
+									checked={printOptions.pdfOptions.summaryPrintFormat === "A4"}
+									onChange={(e) =>
+										setPrintOptions((old) => ({
+											...old,
+											pdfOptions: {
+												...old.pdfOptions,
+												summaryPrintFormat: e.target.checked
+													? "A4"
+													: old.pdfOptions.summaryPrintFormat,
+											},
+										}))
+									}
+									disabled={!printOptions.summary}
+								/>
+								<label htmlFor="print_summary_format_A4" style={{ flex: 0 }}>
+									A4
+								</label>
+								<input
+									id="print_summary_format_A3"
+									name="print_summary_format_A3"
+									type="radio"
+									checked={printOptions.pdfOptions.summaryPrintFormat === "A3"}
+									onChange={(e) =>
+										setPrintOptions((old) => ({
+											...old,
+											pdfOptions: {
+												...old.pdfOptions,
+												summaryPrintFormat: e.target.checked
+													? "A3"
+													: old.pdfOptions.summaryPrintFormat,
+											},
+										}))
+									}
+									disabled={!printOptions.summary}
+								/>
+								<label htmlFor="print_summary_format_A3" style={{ flex: 0 }}>
+									A3
+								</label>
+							</div>
+						)}
+
+						{/** ----------------------------------------------------------- */}
+						{/** MODULE LIST **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div
+							className="dropdown_item head parent"
+							title="Imprimer la liste des modules"
+						>
+							<input
+								id="print_modulelist"
+								name="print_modulelist"
+								type="checkbox"
+								checked={printOptions.modulelist}
+								onChange={(e) =>
+									setPrintOptions((old) => ({
+										...old,
+										modulelist: e.target.checked,
+									}))
+								}
+							/>
+							<label htmlFor="print_modulelist">Liste des modules</label>
+						</div>
+
+						{/** ----------------------------------------------------------- */}
+						{/** OTHER PRINT OPTIONS **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div className="dropdown_separator"></div>
+						<div
+							className="dropdown_item head"
+							title="Ouvrir le document dans un nouvel onglet (désactiver cette option si votre navigateur Internet bloque toutes les fenètres popups)"
+						>
+							<input
+								id="print_pdf_openWindow"
+								name="print_pdf_openWindow"
+								type="checkbox"
+								checked={printOptions.pdfOptions.openWindow}
+								onChange={(e) =>
+									setPrintOptions((old) => ({
+										...old,
+										pdfOptions: {
+											...old.pdfOptions,
+											openWindow: e.target.checked,
+										},
+									}))
+								}
+							/>
+							<label htmlFor="print_pdf_openWindow">
+								Ouvrir le document dans un nouvel onglet
+							</label>
+						</div>
+						<div
+							className="dropdown_item head"
+							title="Ouvrir automatiquement les propriétés d'impressions"
+						>
+							<input
+								id="print_pdf_autoPrint"
+								name="print_pdf_autoPrint"
+								type="checkbox"
+								checked={printOptions.pdfOptions.autoPrint}
+								onChange={(e) =>
+									setPrintOptions((old) => ({
+										...old,
+										pdfOptions: {
+											...old.pdfOptions,
+											autoPrint: e.target.checked,
+										},
+									}))
+								}
+							/>
+							<label htmlFor="print_pdf_autoPrint">
+								Ouvrir automatiquement les propriétés d&#39;impressions
+							</label>
+						</div>
+
+						{Array.isArray(apiAvaillableLanguages) &&
+							apiAvaillableLanguages.length > 0 && (
+								<>
+									<div className="dropdown_separator"></div>
+									<div
+										className="dropdown_item head"
+										title="Traduire le projet imprimé"
+									>
+										<label style={{ fontWeight: 500 }} htmlFor="print_language">
+											Le document doit être généré en:
+										</label>
+									</div>
+									<div
+										className="dropdown_item head"
+										title="Traduire le projet imprimé"
+									>
+										<select
+											style={{ width: "100%" }}
+											name="print_language"
+											id="print_language"
+											value={printOptions.lang}
+											onChange={(e) =>
+												setPrintOptions((old) => ({
+													...old,
+													lang: e.target.value,
+												}))
+											}
+											onFocus={() => {
+												printMenuRef.current.classList.add("clicked");
+											}}
+										>
+											{apiAvaillableLanguages.map((l) => (
+												<option key={l.locale} value={l.locale}>
+													{l.display.name}
+												</option>
+											))}
+										</select>
+									</div>
+								</>
+							)}
+
+						{/** ----------------------------------------------------------- */}
+						{/** PRINT BUTTON **/}
+						{/** ----------------------------------------------------------- */}
+
+						<div className="dropdown_footer">
+							{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+							{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+							<div
+								className="fakeButton"
+								style={{ fontSize: "100%" }}
+								title="Lancer l&apos;impression"
+								onClick={() => {
+									printProject();
+								}}
+							>
+								Lancer l&apos;impression...
+							</div>
+						</div>
+					</div>
+				</button>
+
+				<div className="button_group-separator"></div>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR RESET **/}
+				{/** ----------------------------------------------------------- */}
+
+				{/** biome-ignore lint/a11y/useButtonType: wanted */}
+				<button
+					className="button_group-clear_project"
+					onClick={() => {
+						if (
+							confirm("Êtes-vous certain de vouloir réinitialiser le projet?")
+						)
+							resetProject();
+					}}
+					title="Réinitialiser le projet"
+				>
+					<img
+						src={clearProjectIcon}
+						width={16}
+						height={16}
+						alt={"Réinitialiser"}
+					/>
+					<span>Réinitialiser</span>
+				</button>
+
+				<div className="button_group-separator"></div>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR WORKBOX VIEW MODE **/}
+				{/** ----------------------------------------------------------- */}
+
+				<div
+					className="button_group-separator"
+					style={{ marginLeft: "auto" }}
+				></div>
+				{/** biome-ignore lint/a11y/useButtonType: wanted */}
+				<button
+					className={`button_group-resize end ${autoSpaceSize ? "checked" : ""}`}
+					onClick={() => setAutoSpaceSize((old) => !old)}
+					title="Redimensionner automatiquement l'espace de travail"
+				>
+					<img
+						src={autoSpaceSize ? resizeIcon : resizeOffIcon}
+						width={18}
+						height={18}
+						style={{ width: "18px", height: "18px" }}
+						alt={"Redimensionner automatiquement"}
+					/>
+				</button>
+			</nav>
+
+			{/** ----------------------------------------------------------- */}
+			{/** SWITCHBOARD PROJECT TITLE **/}
+			{/** ----------------------------------------------------------- */}
+
+			<h3
+				className={`${printOptions.labels ? "printable" : "notprintable"}`.trim()}
+			>
+				<img src={projectIcon} width={24} height={24} alt="Projet courant" />
+				<ContentEditable
+					value={switchboard.prjname ?? defaultProjectName}
+					onChange={(value) => {
+						let v = value.trim();
+						if (v === "") v = defaultProjectName;
+						setSwitchboard((old) => ({
+							...old,
+							prjname: v,
+						}));
+					}}
+					editableStyle={{
+						fontSize: "1em",
+						fontWeight: "bold",
+						maxWidth: "100%",
+					}}
+					editable={!UIFrozen}
+					className={"contentEditable"}
+				/>
+			</h3>
+
+			{/** ----------------------------------------------------------- */}
+			{/** SWITCHBOARD PROJECT DETAILS **/}
+			{/** ----------------------------------------------------------- */}
+
+			<ul className="project">
+				<li title="Révision">
+					<img src={versionIcon} alt="Révision" width={16} height={16} />
+					<span>Révision {switchboard.prjversion ?? 1}</span>
+				</li>
+				<li title="Description">
+					<img src={infoIcon} alt="Description" width={16} height={16} />
+					<span>
+						{switchboard.rows.length} x {switchboard.stepsPerRows} module
+						{switchboard.stepsPerRows > 1 ? "s" : ""} / {switchboard.height}mm
+					</span>
+				</li>
+				<li title="Date de création">
+					<img
+						src={createdIcon}
+						alt="Date de création"
+						width={16}
+						height={16}
+					/>
+					<span>{(switchboard.prjcreated ?? new Date()).toLocaleString()}</span>
+				</li>
+				<li title="Date de modification">
+					<img
+						src={updatedIcon}
+						alt="Date de modification"
+						width={16}
+						height={16}
+					/>
+					<span>{(switchboard.prjupdated ?? new Date()).toLocaleString()}</span>
+				</li>
+			</ul>
+
+			{/** ----------------------------------------------------------- */}
+			{/** TABPAGES SELECTOR **/}
+			{/** ----------------------------------------------------------- */}
+
+			<nav className={`tabPages ${UIFrozen ? "disabled" : ""}`.trim()}>
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+				<div
+					className={`tabPages_page ${tab === 1 ? "selected" : ""}`.trim()}
+					onClick={() => setTab(1)}
+				>
+					<img src={projectIcon} width={20} height={20} alt="Etiquettes" />
+					<span>Etiquettes</span>
+				</div>
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+				<div
+					className={`tabPages_page ${tab === 2 ? "selected" : ""}`.trim()}
+					onClick={() => setTab(2)}
+				>
+					<img
+						src={schemaIcon}
+						width={20}
+						height={20}
+						alt="Schéma unifilaire"
+					/>
+					<span>Schéma</span>
+				</div>
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+				<div
+					className={`tabPages_page ${tab === 3 ? "selected" : ""}`.trim()}
+					onClick={() => setTab(3)}
+				>
+					<img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
+					<span>Nomenclature</span>
+				</div>
+			</nav>
+
+			{/** ----------------------------------------------------------- */}
+			{/** SWITCHBOARD TAB **/}
+			{/** ----------------------------------------------------------- */}
+
+			<div
+				ref={switchboardRef}
+				className={`switchboard ${tab === 1 ? "selected" : ""} ${printOptions.labels ? "printable" : "notprintable"}`.trim()}
+				title={freeSpaceMessage}
+			>
+				<div className="tabPageBand notprintable">
+					<div className="tabPageBandGroup">
+						<div className="tabPageBandCol">
+							<span style={{ fontSize: "smaller", lineHeight: 1.2 }}>
+								Thème
+								<br />
+								courant:
+							</span>
+						</div>
+						<div className="tabPageBandCol">
+							<select
+								value={theme?.name ?? defaultTheme}
+								onChange={(e) => {
+									updateTheme(e.target.value);
+								}}
+								style={{
+									maxWidth: "100%",
+									width: "280px",
+									overflowX: "hidden",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+								}}
+								disabled={UIFrozen}
+							>
+								{Object.entries(
+									Object.groupBy(themesList, ({ group }) => group),
+								).map((e) => {
+									const g = e[0];
+									const l = e[1];
+									return (
+										<Fragment key={`themes_${g}`}>
+											<option key={`group_${g}`} id={`group_${g}`} disabled>
+												- {g} -
+											</option>
+											{l.map((t) => (
+												<option
+													key={`theme_${t.name}`}
+													id={`theme_${t.name}`}
+													value={t.name}
+												>
+													({g}) {t.title}
+												</option>
+											))}
+										</Fragment>
+									);
+								})}
+							</select>
+						</div>
+						{theme.name.startsWith("custom") && theme?.data && (
+							<div className="tabPageBandCol">
+								{/** biome-ignore lint/a11y/useButtonType: wanted */}
+								<button
+									style={{ height: "34px" }}
+									title="Modifier le thème."
+									onClick={() => {
+										setThemeEditor(true);
+									}}
+									disabled={UIFrozen}
+								>
+									<img
+										src={themeSettingsIcon}
+										alt="Modifier le thème."
+										width={22}
+										height={22}
+									/>
+								</button>
+							</div>
+						)}
+					</div>
+
+					<div className="tabPageBandGroup">
+						<div className="tabPageBandCol">
+							<span
+								style={{
+									fontSize: "smaller",
+									lineHeight: 1.2,
+								}}
+							>
+								Hauteur des
+								<br />
+								étiquettes:
+							</span>
+						</div>
+						<div className="tabPageBandCol">
+							<input
+								type="range"
+								min={heightMin}
+								max={heightMax}
+								step={1}
+								style={{ width: "100px" }}
+								value={switchboard.height}
+								onChange={(e) => {
+									const value = parseInt(e.target.value, 10);
+									if (value >= heightMin)
+										setSwitchboard((old) => ({ ...old, height: value }));
+								}}
+								disabled={UIFrozen}
+								className={UIFrozen ? "disabled" : ""}
+							/>
+						</div>
+						<div className="tabPageBandCol">
+							<span>{switchboard.height}mm</span>
+						</div>
+					</div>
+
+					<div className="tabPageBandGroup">
+						<div className="tabPageBandCol">
+							<span
+								style={{
+									fontSize: "smaller",
+									lineHeight: 1.2,
+								}}
+							>
+								Largeur des
+								<br />
+								étiquettes:
+							</span>
+						</div>
+						<div className="tabPageBandCol">
+							<select
+								value={switchboard.stepSize ?? defaultStepSize}
+								onChange={(e) => {
+									const value = parseFloat(e.target.value);
+									if (value === 17.5 || value === 18)
+										setSwitchboard((old) => ({
+											...old,
+											stepSize: value,
+										}));
+								}}
+								style={{
+									maxWidth: "100%",
+									width: "max-content",
+									overflowX: "hidden",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+								}}
+								disabled={UIFrozen}
+							>
+								<option>17.5</option>
+								<option>18</option>
+							</select>
+						</div>
+						<div className="tabPageBandCol">
+							<span>mm</span>
+						</div>
+					</div>
+
+					<div className="tabPageBandNL"></div>
+
+					<div className="tabPageBandGroup">
+						<div className="tabPageBandCol">
+							{/** biome-ignore lint/a11y/useButtonType: wanted */}
+							<button
+								style={{ height: "34px" }}
+								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
+								onClick={() => reassignModules()}
+								disabled={UIFrozen}
+							>
+								<img
+									src={numbersIcon}
+									alt="Ré-assigner automatiquement les identifiants"
+									width={22}
+									height={22}
+								/>
+							</button>
+						</div>
+						<div className="tabPageBandCol">
+							<input
+								type="checkbox"
+								name="switchboardMonitorChoice"
+								id="switchboardMonitorChoice"
+								checked={switchboard.switchboardMonitor}
+								onChange={() =>
+									setSwitchboard((old) => ({
+										...old,
+										switchboardMonitor: !old.switchboardMonitor,
+									}))
+								}
+								disabled={UIFrozen}
+							/>
+							<label
+								htmlFor="switchboardMonitorChoice"
+								title="Conseils et Surveillance (NFC 15-100)"
+								className={`${monitor.errors ? "error" : ""}`}
+							>
+								<img
+									src={
+										switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon
+									}
+									alt="Conseils et Surveillance (NFC 15-100)"
+									width={24}
+									height={24}
+								/>
+							</label>
+						</div>
+						{switchboard.switchboardMonitor && (
+							<div className="tabPageBandCol">
+								{monitorWarningsLength > 0 ? (
+									<>
+										<span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? "s" : ""} détectée${monitorWarningsLength > 1 ? "s" : ""}.`}</span>
+										{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+										<img
+											src={info2Icon}
+											alt="Détails des erreurs"
+											title="Détails des erreurs"
+											width={16}
+											height={16}
+											style={{ cursor: "pointer", padding: "4px" }}
+											onClick={() => setMonitorOpened((old) => !old)}
+										/>
+									</>
+								) : (
+									<span>Aucune erreur détectée.</span>
+								)}
+							</div>
+						)}
+					</div>
+				</div>
+
+				{switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
+					// biome-ignore lint/a11y/noStaticElementInteractions: wanted
+					<div
+						className="tabPageBand notprintable errors"
+						ref={monitorRef}
+						tabIndex={-1}
+						onBlur={() => setMonitorOpened(false)}
+					>
+						{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+						{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+						<div
+							className="closeButton"
+							title={"Fermer"}
+							onClick={() => setMonitorOpened(false)}
+						>
+							<img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+						</div>
+						<div
+							className="tabPageBandCol"
+							style={{
+								height: "max-content",
+								minHeight: "max-content",
+								maxHeight: "max-content",
+							}}
+						>
+							<ul>
+								{Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+									<li key={i} className="tabPageErrors">
+										<div>{id}:</div>
+										<ul>
+											{errors.map((error, j) => (
+												// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+												<li key={j} className="tabPageError">
+													<img
+														src={`${import.meta.env.BASE_URL}schema_warning.svg`}
+														alt="Erreurs"
+														width={16}
+														height={16}
+													/>
+													<span>{error}</span>
+												</li>
+											))}
+										</ul>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				)}
+
+				{switchboard.rows.map((row, i) => (
+					<Row
+						// biome-ignore lint/suspicious/noArrayIndexKey: wanted
+						key={i}
+						rowIndex={i}
+						rowPosition={i + 1}
+						items={row.map((m) => ({ ...defaultModule, ...m }))}
+						stepsPerRows={switchboard.stepsPerRows}
+						theme={theme}
+						clipboard={clipboard}
+						clipboardMode={clipboardMode}
+						style={{
+							"--w": `${switchboard.stepsPerRows * switchboard.stepSize}mm`,
+							"--h": `calc(${switchboard.height}mm + 1mm)`, // 30mm -> 117.16px
+							"--c": switchboard.stepsPerRows,
+							"--sw": `calc(${switchboard.stepSize}mm + 1px)`, // 18mm -> 70.03px
+						}}
+						onScrollLeft={() => handleScrollLeft()}
+						onScrollRight={() => handleScrollRight()}
+						onModuleGrow={(moduleIndex, item, moduleRef) =>
+							handleModuleGrow(i, moduleIndex, item, moduleRef)
+						}
+						onModuleShrink={(moduleIndex, item, moduleRef) =>
+							handleModuleShrink(i, moduleIndex, item, moduleRef)
+						}
+						onModuleClear={(moduleIndex, item) =>
+							handleModuleClear(i, moduleIndex, item)
+						}
+						onModuleEdit={(moduleIndex, item) =>
+							handleModuleEdit(i, moduleIndex, item)
+						}
+						onModuleCopy={(moduleIndex, item) =>
+							handleModuleCopy(i, moduleIndex, item)
+						}
+						onModuleCut={(moduleIndex, item) =>
+							handleModuleCut(i, moduleIndex, item)
+						}
+						onModulePaste={(moduleIndex, item) =>
+							handleModulePaste(i, moduleIndex, item)
+						}
+						onModuleCancelPaste={() => handleCancelPaste()}
+						modulePasteAllowed={(moduleIndex, item) =>
+							modulePasteAllowed(i, moduleIndex, item)
+						}
+						hasClipboard={clipboard !== null}
+						onModuleInterCopy={(moduleIndex, item) =>
+							handleModuleInterCopy(i, moduleIndex, item)
+						}
+						onModuleInter={(moduleIndex, item) =>
+							handleModuleInter(i, moduleIndex, item)
+						}
+						moduleInterAllowed={(moduleIndex, item) =>
+							moduleInterAllowed(i, moduleIndex, item)
+						}
+						onModuleMoveLeft={(moduleIndex, item, moduleRef) =>
+							handleModuleMoveLeft(i, moduleIndex, item, moduleRef)
+						}
+						onModuleMoveRight={(moduleIndex, item, moduleRef) =>
+							handleModuleMoveRight(i, moduleIndex, item, moduleRef)
+						}
+						onModuleHalf={(moduleIndex, item, mode) =>
+							handleModuleHalf(i, moduleIndex, item, mode)
+						}
+						moduleShrinkAllowed={(moduleIndex, item) =>
+							moduleShrinkAllowed(i, moduleIndex, item)
+						}
+						moduleGrowAllowed={(moduleIndex, item) =>
+							moduleGrowAllowed(i, moduleIndex, item)
+						}
+						moduleMoveLeftAllowed={(moduleIndex, item) =>
+							moduleMoveLeftAllowed(i, moduleIndex, item)
+						}
+						moduleMoveRightAllowed={(moduleIndex, item) =>
+							moduleMoveRightAllowed(i, moduleIndex, item)
+						}
+						onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
+						onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
+						rowAddAllowed={() => rowAddAllowed()}
+						rowDeleteAllowed={() => rowDeleteAllowed()}
+						printFreeModuleAllowed={() => printFreeModuleAllowed()}
+					/>
+				))}
+			</div>
+
+			{/** ----------------------------------------------------------- */}
+			{/** SCHEMA TAB **/}
+			{/** ----------------------------------------------------------- */}
+
+			<SchemaTab
+				tab={tab}
+				switchboard={switchboard}
+				setSwitchboard={setSwitchboard}
+				printOptions={printOptions}
+				reassignModules={reassignModules}
+				getModuleById={getModuleById2}
+				schemaFunctions={schemaFunctions}
+				onEditSymbol={(rowIndex, moduleIndex) =>
+					editModule(rowIndex, moduleIndex, "schema")
+				}
+			/>
+
+			{/** ----------------------------------------------------------- */}
+			{/** SUMMARY TAB **/}
+			{/** ----------------------------------------------------------- */}
+
+			<SummaryTab
+				tab={tab}
+				switchboard={switchboard}
+				setSwitchboard={setSwitchboard}
+				printOptions={printOptions}
+				reassignModules={reassignModules}
+				getModuleById={getModuleById2}
+				onEdit={(rowIndex, moduleIndex, tab, focus) =>
+					editModule(rowIndex, moduleIndex, tab, focus)
+				}
+			/>
+
+			{/** ----------------------------------------------------------- */}
+			{/** POPUPS **/}
+			{/** ----------------------------------------------------------- */}
+
+			{editor && (
+				<Editor
+					theme={theme}
+					switchboard={switchboard}
+					stepSize={switchboard.stepSize}
+					getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
+					getModuleById={getModuleById}
+					editor={editor}
+					onSetEditor={setEditor}
+					onApplyModuleEditor={applyModuleEditor}
+					onHandleModuleClear={handleModuleClear}
+				/>
+			)}
+
+			{newProjectPopup && (
+				<NewProjectPopup
+					onCancel={() => setNewProjectPopup(false)}
+					onApply={(properties) => {
+						const printFirstpage =
+							properties.infos.from.name ||
+							properties.infos.from.siret ||
+							properties.infos.from.postalAddress ||
+							properties.infos.from.email ||
+							properties.infos.from.phone ||
+							properties.infos.to.name ||
+							properties.infos.to.postalAddress ||
+							properties.infos.to.email ||
+							properties.infos.to.phone;
+
+						createProject(
+							properties.name,
+							properties.stepsPerRows,
+							properties.rowsCount,
+							properties.height,
+							properties.stepSize,
+							properties.views,
+							properties.infos,
+							printFirstpage,
+						);
+						setNewProjectPopup(false);
+					}}
+					defaultFirstpageOptions={defaultFirstpageOptions}
+				/>
+			)}
+
+			{welcome && (
+				<WelcomePopup
+					onCancel={() => setWelcome(false)}
+					onNewProject={() => {
+						setNewProjectPopup(true);
+						setWelcome(false);
+					}}
+					onImportProject={() => {
+						importProjectChooseFile();
+						setWelcome(false);
+					}}
+				/>
+			)}
+
+			{themeEditor && (
+				<ThemeEditorPopup
+					switchboard={switchboard}
+					stepSize={switchboard.stepSize}
+					heightMin={heightMin}
+					heightMax={heightMax}
+					theme={theme}
+					onCancel={() => setThemeEditor(false)}
+					onApply={(editedTheme) => {
+						setTheme(editedTheme);
+						setSwitchboard((old) =>
+							modulesAutoId({ ...old, theme: editedTheme }),
+						);
+						setThemeEditor(false);
+					}}
+				/>
+			)}
+
+			{labelerOptionsPopup && (
+				<LabelerPopup
+					switchboard={switchboard}
+					onApply={(model, options) => {
+						toLabeler(model, options);
+						setLabelerOptionsPopup(false);
+					}}
+					onCancel={() => setLabelerOptionsPopup(false)}
+				/>
+			)}
+
+			{firstpageOptionsPopup && (
+				<FirstpageOptionsPopup
+					withPreview={true}
+					withViewSelector={true}
+					defaultFirstpageOptions={defaultFirstpageOptions}
+					switchboard={switchboard}
+					printOptions={printOptions}
+					onApply={(options) => {
+						setSwitchboard((old) => ({
+							...old,
+							firstPageInfos: { ...options.infos },
+						}));
+
+						setPrintOptions((old) => ({
+							...old,
+							pdfOptions: {
+								...old.pdfOptions,
+								firstPageView: options.views,
+							},
+						}));
+
+						printMenuRef.current.classList.add("clicked");
+						printMenuRef.current.focus();
+						setFirstpageOptionsPopup(false);
+					}}
+					onCancel={() => {
+						printMenuRef.current.classList.add("clicked");
+						printMenuRef.current.focus();
+						setFirstpageOptionsPopup(false);
+					}}
+				/>
+			)}
+		</div>
+	);
 }
 
-export default App
-
-
+export default App;
 
 //TODO: Ajouter les calibres 300mA et 650mA pour le DB

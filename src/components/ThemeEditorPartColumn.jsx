@@ -16,43 +16,46 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-import ThemeEditorPartColumnTitle from "./ThemeEditorPartColumnTitle.jsx";
-import TextPartStyleEditor from "./TextPartStyleEditor.jsx";
 import IconPartStyleEditor from "./IconPartStyleEditor.jsx";
+import TextPartStyleEditor from "./TextPartStyleEditor.jsx";
+import ThemeEditorPartColumnTitle from "./ThemeEditorPartColumnTitle.jsx";
 
 export default function ThemeEditorPartColumn({
-                                                  propName,
-                                                  title,
-                                                  shownCount,
-                                                  positions,
-                                                  editedTheme,
-                                                  setEditedTheme,
-                                                  up,
-                                                  down
-                                              }) {
-    return <>
-        <div className={'tep-settings_column'}>
-            <ThemeEditorPartColumnTitle propName={propName}
-                                        title={title}
-                                        setEditedTheme={setEditedTheme}
-                                        positions={positions}
-                                        shownCount={shownCount}
-                                        down={down}
-                                        up={up}
-            />{
-            propName === 'icon'
-                ? <IconPartStyleEditor propName={propName}
-                                       editedTheme={editedTheme}
-                                       setEditedTheme={setEditedTheme}
-                                       positions={positions}/>
-                : <TextPartStyleEditor propName={propName}
-                                       editedTheme={editedTheme}
-                                       setEditedTheme={setEditedTheme}
-                                       positions={positions}/>
-        }
-        </div>
-    </>
-        ;
+	propName,
+	title,
+	shownCount,
+	positions,
+	editedTheme,
+	setEditedTheme,
+	up,
+	down,
+}) {
+	return (
+		<div className={"tep-settings_column"}>
+			<ThemeEditorPartColumnTitle
+				propName={propName}
+				title={title}
+				setEditedTheme={setEditedTheme}
+				positions={positions}
+				shownCount={shownCount}
+				down={down}
+				up={up}
+			/>
+			{propName === "icon" ? (
+				<IconPartStyleEditor
+					propName={propName}
+					editedTheme={editedTheme}
+					setEditedTheme={setEditedTheme}
+					positions={positions}
+				/>
+			) : (
+				<TextPartStyleEditor
+					propName={propName}
+					editedTheme={editedTheme}
+					setEditedTheme={setEditedTheme}
+					positions={positions}
+				/>
+			)}
+		</div>
+	);
 }

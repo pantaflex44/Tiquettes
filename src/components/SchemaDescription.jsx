@@ -16,36 +16,31 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 import { useMemo } from "react";
 
-export default function SchemaDescription({
-    switchboard,
-    module
-}) {
-    const getModuleById = (moduleId) => {
-        let indexes = { row: -1, module: -1 };
-        let m = { module: null, indexes };
+export default function SchemaDescription({ module }) {
+	/*const getModuleById = (moduleId) => {
+		const indexes = { row: -1, module: -1 };
+		let m = { module: null, indexes };
 
-        switchboard.rows.forEach((row, ri) => {
-            row.forEach((module, mi) => {
-                if (!m.module && module.id === moduleId && !module.free) {
-                    m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
-                }
-            })
-        });
+		switchboard.rows.forEach((row, ri) => {
+			row.forEach((module, mi) => {
+				if (!m.module && module.id === moduleId && !module.free) {
+					m = { ...m, module, indexes: { ...indexes, row: ri, module: mi } };
+				}
+			});
+		});
 
-        return m;
-    }
+		return m;
+	};*/
 
-    const infos = useMemo(() => {
-        let icon = module.icon;
-        let text = module.text ?? "";
-        let wire = module.wire ?? "";
-        let pole = module.pole ?? "";
+	const infos = useMemo(() => {
+		const icon = module.icon;
+		const text = module.text ?? "";
+		const wire = module.wire ?? "";
+		const pole = module.pole ?? "";
 
-        /*const parentModule = getModuleById(module.parentId).module;
+		/*const parentModule = getModuleById(module.parentId).module;
         if ((k === 'kc' || k === 'tl') && parentModule) {
             icon = parentModule.icon;
             text = parentModule.text;
@@ -53,33 +48,35 @@ export default function SchemaDescription({
             wire = parentModule.wire;
         }*/
 
-        /*if (module.func === 'k' && parentModule) {
+		/*if (module.func === 'k' && parentModule) {
             icon = module.icon;
             text = module.text;
             pole = module.pole;
             wire = module.wire;
         }*/
 
-        return { text, icon, wire, pole };
-    }, [module]);
+		return { text, icon, wire, pole };
+	}, [module]);
 
-    return (
-        /*<div className="schemaItemLast">*/
-        <>
-            <div className="schemaItemLastWire">{infos.wire ? `${infos.wire} mm²` : ""}</div>
-            {infos.icon && (
-                <div className="schemaItemLastIconContainer" title={infos.text}>
-                    <img
-                        alt="Pictogramme"
-                        width={24}
-                        height={24}
-                        src={`${import.meta.env.VITE_APP_BASE}${infos.icon}`}
-                        className="schemaItemLastIcon"
-                    />
-                </div>
-            )}
-            <div className="schemaItemLastText">{infos.text}</div>
-        </>
-        /*</div>*/
-    );
+	return (
+		/*<div className="schemaItemLast">*/
+		<>
+			<div className="schemaItemLastWire">
+				{infos.wire ? `${infos.wire} mm²` : ""}
+			</div>
+			{infos.icon && (
+				<div className="schemaItemLastIconContainer" title={infos.text}>
+					<img
+						alt="Pictogramme"
+						width={24}
+						height={24}
+						src={`${import.meta.env.VITE_APP_BASE}${infos.icon}`}
+						className="schemaItemLastIcon"
+					/>
+				</div>
+			)}
+			<div className="schemaItemLastText">{infos.text}</div>
+		</>
+		/*</div>*/
+	);
 }

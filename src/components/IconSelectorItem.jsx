@@ -16,35 +16,54 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 function IconSelectorItem({
-                              icon,
-                              selected,
-                              search,
-                              handleIconListItemSelected,
-                              hoveredItem, setHoveredItem
-                          }) {
-    return <li data-value={icon.filename} onClick={() => handleIconListItemSelected(icon)} style={{
-        borderRadius: '5px',
-        cursor: 'pointer',
-        listStyle: 'none',
-        padding: '0.5em',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        columnGap: '1em',
-        backgroundColor: ((selected && selected.filename === icon.filename && search.filename) ? '#f5f5f5' : (hoveredItem === icon.filename) ? 'var(--secondary-color)' : 'inherit')
-    }} onMouseMove={() => setHoveredItem(icon.filename)}>
-        {icon.filename
-            ? <img src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`} loading={"lazy"} width={24} height={24}
-                   alt={icon.title} title={icon.title}/>
-            : <div style={{width: '24px', height: '24px'}}></div>
-        }
-        <div>{icon.title}</div>
-    </li>;
+	icon,
+	selected,
+	search,
+	handleIconListItemSelected,
+	hoveredItem,
+	setHoveredItem,
+}) {
+	return (
+		// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+		<li
+			data-value={icon.filename}
+			onClick={() => handleIconListItemSelected(icon)}
+			style={{
+				borderRadius: "5px",
+				cursor: "pointer",
+				listStyle: "none",
+				padding: "0.5em",
+				display: "flex",
+				flexDirection: "row",
+				flexWrap: "nowrap",
+				alignItems: "center",
+				justifyContent: "flex-start",
+				columnGap: "1em",
+				backgroundColor:
+					selected && selected.filename === icon.filename && search.filename
+						? "#f5f5f5"
+						: hoveredItem === icon.filename
+							? "var(--secondary-color)"
+							: "inherit",
+			}}
+			onMouseMove={() => setHoveredItem(icon.filename)}
+		>
+			{icon.filename ? (
+				<img
+					src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`}
+					loading={"lazy"}
+					width={24}
+					height={24}
+					alt={icon.title}
+					title={icon.title}
+				/>
+			) : (
+				<div style={{ width: "24px", height: "24px" }}></div>
+			)}
+			<div>{icon.title}</div>
+		</li>
+	);
 }
 
 export default IconSelectorItem;

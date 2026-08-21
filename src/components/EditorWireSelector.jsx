@@ -16,29 +16,42 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 
-import {useEffect, useState} from "react";
+export default function EditorWireSelector({
+	id,
+	value,
+	onChange = null,
+	current = 0,
+	rules = {},
+}) {
+	const [list, setList] = useState([]);
+	const [cur, setCur] = useState(0);
 
-export default function EditorWireSelector({ id, value, onChange = null, current = 0, rules = {} }) {
-    const [list, setList] = useState([]);
-    const [cur, setCur] = useState(0);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		const c = rules[current] ?? 0;
+		setCur(c);
 
-    useEffect(() => {
-        const c = rules[current] ?? 0;
-        setCur(c);
+		const l = [...new Set(Object.values(rules))];
+		setList((old) => (JSON.stringify(old) !== JSON.stringify(l) ? l : old));
+	}, [current, onChange, rules, value]);
 
-        const l = [...new Set(Object.values(rules))];
-        setList(old => (JSON.stringify(old) !== JSON.stringify(l) ? l : old));
-    }, [current, onChange, rules, value]);
-
-
-    return <select id={id} name={id} value={value} data-value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
-        <option value={""}>( détection automatique )</option>
-        {cur > 0 && <option value={"?"}>( inconnue )</option>}
-        {list.map((item) => <option key={item} value={item}>{`${item} mm²`}</option>)}
-    </select>
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			data-value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+		>
+			<option value={""}>( détection automatique )</option>
+			{cur > 0 && <option value={"?"}>( inconnue )</option>}
+			{list.map((item) => (
+				<option key={item} value={item}>{`${item} mm²`}</option>
+			))}
+		</select>
+	);
 }

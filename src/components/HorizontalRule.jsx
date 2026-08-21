@@ -16,11 +16,15 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-import '../css/horizontalRule.css';
+import "../css/horizontalRule.css";
 
 export default function HorizontalRule({ size }) {
-    return (
-        <div className={'horizontalRule noprint'} style={{ '--ruleWidth': `calc(${size}mm)` }}>{size}mm</div>
-    );
+	return (
+		<div
+			className={"horizontalRule noprint"}
+			style={{ "--ruleWidth": `calc(${size}mm)` }}
+		>
+			{size}mm
+		</div>
+	);
 }

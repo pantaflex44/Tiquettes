@@ -16,17 +16,25 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-export default function EditorSensibilitySelector({id, value, onChange = null}) {
-    return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
-        <option value={""}>-</option>
-        <option value={"10mA"}>10mA</option>
-        <option value={"30mA"}>30mA</option>
-        <option value={"300mA"}>300mA</option>
-        <option value={"500mA"}>500mA</option>
-    </select>
+export default function EditorSensibilitySelector({
+	id,
+	value,
+	onChange = null,
+}) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+		>
+			<option value={""}>-</option>
+			<option value={"10mA"}>10mA</option>
+			<option value={"30mA"}>30mA</option>
+			<option value={"300mA"}>300mA</option>
+			<option value={"500mA"}>500mA</option>
+		</select>
+	);
 }

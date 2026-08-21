@@ -16,28 +16,49 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 import partialAsservIcon from "../assets/asserv_p.svg";
 import totalAsservIcon from "../assets/asserv_t.svg";
 
-export default function EditorContactAsservSelector({ id, value, disabled = false, onChange = null }) {
-    return (
-        <div className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()} id={id} name={id}>
-            <div
-                className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
-                title="Asservissement partiel"
-                onClick={() => onChange(true)}
-            >
-                <img src={partialAsservIcon} width={24} height={24} alt="Asservissement partiel" />
-            </div>
-            <div
-                className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
-                title="Asservissement total"
-                onClick={() => onChange(false)}
-            >
-                <img src={totalAsservIcon} width={24} height={24} alt="Asservissement total" />
-            </div>
-        </div>
-    );
+export default function EditorContactAsservSelector({
+	id,
+	value,
+	disabled = false,
+	onChange = null,
+}) {
+	return (
+		<div
+			className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()}
+			id={id}
+			name={id}
+		>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
+				title="Asservissement partiel"
+				onClick={() => onChange(true)}
+			>
+				<img
+					src={partialAsservIcon}
+					width={24}
+					height={24}
+					alt="Asservissement partiel"
+				/>
+			</div>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
+				title="Asservissement total"
+				onClick={() => onChange(false)}
+			>
+				<img
+					src={totalAsservIcon}
+					width={24}
+					height={24}
+					alt="Asservissement total"
+				/>
+			</div>
+		</div>
+	);
 }

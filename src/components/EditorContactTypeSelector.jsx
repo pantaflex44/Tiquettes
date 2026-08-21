@@ -16,20 +16,44 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
+import kcNCIcon from "../assets/kc_nc.svg";
+import kcNOIcon from "../assets/kc_no.svg";
 
-import kcNOIcon from '../assets/kc_no.svg';
-import kcNCIcon from '../assets/kc_nc.svg';
-
-export default function EditorContactTypeSelector({ id, value, disabled = false, onChange = null }) {
-    return <div className={`buttons_box ${disabled === true ? 'disabled' : ''}`.trim()} style={{ width: '100%' }} id={id} name={id}>
-        <div className={`buttons_box-button ${value.trim().toUpperCase() === "NO" ? 'selected' : ''}`.trim()} style={{ width: 'initial', flex: 1 }} title="Normalement ouvert" onClick={() => onChange("NO")}>
-            <img src={kcNOIcon} width={24} height={24} alt="NO" />
-            <span>NO</span>
-        </div>
-        <div className={`buttons_box-button ${value.trim().toUpperCase() === "NC" ? 'selected' : ''}`.trim()} style={{ width: 'initial', flex: 1 }} title="Normalement fermé" onClick={() => onChange("NC")}>
-            <img src={kcNCIcon} width={24} height={24} alt="NF" />
-            <span>NF</span>
-        </div>
-    </div>
+export default function EditorContactTypeSelector({
+	id,
+	value,
+	disabled = false,
+	onChange = null,
+}) {
+	return (
+		<div
+			className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()}
+			style={{ width: "100%" }}
+			id={id}
+			name={id}
+		>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value.trim().toUpperCase() === "NO" ? "selected" : ""}`.trim()}
+				style={{ width: "initial", flex: 1 }}
+				title="Normalement ouvert"
+				onClick={() => onChange("NO")}
+			>
+				<img src={kcNOIcon} width={24} height={24} alt="NO" />
+				<span>NO</span>
+			</div>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value.trim().toUpperCase() === "NC" ? "selected" : ""}`.trim()}
+				style={{ width: "initial", flex: 1 }}
+				title="Normalement fermé"
+				onClick={() => onChange("NC")}
+			>
+				<img src={kcNCIcon} width={24} height={24} alt="NF" />
+				<span>NF</span>
+			</div>
+		</div>
+	);
 }

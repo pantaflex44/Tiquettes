@@ -16,18 +16,22 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-export default function EditorCrbSelector({id, value, onChange = null}) {
-    return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
-        <option value={""}>-</option>
-        <option value={"Z"}>Z</option>
-        <option value={"B"}>B</option>
-        <option value={"C"}>C</option>
-        <option value={"D"}>D</option>
-        <option value={"MA"}>MA</option>
-    </select>
+export default function EditorCrbSelector({ id, value, onChange = null }) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+		>
+			<option value={""}>-</option>
+			<option value={"Z"}>Z</option>
+			<option value={"B"}>B</option>
+			<option value={"C"}>C</option>
+			<option value={"D"}>D</option>
+			<option value={"MA"}>MA</option>
+		</select>
+	);
 }

@@ -16,19 +16,23 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-export default function EditorTypeSelector({id, value, onChange = null}) {
-    return <select id={id} name={id} value={value}
-                   onChange={(e) => {
-                       if (onChange) onChange(e.target.value)
-                   }}>
-        <option value={""}>-</option>
-        <option value={"A"}>A</option>
-        <option value={"AC"}>AC</option>
-        <option value={"B"}>B</option>
-        <option value={"F"}>F</option>
-        <option value={"HPI"}>HPI</option>
-        <option value={"S"}>S</option>
-    </select>
+export default function EditorTypeSelector({ id, value, onChange = null }) {
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+		>
+			<option value={""}>-</option>
+			<option value={"A"}>A</option>
+			<option value={"AC"}>AC</option>
+			<option value={"B"}>B</option>
+			<option value={"F"}>F</option>
+			<option value={"HPI"}>HPI</option>
+			<option value={"S"}>S</option>
+		</select>
+	);
 }

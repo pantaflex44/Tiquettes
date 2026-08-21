@@ -17,26 +17,25 @@
  */
 
 .horizontalRule {
-    --ruleWidth: 234mm;
-    position: relative;
-    box-sizing: border-box;
-    width: var(--ruleWidth);
-    height: 7mm;
-    border-left: 1px solid darkgray;
-    border-right: 1px solid darkgray;
-    font-size: 70%;
-    text-align: center;
-    margin-block: 3mm;
-    color: #555;
+	--ruleWidth: 234mm;
+	position: relative;
+	box-sizing: border-box;
+	width: var(--ruleWidth);
+	height: 7mm;
+	border-left: 1px solid darkgray;
+	border-right: 1px solid darkgray;
+	font-size: 70%;
+	text-align: center;
+	margin-block: 3mm;
+	color: #555;
 }
 
 .horizontalRule::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 60%;
-    height: 1px;
-    border-top: 1px solid darkgray;
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 60%;
+	height: 1px;
+	border-top: 1px solid darkgray;
 }
-

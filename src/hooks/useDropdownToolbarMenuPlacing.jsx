@@ -18,36 +18,59 @@
 
 import { useLayoutEffect, useState } from "react";
 
-function useDropdownToolbarMenuPlacing(relativeToolbarRef, absoluteToolbarItemRef, dropdownWidth, rightMargin = 50) {
+function useDropdownToolbarMenuPlacing(
+	relativeToolbarRef,
+	absoluteToolbarItemRef,
+	dropdownWidth,
+	rightMargin = 50,
+) {
+	const [size, setSize] = useState([0, 0]);
+	const [placement, setPlacement] = useState([0, dropdownWidth]);
 
-    const [size, setSize] = useState([0, 0]);
-    const [placement, setPlacement] = useState([0, dropdownWidth]);
+	useLayoutEffect(() => {
+		function updateSize() {
+			setSize([window.innerWidth, window.innerHeight]);
+		}
 
-    useLayoutEffect(() => {
-        function updateSize() {
-            setSize([window.innerWidth, window.innerHeight]);
-        }
+		window.addEventListener("resize", updateSize);
+		updateSize();
 
-        window.addEventListener('resize', updateSize);
-        updateSize();
+		return () => window.removeEventListener("resize", updateSize);
+	}, []);
 
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useLayoutEffect(() => {
+		if (relativeToolbarRef && absoluteToolbarItemRef) {
+			let left = 0;
+			if (
+				relativeToolbarRef.current.offsetLeft +
+					absoluteToolbarItemRef.current.offsetLeft +
+					dropdownWidth +
+					rightMargin >
+				size[0]
+			) {
+				left =
+					size[0] -
+					(dropdownWidth +
+						rightMargin +
+						relativeToolbarRef.current.offsetLeft +
+						absoluteToolbarItemRef.current.offsetLeft);
+			}
+			if (
+				-left >
+				relativeToolbarRef.current.offsetLeft +
+					absoluteToolbarItemRef.current.offsetLeft
+			) {
+				left = -(
+					relativeToolbarRef.current.offsetLeft +
+					absoluteToolbarItemRef.current.offsetLeft
+				);
+			}
+			setPlacement([left, dropdownWidth]);
+		}
+	}, [size, dropdownWidth, rightMargin]);
 
-    useLayoutEffect(() => {
-        if (relativeToolbarRef && absoluteToolbarItemRef) {
-            let left = 0;
-            if (relativeToolbarRef.current.offsetLeft + absoluteToolbarItemRef.current.offsetLeft + dropdownWidth + rightMargin > size[0]) {
-                left = size[0] - (dropdownWidth + rightMargin + relativeToolbarRef.current.offsetLeft + absoluteToolbarItemRef.current.offsetLeft);
-            }
-            if (-left > (relativeToolbarRef.current.offsetLeft, absoluteToolbarItemRef.current.offsetLeft)) {
-                left = -(relativeToolbarRef.current.offsetLeft, absoluteToolbarItemRef.current.offsetLeft);
-            }
-            setPlacement([left, dropdownWidth]);
-        }
-    }, [size, dropdownWidth, rightMargin]);
-
-    return placement;
+	return placement;
 }
 
 export default useDropdownToolbarMenuPlacing;

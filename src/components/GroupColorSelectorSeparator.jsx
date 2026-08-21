@@ -16,16 +16,17 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 function GroupColorSelectorSeparator() {
-    return <li style={{
-        borderTop: '1px solid lightgray',
-        marginTop: '0.5rem',
-        paddingBottom: '0.5rem',
-        backgroundColor: 'inherit'
-    }}>
-    </li>;
+	return (
+		<li
+			style={{
+				borderTop: "1px solid lightgray",
+				marginTop: "0.5rem",
+				paddingBottom: "0.5rem",
+				backgroundColor: "inherit",
+			}}
+		></li>
+	);
 }
 
 export default GroupColorSelectorSeparator;

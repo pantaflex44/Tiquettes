@@ -15,336 +15,554 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
 
-import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
+import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 
-import '../css/module.css';
-import themesList from '../themes.json';
+import "../css/module.css";
+import copyIcon from "../assets/copy.svg";
+import cutIcon from "../assets/cut.svg";
+import editIcon from "../assets/edit.svg";
+import halfLeftIcon from "../assets/half-left.svg";
+import halfRightIcon from "../assets/half-right.svg";
+import interIcon from "../assets/inter.svg";
+import inter2Icon from "../assets/inter2.svg";
+import leftIcon from "../assets/left.svg";
+import shrinkIcon from "../assets/minus.svg";
+import noHalfIcon from "../assets/no-half.svg";
+import pasteIcon from "../assets/paste.svg";
+import growIcon from "../assets/plus.svg";
+import rightIcon from "../assets/right.svg";
+import clearIcon from "../assets/trash.svg";
+import cancelredIcon from "../assets/x.svg";
+import themesList from "../themes.json";
 
-import editIcon from '../assets/edit.svg';
-import shrinkIcon from '../assets/minus.svg';
-import growIcon from '../assets/plus.svg';
-import copyIcon from '../assets/copy.svg';
-import cutIcon from '../assets/cut.svg';
-import pasteIcon from '../assets/paste.svg';
-import leftIcon from '../assets/left.svg';
-import rightIcon from '../assets/right.svg';
-import cancelredIcon from '../assets/x.svg';
-import halfLeftIcon from '../assets/half-left.svg';
-import halfRightIcon from '../assets/half-right.svg';
-import noHalfIcon from '../assets/no-half.svg';
-import clearIcon from '../assets/trash.svg';
-import interIcon from '../assets/inter.svg';
-import inter2Icon from '../assets/inter2.svg';
-
-
-/* eslint-disable react/prop-types */
 function Module({
-    item,
-    rowPosition = 1,
-    modulePosition = 1,
-    theme,
-    clipboard,
-    clipboardMode,
-    style = {},
-    shrinkAllowed = null,
-    growAllowed = null,
-    moveLeftAllowed = null,
-    moveRightAllowed = null,
-    pasteAllowed = null,
-    interAllowed = null,
-    onGrow = null,
-    onShrink = null,
-    onClear = null,
-    onCopy = null,
-    onCut = null,
-    onEdit = null,
-    onPaste = null,
-    onHalf = null,
-    onInter = null,
-    onInterCopy = null,
-    cancelPaste = null,
-    onMoveLeft = null,
-    onMoveRight = null,
-    printFreeModuleAllowed = null,
-    isDemo = false,
-    hasClipboard = false
+	item,
+	rowPosition = 1,
+	modulePosition = 1,
+	theme,
+	clipboard,
+	style = {},
+	shrinkAllowed = null,
+	growAllowed = null,
+	moveLeftAllowed = null,
+	moveRightAllowed = null,
+	pasteAllowed = null,
+	interAllowed = null,
+	onGrow = null,
+	onShrink = null,
+	onClear = null,
+	onCopy = null,
+	onCut = null,
+	onEdit = null,
+	onPaste = null,
+	onHalf = null,
+	onInter = null,
+	onInterCopy = null,
+	cancelPaste = null,
+	onMoveLeft = null,
+	onMoveRight = null,
+	printFreeModuleAllowed = null,
+	isDemo = false,
+	hasClipboard = false,
 }) {
-    const moduleRef = useRef(null);
+	const moduleRef = useRef(null);
 
-    const isFree = useMemo(() => (!isDemo) && item.free, [isDemo, item.free]);
-    const canPaste = useMemo(() => (!isDemo) && item.free && hasClipboard && (pasteAllowed && pasteAllowed(item)), [hasClipboard, isDemo, item, pasteAllowed]);
-    const canInter = useMemo(() => (!isDemo) && !item.free && hasClipboard && (interAllowed && interAllowed(item)), [hasClipboard, isDemo, item, interAllowed]);
-    const canEdit = useMemo(() => (!isDemo) && onEdit && !item.free, [isDemo, item.free, onEdit]);
-    const canCopy = useMemo(() => (!isDemo) && onCopy && !item.free, [isDemo, item.free, onCopy]);
-    const canInterCopy = useMemo(() => (!isDemo) && onInterCopy && !item.free, [isDemo, item.free, onInterCopy]);
-    const canTransform = useMemo(() => ((!isDemo) && (((moveLeftAllowed && moveLeftAllowed(item)) || (moveRightAllowed && moveRightAllowed(item)) || (shrinkAllowed && shrinkAllowed(item)) || (growAllowed && growAllowed(item))))), [growAllowed, isDemo, item, moveLeftAllowed, moveRightAllowed, shrinkAllowed]);
-    const halfModeLeft = useMemo(() => item.half === "none" || item.half === "right" ? "left" : "none", [item.half]);
-    const halfModeRight = useMemo(() => item.half === "none" || item.half === "left" ? "right" : "none", [item.half]);
-    const canHalfMode = useMemo(() => !item.free && item.span > 1, [item.free, item.span]);
-    const isHalfLeftMode = useMemo(() => item.half === "none" || item.half === "right", [item.half]);
-    const isHalfRightMode = useMemo(() => item.half === "none" || item.half === "left", [item.half]);
+	const isFree = useMemo(() => !isDemo && item.free, [isDemo, item.free]);
+	const canPaste = useMemo(
+		() => !isDemo && item.free && hasClipboard && pasteAllowed?.(item),
+		[hasClipboard, isDemo, item, pasteAllowed],
+	);
+	const canInter = useMemo(
+		() => !isDemo && !item.free && hasClipboard && interAllowed?.(item),
+		[hasClipboard, isDemo, item, interAllowed],
+	);
+	const canEdit = useMemo(
+		() => !isDemo && onEdit && !item.free,
+		[isDemo, item.free, onEdit],
+	);
+	const canCopy = useMemo(
+		() => !isDemo && onCopy && !item.free,
+		[isDemo, item.free, onCopy],
+	);
+	const canInterCopy = useMemo(
+		() => !isDemo && onInterCopy && !item.free,
+		[isDemo, item.free, onInterCopy],
+	);
+	const canTransform = useMemo(
+		() =>
+			!isDemo &&
+			(moveLeftAllowed?.(item) ||
+				moveRightAllowed?.(item) ||
+				shrinkAllowed?.(item) ||
+				growAllowed?.(item)),
+		[
+			growAllowed,
+			isDemo,
+			item,
+			moveLeftAllowed,
+			moveRightAllowed,
+			shrinkAllowed,
+		],
+	);
+	const halfModeLeft = useMemo(
+		() => (item.half === "none" || item.half === "right" ? "left" : "none"),
+		[item.half],
+	);
+	const halfModeRight = useMemo(
+		() => (item.half === "none" || item.half === "left" ? "right" : "none"),
+		[item.half],
+	);
+	const canHalfMode = useMemo(
+		() => !item.free && item.span > 1,
+		[item.free, item.span],
+	);
+	const isHalfLeftMode = useMemo(
+		() => item.half === "none" || item.half === "right",
+		[item.half],
+	);
+	const isHalfRightMode = useMemo(
+		() => item.half === "none" || item.half === "left",
+		[item.half],
+	);
 
-    const [themedModule, setThemedModule] = useState(null);
-    const [beforeUpdate, setBeforeUpdate] = useState(null);
+	const [themedModule, setThemedModule] = useState(null);
+	const [beforeUpdate, setBeforeUpdate] = useState(null);
 
-    const [currentTheme, setCurrentTheme] = useState(theme);
-    const [themeUpdated, setThemeUpdated] = useState(false);
-    useEffect(() => {
-        setCurrentTheme((old) => {
-            if (JSON.stringify(old) !== JSON.stringify(theme)) {
-                setThemeUpdated(true);
-                return theme;
-            }
+	const [currentTheme, setCurrentTheme] = useState(theme);
+	const [themeUpdated, setThemeUpdated] = useState(false);
+	useEffect(() => {
+		setCurrentTheme((old) => {
+			if (JSON.stringify(old) !== JSON.stringify(theme)) {
+				setThemeUpdated(true);
+				return theme;
+			}
 
-            return old;
-        });
-    }, [theme]);
+			return old;
+		});
+	}, [theme]);
 
-    useEffect(() => {
-        const defaultThemeObj = themesList.filter((t) => t.default)[0];
-        const update = JSON.stringify(item);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
+	useEffect(() => {
+		const defaultThemeObj = themesList.filter((t) => t.default)[0];
+		const update = JSON.stringify(item);
 
-        const applyTheme = (Content, data) => {
-            setThemedModule(() => {
-                setBeforeUpdate(update);
+		const applyTheme = (Content, data) => {
+			setThemedModule(() => {
+				setBeforeUpdate(update);
 
-                return (Content ? (
-                    <Content
-                        item={item}
-                        data={data}
-                    />
-                ) : null);
-            });
-        };
+				return Content ? <Content item={item} data={data} /> : null;
+			});
+		};
 
-        const themeImport = (data) => {
-            import(`./ThemeEngine.jsx`)
-                .then((selectedTheme) => applyTheme(selectedTheme.default, data))
-                .catch(() => {
-                    console.log(`Theme '${currentTheme.name}' error. Default theme will be used.`);
-                    import(`./ThemeEngine.jsx`)
-                        .then((selectedTheme) => applyTheme(selectedTheme.default, defaultThemeObj.data))
-                        .catch((err2) => {
-                            console.error(`Unable to load default theme. Error: ${err2}`);
-                        });
-                });
-        };
+		const themeImport = (data) => {
+			import(`./ThemeEngine.jsx`)
+				.then((selectedTheme) => applyTheme(selectedTheme.default, data))
+				.catch(() => {
+					console.log(
+						`Theme '${currentTheme.name}' error. Default theme will be used.`,
+					);
+					import(`./ThemeEngine.jsx`)
+						.then((selectedTheme) =>
+							applyTheme(selectedTheme.default, defaultThemeObj.data),
+						)
+						.catch((err2) => {
+							console.error(`Unable to load default theme. Error: ${err2}`);
+						});
+				});
+		};
 
-        if (themeUpdated || beforeUpdate !== update) {
-            if (themeUpdated) setThemeUpdated(false);
-            themeImport(currentTheme.data);
-        }
+		if (themeUpdated || beforeUpdate !== update) {
+			if (themeUpdated) setThemeUpdated(false);
+			themeImport(currentTheme.data);
+		}
+	}, [beforeUpdate, item, style, currentTheme, themeUpdated, canPaste]);
 
-    }, [beforeUpdate, item, style, currentTheme, themeUpdated, canPaste]);
+	return (
+		item && (
+			<div
+				className={`module ${item.free ? "free" : ""} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== "true" || !printFreeModuleAllowed()) ? "noprint" : ""} ${isDemo ? "demo" : ""}${hasClipboard && item.free && !canPaste ? "disabled" : ""}`.trim()}
+				id={`module_${rowPosition}_${modulePosition}`}
+				data-row={rowPosition}
+				style={{
+					...style,
+					"--sw": `calc((${style["--sw"]} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
+					"--nsw": style["--sw"],
+					color: item.free ? "darkgray" : "black",
+					overflowX: isDemo ? "hidden" : "initial",
+					cursor: canPaste ? "pointer" : "default",
+				}}
+				tabIndex={!canPaste && !hasClipboard ? 0 : null}
+				title={
+					!isDemo
+						? canPaste
+							? "Coller ici"
+							: canInter
+								? "Cliquer ici pour procéder à l'échange"
+								: "Cliquer sur le crayon pour éditer ce module..."
+						: "Module de démonstration"
+				}
+				ref={moduleRef}
+				data-id={`${rowPosition}-${modulePosition}`}
+				onKeyUp={(e) => {
+					if (!isDemo) {
+						if (
+							e.key === "ArrowLeft" &&
+							moveLeftAllowed &&
+							moveLeftAllowed(item)
+						) {
+							onMoveLeft(item);
+						} else if (e.key === "ArrowRight" && moveRightAllowed(item)) {
+							onMoveRight(item);
+						} else if (e.key === "+" && growAllowed(item)) {
+							onGrow(item);
+						} else if (e.key === "-" && shrinkAllowed(item)) {
+							onShrink(item);
+						} else if (e.key === "Delete" && !item.free) {
+							onClear(item);
+						} else if (e.key === "Enter") {
+							onEdit(item);
+						}
+					}
+				}}
+				onClick={() => {
+					if (canPaste) onPaste(item);
+				}}
+			>
+				{canPaste ? (
+					<img
+						className="module_iconfree"
+						src={pasteIcon}
+						style={{ width: "50%" }}
+						title="Coller ici"
+						alt="Coller ici"
+						onClick={() => onPaste(item)}
+					/>
+				) : isFree && !canPaste && !hasClipboard ? (
+					<img
+						className="module_iconfree"
+						src={editIcon}
+						title="Cliquer pour éditer ce module..."
+						alt="Editer ce module"
+						onClick={() => {
+							if (!isDemo) {
+								onEdit(item);
+							}
+						}}
+					/>
+				) : !isFree && themedModule ? (
+					<div
+						className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? "withTopSeparator" : ""} ${currentTheme?.data?.bottom?.border === true ? "withBottomSeparator" : ""} ${hasClipboard && clipboard?.id === item.id ? "clipboard_me" : ""} ${hasClipboard && !canPaste && !canInter ? "disabled" : ""}`.trim()}
+						style={{
+							width: isDemo
+								? "calc(100% + 1px)"
+								: `calc(100% - (${item.half === "none" ? "0px" : `calc(${style["--sw"]} / 2)`}))`,
+							minWidth: isDemo
+								? "calc(100% + 1px)"
+								: `calc(100% - (${item.half === "none" ? "0px" : `calc(${style["--sw"]} / 2)`}))`,
+							maxWidth: isDemo
+								? "calc(100% + 1px)"
+								: `calc(100% - (${item.half === "none" ? "0px" : `calc(${style["--sw"]} / 2)`}))`,
+							marginLeft:
+								item.half === "left"
+									? `calc((${style["--sw"]} / 2) - 1px)`
+									: "0px",
+							marginRight:
+								item.half === "right"
+									? `calc((${style["--sw"]} / 2) - 1px)`
+									: "0px",
+							borderLeftWidth: item.half === "left" ? "1px" : "0px",
+							borderRightWidth: item.half === "right" ? "1px" : "0px",
+							cursor: canEdit ? "pointer" : "default",
+							"--topSeparatorStyle":
+								currentTheme?.data?.top?.border === true
+									? (currentTheme?.data?.top?.borderStyle ?? "solid")
+									: "initial",
+							"--topSeparatorSize":
+								currentTheme?.data?.top?.border === true
+									? `${currentTheme?.data?.top?.borderSize ?? 1}px`
+									: "initial",
+							"--topSeparatorColor":
+								currentTheme?.data?.top?.border === true
+									? currentTheme?.data?.top?.colorUseGrp === true &&
+										item.grp &&
+										item.grp !== ""
+										? item.grp
+										: (currentTheme?.data?.top?.borderColor ?? "#000000")
+									: "initial",
+							"--bottomSeparatorStyle":
+								currentTheme?.data?.bottom?.border === true
+									? (currentTheme?.data?.bottom?.borderStyle ?? "solid")
+									: "initial",
+							"--bottomSeparatorSize":
+								currentTheme?.data?.bottom?.border === true
+									? `${currentTheme?.data?.bottom?.borderSize ?? 1}px`
+									: "initial",
+							"--bottomSeparatorColor":
+								currentTheme?.data?.bottom?.border === true
+									? currentTheme?.data?.bottom?.colorUseGrp === true &&
+										item.grp &&
+										item.grp !== ""
+										? item.grp
+										: (currentTheme?.data?.bottom?.borderColor ?? "#000000")
+									: "initial",
+						}}
+						onClick={() => {
+							if (hasClipboard && canInter) {
+								onInter(item);
+							} else if (canEdit) {
+								onEdit(item);
+							}
+						}}
+					>
+						{cloneElement(themedModule, {
+							style: { ...style },
+						})}
+					</div>
+				) : (
+					<div
+						style={{
+							backgroundImage:
+								"radial-gradient(circle at 1px 1px, #f0f0f0 1px, transparent 0)",
+							backgroundPosition: "4px 2px",
+							backgroundSize: "6px 6px",
+							width: "100%",
+							height: "100%",
+						}}
+					></div>
+				)}
 
+				{!hasClipboard && !isDemo && canTransform && (
+					<div className="module_top">
+						<div className="top_row">
+							<div
+								className="tool"
+								title="Demi module sur la gauche"
+								onClick={() => onHalf(item, halfModeLeft)}
+								data-disabled={!canHalfMode}
+							>
+								<img
+									src={
+										!canHalfMode
+											? halfLeftIcon
+											: isHalfLeftMode
+												? halfLeftIcon
+												: noHalfIcon
+									}
+									alt="Demi module sur la gauche"
+									width={16}
+									height={16}
+								/>
+							</div>
+							<div
+								className="tool shrink"
+								title="Largeur -1 [-]"
+								onClick={() => onShrink(item, moduleRef)}
+								data-disabled={!shrinkAllowed(item)}
+							>
+								<img src={shrinkIcon} alt="Réduire" width={15} height={15} />
+							</div>
+							<div
+								className="tool left"
+								title="Décaler vers la gauche [←]"
+								onClick={() => onMoveLeft(item, moduleRef)}
+								data-disabled={!moveLeftAllowed(item)}
+							>
+								<img
+									src={leftIcon}
+									alt="Déplacer vers la gauche"
+									width={15}
+									height={15}
+								/>
+							</div>
+						</div>
+						<div className="top_row">
+							<div
+								className="tool"
+								title="Demi module sur la droite"
+								onClick={() => onHalf(item, halfModeRight)}
+								data-disabled={!canHalfMode}
+							>
+								<img
+									src={
+										!canHalfMode
+											? halfRightIcon
+											: isHalfRightMode
+												? halfRightIcon
+												: noHalfIcon
+									}
+									alt="Demi module sur la droite"
+									width={16}
+									height={16}
+								/>
+							</div>
+							<div
+								className="tool grow"
+								title="Largeur +1 [+]"
+								onClick={() => onGrow(item, moduleRef)}
+								data-disabled={!growAllowed(item)}
+							>
+								<img src={growIcon} alt="Agrandir" width={15} height={15} />
+							</div>
+							<div
+								className="tool right"
+								title="Décaler vers la droite [→]"
+								onClick={() => onMoveRight(item, moduleRef)}
+								data-disabled={!moveRightAllowed(item)}
+							>
+								<img
+									src={rightIcon}
+									alt="Déplacer vers la droite"
+									width={15}
+									height={15}
+								/>
+							</div>
+						</div>
+						{item.span > 1 && (
+							<div className="top_row" style={{ flex: 1, marginTop: "4px" }}>
+								<div
+									className="tool size"
+									style={{ marginLeft: "auto", marginRight: "10px" }}
+									title={`Largeur: ${item.span} modules`}
+								>
+									<br />⤚ {item.span} ⤙
+								</div>
+							</div>
+						)}
+					</div>
+				)}
 
-    return item && <div
-        className={`module ${item.free ? 'free' : ''} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== 'true' || !printFreeModuleAllowed()) ? 'noprint' : ''} ${isDemo ? 'demo' : ''}${hasClipboard && item.free && !canPaste ? 'disabled' : ''}`.trim()}
-        id={`module_${rowPosition}_${modulePosition}`}
-        data-row={rowPosition}
-        style={{
-            ...style,
-            "--sw": `calc((${style['--sw']} * ${item.span}) + ((1px * ${item.span})  - 1px))`,
-            "--nsw": style['--sw'],
-            color: item.free ? 'darkgray' : 'black',
-            overflowX: isDemo ? 'hidden' : 'initial',
-            cursor: canPaste ? 'pointer' : 'default',
-        }}
-        tabIndex={!canPaste && !hasClipboard ? 0 : null}
-        title={!isDemo ? (canPaste ? "Coller ici" : (canInter ? "Cliquer ici pour procéder à l'échange" : "Cliquer sur le crayon pour éditer ce module...")) : "Module de démonstration"}
-        ref={moduleRef}
-        data-id={`${rowPosition}-${modulePosition}`}
-        onKeyUp={(e) => {
-            if (!isDemo) {
-                if (e.key === 'ArrowLeft' && moveLeftAllowed && moveLeftAllowed(item)) {
-                    onMoveLeft(item);
-                } else if (e.key === 'ArrowRight' && moveRightAllowed(item)) {
-                    onMoveRight(item);
-                } else if (e.key === '+' && growAllowed(item)) {
-                    onGrow(item);
-                } else if (e.key === '-' && shrinkAllowed(item)) {
-                    onShrink(item);
-                } else if (e.key === 'Delete' && !item.free) {
-                    onClear(item);
-                } else if (e.key === 'Enter') {
-                    onEdit(item);
-                }
-            }
-        }}
-        onClick={() => {
-            if (canPaste) onPaste(item);
-        }}
-    >
+				{!canPaste && !canInter && !isDemo && !isFree && (
+					<div className="module_bottom">
+						{(canEdit || canCopy) && (
+							<div className="bottom_row">
+								<div
+									className="tool copy"
+									title="Copier"
+									onClick={() => onCopy(item)}
+									data-disabled={!onCopy}
+								>
+									<img
+										src={copyIcon}
+										alt="Copier"
+										width={14}
+										height={14}
+										style={{ marginTop: "2px", marginLeft: "2px" }}
+									/>
+								</div>
+								<div
+									className="tool cut"
+									title="Couper"
+									onClick={() => onCut(item)}
+									data-disabled={!onCopy}
+								>
+									<img
+										src={cutIcon}
+										alt="Couper"
+										width={16}
+										height={16}
+										style={{ marginTop: "2px", marginLeft: "2px" }}
+									/>
+								</div>
+							</div>
+						)}
+						<div className="bottom_row" style={{ marginTop: "2px" }}>
+							{canInterCopy && (
+								<div
+									className="tool inter"
+									title="Echanger ce module avec un autre"
+									onClick={() => onInterCopy(item)}
+									data-disabled={isFree}
+								>
+									<img
+										src={interIcon}
+										alt="Echanger le module"
+										width={16}
+										height={16}
+									/>
+								</div>
+							)}
+							<div
+								className="tool delete"
+								title="Supprimer le module"
+								onClick={() => onClear(item)}
+								data-disabled={isFree}
+							>
+								<img
+									src={clearIcon}
+									alt="Supprimer le module"
+									width={16}
+									height={16}
+								/>
+							</div>
+						</div>
+					</div>
+				)}
 
-        {canPaste
-            ?
-            <img className="module_iconfree" src={pasteIcon} style={{ width: '50%' }} title="Coller ici" alt="Coller ici"
-                onClick={() => onPaste(item)} />
-            : (isFree && !canPaste && !hasClipboard
-                ? <img className="module_iconfree" src={editIcon} title="Cliquer pour éditer ce module..."
-                    alt="Editer ce module"
-                    onClick={() => { if (!isDemo) { onEdit(item); } }} />
-                : (!isFree && themedModule
-                    ? <div
-                        className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? 'withTopSeparator' : ''} ${currentTheme?.data?.bottom?.border === true ? 'withBottomSeparator' : ''} ${hasClipboard && clipboard?.id === item.id ? 'clipboard_me' : ''} ${hasClipboard && !canPaste && !canInter ? 'disabled' : ''}`.trim()}
-                        style={{
-                            width: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                            minWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                            maxWidth: isDemo ? 'calc(100% + 1px)' : (`calc(100% - (${item.half === "none" ? '0px' : `calc(${style['--sw']} / 2)`}))`),
-                            marginLeft: item.half === "left" ? `calc((${style['--sw']} / 2) - 1px)` : '0px',
-                            marginRight: item.half === "right" ? `calc((${style['--sw']} / 2) - 1px)` : '0px',
-                            borderLeftWidth: item.half === "left" ? '1px' : '0px',
-                            borderRightWidth: item.half === "right" ? '1px' : '0px',
-                            cursor: canEdit ? 'pointer' : 'default',
-                            '--topSeparatorStyle': currentTheme?.data?.top?.border === true ? (currentTheme?.data?.top?.borderStyle ?? 'solid') : 'initial',
-                            '--topSeparatorSize': currentTheme?.data?.top?.border === true ? `${currentTheme?.data?.top?.borderSize ?? 1}px` : 'initial',
-                            '--topSeparatorColor': currentTheme?.data?.top?.border === true ? ((currentTheme?.data?.top?.colorUseGrp === true && item.grp && item.grp !== '' ? item.grp : (currentTheme?.data?.top?.borderColor ?? '#000000'))) : 'initial',
-                            '--bottomSeparatorStyle': currentTheme?.data?.bottom?.border === true ? (currentTheme?.data?.bottom?.borderStyle ?? 'solid') : 'initial',
-                            '--bottomSeparatorSize': currentTheme?.data?.bottom?.border === true ? `${currentTheme?.data?.bottom?.borderSize ?? 1}px` : 'initial',
-                            '--bottomSeparatorColor': currentTheme?.data?.bottom?.border === true ? ((currentTheme?.data?.bottom?.colorUseGrp === true && item.grp && item.grp !== '' ? item.grp : (currentTheme?.data?.bottom?.borderColor ?? '#000000'))) : 'initial',
-                        }}
-                        onClick={() => {
-                            if (hasClipboard && canInter) {
-                                onInter(item);
-                            } else if (canEdit) {
-                                onEdit(item);
-                            }
-                        }}
-                    >{
-                            cloneElement(themedModule,
-                                {
-                                    style: { ...style },
-                                }
-                            )
-                        }</div>
-                    : <div style={{
-                        backgroundImage: 'radial-gradient(circle at 1px 1px, #f0f0f0 1px, transparent 0)',
-                        backgroundPosition: '4px 2px',
-                        backgroundSize: '6px 6px',
-                        width: '100%',
-                        height: '100%'
-                    }}></div>)
-            )
-        }
+				{hasClipboard && !isDemo && clipboard?.id === item.id && (
+					<div
+						className="module_bottom paste force_visible"
+						title="Cliquer ici pour annuler"
+					>
+						<div
+							className="tool paste cancel"
+							onClick={() => cancelPaste()}
+							style={{
+								width: "100%",
+								height: "100%",
+								display: "inline-flex",
+								flexDirection: "row",
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							<img
+								src={cancelredIcon}
+								alt="Annuler"
+								width={16}
+								height={16}
+								style={{ marginTop: "-4px" }}
+							/>
+						</div>
+					</div>
+				)}
 
-        {!hasClipboard && !isDemo && canTransform && <>
-            <div className="module_top">
-                <div className="top_row">
-                    <div className="tool" title="Demi module sur la gauche"
-                        onClick={() => onHalf(item, halfModeLeft)}
-                        data-disabled={!canHalfMode}><img
-                            src={!canHalfMode ? halfLeftIcon : (isHalfLeftMode ? halfLeftIcon : noHalfIcon)}
-                            alt="Demi module sur la gauche" width={16} height={16} /></div>
-                    <div className="tool shrink" title="Largeur -1 [-]" onClick={() => onShrink(item, moduleRef)}
-                        data-disabled={!shrinkAllowed(item)}><img src={shrinkIcon} alt="Réduire" width={15}
-                            height={15} />
-                    </div>
-                    <div className="tool left" title="Décaler vers la gauche [←]"
-                        onClick={() => onMoveLeft(item, moduleRef)} data-disabled={!moveLeftAllowed(item)}><img
-                            src={leftIcon} alt="Déplacer vers la gauche" width={15} height={15} /></div>
-                </div>
-                <div className="top_row">
-                    <div className="tool" title="Demi module sur la droite"
-                        onClick={() => onHalf(item, halfModeRight)}
-                        data-disabled={!canHalfMode}><img
-                            src={!canHalfMode ? halfRightIcon : (isHalfRightMode ? halfRightIcon : noHalfIcon)}
-                            alt="Demi module sur la droite" width={16} height={16} /></div>
-                    <div className="tool grow" title="Largeur +1 [+]" onClick={() => onGrow(item, moduleRef)}
-                        data-disabled={!growAllowed(item)}><img src={growIcon} alt="Agrandir" width={15} height={15} />
-                    </div>
-                    <div className="tool right" title="Décaler vers la droite [→]"
-                        onClick={() => onMoveRight(item, moduleRef)} data-disabled={!moveRightAllowed(item)}><img
-                            src={rightIcon} alt="Déplacer vers la droite" width={15} height={15} /></div>
-                </div>
-                {item.span > 1 && <div className="top_row" style={{ flex: 1, marginTop: '4px' }}>
-                    <div className="tool size" style={{ marginLeft: 'auto', marginRight: '10px' }}
-                        title={`Largeur: ${item.span} modules`}><br />⤚ {item.span} ⤙
-                    </div>
-                </div>}
-            </div>
-        </>
-        }
-
-        {!canPaste && !canInter && !isDemo && !isFree && (
-            <div className="module_bottom">
-                {(canEdit || canCopy) && (
-                    <div className="bottom_row">
-                        <div className="tool copy" title="Copier" onClick={() => onCopy(item)} data-disabled={!onCopy}>
-                            <img src={copyIcon}
-                                alt="Copier"
-                                width={14}
-                                height={14}
-                                style={{ marginTop: '2px', marginLeft: '2px' }} />
-                        </div>
-                        <div className="tool cut" title="Couper" onClick={() => onCut(item)} data-disabled={!onCopy}>
-                            <img src={cutIcon}
-                                alt="Couper"
-                                width={16}
-                                height={16}
-                                style={{ marginTop: '2px', marginLeft: '2px' }} />
-                        </div>
-                    </div>
-                )}
-                <div className="bottom_row" style={{ marginTop: '2px' }}>
-                    {(canInterCopy) && (
-                        <div className="tool inter" title="Echanger ce module avec un autre"
-                            onClick={() => onInterCopy(item)}
-                            data-disabled={isFree}><img
-                                src={interIcon}
-                                alt="Echanger le module" width={16} height={16} />
-                        </div>
-                    )}
-                    <div className="tool delete" title="Supprimer le module"
-                        onClick={() => onClear(item)}
-                        data-disabled={isFree}><img
-                            src={clearIcon}
-                            alt="Supprimer le module" width={16} height={16} />
-                    </div>
-                </div>
-            </div>
-        )}
-
-        {hasClipboard && !isDemo && clipboard?.id === item.id &&
-            <div className="module_bottom paste force_visible" title="Cliquer ici pour annuler">
-                <div className="tool paste cancel" onClick={() => cancelPaste()}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'inline-flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                    <img src={cancelredIcon} alt="Annuler" width={16} height={16}
-                        style={{ marginTop: '-4px' }} />
-                </div>
-            </div>
-        }
-
-        {canInter && !isDemo && clipboard?.id !== item.id &&
-            <div className="module_bottom paste" title="Cliquer sur le module pour procéder à l'échange">
-                <div className="tool inter"
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'inline-flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        cursor: 'default',
-                        gap: '6px',
-                        lineHeight: '1'
-                    }}>
-                    <img src={inter2Icon} alt="Echanger avec ce module" width={16} height={16}
-                        style={{ marginTop: '-4px' }} />
-                    <small>Echanger avec ce module</small>
-                </div>
-            </div>
-        }
-
-    </div>;
+				{canInter && !isDemo && clipboard?.id !== item.id && (
+					<div
+						className="module_bottom paste"
+						title="Cliquer sur le module pour procéder à l'échange"
+					>
+						<div
+							className="tool inter"
+							style={{
+								width: "100%",
+								height: "100%",
+								display: "inline-flex",
+								flexDirection: "column",
+								justifyContent: "center",
+								alignItems: "center",
+								textAlign: "center",
+								cursor: "default",
+								gap: "6px",
+								lineHeight: "1",
+							}}
+						>
+							<img
+								src={inter2Icon}
+								alt="Echanger avec ce module"
+								width={16}
+								height={16}
+								style={{ marginTop: "-4px" }}
+							/>
+							<small>Echanger avec ce module</small>
+						</div>
+					</div>
+				)}
+			</div>
+		)
+	);
 }
 
 export default Module;

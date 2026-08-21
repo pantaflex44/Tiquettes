@@ -16,30 +16,42 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
 function EditorSrcNameItem({
-    item,
-    selected,
-    search,
-    handleItemListItemSelected,
-    hoveredItem, setHoveredItem
+	item,
+	selected,
+	search,
+	handleItemListItemSelected,
+	hoveredItem,
+	setHoveredItem,
 }) {
-    return <li data-value={item} onClick={() => handleItemListItemSelected(item)} style={{
-        borderRadius: '5px',
-        cursor: 'pointer',
-        listStyle: 'none',
-        padding: '0.5em',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        columnGap: '1em',
-        backgroundColor: ((selected && selected === item && search) ? '#f5f5f5' : (hoveredItem === item) ? 'var(--secondary-color)' : 'inherit')
-    }} onMouseMove={() => setHoveredItem(item)}>
-        <div>{item}</div>
-    </li>;
+	return (
+		// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
+		<li
+			data-value={item}
+			onClick={() => handleItemListItemSelected(item)}
+			style={{
+				borderRadius: "5px",
+				cursor: "pointer",
+				listStyle: "none",
+				padding: "0.5em",
+				display: "flex",
+				flexDirection: "row",
+				flexWrap: "nowrap",
+				alignItems: "center",
+				justifyContent: "flex-start",
+				columnGap: "1em",
+				backgroundColor:
+					selected && selected === item && search
+						? "#f5f5f5"
+						: hoveredItem === item
+							? "var(--secondary-color)"
+							: "inherit",
+			}}
+			onMouseMove={() => setHoveredItem(item)}
+		>
+			<div>{item}</div>
+		</li>
+	);
 }
 
 export default EditorSrcNameItem;

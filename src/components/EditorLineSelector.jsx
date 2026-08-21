@@ -16,20 +16,21 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-
-import { Fragment, useEffect, useMemo, useState } from "react";
-
-import schemaFunctions from '../schema_functions.json';
-
 export default function EditorLineSelector({ id, value, onChange = null }) {
-    return <select id={id} name={id} value={value}
-        onChange={(e) => {
-            if (onChange) onChange(e.target.value)
-        }} title={"Distribution parente"}>
-        <option value={""}>-</option>
-        <option value={"1"}>Ph 1</option>
-        <option value={"2"}>Ph 2</option>
-        <option value={"3"}>Ph 3</option>
-    </select>
+	return (
+		<select
+			id={id}
+			name={id}
+			value={value}
+			onChange={(e) => {
+				if (onChange) onChange(e.target.value);
+			}}
+			title={"Distribution parente"}
+		>
+			<option value={""}>-</option>
+			<option value={"1"}>Ph 1</option>
+			<option value={"2"}>Ph 2</option>
+			<option value={"3"}>Ph 3</option>
+		</select>
+	);
 }

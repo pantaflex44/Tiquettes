@@ -16,18 +16,49 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
+import partialParaIcon from "../assets/para_p.svg";
+import totalParaIcon from "../assets/para_t.svg";
 
-import partialParaIcon from '../assets/para_p.svg';
-import totalParaIcon from '../assets/para_t.svg';
-
-export default function EditorParallelSelector({ id, value, disabled = false, onChange = null }) {
-    return <div className={`buttons_box ${disabled === true ? 'disabled' : ''}`.trim()} id={id} name={id}>
-        <div className={`buttons_box-button ${value !== true ? 'selected' : ''}`.trim()} title="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)" onClick={() => onChange(false)}>
-            <img src={partialParaIcon} width={24} height={24} alt="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)" />
-        </div>
-        <div className={`buttons_box-button ${value === true ? 'selected' : ''}`.trim()} title="Allouer ce module à l'alimentation de ses enfants seulement" onClick={() => onChange(true)}>
-            <img src={totalParaIcon} width={24} height={24} alt="Allouer ce module à l'alimentation de ses enfants seulement" />
-        </div>
-    </div>
+export default function EditorParallelSelector({
+	id,
+	value,
+	disabled = false,
+	onChange = null,
+}) {
+	return (
+		<div
+			className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()}
+			id={id}
+			name={id}
+		>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
+				title="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
+				onClick={() => onChange(false)}
+			>
+				<img
+					src={partialParaIcon}
+					width={24}
+					height={24}
+					alt="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
+				/>
+			</div>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+			<div
+				className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
+				title="Allouer ce module à l'alimentation de ses enfants seulement"
+				onClick={() => onChange(true)}
+			>
+				<img
+					src={totalParaIcon}
+					width={24}
+					height={24}
+					alt="Allouer ce module à l'alimentation de ses enfants seulement"
+				/>
+			</div>
+		</div>
+	);
 }
