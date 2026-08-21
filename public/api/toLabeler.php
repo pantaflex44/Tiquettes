@@ -50,126 +50,46 @@ require './libs/ZipStream-PHP-3.2.2/src/Exception/DosTimeOverflowException.php';
 use ZipStream\ZipStream;
 use ZipStream\Stream\CallbackStreamWrapper;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('display_errors', '1');
 
 set_time_limit(120); // 2 min
 
 include_once('./cors.php');
 include_once('./functions.php');
+include_once('./svg2png.php');
 
 class TiquettesLabeler
 {
     const VERSION = "1.1";
 
+    private Svg2Png $svg2pngConverter;
+
     protected string $model = '';
     protected array $options = [];
     protected int $margins = 10;
 
-    public array $required = [];
 
-    public static function requirements()
+    public function __construct(string $model, array $options)
     {
-        $response = [
-            'modules' => [
-                'php' => version_compare(phpversion(), '8.3', '>='),
-                'php_imagick' => extension_loaded('imagick'),
-                'convert' => false,
-                'magick' => false,
-            ],
-            'ok' => false
-        ];
+        global $isDev;
 
-        try {
-            $retval = 0;
-            $ret = exec('magick -version', result_code: $retval);
-            $response['modules']['magick'] = $ret !== false && $retval === 0;
-        } catch (\Exception $ex) {
-        }
+        $this->svg2pngConverter = new Svg2Png($isDev);
 
-        if ($response['modules']['magick'] === false) {
-            try {
-                $retval = 0;
-                $ret = exec('convert -version', result_code: $retval);
-                $response['modules']['convert'] = $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
-            }
-        }
-
-        $response['ok'] = $response['modules']['php']
-            && ($response['modules']['php_imagick']  || $response['modules']['magick'] || $response['modules']['convert']);
-
-        return $response;
-    }
-
-    function __construct(string $model, array $options)
-    {
-        $this->required = self::requirements();
         $this->model = $model;
         $this->options = $options;
     }
 
-    function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
+    private function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        global $isDev;
+        if (!str_starts_with(trim($svgContent), "<?xml"))
+            $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
 
-        try {
-            if (!str_starts_with(trim($svgContent), "<?xml"))
-                $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
-
-            if ($this->required['modules']['php_imagick'] === true && !$isDev) {
-                $image = new Imagick();
-
-                $image->newImage($width, $height, new ImagickPixel('transparent'));
-                $image->readImageBlob($svgContent);
-                $image->transparentPaintImage('#ffffff', 0, 10, false);
-                //$image->thumbnailImage($width, $height, true);
-                $image->setImageFormat('png64');
-                $image->writeImage($pngFilepath);
-
-                return file_exists($pngFilepath);
-            } else if ($this->required['modules']['magick'] === true) {
-                $f = basename($pngFilepath, '.png');
-                $d = dirname($pngFilepath);
-                $s = "{$d}/{$f}.svg";
-                file_put_contents($s, $svgContent);
-                $cmd = "magick {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
-
-                try {
-                    $retval = 0;
-                    $output = [];
-                    $ret = exec($cmd, $output, $retval);
-
-                    return $ret !== false && $retval === 0;
-                } catch (\Exception $ex) {
-                    return false;
-                }
-            } else if ($this->required['modules']['convert'] === true) {
-                $f = basename($pngFilepath, '.png');
-                $d = dirname($pngFilepath);
-                $s = "{$d}/{$f}.svg";
-                file_put_contents($s, $svgContent);
-                $cmd = "convert {$s} -size " . $width . "x" . $height . " -transparent white png24:{$pngFilepath}";
-
-                try {
-                    $retval = 0;
-                    $output = [];
-                    $ret = exec($cmd, $output, $retval);
-
-                    return $ret !== false && $retval === 0;
-                } catch (\Exception $ex) {
-                    return false;
-                }
-            }
-        } catch (\Exception $ex) {
-            var_dump($ex);
-            exit();
-        }
-
-        return false;
+        return $this->svg2pngConverter->Convert($svgContent, $width, $height, $pngFilepath);
     }
 
-    function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100): string
+    private function getIcon(string|null $name, int $iconSizeX = 100, int $iconSizeY = 100): string
     {
         try {
             if (is_null($name)) {
@@ -455,14 +375,6 @@ class TiquettesLabeler
 
         return $im;
     }
-}
-
-
-if (isset($_GET['require'])) {
-    header('Content-Type: application/json; charset=utf-8');
-    $requirements = TiquettesLabeler::requirements();
-    echo json_encode($requirements);
-    exit();
 }
 
 

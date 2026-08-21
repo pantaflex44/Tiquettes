@@ -30,6 +30,7 @@ define('EURO', chr(128));
 include_once('./cors.php');
 include_once('./functions.php');
 include_once('./i18n.php');
+include_once('./svg2png.php');
 
 require('./libs/fpdf19/fpdf.php');
 
@@ -38,88 +39,35 @@ $schemaFunctions = json_decode(file_get_contents('./libs/toPdf/assets/schema_fun
 class TiquettesPDF extends FPDF
 {
 
-    protected $javascript;
-    protected $n_js;
-    protected $visibility = 'all';
-    protected $n_ocg_print;
-    protected $n_ocg_view;
-    protected $subTitle = "";
-    protected $NewPageGroup = false;
-    protected $PageGroups = array();
-    protected $CurrPageGroup;
+    private Svg2Png $svg2pngConverter;
 
-    protected $grid = false;
-    protected $gridOrientation = 'L';
-    protected $gridColor = [230, 230, 230];
-    protected $schemaLineWidth = 0.27;
-    protected $schemaLineColor = [0, 0, 0];
-    protected $schemaSymbolSize = ['w' => 20.1200833333, 'h' => 25.058333333];
-    protected $schemaInitialPos = ['x' => 0, 'y' => 0];
-    protected $schemaCurrentPosX = 0;
-    protected $schemaLastPos = [];
-    protected $schemaCurrentFolio = 1;
-    protected $schemaLevelsCount = 0;
-    protected $showLabelsCutLines = false;
-    protected $angle = 0;
+    protected mixed $javascript;
+    protected mixed $n_js;
+    protected mixed $visibility = 'all';
+    protected mixed $n_ocg_print;
+    protected mixed $n_ocg_view;
+    protected mixed $subTitle = "";
+    protected mixed $NewPageGroup = false;
+    protected mixed $PageGroups = array();
+    protected mixed $CurrPageGroup;
 
-    public $pageMargin = 10;
-    public $pageBottomMargin = 12;
+    protected mixed $grid = false;
+    protected mixed $gridOrientation = 'L';
+    protected mixed $gridColor = [230, 230, 230];
+    protected mixed $schemaLineWidth = 0.27;
+    protected mixed $schemaLineColor = [0, 0, 0];
+    protected mixed $schemaSymbolSize = ['w' => 20.1200833333, 'h' => 25.058333333];
+    protected mixed $schemaInitialPos = ['x' => 0, 'y' => 0];
+    protected mixed $schemaCurrentPosX = 0;
+    protected mixed $schemaLastPos = [];
+    protected mixed $schemaCurrentFolio = 1;
+    protected mixed $schemaLevelsCount = 0;
+    protected mixed $showLabelsCutLines = false;
+    protected mixed $angle = 0;
 
-    public array $required = [];
+    public mixed $pageMargin = 10;
+    public mixed $pageBottomMargin = 12;
 
-    private array $svg2pngCmdLines = [
-        'magick' => 'magick %1$s -size %2$dx%3$d -transparent white png24:%4$s',
-        'convert' => 'convert %1$s -size %2$dx%3$d -transparent white png24:%4$s',
-        'java_batik' => 'java -jar ./libs/batik-1.19/batik-rasterizer-1.19.jar -m image/png -w %2$d -h %3$d -d %4$s %1$s'
-    ];
-
-    public static function requirements()
-    {
-        $response = [
-            'modules' => [
-                'php' => version_compare(phpversion(), '8.3', '>='),
-                'fpdf' => file_exists('./libs/fpdf19/fpdf.php'),
-                'schema_functions.json' => file_exists('./libs/toPdf/assets/schema_functions.json'),
-                'php_imagick' => extension_loaded('imagick'),
-                'magick' => false,
-                'convert' => false,
-                'java_batik' => false
-            ],
-            'ok' => false
-        ];
-
-        try {
-            $retval = 0;
-            $ret = exec('magick -version', result_code: $retval);
-            $response['modules']['magick'] = $ret !== false && $retval === 0;
-        } catch (\Exception $ex) {
-        }
-
-        if ($response['modules']['magick'] === false) {
-            try {
-                $retval = 0;
-                $ret = exec('convert -version', result_code: $retval);
-                $response['modules']['convert'] = $ret !== false && $retval === 0;
-            } catch (\Exception $ex) {
-            }
-        }
-
-        if ($response['modules']['convert'] === false) {
-            try {
-                $retval = 0;
-                $ret = exec('java -version', result_code: $retval);
-                $response['modules']['java_batik'] = $ret !== false && $retval === 0 && file_exists("./libs/batik-1.19/batik-rasterizer-1.19.jar");
-            } catch (\Exception $ex) {
-            }
-        }
-
-        $response['ok'] = $response['modules']['php']
-            && $response['modules']['fpdf']
-            && $response['modules']['schema_functions.json']
-            && ($response['modules']['php_imagick'] || $response['modules']['magick'] || $response['modules']['convert'] || $response['modules']['java_batik']);
-
-        return $response;
-    }
 
     public function SetGridColor(array $color): void
     {
@@ -131,10 +79,11 @@ class TiquettesPDF extends FPDF
         $this->showLabelsCutLines = $show;
     }
 
-
     function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
     {
-        $this->required = self::requirements();
+        global $isDev;
+
+        $this->svg2pngConverter = new Svg2Png($isDev);
 
         $this->schemaLevelsCounterRecursive();
 
@@ -164,7 +113,7 @@ class TiquettesPDF extends FPDF
         $this->_out($points_string . $op);
     }
 
-    public function TextWithRotation($x, $y, $txt, $txt_angle, $font_angle = 0)
+    public function TextWithRotation(mixed $x, mixed $y, mixed $txt, mixed  $txt_angle, int $font_angle = 0): void
     {
         $font_angle += 90 + $txt_angle;
         $txt_angle *= M_PI / 180;
@@ -200,7 +149,7 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    public function TextWithDirection($x, $y, $txt, $direction = 'R')
+    public function TextWithDirection(mixed $x, mixed $y, mixed $txt, string $direction = 'R'): void
     {
         if ($direction == 'R')
             $s = sprintf('BT %.2F %.2F %.2F %.2F %.2F %.2F Tm (%s) Tj ET', 1, 0, 0, 1, $x * $this->k, ($this->h - $y) * $this->k, $this->_escape($txt));
@@ -226,7 +175,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0)
+    public function MultiCell(mixed $w, mixed $h, mixed  $txt, mixed $border = 0, mixed $align = 'J', mixed $fill = false, mixed  $maxline = 0): string
     {
         // Output text with automatic or explicit line breaks, at most $maxline lines
         if (!isset($this->CurrentFont))
@@ -240,6 +189,7 @@ class TiquettesPDF extends FPDF
         if ($nb > 0 && $s[$nb - 1] == "\n")
             $nb--;
         $b = 0;
+        $b2 = '';
         if ($border) {
             if ($border == 1) {
                 $border = 'LTRB';
@@ -335,12 +285,12 @@ class TiquettesPDF extends FPDF
         return '';
     }
 
-    public function Circle($x, $y, $r, $style = 'D')
+    public function Circle(mixed $x, mixed $y, mixed $r, mixed $style = 'D'): void
     {
         $this->Ellipse($x, $y, $r, $r, $style);
     }
 
-    public function Ellipse($x, $y, $rx, $ry, $style = 'D')
+    public function Ellipse(mixed $x, mixed $y, mixed $rx, mixed $ry, mixed $style = 'D'): void
     {
         if ($style == 'F')
             $op = 'f';
@@ -393,12 +343,12 @@ class TiquettesPDF extends FPDF
         ));
     }
 
-    public function IncludeJS($script)
+    public function IncludeJS(mixed $script): void
     {
         $this->javascript = $script;
     }
 
-    public function SetVisibility($v)
+    public function SetVisibility(mixed $v): void
     {
         if ($this->visibility != 'all')
             $this->_out('EMC');
@@ -411,22 +361,22 @@ class TiquettesPDF extends FPDF
         $this->visibility = $v;
     }
 
-    public function StartPageGroup()
+    public function StartPageGroup(): void
     {
         $this->NewPageGroup = true;
     }
 
-    public function GroupPageNo()
+    public function GroupPageNo(): mixed
     {
         return $this->PageGroups[$this->CurrPageGroup];
     }
 
-    public function PageGroupAlias()
+    public function PageGroupAlias(): mixed
     {
         return $this->CurrPageGroup;
     }
 
-    function _beginpage($orientation, $size, $rotation)
+    function _beginpage(mixed $orientation, mixed $size, mixed $rotation): void
     {
         parent::_beginpage($orientation, $size, $rotation);
         if ($this->NewPageGroup) {
@@ -440,7 +390,7 @@ class TiquettesPDF extends FPDF
             $this->PageGroups[$this->CurrPageGroup]++;
     }
 
-    function _putpages()
+    function _putpages(): void
     {
         $nb = $this->page;
         if (!empty($this->PageGroups)) {
@@ -454,7 +404,7 @@ class TiquettesPDF extends FPDF
         parent::_putpages();
     }
 
-    function _putjavascript()
+    function _putjavascript(): void
     {
         $this->_newobj();
         $this->n_js = $this->n;
@@ -470,7 +420,7 @@ class TiquettesPDF extends FPDF
         $this->_put('endobj');
     }
 
-    function _putresources()
+    function _putresources(): void
     {
         $this->_putocg();
         parent::_putresources();
@@ -479,13 +429,13 @@ class TiquettesPDF extends FPDF
         }
     }
 
-    function _putresourcedict()
+    function _putresourcedict(): void
     {
         parent::_putresourcedict();
         $this->_put('/Properties <</OC1 ' . $this->n_ocg_print . ' 0 R /OC2 ' . $this->n_ocg_view . ' 0 R>>');
     }
 
-    function _putcatalog()
+    function _putcatalog(): void
     {
         parent::_putcatalog();
         if (!empty($this->javascript)) {
@@ -497,7 +447,7 @@ class TiquettesPDF extends FPDF
         $this->_put("/OCProperties <</OCGs [$p $v] /D <</ON [$p] /OFF [$v] /AS [$as]>>>>");
     }
 
-    function _endpage()
+    function _endpage(): void
     {
         if ($this->angle != 0) {
             $this->angle = 0;
@@ -507,14 +457,14 @@ class TiquettesPDF extends FPDF
         parent::_endpage();
     }
 
-    function _enddoc()
+    function _enddoc(): void
     {
         if ($this->PDFVersion < '1.5')
             $this->PDFVersion = '1.5';
         parent::_enddoc();
     }
 
-    function _putocg()
+    function _putocg(): void
     {
         $this->_newobj();
         $this->n_ocg_print = $this->n;
@@ -528,7 +478,7 @@ class TiquettesPDF extends FPDF
         $this->_put('endobj');
     }
 
-    function AutoPrint($dialog = false)
+    function AutoPrint(bool $dialog = false): void
     {
         //Open the print dialog or start printing immediately on the standard printer
         $param = ($dialog ? 'true' : 'false');
@@ -536,7 +486,7 @@ class TiquettesPDF extends FPDF
         $this->IncludeJS($script);
     }
 
-    function AutoPrintToPrinter($server, $printer, $dialog = false)
+    function AutoPrintToPrinter(string $server, string $printer, $dialog = false): void
     {
         //Print on a shared printer (requires at least Acrobat 6)
         $script = "var pp = getPrintParams();";
@@ -589,79 +539,10 @@ class TiquettesPDF extends FPDF
 
     function svg2png(string $svgContent, string $pngFilepath, int $width = 100, int $height = 100): bool
     {
-        global $isDev;
-
         if (!str_starts_with(trim($svgContent), "<?xml"))
             $svgContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . trim($svgContent);
 
-        if ($this->required['modules']['php_imagick'] === true && !$isDev) {
-            $image = new Imagick();
-
-            $image->newImage($width, $height, new ImagickPixel('transparent'));
-            $image->readImageBlob($svgContent);
-            $image->transparentPaintImage('#ffffff', 0, 10, false);
-            //$image->thumbnailImage($width, $height, true);
-            $image->setImageFormat('png64');
-            $image->writeImage($pngFilepath);
-
-            return file_exists($pngFilepath);
-        } else if ($this->required['modules']['magick'] === true) {
-            $f = basename($pngFilepath, '.png');
-            $d = dirname($pngFilepath);
-            $s = "{$d}/{$f}.svg";
-            if (file_put_contents($s, $svgContent) !== false) {
-                try {
-                    $cmd = sprintf($this->svg2pngCmdLines['magick'], $s, $width, $height, $pngFilepath);
-                    $retval = 0;
-                    $output = [];
-                    $ret = exec($cmd, $output, $retval);
-
-                    return $ret !== false && $retval === 0;
-                } catch (\Exception $ex) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else if ($this->required['modules']['convert'] === true) {
-            $f = basename($pngFilepath, '.png');
-            $d = dirname($pngFilepath);
-            $s = "{$d}/{$f}.svg";
-            if (file_put_contents($s, $svgContent) !== false) {
-                try {
-                    $cmd = sprintf($this->svg2pngCmdLines['convert'], $s, $width, $height, $pngFilepath);
-                    $retval = 0;
-                    $output = [];
-                    $ret = exec($cmd, $output, $retval);
-
-                    return $ret !== false && $retval === 0;
-                } catch (\Exception $ex) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else if ($this->required['modules']['java_batik'] === true) {
-            $f = basename($pngFilepath, '.png');
-            $d = dirname($pngFilepath);
-            $s = "{$d}/{$f}.svg";
-            if (file_put_contents($s, $svgContent) !== false) {
-                try {
-                    $cmd = sprintf($this->svg2pngCmdLines['java_batik'], $s, $width, $height, $pngFilepath);
-                    $retval = 0;
-                    $output = [];
-                    $ret = exec($cmd, $output, $retval);
-
-                    return $ret !== false && is_string($ret) && $retval === 0 && str_contains($ret, 'success');
-                } catch (\Exception $ex) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-
-        return false;
+        return $this->svg2pngConverter->Convert($svgContent, $width, $height, $pngFilepath);
     }
 
     function pixelToMM(int $pixel): float
@@ -768,7 +649,6 @@ class TiquettesPDF extends FPDF
             if (file_exists($photoPath)) {
                 @unlink($photoPath);
             }
-            var_dump($ex);
             exit();
         }
     }
@@ -903,7 +783,7 @@ class TiquettesPDF extends FPDF
         if ($this->PageNo() === 1 && $printOptions->firstPage) {
             $this->SetTextColor(170, 170, 170);
             $this->SetFont('Arial', '', 8);
-            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . FPDF::VERSION . ' / ' . (phpversion('imagick') !== false ? 'imagick ' . phpversion('imagick') : 'ImageMagick CLI ' . trim($this->required['modules']['magick'] ? '(Magick)' : ($this->required['modules']['convert'] ? '(Convert)' : '')))), 0, 0, 'R');
+            $this->Cell(0, 10, str('tiquettes.fr ' . $tv . ' / php ' . phpversion() . ' / fpdf ' . FPDF::VERSION . ' / ' . $this->svg2pngConverter->GetCurrentConverter()['displayname']), 0, 0, 'R');
         }
 
         if ($this->subTitle !== "" && ($this->PageNo() > 1 || !$printOptions->firstPage)) {
@@ -1408,7 +1288,6 @@ class TiquettesPDF extends FPDF
 
             $this->drawCutLines($cutLines);
         } catch (\Exception $e) {
-            var_dump($e);
             die();
         }
     }
@@ -1453,7 +1332,7 @@ class TiquettesPDF extends FPDF
         $this->schemaDrawChilds('', 0);
     }
 
-    protected function getDirectChildsCount($pm): int
+    protected function getDirectChildsCount(mixed $pm): int
     {
         global $flattenModules;
 
@@ -1464,7 +1343,7 @@ class TiquettesPDF extends FPDF
         return count($childs);
     }
 
-    protected function getSiblingCount($pm): int
+    protected function getSiblingCount(mixed $pm): int
     {
         global $flattenModules;
 
@@ -1989,12 +1868,12 @@ class TiquettesPDF extends FPDF
 }
 
 
-if (isset($_GET['require'])) {
+/*if (isset($_GET['require'])) {
     header('Content-Type: application/json; charset=utf-8');
-    $requirements = TiquettesPDF::requirements();
+    $requirements = $this->svg2png->GetRequirements();
     echo json_encode($requirements);
     exit();
-}
+}*/
 
 
 if (
