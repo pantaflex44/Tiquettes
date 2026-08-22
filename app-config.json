@@ -39,6 +39,9 @@
 			"actions": {
 				"patches": [
 					{
+						"text": "Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source."
+					},
+					{
 						"text": "Diverses refactorisations / optimisations du code source de l'application."
 					},
 					{

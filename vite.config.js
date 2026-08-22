@@ -4,6 +4,7 @@ import biomePlugin from "vite-plugin-biome";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
 import { VitePWA } from "vite-plugin-pwa";
+import preloadPlugin from "vite-preload/plugin";
 
 import * as pkg from "./package.json" with { type: "json" };
 
@@ -18,6 +19,7 @@ export default ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
+			preloadPlugin(),
 			react(),
 			VitePWA({
 				registerType: "autoUpdate",

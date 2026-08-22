@@ -16,7 +16,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { /*lazy,*/ Suspense, useEffect, useMemo, useState } from "react";
+import { lazy } from "vite-preload";
 import assignIdIcon from "../assets/assign-number.svg";
 import editIcon from "../assets/edit.svg";
 import numberAutoIcon from "../assets/numbers_auto.svg";

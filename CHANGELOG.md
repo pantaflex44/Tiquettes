@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source.
 - Diverses refactorisations / optimisations du code source de l'application.
 - Correction de l'ergonomie des menus déroulants de la barre de naviguation.
 - Correction de l'API 'toPdf' et des pictogrammes SVG pour une meilleure conversion en PNG pour l'incorporation dans les projets PDF.

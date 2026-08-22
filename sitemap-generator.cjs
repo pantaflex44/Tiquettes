@@ -7,20 +7,20 @@ console.log(`[${nowFull}] Sitemap generator...`);
 
 const fs = require("node:fs");
 function writeFile(filepath, data) {
-    fs.writeFile(
-        filepath,
-        typeof data !== "string" ? JSON.stringify(data, null, 4) : data,
-        "utf8",
-        (err) => {
-            const message = [`- "${filepath}":`];
-            if (err) {
-                message.push("Error writing file:", err);
-            } else {
-                message.push("Updated.");
-            }
-            console.log(message.join(" "));
-        },
-    );
+	fs.writeFile(
+		filepath,
+		typeof data !== "string" ? JSON.stringify(data, null, 4) : data,
+		"utf8",
+		(err) => {
+			const message = [`- "${filepath}":`];
+			if (err) {
+				message.push("Error writing file:", err);
+			} else {
+				message.push("Updated.");
+			}
+			console.log(message.join(" "));
+		},
+	);
 }
 
 const appConfig = require("./app-config.json");
@@ -34,7 +34,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
         <priority>1</priority>
     </url>
 </urlset>`;
-writeFile('./public/sitemap.xml', sitemap);
+writeFile("./public/sitemap.xml", sitemap);
 
 const url = new URL(appConfig.homepage);
 const robots = `User-agent: *
@@ -43,4 +43,4 @@ Allow: ${url.pathname}
 Allow: ${url.pathname}infos.json
 
 Sitemap: ${url.href}sitemap.xml`;
-writeFile('./public/robots.txt', robots);
+writeFile("./public/robots.txt", robots);
