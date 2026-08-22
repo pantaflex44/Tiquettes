@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import schemaFunctions from "../schema_functions.json";
+import schemaFunctions from "../schema_functions.json" with { type: "json" };
 
 export default function EditorFunctionSelector({
 	id,
@@ -39,7 +39,6 @@ export default function EditorFunctionSelector({
 			{Object.keys(schemaFunctions)
 				.filter((key) => (schemaFunctions[key].selectable ?? false) === true)
 				.map((key, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 					<option key={i} value={key}>
 						{schemaFunctions[key].name}
 					</option>

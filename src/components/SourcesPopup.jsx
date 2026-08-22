@@ -15,7 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
 
 import { useMemo, useRef, useState } from "react";
 
@@ -138,7 +137,6 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 						marginBottom: "1rem",
 					}}
 				>
-					{/** biome-ignore lint/a11y/noLabelWithoutControl: wanted */}
 					<label htmlFor={`source`}></label>
 					<div
 						className="popup_row-grid"
@@ -175,6 +173,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 
 						{isNew && (
 							<button
+								type="button"
 								title="Ajouter la source"
 								disabled={edit === ""}
 								style={{ width: "40px" }}
@@ -198,6 +197,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 
 						{!isNew && (
 							<button
+								type="button"
 								title="Supprimer la source"
 								style={{ width: "40px" }}
 								onClick={() => {

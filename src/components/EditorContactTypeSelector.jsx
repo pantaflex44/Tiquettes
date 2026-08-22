@@ -32,8 +32,6 @@ export default function EditorContactTypeSelector({
 			id={id}
 			name={id}
 		>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<div
 				className={`buttons_box-button ${value.trim().toUpperCase() === "NO" ? "selected" : ""}`.trim()}
 				style={{ width: "initial", flex: 1 }}
@@ -43,8 +41,7 @@ export default function EditorContactTypeSelector({
 				<img src={kcNOIcon} width={24} height={24} alt="NO" />
 				<span>NO</span>
 			</div>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 			<div
 				className={`buttons_box-button ${value.trim().toUpperCase() === "NC" ? "selected" : ""}`.trim()}
 				style={{ width: "initial", flex: 1 }}

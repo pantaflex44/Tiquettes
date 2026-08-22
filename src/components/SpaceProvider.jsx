@@ -171,14 +171,12 @@ export default function SpaceProvider({ children }) {
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (project === null) {
 			closeAll(true);
 		}
 	}, [project]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);

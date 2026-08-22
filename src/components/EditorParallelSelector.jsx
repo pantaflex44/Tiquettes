@@ -31,8 +31,6 @@ export default function EditorParallelSelector({
 			id={id}
 			name={id}
 		>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<div
 				className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
 				title="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
@@ -45,8 +43,7 @@ export default function EditorParallelSelector({
 					alt="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
 				/>
 			</div>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 			<div
 				className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
 				title="Allouer ce module à l'alimentation de ses enfants seulement"

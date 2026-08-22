@@ -23,7 +23,7 @@ const IconSelectorItem = lazy(() => import("./IconSelectorItem.jsx"));
 import caretDownIcon from "../assets/caret-down.svg";
 import caretUpIcon from "../assets/caret-up.svg";
 import useOutsideAlerter from "../hooks/useOutsideAlerter.jsx";
-import swbIcons from "../switchboard_icons.json";
+import swbIcons from "../switchboard_icons.json" with { type: "json" };
 
 function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 	const [selected, setSelected] = useState(null);
@@ -79,7 +79,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 		});
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		setSearch(selected);
 
@@ -90,7 +89,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 		}
 	}, [selected]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (onOpenState) onOpenState(opened ? "opened" : "closed");
 
@@ -117,7 +115,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 		setHoveredItem(l[0].filename);
 	}, [search]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (value) {
 			const f = [...swbIcons].filter((icon) => icon.filename === value);
@@ -152,7 +149,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 				}}
 			>
 				{search?.filename ? (
-					// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 					<img
 						loading={"lazy"}
 						src={`${import.meta.env.VITE_APP_BASE}${search.filename}`}
@@ -162,8 +158,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 						onClick={handleIconListToggler}
 					/>
 				) : (
-					// biome-ignore lint/a11y/noStaticElementInteractions: wanted
-					// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 					<div
 						style={{ width: "21px", height: "21px" }}
 						onClick={handleIconListToggler}
@@ -178,7 +172,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 					style={{ border: 0, padding: 0 }}
 					onInput={handleSearchEnter}
 				/>
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 				<img
 					loading={"lazy"}
 					src={opened ? caretUpIcon : caretDownIcon}
@@ -190,7 +184,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 					onClick={handleIconListToggler}
 				/>
 			</div>
-			{/** biome-ignore lint/a11y/useKeyWithMouseEvents: wanted */}
+
 			<ul
 				tabIndex={-1}
 				onKeyUp={handleKeyUp}
@@ -216,7 +210,6 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 				} /*onBlur={() => setOpened(false)}*/
 			>
 				{found.map((icon, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 					<Suspense key={i} fallback={<div></div>}>
 						<IconSelectorItem
 							icon={icon}

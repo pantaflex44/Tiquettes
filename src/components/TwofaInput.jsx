@@ -15,10 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: wanted */
-/** biome-ignore-all lint/a11y/noPositiveTabindex: wanted */
-/** biome-ignore-all lint/a11y/noNoninteractiveTabindex: wanted */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
 
 import "./twofaInput.css";
 
@@ -50,13 +46,11 @@ export default function TwofaInput({
 	const [sent, setSended] = useState(false);
 	const [value, setValue] = useState("".padStart(twofaCodeLength, "_"));
 	const debouncedValue = useLocalDebounce(value, 500);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const explodedValue = useMemo(() => entryToCleanExploded(value), [value]);
 	const [loading, setLoading] = useState(false);
 	const [resendLink, setResendLink] = useState(false);
 	const [verifying, setVerifying] = useState(false);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const refs = useMemo(() => {
 		const r = Array(twofaCodeLength)
 			.fill()
@@ -65,12 +59,10 @@ export default function TwofaInput({
 	}, [twofaCodeLength]);
 	const boxRef = createRef();
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (onLoading) onLoading(loading);
 	}, [loading]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (sent && refs.length > 0) refs[0].current.focus();
 
@@ -95,7 +87,6 @@ export default function TwofaInput({
 		};
 	}, [sent]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (
 			debouncedValue.length === twofaCodeLength &&

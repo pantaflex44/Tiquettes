@@ -73,13 +73,11 @@ export default function GroupColorSelector({
 		setOpened(false);
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const c = selected?.color ?? "";
 		if (c !== value && onChange) onChange(c);
 	}, [selected]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (onOpened) onOpened(paletteOpened);
 	}, [paletteOpened]);
@@ -87,8 +85,6 @@ export default function GroupColorSelector({
 	return (
 		<>
 			<div style={{ position: "relative" }} className="icon_selector">
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 				<div
 					className={`icon_selector_box ${opened ? "focused" : ""}`}
 					style={{

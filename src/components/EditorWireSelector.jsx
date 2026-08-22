@@ -28,7 +28,6 @@ export default function EditorWireSelector({
 	const [list, setList] = useState([]);
 	const [cur, setCur] = useState(0);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const c = rules[current] ?? 0;
 		setCur(c);

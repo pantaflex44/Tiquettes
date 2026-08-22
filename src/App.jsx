@@ -15,7 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/performance/noAccumulatingSpread: wanted */
 
 import { satisfies } from "compare-versions";
 import {
@@ -29,7 +28,7 @@ import {
 import sanitizeFilename from "sanitize-filename";
 
 import "./css/app.css";
-import * as pkg from "../package.json";
+import * as pkg from "../package.json" with { type: "json" };
 import { statsPush } from "../public/api/stats.js";
 import resizeIcon from "./assets/aspect-ratio.svg";
 import resizeOffIcon from "./assets/aspect-ratio-off.svg";
@@ -65,10 +64,10 @@ import SummaryTab from "./components/SummaryTab.jsx";
 import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
 import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
-import labelersOptions from "./labelers_options.json";
-import schemaFunctions from "./schema_functions.json";
-import swbIcons from "./switchboard_icons.json";
-import themesList from "./themes.json";
+import labelersOptions from "./labelers_options.json" with { type: "json" };
+import schemaFunctions from "./schema_functions.json" with { type: "json" };
+import swbIcons from "./switchboard_icons.json" with { type: "json" };
+import themesList from "./themes.json" with { type: "json" };
 
 function App() {
 	const importRef = useRef();
@@ -177,7 +176,6 @@ function App() {
 		},
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const defaultPrintOptions = useMemo(
 		() => ({
 			lang: "fr_FR",
@@ -300,7 +298,6 @@ function App() {
 		[],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: correct
 	const defaultProjectProperties = useMemo(
 		() => ({
 			name: defaultProjectName,
@@ -414,7 +411,6 @@ function App() {
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: correct
 	const defaultProject = useMemo(
 		() => ({
 			appversion: pkg.version,
@@ -849,7 +845,6 @@ function App() {
 	};
 	const [theme, setTheme] = useState(switchboard?.theme ?? defaultTheme);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const createProject = useCallback(
 		(
 			name,
@@ -908,7 +903,6 @@ function App() {
 		],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const resetProject = useCallback(() => {
 		importRef.current.value = "";
 
@@ -2123,7 +2117,6 @@ function App() {
 		return m;
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const monitor = useMemo(() => {
 		if (!switchboard.switchboardMonitor) return {};
 
@@ -2164,7 +2157,6 @@ function App() {
 		);
 	}, [switchboard.rows.length]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		let t = null;
 
@@ -2235,7 +2227,6 @@ function App() {
 		if (monitorOpened) monitorRef.current.focus();
 	}, [monitorOpened]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (!autoSpaceSize && spaceSize !== "1152px") {
 			setSpaceSize("1152px");
@@ -2262,7 +2253,6 @@ function App() {
 		}
 	}, [spaceSize]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
@@ -2301,7 +2291,6 @@ function App() {
 	}, []);
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: wanted
 		<div
 			ref={projectRef}
 			tabIndex={-1}
@@ -2325,8 +2314,8 @@ function App() {
 				{/** TOOLBAR PROJECTS **/}
 				{/** ----------------------------------------------------------- */}
 
-				{/** biome-ignore lint/a11y/useButtonType: wanted */}
 				<button
+					type="button"
 					className={`button_group-new_project active`.trim()}
 					onClick={() => {
 						setWelcome(true);
@@ -2368,8 +2357,8 @@ function App() {
 				{/** TOOLBAR EXPORTS **/}
 				{/** ----------------------------------------------------------- */}
 
-				{/** biome-ignore lint/a11y/useButtonType: wanted */}
 				<button
+					type="button"
 					ref={exportMenuRef}
 					className="button_group-export_project dropdown_container"
 					title="Exporter..."
@@ -2397,8 +2386,6 @@ function App() {
 						<div className="dropdown_item_flex head">
 							<div className="dropdown_item_flex_left">Projet complet</div>
 							<div className="dropdown_item_flex_right">
-								{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-								{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 								<div
 									className="fakeButton discreet"
 									style={{ marginBlock: "0" }}
@@ -2458,8 +2445,6 @@ function App() {
 								/>
 							</div>
 							<div className="dropdown_item_flex_right">
-								{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-								{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 								<div
 									className="fakeButton discreet"
 									style={{ flex: 1, marginBlock: "0" }}
@@ -2477,8 +2462,8 @@ function App() {
 				{/** TOOLBAR PRINT **/}
 				{/** ----------------------------------------------------------- */}
 
-				{/** biome-ignore lint/a11y/useButtonType: wanted */}
 				<button
+					type="button"
 					ref={printMenuRef}
 					className="button_group-print_project dropdown_container"
 					title="Imprimer..."
@@ -2522,7 +2507,6 @@ function App() {
 							/>
 							<label htmlFor="print_firstPage">Page de garde</label>
 							{printOptions.firstPage && (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 								<img
 									src={fpsettingsIcon}
 									width={16}
@@ -2556,7 +2540,6 @@ function App() {
 							/>
 							<label htmlFor="print_labels">Etiquettes</label>
 							{printOptions.labels && (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 								<img
 									src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon}
 									width={16}
@@ -2725,7 +2708,6 @@ function App() {
 							/>
 							<label htmlFor="print_schema">Schéma unifilaire</label>
 							{printOptions.schema && (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 								<img
 									src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon}
 									width={16}
@@ -2845,7 +2827,6 @@ function App() {
 							/>
 							<label htmlFor="print_summary">Nomenclature</label>
 							{printOptions.summary && (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 								<img
 									src={
 										subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon
@@ -3033,8 +3014,6 @@ function App() {
 						{/** ----------------------------------------------------------- */}
 
 						<div className="dropdown_footer">
-							{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-							{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 							<div
 								className="fakeButton"
 								style={{ fontSize: "100%" }}
@@ -3055,8 +3034,8 @@ function App() {
 				{/** TOOLBAR RESET **/}
 				{/** ----------------------------------------------------------- */}
 
-				{/** biome-ignore lint/a11y/useButtonType: wanted */}
 				<button
+					type="button"
 					className="button_group-clear_project"
 					onClick={() => {
 						if (
@@ -3085,8 +3064,8 @@ function App() {
 					className="button_group-separator"
 					style={{ marginLeft: "auto" }}
 				></div>
-				{/** biome-ignore lint/a11y/useButtonType: wanted */}
 				<button
+					type="button"
 					className={`button_group-resize end ${autoSpaceSize ? "checked" : ""}`}
 					onClick={() => setAutoSpaceSize((old) => !old)}
 					title="Redimensionner automatiquement l'espace de travail"
@@ -3170,8 +3149,6 @@ function App() {
 			{/** ----------------------------------------------------------- */}
 
 			<nav className={`tabPages ${UIFrozen ? "disabled" : ""}`.trim()}>
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 				<div
 					className={`tabPages_page ${tab === 1 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(1)}
@@ -3179,8 +3156,7 @@ function App() {
 					<img src={projectIcon} width={20} height={20} alt="Etiquettes" />
 					<span>Etiquettes</span>
 				</div>
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 				<div
 					className={`tabPages_page ${tab === 2 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(2)}
@@ -3193,8 +3169,7 @@ function App() {
 					/>
 					<span>Schéma</span>
 				</div>
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 				<div
 					className={`tabPages_page ${tab === 3 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(3)}
@@ -3263,8 +3238,8 @@ function App() {
 						</div>
 						{theme.name.startsWith("custom") && theme?.data && (
 							<div className="tabPageBandCol">
-								{/** biome-ignore lint/a11y/useButtonType: wanted */}
 								<button
+									type="button"
 									style={{ height: "34px" }}
 									title="Modifier le thème."
 									onClick={() => {
@@ -3364,8 +3339,8 @@ function App() {
 
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
-							{/** biome-ignore lint/a11y/useButtonType: wanted */}
 							<button
+								type="button"
 								style={{ height: "34px" }}
 								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
 								onClick={() => reassignModules()}
@@ -3413,7 +3388,7 @@ function App() {
 								{monitorWarningsLength > 0 ? (
 									<>
 										<span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? "s" : ""} détectée${monitorWarningsLength > 1 ? "s" : ""}.`}</span>
-										{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 										<img
 											src={info2Icon}
 											alt="Détails des erreurs"
@@ -3433,15 +3408,12 @@ function App() {
 				</div>
 
 				{switchboard.switchboardMonitor && monitorOpened && monitor.errors && (
-					// biome-ignore lint/a11y/noStaticElementInteractions: wanted
 					<div
 						className="tabPageBand notprintable errors"
 						ref={monitorRef}
 						tabIndex={-1}
 						onBlur={() => setMonitorOpened(false)}
 					>
-						{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-						{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 						<div
 							className="closeButton"
 							title={"Fermer"}
@@ -3459,12 +3431,10 @@ function App() {
 						>
 							<ul>
 								{Object.entries(monitor.errors ?? {}).map(([id, errors], i) => (
-									// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 									<li key={i} className="tabPageErrors">
 										<div>{id}:</div>
 										<ul>
 											{errors.map((error, j) => (
-												// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 												<li key={j} className="tabPageError">
 													<img
 														src={`${import.meta.env.BASE_URL}schema_warning.svg`}
@@ -3485,7 +3455,6 @@ function App() {
 
 				{switchboard.rows.map((row, i) => (
 					<Row
-						// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 						key={i}
 						rowIndex={i}
 						rowPosition={i + 1}

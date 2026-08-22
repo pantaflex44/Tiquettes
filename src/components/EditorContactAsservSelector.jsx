@@ -31,8 +31,6 @@ export default function EditorContactAsservSelector({
 			id={id}
 			name={id}
 		>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<div
 				className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
 				title="Asservissement partiel"
@@ -45,8 +43,7 @@ export default function EditorContactAsservSelector({
 					alt="Asservissement partiel"
 				/>
 			</div>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 			<div
 				className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
 				title="Asservissement total"

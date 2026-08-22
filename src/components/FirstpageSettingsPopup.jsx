@@ -15,15 +15,10 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: wanted */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
-/** biome-ignore-all lint/performance/noAccumulatingSpread: wanted */
 
 import { useEffect, useRef, useState } from "react";
 import "../css/firstpageSettingsPopup.css";
-import * as pkg from "../../package.json";
+import * as pkg from "../../package.json" with { type: "json" };
 import clearIcon from "../assets/clear.svg";
 import currentLocationIcon from "../assets/current-location.svg";
 
@@ -272,7 +267,6 @@ export default function FirstpageSettingsPopup({
 		return true;
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (
 			options?.infos?.from?.name &&
@@ -536,6 +530,7 @@ export default function FirstpageSettingsPopup({
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
+								type="button"
 								style={{ height: "34px" }}
 								title="Importer les données installateur"
 								onClick={() => {
@@ -546,6 +541,7 @@ export default function FirstpageSettingsPopup({
 								<span>Importer</span>
 							</button>
 							<button
+								type="button"
 								style={{ height: "34px" }}
 								title="Exporter les données installateur"
 								onClick={() => {
@@ -560,6 +556,7 @@ export default function FirstpageSettingsPopup({
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
+								type="button"
 								style={{ height: "34px" }}
 								title="Réinitialiser"
 								onClick={() => {
@@ -686,6 +683,7 @@ export default function FirstpageSettingsPopup({
 									{(options?.views?.from?.logo ?? false) === true && (
 										<>
 											<button
+												type="button"
 												style={{
 													minHeight: "auto",
 													marginLeft: "auto",
@@ -708,6 +706,7 @@ export default function FirstpageSettingsPopup({
 											{options?.infos?.from?.logo && (
 												<>
 													<button
+														type="button"
 														style={{
 															minHeight: "auto",
 															border: 0,
@@ -742,6 +741,7 @@ export default function FirstpageSettingsPopup({
 														/>
 													</button>
 													<button
+														type="button"
 														style={{
 															minHeight: "auto",
 															border: 0,
@@ -1601,6 +1601,7 @@ export default function FirstpageSettingsPopup({
 						<div className="tabPageBandGroup">
 							<div className="tabPageBandCol">
 								<button
+									type="button"
 									style={{ height: "34px" }}
 									title="Plus petit"
 									onClick={() => {
@@ -1642,6 +1643,7 @@ export default function FirstpageSettingsPopup({
 										))}
 								</select>
 								<button
+									type="button"
 									style={{ height: "34px" }}
 									title="Taille réelle"
 									onClick={() => setZoom(100)}
@@ -1655,6 +1657,7 @@ export default function FirstpageSettingsPopup({
 									/>
 								</button>
 								<button
+									type="button"
 									style={{ height: "34px" }}
 									title="Plus grand"
 									onClick={() => {

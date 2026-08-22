@@ -15,7 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/noLabelWithoutControl: wanted */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import sanitizeFilename from "sanitize-filename";
@@ -260,7 +259,6 @@ export default function ThemeEditorPopup({
 		return uuid.map((x) => x.toString(16)).join("");
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (shownCount < 1 && editedTheme.data.top?.border !== false) {
 			setEditedTheme((old) => ({

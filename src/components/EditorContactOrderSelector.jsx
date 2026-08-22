@@ -32,8 +32,6 @@ export default function EditorContactOrderSelector({
 			id={id}
 			name={id}
 		>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<div
 				className={`buttons_box-button ${value === "before" ? "selected" : ""}`.trim()}
 				title="Les contacteurs sont positionnés en amont du module"
@@ -46,8 +44,7 @@ export default function EditorContactOrderSelector({
 					alt="Asservissement en amont du module"
 				/>
 			</div>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
+
 			<div
 				className={`buttons_box-button ${value === "after" ? "selected" : ""}`.trim()}
 				title="Les contacteurs sont positionnés en aval du module pour piloter le circuit associé"

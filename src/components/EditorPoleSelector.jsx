@@ -33,7 +33,6 @@ export default function EditorPoleSelector({
 		return p;
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const dbPole = useMemo(() => {
 		if (!db?.pole) return 4;
 		const pole = db.pole.trim().toUpperCase();
@@ -93,7 +92,6 @@ export default function EditorPoleSelector({
 		>
 			<option value={""}>-</option>
 			{allowedPoles.map((pole, i) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 				<option key={i} value={pole.key}>
 					{pole.name}
 				</option>

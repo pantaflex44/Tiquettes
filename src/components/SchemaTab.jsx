@@ -15,10 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: wanted */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import boltIcon from "../assets/bolt.svg";
@@ -74,7 +70,6 @@ export default function SchemaTab({
 		onEditSymbol(m.indexes.row, m.indexes.module);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const head = useMemo(() => {
 		return switchboard.rows
 			.flatMap((row) =>
@@ -92,7 +87,6 @@ export default function SchemaTab({
 			.filter((module) => module !== null);
 	}, [switchboard.rows, switchboard.withDb]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const getChilds = useCallback(
 		(parentId) => {
 			return switchboard.rows
@@ -112,7 +106,6 @@ export default function SchemaTab({
 		[switchboard.rows, switchboard.withDb],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const getRow = useCallback(
 		(moduleList) => {
 			let l = {};
@@ -201,7 +194,6 @@ export default function SchemaTab({
 		[switchboard.rows, switchboard.withDb],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const tree = useMemo(() => {
 		return switchboard.withDb
 			? {
@@ -221,7 +213,6 @@ export default function SchemaTab({
 				};
 	}, [head, switchboard.withDb, switchboard.db]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const monitor = useMemo(() => {
 		if (!switchboard.schemaMonitor) return {};
 
@@ -721,6 +712,7 @@ export default function SchemaTab({
 						) : (
 							<div className="tabPageBandCol">
 								<button
+									type="button"
 									style={{ height: "34px" }}
 									title="Gérer les sources"
 									onClick={() => setSourcesOpened(true)}
@@ -791,6 +783,7 @@ export default function SchemaTab({
 						<div className="tabPageBandSeparator"></div>
 						<div className="tabPageBandCol">
 							<button
+								type="button"
 								style={{ height: "34px" }}
 								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
 								onClick={() => reassignModules()}

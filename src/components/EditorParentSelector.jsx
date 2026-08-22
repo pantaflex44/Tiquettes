@@ -18,7 +18,7 @@
 
 import { Fragment, useMemo } from "react";
 
-import schemaFunctions from "../schema_functions.json";
+import schemaFunctions from "../schema_functions.json" with { type: "json" };
 
 export default function EditorParentSelector({
 	id,

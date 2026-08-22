@@ -55,7 +55,6 @@ export default function EditorMultiContactSelector({
 		if (e.key === "Escape") setOpened(false);
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (onChange) onChange(list.join("|"));
 	}, [list]);
@@ -67,8 +66,6 @@ export default function EditorMultiContactSelector({
 			id={id}
 			ref={listContainerRef}
 		>
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<div
 				className={`icon_selector_box ${opened ? "focused" : ""}`}
 				style={{

@@ -132,7 +132,6 @@ export default function Popup({
 		>
 			<div
 				className={`popup ${loading ? "loading" : ""}`.trim()}
-				// biome-ignore lint/a11y/noNoninteractiveTabindex: wanted
 				tabIndex={0}
 				style={{
 					...popupStyle,
@@ -153,8 +152,6 @@ export default function Popup({
 				>
 					<div className="popup_title">{title}</div>
 					{buttons.close && (
-						// biome-ignore lint/a11y/noStaticElementInteractions: wanted
-						// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 						<div className="popup_cancel" onClick={onCancel}>
 							<img src={cancelIcon} alt="Annuler" width={24} height={24} />
 						</div>
@@ -203,7 +200,6 @@ export default function Popup({
 								}
 
 								return (
-									// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 									<button key={i} {...p} onClick={callback} title={b.title}>
 										{text}
 									</button>
@@ -214,8 +210,8 @@ export default function Popup({
 					{(buttons.cancel || buttons.ok) && (
 						<div className="popup_buttons_box">
 							{buttons.cancel && (
-								// biome-ignore lint/a11y/useButtonType: wanted
 								<button
+									type="button"
 									className={`cancel ${buttonsDisabled || cancelButtonDisabled ? "disabled" : ""}`.trim()}
 									onClick={onCancel}
 								>
@@ -223,8 +219,8 @@ export default function Popup({
 								</button>
 							)}
 							{buttons.prev && (
-								// biome-ignore lint/a11y/useButtonType: wanted
 								<button
+									type="button"
 									className={`prev ${buttonsDisabled || prevButtonDisabled ? "disabled" : ""}`.trim()}
 									onClick={onPrev}
 								>
@@ -232,8 +228,8 @@ export default function Popup({
 								</button>
 							)}
 							{buttons.next && (
-								// biome-ignore lint/a11y/useButtonType: wanted
 								<button
+									type="button"
 									className={`next ${buttonsDisabled || nextButtonDisabled ? "disabled" : ""}`.trim()}
 									onClick={onNext}
 								>
@@ -241,8 +237,8 @@ export default function Popup({
 								</button>
 							)}
 							{buttons.ok && (
-								// biome-ignore lint/a11y/useButtonType: wanted
 								<button
+									type="button"
 									className={`ok ${buttonsDisabled || okButtonDisabled ? "disabled" : ""}`.trim()}
 									onClick={onOk}
 								>

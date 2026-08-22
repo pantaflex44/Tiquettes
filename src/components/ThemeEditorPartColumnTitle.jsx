@@ -15,7 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
 
 import downIcon from "../assets/caret-down.svg";
 import upIcon from "../assets/caret-up.svg";

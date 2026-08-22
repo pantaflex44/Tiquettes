@@ -37,7 +37,6 @@ export default function EditorSrcName({
 				Sources personnelles
 			</option>
 			{sources.map((s, i) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 				<option key={i} value={s}>
 					{s}
 				</option>

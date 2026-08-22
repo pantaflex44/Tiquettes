@@ -19,7 +19,6 @@
 import { useEffect } from "react";
 
 export default function useOutsideAlerter(ref, callback = null) {
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (ref.current && !ref.current.contains(event.target) && callback) {

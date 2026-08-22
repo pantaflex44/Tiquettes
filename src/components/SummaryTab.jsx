@@ -15,9 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: wanted */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
 
 import numbersIcon from "../assets/numbers.svg";
 import summaryNoPicto from "../assets/summary_nopicto.svg";
@@ -64,6 +61,7 @@ export default function SummaryTab({
 				<div className="tabPageBandGroup">
 					<div className="tabPageBandCol">
 						<button
+							type="button"
 							style={{ height: "34px" }}
 							title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
 							onClick={() => reassignModules()}

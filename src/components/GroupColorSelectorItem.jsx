@@ -24,7 +24,6 @@ function GroupColorSelectorItem({
 	setHoveredItem,
 }) {
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 		<li
 			data-value={value?.key}
 			onClick={() => handleColorItemSelected(value)}
@@ -65,7 +64,6 @@ function GroupColorSelectorItem({
 			)}
 			{value?.key !== "" && value?.key !== "_new_" && (
 				<div
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: wanted
 					dangerouslySetInnerHTML={{ __html: value?.title ?? value?.key }}
 					style={{ marginTop: "-2px" }}
 				/>

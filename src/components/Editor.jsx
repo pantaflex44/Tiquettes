@@ -15,10 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: wanted */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
-/** biome-ignore-all lint/a11y/noAutofocus: wanted */
-/** biome-ignore-all lint/a11y/noLabelWithoutControl: wanted */
 
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import assignIdIcon from "../assets/assign-number.svg";
@@ -70,7 +66,6 @@ export default function Editor({
 	const [internalPopupOpened, setInternalPopupOpened] = useState(false);
 
 	const [editorTab, setEditorTab] = useState(ed?.tabPage ?? "main");
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const prevModule = useMemo(
 		() => getModuleById(ed?.prevModule?.parentId),
 		[ed?.prevModule?.parentId],
@@ -133,7 +128,6 @@ export default function Editor({
 		return found;
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const lastFreeId = useMemo(() => {
 		return getLastFreeId(ed.currentModule.func);
 	}, [switchboard, defaultModuleId, ed.currentModule.func]);
@@ -163,7 +157,6 @@ export default function Editor({
 		return parent[0];
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const parentModule = useMemo(
 		() => getParentById(ed.currentModule.parentId),
 		[ed.currentModule.parentId],
@@ -175,7 +168,6 @@ export default function Editor({
 			(parentModule.pole === "3P+N" || parentModule.pole === "4P"),
 		[parentModule],
 	);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const hasLine = useMemo(
 		() =>
 			((parentModule && parentModuleIsTri) ||
@@ -187,12 +179,10 @@ export default function Editor({
 		[parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (!hasLine) onUpdateModuleEditor({ line: "" });
 	}, [hasLine]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (hasBlankId) {
 			onUpdateModuleEditor({ id: lastFreeId });
@@ -334,6 +324,7 @@ export default function Editor({
 										autoFocus={!!(ed?.focusedInputName === "id")}
 									/>
 									<button
+										type="button"
 										title="Trouver le prochain identifiant disponible."
 										onClick={() => {
 											onUpdateModuleEditor({ id: lastFreeId });
@@ -350,6 +341,7 @@ export default function Editor({
 										/>
 									</button>
 									<button
+										type="button"
 										title={
 											ed.currentModule.noAutoId === true
 												? "Ne pas modfier cet identifiant lors d'une demande de re-numérotation automatique"

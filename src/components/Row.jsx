@@ -62,7 +62,6 @@ function Row({
 			id={`row_${rowPosition}`}
 		>
 			<div className="row_title">
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 				<img
 					className={`row_delete_icon ${!rowDeleteAllowed() ? "disabled" : ""}`}
 					src={rowDeleteIcon}
@@ -84,7 +83,6 @@ function Row({
 			<div className="row" style={style}>
 				{items.map((item, i) => (
 					<Module
-						// biome-ignore lint/suspicious/noArrayIndexKey: wanted
 						key={i}
 						item={item}
 						modulePosition={i + 1}
@@ -128,7 +126,6 @@ function Row({
 				className={`row_add ${!rowAddAllowed() ? "disabled" : ""}`}
 				title="Insérer une nouvelle rangée"
 			>
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 				<img
 					className="row_add_icon"
 					src={rowAddIcon}
@@ -138,8 +135,6 @@ function Row({
 					onClick={() => onRowAddAfter(rowIndex)}
 				/>
 				{rowAddAllowed() ? (
-					// biome-ignore lint/a11y/noStaticElementInteractions: wanted
-					// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 					<div className="row_add_info" onClick={() => onRowAddAfter(rowIndex)}>
 						Insérer une nouvelle rangée ici
 					</div>

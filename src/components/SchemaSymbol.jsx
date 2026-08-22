@@ -18,10 +18,9 @@
 
 import { useMemo } from "react";
 
-import schemaFunctions from "../schema_functions.json";
+import schemaFunctions from "../schema_functions.json" with { type: "json" };
 
 export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const func = useMemo(() => {
 		if (!module?.func) return null;
 
@@ -71,8 +70,6 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 
 	return (
 		func && (
-			// biome-ignore lint/a11y/noStaticElementInteractions: wanted
-			// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 			<div
 				style={{ "--symbol-width": "70px", "--symbol-height": "100px" }}
 				className={`schemaItemSymbol ${!func.isDb ? "editable" : ""}`}

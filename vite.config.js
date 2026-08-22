@@ -6,7 +6,7 @@ import ogPlugin from "vite-plugin-open-graph";
 import { VitePWA } from "vite-plugin-pwa";
 import Sitemap from "vite-plugin-sitemap";
 
-import * as pkg from "./package.json";
+import * as pkg from "./package.json" with { type: "json" };
 
 // https://vitejs.dev/config/
 

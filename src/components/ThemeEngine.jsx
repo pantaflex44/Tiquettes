@@ -15,7 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: wanted */
 
 import { useMemo } from "react";
 import Color, { hexToRgb } from "../others/color.js";
@@ -101,7 +100,6 @@ function CustomTheme({ item, data, style }) {
 		[data, item],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const iconColor = useMemo(() => {
 		try {
 			const rgb = hexToRgb(
@@ -144,7 +142,6 @@ function CustomTheme({ item, data, style }) {
 		return ret;
 	}, [data]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	const styles = useMemo(
 		() => ({
 			id: {

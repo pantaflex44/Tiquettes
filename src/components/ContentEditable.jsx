@@ -73,9 +73,7 @@ function ContentEditable({
 	};
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: wanted
 		<div
-			// biome-ignore lint/a11y/noNoninteractiveTabindex: wanted
 			tabIndex={0}
 			style={{
 				display: "flex",
@@ -97,12 +95,9 @@ function ContentEditable({
 					onKeyUp={handleKeyUp}
 					style={{ height: `${height}px`, ...editableStyle }}
 					className={editableClassName}
-					// biome-ignore lint/a11y/noAutofocus: wanted
 					autoFocus={true}
 				/>
 			) : (
-				// biome-ignore lint/a11y/noStaticElementInteractions: wanted
-				// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 				<span
 					style={{ ...style }}
 					className={className}

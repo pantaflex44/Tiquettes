@@ -15,8 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
 
 import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 
@@ -36,7 +34,7 @@ import growIcon from "../assets/plus.svg";
 import rightIcon from "../assets/right.svg";
 import clearIcon from "../assets/trash.svg";
 import cancelredIcon from "../assets/x.svg";
-import themesList from "../themes.json";
+import themesList from "../themes.json" with { type: "json" };
 
 function Module({
 	item,
@@ -144,7 +142,6 @@ function Module({
 		});
 	}, [theme]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const defaultThemeObj = themesList.filter((t) => t.default)[0];
 		const update = JSON.stringify(item);

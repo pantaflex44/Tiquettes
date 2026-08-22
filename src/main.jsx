@@ -25,7 +25,7 @@ import * as semver from "semver";
 import App from "./App.jsx";
 
 import "./css/main.css";
-import * as pkg from "../package.json";
+import * as pkg from "../package.json" with { type: "json" };
 import { statsPush } from "../public/api/stats.js";
 import NewVersionPopup from "./components/NewVersionPopup.jsx";
 
@@ -213,7 +213,6 @@ export default function Main() {
 		});
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		console.log("Mode:", import.meta.env.VITE_APP_MODE);
 

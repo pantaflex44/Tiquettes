@@ -15,9 +15,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/noAutofocus: wanted */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: wanted */
 
 import { useState } from "react";
 import "../css/newProjectPopup.css";
@@ -393,6 +390,7 @@ export default function NewProjectPopup({
 									</div>
 									<div className="wizard-page-form-row-flex">
 										<button
+											type="button"
 											style={{
 												fontSize: "95%",
 												marginTop: "0.5rem",

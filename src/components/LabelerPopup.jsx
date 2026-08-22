@@ -15,14 +15,11 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/noLabelWithoutControl: wanted */
-/** biome-ignore-all lint/a11y/useButtonType: wanted */
-/** biome-ignore-all lint/a11y/noAutofocus: wanted */
 
 import { useEffect, useState } from "react";
 
 import "../css/labelerPopup.css";
-import * as pkg from "../../package.json";
+import * as pkg from "../../package.json" with { type: "json" };
 import borderBottomIcon from "../assets/border-bottom.svg";
 import borderInterIcon from "../assets/border-inter.svg";
 import borderLeftIcon from "../assets/border-left.svg";
@@ -44,7 +41,7 @@ import exportLabelerTextNoneIcon from "../assets/text-size-none.svg";
 import trimAllIcon from "../assets/trim-all.svg";
 import trimExtIcon from "../assets/trim-ext.svg";
 import trimNoneIcon from "../assets/trim-none.svg";
-import labelersOptions from "../labelers_options.json";
+import labelersOptions from "../labelers_options.json" with { type: "json" };
 
 import Popup from "./Popup.jsx";
 
@@ -75,7 +72,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 	const [options, setOptions] = useState(null);
 	const [labelersList, setLabelersList] = useState({});
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		const $groups = {};
 		for (const key in labelersOptions) {
@@ -89,7 +85,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 		setLabelersList($groups);
 	}, [labelersOptions, model]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		if (model && labelersOptions) {
 			sessionStorage.setItem(`${pkg.name}_labelersModel`, model);
@@ -235,6 +230,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 					>
 						<label htmlFor={`labeler_init`}>Paramètres courants</label>
 						<button
+							type="button"
 							id={`labeler_init`}
 							name={`labeler_init`}
 							className="link"

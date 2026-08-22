@@ -40,8 +40,8 @@ function GroupColorChooser({
 
 	return (
 		<>
-			{/** biome-ignore lint/a11y/useButtonType: wanted */}
 			<button
+				type="button"
 				id={id}
 				name={name}
 				title={title}

@@ -25,7 +25,6 @@ function IconSelectorItem({
 	setHoveredItem,
 }) {
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 		<li
 			data-value={icon.filename}
 			onClick={() => handleIconListItemSelected(icon)}

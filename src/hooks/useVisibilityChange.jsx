@@ -33,7 +33,6 @@ function useDocumentVisibility() {
 		setIsDocumentVisible(true);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useEffect(() => {
 		document.addEventListener("visibilitychange", handleVisibilityChange);
 		window.addEventListener("blur", handleBlurChange);

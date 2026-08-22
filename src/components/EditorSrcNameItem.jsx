@@ -25,7 +25,6 @@ function EditorSrcNameItem({
 	setHoveredItem,
 }) {
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: wanted
 		<li
 			data-value={item}
 			onClick={() => handleItemListItemSelected(item)}

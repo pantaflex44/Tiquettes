@@ -38,7 +38,6 @@ function useDropdownToolbarMenuPlacing(
 		return () => window.removeEventListener("resize", updateSize);
 	}, []);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: wanted
 	useLayoutEffect(() => {
 		if (relativeToolbarRef && absoluteToolbarItemRef) {
 			let left = 0;

@@ -56,8 +56,6 @@ function PasswordInput({
 				onBlur={onBlur}
 				{...props}
 			/>
-			{/** biome-ignore lint/a11y/useAltText: wanted */}
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: wanted */}
 			<img
 				src={eyeIcon}
 				ref={passwordImgRef}
@@ -73,6 +71,7 @@ function PasswordInput({
 					}
 					passwordInputRef.current.focus();
 				}}
+				alt=""
 			/>
 		</div>
 	);

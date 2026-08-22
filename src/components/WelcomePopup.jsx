@@ -15,11 +15,10 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: wanted */
 
 import "../css/welcomePopup.css";
 
-import * as pkg from "../../package.json";
+import * as pkg from "../../package.json" with { type: "json" };
 
 import projectIcon from "../assets/project.svg";
 import importIcon from "../assets/upload.svg";
