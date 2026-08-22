@@ -93,7 +93,7 @@ export default ({ mode }) => {
 					url: env.VITE_APP_URL,
 					title: pkg.title,
 					type: "website",
-					image: `${env.VITE_APP_URL}og.webp`,
+					image: `${env.VITE_APP_URL}og_1200x630.webp`,
 					determiner: "auto",
 					description: pkg.description,
 					locale: env.VITE_APP_LOCALE.replaceAll("-", "_"),
@@ -101,7 +101,7 @@ export default ({ mode }) => {
 					siteName: pkg.title,
 				},
 				twitter: {
-					image: `${env.VITE_APP_URL}twitter.webp`,
+					image: `${env.VITE_APP_URL}twitter_1280x640.webp`,
 					card: "summary_large_image",
 					description: pkg.description,
 					title: pkg.title,
