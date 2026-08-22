@@ -12,25 +12,19 @@ import * as pkg from "./package.json" with { type: "json" };
 
 import { glob } from "glob";
 
-const images = (
-	await glob([
-		"./src/**/*.png",
-		"./src/**/*.webp",
-		"./src/**/*.jpg",
-		"./src/**/*.bmp",
-		"./src/**/*.gif",
-		"./src/**/*.svg",
-		"./public/**/*.png",
-		"./public/**/*.webp",
-		"./public/**/*.jpg",
-		"./public/**/*.bmp",
-		"./public/**/*.gif",
-		"./public/**/*.svg",
-	])
-).map((i) => `./${i}`);
-
-const config = ({ mode }) => {
+export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
+
+	const images = (
+		await glob([
+			"./public/**/*.png",
+			"./public/**/*.webp",
+			"./public/**/*.jpg",
+			"./public/**/*.bmp",
+			"./public/**/*.gif",
+			"./public/**/*.svg",
+		])
+	).map((i) => `${env.VITE_APP_BASE}${i.split(/[\\/]/).pop()}`);
 
 	let options = {
 		base: env.VITE_APP_BASE,
@@ -128,5 +122,3 @@ const config = ({ mode }) => {
 
 	return defineConfig(options);
 };
-
-export default config;
