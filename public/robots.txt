@@ -3,4 +3,4 @@ Allow: /
 Allow: /app/
 Allow: /app/infos.json
 
-Sitemap: https://www.tiquettes.fr/app//sitemap.xml
+Sitemap: https://www.tiquettes.fr/app/sitemap.xml

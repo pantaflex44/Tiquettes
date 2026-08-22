@@ -42,5 +42,5 @@ Allow: /
 Allow: ${url.pathname}
 Allow: ${url.pathname}infos.json
 
-Sitemap: ${url.href}/sitemap.xml`;
+Sitemap: ${url.href}sitemap.xml`;
 writeFile('./public/robots.txt', robots);
