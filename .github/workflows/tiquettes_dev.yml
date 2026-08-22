@@ -29,12 +29,16 @@ jobs:
       - name: Build dev
         run: npm run build:dev
       - name: Upload files
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        uses: pressidium/lftp-mirror-action@v1
         with:
-          sftp_only: true
-          server: ${{ secrets.FTPSERVER }}
-          username: ${{ secrets.FTPUSERNAME }}
-          password: ${{ secrets.FTPPASSWORD }}
+          host: ${{ secrets.FTPSERVER }}
           port: 22
-          local_path: "./dist/*"
-          remote_path: "./public/dev/"
+          user: ${{ secrets.FTPUSERNAME }}
+          pass: ${{ secrets.FTPPASSWORD }}
+          onlyNewer: true
+          settings: 'sftp:auto-confirm=yes'
+          localDir: './dist'
+          remoteDir: './public/dev/'
+          reverse: true
+          parallel: 4
+          options: 'delete'

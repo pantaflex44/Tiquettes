@@ -24,7 +24,6 @@ export default async ({ mode }) => {
 			"./public/**/*.svg",
 		])
 	).map((i) => `${env.VITE_APP_BASE}${i.split(/[\\/]/).pop()}`);
-	console.log("Images to preload:", images);
 
 	let options = {
 		base: env.VITE_APP_BASE,
