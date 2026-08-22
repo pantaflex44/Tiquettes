@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { glob } from "glob";
 import { defineConfig, loadEnv } from "vite";
 import biomePlugin from "vite-plugin-biome";
 import mkcert from "vite-plugin-mkcert";
@@ -9,8 +10,6 @@ import preloadPlugin from "vite-preload/plugin";
 import * as pkg from "./package.json" with { type: "json" };
 
 // https://vitejs.dev/config/
-
-import { glob } from "glob";
 
 export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
