@@ -16,8 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { /*lazy,*/ Suspense, useEffect, useRef, useState } from "react";
-import { lazy } from "vite-preload";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const IconSelectorItem = lazy(() => import("./IconSelectorItem.jsx"));
 

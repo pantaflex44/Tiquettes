@@ -22,7 +22,10 @@ export default async ({ mode }) => {
 			"./public/**/*.gif",
 			"./public/**/*.svg",
 		])
-	).map((i) => `${env.VITE_APP_BASE}${i.split(/[\\/]/).pop()}`);
+	).map(
+		(i) =>
+			`<link rel="preload" as="image" href="${env.VITE_APP_BASE}${i.split(/[\\/]/).pop()}" fetchpriority="high" />`,
+	);
 
 	let options = {
 		base: env.VITE_APP_BASE,
