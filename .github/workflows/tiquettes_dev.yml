@@ -38,7 +38,7 @@ jobs:
           onlyNewer: true
           settings: 'sftp:auto-confirm=yes'
           localDir: './dist'
-          remoteDir: './public/dev/'
+          remoteDir: '/public/dev'
           reverse: true
           parallel: 4
           options: 'delete'
