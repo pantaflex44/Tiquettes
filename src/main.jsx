@@ -200,7 +200,7 @@ export default function Main() {
 			"ressources",
 		].map((src) => {
 			return new Promise((resolve, reject) => {
-				const s = `${import.meta.env.VITE_APP_URL}/${src}.svg`;
+				const s = `${import.meta.env.VITE_APP_URL}${src}.svg`;
 				const img = new Image();
 				img.onload = () => {
 					resolve(img);

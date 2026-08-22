@@ -1,7 +1,7 @@
 {
     "name": "tiquettes",
     "title": "Tiquettes",
-    "description": "Générateur d'étiquettes pour tableaux et armoires électriques.",
+    "description": "Générateur d'étiquettes pour tableaux et armoires électriques. Sublimer vos tableaux électriques tout en répondant aux besoins de la norme en vigueur. Fonctionnalités et esthétisme pour tous vos projets.",
     "version": "1.0.0",
     "keywords": [
         "étiquette",
@@ -37,7 +37,7 @@
     "type": "module",
     "scripts": {
         "update:all": "npx npm-check-updates -u && npm install",
-        "compile": "concurrently \"node ./app-config-compiler.cjs\"",
+        "compile": "cross-env NODE_ENV=dev && concurrently \"node ./app-config-compiler.cjs\" \"node ./sitemap-generator.cjs\"",
         "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\"",
         "predev": "concurrently \"npm run copies\"",
         "dev": "cross-env NODE_ENV=dev concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
@@ -82,8 +82,7 @@
         "vite": "^8.2.2",
         "vite-plugin-biome": "^1.2.0",
         "vite-plugin-mkcert": "^2.1.0",
-        "vite-plugin-open-graph": "^2.0.6",
-        "vite-plugin-sitemap": "^0.8.2"
+        "vite-plugin-open-graph": "^2.0.6"
     },
     "allowScripts": {
         "sharp@0.33.5": true,
