@@ -4,7 +4,6 @@ import { defineConfig, loadEnv } from "vite";
 import biomePlugin from "vite-plugin-biome";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
-import preloadAssets from "vite-plugin-preload-assets";
 import { VitePWA } from "vite-plugin-pwa";
 
 import * as pkg from "./package.json" with { type: "json" };
@@ -31,9 +30,6 @@ export default async ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
-			preloadAssets({
-				imagesToPreload,
-			}),
 			react(),
 			VitePWA({
 				registerType: "autoUpdate",
