@@ -49,3 +49,6 @@ public/tiquettes_stickers.pdf
 
 src/css/twofaInput.css
 src/TwofaInput.jsx
+dist/api/libs/batik-1.19/CHANGES
+dist/api/libs/batik-1.19/lib/README.xml-apis-ext-1.3.04.txt
+dist/api/libs/batik-1.19/extensions/README.txt

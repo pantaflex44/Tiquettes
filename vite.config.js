@@ -10,7 +10,26 @@ import * as pkg from "./package.json" with { type: "json" };
 
 // https://vitejs.dev/config/
 
-export default ({ mode }) => {
+import { glob } from "glob";
+
+const images = (
+	await glob([
+		"./src/**/*.png",
+		"./src/**/*.webp",
+		"./src/**/*.jpg",
+		"./src/**/*.bmp",
+		"./src/**/*.gif",
+		"./src/**/*.svg",
+		"./public/**/*.png",
+		"./public/**/*.webp",
+		"./public/**/*.jpg",
+		"./public/**/*.bmp",
+		"./public/**/*.gif",
+		"./public/**/*.svg",
+	])
+).map((i) => `./${i}`);
+
+const config = ({ mode }) => {
 	const env = loadEnv(mode, "./");
 
 	let options = {
@@ -19,7 +38,9 @@ export default ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
-			preloadPlugin(),
+			preloadPlugin({
+				imagesToPreload: images,
+			}),
 			react(),
 			VitePWA({
 				registerType: "autoUpdate",
@@ -58,6 +79,27 @@ export default ({ mode }) => {
 				applyFixes: true,
 				biomeAdditionalArgs: "--config-path=./biome.json",
 			}),
+			ogPlugin({
+				basic: {
+					url: env.VITE_APP_URL,
+					title: pkg.title,
+					type: "website",
+					image: `${env.VITE_APP_URL}og_1200x630.webp`,
+					determiner: "auto",
+					description: pkg.description,
+					locale: env.VITE_APP_LOCALE.replaceAll("-", "_"),
+					localeAlternate: [env.VITE_APP_LOCALE.replaceAll("-", "_")],
+					siteName: pkg.title,
+				},
+				twitter: {
+					image: `${env.VITE_APP_URL}twitter_1280x640.webp`,
+					card: "summary_large_image",
+					description: pkg.description,
+					title: pkg.title,
+					site: env.VITE_APP_URL,
+					creator: pkg.author,
+				},
+			}),
 		],
 		build: {
 			rollupOptions: {
@@ -84,36 +126,7 @@ export default ({ mode }) => {
 		};
 	}
 
-	/*if (mode === "production") {*/
-	options = {
-		...options,
-		plugins: [
-			...options.plugins,
-
-			ogPlugin({
-				basic: {
-					url: env.VITE_APP_URL,
-					title: pkg.title,
-					type: "website",
-					image: `${env.VITE_APP_URL}og_1200x630.webp`,
-					determiner: "auto",
-					description: pkg.description,
-					locale: env.VITE_APP_LOCALE.replaceAll("-", "_"),
-					localeAlternate: [env.VITE_APP_LOCALE.replaceAll("-", "_")],
-					siteName: pkg.title,
-				},
-				twitter: {
-					image: `${env.VITE_APP_URL}twitter_1280x640.webp`,
-					card: "summary_large_image",
-					description: pkg.description,
-					title: pkg.title,
-					site: env.VITE_APP_URL,
-					creator: pkg.author,
-				},
-			}),
-		],
-	};
-	/*}*/
-
 	return defineConfig(options);
 };
+
+export default config;
