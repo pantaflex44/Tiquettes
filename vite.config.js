@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react";
 import { glob } from "glob";
 import { defineConfig, loadEnv } from "vite";
 import biomePlugin from "vite-plugin-biome";
+import { createHtmlPlugin } from "vite-plugin-html";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
 import { VitePWA } from "vite-plugin-pwa";
@@ -13,19 +14,21 @@ import * as pkg from "./package.json" with { type: "json" };
 export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
 
-	const imagesToPreload = (
-		await glob([
-			"./public/**/*.png",
-			"./public/**/*.webp",
-			"./public/**/*.jpg",
-			"./public/**/*.bmp",
-			"./public/**/*.gif",
-			"./public/**/*.svg",
-		])
-	).map(
-		(i) =>
-			`<link rel="preload" as="image" href="${env.VITE_APP_BASE}${i.split(/[\\/]/).pop()}" fetchpriority="high" />`,
-	);
+	const imagesToPreload = [];
+	const images = await glob([
+		"./public/**/*.png",
+		"./public/**/*.webp",
+		"./public/**/*.jpg",
+		"./public/**/*.bmp",
+		"./public/**/*.gif",
+		"./public/**/*.svg",
+	]);
+	for (const img of images) {
+		const link = `<link rel="preload" as="image" href="${env.VITE_APP_BASE}${img.split(/[\\/]/).pop()}" fetchpriority="high" />`;
+		if (!imagesToPreload.includes(link)) {
+			imagesToPreload.push(link);
+		}
+	}
 
 	let options = {
 		base: env.VITE_APP_BASE,
@@ -34,6 +37,14 @@ export default async ({ mode }) => {
 		},
 		plugins: [
 			react(),
+			createHtmlPlugin({
+				minify: false,
+				inject: {
+					data: {
+						imagesToPreload: `${imagesToPreload.join("\n")}`,
+					},
+				},
+			}),
 			VitePWA({
 				registerType: "autoUpdate",
 				includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
