@@ -4,8 +4,8 @@ import { defineConfig, loadEnv } from "vite";
 import biomePlugin from "vite-plugin-biome";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
+import preloadAssets from "vite-plugin-preload-assets";
 import { VitePWA } from "vite-plugin-pwa";
-import preloadPlugin from "vite-preload/plugin";
 
 import * as pkg from "./package.json" with { type: "json" };
 
@@ -14,7 +14,7 @@ import * as pkg from "./package.json" with { type: "json" };
 export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
 
-	const images = (
+	const imagesToPreload = (
 		await glob([
 			"./public/**/*.png",
 			"./public/**/*.webp",
@@ -31,8 +31,8 @@ export default async ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
-			preloadPlugin({
-				imagesToPreload: [...images],
+			preloadAssets({
+				imagesToPreload,
 			}),
 			react(),
 			VitePWA({

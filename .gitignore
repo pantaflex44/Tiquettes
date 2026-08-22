@@ -51,3 +51,4 @@ src/css/twofaInput.css
 src/TwofaInput.jsx
 
 .github/workflows/tiquettes_dev.yml.old
+.github/workflows/tiquettes_fr.yml.old
