@@ -38,4 +38,3 @@ jobs:
           port: 22
           local_path: "./dist/*"
           remote_path: "./public/dev/"
-          delete_remote_files: true
