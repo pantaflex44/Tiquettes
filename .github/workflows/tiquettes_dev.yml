@@ -35,7 +35,7 @@ jobs:
           port: 22
           user: ${{ secrets.FTPUSERNAME }}
           pass: ${{ secrets.FTPPASSWORD }}
-          onlyNewer: true
+          onlyNewer: false
           settings: 'sftp:auto-confirm=yes'
           localDir: './dist'
           remoteDir: '/public/dev'
