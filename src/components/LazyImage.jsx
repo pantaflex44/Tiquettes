@@ -18,6 +18,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import blankIcon from "../../src/assets/blank.svg";
+
 function LazyImage({
 	src,
 	width = null,
@@ -28,12 +30,12 @@ function LazyImage({
 	threshold = 0,
 	...props
 }) {
-	const [imageSrc, setImageSrc] = useState(null);
+	const [imageSrc, setImageSrc] = useState(blankIcon);
 	const imageRef = useRef();
 
 	const callback = useCallback((entries) => {
 		const [entry] = entries;
-		if (entry.isIntersecting && imageSrc === null) {
+		if (entry.isIntersecting && (imageSrc === null || imageSrc === blankIcon)) {
 			setImageSrc(src);
 		}
 	}, []);
@@ -52,10 +54,12 @@ function LazyImage({
 	}, [callback, root, rootMargin, threshold, imageRef]);
 
 	useEffect(() => {
-		if (imageSrc !== null) {
+		if (imageSrc !== null && imageSrc !== blankIcon) {
 			setImageSrc(src);
 		}
 	}, [src]);
+
+	useEffect(() => console.log(imageSrc), [imageSrc]);
 
 	return (
 		<img
