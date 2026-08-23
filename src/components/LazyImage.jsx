@@ -67,7 +67,7 @@ function LazyImage({
 
 	return (
 		<img
-			alt={alt}
+			alt={""}
 			width={width}
 			height={height}
 			{...props}
