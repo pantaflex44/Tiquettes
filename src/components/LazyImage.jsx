@@ -29,9 +29,10 @@ function LazyImage({
 	rootMargin = "0px",
 	threshold = 0,
 	lazy = true,
+	onlyInView = true,
 	...props
 }) {
-	const [imageSrc, setImageSrc] = useState(lazy ? null : src);
+	const [imageSrc, setImageSrc] = useState(lazy && onlyInView ? null : src);
 	const imageRef = useRef();
 
 	const callback = useCallback((entries) => {
@@ -47,7 +48,7 @@ function LazyImage({
 			rootMargin,
 			threshold,
 		});
-		if (lazy) {
+		if (lazy && onlyInView) {
 			observer.observe(imageRef.current);
 		} else {
 			observer.unobserve(imageRef.current);
@@ -56,13 +57,13 @@ function LazyImage({
 		return () => {
 			observer.disconnect();
 		};
-	}, [callback, root, rootMargin, threshold, imageRef, lazy]);
+	}, [callback, root, rootMargin, threshold, imageRef, lazy, onlyInView]);
 
 	useEffect(() => {
-		if (!lazy || imageSrc !== null) {
+		if (!lazy || !onlyInView || imageSrc !== null) {
 			setImageSrc(src);
 		}
-	}, [src]);
+	}, [imageSrc, src, lazy, onlyInView]);
 
 	return (
 		<img
@@ -74,6 +75,7 @@ function LazyImage({
 			src={imageSrc ?? blankIcon}
 			loading={lazy ? "lazy" : "eager"}
 			data-lazy={lazy}
+			data-onlyInView={onlyInView}
 		/>
 	);
 }

@@ -237,7 +237,8 @@ function Module({
 						title="Coller ici"
 						alt="Coller ici"
 						onClick={() => onPaste(item)}
-						lazy={false}
+						lazy={true}
+						onlyInView={false}
 					/>
 				) : isFree && !canPaste && !hasClipboard ? (
 					<LazyImage
@@ -250,7 +251,8 @@ function Module({
 								onEdit(item);
 							}
 						}}
-						lazy={false}
+						lazy={true}
+						onlyInView={false}
 					/>
 				) : !isFree && themedModule ? (
 					<div
@@ -354,7 +356,8 @@ function Module({
 									alt="Demi module sur la gauche"
 									width={16}
 									height={16}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 							<div
@@ -368,7 +371,8 @@ function Module({
 									alt="Réduire"
 									width={15}
 									height={15}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 							<div
@@ -382,7 +386,8 @@ function Module({
 									alt="Déplacer vers la gauche"
 									width={15}
 									height={15}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 						</div>
@@ -404,7 +409,8 @@ function Module({
 									alt="Demi module sur la droite"
 									width={16}
 									height={16}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 							<div
@@ -418,7 +424,8 @@ function Module({
 									alt="Agrandir"
 									width={15}
 									height={15}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 							<div
@@ -432,7 +439,8 @@ function Module({
 									alt="Déplacer vers la droite"
 									width={15}
 									height={15}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 						</div>
@@ -466,7 +474,8 @@ function Module({
 										width={14}
 										height={14}
 										style={{ marginTop: "2px", marginLeft: "2px" }}
-										lazy={false}
+										lazy={true}
+										onlyInView={false}
 									/>
 								</div>
 								<div
@@ -481,7 +490,8 @@ function Module({
 										width={16}
 										height={16}
 										style={{ marginTop: "2px", marginLeft: "2px" }}
-										lazy={false}
+										lazy={true}
+										onlyInView={false}
 									/>
 								</div>
 							</div>
@@ -499,7 +509,8 @@ function Module({
 										alt="Echanger le module"
 										width={16}
 										height={16}
-										lazy={false}
+										lazy={true}
+										onlyInView={false}
 									/>
 								</div>
 							)}
@@ -514,7 +525,8 @@ function Module({
 									alt="Supprimer le module"
 									width={16}
 									height={16}
-									lazy={false}
+									lazy={true}
+									onlyInView={false}
 								/>
 							</div>
 						</div>
@@ -544,7 +556,8 @@ function Module({
 								width={16}
 								height={16}
 								style={{ marginTop: "-4px" }}
-								lazy={false}
+								lazy={true}
+								onlyInView={false}
 							/>
 						</div>
 					</div>
@@ -576,7 +589,8 @@ function Module({
 								width={16}
 								height={16}
 								style={{ marginTop: "-4px" }}
-								lazy={false}
+								lazy={true}
+								onlyInView={false}
 							/>
 							<small>Echanger avec ce module</small>
 						</div>
