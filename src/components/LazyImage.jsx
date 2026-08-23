@@ -30,12 +30,12 @@ function LazyImage({
 	threshold = 0,
 	...props
 }) {
-	const [imageSrc, setImageSrc] = useState(blankIcon);
+	const [imageSrc, setImageSrc] = useState(null);
 	const imageRef = useRef();
 
 	const callback = useCallback((entries) => {
 		const [entry] = entries;
-		if (entry.isIntersecting && (imageSrc === null || imageSrc === blankIcon)) {
+		if (entry.isIntersecting && imageSrc === null) {
 			setImageSrc(src);
 		}
 	}, []);
@@ -54,12 +54,10 @@ function LazyImage({
 	}, [callback, root, rootMargin, threshold, imageRef]);
 
 	useEffect(() => {
-		if (imageSrc !== null && imageSrc !== blankIcon) {
+		if (imageSrc !== null) {
 			setImageSrc(src);
 		}
 	}, [src]);
-
-	useEffect(() => console.log(imageSrc), [imageSrc]);
 
 	return (
 		<img
@@ -68,7 +66,7 @@ function LazyImage({
 			height={height}
 			{...props}
 			ref={imageRef}
-			src={imageSrc}
+			src={imageSrc ?? blankIcon}
 			loading="lazy"
 			data-lazy={true}
 		/>
