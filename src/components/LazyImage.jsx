@@ -66,7 +66,7 @@ function LazyImage({
 			height={height}
 			{...props}
 			ref={imageRef}
-			src={imageSrc ?? blankIcon}
+			src={imageSrc}
 			loading="lazy"
 			data-lazy={true}
 		/>
