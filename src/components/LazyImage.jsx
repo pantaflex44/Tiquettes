@@ -67,7 +67,7 @@ function LazyImage({
 			{...props}
 			ref={imageRef}
 			src={imageSrc}
-			loading="lazy"
+			/*loading="lazy"*/
 			data-lazy={true}
 		/>
 	);
