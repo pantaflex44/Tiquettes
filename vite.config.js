@@ -2,7 +2,6 @@ import react from "@vitejs/plugin-react";
 import { glob } from "glob";
 import { defineConfig, loadEnv } from "vite";
 import biomePlugin from "vite-plugin-biome";
-import { createHtmlPlugin } from "vite-plugin-html";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
 import { VitePWA } from "vite-plugin-pwa";
@@ -14,21 +13,38 @@ import * as pkg from "./package.json" with { type: "json" };
 export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
 
-	const imagesToPreload = [];
-	const images = await glob([
-		"./public/**/*.png",
-		"./public/**/*.webp",
-		"./public/**/*.jpg",
-		"./public/**/*.bmp",
-		"./public/**/*.gif",
-		"./public/**/*.svg",
-	]);
-	for (const img of images) {
-		const link = `<link rel="preload" as="image" href="${env.VITE_APP_BASE}${img.split(/[\\/]/).pop()}" fetchpriority="high" />`;
-		if (!imagesToPreload.includes(link)) {
-			imagesToPreload.push(link);
-		}
-	}
+	const svgPreloader = () => {
+		return {
+			name: "no-attribute",
+			async transformIndexHtml(html) {
+				const imageChecker = async (url) => {
+					try {
+						const response = await fetch(url, { method: "head" });
+						return response.status !== 404;
+					} catch (error) {
+						return error;
+					}
+				};
+
+				const images = [];
+				const found = await glob(["./public/**/*.svg"]);
+				for (const img of found) {
+					const filename = img.split(/[\\/]/).pop();
+					const filepath = `${env.VITE_APP_BASE}${filename}`;
+					const link = `<link rel="preload" as="image" href="${filepath}" fetchpriority="high" />`;
+					if (!images.includes(link)) {
+						images.push(link);
+					}
+				}
+
+				html = html.replace(
+					/<!--[\s]*SVG_PRELOADER[\s]*-->/gim,
+					`<!-- START : SVG PRELOADER -->\n\t${images.join("\n\t")}\n\t<!-- END : SVG PRELOADER -->`,
+				);
+				return html;
+			},
+		};
+	};
 
 	let options = {
 		base: env.VITE_APP_BASE,
@@ -36,15 +52,8 @@ export default async ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
+			svgPreloader(),
 			react(),
-			createHtmlPlugin({
-				minify: false,
-				inject: {
-					data: {
-						imagesToPreload: `${imagesToPreload.join("\n")}`,
-					},
-				},
-			}),
 			VitePWA({
 				registerType: "autoUpdate",
 				includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
