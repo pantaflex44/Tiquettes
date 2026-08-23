@@ -21,9 +21,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import blankIcon from "../../src/assets/blank.svg";
 
 function LazyImage({
-	src,
-	width = null,
-	height = null,
+	src = null,
+	width = 16,
+	height = 16,
 	alt = "",
 	root = null,
 	rootMargin = "0px",
