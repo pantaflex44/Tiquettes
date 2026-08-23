@@ -18,6 +18,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import blankIcon from "../../src/assets/blank.svg";
+
 function LazyImage({
 	src,
 	width = null,
@@ -69,9 +71,9 @@ function LazyImage({
 			height={height}
 			{...props}
 			ref={imageRef}
-			src={imageSrc}
-			/*loading="lazy"*/
-			data-lazy={true}
+			src={imageSrc ?? blankIcon}
+			loading={lazy ? "lazy" : "eager"}
+			data-lazy={lazy}
 		/>
 	);
 }
