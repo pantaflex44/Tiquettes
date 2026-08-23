@@ -35,6 +35,7 @@ import rightIcon from "../assets/right.svg";
 import clearIcon from "../assets/trash.svg";
 import cancelredIcon from "../assets/x.svg";
 import themesList from "../themes.json" with { type: "json" };
+import LazyImage from "./LazyImage.jsx";
 
 function Module({
 	item,
@@ -229,7 +230,7 @@ function Module({
 				}}
 			>
 				{canPaste ? (
-					<img
+					<LazyImage
 						className="module_iconfree"
 						src={pasteIcon}
 						style={{ width: "50%" }}
@@ -238,7 +239,7 @@ function Module({
 						onClick={() => onPaste(item)}
 					/>
 				) : isFree && !canPaste && !hasClipboard ? (
-					<img
+					<LazyImage
 						className="module_iconfree"
 						src={editIcon}
 						title="Cliquer pour éditer ce module..."
@@ -340,7 +341,7 @@ function Module({
 								onClick={() => onHalf(item, halfModeLeft)}
 								data-disabled={!canHalfMode}
 							>
-								<img
+								<LazyImage
 									src={
 										!canHalfMode
 											? halfLeftIcon
@@ -359,7 +360,12 @@ function Module({
 								onClick={() => onShrink(item, moduleRef)}
 								data-disabled={!shrinkAllowed(item)}
 							>
-								<img src={shrinkIcon} alt="Réduire" width={15} height={15} />
+								<LazyImage
+									src={shrinkIcon}
+									alt="Réduire"
+									width={15}
+									height={15}
+								/>
 							</div>
 							<div
 								className="tool left"
@@ -367,7 +373,7 @@ function Module({
 								onClick={() => onMoveLeft(item, moduleRef)}
 								data-disabled={!moveLeftAllowed(item)}
 							>
-								<img
+								<LazyImage
 									src={leftIcon}
 									alt="Déplacer vers la gauche"
 									width={15}
@@ -382,7 +388,7 @@ function Module({
 								onClick={() => onHalf(item, halfModeRight)}
 								data-disabled={!canHalfMode}
 							>
-								<img
+								<LazyImage
 									src={
 										!canHalfMode
 											? halfRightIcon
@@ -401,7 +407,12 @@ function Module({
 								onClick={() => onGrow(item, moduleRef)}
 								data-disabled={!growAllowed(item)}
 							>
-								<img src={growIcon} alt="Agrandir" width={15} height={15} />
+								<LazyImage
+									src={growIcon}
+									alt="Agrandir"
+									width={15}
+									height={15}
+								/>
 							</div>
 							<div
 								className="tool right"
@@ -409,7 +420,7 @@ function Module({
 								onClick={() => onMoveRight(item, moduleRef)}
 								data-disabled={!moveRightAllowed(item)}
 							>
-								<img
+								<LazyImage
 									src={rightIcon}
 									alt="Déplacer vers la droite"
 									width={15}
@@ -441,7 +452,7 @@ function Module({
 									onClick={() => onCopy(item)}
 									data-disabled={!onCopy}
 								>
-									<img
+									<LazyImage
 										src={copyIcon}
 										alt="Copier"
 										width={14}
@@ -455,7 +466,7 @@ function Module({
 									onClick={() => onCut(item)}
 									data-disabled={!onCopy}
 								>
-									<img
+									<LazyImage
 										src={cutIcon}
 										alt="Couper"
 										width={16}
@@ -473,7 +484,7 @@ function Module({
 									onClick={() => onInterCopy(item)}
 									data-disabled={isFree}
 								>
-									<img
+									<LazyImage
 										src={interIcon}
 										alt="Echanger le module"
 										width={16}
@@ -487,7 +498,7 @@ function Module({
 								onClick={() => onClear(item)}
 								data-disabled={isFree}
 							>
-								<img
+								<LazyImage
 									src={clearIcon}
 									alt="Supprimer le module"
 									width={16}
@@ -515,7 +526,7 @@ function Module({
 								alignItems: "center",
 							}}
 						>
-							<img
+							<LazyImage
 								src={cancelredIcon}
 								alt="Annuler"
 								width={16}
@@ -546,7 +557,7 @@ function Module({
 								lineHeight: "1",
 							}}
 						>
-							<img
+							<LazyImage
 								src={inter2Icon}
 								alt="Echanger avec ce module"
 								width={16}

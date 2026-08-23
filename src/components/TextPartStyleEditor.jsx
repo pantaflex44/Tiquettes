@@ -27,6 +27,7 @@ import backColorIcon from "../assets/paint.svg";
 import textColorIcon from "../assets/text-color.svg";
 import verticalDisplayModeIcon from "../assets/verticalDisplayMode.svg";
 import GroupColorChooser from "./GroupColorChooser";
+import LazyImage from "./LazyImage";
 
 export default function TextPartStyleEditor({
 	positions,
@@ -89,7 +90,7 @@ export default function TextPartStyleEditor({
 
 			<div className={"tep-settings_row"}>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignLeftIcon}
 						alt={"Alignement à gauche"}
 						width={16}
@@ -121,7 +122,7 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignCenterIcon}
 						alt={"Alignement au centre"}
 						width={16}
@@ -153,7 +154,7 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignRightIcon}
 						alt={"Alignement à droite"}
 						width={16}
@@ -186,7 +187,7 @@ export default function TextPartStyleEditor({
 				</div>
 				<div className={"tep-settings_row-el-separator"}></div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={horizontalDisplayModeIcon}
 						alt={"Présentation horizontale"}
 						width={16}
@@ -215,7 +216,7 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={verticalDisplayModeIcon}
 						alt={"Présentation verticale"}
 						width={16}
@@ -297,7 +298,7 @@ export default function TextPartStyleEditor({
 
 			<div className={"tep-settings_row"}>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={backColorIcon}
 						alt={"Couleur du fond"}
 						width={16}
@@ -338,7 +339,7 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={textColorIcon}
 						alt={"Couleur du texte"}
 						width={16}
@@ -376,7 +377,7 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img src={boldIcon} alt={"Texte gras"} width={16} height={16} />
+					<LazyImage src={boldIcon} alt={"Texte gras"} width={16} height={16} />
 					<input
 						type={"checkbox"}
 						checked={
@@ -400,7 +401,12 @@ export default function TextPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img src={italicIcon} alt={"Texte italique"} width={16} height={16} />
+					<LazyImage
+						src={italicIcon}
+						alt={"Texte italique"}
+						width={16}
+						height={16}
+					/>
 					<input
 						type={"checkbox"}
 						checked={

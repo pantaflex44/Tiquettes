@@ -25,6 +25,7 @@ import nextIcon from "../assets/arrow-right.svg";
 import okIcon from "../assets/check.svg";
 import loadingIcon from "../assets/loading_mini.gif";
 import cancelIcon from "../assets/x.svg";
+import LazyImage from "./LazyImage";
 
 export default function Popup({
 	title,
@@ -62,7 +63,7 @@ export default function Popup({
 			}}
 			title={"Annuler et fermer"}
 		>
-			<img src={cancelIcon} alt={"Annuler"} width={18} height={18} />
+			<LazyImage src={cancelIcon} alt={"Annuler"} width={18} height={18} />
 			<span className={"additional_buttons_text"}>Annuler</span>
 		</div>
 	),
@@ -76,7 +77,7 @@ export default function Popup({
 			}}
 			title={"Précédent"}
 		>
-			<img src={prevIcon} alt={"Précédent"} width={18} height={18} />
+			<LazyImage src={prevIcon} alt={"Précédent"} width={18} height={18} />
 			<span className={"additional_buttons_text"}>Précédent</span>
 		</div>
 	),
@@ -90,7 +91,7 @@ export default function Popup({
 			}}
 			title={"Suivant"}
 		>
-			<img src={nextIcon} alt={"Suivant"} width={18} height={18} />
+			<LazyImage src={nextIcon} alt={"Suivant"} width={18} height={18} />
 			<span className={"additional_buttons_text"}>Suivant</span>
 		</div>
 	),
@@ -104,7 +105,7 @@ export default function Popup({
 			}}
 			title={"Valider et fermer"}
 		>
-			<img src={okIcon} alt={"Valider"} width={18} height={18} />
+			<LazyImage src={okIcon} alt={"Valider"} width={18} height={18} />
 			<span className={"additional_buttons_text"}>Valider</span>
 		</div>
 	),
@@ -153,7 +154,12 @@ export default function Popup({
 					<div className="popup_title">{title}</div>
 					{buttons.close && (
 						<div className="popup_cancel" onClick={onCancel}>
-							<img src={cancelIcon} alt="Annuler" width={24} height={24} />
+							<LazyImage
+								src={cancelIcon}
+								alt="Annuler"
+								width={24}
+								height={24}
+							/>
 						</div>
 					)}
 				</div>
@@ -171,7 +177,7 @@ export default function Popup({
 
 				{loading && (
 					<div className={"popup_loading_box"}>
-						<img
+						<LazyImage
 							src={loadingIcon}
 							width={40}
 							height={40}

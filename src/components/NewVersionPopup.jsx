@@ -19,7 +19,7 @@
 import "../css/newVersionPopup.css";
 
 import reloadIcon from "../assets/refresh-dot.svg";
-
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function NewVersionPopup({ newVersion, onOk }) {
@@ -40,7 +40,7 @@ export default function NewVersionPopup({ newVersion, onOk }) {
 					}}
 					title={"Charger la nouvelle version"}
 				>
-					<img src={reloadIcon} alt={"Charger"} width={20} height={20} />
+					<LazyImage src={reloadIcon} alt={"Charger"} width={20} height={20} />
 					<span>Utiliser la nouvelle version</span>
 				</div>
 			}

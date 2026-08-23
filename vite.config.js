@@ -17,15 +17,6 @@ export default async ({ mode }) => {
 		return {
 			name: "no-attribute",
 			async transformIndexHtml(html) {
-				const imageChecker = async (url) => {
-					try {
-						const response = await fetch(url, { method: "head" });
-						return response.status !== 404;
-					} catch (error) {
-						return error;
-					}
-				};
-
 				const images = [];
 				const found = await glob(["./public/**/*.svg"]);
 				for (const img of found) {

@@ -21,6 +21,7 @@ import summaryNoPicto from "../assets/summary_nopicto.svg";
 import summaryPositionIcon from "../assets/summary_position.svg";
 import summaryRowIcon from "../assets/summary_row.svg";
 import schemaFunctions from "../schema_functions.json";
+import LazyImage from "./LazyImage";
 
 export default function SummaryTab({
 	tab,
@@ -66,7 +67,7 @@ export default function SummaryTab({
 							title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
 							onClick={() => reassignModules()}
 						>
-							<img
+							<LazyImage
 								src={numbersIcon}
 								alt="Ré-assigner automatiquement les identifiants"
 								width={22}
@@ -263,7 +264,7 @@ export default function SummaryTab({
 												<td className="summary_row">
 													{li !== i ? (
 														<div>
-															<img
+															<LazyImage
 																src={summaryRowIcon}
 																width={16}
 																height={16}
@@ -277,7 +278,7 @@ export default function SummaryTab({
 											{switchboard.summaryColumnPosition && (
 												<td className="summary_position">
 													<div>
-														<img
+														<LazyImage
 															src={summaryPositionIcon}
 															width={16}
 															height={16}
@@ -295,14 +296,14 @@ export default function SummaryTab({
 												>
 													<div>
 														{module.icon ? (
-															<img
+															<LazyImage
 																src={module.icon}
 																width={20}
 																height={20}
 																alt="Pictogramme"
 															/>
 														) : (
-															<img
+															<LazyImage
 																src={summaryNoPicto}
 																width={20}
 																height={20}

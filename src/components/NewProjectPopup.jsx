@@ -25,6 +25,7 @@ import wizardPicture2rowsCount from "../assets/swb_rowsCount.png";
 import wizardPicture2stepSize from "../assets/swb_stepSize.png";
 import wizardPicture2stepsPerRows from "../assets/swb_stepsPerRows.png";
 import FirstpageOptionsPopup from "./FirstpageSettingsPopup.jsx";
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function NewProjectPopup({
@@ -149,10 +150,9 @@ export default function NewProjectPopup({
 						<div className="wizard-page-left">
 							<Summary />
 
-							<img
+							<LazyImage
 								className="wizard-page-left-picture"
 								src={wizardPicture2src}
-								alt=""
 							/>
 							<span className="wizard-page-tooltip">{tooltipBox}</span>
 						</div>
@@ -398,7 +398,7 @@ export default function NewProjectPopup({
 											}}
 											onClick={() => setFirstpageOptionsPopup(true)}
 										>
-											<img src={fpSettingsIcon} width={18} height={18} alt="" />
+											<LazyImage src={fpSettingsIcon} width={18} height={18} />
 											<span>Renseigner ou importer les données</span>
 										</button>
 									</div>

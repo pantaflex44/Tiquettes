@@ -21,6 +21,7 @@ import { useEffect, useRef, useState } from "react";
 import caretDownIcon from "../assets/caret-down.svg";
 import caretUpIcon from "../assets/caret-up.svg";
 import useOutsideAlerter from "../hooks/useOutsideAlerter";
+import LazyImage from "./LazyImage";
 
 export default function EditorMultiContactSelector({
 	id,
@@ -134,7 +135,7 @@ export default function EditorMultiContactSelector({
 						</div>
 					) : null}
 				</div>
-				<img
+				<LazyImage
 					loading={"lazy"}
 					src={opened ? caretUpIcon : caretDownIcon}
 					width={16}

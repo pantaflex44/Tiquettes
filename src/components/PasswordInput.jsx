@@ -20,6 +20,7 @@ import { useRef } from "react";
 
 import eyeIcon from "../assets/eye.svg";
 import eyeOffIcon from "../assets/eye-off.svg";
+import LazyImage from "./LazyImage";
 
 function PasswordInput({
 	id = "",
@@ -56,7 +57,7 @@ function PasswordInput({
 				onBlur={onBlur}
 				{...props}
 			/>
-			<img
+			<LazyImage
 				src={eyeIcon}
 				ref={passwordImgRef}
 				width={18}
@@ -71,7 +72,6 @@ function PasswordInput({
 					}
 					passwordInputRef.current.focus();
 				}}
-				alt=""
 			/>
 		</div>
 	);

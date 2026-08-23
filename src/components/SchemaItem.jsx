@@ -20,6 +20,7 @@ import "../css/schema.css";
 
 import { Fragment } from "react";
 import firstIcon from "../assets/caret-down-light.svg";
+import LazyImage from "./LazyImage.jsx";
 import SchemaDescription from "./SchemaDescription.jsx";
 import SchemaSymbol from "./SchemaSymbol.jsx";
 
@@ -41,7 +42,7 @@ export default function SchemaItem({
 				data-hasnext={item.hasNext}
 			>
 				{isFirst && (
-					<img className="schemaItemFirstIcon" src={firstIcon} alt="" />
+					<LazyImage className="schemaItemFirstIcon" src={firstIcon} />
 				)}
 				{isFirst && (
 					<div className="schemaItemFirstIconTitle">

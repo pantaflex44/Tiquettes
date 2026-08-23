@@ -19,7 +19,7 @@
 import "../css/row.css";
 import rowAddIcon from "../assets/row-add.svg";
 import rowDeleteIcon from "../assets/trash.svg";
-
+import LazyImage from "./LazyImage";
 import Module from "./Module";
 
 function Row({
@@ -62,7 +62,7 @@ function Row({
 			id={`row_${rowPosition}`}
 		>
 			<div className="row_title">
-				<img
+				<LazyImage
 					className={`row_delete_icon ${!rowDeleteAllowed() ? "disabled" : ""}`}
 					src={rowDeleteIcon}
 					width={20}
@@ -126,7 +126,7 @@ function Row({
 				className={`row_add ${!rowAddAllowed() ? "disabled" : ""}`}
 				title="Insérer une nouvelle rangée"
 			>
-				<img
+				<LazyImage
 					className="row_add_icon"
 					src={rowAddIcon}
 					width={24}

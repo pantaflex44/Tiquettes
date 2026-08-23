@@ -17,6 +17,7 @@
  */
 
 import { useMemo } from "react";
+import LazyImage from "./LazyImage";
 
 export default function SchemaDescription({ module }) {
 	/*const getModuleById = (moduleId) => {
@@ -66,7 +67,7 @@ export default function SchemaDescription({ module }) {
 			</div>
 			{infos.icon && (
 				<div className="schemaItemLastIconContainer" title={infos.text}>
-					<img
+					<LazyImage
 						alt="Pictogramme"
 						width={24}
 						height={24}

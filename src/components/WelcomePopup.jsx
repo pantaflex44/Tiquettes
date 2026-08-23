@@ -22,7 +22,7 @@ import * as pkg from "../../package.json" with { type: "json" };
 
 import projectIcon from "../assets/project.svg";
 import importIcon from "../assets/upload.svg";
-
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function WelcomePopup({
@@ -43,7 +43,12 @@ export default function WelcomePopup({
 						onNewProject();
 					}}
 				>
-					<img src={projectIcon} width={48} height={48} alt="Nouveau projet" />
+					<LazyImage
+						src={projectIcon}
+						width={48}
+						height={48}
+						alt="Nouveau projet"
+					/>
 					<div className="bigList-content">
 						<div className="bigList-content_title">Nouveau projet libre</div>
 						<div className="bigList-content_description">
@@ -57,7 +62,7 @@ export default function WelcomePopup({
 						onImportProject();
 					}}
 				>
-					<img
+					<LazyImage
 						src={importIcon}
 						width={48}
 						height={48}

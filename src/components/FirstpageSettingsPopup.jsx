@@ -40,6 +40,7 @@ import {
 	mimeTypeToExtension,
 	sanitizeFileName,
 } from "../others/files.js";
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function FirstpageSettingsPopup({
@@ -500,7 +501,7 @@ export default function FirstpageSettingsPopup({
 					className={`tabPages_page ${tab === 1 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(1)}
 				>
-					<img
+					<LazyImage
 						src={dataIcon}
 						width={20}
 						height={20}
@@ -516,7 +517,7 @@ export default function FirstpageSettingsPopup({
 							setTab(2);
 						}}
 					>
-						<img src={eyeIcon} width={20} height={20} alt="Aperçu" />
+						<LazyImage src={eyeIcon} width={20} height={20} alt="Aperçu" />
 						<span>Aperçu</span>
 					</div>
 				)}
@@ -537,7 +538,12 @@ export default function FirstpageSettingsPopup({
 									document.getElementById("importdatafile").click();
 								}}
 							>
-								<img src={importIcon} alt="Importer" width={18} height={18} />
+								<LazyImage
+									src={importIcon}
+									alt="Importer"
+									width={18}
+									height={18}
+								/>
 								<span>Importer</span>
 							</button>
 							<button
@@ -548,7 +554,12 @@ export default function FirstpageSettingsPopup({
 									exportData();
 								}}
 							>
-								<img src={exportIcon} alt="Exporter" width={18} height={18} />
+								<LazyImage
+									src={exportIcon}
+									alt="Exporter"
+									width={18}
+									height={18}
+								/>
 								<span>Exporter</span>
 							</button>
 						</div>
@@ -569,7 +580,12 @@ export default function FirstpageSettingsPopup({
 									}
 								}}
 							>
-								<img src={clearIcon} alt="Défaut" width={18} height={18} />
+								<LazyImage
+									src={clearIcon}
+									alt="Défaut"
+									width={18}
+									height={18}
+								/>
 							</button>
 						</div>
 					</div>
@@ -696,7 +712,7 @@ export default function FirstpageSettingsPopup({
 													document.getElementById("importlogo").click();
 												}}
 											>
-												<img
+												<LazyImage
 													src={importIcon}
 													alt="Importer"
 													width={18}
@@ -733,7 +749,7 @@ export default function FirstpageSettingsPopup({
 															}
 														}}
 													>
-														<img
+														<LazyImage
 															src={trashIcon}
 															alt="Supprimer"
 															width={18}
@@ -753,7 +769,7 @@ export default function FirstpageSettingsPopup({
 															exportLogo();
 														}}
 													>
-														<img
+														<LazyImage
 															src={downloadIcon}
 															alt="Télécharger"
 															width={18}
@@ -781,12 +797,11 @@ export default function FirstpageSettingsPopup({
 												alignItems: "center",
 											}}
 										>
-											<img
+											<LazyImage
 												src={(
 													options?.infos?.from?.logo ?? photoOffIcon
 												).trim()}
 												style={{ maxWidth: "100%", maxHeight: "100%" }}
-												alt=""
 											/>
 										</div>
 									</div>
@@ -822,7 +837,7 @@ export default function FirstpageSettingsPopup({
 										<b>Numéro de SIRET / SIREN</b>
 									</label>
 									{(options?.views?.from?.siret ?? false) && (
-										<img
+										<LazyImage
 											title="Informations"
 											src={infoIcon}
 											width={16}
@@ -841,7 +856,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -909,7 +923,7 @@ export default function FirstpageSettingsPopup({
 										<b>Adresse postale</b>
 									</label>
 									{(options?.views?.from?.postalAddress ?? false) && (
-										<img
+										<LazyImage
 											title="Localiser"
 											src={currentLocationIcon}
 											width={16}
@@ -928,7 +942,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -994,7 +1007,7 @@ export default function FirstpageSettingsPopup({
 										<b>Adresse email</b>
 									</label>
 									{(options?.views?.from?.email ?? false) && (
-										<img
+										<LazyImage
 											title="Envoyer un message"
 											src={sendIcon}
 											width={16}
@@ -1011,7 +1024,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -1079,7 +1091,7 @@ export default function FirstpageSettingsPopup({
 										<b>Numéro de téléphone</b>
 									</label>
 									{(options?.views?.from?.phone ?? false) && (
-										<img
+										<LazyImage
 											title="Appeler"
 											src={callIcon}
 											width={16}
@@ -1096,7 +1108,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -1229,7 +1240,7 @@ export default function FirstpageSettingsPopup({
 										<b>Adresse postale</b>
 									</label>
 									{(options?.views?.to?.postalAddress ?? false) && (
-										<img
+										<LazyImage
 											title="Localiser"
 											src={currentLocationIcon}
 											width={16}
@@ -1248,7 +1259,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -1314,7 +1324,7 @@ export default function FirstpageSettingsPopup({
 										<b>Adresse email</b>
 									</label>
 									{(options?.views?.to?.email ?? false) && (
-										<img
+										<LazyImage
 											title="Envoyer un message"
 											src={sendIcon}
 											width={16}
@@ -1331,7 +1341,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -1396,7 +1405,7 @@ export default function FirstpageSettingsPopup({
 										<b>Numéro de téléphone</b>
 									</label>
 									{(options?.views?.to?.phone ?? false) && (
-										<img
+										<LazyImage
 											title="Appeler"
 											src={callIcon}
 											width={16}
@@ -1413,7 +1422,6 @@ export default function FirstpageSettingsPopup({
 													)
 													.focus()
 											}
-											alt=""
 										/>
 									)}
 								</div>
@@ -1613,7 +1621,7 @@ export default function FirstpageSettingsPopup({
 									}}
 									disabled={zoom <= 25}
 								>
-									<img
+									<LazyImage
 										src={zoomOutIcon}
 										alt="Zoom moins"
 										width={22}
@@ -1649,7 +1657,7 @@ export default function FirstpageSettingsPopup({
 									onClick={() => setZoom(100)}
 									disabled={zoom === 100}
 								>
-									<img
+									<LazyImage
 										src={zoomRealIcon}
 										alt="Taille réelle"
 										width={22}
@@ -1669,7 +1677,7 @@ export default function FirstpageSettingsPopup({
 									}}
 									disabled={zoom >= 100}
 								>
-									<img
+									<LazyImage
 										src={zoomInIcon}
 										alt="Zoom plus"
 										width={22}
@@ -1734,12 +1742,11 @@ export default function FirstpageSettingsPopup({
 													placeItems: "center",
 												}}
 											>
-												<img
+												<LazyImage
 													src={options?.infos?.from?.logo}
 													style={{
 														maxWidth: "100%",
 													}}
-													alt=""
 												/>
 											</div>
 										)}
@@ -1845,7 +1852,7 @@ export default function FirstpageSettingsPopup({
 										Client
 									</span>
 
-									<img
+									<LazyImage
 										className="ffpage-item"
 										style={{
 											left: "11mm",
@@ -1856,7 +1863,6 @@ export default function FirstpageSettingsPopup({
 										src={"./android-chrome-192x192.png"}
 										width={114}
 										height={114}
-										alt=""
 									/>
 
 									<span

@@ -24,6 +24,7 @@ import caretDownIcon from "../assets/caret-down.svg";
 import caretUpIcon from "../assets/caret-up.svg";
 import useOutsideAlerter from "../hooks/useOutsideAlerter.jsx";
 import swbIcons from "../switchboard_icons.json" with { type: "json" };
+import LazyImage from "./LazyImage.jsx";
 
 function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 	const [selected, setSelected] = useState(null);
@@ -149,7 +150,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 				}}
 			>
 				{search?.filename ? (
-					<img
+					<LazyImage
 						loading={"lazy"}
 						src={`${import.meta.env.VITE_APP_BASE}${search.filename}`}
 						width={21}
@@ -173,7 +174,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 					onInput={handleSearchEnter}
 				/>
 
-				<img
+				<LazyImage
 					loading={"lazy"}
 					src={opened ? caretUpIcon : caretDownIcon}
 					width={16}

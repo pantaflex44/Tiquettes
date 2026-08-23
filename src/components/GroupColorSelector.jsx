@@ -25,6 +25,7 @@ import caretDownIcon from "../assets/caret-down.svg";
 import caretUpIcon from "../assets/caret-up.svg";
 import GroupColorSelectorItem from "./GroupColorSelectorItem";
 import GroupColorSelectorSeparator from "./GroupColorSelectorSeparator";
+import LazyImage from "./LazyImage";
 import Popup from "./Popup";
 
 export default function GroupColorSelector({
@@ -112,7 +113,7 @@ export default function GroupColorSelector({
 							backgroundColor: selected.color,
 						}}
 					></div>
-					<img
+					<LazyImage
 						loading={"lazy"}
 						src={opened ? caretUpIcon : caretDownIcon}
 						width={16}

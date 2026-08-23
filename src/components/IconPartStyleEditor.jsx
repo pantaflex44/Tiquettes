@@ -23,6 +23,7 @@ import alignRightIcon from "../assets/align-right.svg";
 import iconColorIcon from "../assets/icon-color.svg";
 import backColorIcon from "../assets/paint.svg";
 import GroupColorChooser from "./GroupColorChooser";
+import LazyImage from "./LazyImage";
 
 export default function IconPartStyleEditor({
 	positions,
@@ -112,7 +113,7 @@ export default function IconPartStyleEditor({
 
 			<div className={"tep-settings_row"}>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignLeftIcon}
 						alt={"Alignement à gauche"}
 						width={16}
@@ -144,7 +145,7 @@ export default function IconPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignCenterIcon}
 						alt={"Alignement au centre"}
 						width={16}
@@ -176,7 +177,7 @@ export default function IconPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={alignRightIcon}
 						alt={"Alignement à droite"}
 						width={16}
@@ -211,7 +212,7 @@ export default function IconPartStyleEditor({
 
 			<div className={"tep-settings_row"}>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={backColorIcon}
 						alt={"Couleur du fond"}
 						width={16}
@@ -252,7 +253,7 @@ export default function IconPartStyleEditor({
 					/>
 				</div>
 				<div className={"tep-settings_row-el"}>
-					<img
+					<LazyImage
 						src={iconColorIcon}
 						alt={"Couleur de l'icône"}
 						width={16}

@@ -19,6 +19,7 @@
 import { useMemo } from "react";
 
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
+import LazyImage from "./LazyImage";
 
 export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 	const func = useMemo(() => {
@@ -76,7 +77,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 				title={func.title}
 				onClick={() => handleEdit()}
 			>
-				<img
+				<LazyImage
 					className="schemaItemSymbolImg"
 					src={func.icon}
 					alt={func.name}
@@ -106,7 +107,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 				{func.obj?.hasPole && module.pole && (
 					<>
 						<div className="schemaItemSymbolPole">{module.pole}</div>
-						<img
+						<LazyImage
 							className="schemaItemSymbolImgPole"
 							src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`}
 							alt={module.pole}
@@ -116,7 +117,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 				)}
 
 				{monitor.errors?.[module.id] && (
-					<img
+					<LazyImage
 						className="schemaItemSymbolWarning notprintable"
 						src={`${import.meta.env.BASE_URL}schema_warning.svg`}
 						alt="Erreur"

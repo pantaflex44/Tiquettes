@@ -18,6 +18,7 @@
 
 import partialParaIcon from "../assets/para_p.svg";
 import totalParaIcon from "../assets/para_t.svg";
+import LazyImage from "./LazyImage";
 
 export default function EditorParallelSelector({
 	id,
@@ -36,7 +37,7 @@ export default function EditorParallelSelector({
 				title="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
 				onClick={() => onChange(false)}
 			>
-				<img
+				<LazyImage
 					src={partialParaIcon}
 					width={24}
 					height={24}
@@ -49,7 +50,7 @@ export default function EditorParallelSelector({
 				title="Allouer ce module à l'alimentation de ses enfants seulement"
 				onClick={() => onChange(true)}
 			>
-				<img
+				<LazyImage
 					src={totalParaIcon}
 					width={24}
 					height={24}

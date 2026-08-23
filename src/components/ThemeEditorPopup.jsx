@@ -31,6 +31,7 @@ import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
 import VerticalRule from "./VerticalRule.jsx";
 
 import "../css/themeEditorPopup.css";
+import LazyImage from "./LazyImage.jsx";
 
 export default function ThemeEditorPopup({
 	switchboard,
@@ -306,7 +307,12 @@ export default function ThemeEditorPopup({
 							}}
 							title={"Importer un thème"}
 						>
-							<img src={importIcon} alt={"Importer"} width={18} height={18} />
+							<LazyImage
+								src={importIcon}
+								alt={"Importer"}
+								width={18}
+								height={18}
+							/>
 							<input
 								type={"file"}
 								id={"importTheme"}
@@ -379,7 +385,12 @@ export default function ThemeEditorPopup({
 							}}
 							title={"Exporter ce thème"}
 						>
-							<img src={exportIcon} alt={"Exporter"} width={18} height={18} />
+							<LazyImage
+								src={exportIcon}
+								alt={"Exporter"}
+								width={18}
+								height={18}
+							/>
 						</div>
 					),
 					title: "Exporter",
@@ -422,7 +433,12 @@ export default function ThemeEditorPopup({
 							}}
 							title={"Annuler les modifications"}
 						>
-							<img src={undoIcon} alt={"Recharger"} width={18} height={18} />
+							<LazyImage
+								src={undoIcon}
+								alt={"Recharger"}
+								width={18}
+								height={18}
+							/>
 							<span className={"additional_buttons_text"}>
 								Thème par défaut
 							</span>
@@ -454,7 +470,7 @@ export default function ThemeEditorPopup({
 								{/* Top border */}
 								<div className={"tep-settings_row"} style={{ width: "100%" }}>
 									<div className={"tep-settings_row-el"}>
-										<img
+										<LazyImage
 											src={borderBottomIcon}
 											alt={"Ajouter un séparateur haut"}
 											width={16}
@@ -585,7 +601,7 @@ export default function ThemeEditorPopup({
 								{/* Botttom border */}
 								<div className={"tep-settings_row"} style={{ width: "100%" }}>
 									<div className={"tep-settings_row-el"}>
-										<img
+										<LazyImage
 											src={borderTopIcon}
 											alt={"Ajouter un séparateur bas"}
 											width={16}

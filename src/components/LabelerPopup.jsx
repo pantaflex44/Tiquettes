@@ -42,7 +42,7 @@ import trimAllIcon from "../assets/trim-all.svg";
 import trimExtIcon from "../assets/trim-ext.svg";
 import trimNoneIcon from "../assets/trim-none.svg";
 import labelersOptions from "../labelers_options.json" with { type: "json" };
-
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function LabelerPopup({ switchboard, onApply, onCancel }) {
@@ -173,7 +173,12 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 					}}
 					title={"Exporter les étiquettes pour cette étiqueteuse"}
 				>
-					<img src={downloadIcon} alt={"Exporter"} width={20} height={20} />
+					<LazyImage
+						src={downloadIcon}
+						alt={"Exporter"}
+						width={20}
+						height={20}
+					/>
 					<span>Exporter</span>
 				</div>
 			}
@@ -467,7 +472,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 							className="popup_row-flex"
 							style={{ alignItems: "center", gap: "0.5rem" }}
 						>
-							<img
+							<LazyImage
 								style={{ flex: 0 }}
 								src={
 									options.options?.icons?.value === true
@@ -482,7 +487,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 								}
 								width={18}
 								height={18}
-								alt=""
 							/>
 							<select
 								id={"labeler_iconsSize"}
@@ -541,7 +545,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 								className="popup_row-flex"
 								style={{ alignItems: "center", gap: "0.5rem" }}
 							>
-								<img
+								<LazyImage
 									style={{ flex: 0 }}
 									src={
 										options.options?.text?.value === true
@@ -556,7 +560,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}
 									width={18}
 									height={18}
-									alt=""
 								/>
 								<select
 									value={
@@ -607,7 +610,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 								className="popup_row-flex"
 								style={{ alignItems: "center", gap: "0.5rem" }}
 							>
-								<img
+								<LazyImage
 									style={{ flex: 0 }}
 									src={
 										options.options?.textOrientation?.value === "horizontal"
@@ -616,7 +619,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}
 									width={18}
 									height={18}
-									alt=""
 								/>
 								<select
 									disabled={options.options?.text?.value !== true}
@@ -663,7 +665,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 							className="popup_row-flex"
 							style={{ alignItems: "center", gap: "0.5rem" }}
 						>
-							<img
+							<LazyImage
 								style={{ flex: 0 }}
 								src={
 									options.options?.invert?.value === true
@@ -672,7 +674,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 								}
 								width={18}
 								height={18}
-								alt=""
 							/>
 							<select
 								value={options.options?.invert?.value ?? false}
@@ -716,7 +717,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 								className="popup_row-flex"
 								style={{ alignItems: "center", gap: "0.5rem" }}
 							>
-								<img
+								<LazyImage
 									style={{ flex: 0 }}
 									src={
 										options.options?.trim === "all"
@@ -727,7 +728,6 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}
 									width={18}
 									height={18}
-									alt=""
 								/>
 								<select
 									value={options.options?.trim ?? false}
@@ -775,7 +775,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}}
 									title={"Afficher les bordures entre les modules imprimés"}
 								>
-									<img src={borderInterIcon} width={18} height={18} alt="" />
+									<LazyImage src={borderInterIcon} width={18} height={18} />
 									<input
 										type="checkbox"
 										name={"labeler_borders_inter"}
@@ -807,7 +807,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}}
 									title={"Afficher les bordures à gauche des modules imprimés"}
 								>
-									<img src={borderLeftIcon} width={18} height={18} alt="" />
+									<LazyImage src={borderLeftIcon} width={18} height={18} />
 									<input
 										type="checkbox"
 										name={"labeler_borders_left"}
@@ -839,7 +839,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}}
 									title={"Afficher les bordures en haut des modules imprimés"}
 								>
-									<img src={borderTopIcon} width={18} height={18} alt="" />
+									<LazyImage src={borderTopIcon} width={18} height={18} />
 									<input
 										type="checkbox"
 										name={"labeler_borders_top"}
@@ -871,7 +871,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}}
 									title={"Afficher les bordures à droite des modules imprimés"}
 								>
-									<img src={borderRightIcon} width={18} height={18} alt="" />
+									<LazyImage src={borderRightIcon} width={18} height={18} />
 									<input
 										type="checkbox"
 										name={"labeler_borders_right"}
@@ -905,7 +905,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 									}}
 									title={"Afficher les bordures en bas des modules imprimés"}
 								>
-									<img src={borderBottomIcon} width={18} height={18} alt="" />
+									<LazyImage src={borderBottomIcon} width={18} height={18} />
 									<input
 										type="checkbox"
 										name={"labeler_borders_bottom"}

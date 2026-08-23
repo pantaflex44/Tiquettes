@@ -32,6 +32,7 @@ import sourcesIcon from "../assets/sources.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
 import swbIcons from "../switchboard_icons.json";
+import LazyImage from "./LazyImage.jsx";
 import SchemaItem from "./SchemaItem.jsx";
 import SourcesPopup from "./SourcesPopup.jsx";
 
@@ -505,7 +506,7 @@ export default function SchemaTab({
 								}
 							/>
 							<label htmlFor="schemaProjectTypeR" title="Project résidentiel">
-								<img
+								<LazyImage
 									src={homeIcon}
 									alt="Project résidentiel"
 									width={24}
@@ -524,7 +525,7 @@ export default function SchemaTab({
 								}
 							/>
 							<label htmlFor="schemaProjectTypeT" title="Project tertiaire">
-								<img
+								<LazyImage
 									src={compagnyIcon}
 									alt="Project tertiaire"
 									width={24}
@@ -558,7 +559,7 @@ export default function SchemaTab({
 								htmlFor="schemaWithDbChoice"
 								title="Intégrer un disjoncteur de branchement"
 							>
-								<img
+								<LazyImage
 									src={switchboard.withDb ? boltIcon : noboltIcon}
 									alt="Disjoncteur de branchement"
 									width={24}
@@ -717,7 +718,7 @@ export default function SchemaTab({
 									title="Gérer les sources"
 									onClick={() => setSourcesOpened(true)}
 								>
-									<img
+									<LazyImage
 										src={sourcesIcon}
 										alt="Gérer les sources"
 										width={22}
@@ -746,7 +747,7 @@ export default function SchemaTab({
 								htmlFor="schemaWithGroundChoice"
 								title="Représenter le bornier de terre"
 							>
-								<img
+								<LazyImage
 									src={switchboard.withGroundLine ? groundIcon : nogroundIcon}
 									alt="Bornier de terre"
 									width={24}
@@ -771,7 +772,7 @@ export default function SchemaTab({
 								htmlFor="schemaMonitorZoom"
 								title="Agrandir visuellement le schéma"
 							>
-								<img
+								<LazyImage
 									src={zoomed ? zoomMinusIcon : zoomPlusIcon}
 									alt="Zoom"
 									width={24}
@@ -788,7 +789,7 @@ export default function SchemaTab({
 								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."
 								onClick={() => reassignModules()}
 							>
-								<img
+								<LazyImage
 									src={numbersIcon}
 									alt="Ré-assigner automatiquement les identifiants"
 									width={22}
@@ -815,7 +816,7 @@ export default function SchemaTab({
 								title="Conseils et Surveillance (NFC 15-100)"
 								className={`${monitor.errors ? "error" : ""}`}
 							>
-								<img
+								<LazyImage
 									src={switchboard.schemaMonitor ? monitorIcon : nomonitorIcon}
 									alt="Conseils et Surveillance (NFC 15-100)"
 									width={24}
@@ -828,7 +829,7 @@ export default function SchemaTab({
 								{monitorWarningsLength > 0 ? (
 									<>
 										<span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? "s" : ""} détectée${monitorWarningsLength > 1 ? "s" : ""}.`}</span>
-										<img
+										<LazyImage
 											src={info2Icon}
 											alt="Détails des erreurs"
 											title="Détails des erreurs"
@@ -858,7 +859,12 @@ export default function SchemaTab({
 							title={"Fermer"}
 							onClick={() => setMonitorOpened(false)}
 						>
-							<img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+							<LazyImage
+								src={cancelIcon}
+								width={24}
+								height={24}
+								alt={"Fermer"}
+							/>
 						</div>
 						<div
 							className="tabPageBandCol"
@@ -875,7 +881,7 @@ export default function SchemaTab({
 										<ul>
 											{errors.map((error, j) => (
 												<li key={j} className="tabPageError">
-													<img
+													<LazyImage
 														src={`${import.meta.env.BASE_URL}schema_warning.svg`}
 														alt="Erreurs"
 														width={16}
@@ -905,12 +911,11 @@ export default function SchemaTab({
 
 					{switchboard.withGroundLine && (
 						<div className="schemaGroundLine">
-							<img
+							<LazyImage
 								className=""
 								src={`${import.meta.env.VITE_APP_BASE}circuit-ground.svg`}
 								width={24}
 								height={24}
-								alt=""
 							/>
 						</div>
 					)}

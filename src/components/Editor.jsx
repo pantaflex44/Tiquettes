@@ -38,6 +38,7 @@ import EditorSensibilitySelector from "./EditorSensibilitySelector.jsx";
 import EditorTypeSelector from "./EditorTypeSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
 import GroupColorSelector from "./GroupColorSelector.jsx";
+import LazyImage from "./LazyImage.jsx";
 import Module from "./Module.jsx";
 import Popup from "./Popup.jsx";
 import SchemaSymbol from "./SchemaSymbol.jsx";
@@ -218,7 +219,7 @@ export default function Editor({
 			<Popup
 				title={
 					<div className="popup_title_content">
-						<img
+						<LazyImage
 							className="popup_title_content_img"
 							src={editIcon}
 							title="Editer le module"
@@ -273,7 +274,12 @@ export default function Editor({
 							onChange={() => setEditorTab("main")}
 						/>
 						<label htmlFor="main_editor_tab">
-							<img src={switchboardIcon} width="20" height="20" alt="Tableau" />
+							<LazyImage
+								src={switchboardIcon}
+								width="20"
+								height="20"
+								alt="Tableau"
+							/>
 							<span>Tableau</span>
 						</label>
 
@@ -284,7 +290,7 @@ export default function Editor({
 							onChange={() => setEditorTab("schema")}
 						/>
 						<label htmlFor="schema_editor_tab">
-							<img src={schemaIcon} width="20" height="20" alt="Schéma" />
+							<LazyImage src={schemaIcon} width="20" height="20" alt="Schéma" />
 							<span>Schéma</span>
 						</label>
 					</div>
@@ -333,7 +339,7 @@ export default function Editor({
 											}
 										}}
 									>
-										<img
+										<LazyImage
 											src={assignIdIcon}
 											width={22}
 											height={22}
@@ -359,7 +365,7 @@ export default function Editor({
 													: "initial",
 										}}
 									>
-										<img
+										<LazyImage
 											src={
 												ed.currentModule.noAutoId === true
 													? numberManIcon

@@ -18,6 +18,7 @@
 
 import kcNCIcon from "../assets/kc_nc.svg";
 import kcNOIcon from "../assets/kc_no.svg";
+import LazyImage from "./LazyImage";
 
 export default function EditorContactTypeSelector({
 	id,
@@ -38,7 +39,7 @@ export default function EditorContactTypeSelector({
 				title="Normalement ouvert"
 				onClick={() => onChange("NO")}
 			>
-				<img src={kcNOIcon} width={24} height={24} alt="NO" />
+				<LazyImage src={kcNOIcon} width={24} height={24} alt="NO" />
 				<span>NO</span>
 			</div>
 
@@ -48,7 +49,7 @@ export default function EditorContactTypeSelector({
 				title="Normalement fermé"
 				onClick={() => onChange("NC")}
 			>
-				<img src={kcNCIcon} width={24} height={24} alt="NF" />
+				<LazyImage src={kcNCIcon} width={24} height={24} alt="NF" />
 				<span>NF</span>
 			</div>
 		</div>

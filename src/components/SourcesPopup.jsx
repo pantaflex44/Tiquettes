@@ -22,6 +22,7 @@ import "../css/sourcesPopup.css";
 
 import plusIcon from "../assets/plus.svg";
 import trashIcon from "../assets/trash.svg";
+import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function SourcesPopup({ switchboard, onApply, onCancel }) {
@@ -186,7 +187,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 									//ensureVisible(edit);
 								}}
 							>
-								<img
+								<LazyImage
 									src={plusIcon}
 									width={18}
 									height={18}
@@ -212,7 +213,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 									}
 								}}
 							>
-								<img
+								<LazyImage
 									src={trashIcon}
 									width={18}
 									height={18}

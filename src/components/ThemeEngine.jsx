@@ -19,6 +19,7 @@
 import { useMemo } from "react";
 import Color, { hexToRgb } from "../others/color.js";
 import Solver from "../others/colorSolver.js";
+import LazyImage from "./LazyImage.jsx";
 
 function CustomTheme({ item, data, style }) {
 	const shown = useMemo(
@@ -317,9 +318,8 @@ function CustomTheme({ item, data, style }) {
 					{useNamedFunction ? (
 						<p style={styles.iconText}>{item.modtype ?? ""}</p>
 					) : (
-						<img
+						<LazyImage
 							style={styles.iconImg}
-							alt=""
 							src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
 						/>
 					)}

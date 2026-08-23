@@ -18,6 +18,7 @@
 
 import downIcon from "../assets/caret-down.svg";
 import upIcon from "../assets/caret-up.svg";
+import LazyImage from "./LazyImage";
 
 export default function ThemeEditorPartColumnTitle({
 	propName,
@@ -47,7 +48,7 @@ export default function ThemeEditorPartColumnTitle({
 					}))
 				}
 			/>
-			<img
+			<LazyImage
 				src={upIcon}
 				alt={"Remonter"}
 				width={16}
@@ -60,7 +61,7 @@ export default function ThemeEditorPartColumnTitle({
 				style={{ cursor: "pointer" }}
 				onClick={() => up(propName)}
 			/>
-			<img
+			<LazyImage
 				src={downIcon}
 				alt={"Descendre"}
 				width={16}

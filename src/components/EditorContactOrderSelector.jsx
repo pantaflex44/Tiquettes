@@ -18,6 +18,7 @@
 
 import asservOrderAfter from "../assets/asserv_order_after.svg";
 import asservOrderBefore from "../assets/asserv_order_before.svg";
+import LazyImage from "./LazyImage";
 
 export default function EditorContactOrderSelector({
 	id,
@@ -37,7 +38,7 @@ export default function EditorContactOrderSelector({
 				title="Les contacteurs sont positionnés en amont du module"
 				onClick={() => onChange("before")}
 			>
-				<img
+				<LazyImage
 					src={asservOrderBefore}
 					width={24}
 					height={24}
@@ -50,7 +51,7 @@ export default function EditorContactOrderSelector({
 				title="Les contacteurs sont positionnés en aval du module pour piloter le circuit associé"
 				onClick={() => onChange("after")}
 			>
-				<img
+				<LazyImage
 					src={asservOrderAfter}
 					width={24}
 					height={24}

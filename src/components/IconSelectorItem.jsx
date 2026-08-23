@@ -16,6 +16,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import LazyImage from "./LazyImage";
+
 function IconSelectorItem({
 	icon,
 	selected,
@@ -49,7 +51,7 @@ function IconSelectorItem({
 			onMouseMove={() => setHoveredItem(icon.filename)}
 		>
 			{icon.filename ? (
-				<img
+				<LazyImage
 					src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`}
 					loading={"lazy"}
 					width={24}

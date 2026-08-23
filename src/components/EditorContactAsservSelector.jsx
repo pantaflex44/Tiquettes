@@ -18,6 +18,7 @@
 
 import partialAsservIcon from "../assets/asserv_p.svg";
 import totalAsservIcon from "../assets/asserv_t.svg";
+import LazyImage from "./LazyImage";
 
 export default function EditorContactAsservSelector({
 	id,
@@ -36,7 +37,7 @@ export default function EditorContactAsservSelector({
 				title="Asservissement partiel"
 				onClick={() => onChange(true)}
 			>
-				<img
+				<LazyImage
 					src={partialAsservIcon}
 					width={24}
 					height={24}
@@ -49,7 +50,7 @@ export default function EditorContactAsservSelector({
 				title="Asservissement total"
 				onClick={() => onChange(false)}
 			>
-				<img
+				<LazyImage
 					src={totalAsservIcon}
 					width={24}
 					height={24}

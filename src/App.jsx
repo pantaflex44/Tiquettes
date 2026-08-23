@@ -57,6 +57,7 @@ import ContentEditable from "./components/ContentEditable.jsx";
 import Editor from "./components/Editor.jsx";
 import FirstpageOptionsPopup from "./components/FirstpageSettingsPopup.jsx";
 import LabelerPopup from "./components/LabelerPopup.jsx";
+import LazyImage from "./components/LazyImage.jsx";
 import NewProjectPopup from "./components/NewProjectPopup.jsx";
 import Row from "./components/Row.jsx";
 import SchemaTab from "./components/SchemaTab.jsx";
@@ -2322,7 +2323,7 @@ function App() {
 					}}
 					title="Créer un nouveau projet"
 				>
-					<img
+					<LazyImage
 						src={newProjectIcon}
 						width={16}
 						height={16}
@@ -2363,7 +2364,7 @@ function App() {
 					className="button_group-export_project dropdown_container"
 					title="Exporter..."
 				>
-					<img
+					<LazyImage
 						src={exportProjectIcon}
 						width={16}
 						height={16}
@@ -2394,7 +2395,7 @@ function App() {
 										exportProject();
 									}}
 								>
-									<img src={downloadIcon} width={16} height={16} alt="" />
+									<LazyImage src={downloadIcon} width={16} height={16} />
 								</div>
 							</div>
 						</div>
@@ -2451,7 +2452,7 @@ function App() {
 									title="Exporter les étiquettes"
 									onClick={() => setLabelerOptionsPopup(true)}
 								>
-									<img src={downloadIcon} width={16} height={16} alt="" />
+									<LazyImage src={downloadIcon} width={16} height={16} />
 								</div>
 							</div>
 						</div>
@@ -2474,7 +2475,12 @@ function App() {
 						printMenuRef.current.classList.remove("clicked");
 					}}
 				>
-					<img src={printProjectIcon} width={16} height={16} alt={"Imprimer"} />
+					<LazyImage
+						src={printProjectIcon}
+						width={16}
+						height={16}
+						alt={"Imprimer"}
+					/>
 					<span>Imprimer...</span>
 					<div
 						className="dropdown"
@@ -2507,7 +2513,7 @@ function App() {
 							/>
 							<label htmlFor="print_firstPage">Page de garde</label>
 							{printOptions.firstPage && (
-								<img
+								<LazyImage
 									src={fpsettingsIcon}
 									width={16}
 									height={16}
@@ -2540,7 +2546,7 @@ function App() {
 							/>
 							<label htmlFor="print_labels">Etiquettes</label>
 							{printOptions.labels && (
-								<img
+								<LazyImage
 									src={subMenus.printLabelsOpened ? caretUpIcon : caretDownIcon}
 									width={16}
 									height={16}
@@ -2708,7 +2714,7 @@ function App() {
 							/>
 							<label htmlFor="print_schema">Schéma unifilaire</label>
 							{printOptions.schema && (
-								<img
+								<LazyImage
 									src={subMenus.printSchemaOpened ? caretUpIcon : caretDownIcon}
 									width={16}
 									height={16}
@@ -2827,7 +2833,7 @@ function App() {
 							/>
 							<label htmlFor="print_summary">Nomenclature</label>
 							{printOptions.summary && (
-								<img
+								<LazyImage
 									src={
 										subMenus.printSummaryOpened ? caretUpIcon : caretDownIcon
 									}
@@ -3045,7 +3051,7 @@ function App() {
 					}}
 					title="Réinitialiser le projet"
 				>
-					<img
+					<LazyImage
 						src={clearProjectIcon}
 						width={16}
 						height={16}
@@ -3070,7 +3076,7 @@ function App() {
 					onClick={() => setAutoSpaceSize((old) => !old)}
 					title="Redimensionner automatiquement l'espace de travail"
 				>
-					<img
+					<LazyImage
 						src={autoSpaceSize ? resizeIcon : resizeOffIcon}
 						width={18}
 						height={18}
@@ -3087,7 +3093,12 @@ function App() {
 			<h3
 				className={`${printOptions.labels ? "printable" : "notprintable"}`.trim()}
 			>
-				<img src={projectIcon} width={24} height={24} alt="Projet courant" />
+				<LazyImage
+					src={projectIcon}
+					width={24}
+					height={24}
+					alt="Projet courant"
+				/>
 				<ContentEditable
 					value={switchboard.prjname ?? defaultProjectName}
 					onChange={(value) => {
@@ -3114,18 +3125,18 @@ function App() {
 
 			<ul className="project">
 				<li title="Révision">
-					<img src={versionIcon} alt="Révision" width={16} height={16} />
+					<LazyImage src={versionIcon} alt="Révision" width={16} height={16} />
 					<span>Révision {switchboard.prjversion ?? 1}</span>
 				</li>
 				<li title="Description">
-					<img src={infoIcon} alt="Description" width={16} height={16} />
+					<LazyImage src={infoIcon} alt="Description" width={16} height={16} />
 					<span>
 						{switchboard.rows.length} x {switchboard.stepsPerRows} module
 						{switchboard.stepsPerRows > 1 ? "s" : ""} / {switchboard.height}mm
 					</span>
 				</li>
 				<li title="Date de création">
-					<img
+					<LazyImage
 						src={createdIcon}
 						alt="Date de création"
 						width={16}
@@ -3134,7 +3145,7 @@ function App() {
 					<span>{(switchboard.prjcreated ?? new Date()).toLocaleString()}</span>
 				</li>
 				<li title="Date de modification">
-					<img
+					<LazyImage
 						src={updatedIcon}
 						alt="Date de modification"
 						width={16}
@@ -3153,7 +3164,12 @@ function App() {
 					className={`tabPages_page ${tab === 1 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(1)}
 				>
-					<img src={projectIcon} width={20} height={20} alt="Etiquettes" />
+					<LazyImage
+						src={projectIcon}
+						width={20}
+						height={20}
+						alt="Etiquettes"
+					/>
 					<span>Etiquettes</span>
 				</div>
 
@@ -3161,7 +3177,7 @@ function App() {
 					className={`tabPages_page ${tab === 2 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(2)}
 				>
-					<img
+					<LazyImage
 						src={schemaIcon}
 						width={20}
 						height={20}
@@ -3174,7 +3190,12 @@ function App() {
 					className={`tabPages_page ${tab === 3 ? "selected" : ""}`.trim()}
 					onClick={() => setTab(3)}
 				>
-					<img src={summaryIcon} width={20} height={20} alt="Nomenclature" />
+					<LazyImage
+						src={summaryIcon}
+						width={20}
+						height={20}
+						alt="Nomenclature"
+					/>
 					<span>Nomenclature</span>
 				</div>
 			</nav>
@@ -3247,7 +3268,7 @@ function App() {
 									}}
 									disabled={UIFrozen}
 								>
-									<img
+									<LazyImage
 										src={themeSettingsIcon}
 										alt="Modifier le thème."
 										width={22}
@@ -3346,7 +3367,7 @@ function App() {
 								onClick={() => reassignModules()}
 								disabled={UIFrozen}
 							>
-								<img
+								<LazyImage
 									src={numbersIcon}
 									alt="Ré-assigner automatiquement les identifiants"
 									width={22}
@@ -3373,7 +3394,7 @@ function App() {
 								title="Conseils et Surveillance (NFC 15-100)"
 								className={`${monitor.errors ? "error" : ""}`}
 							>
-								<img
+								<LazyImage
 									src={
 										switchboard.switchboardMonitor ? monitorIcon : nomonitorIcon
 									}
@@ -3389,7 +3410,7 @@ function App() {
 									<>
 										<span>{`${monitorWarningsLength} erreur${monitorWarningsLength > 1 ? "s" : ""} détectée${monitorWarningsLength > 1 ? "s" : ""}.`}</span>
 
-										<img
+										<LazyImage
 											src={info2Icon}
 											alt="Détails des erreurs"
 											title="Détails des erreurs"
@@ -3419,7 +3440,12 @@ function App() {
 							title={"Fermer"}
 							onClick={() => setMonitorOpened(false)}
 						>
-							<img src={cancelIcon} width={24} height={24} alt={"Fermer"} />
+							<LazyImage
+								src={cancelIcon}
+								width={24}
+								height={24}
+								alt={"Fermer"}
+							/>
 						</div>
 						<div
 							className="tabPageBandCol"
@@ -3436,7 +3462,7 @@ function App() {
 										<ul>
 											{errors.map((error, j) => (
 												<li key={j} className="tabPageError">
-													<img
+													<LazyImage
 														src={`${import.meta.env.BASE_URL}schema_warning.svg`}
 														alt="Erreurs"
 														width={16}
