@@ -239,6 +239,8 @@ function Module({
 						onClick={() => onPaste(item)}
 						lazy={true}
 						onlyInView={false}
+						width={null}
+						height={null}
 					/>
 				) : isFree && !canPaste && !hasClipboard ? (
 					<LazyImage
@@ -253,6 +255,8 @@ function Module({
 						}}
 						lazy={true}
 						onlyInView={false}
+						width={null}
+						height={null}
 					/>
 				) : !isFree && themedModule ? (
 					<div

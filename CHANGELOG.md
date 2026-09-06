@@ -19,6 +19,7 @@
 
 ### Ajouts
 
+- Ajout du pictogramme 'Boite de dérivation' suite à la demande d'Alain S.
 - [[Discussion #98](https://github.com/pantaflex44/Tiquettes/discussions/98)] Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.
 - [[Formulaire de contact #1](https://www.tiquettes.fr/app/)] Ajout d'un nouveau pictogramme: Circulateur / Pompe chauffage, Eclairages / Prises (RGIE).
 

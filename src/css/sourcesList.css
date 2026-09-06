@@ -1,0 +1,82 @@
+/**
+    Tiquettes - Générateur d'étiquettes pour tableaux et armoires électriques
+    Copyright (C) 2024-2026 Christophe LEMOINE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.iconview {
+	box-sizing: border-box;
+	padding: 1rem;
+	width: 100%;
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #999;
+	border-radius: 7px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(134px, 1fr));
+	grid-auto-rows: max-content;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 0.5rem;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 22rem;
+}
+
+.iconview_item {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	height: max-content;
+	border: 1px solid transparent;
+	border-radius: 7px;
+	cursor: pointer;
+}
+
+.iconview_item:hover {
+	background-color: var(--secondary-color-light);
+}
+
+.iconview_item > .text {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+/*.iconview_item:focus > .text {
+	color: #008b8b;
+}
+
+.iconview_item:focus > img {
+	filter: brightness(0) saturate(100%) invert(37%) sepia(71%) saturate(889%)
+		hue-rotate(139deg) brightness(94%) contrast(105%);
+}*/
+
+.iconview_item.selected {
+	border-color: #008b8b;
+	background-color: var(--secondary-color);
+	color: #008b8b;
+}
+
+.iconview_item.selected > img {
+	filter: brightness(0) saturate(100%) invert(37%) sepia(71%) saturate(889%)
+		hue-rotate(139deg) brightness(94%) contrast(105%);
+}

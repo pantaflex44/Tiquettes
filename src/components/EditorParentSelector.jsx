@@ -16,45 +16,53 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
 
 export default function EditorParentSelector({
 	id,
-	currentParentId,
-	currentSourceId,
 	currentModuleId,
 	filteredModulesListBySchemaFuncs,
+	getModuleById,
 	sources,
 	onParentChange = null,
 	onSourceChange = null,
 }) {
-	const currentValue = useMemo(() => {
-		if (currentParentId !== "") {
-			return JSON.stringify({ type: "module", id: currentParentId });
-		} else if (currentSourceId) {
-			return JSON.stringify({ type: "source", id: currentSourceId });
+	const getCurrentParent = (currentModuleId) => {
+		const module = getModuleById(currentModuleId);
+		if (!module) return "";
+
+		let v = "";
+		if (module.parentId !== "") {
+			v = JSON.stringify({ type: "module", id: module.parentId });
+		} else if (module.srcId !== "") {
+			//v = JSON.stringify({ type: "source", id: module.srcId });
 		}
-	}, [currentParentId, currentSourceId]);
+		return v;
+	};
+	const [currentParent, setCurrentParent] = useState(
+		getCurrentParent(currentModuleId),
+	);
 
 	return (
 		<select
 			id={id}
 			name={id}
-			value={currentValue}
+			value={currentParent}
 			onChange={(e) => {
-				let v = e.target.value.trim();
+				const v = e.target.value.trim();
 				if (v === "") {
-					if (onSourceChange) onSourceChange("");
+					if (onParentChange) onParentChange("");
 				} else {
-					v = JSON.parse(v);
-					if (v.type === "module") {
-						if (onParentChange) onParentChange(v.id);
-					} else if (v.type === "source") {
-						if (onSourceChange) onSourceChange(v.id ?? "");
+					const vp = JSON.parse(v);
+					if (vp.type === "module") {
+						if (onParentChange) onParentChange(vp.id);
+					} else if (vp.type === "source") {
+						//if (onSourceChange) onSourceChange(vp.id ?? "");
 					}
 				}
+				setCurrentParent(v);
 			}}
 			style={{ flex: 1 }}
 		>
@@ -65,14 +73,14 @@ export default function EditorParentSelector({
 			<option value={""} disabled={true}>
 				Sources d'alimentations
 			</option>
-			{sources.map((s) => (
+			{/*sources.map((s) => (
 				<option
 					key={s.trim()}
 					value={JSON.stringify({ type: "source", id: s.trim() })}
 				>
 					{s.trim()}
 				</option>
-			))}
+			))*/}
 
 			{/* Modules */}
 			{Object.entries(filteredModulesListBySchemaFuncs).map(([k, l]) => {

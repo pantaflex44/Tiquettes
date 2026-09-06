@@ -295,6 +295,7 @@ body:has(.popup-overflow) {
 
 .popup_row > label {
 	margin-right: 1em;
+	align-self: center;
 }
 
 .popup.internal_popup_opened {

@@ -70,6 +70,9 @@
 				],
 				"adds": [
 					{
+						"text": "Ajout du pictogramme 'Boite de dérivation' suite à la demande d'Alain S."
+					},
+					{
 						"text": "Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.",
 						"from": {
 							"name": "Discussion #98",

@@ -80,13 +80,13 @@ export default function SchemaTab({
 						((module.parentId ?? "-").trim() === "" ||
 							!getModuleById(module.parentId).module)
 					) {
-						return { ...module, parentId: switchboard.withDB ? "DB" : "" };
+						return { ...module, parentId: /*switchboard.withDB ? "DB" :*/ "" };
 					}
 					return null;
 				}),
 			)
 			.filter((module) => module !== null);
-	}, [switchboard.rows, switchboard.withDb]);
+	}, [switchboard.rows /*, switchboard.withDb*/]);
 
 	const getChilds = useCallback(
 		(parentId) => {
@@ -104,7 +104,7 @@ export default function SchemaTab({
 				)
 				.filter((module) => module !== null);
 		},
-		[switchboard.rows, switchboard.withDb],
+		[switchboard.rows /*, switchboard.withDb*/],
 	);
 
 	const getRow = useCallback(
@@ -192,12 +192,13 @@ export default function SchemaTab({
 
 			return l;
 		},
-		[switchboard.rows, switchboard.withDb],
+		[switchboard.rows /*, switchboard.withDb*/],
 	);
 
 	const tree = useMemo(() => {
-		return switchboard.withDb
-			? {
+		return (
+			/*switchboard.withDb
+		? {
 					childs: {
 						DB: {
 							module: { ...switchboard.db },
@@ -209,10 +210,9 @@ export default function SchemaTab({
 						},
 					},
 				}
-			: {
-					childs: getRow(head),
-				};
-	}, [head, switchboard.withDb, switchboard.db]);
+			:*/ { childs: getRow(head) }
+		);
+	}, [head /*, switchboard.withDb, switchboard.db*/]);
 
 	const monitor = useMemo(() => {
 		if (!switchboard.schemaMonitor) return {};
@@ -322,7 +322,7 @@ export default function SchemaTab({
 
 				const parentPole =
 					lastParentModule?.pole ??
-					(switchboard.withDb ? switchboard.db?.pole : null);
+					/*switchboard.withDb ? switchboard.db?.pole :*/ null;
 				const parentCurrent = getCurrent(lastParentModule);
 				const currentPole = getPole(data.module);
 				const currentFunc = getFunc(data.module);
@@ -541,7 +541,7 @@ export default function SchemaTab({
 								Sources:
 							</span>
 						</div>
-						<div className="tabPageBandCol">
+						{/*<div className="tabPageBandCol">
 							<input
 								type="checkbox"
 								name="schemaWithDbChoice"
@@ -566,8 +566,9 @@ export default function SchemaTab({
 									height={24}
 								/>
 							</label>
-						</div>
-						{switchboard.withDb ? (
+						</div>*/}
+						{
+							/*switchboard.withDb ? (
 							<>
 								<div className="tabPageBandCol">
 									<select
@@ -710,8 +711,7 @@ export default function SchemaTab({
 									</select>
 								</div>
 							</>
-						) : (
-							<div className="tabPageBandCol">
+						) :*/ <div className="tabPageBandCol">
 								<button
 									type="button"
 									style={{ height: "34px" }}
@@ -726,7 +726,7 @@ export default function SchemaTab({
 									/>
 								</button>
 							</div>
-						)}
+						}
 					</div>
 
 					<div className="tabPageBandGroup">

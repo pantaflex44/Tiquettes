@@ -16,7 +16,35 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default function EditorCurrentSelector({ id, value, onChange = null }) {
+export default function EditorCurrentSelector({
+	id,
+	value,
+	allowed = [
+		"2A",
+		"6A",
+		"10A",
+		"15A",
+		"16A",
+		"20A",
+		"25A",
+		"30A",
+		"32A",
+		"40A",
+		"45A",
+		"50A",
+		"60A",
+		"63A",
+		"80A",
+		"90A",
+		"100A",
+		"125A",
+		"160A",
+		"180A",
+		"240A",
+		"250A",
+	],
+	onChange = null,
+}) {
 	return (
 		<select
 			id={id}
@@ -27,28 +55,11 @@ export default function EditorCurrentSelector({ id, value, onChange = null }) {
 			}}
 		>
 			<option value={""}>-</option>
-			<option value={"2A"}>2A</option>
-			<option value={"6A"}>6A</option>
-			<option value={"10A"}>10A</option>
-			<option value={"15A"}>15A</option>
-			<option value={"16A"}>16A</option>
-			<option value={"20A"}>20A</option>
-			<option value={"25A"}>25A</option>
-			<option value={"30A"}>30A</option>
-			<option value={"32A"}>32A</option>
-			<option value={"40A"}>40A</option>
-			<option value={"45A"}>45A</option>
-			<option value={"50A"}>50A</option>
-			<option value={"60A"}>60A</option>
-			<option value={"63A"}>63A</option>
-			<option value={"80A"}>80A</option>
-			<option value={"90A"}>90A</option>
-			<option value={"100A"}>100A</option>
-			<option value={"125A"}>125A</option>
-			<option value={"160A"}>160A</option>
-			<option value={"180A"}>180A</option>
-			<option value={"240A"}>240A</option>
-			<option value={"250A"}>250A</option>
+			{allowed.map((a) => (
+				<option key={a} value={a}>
+					{a}
+				</option>
+			))}
 		</select>
 	);
 }

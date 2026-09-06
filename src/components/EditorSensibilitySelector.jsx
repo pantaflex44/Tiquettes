@@ -19,6 +19,7 @@
 export default function EditorSensibilitySelector({
 	id,
 	value,
+	allowed = ["10mA", "30mA", "300mA", "500mA", "600mA"],
 	onChange = null,
 }) {
 	return (
@@ -31,10 +32,11 @@ export default function EditorSensibilitySelector({
 			}}
 		>
 			<option value={""}>-</option>
-			<option value={"10mA"}>10mA</option>
-			<option value={"30mA"}>30mA</option>
-			<option value={"300mA"}>300mA</option>
-			<option value={"500mA"}>500mA</option>
+			{allowed.map((a) => (
+				<option key={a} value={a}>
+					{a}
+				</option>
+			))}
 		</select>
 	);
 }

@@ -171,10 +171,11 @@ export default function Editor({
 	);
 	const hasLine = useMemo(
 		() =>
-			((parentModule && parentModuleIsTri) ||
+			parentModule &&
+			parentModuleIsTri /* ||
 				(!parentModule &&
 					switchboard.withDb &&
-					(switchboard.db.pole === "3P+N" || switchboard.db.pole === "4P"))) &&
+					(switchboard.db.pole === "3P+N" || switchboard.db.pole === "4P"))*/ &&
 			schemaFunctions[ed.currentModule.func]?.hasPole &&
 			(ed.currentModule.pole === "1P+N" || ed.currentModule.pole === "2P"),
 		[parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions],
@@ -189,7 +190,7 @@ export default function Editor({
 			onUpdateModuleEditor({ id: lastFreeId });
 		}
 
-		let dbPole = 4;
+		/*let dbPole = 4;
 		if (switchboard.withDb) {
 			const pole = switchboard.db.pole.trim().toUpperCase();
 			dbPole = parseInt(pole.replace(/\D/g, ""), 10);
@@ -204,8 +205,8 @@ export default function Editor({
 		}
 
 		if (dbPole === 1 && currentPole !== 1 && currentPole !== 2)
-			onUpdateModuleEditor({ pole: switchboard.db.pole, line: "" });
-	}, [hasBlankId, ed.currentModule.func]);
+			onUpdateModuleEditor({ pole: switchboard.db.pole, line: "" });*/
+	}, [hasBlankId /*, ed.currentModule.func*/]);
 
 	const [fidc, setFidc] = useState(false);
 	useEffect(() => {
@@ -693,33 +694,29 @@ export default function Editor({
 										>
 											<EditorParentSelector
 												id={`editor_schparent_${ed.currentModule.id.trim()}`}
-												currentParentId={(
-													ed.currentModule.parentId ?? ""
-												).trim()}
-												currentSourceId={(ed.currentModule.srcId ?? "").trim()}
 												currentModuleId={ed.currentModule.id}
 												filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
-												sources={
+												getModuleById={getModuleById}
+												/*sources={
 													switchboard.sources ??
 													import.meta.env.VITE_SOURCES.split("|")
 														.map((v) => v.trim())
 														.filter((v) => v !== "")
 														.sort((a, b) => a.localeCompare(b))
-												}
+												}*/
 												onParentChange={(value) => {
 													onUpdateModuleEditor({ parentId: value });
-													const prt = getParentById(value);
+													/*const prt = getParentById(value);
 													const srcId =
 														prt?.srcId ??
-														(!prt && switchboard.withDb
-															? import.meta.env.VITE_DB_SRCNAME
-															: (ed.currentModule.srcId ?? ""));
-													onUpdateModuleEditor({ srcId });
+														ed.currentModule.srcId ??
+														"";
+													onUpdateModuleEditor({ srcId });*/
 												}}
-												onSourceChange={(value) => {
+												/*onSourceChange={(value) => {
 													onUpdateModuleEditor({ parentId: "" });
 													onUpdateModuleEditor({ srcId: value });
-												}}
+												}}*/
 											/>
 										</div>
 									</div>
@@ -915,7 +912,7 @@ export default function Editor({
 										id={`editor_pole_${ed.currentModule.id.trim()}`}
 										parentModule={getParentById(ed.currentModule.parentId)}
 										value={ed.currentModule.pole}
-										db={switchboard.withDb ? switchboard.db : null}
+										/*db={switchboard.withDb ? switchboard.db : null}*/
 										onChange={(value, vref) => {
 											onUpdateModuleEditor({ pole: value, vref });
 										}}

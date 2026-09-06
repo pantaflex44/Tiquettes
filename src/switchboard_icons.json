@@ -152,6 +152,12 @@
 		"coef": 1
 	},
 	{
+		"filename": "swb_deriv.svg",
+		"title": "Boite de derivation",
+		"modtype": "Alim",
+		"coef": 1
+	},
+	{
 		"filename": "swb_home.svg",
 		"title": "Maison / Dependance / Extension",
 		"modtype": "Alim",

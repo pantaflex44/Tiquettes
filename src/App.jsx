@@ -28,6 +28,7 @@ import {
 import sanitizeFilename from "sanitize-filename";
 
 import "./css/app.css";
+
 import * as pkg from "../package.json" with { type: "json" };
 import { statsPush } from "../public/api/stats.js";
 import resizeIcon from "./assets/aspect-ratio.svg";
@@ -67,6 +68,7 @@ import WelcomePopup from "./components/WelcomePopup.jsx";
 import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
 import labelersOptions from "./labelers_options.json" with { type: "json" };
 import schemaFunctions from "./schema_functions.json" with { type: "json" };
+import schemaSources from "./schema_sources.json" with { type: "json" };
 import swbIcons from "./switchboard_icons.json" with { type: "json" };
 import themesList from "./themes.json" with { type: "json" };
 
@@ -258,6 +260,13 @@ function App() {
 	const defaultTheme = themesList.filter((t) => t.default)[0];
 	const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
 	const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
+	const defaultSources = (import.meta.env.VITE_SOURCES ?? "")
+		.split("|")
+		.filter(
+			(id) =>
+				id.trim() !== "" && Object.keys(schemaSources).includes(id.trim()),
+		)
+		.map((id) => ({ ...schemaSources[id], id }));
 	//const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN, 10);
 	const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX, 10);
 	const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN, 10);
@@ -306,7 +315,8 @@ function App() {
 			hRow: defaultHRow,
 			spr: defaultStepsPerRows,
 			projectType: defaultProjectType,
-			db: {
+			sources: defaultSources,
+			/*db: {
 				crb: "",
 				current: "30/60A",
 				desc: "Disjonteur de branchement",
@@ -332,7 +342,7 @@ function App() {
 				span: 4,
 				text: "Disjonteur de branchement",
 				type: "S",
-			},
+			},*/
 		}),
 		[
 			defaultHRow,
@@ -340,6 +350,7 @@ function App() {
 			defaultProjectName,
 			defaultStepsPerRows,
 			defaultProjectType,
+			defaultSources,
 		],
 	);
 
@@ -431,9 +442,9 @@ function App() {
 			rows: createRow(defaultStepsPerRows, defaultNpRows),
 
 			db: { ...defaultProjectProperties.db },
-			sources: [],
 
-			withDb: false,
+			/*withDb: false,*/
+			sources: [...defaultSources],
 			withGroundLine: false,
 
 			schemaMonitor: false,
@@ -461,6 +472,7 @@ function App() {
 			defaultNpRows,
 			defaultProjectProperties.db,
 			defaultFirstpageOptions.infos,
+			defaultSources,
 		],
 	);
 
@@ -477,11 +489,11 @@ function App() {
 			prjversion: swb.prjversion ? parseInt(swb.prjversion, 10) : 1,
 			// <2.0.0
 			projectType: swb.projectType ?? defaultProjectType,
-			db: {
+			/*db: {
 				...defaultProjectProperties.db,
 				...(swb.db ?? { ...defaultProjectProperties.db }),
 			},
-			withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,
+			withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,*/
 			withGroundLine:
 				swb.withGroundLine === true || swb.withGroundLine === false
 					? swb.withGroundLine
@@ -532,11 +544,8 @@ function App() {
 			// <2.2.2
 			prjid: swb.prjid ?? generateUUID(),
 			// <2.2.8
-			sources:
-				swb.sources ??
-				import.meta.env.VITE_SOURCES.split("|")
-					.map((v) => v.trim())
-					.filter((v) => v !== ""),
+			// deprecated: withDb, db
+			sources: swb.sources ?? [...defaultSources],
 		};
 	};
 

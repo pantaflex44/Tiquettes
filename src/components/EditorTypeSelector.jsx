@@ -16,7 +16,12 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default function EditorTypeSelector({ id, value, onChange = null }) {
+export default function EditorTypeSelector({
+	id,
+	value,
+	onChange = null,
+	allowed = ["A", "AC", "B", "F", "HPI", "S"],
+}) {
 	return (
 		<select
 			id={id}
@@ -27,12 +32,11 @@ export default function EditorTypeSelector({ id, value, onChange = null }) {
 			}}
 		>
 			<option value={""}>-</option>
-			<option value={"A"}>A</option>
-			<option value={"AC"}>AC</option>
-			<option value={"B"}>B</option>
-			<option value={"F"}>F</option>
-			<option value={"HPI"}>HPI</option>
-			<option value={"S"}>S</option>
+			{allowed.map((a) => (
+				<option key={a} value={a}>
+					{a}
+				</option>
+			))}
 		</select>
 	);
 }

@@ -1414,7 +1414,7 @@ class TiquettesPDF extends FPDF
 
             $this->SetTextColor(50, 50, 50);
             $this->SetFont('Arial', '', 6);
-            $t = $m->id === 'DB' ? _("Réseau") : ($m->srcId ?? "");
+            $t = /*$m->id === 'DB' ? _("Réseau") :*/ ($m->srcId ?? "");
             $t = substr($t, 0, 50);
             $fs = str($t);
             $this->Text($lx + 3, $ly - 1, $fs);
@@ -1931,7 +1931,7 @@ foreach ($switchboard->rows as $row) {
         }
     }
 }
-if ($switchboard->withDb) {
+/*if ($switchboard->withDb) {
     $flattenModules = array_map(function ($module) {
         return (object) array_merge((array) $module, [
             'parentId' => $module->parentId === '' ? 'DB' : $module->parentId,
@@ -1942,7 +1942,7 @@ if ($switchboard->withDb) {
         'parentId' => '',
         'func' => 'dd'
     ]);
-}
+}*/
 
 foreach ($flattenModules as $module) {
     $kcId = trim($module->kcId ?? '');

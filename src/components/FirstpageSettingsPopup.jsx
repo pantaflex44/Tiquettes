@@ -801,6 +801,8 @@ export default function FirstpageSettingsPopup({
 												src={(
 													options?.infos?.from?.logo ?? photoOffIcon
 												).trim()}
+												width={options?.infos?.from?.logo ? "auto" : 96}
+												height={options?.infos?.from?.logo ? "auto" : 96}
 												style={{ maxWidth: "100%", maxHeight: "100%" }}
 											/>
 										</div>
@@ -1744,9 +1746,9 @@ export default function FirstpageSettingsPopup({
 											>
 												<LazyImage
 													src={options?.infos?.from?.logo}
-													style={{
-														maxWidth: "100%",
-													}}
+													width={"auto"}
+													height={"auto"}
+													style={{ maxWidth: "100%", maxHeight: "100%" }}
 												/>
 											</div>
 										)}
@@ -1759,7 +1761,7 @@ export default function FirstpageSettingsPopup({
 													left: "8mm",
 													top: "50mm",
 													width: "150px",
-													fontSize: "10pt",
+													fontSize: "9pt",
 												}}
 											>
 												S / {options?.infos?.from?.siret}

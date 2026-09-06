@@ -323,6 +323,8 @@ function CustomTheme({ item, data, style }) {
 							src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
 							lazy={true}
 							onlyInView={false}
+							width={null}
+							height={null}
 						/>
 					)}
 				</div>

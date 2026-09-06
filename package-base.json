@@ -38,7 +38,7 @@
     "scripts": {
         "update:all": "npx npm-check-updates -u && npm install",
         "compile": "cross-env NODE_ENV=dev && concurrently \"node ./app-config-compiler.cjs\" \"node ./sitemap-generator.cjs\"",
-        "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\"",
+        "copies": "concurrently \"cpx src/schema_functions.json public/api/libs/toPdf/assets\" \"cpx src/schema_sources.json public/api/libs/toPdf/assets\"",
         "predev": "concurrently \"npm run copies\"",
         "dev": "cross-env NODE_ENV=dev concurrently \"php -S localhost:8080 -t public/api\" \"vite\"",
         "prebuild": "concurrently \"npm run copies\"",

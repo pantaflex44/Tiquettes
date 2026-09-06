@@ -22,7 +22,8 @@ export default function EditorPoleSelector({
 	id,
 	parentModule,
 	value,
-	db = null,
+	allowed = ["1P+N", "2P", "3P", "3P+N", "4P"],
+	/*db = null,*/
 	style = {},
 	onChange = null,
 }) {
@@ -33,11 +34,11 @@ export default function EditorPoleSelector({
 		return p;
 	};
 
-	const dbPole = useMemo(() => {
+	const dbPole = 4 /*useMemo(() => {
 		if (!db?.pole) return 4;
 		const pole = db.pole.trim().toUpperCase();
 		return polesCounter(pole);
-	}, [db]);
+	}, [db])*/;
 
 	const allowedPoles = [
 		{
@@ -65,15 +66,17 @@ export default function EditorPoleSelector({
 			name: `Tétrapolaire ${import.meta.env.VITE_VREF_230V} (4P)`,
 			vref: import.meta.env.VITE_VREF_230V,
 		},
-	].filter((currentPole) => {
-		const p = polesCounter(currentPole.key);
-		if (p <= dbPole) {
-			if (!parentModule?.pole) return true;
-			const parentPole = parentModule.pole.trim().toUpperCase();
-			return p <= polesCounter(parentPole);
-		}
-		return false;
-	});
+	]
+		.filter((p) => allowed.includes(p.key))
+		.filter((currentPole) => {
+			const p = polesCounter(currentPole.key);
+			if (p <= dbPole) {
+				if (!parentModule?.pole) return true;
+				const parentPole = parentModule.pole.trim().toUpperCase();
+				return p <= polesCounter(parentPole);
+			}
+			return false;
+		});
 
 	const getVrefFromPole = (pole) => {
 		const found = allowedPoles.find((p) => p.key === pole);

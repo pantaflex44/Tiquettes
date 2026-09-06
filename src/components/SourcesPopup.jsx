@@ -20,13 +20,19 @@ import { useMemo, useRef, useState } from "react";
 
 import "../css/sourcesPopup.css";
 
+import editIcon from "../assets/edit.svg";
 import plusIcon from "../assets/plus.svg";
 import trashIcon from "../assets/trash.svg";
+import useDropdownToolbarMenuPlacing from "../hooks/useDropdownToolbarMenuPlacing.jsx";
+import schemaSources from "../schema_sources.json" with { type: "json" };
 import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
+import SourceEditor from "./SourceEditorPopup.jsx";
+import SourceEditorPopup from "./SourceEditorPopup.jsx";
+import SourcesList from "./SourcesList.jsx";
 
 export default function SourcesPopup({ switchboard, onApply, onCancel }) {
-	const listRef = useRef();
+	/*const listRef = useRef();
 
 	const [sources, setSources] = useState(
 		[
@@ -42,21 +48,13 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 		const results = sources.filter((s) => s === edit);
 		return edit === "" || (edit !== "" && results.length === 0);
 	}, [sources, edit]);
-
-	const cancel = () => {
-		if (onCancel) onCancel();
-	};
-
-	const apply = () => {
-		if (onApply) onApply(sources);
-	};
-
+	
 	const countFromSource = (srcId) => {
 		const l = switchboard.rows
 			.map((r) => r.map((m) => m.srcId === srcId).filter((m) => m !== false))
 			.filter((r) => r.length > 0).length;
 		return l;
-	};
+	};*/
 
 	/*const ensureVisible = (srcId) => {
 		setTimeout(() => {
@@ -69,161 +67,156 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 		}, 500);
 	};*/
 
+	const navRef = useRef();
+	const newMenuRef = useRef();
+
+	const newDropdownMenuPlacement = useDropdownToolbarMenuPlacing(
+		navRef,
+		newMenuRef,
+		320,
+		50,
+	);
+
+	const [sources, setSources] = useState(switchboard.sources ?? []);
+	const [selected, setSelected] = useState([]);
+	const [editor, setEditor] = useState(null);
+
+	const getNextFreeRef = (wantedRef) => {
+		const ids = (sources ?? []).map((s) => s.id);
+		let ref = wantedRef;
+		let counter = 1;
+		while (ids.includes(ref)) {
+			ref = `${ref} ${counter}`;
+			counter++;
+		}
+		//ref = ref.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents/diacritics
+		return ref;
+	};
+
+	const cancel = () => {
+		if (onCancel) onCancel();
+	};
+
+	const apply = () => {
+		if (
+			onApply &&
+			JSON.stringify(switchboard.sources) !== JSON.stringify(sources)
+		)
+			onApply(sources);
+	};
+
 	return (
-		<Popup
-			title={"Gestion des sources"}
-			showCloseButton={true}
-			showOkButton={true}
-			showCancelButton={true}
-			width={500}
-			onOk={apply}
-			okButtonDisabled={
+		<>
+			<Popup
+				title={"Gestion des sources"}
+				showCloseButton={true}
+				showOkButton={true}
+				showCancelButton={true}
+				width={500}
+				onOk={apply}
+				withOverflow={!editor}
+				/*okButtonDisabled={
 				switchboard.sources &&
 				JSON.stringify(switchboard.sources) === JSON.stringify(sources)
-			}
-			onCancel={cancel}
-		>
-			<div className="popup_rows" style={{ flex: 1 }}>
-				<div
-					className="popup_row"
-					style={{
-						"--left_column_size": "140px",
-						alignItems: "flex-start",
-						marginTop: "1rem",
-					}}
-				>
-					<label htmlFor={`sources_list`}>
-						<b>Liste des sources disponibles</b>
-						<br />
-						<br />
-						<small>
-							Ajoutez ou retirez les sources qui seront reliées à vos modules de
-							tête.
-						</small>
-					</label>
-					<select
-						ref={listRef}
-						multiple={true}
-						size={5}
-						name={`sources_list`}
-						id={`sources_list`}
-						value={current}
-						onChange={(e) => {
-							let c = Array.from(e.target.options)
-								.filter((o) => o.selected)
-								.map((o) => o.value);
-							if (!Array.isArray(c)) {
-								c = [];
-							}
-							if (c.length > 1) c = [c[0]];
-							setCurrent(c);
-							setEdit(c.length > 0 ? c[0] : "");
+			}*/
+				onCancel={cancel}
+			>
+				<div className="popup_rows" style={{ flex: 1 }}>
+					<nav
+						className={"button_group"}
+						style={{ marginBottom: 0, boxSizing: "border-box" }}
+						ref={navRef}
+					>
+						<button
+							type="button"
+							className={"active dropdown_container"}
+							title="Ajouter une source..."
+							ref={newMenuRef}
+						>
+							<LazyImage src={plusIcon} width={16} height={16} />
+							<span className={"responsive"}>Ajouter une source...</span>
+
+							<div
+								className="dropdown"
+								style={{
+									left: `${newDropdownMenuPlacement[0]}px`,
+								}}
+							>
+								{Object.keys(schemaSources).map((id) => (
+									<div
+										key={id}
+										className="dropdown_item_flex clickable"
+										onClick={() =>
+											setEditor({
+												...schemaSources[id],
+												id,
+												label: getNextFreeRef(schemaSources[id].label),
+											})
+										}
+									>
+										<LazyImage
+											src={`./schema_${id}.svg`}
+											width={22}
+											height={22}
+										/>
+										<span>{schemaSources[id].name}</span>
+									</div>
+								))}
+							</div>
+						</button>
+						<div className="button_group-separator"></div>
+
+						<button
+							type="button"
+							className={selected.length !== 1 ? "disabled" : ""}
+							onClick={() => {}}
+							title="Editer"
+						>
+							<LazyImage src={editIcon} width={16} height={16} />
+							<span className={"responsive"}>Editer...</span>
+						</button>
+						<button
+							type="button"
+							className={selected.length === 0 ? "disabled" : ""}
+							onClick={() => {}}
+							title="Supprimer"
+						>
+							<LazyImage src={trashIcon} width={16} height={16} />
+						</button>
+						<div className="button_group-separator"></div>
+					</nav>
+
+					<div
+						className="popup_row span"
+						style={{
+							alignItems: "flex-start",
+							marginTop: "1rem",
 						}}
 					>
-						{sources.map((s) => (
-							<option
-								key={s}
-								title={`${countFromSource(s)} utilisation${countFromSource(s) > 1 ? "s" : ""}`}
-							>
-								{s}
-							</option>
-						))}
-					</select>
-				</div>
-				<div
-					className="popup_row"
-					style={{
-						"--left_column_size": "140px",
-						alignItems: "flex-start",
-						marginBottom: "1rem",
-					}}
-				>
-					<label htmlFor={`source`}></label>
+						<b>Liste des sources du projet</b>
+					</div>
 					<div
-						className="popup_row-grid"
-						style={{ gridTemplateColumns: "1fr 41px" }}
+						className="popup_row span"
+						style={{
+							alignItems: "flex-start",
+						}}
 					>
-						<input
-							type="search"
-							name={`source`}
-							id={`source`}
-							value={edit}
-							placeholder="Nom de la source"
-							style={{ height: "34px" }}
-							onChange={(e) => {
-								setEdit(e.target.value);
-
-								const v = e.target.value.trim();
-								const results = sources.filter((s) =>
-									s.toLowerCase().includes(v.toLowerCase()),
-								);
-								if (v === "" || results.length === 0) {
-									setCurrent([]);
-								} else {
-									setCurrent([results[0]]);
-								}
-							}}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") {
-									if (current.length > 0) {
-										setEdit(current[0]);
-									}
-								}
+						<SourcesList
+							sources={sources}
+							onSelect={(list) => {
+								setSelected(list);
 							}}
 						/>
-
-						{isNew && (
-							<button
-								type="button"
-								title="Ajouter la source"
-								disabled={edit === ""}
-								style={{ width: "40px" }}
-								onClick={() => {
-									setSources((old) =>
-										[...old, edit].sort((a, b) => a.localeCompare(b)),
-									);
-									//setEdit("");
-									setCurrent([edit]);
-									//ensureVisible(edit);
-								}}
-							>
-								<LazyImage
-									src={plusIcon}
-									width={18}
-									height={18}
-									alt="Ajouter la source"
-								/>
-							</button>
-						)}
-
-						{!isNew && (
-							<button
-								type="button"
-								title="Supprimer la source"
-								style={{ width: "40px" }}
-								onClick={() => {
-									if (
-										confirm(
-											"Êtes-vous certain de vouloir supprimer cette source ?",
-										)
-									) {
-										setSources((old) => old.filter((o) => o !== edit));
-										setEdit("");
-										setCurrent([]);
-									}
-								}}
-							>
-								<LazyImage
-									src={trashIcon}
-									width={18}
-									height={18}
-									alt="Supprimer la source"
-								/>
-							</button>
-						)}
 					</div>
 				</div>
-			</div>
-		</Popup>
+			</Popup>
+			{editor && (
+				<SourceEditorPopup
+					getNextFreeRef={getNextFreeRef}
+					source={editor}
+					onCancel={() => setEditor(null)}
+				/>
+			)}
+		</>
 	);
 }

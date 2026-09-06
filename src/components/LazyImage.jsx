@@ -18,7 +18,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import blankIcon from "../../src/assets/blank.svg";
+import blankIcon from "../assets/blank.svg";
 
 function LazyImage({
 	src = null,
@@ -71,11 +71,12 @@ function LazyImage({
 			width={width}
 			height={height}
 			{...props}
+			style={{ ...(props?.style ?? {}), width, height }}
 			ref={imageRef}
 			src={imageSrc ?? blankIcon}
 			loading={lazy ? "lazy" : "eager"}
 			data-lazy={lazy}
-			data-onlyInView={onlyInView}
+			data-onlyinview={onlyInView}
 		/>
 	);
 }

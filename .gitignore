@@ -32,6 +32,7 @@ public/api/.idea/*
 
 public/api/libs/toPdf/themes/icons
 public/api/libs/toPdf/assets/schema_functions.json
+public/api/libs/toPdf/assets/schema_sources.json
 
 public/api/libs/toLabeler/icons
 public/api/libs/toLabeler/tmp
@@ -50,6 +51,3 @@ public/tiquettes_stickers.pdf
 
 src/css/twofaInput.css
 src/TwofaInput.jsx
-
-.github/workflows/tiquettes_dev.yml.old
-.github/workflows/tiquettes_fr.yml.old
