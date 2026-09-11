@@ -23,11 +23,16 @@ import "../css/sourcesList.css";
 import schemaSources from "../schema_sources.json" with { type: "json" };
 import LazyImage from "./LazyImage";
 
-function SourcesList({ sources, onSelect = null }) {
+function SourcesList({
+	sources,
+	onSelect = null,
+	onEdit = null,
+	onDelete = null,
+}) {
 	const filteredSources = useMemo(() => {
 		return (sources ?? [])
-			.filter((s) => Object.keys(schemaSources).includes(s.id))
-			.map((s) => ({ ...schemaSources[s.id], id: s.id }));
+			.filter((s) => Object.keys(schemaSources).includes(s.base))
+			.map((s) => ({ ...schemaSources[s.base], ...s }));
 	}, [sources]);
 
 	const [selected, setSelected] = useState([]);
@@ -39,22 +44,41 @@ function SourcesList({ sources, onSelect = null }) {
 	}, [selected]);
 
 	return (
-		<div className="iconview">
+		<div
+			className="iconview"
+			onMouseDown={(e) => {
+				if (!e.ctrlKey) {
+					setSelected([]);
+				}
+			}}
+		>
 			{filteredSources.map((s) => (
 				<div
 					key={s.id}
 					className={`iconview_item ${selected.includes(s.id) ? "selected" : ""}`.trim()}
 					title={s.description}
-					onClick={() => {
-						if (!selected.includes(s.id)) {
-							setSelected((old) => [...old, s.id]);
+					onMouseUp={(e) => {
+						if (e.ctrlKey) {
+							if (!selected.includes(s.id)) {
+								setSelected((old) => [...old, s.id]);
+							} else {
+								setSelected((old) => old.filter((t) => t !== s.id));
+							}
 						} else {
-							setSelected((old) => old.filter((t) => t !== s.id));
+							setSelected([s.id]);
+						}
+					}}
+					onDoubleClick={() => {
+						if (onEdit) onEdit(s.id);
+					}}
+					onKeyUp={(e) => {
+						if (e.code === "Delete" && onDelete) {
+							onDelete([s.id]);
 						}
 					}}
 				>
-					<LazyImage src={`./schema_${s.id}.svg`} width={48} height={48} />
-					<div className="text">{s.name}</div>
+					<LazyImage src={`./schema_${s.base}.svg`} width={48} height={48} />
+					<div className="label">{s.label}</div>
 				</div>
 			))}
 		</div>

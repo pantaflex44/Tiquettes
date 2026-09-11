@@ -37,7 +37,7 @@ export default function EditorParentSelector({
 		if (module.parentId !== "") {
 			v = JSON.stringify({ type: "module", id: module.parentId });
 		} else if (module.srcId !== "") {
-			//v = JSON.stringify({ type: "source", id: module.srcId });
+			v = JSON.stringify({ type: "source", id: module.srcId });
 		}
 		return v;
 	};
@@ -59,7 +59,7 @@ export default function EditorParentSelector({
 					if (vp.type === "module") {
 						if (onParentChange) onParentChange(vp.id);
 					} else if (vp.type === "source") {
-						//if (onSourceChange) onSourceChange(vp.id ?? "");
+						if (onSourceChange) onSourceChange(vp.id ?? "");
 					}
 				}
 				setCurrentParent(v);
@@ -73,14 +73,11 @@ export default function EditorParentSelector({
 			<option value={""} disabled={true}>
 				Sources d'alimentations
 			</option>
-			{/*sources.map((s) => (
-				<option
-					key={s.trim()}
-					value={JSON.stringify({ type: "source", id: s.trim() })}
-				>
-					{s.trim()}
+			{sources.map((s) => (
+				<option key={s.id} value={JSON.stringify({ type: "source", id: s.id })}>
+					{s.label}
 				</option>
-			))*/}
+			))}
 
 			{/* Modules */}
 			{Object.entries(filteredModulesListBySchemaFuncs).map(([k, l]) => {

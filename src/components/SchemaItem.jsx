@@ -32,61 +32,68 @@ export default function SchemaItem({
 	onEditSymbol,
 	monitor = {},
 }) {
-	return Object.entries(childs ?? {}).map(([id, item], j) => (
-		<Fragment key={id}>
-			<div
-				className={`schemaItem ${isFirst ? "isFirst" : ""} ${item.isLast ? "isLast" : ""}`.trim()}
-				data-isfirst={isFirst}
-				data-islast={item.isLast}
-				data-hasprev={item.hasPrev}
-				data-hasnext={item.hasNext}
-			>
-				{isFirst && (
-					<LazyImage className="schemaItemFirstIcon" src={firstIcon} />
+	return Object.entries(childs ?? {}).map(([id, item], j) => {
+		const src = item.module.srcId
+			? switchboard.sources.filter((s) => s.id === item.module.srcId)
+			: null;
+		return (
+			<Fragment key={id}>
+				<div
+					className={`schemaItem ${isFirst ? "isFirst" : ""} ${item.isLast ? "isLast" : ""}`.trim()}
+					data-isfirst={isFirst}
+					data-islast={item.isLast}
+					data-hasprev={item.hasPrev}
+					data-hasnext={item.hasNext}
+				>
+					{isFirst && (
+						<LazyImage className="schemaItemFirstIcon" src={firstIcon} />
+					)}
+					{isFirst && src && (
+						<div className="schemaItemFirstIconTitle">
+							{src[0].label.substring(0, 50)}
+						</div>
+					)}
+
+					{(isFirst || item.hasPrev || item.hasNext) && (
+						<div
+							className={`schemaItemPrevLine ${!item.hasNext || isFirst ? "noNext" : ""} ${!item.hasPrev && !isFirst ? "noPrev" : ""}`.trim()}
+						></div>
+					)}
+
+					{!isFirst && item.hasNext && (
+						<div className="schemaItemNextLine"></div>
+					)}
+
+					<SchemaSymbol
+						isLast={item.isLast}
+						module={item.module}
+						onEdit={(module) => {
+							onEditSymbol(module);
+						}}
+						monitor={monitor}
+					/>
+
+					{item.isLast ? (
+						<SchemaDescription module={item.module} />
+					) : (
+						<div className="schemaItemChilds">
+							<SchemaItem
+								switchboard={switchboard}
+								childs={item.childs}
+								baseId={baseId ?? item.module.id}
+								onEditSymbol={(module) => {
+									onEditSymbol(module);
+								}}
+								monitor={monitor}
+							/>
+						</div>
+					)}
+				</div>
+
+				{isFirst && j < Object.keys(childs).length - 1 && (
+					<div className="schemaItemSeparator"></div>
 				)}
-				{isFirst && (
-					<div className="schemaItemFirstIconTitle">
-						{(item.module.srcId ?? "").substring(0, 50)}
-					</div>
-				)}
-
-				{(isFirst || item.hasPrev || item.hasNext) && (
-					<div
-						className={`schemaItemPrevLine ${!item.hasNext || isFirst ? "noNext" : ""} ${!item.hasPrev && !isFirst ? "noPrev" : ""}`.trim()}
-					></div>
-				)}
-
-				{!isFirst && item.hasNext && <div className="schemaItemNextLine"></div>}
-
-				<SchemaSymbol
-					isLast={item.isLast}
-					module={item.module}
-					onEdit={(module) => {
-						onEditSymbol(module);
-					}}
-					monitor={monitor}
-				/>
-
-				{item.isLast ? (
-					<SchemaDescription module={item.module} />
-				) : (
-					<div className="schemaItemChilds">
-						<SchemaItem
-							switchboard={switchboard}
-							childs={item.childs}
-							baseId={baseId ?? item.module.id}
-							onEditSymbol={(module) => {
-								onEditSymbol(module);
-							}}
-							monitor={monitor}
-						/>
-					</div>
-				)}
-			</div>
-
-			{isFirst && j < Object.keys(childs).length - 1 && (
-				<div className="schemaItemSeparator"></div>
-			)}
-		</Fragment>
-	));
+			</Fragment>
+		);
+	});
 }

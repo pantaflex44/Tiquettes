@@ -21,12 +21,12 @@ import { useState } from "react";
 import "../css/sourcesEditorPopup.css";
 
 import schemaSources from "../schema_sources.json" with { type: "json" };
+import EditorCrbSelector from "./EditorCrbSelector.jsx";
 import EditorCurrentSelector from "./EditorCurrentSelector.jsx";
 import EditorPoleSelector from "./EditorPoleSelector.jsx";
 import EditorSensibilitySelector from "./EditorSensibilitySelector.jsx";
 import EditorTypeSelector from "./EditorTypeSelector.jsx";
 import EditorWireSelector from "./EditorWireSelector.jsx";
-import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
 export default function SourceEditorPopup({
@@ -67,8 +67,30 @@ export default function SourceEditorPopup({
 	};
 
 	const apply = () => {
-		if (onApply && JSON.stringify(source) !== JSON.stringify(editedSource))
-			onApply(editedSource);
+		if (onApply) {
+			let src = {
+				id: editedSource.id,
+				base: editedSource.base,
+				label: editedSource.label,
+				remark: editedSource.remark ?? "",
+			};
+			if (editedSource.hasCrb) {
+				src = { ...src, crb: editedSource.crb };
+			}
+			if (editedSource.hasCurrent) {
+				src = { ...src, current: editedSource.current };
+			}
+			if (editedSource.hasPole) {
+				src = { ...src, pole: editedSource.pole };
+			}
+			if (editedSource.hasType) {
+				src = { ...src, type: editedSource.type };
+			}
+			if (editedSource.hasWire) {
+				src = { ...src, wire: editedSource.wire };
+			}
+			onApply(src);
+		}
 	};
 
 	return (
@@ -108,7 +130,7 @@ export default function SourceEditorPopup({
 						type="text"
 						name="editor_label"
 						id={`editor_label`}
-						value={editedSource.label ?? editedSource.id}
+						value={editedSource.label ?? editedSource.base}
 						onChange={(e) => {
 							const freeLabel = getNextFreeRef(e.currentTarget.value);
 							setEditedSource((old) => ({ ...old, label: freeLabel }));
@@ -117,7 +139,7 @@ export default function SourceEditorPopup({
 					/>
 				</div>
 
-				{schemaSources[editedSource.id]?.hasType && (
+				{schemaSources[editedSource.base]?.hasType && (
 					<>
 						<div
 							className="popup_row"
@@ -150,7 +172,20 @@ export default function SourceEditorPopup({
 					</>
 				)}
 
-				{schemaSources[editedSource.id]?.hasCurrent && (
+				{schemaSources[editedSource.base]?.hasCrb && (
+					<div className="popup_row" style={{ "--left_column_size": "120px" }}>
+						<label htmlFor={`editor_crb`}>Courbe</label>
+						<EditorCrbSelector
+							id={`editor_crb`}
+							value={editedSource.crb}
+							onChange={(value) => {
+								setEditedSource((old) => ({ ...old, crb: value }));
+							}}
+						/>
+					</div>
+				)}
+
+				{schemaSources[editedSource.base]?.hasCurrent && (
 					<div
 						className={`popup_row`.trim()}
 						style={{ "--left_column_size": "120px" }}
@@ -167,7 +202,7 @@ export default function SourceEditorPopup({
 					</div>
 				)}
 
-				{schemaSources[editedSource.id]?.hasWire && (
+				{schemaSources[editedSource.base]?.hasWire && (
 					<div className="popup_row" style={{ "--left_column_size": "120px" }}>
 						<label htmlFor={`editor_wire`}>Section</label>
 						<EditorWireSelector
@@ -189,7 +224,7 @@ export default function SourceEditorPopup({
 					</div>
 				)}
 
-				{schemaSources[editedSource.id]?.hasPole && (
+				{schemaSources[editedSource.base]?.hasPole && (
 					<div
 						className={`popup_row`.trim()}
 						style={{ "--left_column_size": "120px" }}
@@ -207,6 +242,22 @@ export default function SourceEditorPopup({
 						/>
 					</div>
 				)}
+
+				<div
+					className={`popup_row`.trim()}
+					style={{ "--left_column_size": "120px" }}
+				>
+					<label htmlFor={`editor_note`}>Remarques</label>
+					<textarea
+						id={`editor_note`}
+						style={{ flex: 1, resize: "vertical" }}
+						value={editedSource.remark ?? ""}
+						onChange={(e) => {
+							setEditedSource((old) => ({ ...old, remark: e.target.value }));
+						}}
+						rows={5}
+					></textarea>
+				</div>
 			</div>
 		</Popup>
 	);

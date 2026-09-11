@@ -831,7 +831,7 @@ option[disabled] {
 	flex-wrap: nowrap;
 	justify-content: center;
 	align-items: center;
-	margin-bottom: 1em;
+	/*margin-bottom: 1em;*/
 }
 
 .editor_tabpages input[type="checkbox"] {

@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import "../css/sourcesPopup.css";
 
@@ -27,7 +27,6 @@ import useDropdownToolbarMenuPlacing from "../hooks/useDropdownToolbarMenuPlacin
 import schemaSources from "../schema_sources.json" with { type: "json" };
 import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
-import SourceEditor from "./SourceEditorPopup.jsx";
 import SourceEditorPopup from "./SourceEditorPopup.jsx";
 import SourcesList from "./SourcesList.jsx";
 
@@ -98,11 +97,39 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 	};
 
 	const apply = () => {
+		if (onApply) onApply(sources);
+	};
+
+	const uuidV4 = () => {
+		const uuid = new Array(36);
+		for (let i = 0; i < 36; i++) {
+			uuid[i] = Math.floor(Math.random() * 16);
+		}
+		uuid[14] = 4; // set bits 12-15 of time-high-and-version to 0100
+		uuid[19] = uuid[19] &= ~(1 << 2); // set bit 6 of clock-seq-and-reserved to zero
+		uuid[19] = uuid[19] |= 1 << 3; // set bit 7 of clock-seq-and-reserved to one
+		uuid[8] = uuid[13] = uuid[18] = uuid[23] = "-";
+		return uuid.map((x) => x.toString(16)).join("");
+	};
+
+	const edit = (sourceId) => {
+		const source = sources.filter((s) => s.id === sourceId);
+		if (!source) return;
+
+		setEditor({
+			...schemaSources[source[0].base],
+			...source[0],
+		});
+	};
+
+	const remove = (sourceIds) => {
 		if (
-			onApply &&
-			JSON.stringify(switchboard.sources) !== JSON.stringify(sources)
-		)
-			onApply(sources);
+			confirm(
+				"Êtes-vous certain de vouloir supprimer les sources sélectionnées?",
+			)
+		) {
+			setSources((old) => old.filter((o) => !sourceIds.includes(o.id)));
+		}
 	};
 
 	return (
@@ -115,10 +142,6 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 				width={500}
 				onOk={apply}
 				withOverflow={!editor}
-				/*okButtonDisabled={
-				switchboard.sources &&
-				JSON.stringify(switchboard.sources) === JSON.stringify(sources)
-			}*/
 				onCancel={cancel}
 			>
 				<div className="popup_rows" style={{ flex: 1 }}>
@@ -142,24 +165,25 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 									left: `${newDropdownMenuPlacement[0]}px`,
 								}}
 							>
-								{Object.keys(schemaSources).map((id) => (
+								{Object.keys(schemaSources).map((base) => (
 									<div
-										key={id}
+										key={base}
 										className="dropdown_item_flex clickable"
 										onClick={() =>
 											setEditor({
-												...schemaSources[id],
-												id,
-												label: getNextFreeRef(schemaSources[id].label),
+												...schemaSources[base],
+												base,
+												id: uuidV4(),
+												label: getNextFreeRef(schemaSources[base].label),
 											})
 										}
 									>
 										<LazyImage
-											src={`./schema_${id}.svg`}
+											src={`./schema_${base}.svg`}
 											width={22}
 											height={22}
 										/>
-										<span>{schemaSources[id].name}</span>
+										<span>{schemaSources[base].name}</span>
 									</div>
 								))}
 							</div>
@@ -169,7 +193,9 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 						<button
 							type="button"
 							className={selected.length !== 1 ? "disabled" : ""}
-							onClick={() => {}}
+							onClick={() => {
+								edit(selected[0]);
+							}}
 							title="Editer"
 						>
 							<LazyImage src={editIcon} width={16} height={16} />
@@ -178,7 +204,9 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 						<button
 							type="button"
 							className={selected.length === 0 ? "disabled" : ""}
-							onClick={() => {}}
+							onClick={() => {
+								remove(selected);
+							}}
 							title="Supprimer"
 						>
 							<LazyImage src={trashIcon} width={16} height={16} />
@@ -206,6 +234,8 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 							onSelect={(list) => {
 								setSelected(list);
 							}}
+							onEdit={edit}
+							onDelete={remove}
 						/>
 					</div>
 				</div>
@@ -215,6 +245,13 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 					getNextFreeRef={getNextFreeRef}
 					source={editor}
 					onCancel={() => setEditor(null)}
+					onApply={(source) => {
+						setSources((old) => [
+							...old.filter((o) => o.id !== source.id),
+							source,
+						]);
+						setEditor(null);
+					}}
 				/>
 			)}
 		</>

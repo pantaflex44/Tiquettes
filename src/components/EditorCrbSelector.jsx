@@ -16,7 +16,12 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default function EditorCrbSelector({ id, value, onChange = null }) {
+export default function EditorCrbSelector({
+	id,
+	value,
+	allowed = ["Z", "B", "C", "D", "MA", "F", "SI"],
+	onChange = null,
+}) {
 	return (
 		<select
 			id={id}
@@ -27,11 +32,11 @@ export default function EditorCrbSelector({ id, value, onChange = null }) {
 			}}
 		>
 			<option value={""}>-</option>
-			<option value={"Z"}>Z</option>
-			<option value={"B"}>B</option>
-			<option value={"C"}>C</option>
-			<option value={"D"}>D</option>
-			<option value={"MA"}>MA</option>
+			{allowed.map((a) => (
+				<option key={a} value={a}>
+					{a}
+				</option>
+			))}
 		</select>
 	);
 }

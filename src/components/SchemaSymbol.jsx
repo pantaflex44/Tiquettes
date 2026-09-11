@@ -25,12 +25,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 	const func = useMemo(() => {
 		if (!module?.func) return null;
 
-		let func = module?.func;
-		let isDb = false;
-		if (func === "db") {
-			func = "dd";
-			isDb = true;
-		}
+		const func = module?.func;
 		const isContact = func === "k";
 
 		if (!schemaFunctions[func] && !isContact) return null;
@@ -62,7 +57,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 				? `schema_${func}${module.kcType === "NC" ? "_nc" : ""}.svg`
 				: `schema_${func}.svg`);
 
-		return { obj, name, title, icon, isDb, isContact };
+		return { obj, name, title, icon, isContact };
 	}, [module]);
 
 	const handleEdit = () => {
@@ -73,7 +68,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 		func && (
 			<div
 				style={{ "--symbol-width": "70px", "--symbol-height": "100px" }}
-				className={`schemaItemSymbol ${!func.isDb ? "editable" : ""}`}
+				className={`schemaItemSymbol editable`}
 				title={func.title}
 				onClick={() => handleEdit()}
 			>

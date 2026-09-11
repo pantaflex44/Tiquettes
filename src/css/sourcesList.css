@@ -59,6 +59,15 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: center;
+	font-size: 80%;
+}
+
+.iconview_item > .label {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
 }
 
 /*.iconview_item:focus > .text {
@@ -73,10 +82,10 @@
 .iconview_item.selected {
 	border-color: #008b8b;
 	background-color: var(--secondary-color);
-	color: #008b8b;
+	/*color: #008b8b;*/
 }
 
-.iconview_item.selected > img {
+/*.iconview_item.selected > img {
 	filter: brightness(0) saturate(100%) invert(37%) sepia(71%) saturate(889%)
 		hue-rotate(139deg) brightness(94%) contrast(105%);
-}
+}*/

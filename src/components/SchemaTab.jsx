@@ -534,202 +534,30 @@ export default function SchemaTab({
 							</label>
 						</div>
 					</div>
+					<div className="tabPageBandSeparator"></div>
 
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<span style={{ fontSize: "smaller", lineHeight: 1.2 }}>
-								Sources:
+								Alimentations:
 							</span>
 						</div>
-						{/*<div className="tabPageBandCol">
-							<input
-								type="checkbox"
-								name="schemaWithDbChoice"
-								id="schemaWithDbChoice"
-								checked={switchboard.withDb}
-								onChange={() =>
-									setSwitchboard((old) => ({
-										...old,
-										db: { ...old.db, func: "db" },
-										withDb: !old.withDb,
-									}))
-								}
-							/>
-							<label
-								htmlFor="schemaWithDbChoice"
-								title="Intégrer un disjoncteur de branchement"
+						<div className="tabPageBandCol">
+							<button
+								type="button"
+								style={{ height: "34px" }}
+								title="Gérer les sources"
+								onClick={() => setSourcesOpened(true)}
 							>
 								<LazyImage
-									src={switchboard.withDb ? boltIcon : noboltIcon}
-									alt="Disjoncteur de branchement"
-									width={24}
-									height={24}
+									src={sourcesIcon}
+									alt="Gérer les sources"
+									width={22}
+									height={22}
 								/>
-							</label>
-						</div>*/}
-						{
-							/*switchboard.withDb ? (
-							<>
-								<div className="tabPageBandCol">
-									<select
-										value={switchboard.db.type}
-										onChange={(e) =>
-											setSwitchboard((old) => ({
-												...old,
-												db: { ...old.db, type: e.target.value },
-											}))
-										}
-										disabled={!switchboard.withDb}
-									>
-										<option value="">Instantané</option>
-										<option value="S">Sélectif</option>
-									</select>
-								</div>
-								<div className="tabPageBandCol">
-									<select
-										value={switchboard.db.pole}
-										onChange={(e) =>
-											setSwitchboard((old) => {
-												let sw = {
-													...old,
-													db: { ...old.db, pole: e.target.value },
-												};
-
-												if (e.target.value === "1P+N") {
-													sw = {
-														...sw,
-														rows: sw.rows.map((row) =>
-															row.map((module) => {
-																const modulePoleCounter = polesCounter(
-																	module.pole,
-																);
-																//if (modulePoleCounter === 1) modulePoleCounter = 2;
-																//if (modulePoleCounter === 3) modulePoleCounter = 4;
-
-																const dbPoleCounter = polesCounter(
-																	e.target.value,
-																);
-																//if (dbPoleCounter === 1) dbPoleCounter = 2;
-																//if (dbPoleCounter === 3) dbPoleCounter = 4;
-
-																if (modulePoleCounter > dbPoleCounter) {
-																	return { ...module, pole: e.target.value };
-																}
-																return module;
-															}),
-														),
-													};
-												}
-
-												return sw;
-											})
-										}
-										disabled={!switchboard.withDb}
-									>
-										<option value="1P+N">Monophasé</option>
-										<option value="3P+N">Triphasé</option>
-									</select>
-								</div>
-								<div className="tabPageBandCol">
-									<select
-										value={switchboard.db.sensibility}
-										onChange={(e) =>
-											setSwitchboard((old) => ({
-												...old,
-												db: { ...old.db, sensibility: e.target.value },
-											}))
-										}
-										disabled={!switchboard.withDb}
-									>
-										<option value="300mA">300mA</option>
-										<option value="500mA">500mA</option>
-										<option value="650mA">650mA</option>
-									</select>
-								</div>
-								<div className="tabPageBandCol">
-									<select
-										value={switchboard.db.current}
-										onChange={(e) =>
-											setSwitchboard((old) => ({
-												...old,
-												db: { ...old.db, current: e.target.value },
-											}))
-										}
-										disabled={!switchboard.withDb}
-									>
-										{switchboard.db.pole === "3P+N" && (
-											<>
-												<option value="" disabled={true}>
-													Tarifs bleus
-												</option>
-												<option value="30A">30A - 6kVA</option>
-												<option value="45A">45A - 9kVA</option>
-												<option value="60A">60A - 12kVA</option>
-												<option value="75A">75A - 15kVA</option>
-												<option value="90A">90A - 18kVA</option>
-												<option value="120A">120A - 24kVA</option>
-												<option value="150A">150A - 30kVA</option>
-												<option value="180A">180A - 36kVA</option>
-												<option value="" disabled={true}>
-													Tarifs jaunes
-												</option>
-												<option value="183A">183A - 42kVA</option>
-												<option value="207A">207A - 48kVA</option>
-												<option value="234A">234A - 54kVA</option>
-												<option value="285A">285A - 66kVA</option>
-												<option value="312A">312A - 72kVA</option>
-												<option value="339A">339A - 78kVA</option>
-												<option value="363A">363A - 84kVA</option>
-
-												<option value="390A">390A - 90kVA</option>
-												<option value="417A">417A - 96kVA</option>
-												<option value="441A">441A - 102kVA</option>
-												<option value="468A">468A - 108kVA</option>
-												<option value="519A">519A - 120kVA</option>
-												<option value="573A">573A - 132kVA</option>
-												<option value="624A">624A - 144kVA</option>
-												<option value="675A">675A - 156kVA</option>
-												<option value="726A">726A - 168kVA</option>
-												<option value="780A">780A - 180kVA</option>
-												<option value="831A">831A - 192kVA</option>
-												<option value="363A">363A - 84kVA</option>
-												<option value="363A">363A - 84kVA</option>
-												<option value="363A">363A - 84kVA</option>
-												<option value="363A">363A - 84kVA</option>
-											</>
-										)}
-
-										{switchboard.db.pole === "1P+N" && (
-											<>
-												<option value="10/30A">10/30A</option>
-												<option value="15/45A">15/45A</option>
-												<option value="30/60A">30/60A</option>
-												<option value="60/90A">60/90A</option>
-												<option value="60A">60A mono-calibre</option>
-											</>
-										)}
-									</select>
-								</div>
-							</>
-						) :*/ <div className="tabPageBandCol">
-								<button
-									type="button"
-									style={{ height: "34px" }}
-									title="Gérer les sources"
-									onClick={() => setSourcesOpened(true)}
-								>
-									<LazyImage
-										src={sourcesIcon}
-										alt="Gérer les sources"
-										width={22}
-										height={22}
-									/>
-								</button>
-							</div>
-						}
-					</div>
-
-					<div className="tabPageBandGroup">
+								<span>Sources</span>
+							</button>
+						</div>
 						<div className="tabPageBandCol">
 							<input
 								type="checkbox"

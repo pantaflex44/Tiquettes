@@ -1390,6 +1390,8 @@ class TiquettesPDF extends FPDF
 
     protected function drawPowerLine(object|null $m, int $level, int $pos): void
     {
+        global $switchboard;
+
         if (is_null($m) /*|| $pos > 0*/)
             return;
 
@@ -1414,10 +1416,11 @@ class TiquettesPDF extends FPDF
 
             $this->SetTextColor(50, 50, 50);
             $this->SetFont('Arial', '', 6);
-            $t = /*$m->id === 'DB' ? _("Réseau") :*/ ($m->srcId ?? "");
+            $src = $m->srcId ? array_filter(($switchboard->sources ?? []), fn($fm) => $fm->id === $m->srcId) : null;
+            $t = $src ? array_values($src)[0]->label : "";
             $t = substr($t, 0, 50);
             $fs = str($t);
-            $this->Text($lx + 3, $ly - 1, $fs);
+            $this->Text($lx + 3.75, $ly - 1, $fs);
         }
     }
 

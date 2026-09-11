@@ -266,7 +266,7 @@ export default function Editor({
 					},
 				]}
 			>
-				<div className="popup_rows" style={{ minHeight: "710px" }}>
+				<div className="popup_rows" style={{ minHeight: "700px" }}>
 					<div className={"editor_tabpages"}>
 						<input
 							type="checkbox"
@@ -697,26 +697,18 @@ export default function Editor({
 												currentModuleId={ed.currentModule.id}
 												filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
 												getModuleById={getModuleById}
-												/*sources={
-													switchboard.sources ??
-													import.meta.env.VITE_SOURCES.split("|")
-														.map((v) => v.trim())
-														.filter((v) => v !== "")
-														.sort((a, b) => a.localeCompare(b))
-												}*/
+												sources={switchboard.sources ?? []}
 												onParentChange={(value) => {
 													onUpdateModuleEditor({ parentId: value });
-													/*const prt = getParentById(value);
+													const prt = getParentById(value);
 													const srcId =
-														prt?.srcId ??
-														ed.currentModule.srcId ??
-														"";
-													onUpdateModuleEditor({ srcId });*/
+														prt?.srcId ?? ed.currentModule.srcId ?? "";
+													onUpdateModuleEditor({ srcId });
 												}}
-												/*onSourceChange={(value) => {
+												onSourceChange={(value) => {
 													onUpdateModuleEditor({ parentId: "" });
 													onUpdateModuleEditor({ srcId: value });
-												}}*/
+												}}
 											/>
 										</div>
 									</div>
