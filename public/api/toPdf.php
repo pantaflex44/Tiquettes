@@ -1397,30 +1397,33 @@ class TiquettesPDF extends FPDF
 
         if (trim($m->parentId ?? '') === '') {
             $lx = $this->grid[$this->gridOrientation]['left'];
-            $ly = $level > 0
+            $ly = ($level > 0
                 ? $this->schemaLastPos["L{$level}"]['y'] - ($this->schemaLineWidth / 2)
-                : $this->schemaInitialPos['y'] - ($this->schemaLineWidth / 2) - 0.125;
+                : $this->schemaInitialPos['y'] - ($this->schemaLineWidth / 2) - 0.125);
             $lw = $this->schemaCurrentPosX - $lx + ($this->schemaSymbolSize['w'] / 2) + ($this->schemaLineWidth / 2);
             $this->SetFillColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
             $this->Rect($lx, $ly, $lw, $this->schemaLineWidth, 'F');
 
             $this->SetDrawColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
+            $lxDelta = 0.1;
+            $lyDelta = 0.1;
+            $polygonSize = 2.5;
             $this->Polygon([
-                $lx,
-                $ly,
-                $lx + 1.5,
-                $ly - 1.5,
-                $lx + 3,
-                $ly
-            ], 'F');
+                $lx + $lxDelta,
+                $ly + $lyDelta,
+                $lx + ($polygonSize / 2) + $lxDelta,
+                $ly - ($polygonSize / 2) + $lyDelta,
+                $lx + $polygonSize + $lxDelta,
+                $ly + $lyDelta
+            ], 'D');
 
-            $this->SetTextColor(50, 50, 50);
-            $this->SetFont('Arial', '', 6);
+            $this->SetTextColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
+            $this->SetFont('Arial', 'I', 6.5);
             $src = $m->srcId ? array_filter(($switchboard->sources ?? []), fn($fm) => $fm->id === $m->srcId) : null;
             $t = $src ? array_values($src)[0]->label : "";
             $t = substr($t, 0, 50);
             $fs = str($t);
-            $this->Text($lx + 3.75, $ly - 1, $fs);
+            $this->Text($lx + 0, $ly - 2.5, $fs);
         }
     }
 
@@ -1934,18 +1937,6 @@ foreach ($switchboard->rows as $row) {
         }
     }
 }
-/*if ($switchboard->withDb) {
-    $flattenModules = array_map(function ($module) {
-        return (object) array_merge((array) $module, [
-            'parentId' => $module->parentId === '' ? 'DB' : $module->parentId,
-        ]);
-    }, $flattenModules);
-    $flattenModules[] = (object) array_merge((array) $switchboard->db, [
-        'id' => 'DB',
-        'parentId' => '',
-        'func' => 'dd'
-    ]);
-}*/
 
 foreach ($flattenModules as $module) {
     $kcId = trim($module->kcId ?? '');

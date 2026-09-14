@@ -16,7 +16,7 @@
 		"pole_allowed": ["2P", "4P"],
 		"wire": 16,
 		"sensibility": "500mA",
-		"sensibility_allowed": ["500mA", "600mA"]
+		"sensibility_allowed": ["300mA", "500mA", "650mA"]
 	},
 	"ge": {
 		"name": "Groupe électrogène",

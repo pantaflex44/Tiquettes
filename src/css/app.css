@@ -624,12 +624,14 @@ option[disabled] {
 	height: 18px;
 }
 
-.button_group .button_group-resize.checked {
+.button_group .button_group-resize.checked,
+.button_group .button_group-autosave.checked {
 	background-color: var(--secondary-color);
 	color: var(--primary-color);
 }
 
-.button_group .button_group-resize.checked img {
+.button_group .button_group-resize.checked img,
+.button_group .button_group-autosave.checked img {
 	/*filter: invert(100%) sepia(0%) saturate(7496%) hue-rotate(142deg) brightness(102%) contrast(102%);*/
 	filter: invert(38%) sepia(47%) saturate(6220%) hue-rotate(160deg)
 		brightness(91%) contrast(101%);

@@ -33,6 +33,8 @@ import * as pkg from "../package.json" with { type: "json" };
 import { statsPush } from "../public/api/stats.js";
 import resizeIcon from "./assets/aspect-ratio.svg";
 import resizeOffIcon from "./assets/aspect-ratio-off.svg";
+import autosaveIcon from "./assets/autosave.svg";
+import autosaveOffIcon from "./assets/autosave-off.svg";
 import cancelIcon from "./assets/cancel.svg";
 import caretDownIcon from "./assets/caret-down.svg";
 import caretUpIcon from "./assets/caret-up.svg";
@@ -137,6 +139,14 @@ function App() {
 		newProjectPopup,
 	]);
 
+	const getSavedAutoSave = () => {
+		if (localStorage.getItem(`${pkg.name}_autoSave`)) {
+			return localStorage.getItem(`${pkg.name}_autoSave`) === "true";
+		}
+		return false;
+	};
+	const [autoSave, setAutoSave] = useState(getSavedAutoSave());
+
 	const defaultFirstpageOptions = {
 		infos: {
 			// to switchboad.firstPageInfos
@@ -204,24 +214,31 @@ function App() {
 		[],
 	);
 	const getSavedPrintOptions = () => {
-		if (sessionStorage.getItem(`${pkg.name}_printOptions`)) {
-			const merge = (a, b) =>
-				[a, b].reduce(
-					(r, o) =>
-						Object.entries(o).reduce(
-							(q, [k, v]) => ({
-								...q,
-								[k]: v && typeof v === "object" ? merge(q[k] || {}, v) : v,
-							}),
-							r,
-						),
-					{},
-				);
-			return merge(
-				defaultPrintOptions,
-				JSON.parse(sessionStorage.getItem(`${pkg.name}_printOptions`)),
+		const merge = (a, b) =>
+			[a, b].reduce(
+				(r, o) =>
+					Object.entries(o).reduce(
+						(q, [k, v]) => ({
+							...q,
+							[k]: v && typeof v === "object" ? merge(q[k] || {}, v) : v,
+						}),
+						r,
+					),
+				{},
 			);
+
+		let data = null;
+
+		if (autoSave && localStorage.getItem(`${pkg.name}_printOptions`)) {
+			data = localStorage.getItem(`${pkg.name}_printOptions`);
+		} else if (sessionStorage.getItem(`${pkg.name}_printOptions`)) {
+			data = sessionStorage.getItem(`${pkg.name}_printOptions`);
 		}
+
+		if (data) {
+			return merge(defaultPrintOptions, JSON.parse(data));
+		}
+
 		return { ...defaultPrintOptions };
 	};
 	const [printOptions, setPrintOptions] = useState(getSavedPrintOptions());
@@ -241,9 +258,18 @@ function App() {
 	};
 
 	const getSavedAutoResize = () => {
-		if (sessionStorage.getItem(`${pkg.name}_autoResize`)) {
+		let data = null;
+
+		if (autoSave && localStorage.getItem(`${pkg.name}_autoResize`)) {
+			data = localStorage.getItem(`${pkg.name}_autoResize`);
+		} else if (sessionStorage.getItem(`${pkg.name}_autoResize`)) {
+			data = sessionStorage.getItem(`${pkg.name}_autoResize`);
+		}
+
+		if (data) {
 			return sessionStorage.getItem(`${pkg.name}_autoResize`) === "true";
 		}
+
 		return false;
 	};
 	const [spaceSize, setSpaceSize] = useState("1152px");
@@ -308,7 +334,7 @@ function App() {
 		[],
 	);
 
-	const defaultProjectProperties = useMemo(
+	/*const defaultProjectProperties = useMemo(
 		() => ({
 			name: defaultProjectName,
 			npRows: defaultNpRows,
@@ -316,33 +342,6 @@ function App() {
 			spr: defaultStepsPerRows,
 			projectType: defaultProjectType,
 			sources: defaultSources,
-			/*db: {
-				crb: "",
-				current: "30/60A",
-				desc: "Disjonteur de branchement",
-				free: false,
-				func: "db",
-				icon: "swb_puissance.svg",
-				id: "DB",
-				parentId: "",
-				srcId: import.meta.env.VITE_DB_SRCNAME,
-				kcId: "",
-				kcType: "NO",
-				kcOrder: "after",
-				vref: import.meta.env.VITE_VREF_230V,
-				partialKc: false,
-				onlyChilds: true,
-				noAutoId: false,
-				pole: "1P+N",
-				wire: "16",
-				line: "",
-				grp: "",
-				sensibility: "500mA",
-				coef: 1,
-				span: 4,
-				text: "Disjonteur de branchement",
-				type: "S",
-			},*/
 		}),
 		[
 			defaultHRow,
@@ -352,7 +351,7 @@ function App() {
 			defaultProjectType,
 			defaultSources,
 		],
-	);
+	);*/
 
 	const createRow = useCallback(
 		(steps, rowsCount) => {
@@ -441,9 +440,6 @@ function App() {
 			stepSize: defaultStepSize,
 			rows: createRow(defaultStepsPerRows, defaultNpRows),
 
-			db: { ...defaultProjectProperties.db },
-
-			/*withDb: false,*/
 			sources: [...defaultSources],
 			withGroundLine: false,
 
@@ -470,7 +466,6 @@ function App() {
 			defaultStepSize,
 			createRow,
 			defaultNpRows,
-			defaultProjectProperties.db,
 			defaultFirstpageOptions.infos,
 			defaultSources,
 		],
@@ -489,11 +484,6 @@ function App() {
 			prjversion: swb.prjversion ? parseInt(swb.prjversion, 10) : 1,
 			// <2.0.0
 			projectType: swb.projectType ?? defaultProjectType,
-			/*db: {
-				...defaultProjectProperties.db,
-				...(swb.db ?? { ...defaultProjectProperties.db }),
-			},
-			withDb: swb.withDb === true || swb.withDb === false ? swb.withDb : false,*/
 			withGroundLine:
 				swb.withGroundLine === true || swb.withGroundLine === false
 					? swb.withGroundLine
@@ -770,10 +760,18 @@ function App() {
 	};
 
 	const getSavedSwitchboard = () => {
-		if (sessionStorage.getItem(pkg.name)) {
+		let saved = null;
+
+		if (autoSave && localStorage.getItem(pkg.name)) {
+			saved = localStorage.getItem(pkg.name);
+		} else if (sessionStorage.getItem(pkg.name)) {
+			saved = sessionStorage.getItem(pkg.name);
+		}
+
+		if (saved) {
 			let swb = {
 				...defaultProject,
-				...JSON.parse(sessionStorage.getItem(pkg.name)),
+				...JSON.parse(saved),
 			};
 			swb = autoUpdateProjectProperties(swb);
 
@@ -927,6 +925,11 @@ function App() {
 			printSchemaOpened: false,
 			printSummaryOpened: false,
 		}));
+
+		localStorage.removeItem(pkg.name);
+		localStorage.removeItem(`${pkg.name}_printOptions`);
+		localStorage.removeItem(`${pkg.name}_autoSave`);
+		localStorage.removeItem(`${pkg.name}_autoResize`);
 
 		createProject(
 			defaultProjectName,
@@ -2188,7 +2191,12 @@ function App() {
 					prjupdated: new Date(),
 				};
 
-				sessionStorage.setItem(pkg.name, JSON.stringify(updatedProject));
+				const prjStrProject = JSON.stringify(updatedProject);
+				sessionStorage.setItem(pkg.name, prjStrProject);
+				if (autoSave) {
+					localStorage.setItem(pkg.name, prjStrProject);
+				}
+
 				setSwitchboard(updatedProject);
 				setDocumentTitle(updatedProject.prjname);
 			}
@@ -2201,6 +2209,12 @@ function App() {
 					`${pkg.name}_printOptions`,
 					JSON.stringify(printOptions),
 				);
+				if (autoSave) {
+					localStorage.setItem(
+						`${pkg.name}_printOptions`,
+						JSON.stringify(printOptions),
+					);
+				}
 			}
 
 			const labelersOptionsIsOutdated =
@@ -2211,6 +2225,12 @@ function App() {
 					`${pkg.name}_labelersOptions`,
 					JSON.stringify(labelersOptions),
 				);
+				if (autoSave) {
+					localStorage.setItem(
+						`${pkg.name}_labelersOptions`,
+						JSON.stringify(labelersOptions),
+					);
+				}
 			}
 		}, 1000);
 
@@ -2254,7 +2274,17 @@ function App() {
 			`${pkg.name}_autoResize`,
 			autoSpaceSize ? "true" : "false",
 		);
+		if (autoSave) {
+			localStorage.setItem(
+				`${pkg.name}_autoResize`,
+				autoSpaceSize ? "true" : "false",
+			);
+		}
 	}, [autoSpaceSize, switchboard.stepsPerRows]);
+
+	useEffect(() => {
+		localStorage.setItem(`${pkg.name}_autoSave`, autoSave ? "true" : "false");
+	}, [autoSave]);
 
 	useEffect(() => {
 		const ctn = document.getElementById("content");
@@ -3072,13 +3102,36 @@ function App() {
 				<div className="button_group-separator"></div>
 
 				{/** ----------------------------------------------------------- */}
-				{/** TOOLBAR WORKBOX VIEW MODE **/}
+				{/** TOOLBAR AUTOSAVE **/}
 				{/** ----------------------------------------------------------- */}
 
 				<div
 					className="button_group-separator"
 					style={{ marginLeft: "auto" }}
 				></div>
+
+				<button
+					type="button"
+					className={`button_group-autosave end ${autoSave ? "checked" : ""}`}
+					onClick={() => setAutoSave((old) => !old)}
+					title="Conserver le projet et ses paramètres en mémoire du navigateur (auto-enregistrement)"
+				>
+					<LazyImage
+						src={autoSave ? autosaveIcon : autosaveOffIcon}
+						width={18}
+						height={18}
+						style={{ width: "18px", height: "18px" }}
+						alt={
+							"Conserver le projet et ses paramètres en mémoire du navigateur"
+						}
+					/>
+				</button>
+
+				{/** ----------------------------------------------------------- */}
+				{/** TOOLBAR WORKBOX VIEW MODE **/}
+				{/** ----------------------------------------------------------- */}
+
+				<div className="button_group-separator"></div>
 				<button
 					type="button"
 					className={`button_group-resize end ${autoSpaceSize ? "checked" : ""}`}
@@ -3733,5 +3786,3 @@ function App() {
 }
 
 export default App;
-
-//TODO: Ajouter les calibres 300mA et 650mA pour le DB

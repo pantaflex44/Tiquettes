@@ -16,34 +16,53 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
+import { polesCounter } from "../others/functions.js";
 
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
 
 export default function EditorParentSelector({
 	id,
 	currentModuleId,
+	currentPole,
 	filteredModulesListBySchemaFuncs,
 	getModuleById,
 	sources,
 	onParentChange = null,
 	onSourceChange = null,
 }) {
-	const getCurrentParent = (currentModuleId) => {
-		const module = getModuleById(currentModuleId);
-		if (!module) return "";
+	const currentModule = getModuleById(currentModuleId);
+
+	const getCurrentParent = () => {
+		if (!currentModule) return "";
 
 		let v = "";
-		if (module.parentId !== "") {
-			v = JSON.stringify({ type: "module", id: module.parentId });
-		} else if (module.srcId !== "") {
-			v = JSON.stringify({ type: "source", id: module.srcId });
+		if (currentModule.parentId !== "") {
+			v = JSON.stringify({
+				type: "module",
+				id: currentModule.parentId,
+				pole: getModuleById(currentModule.parentId)?.pole ?? "4P",
+			});
+		} else if (currentModule.srcId !== "") {
+			v = JSON.stringify({
+				type: "source",
+				id: currentModule.srcId,
+				pole: sources.find((s) => s.id === currentModule.srcId)?.pole ?? "4P",
+			});
 		}
+
 		return v;
 	};
 	const [currentParent, setCurrentParent] = useState(
 		getCurrentParent(currentModuleId),
 	);
+
+	const isCompatiblePoles = (pole) => {
+		const sourcePoles = polesCounter(pole ?? "4P");
+		const modulePoles = polesCounter(currentPole ?? "4P");
+		if (sourcePoles < modulePoles) return false;
+		return true;
+	};
 
 	return (
 		<select
@@ -52,16 +71,26 @@ export default function EditorParentSelector({
 			value={currentParent}
 			onChange={(e) => {
 				const v = e.target.value.trim();
+
 				if (v === "") {
 					if (onParentChange) onParentChange("");
+					if (onSourceChange) onSourceChange("");
 				} else {
 					const vp = JSON.parse(v);
 					if (vp.type === "module") {
+						if (onSourceChange) onSourceChange("");
 						if (onParentChange) onParentChange(vp.id);
 					} else if (vp.type === "source") {
-						if (onSourceChange) onSourceChange(vp.id ?? "");
+						if (onParentChange) onParentChange("");
+						if (onSourceChange) {
+							if (!isCompatiblePoles(vp.pole)) {
+								onSourceChange("");
+							}
+							onSourceChange(vp.id ?? "");
+						}
 					}
 				}
+
 				setCurrentParent(v);
 			}}
 			style={{ flex: 1 }}
@@ -73,11 +102,20 @@ export default function EditorParentSelector({
 			<option value={""} disabled={true}>
 				Sources d'alimentations
 			</option>
-			{sources.map((s) => (
-				<option key={s.id} value={JSON.stringify({ type: "source", id: s.id })}>
-					{s.label}
-				</option>
-			))}
+			{sources.map((s) => {
+				if (currentPole && !isCompatiblePoles(s.pole)) {
+					return null;
+				}
+
+				return (
+					<option
+						key={s.id}
+						value={JSON.stringify({ type: "source", id: s.id, pole: s.pole })}
+					>
+						{s.label}
+					</option>
+				);
+			})}
 
 			{/* Modules */}
 			{Object.entries(filteredModulesListBySchemaFuncs).map(([k, l]) => {

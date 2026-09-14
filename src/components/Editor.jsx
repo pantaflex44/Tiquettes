@@ -23,6 +23,7 @@ import numberAutoIcon from "../assets/numbers_auto.svg";
 import numberManIcon from "../assets/numbers_man.svg";
 import switchboardIcon from "../assets/project.svg";
 import schemaIcon from "../assets/schema.svg";
+import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
@@ -169,17 +170,31 @@ export default function Editor({
 			(parentModule.pole === "3P+N" || parentModule.pole === "4P"),
 		[parentModule],
 	);
-	const hasLine = useMemo(
+
+	const source = useMemo(
 		() =>
-			parentModule &&
-			parentModuleIsTri /* ||
-				(!parentModule &&
-					switchboard.withDb &&
-					(switchboard.db.pole === "3P+N" || switchboard.db.pole === "4P"))*/ &&
-			schemaFunctions[ed.currentModule.func]?.hasPole &&
-			(ed.currentModule.pole === "1P+N" || ed.currentModule.pole === "2P"),
-		[parentModule, parentModuleIsTri, ed.currentModule, schemaFunctions],
+			(switchboard.sources ?? []).find((s) => s.id === ed.currentModule.srcId),
+		[ed.currentModule.srcId],
 	);
+	const sourceModuleIsTri = useMemo(
+		() => source && (source.pole === "3P+N" || source.pole === "4P"),
+		[source],
+	);
+
+	const hasLine = useMemo(() => {
+		return (
+			((parentModule && parentModuleIsTri) || (source && sourceModuleIsTri)) &&
+			schemaFunctions[ed.currentModule.func]?.hasPole &&
+			(ed.currentModule.pole === "1P+N" || ed.currentModule.pole === "2P")
+		);
+	}, [
+		parentModule,
+		parentModuleIsTri,
+		source,
+		sourceModuleIsTri,
+		ed.currentModule,
+		schemaFunctions,
+	]);
 
 	useEffect(() => {
 		if (!hasLine) onUpdateModuleEditor({ line: "" });
@@ -190,23 +205,15 @@ export default function Editor({
 			onUpdateModuleEditor({ id: lastFreeId });
 		}
 
-		/*let dbPole = 4;
-		if (switchboard.withDb) {
-			const pole = switchboard.db.pole.trim().toUpperCase();
-			dbPole = parseInt(pole.replace(/\D/g, ""), 10);
-			if (dbPole === 3 && pole.includes("+N")) dbPole = 4;
-		}
-
-		let currentPole = 0;
-		if (ed.currentModule.pole) {
-			const pole = ed.currentModule.pole.trim().toUpperCase();
-			currentPole = parseInt(pole.replace(/\D/g, ""), 10);
-			if (currentPole === 3 && pole.includes("+N")) currentPole = 4;
-		}
-
-		if (dbPole === 1 && currentPole !== 1 && currentPole !== 2)
-			onUpdateModuleEditor({ pole: switchboard.db.pole, line: "" });*/
-	}, [hasBlankId /*, ed.currentModule.func*/]);
+		const sourcePole = source?.pole
+			? polesCounter(source.pole.trim().toUpperCase())
+			: 4;
+		const currentPole = ed.currentModule.pole
+			? polesCounter(ed.currentModule.pole.trim().toUpperCase())
+			: 0;
+		if (sourcePole === 1 && currentPole !== 1 && currentPole !== 2)
+			onUpdateModuleEditor({ pole: sourcePole, line: "" });
+	}, [hasBlankId]);
 
 	const [fidc, setFidc] = useState(false);
 	useEffect(() => {
@@ -695,6 +702,7 @@ export default function Editor({
 											<EditorParentSelector
 												id={`editor_schparent_${ed.currentModule.id.trim()}`}
 												currentModuleId={ed.currentModule.id}
+												currentPole={ed.currentModule.pole}
 												filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
 												getModuleById={getModuleById}
 												sources={switchboard.sources ?? []}
@@ -903,8 +911,10 @@ export default function Editor({
 									<EditorPoleSelector
 										id={`editor_pole_${ed.currentModule.id.trim()}`}
 										parentModule={getParentById(ed.currentModule.parentId)}
+										source={(switchboard.sources ?? []).find(
+											(s) => s.id === ed.currentModule.srcId,
+										)}
 										value={ed.currentModule.pole}
-										/*db={switchboard.withDb ? switchboard.db : null}*/
 										onChange={(value, vref) => {
 											onUpdateModuleEditor({ pole: value, vref });
 										}}

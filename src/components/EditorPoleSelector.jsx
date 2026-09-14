@@ -16,30 +16,17 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useMemo } from "react";
+import { polesCounter } from "../others/functions.js";
 
 export default function EditorPoleSelector({
 	id,
 	parentModule,
+	source,
 	value,
 	allowed = ["1P+N", "2P", "3P", "3P+N", "4P"],
-	/*db = null,*/
 	style = {},
 	onChange = null,
 }) {
-	const polesCounter = (pole) => {
-		let p = parseInt(pole.replace(/\D/g, ""), 10);
-		if (p === 1 && pole.includes("+N")) p = 2;
-		if (p === 3 && pole.includes("+N")) p = 4;
-		return p;
-	};
-
-	const dbPole = 4 /*useMemo(() => {
-		if (!db?.pole) return 4;
-		const pole = db.pole.trim().toUpperCase();
-		return polesCounter(pole);
-	}, [db])*/;
-
 	const allowedPoles = [
 		{
 			key: "1P+N",
@@ -70,12 +57,15 @@ export default function EditorPoleSelector({
 		.filter((p) => allowed.includes(p.key))
 		.filter((currentPole) => {
 			const p = polesCounter(currentPole.key);
-			if (p <= dbPole) {
-				if (!parentModule?.pole) return true;
-				const parentPole = parentModule.pole.trim().toUpperCase();
-				return p <= polesCounter(parentPole);
+			if (!parentModule?.pole) {
+				const sourcePole = source?.pole
+					? polesCounter(source.pole.trim().toUpperCase())
+					: 4;
+				return p <= sourcePole;
+			} else {
+				const parentPole = polesCounter(parentModule.pole.trim().toUpperCase());
+				return p <= parentPole;
 			}
-			return false;
 		});
 
 	const getVrefFromPole = (pole) => {

@@ -35,7 +35,7 @@
 	],
 	"changelog": {
 		"2.2.9": {
-			"date": "2026-08-21",
+			"date": "2026-09-14",
 			"actions": {
 				"patches": [
 					{
@@ -69,6 +69,13 @@
 					}
 				],
 				"adds": [
+					{
+						"text": "Ajout d'un système de mémorisation du projet et de ses paramètres sur l'ordinateur de l'utilisateur (auto-enregistrement).",
+						"from": {
+							"name": "Issue #103",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/103"
+						}
+					},
 					{
 						"text": "Ajout du pictogramme 'Boite de dérivation' suite à la demande d'Alain S."
 					},

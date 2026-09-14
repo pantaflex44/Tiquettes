@@ -17,14 +17,12 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import boltIcon from "../assets/bolt.svg";
 import cancelIcon from "../assets/cancel.svg";
 import compagnyIcon from "../assets/compagny.svg";
 import groundIcon from "../assets/ground.svg";
 import homeIcon from "../assets/home.svg";
 import info2Icon from "../assets/info2.svg";
 import monitorIcon from "../assets/monitor.svg";
-import noboltIcon from "../assets/nobolt.svg";
 import nogroundIcon from "../assets/noground.svg";
 import nomonitorIcon from "../assets/nomonitor.svg";
 import numbersIcon from "../assets/numbers.svg";
@@ -50,19 +48,11 @@ export default function SchemaTab({
 	const [sourcesOpened, setSourcesOpened] = useState(false);
 	const [zoomed, setZoomed] = useState(false);
 	const monitorRef = useRef(null);
-	let dbCurrent = 0;
+	const dbCurrent = 0;
 
 	useEffect(() => {
 		if (monitorOpened) monitorRef.current.focus();
 	}, [monitorOpened]);
-
-	const polesCounter = (pole) => {
-		if (!pole) return 4;
-		let p = parseInt(pole.replace(/\D/g, ""), 10);
-		if (p === 1 && pole.includes("+N")) p = 2;
-		if (p === 3 && pole.includes("+N")) p = 4;
-		return p;
-	};
 
 	const handleEditSymbol = (module) => {
 		const m = getModuleById(module.id);
@@ -80,13 +70,13 @@ export default function SchemaTab({
 						((module.parentId ?? "-").trim() === "" ||
 							!getModuleById(module.parentId).module)
 					) {
-						return { ...module, parentId: /*switchboard.withDB ? "DB" :*/ "" };
+						return { ...module, parentId: "" };
 					}
 					return null;
 				}),
 			)
 			.filter((module) => module !== null);
-	}, [switchboard.rows /*, switchboard.withDb*/]);
+	}, [switchboard.rows]);
 
 	const getChilds = useCallback(
 		(parentId) => {
@@ -104,7 +94,7 @@ export default function SchemaTab({
 				)
 				.filter((module) => module !== null);
 		},
-		[switchboard.rows /*, switchboard.withDb*/],
+		[switchboard.rows],
 	);
 
 	const getRow = useCallback(
@@ -192,27 +182,12 @@ export default function SchemaTab({
 
 			return l;
 		},
-		[switchboard.rows /*, switchboard.withDb*/],
+		[switchboard.rows],
 	);
 
 	const tree = useMemo(() => {
-		return (
-			/*switchboard.withDb
-		? {
-					childs: {
-						DB: {
-							module: { ...switchboard.db },
-							hasNext: false,
-							hasPrev: false,
-							isLast: false,
-							childs: getRow(head),
-							hasBrothers: false,
-						},
-					},
-				}
-			:*/ { childs: getRow(head) }
-		);
-	}, [head /*, switchboard.withDb, switchboard.db*/]);
+		return { childs: getRow(head) };
+	}, [head]);
 
 	const monitor = useMemo(() => {
 		if (!switchboard.schemaMonitor) return {};
@@ -320,9 +295,10 @@ export default function SchemaTab({
 					return { value, unit: "W" };
 				};
 
-				const parentPole =
-					lastParentModule?.pole ??
-					/*switchboard.withDb ? switchboard.db?.pole :*/ null;
+				const source = switchboard.sources.find(
+					(s) => s.id === data.module.srcId,
+				);
+				const parentPole = lastParentModule?.pole ?? source?.pole ?? null;
 				const parentCurrent = getCurrent(lastParentModule);
 				const currentPole = getPole(data.module);
 				const currentFunc = getFunc(data.module);
@@ -333,7 +309,7 @@ export default function SchemaTab({
 					(isTri(currentPole) ? 3 : isMono(currentPole) ? 1 : 1);
 
 				// Le module courant est un disjoncteur de branchement
-				if (currentFunc === "db") {
+				/*if (currentFunc === "db") {
 					dbCurrent = currentCurrent;
 
 					add_info(id, `Calibre retenu: ${dbCurrent}A`);
@@ -348,7 +324,7 @@ export default function SchemaTab({
 								);
 						}
 					});
-				}
+				}*/
 
 				// Le module courant est un interrupteur différentiel
 				if (currentFunc === "id" && getId(data.module)) {
