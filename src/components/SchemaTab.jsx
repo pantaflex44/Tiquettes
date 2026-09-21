@@ -361,23 +361,24 @@ export default function SchemaTab({
 					);
 
 					if (total > currentCurrent) {
-						let prt = lastParentModule;
-						do {
-							const rc = getCurrent(prt);
-							if (rc > 0 && rc < refCurrent) {
-								refCurrent = rc;
-							}
-							prt = getParentByModule(prt);
-						} while (prt);
-
-						if (lastParentModule && getFunc(lastParentModule) === "q") {
-							refCurrent = getCurrent(lastParentModule);
+						if (lastParentModule) {
+							let prt = lastParentModule;
+							do {
+								if (getFunc(prt) !== "q") {
+									break;
+								}
+								const rc = getCurrent(prt);
+								if (rc > 0 && rc < refCurrent) {
+									refCurrent = rc;
+								}
+								prt = getParentByModule(prt);
+							} while (prt);
 						} else {
 							refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
 						}
 
 						// erreur seulement si la charge > DDR (regle de l'aval - DDR >= total charges)
-						if (refCurrent <= 0 || currentCurrent < refCurrent) {
+						if (refCurrent <= 0 || currentCurrent <= refCurrent) {
 							// et seulement si le DDR < AGCP (règle de l'amont - DDR >= AGCP):
 							add_error(
 								id,
