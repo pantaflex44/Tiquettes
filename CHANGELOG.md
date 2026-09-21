@@ -4,6 +4,7 @@
 
 ### Corrections
 
+- Correction du moniteur des erreurs relatives à la NFC 15-100.
 - Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source.
 - Diverses refactorisations / optimisations du code source de l'application.
 - Correction de l'ergonomie des menus déroulants de la barre de naviguation.

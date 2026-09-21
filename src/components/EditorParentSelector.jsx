@@ -102,14 +102,14 @@ export default function EditorParentSelector({
 			<option value={""} disabled={true}>
 				Sources d'alimentations
 			</option>
-			{sources.map((s) => {
+			{sources.map((s, _i) => {
 				if (currentPole && !isCompatiblePoles(s.pole)) {
 					return null;
 				}
 
 				return (
 					<option
-						key={s.id}
+						key={`${s.id}-${_i}`}
 						value={JSON.stringify({ type: "source", id: s.id, pole: s.pole })}
 					>
 						{s.label}
@@ -125,10 +125,10 @@ export default function EditorParentSelector({
 							{schemaFunctions[k].name}
 						</option>
 						{l
-							.map((module) =>
+							.map((module, _i) =>
 								currentModuleId !== module.id ? (
 									<option
-										key={module.id}
+										key={`${module.id}-${_i}`}
 										value={JSON.stringify({ type: "module", id: module.id })}
 									>
 										{`${module.id} ${module.text ? `- ${module.text}` : ""}`.trim()}

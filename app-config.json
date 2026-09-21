@@ -39,6 +39,9 @@
 			"actions": {
 				"patches": [
 					{
+						"text": "Correction du moniteur des erreurs relatives à la NFC 15-100."
+					},
+					{
 						"text": "Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source."
 					},
 					{

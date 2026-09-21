@@ -42,13 +42,13 @@ export default function SchemaTab({
 	reassignModules,
 	getModuleById,
 	schemaFunctions,
+	getFilteredModulesBySchemaFuncs,
 	onEditSymbol = null,
 }) {
 	const [monitorOpened, setMonitorOpened] = useState(false);
 	const [sourcesOpened, setSourcesOpened] = useState(false);
 	const [zoomed, setZoomed] = useState(false);
 	const monitorRef = useRef(null);
-	const dbCurrent = 0;
 
 	useEffect(() => {
 		if (monitorOpened) monitorRef.current.focus();
@@ -233,6 +233,16 @@ export default function SchemaTab({
 					return 0;
 				};
 
+				const getComputedCurrent = (computedCurrent) => {
+					const _currentCurrent = computedCurrent.split("/");
+					if (_currentCurrent.length > 0)
+						return parseInt(
+							_currentCurrent[_currentCurrent.length - 1].replace(/\D/g, ""),
+							10,
+						);
+					return 0;
+				};
+
 				const getVref = (module) => {
 					const _currentVref = (
 						module?.vref ?? import.meta.env.VITE_VREF_230V
@@ -265,6 +275,10 @@ export default function SchemaTab({
 					return module?.pole;
 				};
 
+				const getSource = (module) => {
+					return switchboard.sources.find((s) => s.id === module?.srcId);
+				};
+
 				const getTrueCoef = (module) => {
 					return switchboard.projectType === "R" && isMono(currentPole)
 						? Math.round((module?.coef ?? 0.5) * 10) / 10
@@ -279,6 +293,24 @@ export default function SchemaTab({
 					const icon = module?.icon ?? "";
 					const found = swbIcons.filter((i) => i.filename === icon);
 					return found.length === 1 ? found[0] : null;
+				};
+
+				const getParentByModule = (module) => {
+					const parent = Object.entries(getFilteredModulesBySchemaFuncs())
+						.map(([_k, l]) => {
+							const res = l
+								.map((m) => (module?.parentId === m.id ? m : null))
+								.filter((f) => f !== null);
+
+							if (res.length === 1) return res[0];
+							return null;
+						})
+						.filter((f) => f !== null);
+					if (!parent || !Array.isArray(parent)) return null;
+
+					if (parent.length !== 1) return null;
+
+					return parent[0];
 				};
 
 				const applyPowerRound = (value) => {
@@ -304,27 +336,14 @@ export default function SchemaTab({
 				const currentFunc = getFunc(data.module);
 				const currentCurrent = getCurrent(data.module);
 				const currentPower = currentCurrent * getVref(data.module);
+				const currentSource = getSource(data.module);
 				const vDivider =
 					getVref(data.module) *
 					(isTri(currentPole) ? 3 : isMono(currentPole) ? 1 : 1);
 
-				// Le module courant est un disjoncteur de branchement
-				/*if (currentFunc === "db") {
-					dbCurrent = currentCurrent;
-
-					add_info(id, `Calibre retenu: ${dbCurrent}A`);
-
-					Object.entries(data.childs).forEach(([cid, cdata]) => {
-						if (getFunc(cdata.module) === "sw") {
-							const childCurrent = getCurrent(cdata.module);
-							if (childCurrent < currentCurrent)
-								add_error(
-									cid,
-									`Le calibre choisi (${childCurrent}A) doit être supérieur au calibre maximum du disjoncteur de branchement: ${currentCurrent}A`,
-								);
-						}
-					});
-				}*/
+				let refCurrent = currentCurrent;
+				if (!refCurrent || refCurrent <= 0)
+					refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
 
 				// Le module courant est un interrupteur différentiel
 				if (currentFunc === "id" && getId(data.module)) {
@@ -342,8 +361,23 @@ export default function SchemaTab({
 					);
 
 					if (total > currentCurrent) {
+						let prt = lastParentModule;
+						do {
+							const rc = getCurrent(prt);
+							if (rc > 0 && rc < refCurrent) {
+								refCurrent = rc;
+							}
+							prt = getParentByModule(prt);
+						} while (prt);
+
+						if (lastParentModule && getFunc(lastParentModule) === "q") {
+							refCurrent = getCurrent(lastParentModule);
+						} else {
+							refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
+						}
+
 						// erreur seulement si la charge > DDR (regle de l'aval - DDR >= total charges)
-						if (dbCurrent <= 0 || currentCurrent < dbCurrent) {
+						if (refCurrent <= 0 || currentCurrent < refCurrent) {
 							// et seulement si le DDR < AGCP (règle de l'amont - DDR >= AGCP):
 							add_error(
 								id,
@@ -371,7 +405,7 @@ export default function SchemaTab({
 
 					add_info(
 						id,
-						`Charge retenue: ${total}A sur un maximum autorisé de ${currentCurrent}A`,
+						`La charge est de ${total}A pour un courant limité à ${refCurrent ? `${refCurrent}A` : "une valeur inconnue"}`,
 					);
 
 					_lastParentModuleId = data.module;

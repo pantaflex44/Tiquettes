@@ -3636,6 +3636,7 @@ function App() {
 				reassignModules={reassignModules}
 				getModuleById={getModuleById2}
 				schemaFunctions={schemaFunctions}
+				getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
 				onEditSymbol={(rowIndex, moduleIndex) =>
 					editModule(rowIndex, moduleIndex, "schema")
 				}
