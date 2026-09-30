@@ -1973,12 +1973,11 @@ $findSource = function ($id) use ($sources) {
 
 $rpCnt = 1;
 $rps = [];
+$autoAddRps = $switchboard->autoAddRps ?? false;
 
 foreach ($switchboard->rows as $row) {
     foreach ($row as $module) {
         if (!$module?->id) continue;
-
-        $autoAddRps = $switchboard->autoAddRps ?? false;
 
         $fc = trim($module->func ?? "");
         $pi = trim($module->parentId ?? "-");
@@ -1997,10 +1996,10 @@ foreach ($switchboard->rows as $row) {
     }
 }
 
-$flattenModules = array_values(array_filter(array_map(function ($module) use ($switchboard, $findSource, $rpCnt) {
+$flattenModules = array_values(array_filter(array_map(function ($module) use ($switchboard, $findSource, $rpCnt, $autoAddRps) {
     global $rps;
 
-    if ($switchboard->autoAddRps ?? false) {
+    if ($autoAddRps) {
         $fc = trim($module->func ?? "");
         $pi = trim($module->parentId ?? "-");
         $s = $findSource(trim($module->srcId ?? ""));
@@ -2065,7 +2064,7 @@ function getSimplyPole($module)
     return $pc;
 };
 
-if ($switchboard->autoAddRps ?? false) {
+if ($autoAddRps) {
     $tm = [];
 
     foreach (array_values($rps) as $rp) {
