@@ -25,7 +25,6 @@ import switchboardIcon from "../assets/project.svg";
 import schemaIcon from "../assets/schema.svg";
 import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
-import swbIcons from "../switchboard_icons.json" with { type: "json" };
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
 import EditorCrbSelector from "./EditorCrbSelector.jsx";

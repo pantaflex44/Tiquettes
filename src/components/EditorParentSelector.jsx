@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { polesCounter } from "../others/functions.js";
 
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
