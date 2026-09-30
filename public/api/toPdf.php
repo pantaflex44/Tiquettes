@@ -1978,6 +1978,7 @@ $autoAddRps = $switchboard->autoAddRps ?? false;
 foreach ($switchboard->rows as $row) {
     foreach ($row as $module) {
         if (!$module?->id) continue;
+        if (!is_string($module->func) || strlen(trim($module->func)) === 0) continue;
 
         $fc = trim($module->func ?? "");
         $pi = trim($module->parentId ?? "-");
@@ -2136,8 +2137,6 @@ function findInFlattedSwitchboard($id)
 
 
 foreach ($flattenModules as $module) {
-    if (!is_string($module->func) || strlen(trim($module->func)) === "") continue;
-
     $kcId = trim($module->kcId ?? '');
     $kcId_a = explode('|', $kcId);
 
