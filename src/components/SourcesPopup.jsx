@@ -179,7 +179,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 										}
 									>
 										<LazyImage
-											src={`./schema_${base}.svg`}
+											src={`./source_${base}.svg`}
 											width={22}
 											height={22}
 										/>
