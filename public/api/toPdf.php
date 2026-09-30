@@ -2000,7 +2000,7 @@ foreach ($switchboard->rows as $row) {
 $flattenModules = array_values(array_filter(array_map(function ($module) use ($switchboard, $findSource, $rpCnt) {
     global $rps;
 
-    if ($switchboard->autoAddRps) {
+    if ($switchboard->autoAddRps ?? false) {
         $fc = trim($module->func ?? "");
         $pi = trim($module->parentId ?? "-");
         $s = $findSource(trim($module->srcId ?? ""));
@@ -2065,7 +2065,7 @@ function getSimplyPole($module)
     return $pc;
 };
 
-if ($switchboard->autoAddRps) {
+if ($switchboard->autoAddRps ?? false) {
     $tm = [];
 
     foreach (array_values($rps) as $rp) {
