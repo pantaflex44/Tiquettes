@@ -77,7 +77,7 @@ function SourcesList({
 						}
 					}}
 				>
-					<LazyImage src={`./schema_${s.base}.svg`} width={48} height={48} />
+					<LazyImage src={`./source_${s.base}.svg`} width={48} height={48} />
 					<div className="label">{s.label}</div>
 				</div>
 			))}

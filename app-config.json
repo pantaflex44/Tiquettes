@@ -35,11 +35,14 @@
 	],
 	"changelog": {
 		"2.2.9": {
-			"date": "2026-09-14",
+			"date": "2026-09-30",
 			"actions": {
 				"patches": [
 					{
-						"text": "Correction du moniteur des erreurs relatives à la NFC 15-100."
+						"text": "Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses."
+					},
+					{
+						"text": "Correction de divers bugs dans le moniteur de schéma unifilaire."
 					},
 					{
 						"text": "Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source."
@@ -55,6 +58,9 @@
 					}
 				],
 				"updates": [
+					{
+						"text": "Modification du générateur de schémas unifilaires avec prise en charge des sources multiples et gestion automatique des répartiteurs de branchement."
+					},
 					{
 						"text": "Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis."
 					},

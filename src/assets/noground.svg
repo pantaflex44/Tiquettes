@@ -12,7 +12,7 @@
    version="1.1"
    id="svg74"
    sodipodi:docname="noground.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -31,10 +31,10 @@
      showgrid="false"
      inkscape:zoom="35.916667"
      inkscape:cx="12"
-     inkscape:cy="12.013921"
+     inkscape:cy="11.986079"
      inkscape:window-width="1920"
-     inkscape:window-height="1010"
-     inkscape:window-x="1920"
+     inkscape:window-height="954"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg74" />
@@ -45,16 +45,20 @@
      id="path64" />
   <path
      d="M12 13v-8"
-     id="path66" />
+     id="path66"
+     style="stroke:#999999;stroke-opacity:1" />
   <path
      d="M4 13h16"
-     id="path68" />
+     id="path68"
+     style="stroke:#999999;stroke-opacity:1" />
   <path
      d="M7 16h10"
-     id="path70" />
+     id="path70"
+     style="stroke:#999999;stroke-opacity:1" />
   <path
      d="M10 19h4"
-     id="path72" />
+     id="path72"
+     style="stroke:#999999;stroke-opacity:1" />
   <path
      style="fill:#000000;stroke-width:1.84842;stroke-linejoin:bevel;stroke-miterlimit:20"
      d="M 3.9056521,4.1005477 20.052584,20.247479"

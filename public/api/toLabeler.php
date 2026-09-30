@@ -209,7 +209,42 @@ class TiquettesLabeler
     {
         global $switchboard;
 
-        $modules = $switchboard->rows[$rowIndex];
+        $baseModules = $switchboard->rows[$rowIndex];
+
+        $modules = [];
+        for ($j = 0; $j < count($baseModules); $j++) {
+            $module = $baseModules[$j];
+
+            $isInvisible = str_contains(strtolower(trim($module->icon ?? "")), "invisible");
+            if ($isInvisible) {
+                $span = $module->span ?? 1;
+                for ($z = 0; $z < $span; $z++) {
+                    $modules[] = (object)[
+                        ...(array)$module,
+                        "id" => "",
+                        "icon" => "",
+                        "text" => "",
+                        "free" => true,
+                        "half" => "none",
+                        "span" => 1,
+                        "func" => "",
+                        "current" => "",
+                        "type" => "",
+                        "crb" => "",
+                        "modtype" => "",
+                        "vref" => "230V",
+                        "sensibility" => "",
+                        "coef" => 0.5,
+                        "pole" => "",
+                        "wire" => "",
+                        "line" => "",
+                        "grp" => "",
+                    ];
+                }
+            } else {
+                $modules[] = $module;
+            }
+        }
 
         $trim = isset($this->options['options']['trim'])  ? $this->options['options']['trim'] : 'ext';
         if ($trim === 'all') {

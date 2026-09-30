@@ -1,4 +1,18 @@
 {
+	"rp": {
+		"name": "Répartiteur",
+		"description": "Un répartiteur est un dispositif qui permet de répartir l'énergie électrique dans plusieurs circuits.",
+		"hasType": false,
+		"hasCrb": false,
+		"hasCurrent": true,
+		"hasPole": true,
+		"hasWire": false,
+		"hasContacts": false,
+		"supportContacts": false,
+		"selectable": true,
+		"hasShareWithChilds": false,
+		"hasNONCChoice": false
+	},
 	"sw": {
 		"name": "Interrupteur sectionneur",
 		"description": "Un interrupteur sectionneur, c'est la combinaison d’un interrupteur et d’un sectionneur, destiné à isoler mécaniquement un circuit déjà coupé afin de sécuriser une intervention.",

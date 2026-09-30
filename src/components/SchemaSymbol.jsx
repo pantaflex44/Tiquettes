@@ -47,8 +47,14 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 		const titleInfos = monitor.infos?.[module.id]
 			? `\r\n\r\n🛈 ${monitor.infos[module.id].join("\r\n🛈 ")}`
 			: "";
-		const title =
+		const remark = (module.remark ?? "").trim();
+
+		let title =
 			`${module.id} / ${name}: ${module.text}${titleErrors}${titleInfos}`.trim();
+		if (remark !== "") {
+			title += `\r\n\r\nRemarques:\r\n${remark}`;
+		}
+
 		const icon =
 			`${import.meta.env.BASE_URL}` +
 			(isContact &&

@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { polesCounter } from "../others/functions.js";
 
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
@@ -103,7 +103,7 @@ export default function EditorParentSelector({
 				Sources d'alimentations
 			</option>
 			{sources.map((s, _i) => {
-				if (currentPole && !isCompatiblePoles(s.pole)) {
+				if (!s.id || !s.label || (currentPole && !isCompatiblePoles(s.pole))) {
 					return null;
 				}
 
@@ -129,7 +129,11 @@ export default function EditorParentSelector({
 								currentModuleId !== module.id ? (
 									<option
 										key={`${module.id}-${_i}`}
-										value={JSON.stringify({ type: "module", id: module.id })}
+										value={JSON.stringify({
+											type: "module",
+											id: module.id,
+											pole: module.pole,
+										})}
 									>
 										{`${module.id} ${module.text ? `- ${module.text}` : ""}`.trim()}
 									</option>

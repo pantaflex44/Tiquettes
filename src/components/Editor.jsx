@@ -25,6 +25,7 @@ import switchboardIcon from "../assets/project.svg";
 import schemaIcon from "../assets/schema.svg";
 import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
+import swbIcons from "../switchboard_icons.json" with { type: "json" };
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
 import EditorCrbSelector from "./EditorCrbSelector.jsx";
@@ -484,10 +485,13 @@ export default function Editor({
 													coef: selected?.coef ?? 0.5,
 												});
 
-												if (selected?.func && ed.currentModule.func === "")
+												if (selected?.func && ed.currentModule.func === "") {
 													onUpdateModuleEditor({ func: selected?.func });
+												}
+
 												if (selected?.crb && ed.currentModule.crb === "")
 													onUpdateModuleEditor({ crb: selected?.crb });
+
 												if (
 													selected?.current &&
 													ed.currentModule.current === ""
@@ -495,6 +499,7 @@ export default function Editor({
 													onUpdateModuleEditor({
 														current: selected?.current,
 													});
+
 												if (selected?.wire && ed.currentModule.wire === "") {
 													let w = 0;
 													if (ed.currentModule.current !== "") {
@@ -919,6 +924,11 @@ export default function Editor({
 											onUpdateModuleEditor({ pole: value, vref });
 										}}
 										style={{ flex: 1 }}
+										allowed={
+											ed.currentModule.func === "rp"
+												? ["2P", "4P"]
+												: ["1P+N", "2P", "3P", "3P+N", "4P"]
+										}
 									/>
 									{hasLine && (
 										<EditorLineSelector
@@ -959,7 +969,7 @@ export default function Editor({
 											minWidth: "70px",
 											height: "100px",
 											maxWidth: "100%",
-											overflowX: "auto",
+											overflowX: "hidden",
 											marginTop: "1em",
 											overflowY: "hidden",
 										}}

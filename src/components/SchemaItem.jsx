@@ -50,7 +50,7 @@ export default function SchemaItem({
 					)}
 					{isFirst && src && (
 						<div className="schemaItemFirstIconTitle">
-							{src[0].label.substring(0, 50)}
+							{(src[0]?.label ?? "").substring(0, 50)}
 						</div>
 					)}
 

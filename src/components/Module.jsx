@@ -126,6 +126,9 @@ function Module({
 		() => item.half === "none" || item.half === "left",
 		[item.half],
 	);
+	const isInvisible = useMemo(() => {
+		return (item.icon ?? "").trim().toLowerCase().includes("invisible");
+	}, [item]);
 
 	const [themedModule, setThemedModule] = useState(null);
 	const [beforeUpdate, setBeforeUpdate] = useState(null);
@@ -260,7 +263,7 @@ function Module({
 					/>
 				) : !isFree && themedModule ? (
 					<div
-						className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true ? "withTopSeparator" : ""} ${currentTheme?.data?.bottom?.border === true ? "withBottomSeparator" : ""} ${hasClipboard && clipboard?.id === item.id ? "clipboard_me" : ""} ${hasClipboard && !canPaste && !canInter ? "disabled" : ""}`.trim()}
+						className={`module_content half-${item.half} ${currentTheme?.data?.top?.border === true && !isInvisible ? "withTopSeparator" : ""} ${currentTheme?.data?.bottom?.border === true && !isInvisible ? "withBottomSeparator" : ""} ${hasClipboard && clipboard?.id === item.id ? "clipboard_me" : ""} ${hasClipboard && !canPaste && !canInter ? "disabled" : ""}`.trim()}
 						style={{
 							width: isDemo
 								? "calc(100% + 1px)"
@@ -314,6 +317,9 @@ function Module({
 										? item.grp
 										: (currentTheme?.data?.bottom?.borderColor ?? "#000000")
 									: "initial",
+							background: isInvisible
+								? "repeating-linear-gradient(-45deg, #00000008, #00000008 10px, transparent 10px, transparent 20px)"
+								: null,
 						}}
 						onClick={() => {
 							if (hasClipboard && canInter) {

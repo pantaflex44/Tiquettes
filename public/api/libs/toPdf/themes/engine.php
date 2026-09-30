@@ -86,7 +86,9 @@ class Theme
 
     public static function render($pdf, $workBox, $restPos, $themeData, $module, $printOptions)
     {
-        if ($printOptions->freeModules === true || (!$printOptions->freeModules && !$module->free)) {
+        $isInvisible = str_contains(strtolower(trim($module->icon ?? "")), "invisible");
+
+        if (!$isInvisible && ($printOptions->freeModules === true || (!$printOptions->freeModules && !$module->free))) {
             $originalData = json_decode(json_encode($themeData), true);
 
             $data = array_filter(

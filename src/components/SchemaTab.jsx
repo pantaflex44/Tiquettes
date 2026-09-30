@@ -7,7 +7,7 @@
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,getModuleById
+ This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Affero General Public License for more details.
@@ -17,12 +17,14 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import autoAddRpsIcon from "../assets/auto-add-rps.svg";
 import cancelIcon from "../assets/cancel.svg";
 import compagnyIcon from "../assets/compagny.svg";
 import groundIcon from "../assets/ground.svg";
 import homeIcon from "../assets/home.svg";
 import info2Icon from "../assets/info2.svg";
 import monitorIcon from "../assets/monitor.svg";
+import noautoAddRpsIcon from "../assets/no-auto-add-rps.svg";
 import nogroundIcon from "../assets/noground.svg";
 import nomonitorIcon from "../assets/nomonitor.svg";
 import numbersIcon from "../assets/numbers.svg";
@@ -50,6 +52,160 @@ export default function SchemaTab({
 	const [zoomed, setZoomed] = useState(false);
 	const monitorRef = useRef(null);
 
+	const getCurrent = (module) => {
+		const _currentCurrent = (module?.current ?? "0A").split("/");
+		if (_currentCurrent.length > 0)
+			return parseInt(
+				_currentCurrent[_currentCurrent.length - 1].replace(/\D/g, ""),
+				10,
+			);
+		return 0;
+	};
+
+	const getSimplyPole = (module) => {
+		const p = (module?.pole ?? "1P+N").trim().toUpperCase();
+		let pc = p.replace(/\D/g, "");
+		if ((pc === 1 || pc === 3) && p.includes("+N")) pc++;
+		if (pc < 2) pc = 2;
+		if (pc > 4) pc = 4;
+		return pc;
+	};
+
+	const flattedSwitchboard = useMemo(() => {
+		const sources = (switchboard.sources ?? []).filter((s) => s.id);
+		const findSource = (id) => sources.find((s) => s.id === id);
+
+		let rpCnt = 1;
+		let rps = {};
+
+		let r = switchboard.rows.flatMap((row) =>
+			row
+				.map((module) => {
+					if (!module?.id) return null;
+
+					if (switchboard.autoAddRps) {
+						const fc = (module.func ?? "").trim();
+						const pi = (module.parentId ?? "-").trim();
+						const s = findSource((module.srcId ?? "").trim());
+						if (pi === "") {
+							if (fc === "rp") {
+								const ks = s?.id ?? "-";
+								if (!rps[ks]) {
+									rps = { ...rps, [ks]: { ...module, _auto: false } };
+								}
+							}
+						}
+					}
+
+					return { ...module };
+				})
+				.filter((module) => module !== null)
+				.map((module) => {
+					if (switchboard.autoAddRps) {
+						const fc = (module.func ?? "").trim();
+						const pi = (module.parentId ?? "-").trim();
+						const s = findSource((module.srcId ?? "").trim());
+						if (pi === "") {
+							if (fc !== "") {
+								const ks = s?.id ?? "-";
+
+								const rpBase = {
+									id: `RP Auto ${rpCnt}`,
+									kcId: "",
+									parentId: "",
+									srcId: ks,
+									func: "rp",
+									text: "Répartiteur de branchement",
+									_auto: true,
+								};
+
+								rpCnt++;
+
+								let id = rpBase.id;
+								if (rps[ks]) {
+									id = rps[ks].id;
+								} else {
+									rps[ks] = rpBase;
+								}
+
+								return fc !== "rp"
+									? { ...module, srcId: "", parentId: id }
+									: null;
+							}
+						}
+					}
+
+					return { ...module };
+				})
+				.filter((module) => module !== null),
+		);
+
+		if (switchboard.autoAddRps) {
+			let tm = {};
+			Object.values(rps).forEach((rp) => {
+				const f = r.filter((m) => m.parentId === rp.id);
+				if (f.length === 1) {
+					tm = {
+						...tm,
+						[f[0].id]: { from: rp.id, parentId: rp.parentId, srcId: rp.srcId },
+					};
+				} else {
+					const childsCount = r.filter((m) => m.parentId === rp.id).length;
+					const remark =
+						(rp?.remark ?? "") +
+						`\r\nIl est préconisé d'utiliser un répartiteur avec minimum ${childsCount} départ${childsCount > 1 ? "s" : ""}`;
+
+					if (rp._auto) {
+						const childsCurrent = r
+							.filter((m) => m.parentId === rp.id)
+							.map((m) => getCurrent(m));
+
+						const childsPole = r
+							.filter((m) => m.parentId === rp.id)
+							.map((m) => getSimplyPole(m));
+
+						r = [
+							...r,
+							{
+								...rp,
+								current: `${Math.max(...childsCurrent)}A`,
+								pole: `${Math.max(...childsPole)}P`,
+								remark,
+							},
+						];
+					} else {
+						r = [
+							...r,
+							{
+								...rp,
+								remark,
+							},
+						];
+					}
+				}
+			});
+
+			Object.keys(tm).forEach((k) => {
+				r = r.map((m) => {
+					if (m.id === k) {
+						return { ...m, parentId: tm[k].parentId, srcId: tm[k].srcId };
+					}
+					return m;
+				});
+			});
+		}
+
+		return r;
+	}, [switchboard.rows, switchboard.sources, switchboard.autoAddRps]);
+
+	const findInFlattedSwitchboard = useCallback(
+		(id) => {
+			const r = flattedSwitchboard.find((m) => m.id === id.trim());
+			return r?.id && r?.id !== "" && r?.id !== "-" ? r : undefined;
+		},
+		[flattedSwitchboard],
+	);
+
 	useEffect(() => {
 		if (monitorOpened) monitorRef.current.focus();
 	}, [monitorOpened]);
@@ -62,39 +218,35 @@ export default function SchemaTab({
 	};
 
 	const head = useMemo(() => {
-		return switchboard.rows
-			.flatMap((row) =>
-				row.map((module) => {
-					if (
-						(module.func ?? "").trim() !== "" &&
-						((module.parentId ?? "-").trim() === "" ||
-							!getModuleById(module.parentId).module)
-					) {
-						return { ...module, parentId: "" };
-					}
-					return null;
-				}),
-			)
+		return flattedSwitchboard
+			.map((module) => {
+				const fc = (module.func ?? "").trim();
+				const pi = (module.parentId ?? "-").trim();
+				const pm = findInFlattedSwitchboard(pi);
+				if (fc !== "" && (pi === "" || pi === "-" || !pm)) {
+					const m = { ...module, parentId: "" };
+					return m;
+				}
+				return null;
+			})
 			.filter((module) => module !== null);
-	}, [switchboard.rows]);
+	}, [flattedSwitchboard]);
 
 	const getChilds = useCallback(
 		(parentId) => {
-			return switchboard.rows
-				.flatMap((row) =>
-					row.map((module) => {
-						if (
-							(module.func ?? "").trim() !== "" &&
-							module.parentId === parentId
-						) {
-							return module;
-						}
-						return null;
-					}),
-				)
+			return flattedSwitchboard
+				.map((module) => {
+					if (
+						(module.func ?? "").trim() !== "" &&
+						module.parentId === parentId
+					) {
+						return module;
+					}
+					return null;
+				})
 				.filter((module) => module !== null);
 		},
-		[switchboard.rows],
+		[flattedSwitchboard],
 	);
 
 	const getRow = useCallback(
@@ -109,7 +261,7 @@ export default function SchemaTab({
 					const kcId = module.kcId ?? "";
 					const kcId_a = kcId.split("|");
 					kcId_a.forEach((k) => {
-						const kcModule = getModuleById(k.trim()).module;
+						const kcModule = findInFlattedSwitchboard(k);
 						if (kcModule) {
 							if (module.partialKc === true) {
 								_childs.push({
@@ -345,6 +497,21 @@ export default function SchemaTab({
 				if (!refCurrent || refCurrent <= 0)
 					refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
 
+				// Le module courant est un répartiteur
+				if (currentFunc === "rp" && getId(data.module)) {
+					const powers = Object.entries(data.childs).map(([_, cdata]) => {
+						const c = getCurrent(cdata.module);
+						return c ? c : 0;
+					});
+					const pcm = Math.max(...powers);
+					if (currentCurrent > 0 && pcm > currentCurrent) {
+						add_error(
+							id,
+							`Le répartiteur doit avoir un calibre supérieur ou égal à la charge maximale de ses départs (${pcm}A).`,
+						);
+					}
+				}
+
 				// Le module courant est un interrupteur différentiel
 				if (currentFunc === "id" && getId(data.module)) {
 					const powers = Object.entries(data.childs).map(([_, cdata]) => {
@@ -364,14 +531,24 @@ export default function SchemaTab({
 						if (lastParentModule) {
 							let prt = lastParentModule;
 							do {
-								if (getFunc(prt) !== "q") {
+								const prtFunc = getFunc(prt);
+								if (prtFunc !== "q" && prtFunc !== "rp") {
 									break;
 								}
 								const rc = getCurrent(prt);
 								if (rc > 0 && rc < refCurrent) {
 									refCurrent = rc;
 								}
-								prt = getParentByModule(prt);
+								const prtTemp = getParentByModule(prt);
+								if (!prtTemp) {
+									const refCurrentTemp = getComputedCurrent(
+										getSource(prt)?.current ?? prt.current ?? "0A",
+									);
+									if (refCurrentTemp > 0 && refCurrentTemp < refCurrent) {
+										refCurrent = refCurrentTemp;
+									}
+								}
+								prt = prtTemp;
 							} while (prt);
 						} else {
 							refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
@@ -487,7 +664,7 @@ export default function SchemaTab({
 		return result;
 	}, [tree?.childs, switchboard]);
 	const monitorWarningsLength = useMemo(
-		() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length,
+		() => Object.values(monitor.errors ?? {}).flatMap((e) => e.flat()).length,
 		[monitor],
 	);
 
@@ -568,6 +745,33 @@ export default function SchemaTab({
 								/>
 								<span>Sources</span>
 							</button>
+						</div>
+						<div className="tabPageBandCol">
+							<input
+								type="checkbox"
+								name="schemaAutoAddRps"
+								id="schemaAutoAddRps"
+								checked={switchboard.autoAddRps}
+								onChange={() =>
+									setSwitchboard((old) => ({
+										...old,
+										autoAddRps: !old.autoAddRps,
+									}))
+								}
+							/>
+							<label
+								htmlFor="schemaAutoAddRps"
+								title="Ajouter et regrouper automatiquement les répartiteurs de branchement aux différentes sources définies."
+							>
+								<LazyImage
+									src={
+										switchboard.autoAddRps ? autoAddRpsIcon : noautoAddRpsIcon
+									}
+									alt="Répartiteurs de branchement"
+									width={24}
+									height={24}
+								/>
+							</label>
 						</div>
 						<div className="tabPageBandCol">
 							<input
@@ -769,11 +973,11 @@ export default function SchemaTab({
 							return {
 								...old,
 								sources,
-								rows: old.rows.map((r) => {
+								/*rows: old.rows.map((r) => {
 									return r.map((m) => {
 										return !sources.includes(m.srcId) ? { ...m, srcId: "" } : m;
 									});
-								}),
+								}),*/
 							};
 						});
 

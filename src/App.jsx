@@ -293,6 +293,8 @@ function App() {
 				id.trim() !== "" && Object.keys(schemaSources).includes(id.trim()),
 		)
 		.map((id) => ({ ...schemaSources[id], id }));
+	const defaultAutoAddRps =
+		import.meta.env.VITE_AUTO_ADD_RPS.trim().toLowerCase() === "true";
 	//const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN, 10);
 	const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX, 10);
 	const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN, 10);
@@ -333,25 +335,6 @@ function App() {
 		}),
 		[],
 	);
-
-	/*const defaultProjectProperties = useMemo(
-		() => ({
-			name: defaultProjectName,
-			npRows: defaultNpRows,
-			hRow: defaultHRow,
-			spr: defaultStepsPerRows,
-			projectType: defaultProjectType,
-			sources: defaultSources,
-		}),
-		[
-			defaultHRow,
-			defaultNpRows,
-			defaultProjectName,
-			defaultStepsPerRows,
-			defaultProjectType,
-			defaultSources,
-		],
-	);*/
 
 	const createRow = useCallback(
 		(steps, rowsCount) => {
@@ -441,6 +424,7 @@ function App() {
 			rows: createRow(defaultStepsPerRows, defaultNpRows),
 
 			sources: [...defaultSources],
+			autoAddRps: true,
 			withGroundLine: false,
 
 			schemaMonitor: false,
@@ -468,6 +452,7 @@ function App() {
 			defaultNpRows,
 			defaultFirstpageOptions.infos,
 			defaultSources,
+			defaultAutoAddRps,
 		],
 	);
 
@@ -536,6 +521,8 @@ function App() {
 			// <2.2.8
 			// deprecated: withDb, db
 			sources: swb.sources ?? [...defaultSources],
+			// <2.2.9
+			autoAddRps: swb.autoAddRps ?? defaultAutoAddRps,
 		};
 	};
 
@@ -1078,28 +1065,47 @@ function App() {
 	const toLabeler = (model, options) => {
 		const rowPositionMin = 1;
 		const rowPositionMax = switchboard.rows.length;
-		const selectedPositions = (
-			labelerOptionsRowsSelection ?? `1-${rowPositionMax}`
-		)
+		const selectedPositions = [];
+		(labelerOptionsRowsSelection ?? `1-${rowPositionMax}`)
 			.split(",")
 			.map((p) => p.trim())
 			.filter((p) => p !== "")
-			.flatMap((p) => {
-				const sp = p
-					.split("-")
-					.map((x) => parseInt(x.trim(), 10))
-					.map((x) =>
-						Number.isNaN(x)
-							? rowPositionMax
-							: x < rowPositionMin
-								? rowPositionMin
-								: x > rowPositionMax
-									? rowPositionMax
-									: x,
-					);
-				const min = Math.min(...sp);
-				const max = Math.max(...sp);
-				return Array.from({ length: max - min + 1 }, (_v, k) => k + 1);
+			.forEach((p) => {
+				if (!p.includes("-")) {
+					const v = parseInt(p, 10);
+					if (!selectedPositions.includes(v)) selectedPositions.push(v);
+				} else {
+					const sp = p
+						.split("-")
+						.map((x) => parseInt(x.trim(), 10))
+						.map((x) =>
+							Number.isNaN(x)
+								? rowPositionMax
+								: x < rowPositionMin
+									? rowPositionMin
+									: x > rowPositionMax
+										? rowPositionMax
+										: x,
+						);
+
+					const min = Math.min(...sp);
+					const max = Math.max(...sp);
+
+					let l = 0;
+					if (min === max) {
+						l = [min];
+					} else {
+						l = Array.from(
+							{ length: max - min + 1 },
+							(_v, k) => min - 1 + k + 1,
+						);
+					}
+
+					l.forEach((vl) => {
+						const v = parseInt(vl, 10);
+						if (!selectedPositions.includes(v)) selectedPositions.push(v);
+					});
+				}
 			});
 		const uniqueSelectedPositions = Array.from(new Set(selectedPositions))
 			.map((x) => x - 1) // to zero based index
@@ -2158,7 +2164,7 @@ function App() {
 		return result;
 	}, [switchboard.rows, switchboard.switchboardMonitor]);
 	const monitorWarningsLength = useMemo(
-		() => Object.values(monitor.errors ?? {}).map((e) => e.flat()).length,
+		() => Object.values(monitor.errors ?? {}).flatMap((e) => e.flat()).length,
 		[monitor],
 	);
 

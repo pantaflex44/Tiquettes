@@ -3,7 +3,15 @@
 		"filename": "",
 		"title": "Aucun pictogramme",
 		"modtype": "",
-		"coef": 0.5
+		"coef": 1,
+		"hidden": false
+	},
+	{
+		"filename": "swb_invisible.svg",
+		"title": "Element invisible / non étiquetté",
+		"modtype": "Alim",
+		"coef": 1,
+		"hidden": true
 	},
 	{
 		"filename": "swb_ecl.svg",
@@ -13,7 +21,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ecl2.svg",
@@ -23,7 +32,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ecl_cmd.svg",
@@ -33,7 +43,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1"
+		"wire": "1",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ecl_rgb.svg",
@@ -43,7 +54,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1"
+		"wire": "1",
+		"hidden": false
 	},
 	{
 		"filename": "swb_eclext.svg",
@@ -53,7 +65,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1"
+		"wire": "1",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pc.svg",
@@ -63,7 +76,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pc2.svg",
@@ -72,7 +86,8 @@
 		"coef": 0.5,
 		"func": "o",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pctri.svg",
@@ -82,7 +97,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pc_kitchen.svg",
@@ -92,7 +108,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_eclpc.svg",
@@ -102,7 +119,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_alim_eco.svg",
@@ -112,14 +130,16 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_differential-circuit-breaker.svg",
 		"title": "Interrupteur differentiel",
 		"modtype": "Alim",
 		"coef": 1,
-		"func": "id"
+		"func": "id",
+		"hidden": false
 	},
 	{
 		"filename": "swb_grid.svg",
@@ -128,7 +148,8 @@
 		"coef": 1,
 		"func": "sw",
 		"current": "63A",
-		"wire": "16"
+		"wire": "16",
+		"hidden": false
 	},
 	{
 		"filename": "swb_alim_ht.svg",
@@ -137,25 +158,29 @@
 		"coef": 1,
 		"func": "sw",
 		"current": "63A",
-		"wire": "16"
+		"wire": "16",
+		"hidden": false
 	},
 	{
 		"filename": "swb_alim.svg",
 		"title": "Alimentation commandee",
 		"modtype": "Alim",
-		"coef": 1
+		"coef": 1,
+		"hidden": false
 	},
 	{
 		"filename": "swb_puissance.svg",
 		"title": "Alimentation principale",
 		"modtype": "Alim",
-		"coef": 1
+		"coef": 1,
+		"hidden": false
 	},
 	{
 		"filename": "swb_deriv.svg",
 		"title": "Boite de derivation",
 		"modtype": "Alim",
-		"coef": 1
+		"coef": 1,
+		"hidden": false
 	},
 	{
 		"filename": "swb_home.svg",
@@ -165,7 +190,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "63A",
-		"wire": "16"
+		"wire": "16",
+		"hidden": false
 	},
 	{
 		"filename": "swb_transformer.svg",
@@ -175,7 +201,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_battery.svg",
@@ -185,7 +212,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_surgeprotector.svg",
@@ -193,7 +221,8 @@
 		"modtype": "Alim",
 		"func": "prd",
 		"current": "250A",
-		"coef": 1
+		"coef": 1,
+		"hidden": false
 	},
 	{
 		"filename": "swb_ext.svg",
@@ -203,7 +232,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "40A",
-		"wire": "10"
+		"wire": "10",
+		"hidden": false
 	},
 	{
 		"filename": "swb_clim.svg",
@@ -213,7 +243,8 @@
 		"func": "q",
 		"crb": "D",
 		"current": "25A",
-		"wire": "4"
+		"wire": "4",
+		"hidden": false
 	},
 	{
 		"filename": "swb_inverter.svg",
@@ -223,7 +254,8 @@
 		"func": "q",
 		"crb": "D",
 		"current": "25A",
-		"wire": "4"
+		"wire": "4",
+		"hidden": false
 	},
 	{
 		"filename": "swb_eau.svg",
@@ -233,7 +265,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pompe1.svg",
@@ -243,7 +276,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_four.svg",
@@ -253,7 +287,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_frigo.svg",
@@ -263,7 +298,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_froid.svg",
@@ -273,7 +309,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_gaz.svg",
@@ -283,7 +320,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_cuissin.svg",
@@ -294,7 +332,8 @@
 		"crb": "C",
 		"current": "32A",
 		"requiredIdTypes": ["A"],
-		"wire": "6"
+		"wire": "6",
+		"hidden": false
 	},
 	{
 		"filename": "swb_induction.svg",
@@ -305,7 +344,8 @@
 		"crb": "C",
 		"current": "32A",
 		"requiredIdTypes": ["A"],
-		"wire": "6"
+		"wire": "6",
+		"hidden": false
 	},
 	{
 		"filename": "swb_soup.svg",
@@ -315,7 +355,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ll.svg",
@@ -326,7 +367,8 @@
 		"crb": "C",
 		"current": "20A",
 		"requiredIdTypes": ["A"],
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_dryer.svg",
@@ -336,7 +378,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ironing.svg",
@@ -346,7 +389,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_lv.svg",
@@ -356,7 +400,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_lg.svg",
@@ -366,7 +411,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_iceberg.svg",
@@ -376,7 +422,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_fountain.svg",
@@ -386,7 +433,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_coffeetea.svg",
@@ -396,7 +444,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_microonde.svg",
@@ -406,7 +455,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_minuterie.svg",
@@ -416,7 +466,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_portail.svg",
@@ -426,7 +477,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_voitureelectrique.svg",
@@ -437,7 +489,8 @@
 		"crb": "B",
 		"current": "32A",
 		"requiredIdTypes": ["A", "F", "HPI"],
-		"wire": "6"
+		"wire": "6",
+		"hidden": false
 	},
 	{
 		"filename": "swb_voitureelectrique2.svg",
@@ -448,19 +501,22 @@
 		"crb": "C",
 		"current": "20A",
 		"requiredIdTypes": ["A", "F", "HPI"],
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ship.svg",
 		"title": "Bateaux / Ponton / Port",
 		"modtype": "Divers",
-		"coef": 0.5
+		"coef": 0.5,
+		"hidden": false
 	},
 	{
 		"filename": "swb_solaire.svg",
 		"title": "Panneaux solaires / Photovoltaique",
 		"modtype": "Solaire",
-		"coef": 0.5
+		"coef": 0.5,
+		"hidden": false
 	},
 	{
 		"filename": "swb_volet.svg",
@@ -470,7 +526,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_store.svg",
@@ -480,7 +537,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_garage.svg",
@@ -490,7 +548,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_split.svg",
@@ -500,7 +559,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_remswitch.svg",
@@ -509,7 +569,8 @@
 		"coef": 0.5,
 		"func": "tl",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_contact.svg",
@@ -518,7 +579,8 @@
 		"coef": 0.5,
 		"func": "kc",
 		"current": "25A",
-		"wire": "4"
+		"wire": "4",
+		"hidden": false
 	},
 	{
 		"filename": "swb_clock.svg",
@@ -527,7 +589,8 @@
 		"coef": 0.5,
 		"func": "kc",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_calendar-clock.svg",
@@ -536,7 +599,8 @@
 		"coef": 0.5,
 		"func": "kc",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_telec.svg",
@@ -546,7 +610,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ermt.svg",
@@ -556,7 +621,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_fire.svg",
@@ -566,7 +632,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_homeshield.svg",
@@ -576,7 +643,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_smoke.svg",
@@ -586,7 +654,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_bell.svg",
@@ -596,7 +665,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_telephonie.svg",
@@ -606,7 +676,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_informatique.svg",
@@ -616,7 +687,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_tv.svg",
@@ -626,7 +698,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_music.svg",
@@ -636,7 +709,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_thermo.svg",
@@ -646,7 +720,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_thermo2.svg",
@@ -656,7 +731,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_thermo3.svg",
@@ -666,7 +742,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_thermo4.svg",
@@ -676,7 +753,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_bec.svg",
@@ -686,7 +764,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_journuit.svg",
@@ -695,7 +774,8 @@
 		"coef": 0.5,
 		"func": "kc",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_blrgas.svg",
@@ -705,7 +785,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_circu.svg",
@@ -715,7 +796,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_chauffage.svg",
@@ -725,7 +807,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "16A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_twldryer.svg",
@@ -735,7 +818,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_solchauffant.svg",
@@ -745,7 +829,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ventil.svg",
@@ -755,7 +840,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_ventil2.svg",
@@ -765,7 +851,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_vmc.svg",
@@ -775,7 +862,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "2A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_hotte.svg",
@@ -785,7 +873,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "10A",
-		"wire": "1.5"
+		"wire": "1.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_pool.svg",
@@ -795,7 +884,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "40A",
-		"wire": "10"
+		"wire": "10",
+		"hidden": false
 	},
 	{
 		"filename": "swb_spa.svg",
@@ -805,7 +895,8 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"wire": "2.5"
+		"wire": "2.5",
+		"hidden": false
 	},
 	{
 		"filename": "swb_electric-motor.svg",
@@ -813,6 +904,7 @@
 		"modtype": "Divers",
 		"coef": 0.5,
 		"func": "q",
-		"crb": "D"
+		"crb": "D",
+		"hidden": false
 	}
 ]

@@ -143,6 +143,10 @@ function CustomTheme({ item, data, style }) {
 		return ret;
 	}, [data]);
 
+	const isInvisible = useMemo(() => {
+		return (item.icon ?? "").trim().toLowerCase().includes("invisible");
+	}, [item]);
+
 	const styles = useMemo(
 		() => ({
 			id: {
@@ -187,6 +191,28 @@ function CustomTheme({ item, data, style }) {
 				backgroundColor: colors.bg.id
 					? item.grp
 					: (data?.id?.backgroundColor ?? "transparent"),
+				width: "100%",
+				transform:
+					(data?.id?.displayMode ?? "H") === "V" ? "rotate(-90deg)" : "none",
+			},
+			idInvisibleContent: {
+				"--idlh": "1.2em",
+				"--idnbl": 6,
+				margin: 0,
+				padding: 0,
+				display: "-webkit-box",
+				WebkitLineClamp: "var(--idnbl)",
+				WebkitBoxOrient: "vertical",
+				overflow: "hidden",
+				lineHeight: "var(--idlh)",
+				height: "calc(var(--idlh) * var(--idnbl))",
+				textAlign: "center",
+				fontSize: "2.5mm",
+				fontWeight: "bold",
+				fontStyle: "normal",
+				fontFamily: "sans-serif",
+				color: "#000000",
+				backgroundColor: "transparent",
 				width: "100%",
 				transform:
 					(data?.id?.displayMode ?? "H") === "V" ? "rotate(-90deg)" : "none",
@@ -289,7 +315,7 @@ function CustomTheme({ item, data, style }) {
 
 	return (
 		<>
-			{shown.id && (
+			{!isInvisible && shown.id && (
 				<div
 					style={styles.id}
 					data-order={
@@ -304,7 +330,15 @@ function CustomTheme({ item, data, style }) {
 				</div>
 			)}
 
-			{shown.icon && (
+			{isInvisible && (
+				<div style={styles.id} data-order={"top"}>
+					<p style={styles.idInvisibleContent}>
+						Espace invisible utilisé par {item.id}
+					</p>
+				</div>
+			)}
+
+			{!isInvisible && shown.icon && (
 				<div
 					style={styles.icon}
 					data-order={
@@ -330,7 +364,7 @@ function CustomTheme({ item, data, style }) {
 				</div>
 			)}
 
-			{shown.text && (
+			{!isInvisible && shown.text && (
 				<div
 					style={styles.text}
 					data-order={

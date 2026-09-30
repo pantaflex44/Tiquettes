@@ -37,7 +37,7 @@ export default function EditorFunctionSelector({
 		>
 			<option value={""}>-</option>
 			{Object.keys(schemaFunctions)
-				.filter((key) => (schemaFunctions[key].selectable ?? false) === true)
+				.filter((key) => schemaFunctions[key].selectable === true)
 				.map((key, i) => (
 					<option key={i} value={key}>
 						{schemaFunctions[key].name}

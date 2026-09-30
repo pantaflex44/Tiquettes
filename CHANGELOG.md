@@ -1,10 +1,11 @@
 # ChangeLog
 
-## [2.2.9] - 2026-09-14
+## [2.2.9] - 2026-09-30
 
 ### Corrections
 
-- Correction du moniteur des erreurs relatives à la NFC 15-100.
+- Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses.
+- Correction de divers bugs dans le moniteur de schéma unifilaire.
 - Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source.
 - Diverses refactorisations / optimisations du code source de l'application.
 - Correction de l'ergonomie des menus déroulants de la barre de naviguation.
@@ -12,6 +13,7 @@
 
 ### Modifications
 
+- Modification du générateur de schémas unifilaires avec prise en charge des sources multiples et gestion automatique des répartiteurs de branchement.
 - Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
 - Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG.
 - Mise à jour de la librairie FPDF 1.8.6 => 1.9 .

@@ -1217,8 +1217,43 @@ class TiquettesPDF extends FPDF
 
                 $x = $this->pageMargin;
 
+                $modules = [];
                 for ($j = 0; $j < count($row); $j++) {
                     $module = $row[$j];
+
+                    $isInvisible = str_contains(strtolower(trim($module->icon ?? "")), "invisible");
+                    if ($isInvisible) {
+                        $span = $module->span ?? 1;
+                        for ($z = 0; $z < $span; $z++) {
+                            $modules[] = (object)[
+                                ...(array)$module,
+                                "id" => "",
+                                "icon" => "",
+                                "text" => "",
+                                "free" => true,
+                                "half" => "none",
+                                "span" => 1,
+                                "func" => "",
+                                "current" => "",
+                                "type" => "",
+                                "crb" => "",
+                                "modtype" => "",
+                                "vref" => "230V",
+                                "sensibility" => "",
+                                "coef" => 0.5,
+                                "pole" => "",
+                                "wire" => "",
+                                "line" => "",
+                                "grp" => "",
+                            ];
+                        }
+                    } else {
+                        $modules[] = $module;
+                    }
+                }
+
+                for ($j = 0; $j < count($modules); $j++) {
+                    $module = $modules[$j];
 
                     if ($x + $w * $module->span > $this->GetPageWidth() - $this->pageMargin) {
                         $this->SetY($this->GetY() + $h + ($printCurrents ? 11 : 3));
@@ -1418,12 +1453,12 @@ class TiquettesPDF extends FPDF
             ], 'D');
 
             $this->SetTextColor($this->schemaLineColor[0], $this->schemaLineColor[1], $this->schemaLineColor[2]);
-            $this->SetFont('Arial', 'I', 6.5);
-            $src = $m->srcId ? array_filter(($switchboard->sources ?? []), fn($fm) => $fm->id === $m->srcId) : null;
+            $this->SetFont('Arial', 'B', 6.5);
+            $src = $m->srcId ? array_values(array_filter(($switchboard->sources ?? []), fn($fm) => is_object($fm) && $fm->id === $m->srcId)) : null;
             $t = $src ? array_values($src)[0]->label : "";
             $t = substr($t, 0, 50);
             $fs = str($t);
-            $this->Text($lx + 0, $ly - 2.5, $fs);
+            $this->Text($lx + 2.5, $ly - 1.5, $fs);
         }
     }
 
@@ -1826,7 +1861,7 @@ class TiquettesPDF extends FPDF
                     $fsensibility = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '');
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
-                    $fdetails = array_filter([trim($fname), trim($ftype), trim($fsensibility), trim($fcrb), trim($fcurrent), trim($fpole)], fn($v) => $v !== '');
+                    $fdetails = array_values(array_filter([trim($fname), trim($ftype), trim($fsensibility), trim($fcrb), trim($fcurrent), trim($fpole)], fn($v) => $v !== ''));
                     $fdetails = implode('  ', $fdetails);
                     if (!isset($modules[$fdetails])) {
                         $modules[$fdetails] = 0;
@@ -1930,13 +1965,176 @@ $schemaFolioStart = intval($printOptions->pdfOptions?->schemaFolioStart ?? 1);
 
 
 $flattenModules = [];
+
+$sources = array_values(array_filter($switchboard->sources ?? [], fn($s) => is_object($s) && $s->id));
+$findSource = function ($id) use ($sources) {
+    return array_find($sources, fn($s) => $s->id === $id);
+};
+
+$rpCnt = 1;
+$rps = [];
+
 foreach ($switchboard->rows as $row) {
+    foreach ($row as $module) {
+        if (!$module?->id) continue;
+
+        $autoAddRps = $switchboard->autoAddRps ?? false;
+
+        $fc = trim($module->func ?? "");
+        $pi = trim($module->parentId ?? "-");
+        $s = $findSource(trim($module->srcId ?? ""));
+
+        if ($pi === "") {
+            if ($fc === "rp") {
+                $ks = $s?->id ?? "-";
+                if (!isset($rps[$ks])) {
+                    $rps[$ks] = (object)[...(array)$module, '_auto' => false];
+                }
+            }
+        }
+
+        $flattenModules[] = $module;
+    }
+}
+
+$flattenModules = array_values(array_filter(array_map(function ($module) use ($switchboard, $findSource, $rpCnt) {
+    global $rps;
+
+    if ($switchboard->autoAddRps) {
+        $fc = trim($module->func ?? "");
+        $pi = trim($module->parentId ?? "-");
+        $s = $findSource(trim($module->srcId ?? ""));
+
+        if ($pi === "") {
+            if ($fc !== "") {
+                $ks = $s?->id ?? "-";
+
+                $rpBase = (object)[
+                    'id' => "RP Auto " . $rpCnt,
+                    'kcId' => "",
+                    'parentId' => "",
+                    'srcId' => $ks,
+                    'func' => "rp",
+                    'text' => "Répartiteur de branchement",
+                    '_auto' => true,
+                ];
+
+                $rpCnt++;
+
+                $id = $rpBase->id;
+                if (isset($rps[$ks])) {
+                    $id = $rps[$ks]->id;
+                } else {
+                    $rps[$ks] = $rpBase;
+                }
+
+                return $fc !== "rp"
+                    ? (object)[...(array)$module, 'srcId' => "", 'parentId' => $id]
+                    : null;
+            }
+        }
+    }
+
+    return $module;
+}, $flattenModules), fn($m) => !is_null($m)));
+
+function getCurrent($module)
+{
+    $c = explode("/", ($module?->current ?? "0A"));
+    if (count($c) > 0)
+        return intval(
+            preg_replace("/\D/", "", $c[count($c) - 1]),
+            10,
+        );
+    return 0;
+};
+
+function getSimplyPole($module)
+{
+    $p = strtoupper(trim($module?->pole ?? "1P+N"));
+    $pc = preg_replace("/\D/", "", $p);
+    if (($pc === 1 || $pc === 3) && str_contains($p, '+N')) {
+        $pc++;
+    }
+    if ($pc < 2) {
+        $pc = 2;
+    }
+    if ($pc > 4) {
+        $pc = 4;
+    }
+    return $pc;
+};
+
+if ($switchboard->autoAddRps) {
+    $tm = [];
+
+    foreach (array_values($rps) as $rp) {
+
+        $f = array_values(array_filter($flattenModules, function ($m) use ($rp) {
+            $ret = $m->parentId === $rp->id;
+            return $ret;
+        }));
+
+        if (count($f) === 1) {
+            $tm[$f[0]->id] = (object)['from' => $rp->id, 'parentId' => $rp->parentId, 'srcId' => $rp->srcId];
+        } else {
+            $childsCount = count(array_values(array_filter($flattenModules, fn($m) => $m->parentId === $rp->id)));
+            $remark = ($rp?->remark ?? "") . "\r\nIl est préconisé d'utiliser un répartiteur avec minimum " . $childsCount . " départ" . ($childsCount > 1 ? "s" : "");
+
+            if ($rp->_auto === true) {
+                $childsCurrent = array_map(fn($m) => getCurrent($m), array_values(array_filter($flattenModules, fn($m) => $m->parentId === $rp->id)));
+                $childsPole = array_map(
+                    fn($m) => getSimplyPole($m),
+                    array_values(array_filter($flattenModules, fn($m) => $m->parentId === $rp->id))
+                );
+
+                $flattenModules[] = (object)[
+                    ...(array)$rp,
+                    'current' => max($childsCurrent) . "A",
+                    'pole' => max($childsPole) . "P",
+                    'remark' => $remark
+                ];
+            } else {
+                $flattenModules[] = (object)[
+                    ...(array)$rp,
+                    'remark' => $remark
+                ];
+            }
+        }
+    }
+
+    foreach (array_keys($tm) as $k) {
+        $flattenModules = array_map(function ($m) use ($k, $tm) {
+            if ($m->id === $k) {
+                return (object)[
+                    ...(array)$m,
+                    'parentId' => $tm[$k]->parentId,
+                    'srcId' => $tm[$k]->srcId
+                ];
+            }
+
+            return $m;
+        }, $flattenModules);
+    }
+}
+
+function findInFlattedSwitchboard($id)
+{
+    global $flattenModules;
+    $r = array_find($flattenModules, fn($m) => $m->id === trim($id));
+    return $r?->id !== null && $r?->id !== "" && $r?->id !== "-" ? $r : null;
+}
+
+
+/*foreach ($switchboard->rows as $row) {
     foreach ($row as $module) {
         if (!$module->free && !is_null($module->id) && ($module->func ?? '') !== '') {
             $flattenModules[] = $module;
         }
     }
-}
+}*/
+
+
 
 foreach ($flattenModules as $module) {
     $kcId = trim($module->kcId ?? '');

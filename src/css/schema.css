@@ -123,7 +123,8 @@
 	position: absolute;
 	display: block;
 	font-size: 50%;
-	color: #555;
+	color: var(--primary-color);
+	font-weight: bold;
 }
 
 .schemaItemChilds {
@@ -200,7 +201,9 @@
 }
 
 .schemaItemSymbolId {
-	top: 5px;
+	top: 7px;
+	font-weight: 400;
+	color: #000;
 }
 
 .schemaItemSymbolType {
@@ -250,8 +253,12 @@
 	top: 6px;
 	left: calc(50% - 22px);
 
-	filter: invert(59%) sepia(28%) saturate(6845%) hue-rotate(14deg)
-		brightness(97%) contrast(101%);
+	/*filter: invert(59%) sepia(28%) saturate(6845%) hue-rotate(14deg)
+		brightness(97%) contrast(101%);*/
+
+	filter: brightness(0) saturate(100%) invert(10%) sepia(100%) saturate(6533%)
+		hue-rotate(4deg) brightness(113%) contrast(114%);
+
 	animation: blinker 1s linear infinite;
 }
 
