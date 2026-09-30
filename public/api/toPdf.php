@@ -2136,6 +2136,8 @@ function findInFlattedSwitchboard($id)
 
 
 foreach ($flattenModules as $module) {
+    if (!is_string($module->func) || strlen(trim($module->func)) === "") continue;
+
     $kcId = trim($module->kcId ?? '');
     $kcId_a = explode('|', $kcId);
 
