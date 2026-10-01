@@ -30,9 +30,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.36782443"
      inkscape:cx="-133.21573"
-     inkscape:cy="206.62032"
+     inkscape:cy="207.97966"
      inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-height="954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -47,9 +47,9 @@
   <path
      d="M 2.4174204,9.7248946 H 22.398186"
      id="path3"
-     style="fill:none;stroke:#000000;stroke-width:2.22009;stroke-opacity:1" />
+     style="fill:#000000;stroke:#000000;stroke-width:2.22009;stroke-opacity:1;fill-opacity:0" />
   <path
-     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-dasharray:none"
+     style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-dasharray:none;fill-opacity:0;stroke-opacity:1"
      d="M 4.893639,9.5833765 6.796721,4.1459998 10.059147,2.1749507 13.457508,5.3014423 17.943343,6.456885 19.914392,9.5833765 17.943343,19.710491 13.729376,22.769015 10.195082,17.53554 6.8646883,16.244163 Z"
      id="path4" />
 </svg>

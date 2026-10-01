@@ -1997,8 +1997,8 @@ foreach ($switchboard->rows as $row) {
     }
 }
 
-$flattenModules = array_values(array_filter(array_map(function ($module) use ($switchboard, $findSource, $rpCnt, $autoAddRps) {
-    global $rps;
+$flattenModules = array_values(array_filter(array_map(function ($module) use ($findSource, $autoAddRps) {
+    global $rps, $rpCnt;
 
     if ($autoAddRps) {
         $fc = trim($module->func ?? "");
@@ -2117,22 +2117,6 @@ if ($autoAddRps) {
         }, $flattenModules);
     }
 }
-
-function findInFlattedSwitchboard($id)
-{
-    global $flattenModules;
-    $r = array_find($flattenModules, fn($m) => $m->id === trim($id));
-    return $r?->id !== null && $r?->id !== "" && $r?->id !== "-" ? $r : null;
-}
-
-
-/*foreach ($switchboard->rows as $row) {
-    foreach ($row as $module) {
-        if (!$module->free && !is_null($module->id) && ($module->func ?? '') !== '') {
-            $flattenModules[] = $module;
-        }
-    }
-}*/
 
 
 

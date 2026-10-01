@@ -31,9 +31,9 @@
      showgrid="false"
      inkscape:zoom="0.868"
      inkscape:cx="426.26728"
-     inkscape:cy="316.82028"
+     inkscape:cy="317.39631"
      inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-height="954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -42,13 +42,13 @@
   <path
      d="m18 8-.8 3a1.25 1.25 0 0 1-1.2 1H8a1.25 1.25 0 0 1-1.2-1L6 8M12 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25"
      id="path4"
-     style="stroke:#000000;stroke-opacity:1;fill:none" />
+     style="stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:0" />
   <path
      d="M7 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25M17 16c.643.288 1.017.756 1 1.25.017.494-.357.962-1 1.25-.643.288-1.017.756-1 1.25-.017.494.357.962 1 1.25"
      id="path8"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+     style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-opacity:1" />
   <path
-     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.92"
+     style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.92;fill-opacity:0;stroke-opacity:1"
      d="M 3.1244239,2.6267281 H 20.654378 V 7.7142856 H 3.1244239 Z"
      id="path1" />
 </svg>

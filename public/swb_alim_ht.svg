@@ -30,20 +30,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.799"
      inkscape:cx="499.37422"
-     inkscape:cy="499.37422"
+     inkscape:cy="500"
      inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-height="954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      showguides="true" />
   <path
-     d="M0 0h24v24H0Z"
-     stroke="none"
-     id="path1" />
-  <path
-     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.92"
+     style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.92;fill-opacity:0;stroke-opacity:1"
      d="M 12.916145,3.0037548 5.0162702,13.967459 h 5.8573218 v 7.028786 l 8.050063,-10.963704 h -6.00751 z"
      id="path3" />
 </svg>

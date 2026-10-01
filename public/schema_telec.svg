@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.799"
      inkscape:cx="350.43805"
-     inkscape:cy="499.37422"
+     inkscape:cy="500"
      inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-height="954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -36,7 +36,7 @@
      d="M9.131 0h.265v6.604h-.265z"
      id="path1" />
   <path
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.23810143;stroke-dasharray:0.23810143,0.47620478;stroke-dashoffset:0;stroke-opacity:1"
+     style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.23810143;stroke-dasharray:0.23810143, 0.47620478;stroke-dashoffset:0;stroke-opacity:1"
      d="m 9.2554459,7.5784459 h 0.079108 v 5.1759951 h -0.079108 z"
      id="path2" />
   <path
@@ -44,7 +44,7 @@
      d="M9.092 14.528h.265v11.944h-.265z"
      id="path3" />
   <path
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
      d="M 4.4831674,7.4891712 4.7120618,7.3723107 9.3633852,14.496315 9.134491,14.613175 Z"
      id="path3-3" />
 </svg>

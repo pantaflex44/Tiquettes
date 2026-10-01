@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.98641975"
      inkscape:cx="195.65707"
-     inkscape:cy="511.95244"
+     inkscape:cy="512.45933"
      inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-height="954"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -39,11 +39,11 @@
        inkscape:locked="false" />
   </sodipodi:namedview>
   <path
-     style="fill:#010101;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none"
+     style="fill:#010101;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
      d="m 8.7320535,0.29501929 h 0.265 V 6.8990193 h -0.265 z"
      id="path1" />
   <path
-     style="fill:#010101;stroke-width:0;stroke-dasharray:none;fill-opacity:1;stroke:none"
+     style="fill:#010101;stroke-width:0;stroke-dasharray:none;fill-opacity:1;stroke:#000000;stroke-opacity:0"
      d="M9.092 14.528h.265v11.944h-.265z"
      id="path2" />
   <path
@@ -52,7 +52,7 @@
      d="M-.398 8.716h.257v8.508h-.257z"
      id="path3" />
   <path
-     style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
      d="m 4.4651556,7.5077248 0.228895,-0.1168605 4.651323,7.1240047 -0.228894,0.11686 z"
      id="path3-7" />
 </svg>

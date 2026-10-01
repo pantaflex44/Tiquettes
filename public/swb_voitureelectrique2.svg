@@ -9,7 +9,7 @@
    version="1.1"
    id="svg14"
    sodipodi:docname="swb_voitureelectrique2.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,35 +27,35 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="0.868"
-     inkscape:cx="354.26267"
+     inkscape:cx="353.68664"
      inkscape:cy="501.72811"
-     inkscape:window-width="1862"
-     inkscape:window-height="1011"
-     inkscape:window-x="1978"
-     inkscape:window-y="32"
+     inkscape:window-width="1920"
+     inkscape:window-height="954"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg14" />
   <path
      d="m 5.518813,3.2508409 5.114498,5.1144977 -1.2806383,1.280638 A 3.6244472,3.6244472 0 1 1 4.2301207,4.5234245 l 1.280638,-1.280638 z M 1.9024202,11.973677 4.0851428,9.7909545"
      stroke="#000000"
-     style="fill:none;stroke:#000000;stroke-width:1.61087;stroke-opacity:1"
+     style="fill:#000000;stroke:#000000;stroke-width:1.61087;stroke-opacity:1;fill-opacity:0"
      id="path2" />
   <path
      d="M 8.7647069,2.0024202 6.5819842,4.1851428"
      stroke="#000000"
-     style="fill:none;stroke:#000000;stroke-width:1.61087;stroke-opacity:1"
+     style="fill:#000000;stroke:#000000;stroke-width:1.61087;stroke-opacity:1;fill-opacity:0"
      id="path4" />
   <path
      d="M 11.881731,5.1194447 9.6990088,7.3021674"
      stroke="#000000"
-     style="fill:none;stroke-width:1.61087"
+     style="fill:#000000;stroke-width:1.61087;fill-opacity:0;stroke:#000000;stroke-opacity:1"
      id="path6" />
   <path
      d="m 12.372274,21.194382 a 1.2014145,1.2014145 0 1 0 2.402829,0 1.2014145,1.2014145 0 0 0 -2.402829,0 m 6.007073,0 a 1.2014145,1.2014145 0 1 0 2.402828,0 1.2014145,1.2014145 0 0 0 -2.402828,0"
      id="path4-3"
-     style="fill:none;stroke:#000000;stroke-width:1.20141;stroke-opacity:1" />
+     style="fill:#000000;stroke:#000000;stroke-width:1.20141;stroke-opacity:1;fill-opacity:0" />
   <path
      d="m 12.379659,21.194382 h -1.201414 v -3.604244 l 1.201414,-3.003535 h 5.406366 l 2.40283,3.003535 h 0.600706 a 1.2014145,1.2014145 0 0 1 1.201415,1.201415 v 2.402829 h -1.201415 m -2.402829,0 h -3.604244 m -3.604243,-3.604244 h 9.01061 m -3.604244,0 v -3.003535 m -5.406366,-1.802123 5.406366,-2.402829 5.406365,2.402829"
      id="path6-6"
-     style="fill:none;stroke:#000000;stroke-width:1.20141;stroke-opacity:1" />
+     style="fill:#000000;stroke:#000000;stroke-width:1.20141;stroke-opacity:1;fill-opacity:0" />
 </svg>
