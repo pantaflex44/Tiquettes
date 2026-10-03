@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.2.9] - 2026-10-01
+## [2.2.9] - 2026-10-03
 
 ### Corrections
 
+- Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.
 - Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses.
 - Correction de divers bugs dans le moniteur de schéma unifilaire.
 - Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source.

@@ -348,6 +348,7 @@ button,
 	align-items: center;
 	column-gap: 0.5em;
 	transition: all 0.2s ease;
+	font-family: sans-serif;
 }
 
 .fakeButton {
@@ -427,6 +428,7 @@ input[type="file"] {
 	min-height: 32px;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	font-family: sans-serif;
 }
 
 input[type="file"]::-webkit-file-upload-button {
@@ -445,6 +447,7 @@ select {
 	min-width: 28px;
 	padding-inline: 0.5em;
 	font-weight: 500;
+	font-family: sans-serif;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {

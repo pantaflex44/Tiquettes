@@ -35,9 +35,12 @@
 	],
 	"changelog": {
 		"2.2.9": {
-			"date": "2026-10-01",
+			"date": "2026-10-03",
 			"actions": {
 				"patches": [
+					{
+						"text": "Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques."
+					},
 					{
 						"text": "Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses."
 					},

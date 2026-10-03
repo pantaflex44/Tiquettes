@@ -488,7 +488,7 @@
 		"func": "q",
 		"crb": "B",
 		"current": "32A",
-		"requiredIdTypes": ["A", "F", "HPI"],
+		"requiredIdTypes": ["A", "B", "F", "HPI"],
 		"wire": "6",
 		"hidden": false
 	},
@@ -500,7 +500,7 @@
 		"func": "q",
 		"crb": "C",
 		"current": "20A",
-		"requiredIdTypes": ["A", "F", "HPI"],
+		"requiredIdTypes": ["A", "B", "F", "HPI"],
 		"wire": "2.5",
 		"hidden": false
 	},
