@@ -39,13 +39,21 @@
 			"actions": {
 				"patches": [
 					{
-						"text": "Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques."
+						"text": "Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.",
+						"from": {
+							"name": "Discussion #105",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/105"
+						}
 					},
 					{
 						"text": "Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses."
 					},
 					{
-						"text": "Correction de divers bugs dans le moniteur de schéma unifilaire."
+						"text": "Correction de divers bugs dans le moniteur de schéma unifilaire.",
+						"from": {
+							"name": "Discussion #100",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/100"
+						}
 					},
 					{
 						"text": "Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source."
@@ -61,6 +69,13 @@
 					}
 				],
 				"updates": [
+					{
+						"text": "Modification des informations affichées dans l'info bulle au dessus de chaque module dans l'éditeur d'étiquettes pour améliorer la conception. Ajout de l'identifiant du parent, de la phase parente sur laquelle le module est connecté, de la sensibilité et du calibre de celui-ci.",
+						"from": {
+							"name": "Discussion #104",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/104"
+						}
+					},
 					{
 						"text": "Modification du générateur de schémas unifilaires avec prise en charge des sources multiples et gestion automatique des répartiteurs de branchement."
 					},

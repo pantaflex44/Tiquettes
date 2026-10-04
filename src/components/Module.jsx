@@ -202,7 +202,9 @@ function Module({
 							? "Coller ici"
 							: canInter
 								? "Cliquer ici pour procéder à l'échange"
-								: "Cliquer sur le crayon pour éditer ce module..."
+								: !isFree
+									? `Cliquer pour éditer ce module...${item.parentId || item.line || item.sensibility || item.current ? "\r\n" : ""}${item.parentId || item.line ? `\r\n${`${item.parentId ? `Parent: ${item.parentId}` : "-"}${item.line ? ` Ph${item.line}` : ""}`.trim()}` : ""}${item.sensibility || item.current ? `\r\nSpecs: ${item.current ? `${`${item.crb ? `${item.crb} ` : ""}${item.current}`.trim()} ` : ""}${item.sensibility ? item.sensibility : ""}` : ""}`
+									: "Cliquer sur le crayon pour éditer ce module..."
 						: "Module de démonstration"
 				}
 				ref={moduleRef}
@@ -249,7 +251,7 @@ function Module({
 					<LazyImage
 						className="module_iconfree"
 						src={editIcon}
-						title="Cliquer pour éditer ce module..."
+						title="Cliquer sur le crayon pour éditer ce module..."
 						alt="Editer ce module"
 						onClick={() => {
 							if (!isDemo) {

@@ -4,9 +4,9 @@
 
 ### Corrections
 
-- Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.
+- [[Discussion #105](https://github.com/pantaflex44/Tiquettes/discussions/105)] Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.
 - Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses.
-- Correction de divers bugs dans le moniteur de schéma unifilaire.
+- [[Discussion #100](https://github.com/pantaflex44/Tiquettes/discussions/100)] Correction de divers bugs dans le moniteur de schéma unifilaire.
 - Remplacement des librairies esLint et oxLint par la librairie Biome, pour le contrôle et la mise en forme du code source.
 - Diverses refactorisations / optimisations du code source de l'application.
 - Correction de l'ergonomie des menus déroulants de la barre de naviguation.
@@ -14,6 +14,7 @@
 
 ### Modifications
 
+- [[Discussion #104](https://github.com/pantaflex44/Tiquettes/discussions/104)] Modification des informations affichées dans l'info bulle au dessus de chaque module dans l'éditeur d'étiquettes pour améliorer la conception. Ajout de l'identifiant du parent, de la phase parente sur laquelle le module est connecté, de la sensibilité et du calibre de celui-ci.
 - Modification du générateur de schémas unifilaires avec prise en charge des sources multiples et gestion automatique des répartiteurs de branchement.
 - Le logo de l'installateur doit désormais être téléversé. Une URL du fichier n'est plus requis.
 - Mise à jour des pictogrammes pour améliorer la compatibilité avec la conversion automatique SVG->PNG.
