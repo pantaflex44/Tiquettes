@@ -33,6 +33,7 @@ export default function GroupColorSelector({
 	value = "",
 	onChange = null,
 	onOpened = null,
+	id = null,
 }) {
 	const [opened, setOpened] = useState(false);
 	const [paletteOpened, setPaletteOpened] = useState(false);
@@ -85,7 +86,7 @@ export default function GroupColorSelector({
 
 	return (
 		<>
-			<div style={{ position: "relative" }} className="icon_selector">
+			<div style={{ position: "relative" }} className="icon_selector" id={id}>
 				<div
 					className={`icon_selector_box ${opened ? "focused" : ""}`}
 					style={{

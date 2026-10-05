@@ -732,6 +732,7 @@ export default function SchemaTab({
 						</div>
 						<div className="tabPageBandCol">
 							<button
+								id="schemaSourcesBtn"
 								type="button"
 								style={{ height: "34px" }}
 								title="Gérer les sources"
@@ -827,6 +828,7 @@ export default function SchemaTab({
 						<div className="tabPageBandSeparator"></div>
 						<div className="tabPageBandCol">
 							<button
+								id="schemaReassignModulesBtn"
 								type="button"
 								style={{ height: "34px" }}
 								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."

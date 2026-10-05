@@ -26,7 +26,12 @@ import useOutsideAlerter from "../hooks/useOutsideAlerter.jsx";
 import swbIcons from "../switchboard_icons.json" with { type: "json" };
 import LazyImage from "./LazyImage.jsx";
 
-function IconSelector({ value = null, onChange = null, onOpenState = null }) {
+function IconSelector({
+	value = null,
+	onChange = null,
+	onOpenState = null,
+	id = null,
+}) {
 	const [selected, setSelected] = useState(null);
 	const [opened, setOpened] = useState(false);
 	const [hoveredItem, setHoveredItem] = useState(false);
@@ -129,6 +134,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 			style={{ position: "relative" }}
 			className="icon_selector"
 			ref={listContainerRef}
+			id={id}
 		>
 			<div
 				className={`icon_selector_box ${opened ? "focused" : ""}`}
@@ -165,6 +171,7 @@ function IconSelector({ value = null, onChange = null, onOpenState = null }) {
 					></div>
 				)}
 				<input
+					id="iconSelectorSearchInput"
 					type="text"
 					value={search ? search.title : ""}
 					onKeyUp={handleKeyUp}

@@ -355,7 +355,7 @@ function CustomTheme({ item, data, style }) {
 						<LazyImage
 							style={styles.iconImg}
 							src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
-							lazy={true}
+							lazy={false}
 							onlyInView={false}
 							width={null}
 							height={null}

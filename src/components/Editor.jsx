@@ -68,11 +68,28 @@ export default function Editor({
 	const [internalPopupOpened, setInternalPopupOpened] = useState(false);
 
 	const [editorTab, setEditorTab] = useState(ed?.tabPage ?? "main");
-	const prevModule = useMemo(
-		() => getModuleById(ed?.prevModule?.parentId),
-		[ed?.prevModule?.parentId],
+	/*const prevModule = useMemo(
+		() => getModuleById(ed?.prevModule?.id),
+		[ed?.prevModule?.id],
+	);*/
+
+	const moduleIsTri = useMemo(
+		() =>
+			ed.currentModule &&
+			schemaFunctions[ed.currentModule.func]?.hasPole &&
+			(ed.currentModule.pole === "3P+N" || ed.currentModule.pole === "4P"),
+		[ed.currentModule],
 	);
-	const prevModuleTitle = useMemo(
+
+	const prevModule = useMemo(() => ed?.prevModule, [ed?.prevModule]);
+	const prevModuleModuleIsTri = useMemo(
+		() =>
+			prevModule &&
+			schemaFunctions[prevModule.func]?.hasPole &&
+			(prevModule.pole === "3P+N" || prevModule.pole === "4P"),
+		[prevModule],
+	);
+	const _prevModuleTitle = useMemo(
 		() =>
 			(
 				(prevModule?.id ?? "-") +
@@ -159,6 +176,19 @@ export default function Editor({
 		return parent[0];
 	};
 
+	const _getChildsOfParent = (parentId) => {
+		const childs = Object.entries(getFilteredModulesBySchemaFuncs())
+			.map(([_k, l]) => {
+				return l
+					.map((module) => (parentId === module.parentId ? module : null))
+					.filter((f) => f !== null);
+			})
+			.filter((f) => f !== null);
+		if (!childs || !Array.isArray(childs)) return null;
+
+		return childs;
+	};
+
 	const parentModule = useMemo(
 		() => getParentById(ed.currentModule.parentId),
 		[ed.currentModule.parentId],
@@ -194,6 +224,41 @@ export default function Editor({
 		sourceModuleIsTri,
 		ed.currentModule,
 		schemaFunctions,
+	]);
+
+	const suggestLine = useMemo(() => {
+		let suggestedLine = 0;
+
+		if (moduleIsTri) return null;
+
+		if (hasLine && parentModule && parentModuleIsTri) {
+			if (ed.parentModulePosition.rowIndex === ed.rowIndex) {
+				const dist =
+					ed.modulePosition.position -
+					(ed.parentModulePosition.position + (parentModule.span ?? 1));
+				suggestedLine = dist % 3;
+				if (suggestedLine === 0) suggestedLine = 3;
+			}
+
+			const prevModuleLine = parseInt((prevModule?.line ?? "0").trim(), 10);
+			if (prevModuleLine > 0) {
+				let sl = prevModuleLine + 1;
+				if (sl > 3) sl = 1;
+				if (suggestedLine !== sl) {
+					suggestedLine = sl;
+				}
+			}
+		}
+
+		return suggestedLine > 0 ? suggestedLine : null;
+	}, [
+		ed.currentModule,
+		ed.parentModulePosition,
+		parentModule,
+		parentModuleIsTri,
+		hasLine,
+		prevModule,
+		prevModuleModuleIsTri,
 	]);
 
 	useEffect(() => {
@@ -397,10 +462,10 @@ export default function Editor({
 								style={{ "--left_column_size": "120px" }}
 							>
 								<div></div>
-								<label style={{ fontSize: "small", color: "#777" }}>
+								<span style={{ fontSize: "small", color: "#777" }}>
 									└ Identifiant du module précédent:{" "}
 									<b>{ed.prevModule?.id ?? "-"}</b>
-								</label>
+								</span>
 							</div>
 
 							<div
@@ -432,7 +497,9 @@ export default function Editor({
 									maxWidth: "100%",
 								}}
 							>
-								<label>Couleur</label>
+								<label htmlFor={`editor_grp_${ed.currentModule.id.trim()}`}>
+									Couleur
+								</label>
 								<div
 									className="popup_row-flex"
 									style={{
@@ -442,6 +509,7 @@ export default function Editor({
 									}}
 								>
 									<GroupColorSelector
+										id={`editor_grp_${ed.currentModule.id.trim()}`}
 										switchboard={switchboard}
 										value={ed.currentModule.grp}
 										onChange={(value) => onUpdateModuleEditor({ grp: value })}
@@ -468,11 +536,14 @@ export default function Editor({
 									paddingTop: "1em",
 								}}
 							>
-								<label>Pictogramme</label>
+								<label htmlFor={`editor_icon_${ed.currentModule.id.trim()}`}>
+									Pictogramme
+								</label>
 								<Suspense
 									fallback={<div style={{ lineHeight: "40px" }}>...</div>}
 								>
 									<IconSelector
+										id={`editor_icon_${ed.currentModule.id.trim()}`}
 										value={ed.currentModule.icon}
 										onChange={(selectedIcon, selected) => {
 											if (
@@ -741,10 +812,10 @@ export default function Editor({
 										}}
 									>
 										<div></div>
-										<label style={{ fontSize: "small", color: "#777" }}>
+										<span style={{ fontSize: "small", color: "#777" }}>
 											└ Parent du module précédent:{" "}
-											<b>{prevModuleTitle !== "" ? prevModuleTitle : "-"}</b>
-										</label>
+											<b>{prevModule?.parentId ?? "-"}</b>
+										</span>
 									</div>
 								</>
 							)}
@@ -932,6 +1003,7 @@ export default function Editor({
 									{hasLine && (
 										<EditorLineSelector
 											id={`editor_line_${ed.currentModule.id.trim()}`}
+											suggested={suggestLine}
 											value={ed.currentModule.line}
 											onChange={(value) =>
 												onUpdateModuleEditor({ line: value })

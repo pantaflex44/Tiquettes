@@ -1335,6 +1335,34 @@ function App() {
 		}
 	};
 
+	const getModulePositionById = (id) => {
+		let modulePosition = switchboard.rows
+			.map((row, y) => {
+				let s = 0;
+				const r = row
+					.map((module, x) => {
+						if (module.id === id) {
+							return {
+								rowIndex: y,
+								moduleIndex: x,
+								span: module.span ?? 1,
+								position: s,
+							};
+						}
+						s += module.span ?? 1;
+						return null;
+					})
+					.filter((r) => r !== null);
+				return r.length > 0 ? r[0] : null;
+			})
+			.filter((r) => r !== null);
+		if (Array.isArray(modulePosition) && modulePosition.length > 0) {
+			modulePosition = modulePosition[0];
+		}
+
+		return modulePosition;
+	};
+
 	const editModule = (
 		rowIndex,
 		moduleIndex,
@@ -1381,6 +1409,8 @@ function App() {
 			focusedInputName,
 			errors: [],
 			hasBlankId,
+			modulePosition: getModulePositionById(currentModule.id),
+			parentModulePosition: getModulePositionById(currentModule.parentId),
 		});
 	};
 
@@ -2470,8 +2500,8 @@ function App() {
 								<span style={{ fontSize: "100%" }}>Exporter les rangées:</span>
 								<input
 									type="text"
-									name=""
-									id=""
+									name="labellersExportOptionsRowsSelection"
+									id="labellersExportOptionsRowsSelection"
 									ref={labelerRef}
 									value={
 										labelerOptionsRowsSelection ??
@@ -3288,6 +3318,7 @@ function App() {
 						</div>
 						<div className="tabPageBandCol">
 							<select
+								id="switchboardThemeChoice"
 								value={theme?.name ?? defaultTheme}
 								onChange={(e) => {
 									updateTheme(e.target.value);
@@ -3328,6 +3359,7 @@ function App() {
 						{theme.name.startsWith("custom") && theme?.data && (
 							<div className="tabPageBandCol">
 								<button
+									id="switchboardThemeEdit"
 									type="button"
 									style={{ height: "34px" }}
 									title="Modifier le thème."
@@ -3362,6 +3394,7 @@ function App() {
 						</div>
 						<div className="tabPageBandCol">
 							<input
+								id="switchboardHeightChoice"
 								type="range"
 								min={heightMin}
 								max={heightMax}
@@ -3397,6 +3430,7 @@ function App() {
 						</div>
 						<div className="tabPageBandCol">
 							<select
+								id="switchboardStepSizeChoice"
 								value={switchboard.stepSize ?? defaultStepSize}
 								onChange={(e) => {
 									const value = parseFloat(e.target.value);
@@ -3429,6 +3463,7 @@ function App() {
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
+								id="switchboardReassignModules"
 								type="button"
 								style={{ height: "34px" }}
 								title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."

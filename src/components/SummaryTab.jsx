@@ -62,6 +62,7 @@ export default function SummaryTab({
 				<div className="tabPageBandGroup">
 					<div className="tabPageBandCol">
 						<button
+							id="summaryReassignModulesBtn"
 							type="button"
 							style={{ height: "34px" }}
 							title="Ré-assigner automatiquement les identifiants des modules de l'ensemble du projet."

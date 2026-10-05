@@ -13,7 +13,7 @@ import * as pkg from "./package.json" with { type: "json" };
 export default async ({ mode }) => {
 	const env = loadEnv(mode, "./");
 
-	const svgPreloader = () => {
+	const _svgPreloader = () => {
 		return {
 			name: "no-attribute",
 			async transformIndexHtml(html) {
@@ -43,7 +43,7 @@ export default async ({ mode }) => {
 			port: env.VITE_SERVER_PORT,
 		},
 		plugins: [
-			svgPreloader(),
+			//svgPreloader(),
 			react(),
 			VitePWA({
 				registerType: "autoUpdate",

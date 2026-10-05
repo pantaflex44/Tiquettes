@@ -16,12 +16,27 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default function EditorLineSelector({ id, value, onChange = null }) {
+import { useMemo } from "react";
+
+export default function EditorLineSelector({
+	id,
+	value,
+	suggested = null,
+	onChange = null,
+}) {
+	const v = useMemo(() => {
+		let v = (value ?? "").trim();
+		if (v === "" && suggested !== null) {
+			v = `${suggested}`;
+		}
+		return v;
+	}, [value, suggested]);
+
 	return (
 		<select
 			id={id}
 			name={id}
-			value={value}
+			value={v}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);
 			}}

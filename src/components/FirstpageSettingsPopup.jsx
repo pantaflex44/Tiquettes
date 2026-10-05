@@ -531,6 +531,7 @@ export default function FirstpageSettingsPopup({
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
+								id="importdatafile"
 								type="button"
 								style={{ height: "34px" }}
 								title="Importer les données installateur"
@@ -567,6 +568,7 @@ export default function FirstpageSettingsPopup({
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
+								id="resetfirstpageoptions"
 								type="button"
 								style={{ height: "34px" }}
 								title="Réinitialiser"
@@ -1611,6 +1613,7 @@ export default function FirstpageSettingsPopup({
 						<div className="tabPageBandGroup">
 							<div className="tabPageBandCol">
 								<button
+									id="zoomOut"
 									type="button"
 									style={{ height: "34px" }}
 									title="Plus petit"
