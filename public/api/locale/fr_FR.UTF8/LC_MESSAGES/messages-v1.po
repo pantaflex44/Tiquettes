@@ -286,3 +286,33 @@ msgstr "Télécommande"
 
 msgid "Prise modulaire"
 msgstr "Prise modulaire"
+
+msgid "Schéma unifilaire - Liste des sources"
+msgstr "Schéma unifilaire - Liste des sources"
+
+msgid "Modèle"
+msgstr "Modèle"
+
+msgid "Nom"
+msgstr "Nom"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Sensibilité"
+msgstr "Sensibilité"
+
+msgid "Courbe"
+msgstr "Courbe"
+
+msgid "Calibre"
+msgstr Calibre"
+
+msgid "Pôles"
+msgstr "Pôles"
+
+msgid "Section"
+msgstr "Section"
+
+msgid "Remarques"
+msgstr "Remarques"

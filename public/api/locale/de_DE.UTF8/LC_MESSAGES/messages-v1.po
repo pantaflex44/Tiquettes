@@ -285,3 +285,33 @@ msgstr "Fernbedienung"
 
 msgid "Prise modulaire"
 msgstr "Modulare Steckdose"
+
+msgid "Schéma unifilaire - Liste des sources"
+msgstr "Einlinienschaltplan – Quellenliste"
+
+msgid "Modèle"
+msgstr "Modell"
+
+msgid "Nom"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Sensibilité"
+msgstr "Empfindlichkeit"
+
+msgid "Courbe"
+msgstr "Kennlinie"
+
+msgid "Calibre"
+msgstr "Bemessungsstrom"
+
+msgid "Pôles"
+msgstr "Pole"
+
+msgid "Section"
+msgstr "Querschnitt"
+
+msgid "Remarques"
+msgstr "Bemerkungen"

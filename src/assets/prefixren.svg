@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-plus"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="prefixren.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="23.570226"
+     inkscape:cx="11.624836"
+     inkscape:cy="8.7822663"
+     inkscape:window-width="1920"
+     inkscape:window-height="983"
+     inkscape:window-x="1920"
+     inkscape:window-y="33"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3"
+     showguides="true">
+    <sodipodi:guide
+       position="1.4083475,16.045709"
+       orientation="1,0"
+       id="guide1"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="22.628387,17.206549"
+       orientation="1,0"
+       id="guide2"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <path
+     stroke="none"
+     d="M0 0h24v24H0z"
+     fill="none"
+     id="path1" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.40564px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke:none;stroke-width:1.78689"
+     x="1.2647676"
+     y="12.097926"
+     id="text1"
+     transform="scale(0.88083571,1.1352855)"><tspan
+       sodipodi:role="line"
+       id="tspan1"
+       x="1.2647676"
+       y="12.097926"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.40564px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:1.78689"><tspan
+   style="fill:#008b8b;fill-opacity:1"
+   id="tspan7">Q</tspan> = <tspan
+   style="fill:#008b8b;fill-opacity:1"
+   id="tspan4">D</tspan></tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:7.74776px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke:none;stroke-width:1.12243"
+     x="1.0976616"
+     y="20.507351"
+     id="text1-6"
+     transform="scale(0.88083571,1.1352855)"><tspan
+       sodipodi:role="line"
+       id="tspan1-1"
+       x="1.0976616"
+       y="20.507351"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:7.74776px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:1.12243"><tspan
+   style="fill:#008b8b;fill-opacity:1"
+   id="tspan8">K</tspan> = <tspan
+   style="fill:#008b8b;fill-opacity:1"
+   id="tspan3">TR</tspan></tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.858px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke:none;stroke-width:2.4253"
+     x="0.73623276"
+     y="5.0419412"
+     id="text2"
+     transform="scale(1.2126499,0.8246403)"><tspan
+       sodipodi:role="line"
+       id="tspan2"
+       x="0.73623276"
+       y="5.0419412"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.46746px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:2.4253">Préfix</tspan></text>
+</svg>

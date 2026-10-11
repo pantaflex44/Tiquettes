@@ -28,6 +28,7 @@ import noautoAddRpsIcon from "../assets/no-auto-add-rps.svg";
 import nogroundIcon from "../assets/noground.svg";
 import nomonitorIcon from "../assets/nomonitor.svg";
 import numbersIcon from "../assets/numbers.svg";
+import prefixIcon from "../assets/prefixren.svg";
 import sourcesIcon from "../assets/sources.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
@@ -49,6 +50,7 @@ export default function SchemaTab({
 }) {
 	const [monitorOpened, setMonitorOpened] = useState(false);
 	const [sourcesOpened, setSourcesOpened] = useState(false);
+	const [_prefixOpened, setPrefixOpened] = useState(false);
 	const [zoomed, setZoomed] = useState(false);
 	const monitorRef = useRef(null);
 
@@ -798,6 +800,30 @@ export default function SchemaTab({
 									height={24}
 								/>
 							</label>
+						</div>
+					</div>
+
+					<div className="tabPageBandGroup">
+						<div className="tabPageBandCol">
+							<span style={{ fontSize: "smaller", lineHeight: 1.2 }}>
+								Divers:
+							</span>
+						</div>
+						<div className="tabPageBandCol">
+							<button
+								id="schemaIdentsBtn"
+								type="button"
+								style={{ height: "34px" }}
+								title="Gérer les préfixes d'identifiants"
+								onClick={() => setPrefixOpened(true)}
+							>
+								<LazyImage
+									src={prefixIcon}
+									alt="Gérer les préfixes d'identifiants"
+									width={22}
+									height={22}
+								/>
+							</button>
 						</div>
 					</div>
 

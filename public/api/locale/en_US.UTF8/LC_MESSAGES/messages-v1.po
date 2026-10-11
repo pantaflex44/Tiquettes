@@ -281,3 +281,33 @@ msgstr "Remote control"
 
 msgid "Prise modulaire"
 msgstr "Modular outlet"
+
+msgid "Schéma unifilaire - Liste des sources"
+msgstr "Single-Line Diagram - Source List"
+
+msgid "Modèle"
+msgstr "Model"
+
+msgid "Nom"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Sensibilité"
+msgstr "Sensitivity"
+
+msgid "Courbe"
+msgstr "Curve"
+
+msgid "Calibre"
+msgstr "Rating"
+
+msgid "Pôles"
+msgstr "Poles"
+
+msgid "Section"
+msgstr "Cross-Section"
+
+msgid "Remarques"
+msgstr "Notes"

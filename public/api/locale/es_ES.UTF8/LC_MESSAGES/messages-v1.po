@@ -285,3 +285,33 @@ msgstr "Mando a distancia"
 
 msgid "Prise modulaire"
 msgstr "Toma modular"
+
+msgid "Schéma unifilaire - Liste des sources"
+msgstr "Esquema unifilar - Lista de fuentes"
+
+msgid "Modèle"
+msgstr "Modelo"
+
+msgid "Nom"
+msgstr "Nombre"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Sensibilité"
+msgstr "Sensibilidad"
+
+msgid "Courbe"
+msgstr "Curva"
+
+msgid "Calibre"
+msgstr "Calibre"
+
+msgid "Pôles"
+msgstr "Polos"
+
+msgid "Section"
+msgstr "Sección"
+
+msgid "Remarques"
+msgstr "Observaciones"
