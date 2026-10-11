@@ -1352,18 +1352,18 @@ class TiquettesPDF extends FPDF
         $gridOrientation = 'L';
 
         $rows = [
-            ['title' => _("Modèle"), 'property' => 'name', 'lines' => 1, 'fontweight' => '', 'color' => [100, 100, 100]],
-            ['title' => _("Nom"), 'property' => 'label', 'lines' => 1, 'fontweight' => 'B', 'color' => [0, 0, 0]],
-            ['title' => _("Description"), 'property' => 'description', 'lines' => 3,  'fontweight' => '', 'color' => [100, 100, 100]],
+            ['title' => _("Modèle"), 'property' => 'name', 'sprintf' => '%s', 'lines' => 1, 'fontweight' => '', 'color' => [100, 100, 100]],
+            ['title' => _("Nom"), 'property' => 'label', 'sprintf' => '%s', 'lines' => 1, 'fontweight' => 'B', 'color' => [0, 0, 0]],
+            ['title' => _("Description"), 'property' => 'description', 'sprintf' => '%s', 'lines' => 3,  'fontweight' => '', 'color' => [100, 100, 100]],
             null,
-            ['title' => _("Type"), 'property' => 'type', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
-            ['title' => _("Sensibilité"), 'property' => 'sensibility', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
-            ['title' => _("Courbe"), 'property' => 'crb', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
-            ['title' => _("Calibre"), 'property' => 'current', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
-            ['title' => _("Pôles"), 'property' => 'pole', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
-            ['title' => _("Section"), 'property' => 'wire', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Type"), 'property' => 'type', 'sprintf' => '%s', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Sensibilité"), 'property' => 'sensibility', 'sprintf' => '%s', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Courbe"), 'property' => 'crb', 'sprintf' => '%s', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Calibre"), 'property' => 'current', 'sprintf' => '%s', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Pôles"), 'property' => 'pole', 'sprintf' => '%s', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Section"), 'property' => 'wire', 'sprintf' => '%dmm²', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
             null,
-            ['title' => _("Remarques"), 'property' => 'remark', 'lines' => 11, 'fontsize' => 9, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Remarques"), 'property' => 'remark', 'sprintf' => '%s', 'lines' => 11, 'fontsize' => 9, 'fontweight' => '', 'color' => [0, 0, 0]],
         ];
 
         $initialPos = [
@@ -1434,11 +1434,14 @@ class TiquettesPDF extends FPDF
                 $this->SetTextColor(...$row['color']);
 
                 $property = $row['property'];
-                $text = trim((string)($source->$property ?? '-'));
+                $text = trim((string)($source->$property ?? ''));
                 if ($text === '') {
                     $text = '-';
                     $row['lines'] = 1;
+                } else {
+                    $text = sprintf($row['sprintf'], $text);
                 }
+
                 $this->MultiCell($columnWidth - 10, $stringheight, str($text), 0, 'L', false, $row['lines']);
 
                 $pos['y'] += $boxheight + $separatorWidth;
