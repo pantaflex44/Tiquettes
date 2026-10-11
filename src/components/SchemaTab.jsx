@@ -803,30 +803,6 @@ export default function SchemaTab({
 						</div>
 					</div>
 
-					<div className="tabPageBandGroup">
-						<div className="tabPageBandCol">
-							<span style={{ fontSize: "smaller", lineHeight: 1.2 }}>
-								Divers:
-							</span>
-						</div>
-						<div className="tabPageBandCol">
-							<button
-								id="schemaIdentsBtn"
-								type="button"
-								style={{ height: "34px" }}
-								title="Gérer les préfixes d'identifiants"
-								onClick={() => setPrefixOpened(true)}
-							>
-								<LazyImage
-									src={prefixIcon}
-									alt="Gérer les préfixes d'identifiants"
-									width={22}
-									height={22}
-								/>
-							</button>
-						</div>
-					</div>
-
 					<div className="tabPageBandNL"></div>
 
 					<div className="tabPageBandGroup">
@@ -852,6 +828,22 @@ export default function SchemaTab({
 						</div>
 
 						<div className="tabPageBandSeparator"></div>
+						{/*<div className="tabPageBandCol">
+							<button
+								id="schemaIdentsBtn"
+								type="button"
+								style={{ height: "34px" }}
+								title="Gérer les préfixes d'identifiants"
+								onClick={() => setPrefixOpened(true)}
+							>
+								<LazyImage
+									src={prefixIcon}
+									alt="Gérer les préfixes d'identifiants"
+									width={22}
+									height={22}
+								/>
+							</button>
+						</div>*/}
 						<div className="tabPageBandCol">
 							<button
 								id="schemaReassignModulesBtn"
