@@ -968,6 +968,7 @@ export default function SchemaTab({
 						childs={tree.childs}
 						isFirst={true}
 						parentIsFirst={true}
+						getModuleById={getModuleById}
 						onEditSymbol={(module) => handleEditSymbol(module)}
 						monitor={monitor}
 					/>

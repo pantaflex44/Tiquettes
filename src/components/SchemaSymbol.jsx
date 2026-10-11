@@ -21,7 +21,12 @@ import { useMemo } from "react";
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
 import LazyImage from "./LazyImage";
 
-export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
+export default function SchemaSymbol({
+	module,
+	limited = false,
+	onEdit = null,
+	monitor = {},
+}) {
 	const func = useMemo(() => {
 		if (!module?.func) return null;
 
@@ -74,7 +79,7 @@ export default function SchemaSymbol({ module, onEdit = null, monitor = {} }) {
 		func && (
 			<div
 				style={{ "--symbol-width": "70px", "--symbol-height": "100px" }}
-				className={`schemaItemSymbol editable`}
+				className={`schemaItemSymbol editable ${limited ? "limited" : ""}`}
 				title={func.title}
 				onClick={() => handleEdit()}
 			>

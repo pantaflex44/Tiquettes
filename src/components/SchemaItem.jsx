@@ -30,9 +30,13 @@ export default function SchemaItem({
 	isFirst = false,
 	childs,
 	onEditSymbol,
+	getModuleById,
 	monitor = {},
 }) {
 	return Object.entries(childs ?? {}).map(([id, item], j) => {
+		const m = getModuleById(item.module.id);
+		const limited = m.module === null;
+
 		const src = item.module.srcId
 			? switchboard.sources.filter((s) => s.id === item.module.srcId)
 			: null;
@@ -70,6 +74,7 @@ export default function SchemaItem({
 						onEdit={(module) => {
 							onEditSymbol(module);
 						}}
+						limited={limited}
 						monitor={monitor}
 					/>
 
@@ -81,6 +86,7 @@ export default function SchemaItem({
 								switchboard={switchboard}
 								childs={item.childs}
 								baseId={baseId ?? item.module.id}
+								getModuleById={getModuleById}
 								onEditSymbol={(module) => {
 									onEditSymbol(module);
 								}}
