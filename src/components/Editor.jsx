@@ -907,6 +907,11 @@ export default function Editor({
 									<EditorSensibilitySelector
 										id={`editor_sensibility_${ed.currentModule.id.trim()}`}
 										value={ed.currentModule.sensibility}
+										allowed={[
+											"10mA",
+											"30mA",
+											switchboard.projectType === "T" ? "300mA" : null,
+										].filter((f) => f !== null)}
 										onChange={(value) =>
 											onUpdateModuleEditor({ sensibility: value })
 										}

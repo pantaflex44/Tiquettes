@@ -100,7 +100,8 @@ export default function EditorParentSelector({
 
 			{/* Sources personnelles */}
 			<option value={""} disabled={true}>
-				Sources d'alimentations
+				Sources d'alimentations compatibles {polesCounter(currentPole ?? "4P")}{" "}
+				pôles
 			</option>
 			{sources.map((s, _i) => {
 				if (!s.id || !s.label || (currentPole && !isCompatiblePoles(s.pole))) {

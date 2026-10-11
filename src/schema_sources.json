@@ -8,6 +8,7 @@
 		"hasCurrent": true,
 		"hasPole": true,
 		"hasWire": true,
+		"hasSensibility": true,
 		"type": "S",
 		"type_allowed": ["G", "S"],
 		"current": "60A",
@@ -27,6 +28,7 @@
 		"hasCurrent": true,
 		"hasPole": true,
 		"hasWire": true,
+		"hasSensibility": false,
 		"crb": "D",
 		"current": "63A",
 		"current_allowed": [
@@ -58,6 +60,7 @@
 		"hasCurrent": true,
 		"hasPole": true,
 		"hasWire": true,
+		"hasSensibility": false,
 		"crb": "D",
 		"current": "63A",
 		"current_allowed": [
@@ -89,6 +92,7 @@
 		"hasCurrent": true,
 		"hasPole": true,
 		"hasWire": true,
+		"hasSensibility": false,
 		"crb": "D",
 		"current": "32A",
 		"current_allowed": [
@@ -120,6 +124,7 @@
 		"hasCurrent": true,
 		"hasPole": true,
 		"hasWire": true,
+		"hasSensibility": false,
 		"crb": "D",
 		"current": "63A",
 		"current_allowed": [

@@ -19,7 +19,7 @@
 export default function EditorSensibilitySelector({
 	id,
 	value,
-	allowed = ["10mA", "30mA", "300mA", "500mA", "600mA"],
+	allowed = ["10mA", "30mA", "300mA", "500mA", "650mA"],
 	onChange = null,
 }) {
 	return (

@@ -73,6 +73,8 @@ export default function SourceEditorPopup({
 				base: editedSource.base,
 				label: editedSource.label,
 				remark: editedSource.remark ?? "",
+				name: editedSource.name,
+				description: editedSource.description ?? "",
 			};
 			if (editedSource.hasCrb) {
 				src = { ...src, crb: editedSource.crb };
@@ -88,6 +90,9 @@ export default function SourceEditorPopup({
 			}
 			if (editedSource.hasWire) {
 				src = { ...src, wire: editedSource.wire };
+			}
+			if (editedSource.hasSensibility) {
+				src = { ...src, sensibility: editedSource.sensibility };
 			}
 			onApply(src);
 		}

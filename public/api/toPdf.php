@@ -1329,7 +1329,126 @@ class TiquettesPDF extends FPDF
 
     function AddSchemaPage()
     {
-        global $switchboard, $flattenModules, $schemaPrintFormat, $schemaFolioStart;
+        global $switchboard;
+
+        $this->SetVisibility('all');
+        $this->StartPageGroup();
+
+        if (count($switchboard->sources ?? []) > 0) {
+            $this->drawSourcesList();
+        }
+
+        $this->drawSchemaPage();
+    }
+
+    protected function drawSourcesList(): void
+    {
+        global $switchboard, $schemaPrintFormat;
+
+        $sources = $switchboard->sources ?? [];
+        if (count($sources) === 0) return;
+
+        $this->grid = false;
+        $gridOrientation = 'L';
+
+        $rows = [
+            ['title' => _("Modèle"), 'property' => 'name', 'lines' => 1, 'fontweight' => '', 'color' => [100, 100, 100]],
+            ['title' => _("Nom"), 'property' => 'label', 'lines' => 1, 'fontweight' => 'B', 'color' => [0, 0, 0]],
+            ['title' => _("Description"), 'property' => 'description', 'lines' => 3,  'fontweight' => '', 'color' => [100, 100, 100]],
+            null,
+            ['title' => _("Type"), 'property' => 'type', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Sensibilité"), 'property' => 'sensibility', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Courbe"), 'property' => 'crb', 'lines' => 1, 'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Calibre"), 'property' => 'current', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Pôles"), 'property' => 'pole', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            ['title' => _("Section"), 'property' => 'wire', 'lines' => 1,  'fontweight' => '', 'color' => [0, 0, 0]],
+            null,
+            ['title' => _("Remarques"), 'property' => 'remark', 'lines' => 11, 'fontsize' => 9, 'fontweight' => '', 'color' => [0, 0, 0]],
+        ];
+
+        $initialPos = [
+            'x' => $this->pageMargin + 1,
+            'y' => $this->pageMargin + 2.5 + 5
+        ];
+        $pos = $initialPos;
+
+        $fontsize = 9;
+        $lineHeight = $fontsize;
+        $stringheight = $fontsize / 2;
+        $columnWidth = 54;
+        $separatorWidth = 1;
+
+        $newPage = function () use ($gridOrientation, $schemaPrintFormat, $initialPos, $rows, $lineHeight, $stringheight, $columnWidth, $fontsize, $separatorWidth) {
+            global $pos;
+
+            $this->subTitle = _("Schéma unifilaire - Liste des sources");
+            $this->AddPage($gridOrientation, $schemaPrintFormat, 0);
+
+            $pos = $initialPos;
+
+            foreach ($rows as $row) {
+                if (is_null($row)) {
+                    $pos['y'] += $lineHeight;
+                    continue;
+                }
+
+                $boxheight = $row['lines'] === 1 ? $lineHeight : (($stringheight * $row['lines']) + 5);
+
+                $this->SetFillColor(240, 240, 240);
+                $this->Rect($pos['x'], $pos['y'], $columnWidth, $boxheight, 'F');
+
+                $this->SetY($pos['y'] + 2.5);
+                $this->SetX($pos['x'] + 4);
+                $this->SetFont('Arial', 'B', $fontsize);
+                $this->SetTextColor(0, 0, 0);
+                $this->MultiCell($columnWidth - 10, $stringheight, str($row['title']), 0, 'L', false, 1);
+
+                $pos['y'] += $boxheight + $separatorWidth;
+            }
+        };
+
+        $newPage();
+        foreach ($sources as $source) {
+            if ($pos['x'] + $columnWidth > $this->GetPageWidth() - ($initialPos['x'] * 2)) {
+                $newPage();
+                $pos = $initialPos;
+            }
+
+            $pos['y'] = $initialPos['y'];
+            $pos['x'] += $columnWidth + $separatorWidth;
+
+            foreach ($rows as $row) {
+                if (is_null($row)) {
+                    $pos['y'] += $lineHeight;
+                    continue;
+                }
+
+                $boxheight = $row['lines'] === 1 ? $lineHeight : (($stringheight * $row['lines']) + 5);
+
+                $this->SetFillColor(224, 255, 255);
+                $this->Rect($pos['x'], $pos['y'], $columnWidth, $boxheight, 'F');
+
+                $this->SetY($pos['y'] + 2.5);
+                $this->SetX($pos['x'] + 4);
+                $this->SetFont('Arial', $row['fontweight'], $fontsize);
+                $this->SetTextColor(...$row['color']);
+
+                $property = $row['property'];
+                $text = trim((string)($source->$property ?? '-'));
+                if ($text === '') {
+                    $text = '-';
+                    $row['lines'] = 1;
+                }
+                $this->MultiCell($columnWidth - 10, $stringheight, str($text), 0, 'L', false, $row['lines']);
+
+                $pos['y'] += $boxheight + $separatorWidth;
+            }
+        }
+    }
+
+    protected function drawSchemaPage(): void
+    {
+        global $schemaPrintFormat, $schemaFolioStart;
 
         $this->grid = [
             'P' => [
@@ -1350,20 +1469,16 @@ class TiquettesPDF extends FPDF
             $this->gridOrientation = 'P';
         }
 
-        $this->SetVisibility('all');
-        $this->StartPageGroup();
+        $this->schemaInitialPos = [
+            'x' => $this->grid[$this->gridOrientation]['left'] + $this->grid[$this->gridOrientation]['step'],
+            'y' => $this->grid[$this->gridOrientation]['top'] + $this->grid[$this->gridOrientation]['step'],
+        ];
 
         $this->schemaCurrentFolio = $schemaFolioStart;
         $this->subTitle = sprintf(_("Schéma unifilaire - Folio %d"), $this->schemaCurrentFolio);
         $this->AddPage($this->gridOrientation, $schemaPrintFormat, 0);
         $this->drawGroundLine();
-
-        $this->schemaInitialPos = [
-            'x' => $this->grid[$this->gridOrientation]['left'] + $this->grid[$this->gridOrientation]['step'],
-            'y' => $this->grid[$this->gridOrientation]['top'] + $this->grid[$this->gridOrientation]['step'],
-        ];
         $this->schemaCurrentPosX = $this->schemaInitialPos['x'];
-
         $this->schemaDrawChilds('', 0);
     }
 
