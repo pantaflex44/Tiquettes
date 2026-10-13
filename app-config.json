@@ -35,9 +35,12 @@
 	],
 	"changelog": {
 		"2.2.9": {
-			"date": "2026-10-11",
+			"date": "2026-10-13",
 			"actions": {
 				"patches": [
+					{
+						"text": "Remplacement de la fonction Object.groupBy par son équivalent Array.reduce, compatible avec les plus anciennes versions de Javascript."
+					},
 					{
 						"text": "Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.",
 						"from": {

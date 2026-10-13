@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.2.9] - 2026-10-11
+## [2.2.9] - 2026-10-13
 
 ### Corrections
 
+- Remplacement de la fonction Object.groupBy par son équivalent Array.reduce, compatible avec les plus anciennes versions de Javascript.
 - [[Discussion #105](https://github.com/pantaflex44/Tiquettes/discussions/105)] Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.
 - Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses.
 - [[Discussion #100](https://github.com/pantaflex44/Tiquettes/discussions/100)] Correction de divers bugs dans le moniteur de schéma unifilaire.

@@ -3332,8 +3332,37 @@ function App() {
 								}}
 								disabled={UIFrozen}
 							>
-								{Object.entries(
+								{/*Object.entries(
 									Object.groupBy(themesList, ({ group }) => group),
+								).map((e) => {
+									const g = e[0];
+									const l = e[1];
+									return (
+										<Fragment key={`themes_${g}`}>
+											<option key={`group_${g}`} id={`group_${g}`} disabled>
+												- {g} -
+											</option>
+											{l.map((t) => (
+												<option
+													key={`theme_${t.name}`}
+													id={`theme_${t.name}`}
+													value={t.name}
+												>
+													({g}) {t.title}
+												</option>
+											))}
+										</Fragment>
+									);
+								})*/}
+								{Object.entries(
+									themesList.reduce((acc, theme) => {
+										const { group } = theme;
+										if (!acc[group]) {
+											acc[group] = [];
+										}
+										acc[group].push(theme);
+										return acc;
+									}, {}),
 								).map((e) => {
 									const g = e[0];
 									const l = e[1];
