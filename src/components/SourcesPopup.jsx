@@ -21,6 +21,7 @@ import { useRef, useState } from "react";
 import "../css/sourcesPopup.css";
 
 import editIcon from "../assets/edit.svg";
+import freesourceIcon from "../assets/freesource.svg";
 import plusIcon from "../assets/plus.svg";
 import trashIcon from "../assets/trash.svg";
 import useDropdownToolbarMenuPlacing from "../hooks/useDropdownToolbarMenuPlacing.jsx";
@@ -30,7 +31,12 @@ import Popup from "./Popup.jsx";
 import SourceEditorPopup from "./SourceEditorPopup.jsx";
 import SourcesList from "./SourcesList.jsx";
 
-export default function SourcesPopup({ switchboard, onApply, onCancel }) {
+export default function SourcesPopup({
+	switchboard,
+	onApply,
+	onCancel,
+	onDelete = null,
+}) {
 	/*const listRef = useRef();
 
 	const [sources, setSources] = useState(
@@ -129,6 +135,7 @@ export default function SourcesPopup({ switchboard, onApply, onCancel }) {
 			)
 		) {
 			setSources((old) => old.filter((o) => !sourceIds.includes(o.id)));
+			if (onDelete) onDelete(sourceIds);
 		}
 	};
 

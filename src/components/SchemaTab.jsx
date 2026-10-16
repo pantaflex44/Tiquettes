@@ -47,6 +47,7 @@ export default function SchemaTab({
 	schemaFunctions,
 	getFilteredModulesBySchemaFuncs,
 	onEditSymbol = null,
+	onSourceDelete = null,
 }) {
 	const [monitorOpened, setMonitorOpened] = useState(false);
 	const [sourcesOpened, setSourcesOpened] = useState(false);
@@ -1005,6 +1006,7 @@ export default function SchemaTab({
 						setSourcesOpened(false);
 					}}
 					onCancel={() => setSourcesOpened(false)}
+					onDelete={(sourcesId) => onSourceDelete(sourcesId)}
 				/>
 			)}
 		</>

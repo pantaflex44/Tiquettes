@@ -1554,6 +1554,28 @@ function App() {
 		setEditor(null);
 	};
 
+	const sourcesDelete = (sourcesId) => {
+		if (!Array.isArray(sourcesId)) return;
+
+		setSwitchboard((old) => {
+			const rows = old.rows.map((row) => {
+				const r = row.map((module) => {
+					let mm = { ...module };
+
+					if (sourcesId.includes(mm.srcId ?? "")) {
+						mm = { ...mm, srcId: null };
+					}
+
+					return mm;
+				});
+
+				return r;
+			});
+
+			return modulesAutoId({ ...old, rows });
+		});
+	};
+
 	const moduleGrow = (rowIndex, moduleIndex) => {
 		const nextModuleIndex = moduleIndex + 1;
 
@@ -3710,6 +3732,7 @@ function App() {
 				onEditSymbol={(rowIndex, moduleIndex) =>
 					editModule(rowIndex, moduleIndex, "schema")
 				}
+				onSourceDelete={(sourcesId) => sourcesDelete(sourcesId)}
 			/>
 
 			{/** ----------------------------------------------------------- */}
