@@ -604,11 +604,68 @@ ou non le <a href="#moniteur-de-surveillance">Moniteur de surveillance</a>.
 
 L'application vous permet d'identifier la ou les sources alimentant les différentes sections de votre tableau électrique. Que ce soit un disjonteur de branchement, un répartiteur ou des panneaux photo-voltaïque, une option pour les définir est à votre disposition via ce bouton:
 
-![Schéma unifilaire](./docs/_schema_parents_edit.png)
+![Schéma unifilaire - Edition des sources](./docs/_schema_parents_edit.png)
 
 En cliquant sur ce bouton, vous pourrez ajouter et / ou supprimer autant de sources que vous le souhaitez:
 
-![Schéma unifilaire](./docs/_schema_parents_editor.png)
+![Schéma unifilaire - Editeur de sources](./docs/_schema_parents_editor.png)
+
+Il ne vous restera plus qu'à choisir votre source comme parent d'un module !
+
+![Schéma unifilaire - Sélecteur d'une source](./docs/_schema_parents_sources.png)
+
+
+#### Les répartiteurs
+
+Pour connecter plusieurs modules à un parent, il est d'usage d'utiliser des borniers de répartition. C'est borniers sont parfois déja présent au sein d'une enveloppe, mais peuvent être ajoutés à tout moment. Il ne sont pas visible depuis la façade de l'enveloppe et n'ont de rôle que la répartitions des alimentations d'un lot de modules.
+
+Tiquettes vous propose de les intégrer de différentes manières.
+
+##### Tout d'adord, coté étiquettes
+
+Un répartiteur est un module de taille variable, parfois installé sur un rail DIN mais très souvent invisible. C'est pourquoi, Tiquettes propose désormais la possibilité d'ajouter un module de type "Element invisible" !
+
+![Elements invisibles](./docs/_labels_hidden.png)
+
+Comme vous le constatez, le module est représenté différement des autres, le thème en cours n'est pas appliqué.
+
+
+> <img src="./docs/info-circle.svg" width="16" height="16" /> <b>Bon à savoir</b>
+>
+> Lors de l'impression, tous les modules définis comme invisibles ne seront pas représentés !
+> 
+
+##### Coté schéma unifilaire
+
+Un répartiteur peut être un module que vous ajoutez lors de la réalisation de votre projet. C'est pourquoi, pour plus de clarté dans la représentation de votre schéma unifilaire, vous pouvez l'ajouter manuellement:
+
+![Schéma unifilaire - Répartiteur](./docs/_schema_rep.png)
+
+Il deviendra donc un parent possible pour tous les autres modules que vous ajouterez !
+
+![Schéma unifilaire - Répartition](./docs/_schema_rep_draw.png)
+
+##### Répartition automatique
+
+Les borniers de répartitions peuvent parfois être en dehors des rails DIN et donc ne seront pas ajoutés à vos étiquettes (les borniers rouge et bleu dans certaines enveloppes par exemple). Toutefois, ils sont présents et utilisés, il faut donc les représenter. De plus, la norme NFC 15-100 impose une limite au nombre de conducteurs raccordés ensemble dans la borne d'un module, sans compter un mélange interdit des sections de chacun de ces conducteurs.
+
+Pour palier à tout celà Tiquettes, propose désormais l'ajout automatique de borniers dans votre schéma unifilaire.
+
+Une fois activée, cette fonctionnalité ajoutera autmatiquent comme parent, un répartiteur de branchement, à tous les modules possédant la même source d'alimentation ! Pratique, non ?
+
+Activer / Désactiver l'ajout automatique de répartiteurs :
+
+![Schéma unifilaire - Répartiteur automatique](./docs/_schema_rep_auto.png)
+
+Prenons le cas suivant. ID2 et ID3 ont la même source d'alimentation (Ma source), par défaut l'application va les représenter comme ceci:
+
+![Schéma unifilaire - Répartition non autmatique](./docs/_schema_source_noauto.png)
+
+Le soucis, c'est que dans la réalité, ID2 et ID3 sont soit peignés verticalement, soit raccordés aux borniers rouge et bleu du chassis sur lequel ils sont installés. Tiquettes vous propose donc de representer ce raccordement automatiquement. En activant l'option de répartition automatique, voici ce que l'application représentera:
+
+![Schéma unifilaire - Répartition non autmatique](./docs/_schema_source_auto.png)
+
+Plus sympa, non ? :-)
 
 
 
@@ -792,7 +849,7 @@ Si vous souhaitez nous soutenir, c'est par ici: [Faire un don](https://www.tique
 
 ### 🐛 Mais aussi pour toutes les remontées de [BUGS](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue) (les [issues](https://github.com/pantaflex44/Tiquettes/issues?q=is%3Aissue)) , et vos participations dans les [discussions](https://github.com/pantaflex44/Tiquettes/discussions)
 
-[zoliaaz](https://github.com/zoliaaz), [cnaslain](https://github.com/cnaslain), [ntarocco](https://github.com/ntarocco), [jlecour](https://github.com/jlecour), [plouflechien](https://github.com/plouflechien), [Benoit485](https://github.com/Benoit485), [F4FXL](https://github.com/F4FXL), [dough29](https://github.com/dough29), [karimLG](https://github.com/karimLG), [fmdl](https://github.com/fmdl), [ekozan](https://github.com/ekozan), [Starlight58](https://github.com/Starlight58), [Trinakria23](https://github.com/Trinakria23), [Boubigloubi](https://github.com/Boubigloubi), [martinlbb](https://github.com/martinlbb), [rems64](https://github.com/rems64), [Biodom13](https://github.com/Biodom13), [mmnlfrrr](https://github.com/mmnlfrrr), [LeG2](https://github.com/LeG2), [misterg94](https://github.com/misterg94), [Fanka14](https://github.com/Fanka14), [xhark](https://github.com/blogmotion), [yar0d](https://github.com/yar0d), [BenoitCier](https://github.com/BenoitCier), [gmergoux](https://github.com/gmergoux), [xbeaudouin](https://github.com/xbeaudouin)
+[zoliaaz](https://github.com/zoliaaz), [cnaslain](https://github.com/cnaslain), [ntarocco](https://github.com/ntarocco), [jlecour](https://github.com/jlecour), [plouflechien](https://github.com/plouflechien), [Benoit485](https://github.com/Benoit485), [F4FXL](https://github.com/F4FXL), [dough29](https://github.com/dough29), [karimLG](https://github.com/karimLG), [fmdl](https://github.com/fmdl), [ekozan](https://github.com/ekozan), [Starlight58](https://github.com/Starlight58), [Trinakria23](https://github.com/Trinakria23), [Boubigloubi](https://github.com/Boubigloubi), [martinlbb](https://github.com/martinlbb), [rems64](https://github.com/rems64), [Biodom13](https://github.com/Biodom13), [mmnlfrrr](https://github.com/mmnlfrrr), [LeG2](https://github.com/LeG2), [misterg94](https://github.com/misterg94), [Fanka14](https://github.com/Fanka14), [xhark](https://github.com/blogmotion), [yar0d](https://github.com/yar0d), [BenoitCier](https://github.com/BenoitCier), [gmergoux](https://github.com/gmergoux), [xbeaudouin](https://github.com/xbeaudouin), Yannis P., Marc T., [Azema](https://github.com/Azema), [sylvainetisa-bot](https://github.com/sylvainetisa-bot)
 
 ### Un remerciement spécial pour vos partages et les articles / messages promouvant Tiquettes.fr sur la toile
 

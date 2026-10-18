@@ -331,10 +331,11 @@ function CustomTheme({ item, data, style }) {
 			)}
 
 			{isInvisible && (
-				<div style={styles.id} data-order={"top"}>
-					<p style={styles.idInvisibleContent}>
-						Espace invisible utilisé par {item.id}
-					</p>
+				<div
+					style={{ ...styles.id, ...styles.idInvisibleContent }}
+					data-order={"top"}
+				>
+					<p>Espace invisible utilisé par {item.id}</p>
 				</div>
 			)}
 
