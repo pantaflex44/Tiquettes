@@ -29,15 +29,17 @@ class Theme
 
     private static function getColorGroup(string $key, $data, $module): null|string
     {
+        $grp = ($module?->grp ?? "");
+
         if (
             array_key_exists($key, $data)
             && $data[$key] === true
-            && $module->grp
-            && gettype($module->grp) === 'string'
-            && preg_match('/^#[a-f0-9]{6}$/i', $module->grp)
-            && strlen($module->grp) === 7
+            && $grp
+            && gettype($grp) === 'string'
+            && preg_match('/^#[a-f0-9]{6}$/i', $grp)
+            && strlen($grp) === 7
         ) {
-            return $module->grp;
+            return $grp;
         }
 
         return null;

@@ -1255,7 +1255,16 @@ class TiquettesPDF extends FPDF
                 for ($j = 0; $j < count($modules); $j++) {
                     $module = $modules[$j];
 
-                    if ($x + $w * $module->span > $this->GetPageWidth() - $this->pageMargin) {
+                    $half = ($module?->half ?? "");
+                    $span = intval($module?->span ?? '1', 10);
+                    if ($span < 0) $span = 1;
+
+                    $crb = ($module?->crb ?? "");
+                    $current = ($module?->current ?? "");
+                    $sensibility = ($module?->sensibility ?? "");
+                    $type = ($module?->type ?? "");
+
+                    if ($x + $w * $span > $this->GetPageWidth() - $this->pageMargin) {
                         $this->SetY($this->GetY() + $h + ($printCurrents ? 11 : 3));
                         $x = $this->pageMargin;
                     }
@@ -1274,17 +1283,17 @@ class TiquettesPDF extends FPDF
                     $box = [
                         'x' => $x,
                         'y' => $this->GetY(),
-                        'w' => $w * $module->span,
+                        'w' => $w * $span,
                         'h' => $h,
                     ];
                     $workBox = [
-                        'x' => $module->half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
+                        'x' => $half === 'left' ? $box['x'] + ($w / 2) : $box['x'],
                         'y' => $box['y'],
-                        'w' => $module->half === 'left' || $module->half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
+                        'w' => $half === 'left' || $half === 'right' ? $box['w'] - ($w / 2) : $box['w'],
                         'h' => $box['h'],
                     ];
                     $restPos = [
-                        'x' => $printOptions->freeModules === true ? ($module->half === 'left' ?  ($box['x'] - $workBox['x']) : 0) : 0,
+                        'x' => $printOptions->freeModules === true ? ($half === 'left' ?  ($box['x'] - $workBox['x']) : 0) : 0,
                         'w' => $printOptions->freeModules === true ? ($box['w'] - $workBox['w']) : 0,
                     ];
 
@@ -1309,13 +1318,13 @@ class TiquettesPDF extends FPDF
                         $this->Rect($box['x'], $box['y'] + $box['h'], $box['w'], 6, 'DF');
 
                         $this->SetFont('Helvetica', '', 7);
-                        $txt = mb_convert_encoding(trim(($module->crb ?? "") . ($module->current ?? "") . " " . ($module->sensibility ?? "") . " " . ($module->type ?? "")), 'windows-1252', 'UTF-8');
+                        $txt = mb_convert_encoding(trim($crb . $current . " " . $sensibility . " " . $type), 'windows-1252', 'UTF-8');
                         $this->MultiCell($box['w'], 6, $txt, 0, 'C', false, 1);
 
                         $this->SetXY($ox, $oy);
                     }
 
-                    $x += $w * $module->span;
+                    $x += $w * $span;
                 }
 
                 $this->SetY($this->GetY() + $h + ($printCurrents ? 10 : 6));
@@ -2095,7 +2104,8 @@ $autoAddRps = $switchboard->autoAddRps ?? false;
 
 foreach ($switchboard->rows as $row) {
     foreach ($row as $module) {
-        if (is_null($module) || !$module?->id || !$module?->func) continue;
+        if (is_null($module) || is_null($module?->id ?? null) || is_null($module?->func ?? null)) continue;
+
         if (!is_string($module->func) || strlen(trim($module->func)) === 0) continue;
 
         $fc = trim($module->func ?? "");
