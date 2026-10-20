@@ -21,7 +21,6 @@ import { useRef, useState } from "react";
 import "../css/sourcesPopup.css";
 
 import editIcon from "../assets/edit.svg";
-import freesourceIcon from "../assets/freesource.svg";
 import plusIcon from "../assets/plus.svg";
 import trashIcon from "../assets/trash.svg";
 import useDropdownToolbarMenuPlacing from "../hooks/useDropdownToolbarMenuPlacing.jsx";

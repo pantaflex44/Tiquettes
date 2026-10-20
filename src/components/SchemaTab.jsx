@@ -28,7 +28,6 @@ import noautoAddRpsIcon from "../assets/no-auto-add-rps.svg";
 import nogroundIcon from "../assets/noground.svg";
 import nomonitorIcon from "../assets/nomonitor.svg";
 import numbersIcon from "../assets/numbers.svg";
-import prefixIcon from "../assets/prefixren.svg";
 import sourcesIcon from "../assets/sources.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
@@ -51,7 +50,7 @@ export default function SchemaTab({
 }) {
 	const [monitorOpened, setMonitorOpened] = useState(false);
 	const [sourcesOpened, setSourcesOpened] = useState(false);
-	const [_prefixOpened, setPrefixOpened] = useState(false);
+	//const [_prefixOpened, _setPrefixOpened] = useState(false);
 	const [zoomed, setZoomed] = useState(false);
 	const monitorRef = useRef(null);
 

@@ -16,7 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function EditorLineSelector({
 	id,
@@ -31,6 +31,10 @@ export default function EditorLineSelector({
 		}
 		return v;
 	}, [value, suggested]);
+
+	useEffect(() => {
+		if (onChange) onChange(v);
+	}, [v]);
 
 	return (
 		<select

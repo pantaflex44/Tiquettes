@@ -1913,7 +1913,7 @@ class TiquettesPDF extends FPDF
                     $this->SetX($oldPosX);
                     $fname = _(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : '-');
                     $ftype = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? sprintf(_('Type %s'), trim($module->type)) : '') : '-';
-                    $fcrb = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '-';
+                    $fcrb = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] && trim($module->crb) !== "" ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '-';
                     $fsensibility = array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '-';
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
@@ -1954,7 +1954,7 @@ class TiquettesPDF extends FPDF
                 $this->SetX($this->pageMargin + $columns[0]['w'] + 5);
                 $this->Cell(0, 8, str(_("vide")), 0, 0, 'L');
 
-                $this->Ln(3);
+                $this->Ln(9);
             }
 
             $this->Ln(3);
@@ -1984,7 +1984,7 @@ class TiquettesPDF extends FPDF
                 if (!is_null($module) && ($module->func ?? '') !== '' && ($module->func ?? '') !== 'o'  && !$module->free) {
                     $fname = _(trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['name'] ?? '-') : ''));
                     $ftype = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? sprintf(_('Type %s'), trim($module->type)) : '') : '');
-                    $fcrb = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '');
+                    $fcrb = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasCrb'] && trim($module->crb) !== "" ? sprintf(_('Courbe %s'), trim($module->crb)) : '') : '');
                     $fsensibility = trim(array_key_exists($module->func, $schemaFunctions) ? trim($schemaFunctions[$module->func]['hasType'] ? $module->sensibility : '') : '');
                     $fcurrent = trim($module->current ?? "");
                     $fpole = trim($module->pole ?? '');
