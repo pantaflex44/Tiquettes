@@ -17,10 +17,9 @@
  */
 
 import "../css/row.css";
-import rowAddIcon from "../assets/row-add.svg";
-import rowDeleteIcon from "../assets/trash.svg";
-import LazyImage from "./LazyImage";
 import Module from "./Module";
+import RowActionsElement from "./RowActionsElement";
+import RowAddElement from "./RowAddElement";
 
 function Row({
 	rowPosition,
@@ -29,6 +28,8 @@ function Row({
 	theme,
 	clipboard,
 	clipboardMode,
+	isLastRow,
+	isFirstRow,
 	style = {},
 	onModuleGrow = null,
 	onModuleShrink = null,
@@ -50,7 +51,10 @@ function Row({
 	onModuleMoveRight = null,
 	onModuleHalf = null,
 	onRowAddAfter = null,
+	onRowAddBefore = null,
 	onRowDelete = null,
+	onRowMoveUp = null,
+	onRowMoveDown = null,
 	rowAddAllowed = null,
 	rowDeleteAllowed = null,
 	printFreeModuleAllowed = null,
@@ -61,25 +65,27 @@ function Row({
 			className={`switchboard_row row_${rowPosition}`}
 			id={`row_${rowPosition}`}
 		>
-			<div className="row_title">
-				<LazyImage
-					className={`row_delete_icon ${!rowDeleteAllowed() ? "disabled" : ""}`}
-					src={rowDeleteIcon}
-					width={20}
-					height={20}
-					alt="Supprimer cette rangée"
-					title="Supprimer cette rangée"
-					onClick={() => {
-						if (
-							confirm(
-								`Supprimer la rangée ${rowPosition} et tout ce qu'elle contient?`,
-							)
-						)
-							onRowDelete(rowIndex);
-					}}
+			{rowPosition === 1 && (
+				<RowAddElement
+					onRowAdd={onRowAddBefore}
+					rowIndex={rowIndex}
+					rowAddAllowed={rowAddAllowed}
+					isFirstRow={top}
 				/>
-				<span>Rangée {rowPosition}</span>
-			</div>
+			)}
+
+			<RowActionsElement
+				onRowDelete={onRowDelete}
+				onRowMoveUp={onRowMoveUp}
+				onRowMoveDown={onRowMoveDown}
+				rowIndex={rowIndex}
+				rowPosition={rowPosition}
+				rowAddAllowed={rowAddAllowed}
+				rowDeleteAllowed={rowDeleteAllowed}
+				isLastRow={isLastRow}
+				isFirstRow={isFirstRow}
+			/>
+
 			<div className="row" style={style}>
 				{items.map((item, i) => (
 					<Module
@@ -122,27 +128,13 @@ function Row({
 					/>
 				))}
 			</div>
-			<div
-				className={`row_add ${!rowAddAllowed() ? "disabled" : ""}`}
-				title="Insérer une nouvelle rangée"
-			>
-				<LazyImage
-					className="row_add_icon"
-					src={rowAddIcon}
-					width={24}
-					height={24}
-					alt="Ajouter une rangée"
-					onClick={() => onRowAddAfter(rowIndex)}
-				/>
-				{rowAddAllowed() ? (
-					<div className="row_add_info" onClick={() => onRowAddAfter(rowIndex)}>
-						Insérer une nouvelle rangée ici
-					</div>
-				) : (
-					<div className="row_add_info">Nombre de rangées maximum atteint</div>
-				)}
-				<div className="row_action_line"></div>
-			</div>
+
+			<RowAddElement
+				onRowAdd={onRowAddAfter}
+				rowIndex={rowIndex}
+				rowAddAllowed={rowAddAllowed}
+				isFirstRow={false}
+			/>
 		</div>
 	);
 }

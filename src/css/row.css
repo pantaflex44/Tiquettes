@@ -46,13 +46,22 @@
 }
 
 .row_add {
-	margin-top: 40px;
+	margin-top: 2em;
+	margin-bottom: 0;
+	padding-block: 1em;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	justify-content: start;
 	align-items: center;
 	column-gap: 1em;
+	/*border-top: 1px dashed #ccc;
+	border-bottom: 1px dashed #ccc;*/
+}
+
+.row_add.top {
+	margin-top: 2em;
+	margin-bottom: 2em;
 }
 
 .row_add_icon {
@@ -80,12 +89,12 @@
 	cursor: pointer;
 }
 
-.row_delete_icon {
+.row_action_icon {
 	cursor: pointer;
 }
 
-.row_delete_icon.disabled {
-	filter: grayscale() opacity(0.5);
+.row_action_icon.disabled {
+	filter: grayscale() opacity(0.4);
 	pointer-events: none;
 }
 
@@ -110,7 +119,7 @@
 	}
 
 	.row_add,
-	.row_delete_icon {
+	.row_action_icon {
 		display: none;
 	}
 }

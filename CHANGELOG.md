@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.9] - 2026-10-18
+## [2.2.9] - 2026-10-25
 
 ### Corrections
 
@@ -25,6 +25,8 @@
 
 ### Ajouts
 
+- [[Discussion #107](https://github.com/pantaflex44/Tiquettes/discussions/107)] Ajout des raccourcis clavier 'Escape' et 'Enter' dans les fenêtres secondaires. Un appuie sur la touche 'Entrée' valide les changements et ferme la fenêtre, 'Echap' abandonne les modifications.
+- [[Discussion #107](https://github.com/pantaflex44/Tiquettes/discussions/107)] Ajout de fonctions pour la manipulation des rangées et la possibilité d'insérer une rangée tout en haut du panneau.
 - [[Issue #103](https://github.com/pantaflex44/Tiquettes/issues/103)] Ajout d'un système de mémorisation du projet et de ses paramètres sur l'ordinateur de l'utilisateur (auto-enregistrement).
 - Ajout du pictogramme 'Boite de dérivation' suite à la demande d'Alain S.
 - [[Discussion #98](https://github.com/pantaflex44/Tiquettes/discussions/98)] Modification de l'API 'toPdf' ajoutant la possibilité de traduire en Français, Anglais, Espagnol et Allemand le projet imprimé.

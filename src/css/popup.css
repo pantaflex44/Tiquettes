@@ -253,6 +253,21 @@ body:has(.popup-overflow) {
 	column-gap: 0.25em;
 }
 
+.popup_row.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	justify-content: flex-start;
+	align-items: flex-start;
+	column-gap: 1em;
+}
+
+.popup_grid-item {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	row-gap: 0.5em;
+}
+
 .popup_row input,
 .popup_row textarea {
 	padding: 0.5em;

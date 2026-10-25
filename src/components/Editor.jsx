@@ -23,6 +23,7 @@ import numberAutoIcon from "../assets/numbers_auto.svg";
 import numberManIcon from "../assets/numbers_man.svg";
 import switchboardIcon from "../assets/project.svg";
 import schemaIcon from "../assets/schema.svg";
+//import useKeyPress from "../hooks/useKeyPress.jsx";
 import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
@@ -281,11 +282,14 @@ export default function Editor({
 	}, [hasBlankId]);
 
 	const [fidc, setFidc] = useState(false);
-	useEffect(() => {
-		if (fidc) {
-			console.log(ed.currentModule.id);
+
+	const deleteModule = () => {
+		if (onHandleModuleClear(ed.rowIndex, ed.moduleIndex, ed.currentModule)) {
+			onSetEditor(null);
 		}
-	}, [fidc, ed.currentModule.id]);
+	};
+
+	//useKeyPress("Delete", deleteModule, true);
 
 	return (
 		ed && (
@@ -323,15 +327,7 @@ export default function Editor({
 					{
 						text: "Supprimer",
 						callback: () => {
-							if (
-								onHandleModuleClear(
-									ed.rowIndex,
-									ed.moduleIndex,
-									ed.currentModule,
-								)
-							) {
-								onSetEditor(null);
-							}
+							deleteModule();
 						},
 						style: { color: "red", borderColor: "red" },
 						disabled: ed.currentModule.free,
@@ -862,22 +858,6 @@ export default function Editor({
 									</div>
 								)}
 
-							{schemaFunctions[ed.currentModule.func]?.hasType && (
-								<div
-									className="popup_row"
-									style={{ "--left_column_size": "120px" }}
-								>
-									<label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>
-										Type
-									</label>
-									<EditorTypeSelector
-										id={`editor_type_${ed.currentModule.id.trim()}`}
-										value={ed.currentModule.type}
-										onChange={(value) => onUpdateModuleEditor({ type: value })}
-									/>
-								</div>
-							)}
-
 							{schemaFunctions[ed.currentModule.func]?.hasCrb && (
 								<div
 									className="popup_row"
@@ -890,6 +870,42 @@ export default function Editor({
 										id={`editor_crb_${ed.currentModule.id.trim()}`}
 										value={ed.currentModule.crb}
 										onChange={(value) => onUpdateModuleEditor({ crb: value })}
+									/>
+								</div>
+							)}
+
+							{schemaFunctions[ed.currentModule.func]?.hasCurrent && (
+								<div
+									className="popup_row"
+									style={{ "--left_column_size": "120px" }}
+								>
+									<label
+										htmlFor={`editor_current_${ed.currentModule.id.trim()}`}
+									>
+										Calibre
+									</label>
+									<EditorCurrentSelector
+										id={`editor_current_${ed.currentModule.id.trim()}`}
+										value={ed.currentModule.current}
+										onChange={(value) =>
+											onUpdateModuleEditor({ current: value })
+										}
+									/>
+								</div>
+							)}
+
+							{schemaFunctions[ed.currentModule.func]?.hasType && (
+								<div
+									className="popup_row"
+									style={{ "--left_column_size": "120px" }}
+								>
+									<label htmlFor={`editor_type_${ed.currentModule.id.trim()}`}>
+										Type
+									</label>
+									<EditorTypeSelector
+										id={`editor_type_${ed.currentModule.id.trim()}`}
+										value={ed.currentModule.type}
+										onChange={(value) => onUpdateModuleEditor({ type: value })}
 									/>
 								</div>
 							)}
@@ -934,26 +950,6 @@ export default function Editor({
 										value={ed.currentModule.kcType ?? "NO"}
 										onChange={(value) =>
 											onUpdateModuleEditor({ kcType: value })
-										}
-									/>
-								</div>
-							)}
-
-							{schemaFunctions[ed.currentModule.func]?.hasCurrent && (
-								<div
-									className="popup_row"
-									style={{ "--left_column_size": "120px" }}
-								>
-									<label
-										htmlFor={`editor_current_${ed.currentModule.id.trim()}`}
-									>
-										Calibre
-									</label>
-									<EditorCurrentSelector
-										id={`editor_current_${ed.currentModule.id.trim()}`}
-										value={ed.currentModule.current}
-										onChange={(value) =>
-											onUpdateModuleEditor({ current: value })
 										}
 									/>
 								</div>

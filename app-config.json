@@ -35,7 +35,7 @@
 	],
 	"changelog": {
 		"2.2.9": {
-			"date": "2026-10-18",
+			"date": "2026-10-25",
 			"actions": {
 				"patches": [
 					{
@@ -99,6 +99,20 @@
 					}
 				],
 				"adds": [
+					{
+						"text": "Ajout des raccourcis clavier 'Escape' et 'Enter' dans les fenêtres secondaires. Un appuie sur la touche 'Entrée' valide les changements et ferme la fenêtre, 'Echap' abandonne les modifications.",
+						"from": {
+							"name": "Discussion #107",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/107"
+						}
+					},
+					{
+						"text": "Ajout de fonctions pour la manipulation des rangées et la possibilité d'insérer une rangée tout en haut du panneau.",
+						"from": {
+							"name": "Discussion #107",
+							"link": "https://github.com/pantaflex44/Tiquettes/discussions/107"
+						}
+					},
 					{
 						"text": "Ajout d'un système de mémorisation du projet et de ses paramètres sur l'ordinateur de l'utilisateur (auto-enregistrement).",
 						"from": {

@@ -2100,7 +2100,7 @@ function App() {
 		);
 	};
 
-	const handleRowAddAfter = (rowIndex) => {
+	const handleRowAdd = (rowIndex) => {
 		const rows = switchboard.rows;
 		if (rows.length >= rowsMax) {
 			alert(
@@ -2110,9 +2110,17 @@ function App() {
 		}
 
 		const newRow = createRow(switchboard.stepsPerRows, 1);
-		rows.splice(rowIndex + 1, 0, ...newRow);
+		rows.splice(rowIndex, 0, ...newRow);
 
 		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+	};
+
+	const handleRowAddBefore = (rowIndex) => {
+		handleRowAdd(rowIndex);
+	};
+
+	const handleRowAddAfter = (rowIndex) => {
+		handleRowAdd(rowIndex + 1);
 	};
 
 	const handleRowDelete = (rowIndex) => {
@@ -2122,8 +2130,42 @@ function App() {
 		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
 	};
 
+	const handleRowMove = (rowIndex, toRowIndex) => {
+		const rows = switchboard.rows;
+		const r = rows[rowIndex];
+		rows[rowIndex] = rows[toRowIndex];
+		rows[toRowIndex] = r;
+
+		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+
+		const e = document.getElementById(`row_${toRowIndex}`);
+		if (e) {
+			e.scrollIntoView({
+				behavior: "smooth",
+				block: "start",
+				inline: "start",
+			});
+		}
+	};
+
+	const handleRowMoveUp = (rowIndex) => {
+		if (rowIndex <= 0) return;
+
+		handleRowMove(rowIndex, rowIndex - 1);
+	};
+
+	const handleRowMoveDown = (rowIndex) => {
+		if (isLastRow(rowIndex)) return;
+
+		handleRowMove(rowIndex, rowIndex + 1);
+	};
+
 	const rowAddAllowed = () => {
 		return switchboard.rows.length < rowsMax;
+	};
+
+	const isLastRow = (rowIndex) => {
+		return rowIndex >= switchboard.rows.length - 1;
 	};
 
 	const rowDeleteAllowed = () => {
@@ -3708,9 +3750,14 @@ function App() {
 							moduleMoveRightAllowed(i, moduleIndex, item)
 						}
 						onRowAddAfter={(rowIndex) => handleRowAddAfter(rowIndex)}
+						onRowAddBefore={(rowIndex) => handleRowAddBefore(rowIndex)}
 						onRowDelete={(rowIndex) => handleRowDelete(rowIndex)}
+						onRowMoveUp={(rowIndex) => handleRowMoveUp(rowIndex)}
+						onRowMoveDown={(rowIndex) => handleRowMoveDown(rowIndex)}
 						rowAddAllowed={() => rowAddAllowed()}
 						rowDeleteAllowed={() => rowDeleteAllowed()}
+						isLastRow={isLastRow(i)}
+						isFirstRow={i === 0}
 						printFreeModuleAllowed={() => printFreeModuleAllowed()}
 					/>
 				))}

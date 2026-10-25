@@ -25,6 +25,7 @@ import nextIcon from "../assets/arrow-right.svg";
 import okIcon from "../assets/check.svg";
 import loadingIcon from "../assets/loading_mini.gif";
 import cancelIcon from "../assets/x.svg";
+import useKeyPress from "../hooks/useKeyPress";
 import LazyImage from "./LazyImage";
 
 export default function Popup({
@@ -110,6 +111,9 @@ export default function Popup({
 		</div>
 	),
 }) {
+	useKeyPress("Enter", onOk, true);
+	useKeyPress("Escape", onCancel, true);
+
 	const buttons = useMemo(
 		() => ({
 			close: showCloseButton,
