@@ -2,7 +2,7 @@ name: FTP Deploy (tiquettes.fr - DEV)
 
 on:
   push:
-    branches: ['dev']
+    branches: ["dev"]
 
   workflow_dispatch:
 
@@ -36,9 +36,9 @@ jobs:
           user: ${{ secrets.FTPUSERNAME }}
           pass: ${{ secrets.FTPPASSWORD }}
           onlyNewer: true
-          settings: 'sftp:auto-confirm=yes'
-          localDir: './dist'
-          remoteDir: '/public/dev'
+          settings: "sftp:auto-confirm=yes"
+          localDir: "./dist"
+          remoteDir: "/public/dev"
           reverse: true
           parallel: 4
-          options: 'delete'
+          options: "delete"

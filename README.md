@@ -4,7 +4,6 @@ Générateur d'étiquettes pour tableaux / armoires électriques.
 
 ---
 
-
 [<img alt="URL" src="https://img.shields.io/badge/🠊-https://www.tiquettes.fr-%3CCOLOR%3E?style=for-the-badge&color=darkcyan&labelColor=darkcyan">](https://www.tiquettes.fr)
 
 <a href="https://www.tiquettes.fr/dons.php" style="text-decoration: none; background: black; color: white; padding-inline: 1.5rem; padding-block: 1rem; font-size: 0.9rem; font-weight: 600; margin: 0;">Soutenir l'application en faisant un don <span style="color: red; margin-left: 0.5rem; font-size: 1.1rem;">♥</span></a>
@@ -50,39 +49,39 @@ Terminées, l'écriture manuscrite, les façades chaotiques et incompréhensible
 ## Sommaire
 
 - [Etiquetter son tableau électrique, plus qu'une affaire de design](#etiquetter-son-tableau-électrique-plus-quune-affaire-de-design)
-    - [La sécurité avant tout](#la-sécurité-avant-tout)
+  - [La sécurité avant tout](#la-sécurité-avant-tout)
     - [Au premier coup d'œil](#au-premier-coup-dœil)
 - [Le projet](#le-projet)
-    - [Créer un nouveau projet libre](#créer-un-nouveau-projet-libre)
+  - [Créer un nouveau projet libre](#créer-un-nouveau-projet-libre)
     - [Importer un projet](#importer-un-projet)
     - [Exporter son travail](#exporter-son-travail)
 - [L'espace de travail](#lespace-de-travail)
-    - [Descriptif](#descriptif)
+  - [Descriptif](#descriptif)
     - [Résumé du projet](#résumé-du-projet)
     - [Menu contextuel du haut](#menu-contextuel-du-haut)
     - [Menu contextuel du bas](#menu-contextuel-du-bas)
-        - [Copier / Couper / Coller](#copier--couper--coller)
+      - [Copier / Couper / Coller](#copier--couper--coller)
         - [Supprimer](#supprimer)
         - [Inter-changer](#inter-changer)
-    - [Manipuler les rangées](#manipuler-les-rangées)
+        - [Manipuler les rangées](#manipuler-les-rangées)
 - [Édition d'un module](#édition-dun-module)
-    - [Les actions disponibles](#les-actions-disponibles)
+  - [Les actions disponibles](#les-actions-disponibles)
     - [Les pictogrammes](#les-pictogrammes)
     - [Les groupes](#les-groupes)
 - [Décorer ses étiquettes](#décorer-ses-étiquettes)
-    - [Personnaliser la décoration](#personnaliser-la-décoration)
+  - [Personnaliser la décoration](#personnaliser-la-décoration)
     - [Bibliothèque de thèmes](#bibliothèque-de-thèmes)
 - [Schéma unifilaire](#schéma-unifilaire)
-    - [Édition des caractéristiques](#édition-des-caractéristiques)
-        - [L'asservissement](#lasservissement)
-        - [Allocation d'un module a ses enfants](#allocation-dun-module-a-ses-enfants)
-        - [Les liens de parenté](#les-liens-de-parenté)
+  - [Édition des caractéristiques](#édition-des-caractéristiques)
+    - [L'asservissement](#lasservissement)
+    - [Allocation d'un module a ses enfants](#allocation-dun-module-a-ses-enfants)
+    - [Les liens de parenté](#les-liens-de-parenté)
     - [Génération du schéma unifilaire](#génération-du-schéma-unifilaire)
-        - [Les sources d'alimentations](#les-sources-dalimentations)
+      - [Les sources d'alimentations](#les-sources-dalimentations)
 - [Moniteur de surveillance](#moniteur-de-surveillance)
 - [Nomenclature / Résumé](#nomenclature--résumé)
 - [Impression](#impression)
-    - [Page de garde](#page-de-garde)
+  - [Page de garde](#page-de-garde)
     - [Etiquettes](#etiquettes)
     - [Schéma unifilaire](#schéma-unifilaire)
     - [Nomenclature](#nomenclature)
@@ -313,7 +312,7 @@ Pour supprimer une rangée, cliquez sur l'icône `Corbeille`, à gauche du nom d
 > ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
-> dans l'onglet ```Éditeur``` et ```Schéma```.
+> dans l'onglet `Éditeur` et `Schéma`.
 
 Une option est disponible dans l'éditeur de modules permettant d'empêcher ou non le réassignement automatique de l'identifiant d'un module:
 
@@ -328,10 +327,10 @@ En cliquant sur l'icône correspondante, vous pouvez bloquer l'identifiant actue
 > Pour s'adapter au mieux à la résolution de vos écrans, l'application possède une zone de travail fixe et définie pour une enveloppe de 13 modules. Toutefois, si vous possédez un écran plus grand ou si vous travaillez avec une plus grande résolution, Tiquettes.fr vous propose d'adapter la zone de travaille automatiquement en fonction du nombre de modules par rangée.
 >
 > <small>**Taille de la zone de travail par défaut**</small><br />
->![Taille de la zone de travail par défaut](./docs/_autoResizeOff.png)
+> ![Taille de la zone de travail par défaut](./docs/_autoResizeOff.png)
 >
 > <small>**Taille de la zone de travail avec redimensionnement automatique**</small><br />
->![Taille de la zone de travail par défaut](./docs/_autoResizeOn.png)
+> ![Taille de la zone de travail par défaut](./docs/_autoResizeOn.png)
 
 <div id="édition-dun-module"></div>
 
@@ -355,7 +354,7 @@ temps réel.
 >
 > Il est parfois difficile de suivre les identifiants déjà utilisés par les précédents modules, c'est pourquoi un bouton
 > est à votre disposition pour trouver automatiquement le dernier identifiant libre correspondant à la fonction du module
-> définie dans l'onglet ```Schéma```.
+> définie dans l'onglet `Schéma`.
 
 <div id="les-actions-disponibles"></div>
 
@@ -489,7 +488,7 @@ Tiquettes.fr propose une bibliothèque de thèmes que vous pouvez importer pour 
 Depuis la version 2.0.0, Tiquettes propose la génération semi-automatique d'un schéma unifilaire représentatif du
 tableau électrique conçu par vos soins.
 
-La fenêtre d’édition d'un module possède désormais un nouvel onglet ```Schéma``` permettant de définir les
+La fenêtre d’édition d'un module possède désormais un nouvel onglet `Schéma` permettant de définir les
 caractéristiques techniques du module:
 
 ![Édition des caractéristiques techniques](./docs/_popup_schema.png)
@@ -555,7 +554,7 @@ Une manière simple et rapide d'indiquer à l'application que vous souhaitez par
 
 Un montage électrique possède bien souvent une hiérarchie. Cette notion peut se caractériser par des liens de parenté. Un disjonteur protégeant un circuit, va être un des enfants d'un interrupteur différentiel, qui lui, pourra être l'enfant d'un sectionneur générale, etc.
 
-Cette hiérarchie se traduit par un sélecteur dans l'édition d'un module, onglet ```Schéma```:
+Cette hiérarchie se traduit par un sélecteur dans l'édition d'un module, onglet `Schéma`:
 
 ![Les parents](./docs/_schema_parents.png)
 
@@ -568,7 +567,7 @@ Une liste vous propose les différents modules présents dans votre tableau éle
 
 La génération dépend à 100% des données que vous aurez renseignées lors de l'édition d'un module.
 
-Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du tableau de bord :
+Le schéma généré en temps réel est accessible via l'onglet `Schéma` du tableau de bord :
 
 ![Schéma unifilaire](./docs/_schema.png)
 
@@ -577,16 +576,16 @@ Le schéma généré en temps réel est accessible via l'onglet ```Schéma``` du
 > ![Auto ID](./docs/_auto_id.png)
 >
 > A tout moment, vous pouvez ré-assigner l'ensemble des identifiants votre projet en cliquant sur ce bouton (accessible
-> dans l'onglet ```Éditeur``` et ```Schéma```.
+> dans l'onglet `Éditeur` et `Schéma`.
 
 
 Pour éditer un module, il suffit juste de cliquer dessus ;-)
 
 ![Schéma unifilaire](./docs/_schema_editor.png)
 
-Au-dessus du schéma vous retrouverez l'espace ```barre à outils``` vous proposant dans cet onglet, différents réglages.
+Au-dessus du schéma vous retrouverez l'espace `barre à outils` vous proposant dans cet onglet, différents réglages.
 
-Pour commencer, vous avez la possibilité d'ajouter un ```Disjoncteur de branchement``` à votre schéma. Vous pouvez
+Pour commencer, vous avez la possibilité d'ajouter un `Disjoncteur de branchement` à votre schéma. Vous pouvez
 l'activer ou le désactiver en utilisant cette
 icône ![Disjoncteur de branchement](./docs/_icon_db.svg).
 Différents réglages sont disponibles pour s'adapter au mieux à votre besoin.
@@ -752,13 +751,13 @@ pour aider à leur installation
 
 
 ![Image 1](./docs/_labels_print_free.png)
-<small>*image 1*</small>
+<small>_image 1_</small>
 
 ![Image 2](./docs/_labels_print_cut.png)
-<small>*image 2*</small>
+<small>_image 2_</small>
 
 ![Image 3](./docs/_labels_print_current.png)
-<small>*image 3*</small>
+<small>_image 3_</small>
 
 <div id="schéma-unifilaire"></div>
 
@@ -766,7 +765,7 @@ pour aider à leur installation
 
 ![Menu - Schéma unifilaire](./docs/_print_menu_schema.png)
 
-Tiquettes.fr vous propose la génération semi automatique du schéma unifilaire associé à votre tableau électrique. 
+Tiquettes.fr vous propose la génération semi automatique du schéma unifilaire associé à votre tableau électrique.
 
 En cas de rénovation vous avez la possibilité de démarrer le Folio à la page de votre choix.
 
@@ -814,7 +813,7 @@ Votre choix fait, il ne vous reste plus qu'à cliquer sur l'icone de télécharg
 
 **Résolutions**: Les appareils ont différentes résolutions. Pour mieux adapter la qualité des images produites à chaque appareil, veillez à correctement renseigner ces valeurs.
 
-**Hauteur du ruban**: Largeur / Hauteur du ruban sur lequel sera imprimé les  rangées.
+**Hauteur du ruban**: Largeur / Hauteur du ruban sur lequel sera imprimé les rangées.
 
 **Largeur des modules**: Largeur des modules du tableau électrique.
 
@@ -856,6 +855,3 @@ Si vous souhaitez nous soutenir, c'est par ici: [Faire un don](https://www.tique
 [Tiquettes.fr : faites vos tableaux électriques en OpenSource](https://www.minimachines.net/actu/tiquettes-tableaux-electrique-141182) (**[MiniMachines.net](https://www.minimachines.net)**)
 
 [Logiciel gratuit pour imprimer les étiquettes de tableau](https://forum.gce-electronics.com/t/logiciel-gratuit-pour-imprimer-les-etiquettes-de-tableau/19416) (**[Forum GCE Electronics](https://forum.gce-electronics.com)**)
-
-
-

@@ -1355,6 +1355,8 @@ class TiquettesPDF extends FPDF
         global $switchboard, $schemaPrintFormat;
 
         $sources = $switchboard->sources ?? [];
+        var_dump($sources);
+        die();
         if (count($sources) === 0) return;
 
         $this->grid = false;
@@ -2094,6 +2096,7 @@ $schemaFolioStart = intval($printOptions->pdfOptions?->schemaFolioStart ?? 1);
 $flattenModules = [];
 
 $sources = array_values(array_filter($switchboard->sources ?? [], fn($s) => is_object($s) && $s->id));
+$switchboard->sources = $sources;
 $findSource = function ($id) use ($sources) {
     return array_find($sources, fn($s) => $s->id === $id);
 };
