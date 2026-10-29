@@ -86,47 +86,49 @@ function Row({
 				isFirstRow={isFirstRow}
 			/>
 
-			<div className="row" style={style}>
-				{items.map((item, i) => (
-					<Module
-						key={i}
-						item={item}
-						modulePosition={i + 1}
-						rowPosition={rowPosition}
-						theme={theme}
-						clipboard={clipboard}
-						clipboardMode={clipboardMode}
-						style={{
-							"--h": style["--h"],
-							"--sw": style["--sw"],
-						}}
-						onGrow={(item, moduleRef) => onModuleGrow(i, item, moduleRef)}
-						onShrink={(item, moduleRef) => onModuleShrink(i, item, moduleRef)}
-						onClear={(item) => onModuleClear(i, item)}
-						onEdit={(item) => onModuleEdit(i, item)}
-						onCopy={(item) => onModuleCopy(i, item)}
-						onCut={(item) => onModuleCut(i, item)}
-						onPaste={(item) => onModulePaste(i, item)}
-						onInter={(item) => onModuleInter(i, item)}
-						onInterCopy={(item) => onModuleInterCopy(i, item)}
-						cancelPaste={() => onModuleCancelPaste()}
-						pasteAllowed={(item) => modulePasteAllowed(i, item)}
-						interAllowed={(item) => moduleInterAllowed(i, item)}
-						hasClipboard={hasClipboard}
-						shrinkAllowed={(item) => moduleShrinkAllowed(i, item)}
-						growAllowed={(item) => moduleGrowAllowed(i, item)}
-						moveLeftAllowed={(item) => moduleMoveLeftAllowed(i, item)}
-						moveRightAllowed={(item) => moduleMoveRightAllowed(i, item)}
-						onMoveLeft={(item, moduleRef) =>
-							onModuleMoveLeft(i, item, moduleRef)
-						}
-						onMoveRight={(item, moduleRef) =>
-							onModuleMoveRight(i, item, moduleRef)
-						}
-						onHalf={(item, mode) => onModuleHalf(i, item, mode)}
-						printFreeModuleAllowed={() => printFreeModuleAllowed()}
-					/>
-				))}
+			<div className="row_container">
+				<div className="row" style={style}>
+					{items.map((item, i) => (
+						<Module
+							key={i}
+							item={item}
+							modulePosition={i + 1}
+							rowPosition={rowPosition}
+							theme={theme}
+							clipboard={clipboard}
+							clipboardMode={clipboardMode}
+							style={{
+								"--h": style["--h"],
+								"--sw": style["--sw"],
+							}}
+							onGrow={(item, moduleRef) => onModuleGrow(i, item, moduleRef)}
+							onShrink={(item, moduleRef) => onModuleShrink(i, item, moduleRef)}
+							onClear={(item) => onModuleClear(i, item)}
+							onEdit={(item) => onModuleEdit(i, item)}
+							onCopy={(item) => onModuleCopy(i, item)}
+							onCut={(item) => onModuleCut(i, item)}
+							onPaste={(item) => onModulePaste(i, item)}
+							onInter={(item) => onModuleInter(i, item)}
+							onInterCopy={(item) => onModuleInterCopy(i, item)}
+							cancelPaste={() => onModuleCancelPaste()}
+							pasteAllowed={(item) => modulePasteAllowed(i, item)}
+							interAllowed={(item) => moduleInterAllowed(i, item)}
+							hasClipboard={hasClipboard}
+							shrinkAllowed={(item) => moduleShrinkAllowed(i, item)}
+							growAllowed={(item) => moduleGrowAllowed(i, item)}
+							moveLeftAllowed={(item) => moduleMoveLeftAllowed(i, item)}
+							moveRightAllowed={(item) => moduleMoveRightAllowed(i, item)}
+							onMoveLeft={(item, moduleRef) =>
+								onModuleMoveLeft(i, item, moduleRef)
+							}
+							onMoveRight={(item, moduleRef) =>
+								onModuleMoveRight(i, item, moduleRef)
+							}
+							onHalf={(item, mode) => onModuleHalf(i, item, mode)}
+							printFreeModuleAllowed={() => printFreeModuleAllowed()}
+						/>
+					))}
+				</div>
 			</div>
 
 			<RowAddElement

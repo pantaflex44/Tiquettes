@@ -16,6 +16,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.row_container {
+	background-color: #fdfdfd;
+	border: 1px solid #e5e5e5;
+	padding: 1em;
+	padding-top: 3.1em;
+	border-radius: 7px;
+}
+
 .row {
 	border: 1px solid darkgray;
 	display: flex;
@@ -32,7 +40,7 @@
 .row_title {
 	color: black;
 	font-size: smaller;
-	margin-bottom: 40px;
+	margin-bottom: 0;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
@@ -46,7 +54,7 @@
 }
 
 .row_add {
-	margin-top: 2em;
+	margin-top: 0em;
 	margin-bottom: 0;
 	padding-block: 1em;
 	display: flex;
@@ -60,8 +68,8 @@
 }
 
 .row_add.top {
-	margin-top: 2em;
-	margin-bottom: 2em;
+	margin-top: 1em;
+	margin-bottom: 1.4em;
 }
 
 .row_add_icon {
