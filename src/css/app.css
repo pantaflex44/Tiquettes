@@ -157,7 +157,7 @@ h4 {
 	flex-wrap: nowrap;
 	gap: 0.5em;
 	width: max-content;
-	margin-bottom: 1em;
+	margin-bottom: 0em;
 	margin-inline: 2em;
 	margin-top: 0;
 	padding-bottom: 1em;
