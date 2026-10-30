@@ -1083,9 +1083,7 @@ function App() {
 								? rowPositionMax
 								: x < rowPositionMin
 									? rowPositionMin
-									: x > rowPositionMax
-										? rowPositionMax
-										: x,
+									: Math.min(x, rowPositionMax),
 						);
 
 					const min = Math.min(...sp);

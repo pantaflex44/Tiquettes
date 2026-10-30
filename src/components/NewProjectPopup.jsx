@@ -28,6 +28,33 @@ import FirstpageOptionsPopup from "./FirstpageSettingsPopup.jsx";
 import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
 
+const Summary = ({ step }) => {
+	return (
+		<>
+			<span
+				className={`wizard-page-left-title ${step === 1 ? "current" : ""}`.trim()}
+			>
+				Bienvenue !
+			</span>
+			<span
+				className={`wizard-page-left-title ${step === 2 ? "current" : ""}`.trim()}
+			>
+				Mon enveloppe
+			</span>
+			<span
+				className={`wizard-page-left-title ${step === 3 ? "current" : ""}`.trim()}
+			>
+				Données du projet
+			</span>
+			<span
+				className={`wizard-page-left-title ${step === 4 ? "current" : ""}`.trim()}
+			>
+				Résumons
+			</span>
+		</>
+	);
+};
+
 export default function NewProjectPopup({
 	onCancel,
 	onApply,
@@ -69,33 +96,6 @@ export default function NewProjectPopup({
 		onApply(properties);
 	};
 
-	const Summary = () => {
-		return (
-			<>
-				<span
-					className={`wizard-page-left-title ${step === 1 ? "current" : ""}`.trim()}
-				>
-					Bienvenue !
-				</span>
-				<span
-					className={`wizard-page-left-title ${step === 2 ? "current" : ""}`.trim()}
-				>
-					Mon enveloppe
-				</span>
-				<span
-					className={`wizard-page-left-title ${step === 3 ? "current" : ""}`.trim()}
-				>
-					Données du projet
-				</span>
-				<span
-					className={`wizard-page-left-title ${step === 4 ? "current" : ""}`.trim()}
-				>
-					Résumons
-				</span>
-			</>
-		);
-	};
-
 	return (
 		<>
 			<Popup
@@ -127,7 +127,7 @@ export default function NewProjectPopup({
 				{step === 1 && (
 					<div className="wizard-page" data-step={step}>
 						<div className="wizard-page-left">
-							<Summary />
+							<Summary step={step} />
 						</div>
 						<div className="wizard-page-right">
 							<h3>
@@ -148,11 +148,13 @@ export default function NewProjectPopup({
 				{step === 2 && (
 					<div className="wizard-page" data-step={step}>
 						<div className="wizard-page-left">
-							<Summary />
+							<Summary step={step} />
 
 							<LazyImage
 								className="wizard-page-left-picture"
 								src={wizardPicture2src}
+								width={null}
+								height={null}
 							/>
 							<span className="wizard-page-tooltip">{tooltipBox}</span>
 						</div>
@@ -352,7 +354,7 @@ export default function NewProjectPopup({
 				{step === 3 && (
 					<div className="wizard-page" data-step={step}>
 						<div className="wizard-page-left">
-							<Summary />
+							<Summary step={step} />
 						</div>
 						<div className="wizard-page-right">
 							<h3>
@@ -415,7 +417,7 @@ export default function NewProjectPopup({
 				{step === 4 && (
 					<div className="wizard-page" data-step={step}>
 						<div className="wizard-page-left">
-							<Summary />
+							<Summary step={step} />
 						</div>
 						<div className="wizard-page-right">
 							<h3>Résumons votre projet</h3>
