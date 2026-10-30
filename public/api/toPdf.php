@@ -1355,8 +1355,6 @@ class TiquettesPDF extends FPDF
         global $switchboard, $schemaPrintFormat;
 
         $sources = $switchboard->sources ?? [];
-        var_dump($sources);
-        die();
         if (count($sources) === 0) return;
 
         $this->grid = false;
