@@ -67,6 +67,7 @@ export default function Editor({
 	const [ed, setEd] = useState(editor);
 	const [isCustomFunction, setIsCustomFunction] = useState(false);
 	const [internalPopupOpened, setInternalPopupOpened] = useState(false);
+	const [noEnterKeyPressAllowed, setNoEnterKeyPressAllowed] = useState(false);
 
 	const [editorTab, setEditorTab] = useState(ed?.tabPage ?? "main");
 	/*const prevModule = useMemo(
@@ -333,6 +334,7 @@ export default function Editor({
 						disabled: ed.currentModule.free,
 					},
 				]}
+				noEnterKeyPressAllowed={noEnterKeyPressAllowed}
 			>
 				<div className="popup_rows" style={{ minHeight: "700px" }}>
 					<div className={"editor_tabpages"}>
@@ -480,6 +482,8 @@ export default function Editor({
 									}
 									rows={3}
 									autoFocus={!!(ed?.focusedInputName === "text")}
+									onFocus={() => setNoEnterKeyPressAllowed(true)}
+									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
 							</div>
 
@@ -647,8 +651,10 @@ export default function Editor({
 									onChange={(e) =>
 										onUpdateModuleEditor({ desc: e.target.value })
 									}
-									rows={2}
+									rows={5}
 									autoFocus={!!(ed?.focusedInputName === "desc")}
+									onFocus={() => setNoEnterKeyPressAllowed(true)}
+									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
 							</div>
 

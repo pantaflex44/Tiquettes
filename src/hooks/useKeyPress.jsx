@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 
-function useKeyPress(targetKey, callback = null, preventDefault = false) {
+function useKeyPress(
+	targetKey,
+	callback = null,
+	preventDefault = false,
+	activated = true,
+) {
 	const [keyPressed, setKeyPressed] = useState(false);
 
 	useEffect(() => {
 		const downHandler = (e) => {
-			if (e.key === targetKey) {
+			if (e.key === targetKey && activated) {
 				if (preventDefault) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -15,7 +20,7 @@ function useKeyPress(targetKey, callback = null, preventDefault = false) {
 			}
 		};
 		const upHandler = (e) => {
-			if (e.key === targetKey) {
+			if (e.key === targetKey && activated) {
 				if (preventDefault) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -32,7 +37,7 @@ function useKeyPress(targetKey, callback = null, preventDefault = false) {
 			window.removeEventListener("keydown", downHandler);
 			window.removeEventListener("keyup", upHandler);
 		};
-	}, [targetKey]);
+	}, [targetKey, activated]);
 
 	return keyPressed;
 }

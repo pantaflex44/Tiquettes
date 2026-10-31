@@ -283,17 +283,25 @@ class Theme
                 $oldX = $pdf->GetX();
                 $oldY = $pdf->GetY();
 
+                $dm = $data[$key]['displayMode'] ?? 'H';
+
                 $posX = $r['x'] + (($r['w'] - $data[$key]['place']['w']) / 2);
                 $largeMarginTop = ($firstKey === $key ? 0.5 : 0);
                 $largeMarginBottom = ($lastKey === $key ? 0.5 : 0);
+                $compens = (($r['h'] - $data[$key]['place']['h']) / ($dm === 'V' ? 1.5 : 2));
+                if (count(array_keys($data)) === 3) {
+                    $compens =  (($r['h'] - $data[$key]['place']['h']) / 4);
+                    if ($firstKey === $key) {
+                        $compens =  (($r['h'] - $data[$key]['place']['h']) / 6);
+                    }
+                }
                 $borderBottomMargin = ($lastKey === $key && $hasBottomBorder ? $borderBottomSize : 0);
                 $borderTopMargin = ($firstKey === $key && $hasTopBorder ? $borderTopSize : 0);
-                $posY = $r['y'] + $largeMarginTop - $largeMarginBottom + (($r['h'] - $data[$key]['place']['h']) / 2) + $borderBottomMargin - $borderTopMargin;
+                $posY = $r['y'] + $largeMarginTop - $largeMarginBottom + $compens + $borderBottomMargin - $borderTopMargin;
+
                 $pdf->SetXY($posX, $posY);
 
                 if ($key === 'id' || $key === 'text') { // draw text
-                    $dm = $data[$key]['displayMode'] ?? 'H';
-
                     self::setFgColor($pdf, $data[$key], $module);
                     $pdf->SetFont($data[$key]['fontFamily'], $data[$key]['fontStyle'], $data[$key]['fontSizePt']);
                     $txt = mb_convert_encoding($module->{$key}, 'windows-1252', 'UTF-8');
@@ -323,7 +331,9 @@ class Theme
 
                         $icon = $pdf->getIcon($module->icon, $color, 100);
                         if ($icon !== '') {
-                            $pdf->Image($icon, $posX, $posY, $data[$key]['place']['w'], $data[$key]['place']['w'], 'PNG');
+                            $sza = $data[$key]['place']['w'] * 0.90;
+                            $cpa = ($data[$key]['place']['w'] - $sza) / 2;
+                            $pdf->Image($icon, $posX + $cpa, $posY + $cpa, $sza, $sza, 'PNG');
                         }
                     } else if ($data[$key]['type'] === 'text') { // text format
                         $modtype = trim($module->modtype ?? "");

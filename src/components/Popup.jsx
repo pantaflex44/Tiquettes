@@ -110,8 +110,9 @@ export default function Popup({
 			<span className={"additional_buttons_text"}>Valider</span>
 		</div>
 	),
+	noEnterKeyPressAllowed = false,
 }) {
-	useKeyPress("Enter", onOk, true);
+	useKeyPress("Enter", onOk, true, !noEnterKeyPressAllowed);
 	useKeyPress("Escape", onCancel, true);
 
 	const buttons = useMemo(
