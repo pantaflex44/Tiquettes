@@ -51,7 +51,7 @@
         "preview": "vite preview --port 8080",
         "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
         "gitpush:dev": "func() { git checkout dev && npm run compile && git add . && git commit -m \"$1\" && git push origin dev; }; func",
-        "gitmerge:main": "func() { git checkout dev && git add . && git commit -m \"Fusion des branches 'dev' <> 'main'\" && git push origin dev && git checkout main && git merge dev -m \"Fusion des branches 'dev' <> 'main'\" && git push origin main && git checkout dev; }; func"
+        "gitmerge:main": "func() { git checkout dev && git add . && git commit -m \"Fusion des branches\" && git push origin dev && git checkout main && git merge dev -m \"Fusion des branches\" && git push origin main && git checkout dev; }; func"
     },
     "dependencies": {
         "@vite-pwa/assets-generator": "^2.0.0",
