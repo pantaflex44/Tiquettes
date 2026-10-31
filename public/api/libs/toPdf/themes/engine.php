@@ -250,17 +250,19 @@ class Theme
                     $lh = 0;
                 $data[$lastKey]['bgPlace']['h'] = $lh;
 
-                if ($key === 'id' || $key === 'text') {
-                    $lc = $data[$key]['lineCount'];
-                    $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
-                    while ($th > $data[$lastKey]['bgPlace']['h']) {
-                        $lc--;
+                foreach (array_keys($data) as $key) {
+                    if ($key === 'id' || $key === 'text') {
+                        $lc = $data[$key]['lineCount'];
                         $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
+                        while ($th > $data[$lastKey]['bgPlace']['h']) {
+                            $lc--;
+                            $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
+                        }
+                        $data[$key]['place']['h'] = $th - 0.5;
+                        $data[$key]['lineCount'] = $lc;
+                    } elseif ($data[$key]['place']['h'] > $data[$lastKey]['bgPlace']['h']) {
+                        $data[$key]['place']['h'] = $data[$lastKey]['bgPlace']['h'] - 2 - 0.5;
                     }
-                    $data[$key]['place']['h'] = $th - 0.5;
-                    $data[$key]['lineCount'] = $lc;
-                } elseif ($data[$key]['place']['h'] > $data[$lastKey]['bgPlace']['h']) {
-                    $data[$key]['place']['h'] = $data[$lastKey]['bgPlace']['h'] - 2 - 0.5;
                 }
 
                 $data[$lastKey]['bgPlace']['y'] += ($hs - $workBox['h']);
