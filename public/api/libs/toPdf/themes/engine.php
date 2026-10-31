@@ -242,7 +242,7 @@ class Theme
             }
 
             // height too high
-            /*$hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
+            $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
             if (is_array($data) && $lastKey !== '' && isset($data[$lastKey]) && $hs >= $workBox['h']) {
                 $lh = $data[$lastKey]['bgPlace']['h'];
                 $lh -= ($hs - $workBox['h']);
@@ -254,19 +254,21 @@ class Theme
                     if ($key === 'id' || $key === 'text') {
                         $lc = $data[$key]['lineCount'];
                         $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
-                        while ($th > $data[$lastKey]['bgPlace']['h']) {
+
+                        while ($th > $data[$key]['bgPlace']['h']) {
                             $lc--;
                             $th = (($lc * $data[$key]['fontSize']) + (($lc - 1) * 0.5373)) - 1;
                         }
+
                         $data[$key]['place']['h'] = $th - 0.5;
                         $data[$key]['lineCount'] = $lc;
-                    } elseif ($data[$key]['place']['h'] > $data[$lastKey]['bgPlace']['h']) {
-                        $data[$key]['place']['h'] = $data[$lastKey]['bgPlace']['h'] - 2 - 0.5;
+                    } elseif ($data[$key]['place']['h'] > $data[$key]['bgPlace']['h']) {
+                        $data[$key]['place']['h'] = $data[$key]['bgPlace']['h'] - 2 - 0.5;
                     }
                 }
 
                 $data[$lastKey]['bgPlace']['y'] += ($hs - $workBox['h']);
-            }*/
+            }
 
             // draw background color
             foreach (array_keys($data) as $key) {
@@ -298,6 +300,8 @@ class Theme
                 $borderBottomMargin = ($lastKey === $key && $hasBottomBorder ? $borderBottomSize : 0);
                 $borderTopMargin = ($firstKey === $key && $hasTopBorder ? $borderTopSize : 0);
                 $posY = $r['y'] + $largeMarginTop - $largeMarginBottom + $compens + $borderBottomMargin - $borderTopMargin;
+
+                $posY += 0.35;
 
                 $pdf->SetXY($posX, $posY);
 
