@@ -41,4 +41,4 @@ jobs:
           remoteDir: "/public/dev"
           reverse: true
           parallel: 4
-          options: --verbose --delete --include="./public/api/libs/constants.development.php"
+          options: --verbose"
