@@ -242,7 +242,7 @@ class Theme
             }
 
             // height too high
-            $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
+            /*$hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
             if (is_array($data) && $lastKey !== '' && isset($data[$lastKey]) && $hs >= $workBox['h']) {
                 $lh = $data[$lastKey]['bgPlace']['h'];
                 $lh -= ($hs - $workBox['h']);
@@ -266,7 +266,7 @@ class Theme
                 }
 
                 $data[$lastKey]['bgPlace']['y'] += ($hs - $workBox['h']);
-            }
+            }*/
 
             // draw background color
             foreach (array_keys($data) as $key) {
