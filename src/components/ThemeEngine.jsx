@@ -310,7 +310,7 @@ function CustomTheme({ item, data, style }) {
 					(data?.text?.displayMode ?? "H") === "V" ? "rotate(-90deg)" : "none",
 			},
 		}),
-		[data, positions, colors],
+		[data, positions, colors, style],
 	);
 
 	return (
