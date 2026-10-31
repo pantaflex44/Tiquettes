@@ -130,7 +130,7 @@ class TiquettesPDF extends FPDF
         $this->_out($s);
     }
 
-    public function Rotate(int $angle, int $x = -1, int $y = -1): void
+    public function Rotate(float $angle, int $x = -1, int $y = -1): void
     {
         if ($x == -1)
             $x = $this->x;

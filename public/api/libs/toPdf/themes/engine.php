@@ -243,7 +243,7 @@ class Theme
 
             // height too high
             $hs = array_sum(array_values(array_map(fn($k) => $k['bgPlace']['h'], $data)));
-            if ($hs >= $workBox['h']) {
+            if (is_array($data) && $lastKey !== '' && isset($data[$lastKey]) && $hs >= $workBox['h']) {
                 $lh = $data[$lastKey]['bgPlace']['h'];
                 $lh -= ($hs - $workBox['h']);
                 if ($lh < 0)
@@ -270,6 +270,12 @@ class Theme
             foreach (array_keys($data) as $key) {
                 self::setBgColor($pdf, $data[$key], $module);
                 $r = $data[$key]['bgPlace'];
+                if (!is_array($r)) {
+                    continue;
+                }
+                if (!isset($r['x']) || !isset($r['y']) || !isset($r['w']) || !isset($r['h'])) {
+                    continue;
+                }
                 $pdf->Rect($r['x']  + $restPos['x'], $r['y'], $r['w'] + $restPos['w'], $r['h'], 'F');
 
                 $oldX = $pdf->GetX();
