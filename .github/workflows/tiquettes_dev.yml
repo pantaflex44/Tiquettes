@@ -41,4 +41,4 @@ jobs:
           remoteDir: "/public/dev"
           reverse: true
           parallel: 4
-          options: --verbose
+          options: --delete
