@@ -467,6 +467,10 @@ export default function SchemaTab({
 					return parent[0];
 				};
 
+				const getIsCurrentLimiter = (module) => {
+					return schemaFunctions[module.func]?.isCurrentLimiter === true;
+				};
+
 				const applyPowerRound = (value) => {
 					if (value >= 1000)
 						return {
@@ -490,17 +494,56 @@ export default function SchemaTab({
 				const currentFunc = getFunc(data.module);
 				const currentCurrent = getCurrent(data.module);
 				const currentPower = currentCurrent * getVref(data.module);
-				const currentSource = getSource(data.module);
+				const currentIsCurrentLimiter = getIsCurrentLimiter(data.module);
 				const vDivider =
 					getVref(data.module) *
 					(isTri(currentPole) ? 3 : isMono(currentPole) ? 1 : 1);
 
-				let refCurrent = currentCurrent;
-				if (!refCurrent || refCurrent <= 0)
-					refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
+				const dataModuleId = getId(data.module);
 
-				// Le module courant est un répartiteur
-				if (currentFunc === "rp" && getId(data.module)) {
+				let parentMinCurrent = {
+					id: dataModuleId,
+					current: currentCurrent,
+				};
+				if (!currentIsCurrentLimiter) {
+					let prt = getParentByModule(data.module);
+					if (prt) {
+						do {
+							const isCurrentLimiter = getIsCurrentLimiter(prt);
+							if (isCurrentLimiter) {
+								const c = getCurrent(prt);
+								if (c > 0 && c < parentMinCurrent.current) {
+									parentMinCurrent = {
+										id: getId(prt),
+										current: c,
+									};
+								}
+							}
+
+							const prtTemp = getParentByModule(prt);
+							if (!prtTemp) {
+								const prtSource = getSource(prt);
+								const prtSourceCurrent = getComputedCurrent(
+									prtSource?.current ?? "0A",
+								);
+								if (
+									prtSourceCurrent > 0 &&
+									prtSourceCurrent < parentMinCurrent.current
+								) {
+									parentMinCurrent = {
+										id: prtSource?.name ?? "",
+										current: prtSourceCurrent,
+									};
+								}
+							}
+
+							prt = prtTemp;
+						} while (prt);
+					}
+				}
+
+				if (currentFunc === "rp" && dataModuleId) {
+					// Le module courant est un répartiteur
 					const powers = Object.entries(data.childs).map(([_, cdata]) => {
 						const c = getCurrent(cdata.module);
 						return c ? c : 0;
@@ -515,7 +558,7 @@ export default function SchemaTab({
 				}
 
 				// Le module courant est un interrupteur différentiel
-				if (currentFunc === "id" && getId(data.module)) {
+				if (currentFunc === "id" && dataModuleId) {
 					const powers = Object.entries(data.childs).map(([_, cdata]) => {
 						if (getFunc(cdata.module) === "q")
 							return (
@@ -529,41 +572,22 @@ export default function SchemaTab({
 						powers.reduce((partialSum, a) => partialSum + a, 0) / vDivider,
 					);
 
+					let loadError = false;
 					if (total > currentCurrent) {
-						if (lastParentModule) {
-							let prt = lastParentModule;
-							do {
-								const prtFunc = getFunc(prt);
-								if (prtFunc !== "q" && prtFunc !== "rp") {
-									break;
-								}
-								const rc = getCurrent(prt);
-								if (rc > 0 && rc < refCurrent) {
-									refCurrent = rc;
-								}
-								const prtTemp = getParentByModule(prt);
-								if (!prtTemp) {
-									const refCurrentTemp = getComputedCurrent(
-										getSource(prt)?.current ?? prt.current ?? "0A",
-									);
-									if (refCurrentTemp > 0 && refCurrentTemp < refCurrent) {
-										refCurrent = refCurrentTemp;
-									}
-								}
-								prt = prtTemp;
-							} while (prt);
-						} else {
-							refCurrent = getComputedCurrent(currentSource?.current ?? "0A");
-						}
-
-						// erreur seulement si la charge > DDR (regle de l'aval - DDR >= total charges)
-						if (refCurrent <= 0 || currentCurrent <= refCurrent) {
-							// et seulement si le DDR < AGCP (règle de l'amont - DDR >= AGCP):
+						if (parentMinCurrent.current >= currentCurrent) {
+							loadError = true;
 							add_error(
 								id,
-								`La charge retenue (${total}A) est supérieure à la limite définie: ${currentCurrent}A`,
+								`La charge retenue de ${total}A est supérieure à la limite de ${currentCurrent}A calibrée pour cet interrupteur différentiel (règle de l'aval)`,
 							);
 						}
+					}
+
+					if (!loadError) {
+						add_info(
+							id,
+							`La charge est de ${total}A pour un courant maximum ${parentMinCurrent ? `de ${parentMinCurrent.current}A` : "d'une valeur inconnue"} limité ${parentMinCurrent.current < currentCurrent ? `en amont par ${parentMinCurrent.id} (règle de l'amont)` : "par cet interrupteur différentiel"}`,
+						);
 					}
 
 					if (
@@ -583,16 +607,11 @@ export default function SchemaTab({
 							nbIdTypeAC30++;
 					}
 
-					add_info(
-						id,
-						`La charge est de ${total}A pour un courant limité à ${refCurrent ? `${refCurrent}A` : "une valeur inconnue"}`,
-					);
-
 					_lastParentModuleId = data.module;
 				}
 
 				// Le module courant est un disjoncteur
-				if (currentFunc === "q" && getId(data.module)) {
+				if (currentFunc === "q" && dataModuleId) {
 					const powerDetails = applyPowerRound(
 						currentPower * (isTetra(data.module) ? 3 : 1),
 					);
@@ -639,7 +658,7 @@ export default function SchemaTab({
 				}
 
 				// Vérification du calibre de la protection en tète des contacts d'asservissements
-				if (currentFunc === "k" && getId(data.module) && lastParentModule) {
+				if (currentFunc === "k" && dataModuleId && lastParentModule) {
 					if (currentCurrent < parentCurrent) {
 						add_error(
 							lastParentModule.id,

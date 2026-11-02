@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.2.9] - 2026-10-28
+## [2.2.9] - 2026-11-02
 
 ### Corrections
 
+- Correction d'un bug dans la surveillance de la norme dans le calcul des règles de l'amont et de l'aval (merci Julien Roussel).
 - Remplacement de la fonction Object.groupBy par son équivalent Array.reduce, compatible avec les plus anciennes versions de Javascript.
 - [[Discussion #105](https://github.com/pantaflex44/Tiquettes/discussions/105)] Ajout d'un parent de Type B (seuls les types A, F, HPI étaient pris en charge) pour protéger un module alimentant les véhicules électriques.
 - Correction de divers bugs dans le générateur d'étiquettes pour les étiqueteuses.

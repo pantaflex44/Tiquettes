@@ -69,7 +69,7 @@ export default function SchemaSymbol({
 				: `schema_${func}.svg`);
 
 		return { obj, name, title, icon, isContact };
-	}, [module]);
+	}, [module, monitor]);
 
 	const handleEdit = () => {
 		if (onEdit) onEdit(module);

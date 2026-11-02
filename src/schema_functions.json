@@ -11,7 +11,8 @@
 		"supportContacts": false,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"sw": {
 		"name": "Interrupteur sectionneur",
@@ -25,7 +26,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"id": {
 		"name": "Interrupteur différentiel",
@@ -39,7 +41,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"dd": {
 		"name": "Disjoncteur différentiel",
@@ -53,7 +56,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": true
 	},
 	"q": {
 		"name": "Disjoncteur",
@@ -67,7 +71,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": true
 	},
 	"prd": {
 		"name": "Parafoudre",
@@ -81,7 +86,8 @@
 		"supportContacts": false,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"fus": {
 		"name": "Fusible",
@@ -95,7 +101,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": true
 	},
 	"cc": {
 		"name": "Coupe Circuit",
@@ -109,7 +116,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": true
 	},
 	"trf": {
 		"name": "Transformateur",
@@ -123,7 +131,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"i": {
 		"name": "Interrupteur",
@@ -137,7 +146,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"kc": {
 		"name": "Contacteur",
@@ -151,7 +161,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": true
+		"hasNONCChoice": true,
+		"isCurrentLimiter": false
 	},
 	"tl": {
 		"name": "Télérupteur",
@@ -165,7 +176,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": true
+		"hasNONCChoice": true,
+		"isCurrentLimiter": false
 	},
 	"cpt": {
 		"name": "Sous-comptage",
@@ -179,7 +191,8 @@
 		"supportContacts": false,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"o": {
 		"name": "Autre",
@@ -193,7 +206,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"c": {
 		"name": "Commande",
@@ -207,7 +221,8 @@
 		"supportContacts": true,
 		"selectable": false,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"cno": {
 		"name": "Commande NO",
@@ -221,7 +236,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"cnf": {
 		"name": "Commande NF",
@@ -235,7 +251,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"bpno": {
 		"name": "Bouton poussoir NO",
@@ -249,7 +266,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"bpnf": {
 		"name": "Bouton poussoir NF",
@@ -263,7 +281,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": true,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"led": {
 		"name": "Voyant",
@@ -277,7 +296,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"son": {
 		"name": "Carillon",
@@ -291,7 +311,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"telec": {
 		"name": "Télécommande",
@@ -305,7 +326,8 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	},
 	"pc": {
 		"name": "Prise modulaire",
@@ -319,6 +341,7 @@
 		"supportContacts": true,
 		"selectable": true,
 		"hasShareWithChilds": false,
-		"hasNONCChoice": false
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false
 	}
 }
