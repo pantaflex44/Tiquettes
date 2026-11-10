@@ -32,6 +32,7 @@ export default function SchemaItem({
 	onEditSymbol,
 	getModuleById,
 	monitor = {},
+	getFilteredModulesBySchemaFuncs = null,
 }) {
 	return Object.entries(childs ?? {}).map(([id, item], j) => {
 		const m = getModuleById(item.module.id);
@@ -76,6 +77,7 @@ export default function SchemaItem({
 						}}
 						limited={limited}
 						monitor={monitor}
+						getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
 					/>
 
 					{item.isLast ? (
@@ -91,6 +93,9 @@ export default function SchemaItem({
 									onEditSymbol(module);
 								}}
 								monitor={monitor}
+								getFilteredModulesBySchemaFuncs={
+									getFilteredModulesBySchemaFuncs
+								}
 							/>
 						</div>
 					)}

@@ -26,6 +26,7 @@ import schemaIcon from "../assets/schema.svg";
 //import useKeyPress from "../hooks/useKeyPress.jsx";
 import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
+import EditorAssociateAccessories from "./EditorAssociateAccessories.jsx";
 import EditorContactAsservSelector from "./EditorContactAsservSelector.jsx";
 import EditorContactTypeSelector from "./EditorContactTypeSelector.jsx";
 import EditorCrbSelector from "./EditorCrbSelector.jsx";
@@ -863,6 +864,29 @@ export default function Editor({
 										</div>
 									</div>
 								)}
+
+							{Object.values(schemaFunctions).filter((v) =>
+								(v.allowedAccessories ?? []).includes(ed.currentModule.func),
+							).length > 0 && (
+								<div
+									className="popup_row"
+									style={{ "--left_column_size": "120px" }}
+								>
+									<label htmlFor={`editor_crb_${ed.currentModule.id.trim()}`}>
+										Accouplé à
+									</label>
+									<EditorAssociateAccessories
+										id={`editor_associate_${ed.currentModule.id.trim()}`}
+										currentModuleId={ed.currentModule.id}
+										currentModuleFunc={ed.currentModule.func}
+										filteredModulesListBySchemaFuncs={getFilteredModulesBySchemaFuncs()}
+										getModuleById={getModuleById}
+										onChange={(value) =>
+											onUpdateModuleEditor({ associateId: value })
+										}
+									/>
+								</div>
+							)}
 
 							{schemaFunctions[ed.currentModule.func]?.hasCrb && (
 								<div

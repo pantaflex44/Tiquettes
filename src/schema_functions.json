@@ -12,7 +12,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"sw": {
 		"name": "Interrupteur sectionneur",
@@ -27,7 +28,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": ["mn", "mx"]
 	},
 	"id": {
 		"name": "Interrupteur différentiel",
@@ -42,7 +44,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": ["mn", "mx"]
 	},
 	"dd": {
 		"name": "Disjoncteur différentiel",
@@ -57,7 +60,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": true
+		"isCurrentLimiter": true,
+		"allowedAccessories": ["mn", "mx"]
 	},
 	"q": {
 		"name": "Disjoncteur",
@@ -72,7 +76,40 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": true
+		"isCurrentLimiter": true,
+		"allowedAccessories": ["mn", "mx"]
+	},
+	"mn": {
+		"name": "Bobine MN",
+		"description": "Visuellement le déclencheur MN ressemble en tout point à un déclencheur MX, c'est également un auxiliaire qui permet le déclenchement mécanique d'un disjoncteur ou un interrupteur différentiel. Cependant la bobine MN fonctionne à l'inverse d'une bobine MX, elle se déclenche lorsque qu'elle n'est plus ou insuffisamment alimentée en tension. Le  disjoncteur accouplé ne peut être réenclenché tant que la tension aux bornes de la bobine MN n'est pas rétablie. Le déclencheur voltmétrique MN peut également être utilisé avec un bouton d'arrêt d'urgence.",
+		"hasType": false,
+		"hasCrb": false,
+		"hasCurrent": false,
+		"hasPole": false,
+		"hasWire": false,
+		"hasContacts": false,
+		"supportContacts": true,
+		"selectable": true,
+		"hasShareWithChilds": false,
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
+	},
+	"mx": {
+		"name": "Bobine MX",
+		"description": "Le déclencheur MX également appelé bobine MX, déclencheur voltmétrique MX ou encore bobine à émission de tension. Cette bobine à émission de courant permet de déclencher mécaniquement un disjoncteur ou un interrupteur différentiel lorsque la bobine du déclencheur est alimentée en tension.",
+		"hasType": false,
+		"hasCrb": false,
+		"hasCurrent": false,
+		"hasPole": false,
+		"hasWire": false,
+		"hasContacts": false,
+		"supportContacts": true,
+		"selectable": true,
+		"hasShareWithChilds": true,
+		"hasNONCChoice": false,
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"prd": {
 		"name": "Parafoudre",
@@ -87,7 +124,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"fus": {
 		"name": "Fusible",
@@ -102,7 +140,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": true
+		"isCurrentLimiter": true,
+		"allowedAccessories": []
 	},
 	"cc": {
 		"name": "Coupe Circuit",
@@ -117,7 +156,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": true
+		"isCurrentLimiter": true,
+		"allowedAccessories": ["mn", "mx"]
 	},
 	"trf": {
 		"name": "Transformateur",
@@ -132,7 +172,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"i": {
 		"name": "Interrupteur",
@@ -147,7 +188,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"kc": {
 		"name": "Contacteur",
@@ -162,7 +204,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": true,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"tl": {
 		"name": "Télérupteur",
@@ -177,7 +220,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": true,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"cpt": {
 		"name": "Sous-comptage",
@@ -192,7 +236,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"o": {
 		"name": "Autre",
@@ -207,7 +252,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"c": {
 		"name": "Commande",
@@ -222,7 +268,8 @@
 		"selectable": false,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"cno": {
 		"name": "Commande NO",
@@ -237,7 +284,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"cnf": {
 		"name": "Commande NF",
@@ -252,7 +300,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"bpno": {
 		"name": "Bouton poussoir NO",
@@ -267,7 +316,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"bpnf": {
 		"name": "Bouton poussoir NF",
@@ -282,7 +332,8 @@
 		"selectable": true,
 		"hasShareWithChilds": true,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"led": {
 		"name": "Voyant",
@@ -297,7 +348,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"son": {
 		"name": "Carillon",
@@ -312,7 +364,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"telec": {
 		"name": "Télécommande",
@@ -327,7 +380,8 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	},
 	"pc": {
 		"name": "Prise modulaire",
@@ -342,6 +396,7 @@
 		"selectable": true,
 		"hasShareWithChilds": false,
 		"hasNONCChoice": false,
-		"isCurrentLimiter": false
+		"isCurrentLimiter": false,
+		"allowedAccessories": []
 	}
 }

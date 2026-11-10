@@ -990,6 +990,7 @@ export default function SchemaTab({
 						getModuleById={getModuleById}
 						onEditSymbol={(module) => handleEditSymbol(module)}
 						monitor={monitor}
+						getFilteredModulesBySchemaFuncs={getFilteredModulesBySchemaFuncs}
 					/>
 
 					{switchboard.withGroundLine && (

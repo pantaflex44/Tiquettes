@@ -41,13 +41,13 @@ export default function EditorParentSelector({
 			v = JSON.stringify({
 				type: "module",
 				id: currentModule.parentId,
-				pole: getModuleById(currentModule.parentId)?.pole ?? "4P",
+				pole: getModuleById(currentModule.parentId)?.pole ?? "2P",
 			});
 		} else if (currentModule.srcId !== "") {
 			v = JSON.stringify({
 				type: "source",
 				id: currentModule.srcId,
-				pole: sources.find((s) => s.id === currentModule.srcId)?.pole ?? "4P",
+				pole: sources.find((s) => s.id === currentModule.srcId)?.pole ?? "2P",
 			});
 		}
 
@@ -58,8 +58,8 @@ export default function EditorParentSelector({
 	);
 
 	const isCompatiblePoles = (pole) => {
-		const sourcePoles = polesCounter(pole ?? "4P");
-		const modulePoles = polesCounter(currentPole ?? "4P");
+		const sourcePoles = polesCounter(pole ?? "2P");
+		const modulePoles = polesCounter(currentPole ?? "2P");
 		if (sourcePoles < modulePoles) return false;
 		return true;
 	};
@@ -100,8 +100,8 @@ export default function EditorParentSelector({
 
 			{/* Sources personnelles */}
 			<option value={""} disabled={true}>
-				Sources d'alimentations compatibles {polesCounter(currentPole ?? "4P")}{" "}
-				pôles
+				{`Sources d'alimentations compatibles ${polesCounter(currentPole ?? "")}`.trim() +
+					" poles"}
 			</option>
 			{sources.map((s, _i) => {
 				if (!s.id || !s.label || (currentPole && !isCompatiblePoles(s.pole))) {

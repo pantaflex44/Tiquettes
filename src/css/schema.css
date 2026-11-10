@@ -189,7 +189,8 @@
 .schemaItemSymbolType,
 .schemaItemSymbolCurrent,
 .schemaItemSymbolPole,
-.schemaItemSymbolLine {
+.schemaItemSymbolLine,
+.schemaItemSymbolAssociateId {
 	position: absolute;
 
 	top: 10px;
@@ -214,6 +215,17 @@
 .schemaItemSymbolCurrent {
 	top: 43px;
 	font-size: 50%;
+}
+
+.schemaItemSymbolAssociateId {
+	top: 83px;
+	left: 25%;
+	font-size: 55%;
+	font-weight: 500;
+	width: 50%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
 }
 
 .schemaItemSymbolPole {

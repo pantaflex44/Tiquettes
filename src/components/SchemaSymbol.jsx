@@ -26,6 +26,7 @@ export default function SchemaSymbol({
 	limited = false,
 	onEdit = null,
 	monitor = {},
+	getFilteredModulesBySchemaFuncs = null,
 }) {
 	const func = useMemo(() => {
 		if (!module?.func) return null;
@@ -52,10 +53,28 @@ export default function SchemaSymbol({
 		const titleInfos = monitor.infos?.[module.id]
 			? `\r\n\r\n🛈 ${monitor.infos[module.id].join("\r\n🛈 ")}`
 			: "";
-		const remark = (module.remark ?? "").trim();
 
 		let title =
-			`${module.id} / ${name}: ${module.text}${titleErrors}${titleInfos}`.trim();
+			`${module.id} / ${name} ${module.text ? `: ${module.text}` : ""}${titleErrors}${titleInfos}`.trim();
+
+		const associateId = module.associateId ?? "";
+
+		const associatedModules = getFilteredModulesBySchemaFuncs
+			? Object.entries(getFilteredModulesBySchemaFuncs()).flatMap(([_k, l]) =>
+					l
+						.map((m) => (m.associateId === module.id ? m : null))
+						.filter((f) => f !== null),
+				)
+			: [];
+		if (associatedModules.length > 0) {
+			title += `\r\n\r\nAccouplé à: ${associatedModules[0].id}${associatedModules[0].text ? ` / ${associatedModules[0].text}` : ""}\r\n`;
+		} else {
+			if (module.associateId) {
+				title += `\r\n\r\nAccouplé à: ${module.associateId}\r\n`;
+			}
+		}
+
+		const remark = (module.remark ?? "").trim();
 		if (remark !== "") {
 			title += `\r\n\r\nRemarques:\r\n${remark}`;
 		}
@@ -68,7 +87,15 @@ export default function SchemaSymbol({
 				? `schema_${func}${module.kcType === "NC" ? "_nc" : ""}.svg`
 				: `schema_${func}.svg`);
 
-		return { obj, name, title, icon, isContact };
+		return {
+			obj,
+			name,
+			title,
+			icon,
+			isContact,
+			associateId,
+			associatedModules,
+		};
 	}, [module, monitor]);
 
 	const handleEdit = () => {
@@ -120,6 +147,10 @@ export default function SchemaSymbol({
 							width={11}
 						/>
 					</>
+				)}
+
+				{func.associateId && (
+					<div className="schemaItemSymbolAssociateId">{func.associateId}</div>
 				)}
 
 				{monitor.errors?.[module.id] && (

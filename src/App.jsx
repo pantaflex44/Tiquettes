@@ -332,6 +332,7 @@ function App() {
 			free: true,
 			span: 1,
 			half: "none",
+			associateId: "",
 		}),
 		[],
 	);
@@ -614,14 +615,19 @@ function App() {
 		return { ...reIndentedSwb, rows };
 	}, []);
 
-	const reassignAllParents = (originalId, newId) => {
+	const reassignAllModules = (originalId, newId) => {
 		if (originalId && originalId !== newId) {
 			setSwitchboard((old) => {
 				const rows = old.rows.map((row) => {
 					return row.map((module) => {
 						let mm = { ...module };
+
 						if (module.parentId === originalId) {
 							mm = { ...mm, parentId: newId };
+						}
+
+						if (module.associateId === originalId) {
+							mm = { ...mm, associateId: newId };
 						}
 
 						const kcId_a = (module.kcId ?? "").split("|").map((k) => k.trim());
@@ -696,14 +702,22 @@ function App() {
 				});
 			});
 
-			// re-assign parents
+			// re-assign parents, associates and key contacts
 			rows = rows.map((row) => {
 				return row.map((module) => {
 					let mm = { ...module };
+
 					if (from[module.parentId]) {
 						mm = {
 							...mm,
 							parentId: from[module.parentId],
+						};
+					}
+
+					if (from[module.associateId]) {
+						mm = {
+							...mm,
+							associateId: from[module.associateId],
 						};
 					}
 
@@ -1425,6 +1439,7 @@ function App() {
 			.replace(/ [ \r\n]+/gm, "\n");
 		const desc = (data.currentModule.desc ?? "").trim();
 		const parentId = (data.currentModule.parentId ?? "").trim();
+		const associateId = (data.currentModule.associateId ?? "").trim();
 		const srcId = (data.currentModule.srcId ?? "").trim();
 		const kcId = (data.currentModule.kcId ?? "").trim();
 		const kcType = (data.currentModule.kcType ?? "NO").trim();
@@ -1535,6 +1550,7 @@ function App() {
 						wire,
 						line,
 						grp,
+						associateId,
 					};
 				});
 			});
@@ -1543,7 +1559,7 @@ function App() {
 		});
 
 		// ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
-		reassignAllParents(data.originalModule?.id, id);
+		reassignAllModules(data.originalModule?.id, id);
 
 		if (isEmpty) {
 			statsPush("action", "create");
@@ -1885,6 +1901,7 @@ function App() {
 						wire: clipboard.wire,
 						line: clipboard.line,
 						grp: clipboard.grp,
+						associateId: clipboard.associateId,
 					};
 				});
 

@@ -17,10 +17,18 @@
  */
 
 :root {
+	/* Couleurs par défaut */
 	--primary-color: darkcyan;
 	--secondary-color: lightcyan;
 	--secondary-color-light: rgb(240, 255, 255);
 	--secondary-color-light-light: rgb(247, 255, 255);
+
+	/* Couleurs DF Artisan */
+	/*--primary-color: #2e4ea5;
+	--secondary-color: #afbedd;
+	--secondary-color-light: #d5dceb;
+	--secondary-color-light-light: #eceef1;*/
+
 	/* 24 modules */
 	/* --content-size: 1800px; */
 	/* 18 modules */

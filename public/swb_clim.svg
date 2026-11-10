@@ -7,7 +7,7 @@
    width="1000"
    height="1000"
    sodipodi:docname="swb_clim.svg"
-   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -22,11 +22,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.743"
-     inkscape:cx="499.32705"
-     inkscape:cy="500"
+     inkscape:cx="498.6541"
+     inkscape:cy="938.08883"
      inkscape:window-width="1920"
-     inkscape:window-height="954"
-     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="Calque_2" />
@@ -45,26 +45,16 @@
      d="M101.96 0H4.43v11.09h97.53z"
      id="path2"
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
-  <rect
+  <path
      class="cls-1"
-     x="14.98"
-     y="74.9"
-     width="9.36"
-     height="5"
-     rx="1.03"
-     ry="1.03"
-     id="rect2"
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
-  <rect
+     d="M 32.41381,77.076401 H 21.311875 v 5.094807 H 32.41381 Z"
+     id="path2-0"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.985732;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" />
+  <path
      class="cls-1"
-     x="85.51"
-     y="74.9"
-     width="9.36"
-     height="5"
-     rx="1.03"
-     ry="1.03"
-     id="rect3"
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+     d="M 83.933619,77.194263 H 72.831684 v 5.094807 h 11.101935 z"
+     id="path2-0-8"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.985732;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" />
   <path
      class="cls-1"
      d="M69.13 14.46c.22 1.6-.66 1.74-1.87 1.74-9.31-.03-18.63-.04-27.94 0-1.31 0-2.23-.16-2.1-1.7H4.41v12.84c3.93-1.85 8.32-2.9 12.95-2.9 16.78 0 30.38 13.6 30.38 30.38 0 6.14-1.83 11.85-4.96 16.63h59.21V14.46H69.12ZM87 55.74c2.31-.02 4.63-.02 6.94 0 1.07.01 1.73.6 1.69 1.67-.04 1.07-.78 1.56-1.82 1.57-1.13.01-2.27 0-3.4 0s-2.27.02-3.4-.02c-1.02-.03-1.76-.48-1.75-1.6 0-1.11.71-1.61 1.74-1.62zm6.94 9.45c-1.18.04-2.36 0-3.55 0-1.09 0-2.18.01-3.26 0-1.09-.01-1.87-.45-1.88-1.64 0-1.11.73-1.61 1.75-1.62 2.32-.03 4.64-.04 6.95 0 1.05.02 1.73.64 1.69 1.7-.04.99-.73 1.52-1.71 1.55z"
