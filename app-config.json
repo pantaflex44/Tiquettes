@@ -35,8 +35,14 @@
 	],
 	"changelog": {
 		"2.3.0": {
-			"date": "2026-11-10",
+			"date": "2026-11-11",
 			"actions": {
+				"patches": [],
+				"updates": [
+					{
+						"text": "Modification globale de l'interface utilisateur pour améliorer l'expérience utilisateur et l'ergonomie de l'application."
+					}
+				],
 				"adds": [
 					{
 						"text": "Ajout des modules 'Bobine MN' et 'Bobine MX'."

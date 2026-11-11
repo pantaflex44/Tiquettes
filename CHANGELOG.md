@@ -1,6 +1,13 @@
 # ChangeLog
 
-## [2.3.0] - 2026-11-10
+## [2.3.0] - 2026-11-11
+
+### Corrections
+
+
+### Modifications
+
+- Modification globale de l'interface utilisateur pour améliorer l'expérience utilisateur et l'ergonomie de l'application.
 
 ### Ajouts
 
