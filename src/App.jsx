@@ -1381,7 +1381,7 @@ function App() {
 		tabPage = "main",
 		focus = null,
 	) => {
-		const focusedInputName = focus ?? "id";
+		const focusedInputName = focus ?? "func";
 		let currentModule = switchboard.rows[rowIndex][moduleIndex];
 
 		// si le module à éditer n'a pas d'identifiant alors on lui donne le dernier identifiant libre

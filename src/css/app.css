@@ -873,6 +873,15 @@ option[disabled] {
 	display: block;
 }
 
+.editor_tabpages input[type="checkbox"]:disabled {
+	pointer-events: none;
+}
+
+.editor_tabpages input[type="checkbox"]:disabled + label {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
 .tabPageBand {
 	position: sticky;
 	left: 0.5rem;

@@ -29,11 +29,13 @@ export default function EditorParallelSelector({
 	return (
 		<div
 			className={`buttons_box ${disabled === true ? "disabled" : ""}`.trim()}
+			style={{ width: "100%" }}
 			id={id}
 			name={id}
 		>
 			<div
 				className={`buttons_box-button ${value !== true ? "selected" : ""}`.trim()}
+				style={{ width: "initial", flex: 1 }}
 				title="Conserver une connexion directe à ce module en parallèle de ses enfants (utile en cas d'appareillage enfant modulaire raccordé à ce même départ)"
 				onClick={() => onChange(false)}
 			>
@@ -47,6 +49,7 @@ export default function EditorParallelSelector({
 
 			<div
 				className={`buttons_box-button ${value === true ? "selected" : ""}`.trim()}
+				style={{ width: "initial", flex: 1 }}
 				title="Allouer ce module à l'alimentation de ses enfants seulement"
 				onClick={() => onChange(true)}
 			>

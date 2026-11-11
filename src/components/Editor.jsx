@@ -350,20 +350,28 @@ export default function Editor({
 								src={switchboardIcon}
 								width="20"
 								height="20"
-								alt="Tableau"
+								alt="Module"
 							/>
-							<span>Tableau</span>
+							<span>Module</span>
 						</label>
-
 						<input
 							type="checkbox"
 							id="schema_editor_tab"
 							checked={editorTab === "schema"}
 							onChange={() => setEditorTab("schema")}
+							disabled={
+								!ed.currentModule.func ||
+								!schemaFunctions[ed.currentModule.func]
+							}
 						/>
 						<label htmlFor="schema_editor_tab">
-							<LazyImage src={schemaIcon} width="20" height="20" alt="Schéma" />
-							<span>Schéma</span>
+							<LazyImage
+								src={schemaIcon}
+								width="20"
+								height="20"
+								alt="Caractéristiques"
+							/>
+							<span>Caractéristiques</span>
 						</label>
 					</div>
 
@@ -384,6 +392,37 @@ export default function Editor({
 								className="popup_row"
 								style={{ "--left_column_size": "120px" }}
 							>
+								<label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>
+									Fonction
+								</label>
+								<div className="popup_row-flex">
+									<EditorFunctionSelector
+										id={`editor_func_${ed.currentModule.id.trim()}`}
+										value={ed.currentModule.func}
+										onChange={(value) => {
+											onUpdateModuleEditor({ func: value });
+											if (
+												schemaFunctions[ed.currentModule.func]
+													?.hasShareWithChilds !== true
+											) {
+												onUpdateModuleEditor({ onlyChilds: true });
+											}
+											if (!fidc) {
+												onUpdateModuleEditor({ id: getLastFreeId(value) });
+											}
+										}}
+										title={
+											schemaFunctions[ed.currentModule.func]?.description ??
+											"Sélectionner la fonction"
+										}
+										autoFocus={ed?.focusedInputName === "func"}
+									/>
+								</div>
+							</div>
+							<div
+								className="popup_row"
+								style={{ "--left_column_size": "120px" }}
+							>
 								<label htmlFor={`editor_id_${ed.currentModule.id.trim()}`}>
 									Identifiant
 								</label>
@@ -399,7 +438,6 @@ export default function Editor({
 												setFidc(true);
 											}
 										}}
-										autoFocus={!!(ed?.focusedInputName === "id")}
 									/>
 									<button
 										type="button"
@@ -482,7 +520,7 @@ export default function Editor({
 										onUpdateModuleEditor({ text: e.target.value })
 									}
 									rows={3}
-									autoFocus={!!(ed?.focusedInputName === "text")}
+									autoFocus={ed?.focusedInputName === "text"}
 									onFocus={() => setNoEnterKeyPressAllowed(true)}
 									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
@@ -597,7 +635,7 @@ export default function Editor({
 												onUpdateModuleEditor({ icon: null, modtype: "" });
 											}
 										}}
-										autoFocus={!!(ed?.focusedInputName === "icon")}
+										autoFocus={ed?.focusedInputName === "icon"}
 									/>
 								</Suspense>
 							</div>
@@ -630,7 +668,7 @@ export default function Editor({
 									onInput={(e) => {
 										setIsCustomFunction(e.target.value.trim() !== "");
 									}}
-									autoFocus={!!(ed?.focusedInputName === "type")}
+									autoFocus={ed?.focusedInputName === "type"}
 								/>
 							</div>
 
@@ -653,7 +691,7 @@ export default function Editor({
 										onUpdateModuleEditor({ desc: e.target.value })
 									}
 									rows={5}
-									autoFocus={!!(ed?.focusedInputName === "desc")}
+									autoFocus={ed?.focusedInputName === "desc"}
 									onFocus={() => setNoEnterKeyPressAllowed(true)}
 									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
@@ -717,51 +755,6 @@ export default function Editor({
 
 					{editorTab === "schema" && (
 						<>
-							<div
-								className="popup_row"
-								style={{ "--left_column_size": "120px" }}
-							>
-								<label htmlFor={`editor_func_${ed.currentModule.id.trim()}`}>
-									Fonction
-								</label>
-								<div
-									className="popup_row-grid"
-									style={{ gridTemplateColumns: "1fr 67px" }}
-								>
-									<EditorFunctionSelector
-										id={`editor_func_${ed.currentModule.id.trim()}`}
-										value={ed.currentModule.func}
-										onChange={(value) => {
-											onUpdateModuleEditor({ func: value });
-											if (
-												schemaFunctions[ed.currentModule.func]
-													?.hasShareWithChilds !== true
-											) {
-												onUpdateModuleEditor({ onlyChilds: true });
-											}
-											if (!fidc) {
-												onUpdateModuleEditor({ id: getLastFreeId(value) });
-											}
-										}}
-										title={
-											schemaFunctions[ed.currentModule.func]?.description ??
-											"Sélectionner la fonction"
-										}
-									/>
-									<EditorParallelSelector
-										id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
-										disabled={
-											schemaFunctions[ed.currentModule.func]
-												?.hasShareWithChilds !== true
-										}
-										value={ed.currentModule.onlyChilds ?? true}
-										onChange={(value) =>
-											onUpdateModuleEditor({ onlyChilds: value })
-										}
-									/>
-								</div>
-							</div>
-
 							{ed.currentModule.func && (
 								<>
 									<div
@@ -819,6 +812,27 @@ export default function Editor({
 											└ Parent du module précédent:{" "}
 											<b>{prevModule?.parentId ?? "-"}</b>
 										</span>
+									</div>
+									<div
+										className="popup_row"
+										style={{ "--left_column_size": "120px" }}
+									>
+										<label
+											htmlFor={`editor_func_${ed.currentModule.id.trim()}`}
+										>
+											Enfants
+										</label>
+										<EditorParallelSelector
+											id={`editor_contacts_parent_parallel_${ed.currentModule.id.trim()}`}
+											disabled={
+												schemaFunctions[ed.currentModule.func]
+													?.hasShareWithChilds !== true
+											}
+											value={ed.currentModule.onlyChilds ?? true}
+											onChange={(value) =>
+												onUpdateModuleEditor({ onlyChilds: value })
+											}
+										/>
 									</div>
 								</>
 							)}

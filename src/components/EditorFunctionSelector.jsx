@@ -23,6 +23,7 @@ export default function EditorFunctionSelector({
 	value,
 	title = null,
 	onChange = null,
+	autoFocus = false,
 }) {
 	return (
 		<select
@@ -33,6 +34,7 @@ export default function EditorFunctionSelector({
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);
 			}}
+			autoFocus={autoFocus}
 			style={{ flex: 1 }}
 		>
 			<option value={""}>-</option>

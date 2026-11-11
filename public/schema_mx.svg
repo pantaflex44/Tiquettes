@@ -5,9 +5,9 @@
    viewBox="0 0 18.518998 26.455"
    version="1.1"
    id="svg4"
-   sodipodi:docname="schema_mx.svg"
+   sodipodi:docname="schema_mx.svg.svg"
    inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
-   inkscape:export-filename="schema_mx.svg"
+   inkscape:export-filename="schema_mn.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -104,45 +104,40 @@
        margin="0"
        bleed="0" />
     <sodipodi:guide
-       position="19.712777,7.7603037"
+       position="5.363987,14.104919"
        orientation="0,-1"
        id="guide6"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="14.434332,1.2823732"
+       position="10.533875,1.2829188"
        orientation="0,-1"
        id="guide9"
        inkscape:locked="false" />
   </sodipodi:namedview>
   <path
      style="fill:#020202;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
-     d="M 9.131,0.043 H 9.396 V 16.696199 H 9.131 Z M 9.092,25.156642 h 0.265 l 0,1.315358 H 9.092 Z"
+     d="M 9.131,0.043 H 9.396 V 16.696199 H 9.131 Z M 9.092,21.381984 h 0.265 l 0,5.090016 H 9.092 Z"
      id="path1"
      sodipodi:nodetypes="cccccccccc" />
   <path
-     style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:0.21164571;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:52;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 4.1057672,16.753823 H 14.171519 v 4.602433 H 4.1057672 Z"
+     style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:0.211646;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:52;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="m 4.1057672,16.753823 h 6.9864258 v 4.602433 H 4.1057672 Z"
      id="path2"
      sodipodi:nodetypes="ccccc" />
   <text
      xml:space="preserve"
      style="font-weight:bold;font-size:2.91377px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';writing-mode:lr-tb;direction:ltr;fill:none;fill-opacity:0;stroke:#999999;stroke-width:0.0151759"
-     x="9.3360882"
+     x="6.1243186"
      y="20.064924"
      id="text1"><tspan
        sodipodi:role="line"
        id="tspan1"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.91377px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0151759"
-       x="9.3360882"
-       y="20.064924">MX</tspan><tspan
-       sodipodi:role="line"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.91377px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0151759"
-       x="9.3360882"
-       y="23.707136"
-       id="tspan2" /></text>
+       x="6.1243186"
+       y="20.064924">MX</tspan></text>
   <path
      style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.238101;stroke-dasharray:0.714304, 0.714304;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 18.566473,18.704247 H 14.226022"
+     d="M 18.521044,18.690608 H 11.101267"
      id="path4"
      sodipodi:nodetypes="cc" />
 </svg>

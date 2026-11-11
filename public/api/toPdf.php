@@ -1703,6 +1703,17 @@ class TiquettesPDF extends FPDF
             $this->Text($centerX + ($this->grid[$this->gridOrientation]['step'] / 2), $currentPosY + ($this->grid[$this->gridOrientation]['step'] / 2) + 2, str($module->id));
             $this->SetFont('Arial', '', 6);
 
+            if (isset($module->associateId) && is_string($module->associateId) && trim($module->associateId) !== "") {
+                $this->SetTextColor(0, 0, 0);
+                $this->SetFont('Arial', 'B', 6);
+                $oldX = $this->GetX();
+                $oldY = $this->GetY();
+                $this->SetXY($centerX + 2.25, ($currentPosY + ($this->schemaSymbolSize['h'] / 2)) + 2);
+                $this->MultiCell(($this->schemaSymbolSize['w'] / 2) - 2.25, 2.5, str($module->associateId), 0, 'L', false, 1);
+                $this->SetXY($oldX, $oldY);
+                $this->SetFont('Arial', '', 6);
+            }
+
             $lines = [
                 $sf['hasType'] && $module->type ? str(sprintf(_("Type %s"), $module->type) ?? '') : '',
                 $sf['hasType'] && $module->type ? str($module->sensibility ?? '') : '',
