@@ -10,7 +10,7 @@ function useKeyPress(
 
 	useEffect(() => {
 		const downHandler = (e) => {
-			if (e.key === targetKey && activated) {
+			if (e.key === targetKey && activated && !e.repeat) {
 				if (preventDefault) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -21,12 +21,7 @@ function useKeyPress(
 		};
 		const upHandler = (e) => {
 			if (e.key === targetKey && activated) {
-				if (preventDefault) {
-					e.preventDefault();
-					e.stopPropagation();
-				}
 				setKeyPressed(false);
-				if (callback) callback();
 			}
 		};
 
@@ -37,7 +32,7 @@ function useKeyPress(
 			window.removeEventListener("keydown", downHandler);
 			window.removeEventListener("keyup", upHandler);
 		};
-	}, [targetKey, activated]);
+	}, [targetKey, callback, preventDefault, activated]);
 
 	return keyPressed;
 }
