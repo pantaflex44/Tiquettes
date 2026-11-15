@@ -488,7 +488,7 @@ Tiquettes.fr propose une bibliothèque de thèmes que vous pouvez importer pour 
 Depuis la version 2.0.0, Tiquettes propose la génération semi-automatique d'un schéma unifilaire représentatif du
 tableau électrique conçu par vos soins.
 
-La fenêtre d’édition d'un module possède désormais un nouvel onglet `Schéma` permettant de définir les
+La fenêtre d’édition d'un module possède désormais un nouvel onglet `Caractéristiques` permettant de définir les
 caractéristiques techniques du module:
 
 ![Édition des caractéristiques techniques](./docs/_popup_schema.png)

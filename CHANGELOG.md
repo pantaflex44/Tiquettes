@@ -7,6 +7,7 @@
 
 ### Modifications
 
+- Modification de la documentation.
 - Modification globale de l'interface utilisateur pour améliorer l'expérience utilisateur et l'ergonomie de l'application.
 
 ### Ajouts

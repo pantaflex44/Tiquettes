@@ -40,6 +40,9 @@
 				"patches": [],
 				"updates": [
 					{
+						"text": "Modification de la documentation."
+					},
+					{
 						"text": "Modification globale de l'interface utilisateur pour améliorer l'expérience utilisateur et l'ergonomie de l'application."
 					}
 				],

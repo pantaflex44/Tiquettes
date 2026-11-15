@@ -42,6 +42,7 @@ export default function EditorCurrentSelector({
 		"180A",
 		"240A",
 		"250A",
+		"400A",
 	],
 	onChange = null,
 }) {
