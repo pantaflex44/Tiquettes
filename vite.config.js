@@ -87,7 +87,14 @@ export default async ({ mode }) => {
 					url: env.VITE_APP_URL,
 					title: pkg.title,
 					type: "website",
-					image: `${env.VITE_APP_URL}og_1200x630.webp`,
+					image: [
+						{
+							width: 1200,
+							url: `${env.VITE_APP_URL}og_1200x630.webp`,
+							height: 630,
+							alt: "L'application Tiquettes.fr",
+						},
+					],
 					determiner: "auto",
 					description: pkg.description,
 					locale: env.VITE_APP_LOCALE.replaceAll("-", "_"),
@@ -95,7 +102,14 @@ export default async ({ mode }) => {
 					siteName: pkg.title,
 				},
 				twitter: {
-					image: `${env.VITE_APP_URL}twitter_1280x640.webp`,
+					image: [
+						{
+							width: 1280,
+							url: `${env.VITE_APP_URL}twitter_1280x640.webp`,
+							height: 640,
+							alt: "L'application Tiquettes.fr",
+						},
+					],
 					card: "summary_large_image",
 					description: pkg.description,
 					title: pkg.title,

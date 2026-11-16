@@ -1,9 +1,10 @@
 # ChangeLog
 
-## [2.3.0] - 2026-11-11
+## [2.3.0] - 2026-11-16
 
 ### Corrections
 
+- [[PR #109](https://github.com/pantaflex44/Tiquettes/pull/109)] Correctif dans le hook useKeyPress par Théo BARRAGUÉ : 'le callback n'est plus appelé deux fois par appui'
 
 ### Modifications
 
