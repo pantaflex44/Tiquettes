@@ -1885,7 +1885,7 @@ function App() {
 						srcId: clipboard.srcId,
 						kcId: clipboard.kcId,
 						kcType: clipboard.kcType,
-						kcOrder: clipboard.ksOrder,
+						kcOrder: clipboard.kcOrder,
 						partialKc: clipboard.partialKc,
 						onlyChilds: clipboard.onlyChilds,
 						noAutoId: clipboard.noAutoId,
