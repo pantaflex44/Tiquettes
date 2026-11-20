@@ -653,7 +653,7 @@ export default function SchemaTab({
 				) {
 					add_error(
 						id,
-						`Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`,
+						`Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule?.id ?? source?.name ?? "-"}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`,
 					);
 				}
 
