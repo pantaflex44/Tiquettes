@@ -2192,7 +2192,7 @@ function getCurrent($module)
 function getSimplyPole($module)
 {
     $p = strtoupper(trim($module?->pole ?? "1P+N"));
-    $pc = preg_replace("/\D/", "", $p);
+    $pc = intval(preg_replace("/\D/", "", $p));
     if (($pc === 1 || $pc === 3) && str_contains($p, '+N')) {
         $pc++;
     }
