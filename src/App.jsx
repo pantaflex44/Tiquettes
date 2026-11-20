@@ -1956,7 +1956,7 @@ function App() {
 		let i = 0;
 		while (max > 0) {
 			const nextModule =
-				moduleIndex + clipboard.span < switchboard.stepsPerRows
+				moduleIndex + clipboard.span <= switchboard.stepsPerRows
 					? row[moduleIndex + i]
 					: null;
 			if (!nextModule?.free || nextModule.span !== 1) {
