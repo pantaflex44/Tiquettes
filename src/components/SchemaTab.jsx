@@ -66,7 +66,7 @@ export default function SchemaTab({
 
 	const getSimplyPole = (module) => {
 		const p = (module?.pole ?? "1P+N").trim().toUpperCase();
-		let pc = p.replace(/\D/g, "");
+		let pc = parseInt(p.replace(/\D/g, ""), 10);
 		if ((pc === 1 || pc === 3) && p.includes("+N")) pc++;
 		if (pc < 2) pc = 2;
 		if (pc > 4) pc = 4;
