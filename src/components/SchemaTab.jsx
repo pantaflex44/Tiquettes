@@ -472,15 +472,15 @@ export default function SchemaTab({
 				};
 
 				const applyPowerRound = (value) => {
-					if (value >= 1000)
-						return {
-							value: Math.round((value / 1000) * 100) / 100,
-							unit: "kW",
-						};
 					if (value >= 1000000)
 						return {
 							value: Math.round((value / 1000000) * 100) / 100,
 							unit: "m.W",
+						};
+					if (value >= 1000)
+						return {
+							value: Math.round((value / 1000) * 100) / 100,
+							unit: "kW",
 						};
 					return { value, unit: "W" };
 				};
