@@ -1179,8 +1179,14 @@ function App() {
 	const handleModuleGrow = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
+		//const nextModule =
+		//	moduleIndex + currentModule.span < switchboard.stepsPerRows
+		//		? row[moduleIndex + 1]
+		//		: null;
+		// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+		// https://github.com/pantaflex44/Tiquettes/pull/115
 		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
+			moduleIndex + currentModule.span <= switchboard.stepsPerRows
 				? row[moduleIndex + 1]
 				: null;
 
@@ -1249,8 +1255,15 @@ function App() {
 		const rows = switchboard.rows;
 		const row = rows[rowIndex];
 		const currentModule = row[moduleIndex];
+
+		//const nextModule =
+		//	moduleIndex + currentModule.span < switchboard.stepsPerRows
+		//		? row[moduleIndex + 1]
+		//		: null;
+		// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+		// https://github.com/pantaflex44/Tiquettes/pull/115
 		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
+			moduleIndex + currentModule.span <= switchboard.stepsPerRows
 				? row[moduleIndex + 1]
 				: null;
 
@@ -1335,7 +1348,7 @@ function App() {
 						srcId: clipboard.srcId,
 						kcId: clipboard.kcId,
 						kcType: clipboard.kcType,
-						kcOrder: clipboard.ksOrder,
+						kcOrder: clipboard.kcOrder,
 						partialKc: clipboard.partialKc,
 						onlyChilds: clipboard.onlyChilds,
 						noAutoId: clipboard.noAutoId,
@@ -1405,10 +1418,17 @@ function App() {
 		let max = clipboard.span;
 		let i = 0;
 		while (max > 0) {
+			//const nextModule =
+			//	moduleIndex + currentModule.span < switchboard.stepsPerRows
+			//		? row[moduleIndex + 1]
+			//		: null;
+			// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+			// https://github.com/pantaflex44/Tiquettes/pull/115
 			const nextModule =
-				moduleIndex + clipboard.span < switchboard.stepsPerRows
-					? row[moduleIndex + i]
+				moduleIndex + currentModule.span <= switchboard.stepsPerRows
+					? row[moduleIndex + 1]
 					: null;
+
 			if (!nextModule?.free || nextModule.span !== 1) {
 				allowed = false;
 				break;
@@ -1530,8 +1550,14 @@ function App() {
 	const moduleGrowAllowed = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
+		//const nextModule =
+		//	moduleIndex + currentModule.span < switchboard.stepsPerRows
+		//		? row[moduleIndex + 1]
+		//		: null;
+		// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+		// https://github.com/pantaflex44/Tiquettes/pull/115
 		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
+			moduleIndex + currentModule.span <= switchboard.stepsPerRows
 				? row[moduleIndex + 1]
 				: null;
 
@@ -1553,8 +1579,14 @@ function App() {
 	const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
+		//const nextModule =
+		//	moduleIndex + currentModule.span < switchboard.stepsPerRows
+		//		? row[moduleIndex + 1]
+		//		: null;
+		// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+		// https://github.com/pantaflex44/Tiquettes/pull/115
 		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
+			moduleIndex + currentModule.span <= switchboard.stepsPerRows
 				? row[moduleIndex + 1]
 				: null;
 
@@ -2631,7 +2663,7 @@ function App() {
 							<div
 								className="fakeButton"
 								style={{ fontSize: "100%" }}
-								title="Lancer l&apos;impression"
+								title="Lancer l'impression"
 								onClick={() => {
 									printProject();
 								}}

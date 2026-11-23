@@ -2192,7 +2192,10 @@ function getCurrent($module)
 function getSimplyPole($module)
 {
     $p = strtoupper(trim($module?->pole ?? "1P+N"));
-    $pc = preg_replace("/\D/", "", $p);
+    //$pc = preg_replace("/\D/", "", $p);
+    // Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+    // https://github.com/pantaflex44/Tiquettes/pull/110
+    $pc = intval(preg_replace("/\D/", "", $p));
     if (($pc === 1 || $pc === 3) && str_contains($p, '+N')) {
         $pc++;
     }
