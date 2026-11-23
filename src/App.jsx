@@ -3323,15 +3323,15 @@ function App() {
 					onCancel={() => setNewProjectPopup(false)}
 					onApply={(properties) => {
 						const printFirstpage =
-							properties.infos.from.name ||
-							properties.infos.from.siret ||
-							properties.infos.from.postalAddress ||
-							properties.infos.from.email ||
-							properties.infos.from.phone ||
-							properties.infos.to.name ||
-							properties.infos.to.postalAddress ||
-							properties.infos.to.email ||
-							properties.infos.to.phone;
+							(properties.infos.from.name ||
+								properties.infos.from.siret ||
+								properties.infos.from.postalAddress ||
+								properties.infos.from.email ||
+								properties.infos.from.phone ||
+								properties.infos.to.name ||
+								properties.infos.to.postalAddress ||
+								properties.infos.to.email ||
+								properties.infos.to.phone) !== null;
 
 						createProject(
 							properties.name,
