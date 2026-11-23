@@ -40,7 +40,7 @@ export default function EditorLineSelector({
 		<select
 			id={id}
 			name={id}
-			value={v}
+			value={v ?? ""}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);
 			}}

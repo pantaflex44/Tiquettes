@@ -68,7 +68,7 @@ export default function EditorParentSelector({
 		<select
 			id={id}
 			name={id}
-			value={currentParent}
+			value={currentParent ?? ""}
 			onChange={(e) => {
 				const v = e.target.value.trim();
 

@@ -16,6 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { VITE_APP_BASE } from "../libs/config";
 import LazyImage from "./LazyImage";
 
 function IconSelectorItem({
@@ -52,7 +53,7 @@ function IconSelectorItem({
 		>
 			{icon.filename ? (
 				<LazyImage
-					src={`${import.meta.env.VITE_APP_BASE}${icon.filename}`}
+					src={`${VITE_APP_BASE}${icon.filename}`}
 					loading={"lazy"}
 					width={24}
 					height={24}

@@ -50,7 +50,7 @@ export default function EditorCurrentSelector({
 		<select
 			id={id}
 			name={id}
-			value={value}
+			value={value ?? ""}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);
 			}}

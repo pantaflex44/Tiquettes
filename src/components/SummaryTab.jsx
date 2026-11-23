@@ -251,7 +251,7 @@ export default function SummaryTab({
 					</tr>
 				</thead>
 				<tbody>
-					{switchboard.rows
+					{(switchboard?.rows ?? [])
 						.map((row, i) => {
 							let li = -1;
 							return row.map((module, j) => {

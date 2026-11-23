@@ -60,6 +60,8 @@
         "convert-source-map": "^2.0.0",
         "cpx": "^1.5.0",
         "cpx2": "^9.0.3",
+        "dotenv": "^18.0.10",
+        "find-config": "^1.0.0",
         "glob": "^14.0.3",
         "process": "^0.11.10",
         "react": "^19.3.1",

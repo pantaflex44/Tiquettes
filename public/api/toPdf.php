@@ -49,7 +49,7 @@ class TiquettesPDF extends FPDF
     protected mixed $subTitle = "";
     protected mixed $NewPageGroup = false;
     protected mixed $PageGroups = array();
-    protected mixed $CurrPageGroup;
+    protected mixed $CurrPageGroup = '';
 
     protected mixed $grid = false;
     protected mixed $gridOrientation = 'L';
@@ -368,7 +368,7 @@ class TiquettesPDF extends FPDF
 
     public function GroupPageNo(): mixed
     {
-        return $this->PageGroups[$this->CurrPageGroup];
+        return $this->CurrPageGroup !== '' ? $this->PageGroups[$this->CurrPageGroup] : '';
     }
 
     public function PageGroupAlias(): mixed
@@ -386,7 +386,7 @@ class TiquettesPDF extends FPDF
             $this->PageGroups[$alias] = 1;
             $this->CurrPageGroup = $alias;
             $this->NewPageGroup = false;
-        } elseif ($this->CurrPageGroup)
+        } elseif ($this->CurrPageGroup !== '')
             $this->PageGroups[$this->CurrPageGroup]++;
     }
 

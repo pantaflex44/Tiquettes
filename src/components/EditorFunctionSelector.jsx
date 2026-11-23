@@ -29,7 +29,7 @@ export default function EditorFunctionSelector({
 		<select
 			id={id}
 			name={id}
-			value={value}
+			value={value ?? ""}
 			title={title ?? ""}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);

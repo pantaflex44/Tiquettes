@@ -40,7 +40,7 @@ export default function EditorWireSelector({
 		<select
 			id={id}
 			name={id}
-			value={value}
+			value={value ?? ""}
 			data-value={value}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value);

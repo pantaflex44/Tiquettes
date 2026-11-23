@@ -24,6 +24,18 @@ import wizardPicture2height from "../assets/swb_height.png";
 import wizardPicture2rowsCount from "../assets/swb_rowsCount.png";
 import wizardPicture2stepSize from "../assets/swb_stepSize.png";
 import wizardPicture2stepsPerRows from "../assets/swb_stepsPerRows.png";
+import {
+	VITE_ALLOWED_MODULES,
+	VITE_DEFAULT_PROJECT_NAME,
+	VITE_DEFAULT_ROWHEIGHT,
+	VITE_DEFAULT_ROWS,
+	VITE_DEFAULT_STEPSIZE,
+	VITE_DEFAULT_STEPSPERROW,
+	VITE_HEIGHT_MAX,
+	VITE_HEIGHT_MIN,
+	VITE_ROWS_MAX,
+	VITE_ROWS_MIN,
+} from "../libs/config.js";
 import FirstpageOptionsPopup from "./FirstpageSettingsPopup.jsx";
 import LazyImage from "./LazyImage.jsx";
 import Popup from "./Popup.jsx";
@@ -60,25 +72,12 @@ export default function NewProjectPopup({
 	onApply,
 	defaultFirstpageOptions,
 }) {
-	const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE, 10);
-	const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
-	const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS, 10);
-	const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT, 10);
-	const defaultStepsPerRows = parseInt(
-		import.meta.env.VITE_DEFAULT_STEPSPERROW,
-		10,
-	);
-	const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN, 10);
-	const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX, 10);
-	const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN, 10);
-	const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX, 10);
-
 	const [properties, setProperties] = useState({
-		rowsCount: defaultNpRows,
-		stepsPerRows: defaultStepsPerRows,
-		height: defaultHRow,
-		stepSize: defaultStepSize,
-		name: defaultProjectName,
+		rowsCount: VITE_DEFAULT_ROWS,
+		stepsPerRows: VITE_DEFAULT_STEPSPERROW,
+		height: VITE_DEFAULT_ROWHEIGHT,
+		stepSize: VITE_DEFAULT_STEPSIZE,
+		name: VITE_DEFAULT_PROJECT_NAME,
 		infos: defaultFirstpageOptions.infos,
 		views: defaultFirstpageOptions.views,
 	});
@@ -178,15 +177,15 @@ export default function NewProjectPopup({
 									</label>
 									<div className="wizard-page-form-row-flex">
 										<span className="wizard-page-form-row-indicator-left">
-											{rowsMin}
+											{VITE_ROWS_MIN}
 										</span>
 										<input
 											style={{ flex: 1 }}
 											type="range"
 											name="rowsCount"
 											id="rowsCount"
-											min={rowsMin}
-											max={rowsMax}
+											min={VITE_ROWS_MIN}
+											max={VITE_ROWS_MAX}
 											value={properties.rowsCount}
 											title={`Nombre de rangées: ${properties.rowsCount}`}
 											onChange={(e) =>
@@ -197,7 +196,7 @@ export default function NewProjectPopup({
 											}
 										/>
 										<span className="wizard-page-form-row-indicator-right">
-											{rowsMax}
+											{VITE_ROWS_MAX}
 										</span>
 									</div>
 								</div>
@@ -217,39 +216,36 @@ export default function NewProjectPopup({
 									<label htmlFor="stepsPerRows">Chaque rangée possède</label>
 									<div className="wizard-page-form-row-flex">
 										<div className="radio_group" style={{ margin: 0 }}>
-											{import.meta.env.VITE_ALLOWED_MODULES.split(",").map(
-												(count) => {
-													const c = parseInt(count.trim(), 10);
-													return (
-														<div key={c} className="radio">
-															<input
-																type="radio"
-																name={`stepsPerRows_${c}`}
-																id={`stepsPerRows_${c}`}
-																value={c}
-																checked={properties.stepsPerRows === c}
-																onChange={(e) =>
-																	setProperties((old) => ({
-																		...old,
-																		stepsPerRows: parseInt(e.target.value, 10),
-																	}))
-																}
-															/>
-															<label
-																htmlFor={`stepsPerRows_${c}`}
-																style={{
-																	margin: 0,
-																	marginRight: "0.5em",
-																	paddingInline: "1em",
-																	fontWeight: "normal",
-																}}
-															>
-																{c} modules
-															</label>
-														</div>
-													);
-												},
-											)}
+											{VITE_ALLOWED_MODULES.map((c) => {
+												return (
+													<div key={c} className="radio">
+														<input
+															type="radio"
+															name={`stepsPerRows_${c}`}
+															id={`stepsPerRows_${c}`}
+															value={c}
+															checked={properties.stepsPerRows === c}
+															onChange={(e) =>
+																setProperties((old) => ({
+																	...old,
+																	stepsPerRows: parseInt(e.target.value, 10),
+																}))
+															}
+														/>
+														<label
+															htmlFor={`stepsPerRows_${c}`}
+															style={{
+																margin: 0,
+																marginRight: "0.5em",
+																paddingInline: "1em",
+																fontWeight: "normal",
+															}}
+														>
+															{c} modules
+														</label>
+													</div>
+												);
+											})}
 										</div>
 									</div>
 								</div>
@@ -323,15 +319,15 @@ export default function NewProjectPopup({
 									</label>
 									<div className="wizard-page-form-row-flex">
 										<span className="wizard-page-form-row-indicator-left">
-											{heightMin}mm
+											{VITE_HEIGHT_MIN}mm
 										</span>
 										<input
 											style={{ flex: 1 }}
 											type="range"
 											name="height"
 											id="height"
-											min={heightMin}
-											max={heightMax}
+											min={VITE_HEIGHT_MIN}
+											max={VITE_HEIGHT_MAX}
 											value={properties.height}
 											title={`Nombre de rangées: ${properties.height}`}
 											onChange={(e) =>
@@ -342,7 +338,7 @@ export default function NewProjectPopup({
 											}
 										/>
 										<span className="wizard-page-form-row-indicator-right">
-											{heightMax}mm
+											{VITE_HEIGHT_MAX}mm
 										</span>
 									</div>
 								</div>

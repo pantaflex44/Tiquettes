@@ -16,6 +16,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { VITE_VREF_230V, VITE_VREF_400V } from "../libs/config.js";
 import { polesCounter } from "../others/functions.js";
 
 export default function EditorPoleSelector({
@@ -30,28 +31,28 @@ export default function EditorPoleSelector({
 	const allowedPoles = [
 		{
 			key: "1P+N",
-			name: `Monophasé unipolaire ${import.meta.env.VITE_VREF_230V} (1P+N)`,
-			vref: import.meta.env.VITE_VREF_230V,
+			name: `Monophasé unipolaire ${VITE_VREF_230V} (1P+N)`,
+			vref: VITE_VREF_230V,
 		},
 		{
 			key: "2P",
-			name: `Monophasé bipolaire ${import.meta.env.VITE_VREF_230V} (2P)`,
-			vref: import.meta.env.VITE_VREF_230V,
+			name: `Monophasé bipolaire ${VITE_VREF_230V} (2P)`,
+			vref: VITE_VREF_230V,
 		},
 		{
 			key: "3P",
-			name: `Triphasé ${import.meta.env.VITE_VREF_400V} (3P)`,
-			vref: import.meta.env.VITE_VREF_400V,
+			name: `Triphasé ${VITE_VREF_400V} (3P)`,
+			vref: VITE_VREF_400V,
 		},
 		{
 			key: "3P+N",
-			name: `Triphasé ${import.meta.env.VITE_VREF_230V} (3P+N)`,
-			vref: import.meta.env.VITE_VREF_230V,
+			name: `Triphasé ${VITE_VREF_230V} (3P+N)`,
+			vref: VITE_VREF_230V,
 		},
 		{
 			key: "4P",
-			name: `Tétrapolaire ${import.meta.env.VITE_VREF_230V} (4P)`,
-			vref: import.meta.env.VITE_VREF_230V,
+			name: `Tétrapolaire ${VITE_VREF_230V} (4P)`,
+			vref: VITE_VREF_230V,
 		},
 	]
 		.filter((p) => allowed.includes(p.key))
@@ -70,14 +71,14 @@ export default function EditorPoleSelector({
 
 	const getVrefFromPole = (pole) => {
 		const found = allowedPoles.find((p) => p.key === pole);
-		return found ? found.vref : import.meta.env.VITE_VREF_230V;
+		return found ? found.vref : VITE_VREF_230V;
 	};
 
 	return (
 		<select
 			id={id}
 			name={id}
-			value={value}
+			value={value ?? ""}
 			onChange={(e) => {
 				if (onChange) onChange(e.target.value, getVrefFromPole(e.target.value));
 			}}

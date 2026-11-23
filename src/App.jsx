@@ -16,7 +16,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { satisfies } from "compare-versions";
 import {
 	Fragment,
 	useCallback,
@@ -69,8 +68,39 @@ import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
 import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
 import labelersOptions from "./labelers_options.json" with { type: "json" };
+import {
+	VITE_APP_API_URL,
+	VITE_APP_MODE,
+	VITE_DEFAULT_PROJECT_NAME,
+	VITE_DEFAULT_ROWHEIGHT,
+	VITE_DEFAULT_ROWS,
+	VITE_DEFAULT_STEPSIZE,
+	VITE_DEFAULT_STEPSPERROW,
+	VITE_HEIGHT_MAX,
+	VITE_HEIGHT_MIN,
+	VITE_ROWS_MAX,
+	VITE_VREF_230V,
+} from "./libs/config.js";
+import { getUrlParam } from "./libs/others.js";
+import {
+	autoCorrectModuleIDs,
+	autoReassignAllModules,
+	autoUpdateProjectProperties,
+	createNewRows,
+	defaultFirstpageOptions,
+	defaultModule,
+	defaultPrintOptions,
+	defaultProject,
+	defaultTheme,
+	getLastFreeID,
+	getNextId,
+	isEmptySwitchboard,
+	newProject,
+	replaceAllModulesID,
+	verifyVersion,
+} from "./libs/project.js";
+import { sendChoice } from "./libs/stats.js";
 import schemaFunctions from "./schema_functions.json" with { type: "json" };
-import schemaSources from "./schema_sources.json" with { type: "json" };
 import swbIcons from "./switchboard_icons.json" with { type: "json" };
 import themesList from "./themes.json" with { type: "json" };
 
@@ -147,72 +177,6 @@ function App() {
 	};
 	const [autoSave, setAutoSave] = useState(getSavedAutoSave());
 
-	const defaultFirstpageOptions = {
-		infos: {
-			// to switchboad.firstPageInfos
-			from: {
-				logo: null,
-				name: null,
-				siret: null,
-				postalAddress: null,
-				email: null,
-				phone: null,
-			},
-			to: {
-				name: null,
-				postalAddress: null,
-				email: null,
-				phone: null,
-			},
-		},
-		views: {
-			// to printOptions.firstPageView
-			projectName: true,
-			projectVersion: true,
-			projectCreated: true,
-			projectUpdated: true,
-			projectType: true,
-			from: {
-				logo: false,
-				name: false,
-				siret: false,
-				postalAddress: false,
-				email: false,
-				phone: false,
-			},
-			to: {
-				name: false,
-				postalAddress: false,
-				email: false,
-				phone: false,
-			},
-		},
-	};
-
-	const defaultPrintOptions = useMemo(
-		() => ({
-			lang: "fr_FR",
-			firstPage: false,
-			labels: true,
-			summary: false,
-			schema: false,
-			modulelist: false,
-			freeModules: false,
-			pdfOptions: {
-				openWindow: true,
-				autoPrint: false,
-				schemaGridColor: [230, 230, 230],
-				labelsCutLines: true,
-				printCurrents: false,
-				labelsPrintFormat: "A4",
-				schemaPrintFormat: "A4",
-				summaryPrintFormat: "A4",
-				schemaFolioStart: 1,
-				firstPageView: { ...defaultFirstpageOptions.views },
-			},
-		}),
-		[],
-	);
 	const getSavedPrintOptions = () => {
 		const merge = (a, b) =>
 			[a, b].reduce(
@@ -275,276 +239,14 @@ function App() {
 	const [spaceSize, setSpaceSize] = useState("1152px");
 	const [autoSpaceSize, setAutoSpaceSize] = useState(getSavedAutoResize());
 
-	const defaultStepSize = parseInt(import.meta.env.VITE_DEFAULT_STEPSIZE, 10);
-	const defaultProjectName = import.meta.env.VITE_DEFAULT_PROJECT_NAME;
-	const defaultNpRows = parseInt(import.meta.env.VITE_DEFAULT_ROWS, 10);
-	const defaultHRow = parseInt(import.meta.env.VITE_DEFAULT_ROWHEIGHT, 10);
-	const defaultStepsPerRows = parseInt(
-		import.meta.env.VITE_DEFAULT_STEPSPERROW,
-		10,
-	);
-	const defaultTheme = themesList.filter((t) => t.default)[0];
-	const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
-	const defaultProjectType = import.meta.env.VITE_DEFAULT_PROJECT_TYPE;
-	const defaultSources = (import.meta.env.VITE_SOURCES ?? "")
-		.split("|")
-		.filter(
-			(id) =>
-				id.trim() !== "" && Object.keys(schemaSources).includes(id.trim()),
-		)
-		.map((id) => ({ ...schemaSources[id], id }));
-	const defaultAutoAddRps =
-		import.meta.env.VITE_AUTO_ADD_RPS.trim().toLowerCase() === "true";
-	//const rowsMin = parseInt(import.meta.env.VITE_ROWS_MIN, 10);
-	const rowsMax = parseInt(import.meta.env.VITE_ROWS_MAX, 10);
-	const heightMin = parseInt(import.meta.env.VITE_HEIGHT_MIN, 10);
-	const heightMax = parseInt(import.meta.env.VITE_HEIGHT_MAX, 10);
-
-	const defaultModule = useMemo(
-		() => ({
-			id: "",
-			icon:
-				import.meta.env.VITE_DEFAULT_ICON === ""
-					? null
-					: import.meta.env.VITE_DEFAULT_ICON,
-			text: import.meta.env.VITE_DEFAULT_TEXT,
-			desc: import.meta.env.VITE_DEFAULT_DESC,
-			func: "",
-			type: "",
-			crb: "",
-			modtype: "",
-			current: "",
-			vref: import.meta.env.VITE_VREF_230V,
-			sensibility: "",
-			coef: 0.5,
-			pole: "",
-			wire: "",
-			line: "",
-			grp: "",
-			parentId: "",
-			srcId: "",
-			kcId: "",
-			kcType: "NO",
-			kcOrder: "after",
-			partialKc: false,
-			onlyChilds: true,
-			noAutoId: false,
-			free: true,
-			span: 1,
-			half: "none",
-			associateId: "",
-		}),
-		[],
-	);
-
 	const createRow = useCallback(
-		(steps, rowsCount) => {
-			return Array(rowsCount)
-				.fill([])
-				.map((_, i) =>
-					Array(steps)
-						.fill({ ...defaultModule })
-						.map((q, j) => ({
-							...q,
-							id: `Q${j + 1 + ((i + 1) * steps - steps)}`,
-						})),
-				);
-		},
+		(steps, rowsCount) => createNewRows(steps, rowsCount),
 		[defaultModule],
 	);
-
-	const generateUUID = () => {
-		const lut = [];
-		for (let i = 0; i < 256; i++) {
-			lut[i] = (i < 16 ? "0" : "") + i.toString(16);
-		}
-		const d0 = (Math.random() * 0xffffffff) | 0;
-		const d1 = (Math.random() * 0xffffffff) | 0;
-		const d2 = (Math.random() * 0xffffffff) | 0;
-		const d3 = (Math.random() * 0xffffffff) | 0;
-		return (
-			lut[d0 & 0xff] +
-			lut[(d0 >> 8) & 0xff] +
-			lut[(d0 >> 16) & 0xff] +
-			lut[(d0 >> 24) & 0xff] +
-			"-" +
-			lut[d1 & 0xff] +
-			lut[(d1 >> 8) & 0xff] +
-			"-" +
-			lut[((d1 >> 16) & 0x0f) | 0x40] +
-			lut[(d1 >> 24) & 0xff] +
-			"-" +
-			lut[(d2 & 0x3f) | 0x80] +
-			lut[(d2 >> 8) & 0xff] +
-			"-" +
-			lut[(d2 >> 16) & 0xff] +
-			lut[(d2 >> 24) & 0xff] +
-			lut[d3 & 0xff] +
-			lut[(d3 >> 8) & 0xff] +
-			lut[(d3 >> 16) & 0xff] +
-			lut[(d3 >> 24) & 0xff]
-		);
-	};
-
-	const getUrlParam = (name, type = "string", defaultValue = null) => {
-		const queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
-
-		let param = urlParams.get(name);
-		if (param === null) return defaultValue;
-		param = decodeURIComponent(param).trim();
-
-		switch (type) {
-			case "int":
-				return parseInt(param, 10);
-			case "float":
-				return parseFloat(param);
-			case "boolean":
-				return param.toLowerCase() === "true" || param === "1";
-			default:
-				return param;
-		}
-	};
-
-	const defaultProject = useMemo(
-		() => ({
-			appversion: pkg.version,
-
-			prjid: generateUUID(),
-			prjname: defaultProjectName,
-			prjcreated: new Date(),
-			prjupdated: new Date(),
-			prjversion: 1,
-			projectType: defaultProjectType,
-
-			theme: defaultTheme,
-
-			height: defaultHRow,
-			stepsPerRows: defaultStepsPerRows,
-			stepSize: defaultStepSize,
-			rows: createRow(defaultStepsPerRows, defaultNpRows),
-
-			sources: [...defaultSources],
-			autoAddRps: true,
-			withGroundLine: false,
-
-			schemaMonitor: false,
-			switchboardMonitor: false,
-
-			summaryColumnRow: false,
-			summaryColumnPosition: false,
-			summaryColumnType: true,
-			summaryColumnId: true,
-			summaryColumnFunction: true,
-			summaryColumnLabel: true,
-			summaryColumnDescription: true,
-
-			firstPageInfos: { ...defaultFirstpageOptions.infos },
-			printOptions: { ...defaultPrintOptions },
-		}),
-		[
-			defaultProjectName,
-			defaultProjectType,
-			defaultTheme,
-			defaultHRow,
-			defaultStepsPerRows,
-			defaultStepSize,
-			createRow,
-			defaultNpRows,
-			defaultFirstpageOptions.infos,
-			defaultSources,
-			defaultAutoAddRps,
-		],
-	);
-
-	const autoUpdateProjectProperties = (swb) => {
-		const theme = themeEngineCompatibility(swb);
-
-		return {
-			...swb,
-
-			// <1.5.0  : add project metas
-			// >=1.5.0 : convert data types
-			prjcreated: swb.prjcreated ? new Date(swb.prjcreated) : new Date(),
-			prjupdated: swb.prjupdated ? new Date(swb.prjupdated) : new Date(),
-			prjversion: swb.prjversion ? parseInt(swb.prjversion, 10) : 1,
-			// <2.0.0
-			projectType: swb.projectType ?? defaultProjectType,
-			withGroundLine:
-				swb.withGroundLine === true || swb.withGroundLine === false
-					? swb.withGroundLine
-					: false,
-			schemaMonitor:
-				swb.schemaMonitor === true || swb.schemaMonitor === false
-					? swb.schemaMonitor
-					: false,
-			switchboardMonitor:
-				swb.switchboardMonitor === true || swb.switchboardMonitor === false
-					? swb.switchboardMonitor
-					: false,
-			summaryColumnRow:
-				swb.summaryColumnRow === true || swb.summaryColumnRow === false
-					? swb.summaryColumnRow
-					: false,
-			summaryColumnPosition:
-				swb.summaryColumnPosition === true ||
-				swb.summaryColumnPosition === false
-					? swb.summaryColumnPosition
-					: false,
-			summaryColumnType:
-				swb.summaryColumnType === true || swb.summaryColumnType === false
-					? swb.summaryColumnType
-					: true,
-			summaryColumnId:
-				swb.summaryColumnId === true || swb.summaryColumnId === false
-					? swb.summaryColumnId
-					: true,
-			summaryColumnFunction:
-				swb.summaryColumnFunction === true ||
-				swb.summaryColumnFunction === false
-					? swb.summaryColumnFunction
-					: true,
-			summaryColumnLabel:
-				swb.summaryColumnLabel === true || swb.summaryColumnLabel === false
-					? swb.summaryColumnLabel
-					: true,
-			summaryColumnDescription:
-				swb.summaryColumnDescription === true ||
-				swb.summaryColumnDescription === false
-					? swb.summaryColumnDescription
-					: true,
-			// <2.0.5
-			stepSize: swb.stepSize ?? defaultStepSize,
-			// <2.1.4
-			theme,
-			// <2.2.2
-			prjid: swb.prjid ?? generateUUID(),
-			// <2.2.8
-			// deprecated: withDb, db
-			sources: swb.sources ?? [...defaultSources],
-			// <2.2.9
-			autoAddRps: swb.autoAddRps ?? defaultAutoAddRps,
-		};
-	};
 
 	const setDocumentTitle = (title) => {
 		const t = `${title} - ${pkg.title} ${pkg.version} pour tableaux et armoires électriques.`;
 		document.title = t;
-	};
-
-	const sendChoice = (choiceName, keys = [], unique = false) => {
-		const ks = keys
-			.map((k) => (typeof k === "string" ? k.trim() : `${k}`))
-			.filter((k) => k !== null);
-
-		if (ks.length === 0) return;
-
-		if (unique && !uniqueChoices.includes(choiceName)) {
-			setUniqueChoices((old) => [...old, choiceName]);
-			statsPush("choice", choiceName, ks);
-		}
-
-		if (!unique) statsPush("choice", choiceName, ks);
 	};
 
 	const scrollToProject = () => {
@@ -556,97 +258,8 @@ function App() {
 		//window.scrollTo(0, 0);
 	};
 
-	const verifyVersion = (swb) => {
-		if (!swb.appversion) {
-			alert(
-				`Ce projet a été réalisé avec une version inconnue de ${pkg.title}.\n\nImpossible de l'éditer.`,
-			);
-			return false;
-		}
-
-		const appVersion = swb.appversion;
-		if (!satisfies(appVersion, import.meta.env.VITE_APP_VERSION_RANGE)) {
-			alert(
-				`Ce projet a été réalisé avec une version trop ancienne de ${pkg.title}.\n\nVersion du projet: ${appVersion}\nVersions supportées: ${import.meta.env.VITE_APP_VERSION_RANGE}\n\nImpossible de l'éditer.`,
-			);
-			return false;
-		}
-
-		return true;
-	};
-
-	// correction des identifiants en doublon
-	const modulesAutoId = useCallback((swb) => {
-		const reIndentedSwb = swb;
-		let rows = reIndentedSwb.rows;
-		const ids = [];
-		swb.rows.forEach((row) => {
-			row.forEach((module) => {
-				if (!module.free && module.id.trim() !== "") {
-					ids.push(module.id.trim());
-				}
-			});
-		});
-
-		rows = rows.map((row) => {
-			return row.map((module) => {
-				if (module.free) {
-					return {
-						...module,
-						id: "",
-					};
-				}
-
-				if (module.id.trim() === "") {
-					let count = 1;
-					while (ids.includes(`${defaultModuleId}${count}`)) count++;
-
-					ids.push(`${defaultModuleId}${count}`);
-					return {
-						...module,
-						id: `${defaultModuleId}${count}`,
-					};
-				}
-
-				return module;
-			});
-		});
-
-		return { ...reIndentedSwb, rows };
-	}, []);
-
 	const reassignAllModules = (originalId, newId) => {
-		if (originalId && originalId !== newId) {
-			setSwitchboard((old) => {
-				const rows = old.rows.map((row) => {
-					return row.map((module) => {
-						let mm = { ...module };
-
-						if (module.parentId === originalId) {
-							mm = { ...mm, parentId: newId };
-						}
-
-						if (module.associateId === originalId) {
-							mm = { ...mm, associateId: newId };
-						}
-
-						const kcId_a = (module.kcId ?? "").split("|").map((k) => k.trim());
-						if (kcId_a.includes(originalId)) {
-							mm = {
-								...mm,
-								kcId: kcId_a
-									.map((k) => (k === originalId ? newId : k))
-									.join("|"),
-							};
-						}
-
-						return mm;
-					});
-				});
-
-				return modulesAutoId({ ...old, rows });
-			});
-		}
+		setSwitchboard((old) => replaceAllModulesID(old, originalId, newId));
 	};
 
 	const reassignModules = () => {
@@ -656,108 +269,8 @@ function App() {
 				"Êtes-vous certain de vouloir ré-assigner automatiquement les identifiants de l'ensemble des modules définis? Cette action est irreversible.",
 			)
 		) {
-			const swb = modulesAutoId(switchboard);
-
-			let counters = {};
-			let from = {};
-
-			// get all modules id from no auto id assignment
-			const keepThem = swb.rows
-				.flatMap((row) => {
-					return row.map((module) => {
-						if ((module.noAutoId ?? false) === true) {
-							return module.id;
-						}
-						return null;
-					});
-				})
-				.filter((kt) => kt !== null);
-
-			// re-assign modules id
-			let rows = swb.rows.map((row) => {
-				return row.map((module) => {
-					if (module.free) {
-						return {
-							...module,
-							id: "",
-						};
-					}
-
-					let newModuleId = module.id;
-					if ((module.noAutoId ?? false) !== true) {
-						let func = (module.func ?? "").trim().toUpperCase();
-						if (func === "") func = defaultModuleId;
-
-						do {
-							counters = { ...counters, [func]: (counters[func] ?? 0) + 1 };
-							newModuleId = `${func}${counters[func]}`;
-						} while (keepThem.includes(newModuleId));
-					}
-					from = { ...from, [module.id]: newModuleId };
-
-					return {
-						...module,
-						id: newModuleId,
-					};
-				});
-			});
-
-			// re-assign parents, associates and key contacts
-			rows = rows.map((row) => {
-				return row.map((module) => {
-					let mm = { ...module };
-
-					if (from[module.parentId]) {
-						mm = {
-							...mm,
-							parentId: from[module.parentId],
-						};
-					}
-
-					if (from[module.associateId]) {
-						mm = {
-							...mm,
-							associateId: from[module.associateId],
-						};
-					}
-
-					mm = {
-						...mm,
-						kcId: (mm.kcId ?? "")
-							.split("|")
-							.map((k) => {
-								if (from[k]) return from[k];
-								return null;
-							})
-							.filter((k) => k !== null)
-							.join("|"),
-					};
-
-					return mm;
-				});
-			});
-
-			setSwitchboard((old) => ({ ...old, rows }));
+			setSwitchboard((old) => autoReassignAllModules(old));
 		}
-	};
-
-	const themeEngineCompatibility = (swb) => {
-		let theme = swb?.theme;
-		if (!theme) theme = getThemeOfFirstModuleFound(swb);
-
-		if (!theme.name.startsWith("custom|")) {
-			theme = {
-				...theme,
-				name: `custom|${theme.name}`,
-			};
-		}
-		if (!theme.data) {
-			theme = {
-				...theme,
-				data: themesList.filter((t) => t.name === theme.name)[0].data,
-			};
-		}
-		return theme;
 	};
 
 	const getSavedSwitchboard = () => {
@@ -776,148 +289,72 @@ function App() {
 			};
 			swb = autoUpdateProjectProperties(swb);
 
-			return modulesAutoId({ ...swb });
+			return autoCorrectModuleIDs({ ...swb });
 		}
 
 		return { ...defaultProject };
 	};
-
 	const [switchboard, setSwitchboard] = useState(getSavedSwitchboard());
-	const switchboardIsEmpty = useMemo(() => {
-		let isEmpty = true;
-
-		for (let i = 0; i < switchboard.rows.length; i++) {
-			for (let j = 0; j < switchboard.rows[i].length; j++) {
-				if (switchboard.rows[i][j].free === false) {
-					isEmpty = false;
-					break;
-				}
-			}
-			if (isEmpty === false) break;
-		}
-
-		return isEmpty;
-	}, [switchboard]);
-
-	const allMemoizedIds = useMemo(() => {
-		const ids = [];
-		switchboard.rows.forEach((row) => {
-			row.forEach((module) => {
-				if (!module.free && module.id.trim() !== "") {
-					ids.push(module.id.trim());
-				}
-			});
-		});
-		return ids;
-	}, [switchboard.rows]);
-
-	const getNextId = (id) => {
-		if (allMemoizedIds.includes(id)) {
-			const ii = id.split("_");
-			let count = 1;
-			while (allMemoizedIds.includes(`${ii[0]}_${count}`)) count++;
-			return `${ii[0]}_${count}`;
-		}
-		return id;
-	};
-
-	const lastFreeId = useMemo(() => {
-		const rows = switchboard.rows;
-
-		const ids = [];
-		rows.forEach((row) => {
-			row.forEach((module) => {
-				ids.push(module.id);
-			});
-		});
-
-		let found = "";
-		let count = 1;
-		while (ids.includes(`${defaultModuleId}${count}`)) count++;
-		found = `${defaultModuleId}${count}`;
-
-		return found;
-	}, [switchboard]);
-
-	const getThemeOfFirstModuleFound = (swb = null) => {
-		let themeFound = null;
-		for (const r of (swb ?? switchboard).rows) {
-			for (const m of r) {
-				if (!m.free) {
-					themeFound = m.theme;
-					break;
-				}
-			}
-			if (themeFound) break;
-		}
-		return themeFound ?? defaultTheme;
-	};
 	const [theme, setTheme] = useState(switchboard?.theme ?? defaultTheme);
 
-	const createProject = useCallback(
-		(
+	const switchboardIsEmpty = useMemo(
+		() => isEmptySwitchboard(switchboard),
+		[switchboard.rows],
+	);
+
+	const lastFreeId = useMemo(
+		() => getLastFreeID(switchboard),
+		[switchboard.rows],
+	);
+
+	const createProject = (
+		name,
+		stepsPerRows,
+		rowsCount,
+		height,
+		stepSize,
+		views = null,
+		infos = null,
+		printFirstpage = null,
+	) => {
+		importRef.current.value = "";
+
+		setClipboard(null);
+		setClipboardMode(null);
+		setUniqueChoices([]);
+
+		setDocumentTitle(name);
+		setTab(1);
+		setSubMenus((old) => ({
+			...old,
+			printLabelsOpened: false,
+			printSchemaOpened: false,
+			printSummaryOpened: false,
+		}));
+
+		const newSwitchboard = newProject(
 			name,
 			stepsPerRows,
 			rowsCount,
 			height,
 			stepSize,
-			views = null,
-			infos = null,
-			printFirstpage = null,
-		) => {
-			importRef.current.value = "";
+			printFirstpage,
+			infos,
+			views,
+		);
+		setTheme(newSwitchboard.theme);
+		setPrintOptions(newSwitchboard.printOptions);
+		setSwitchboard(() => newSwitchboard);
 
-			setTheme(defaultTheme);
-			setSwitchboard(() => {
-				return modulesAutoId({
-					...defaultProject,
-					prjid: generateUUID(),
-					prjname: name,
-					height,
-					stepsPerRows,
-					stepSize,
-					rows: createRow(stepsPerRows, rowsCount),
-					firstPageInfos: { ...infos },
-				});
-			});
+		scrollToProject();
+	};
 
-			setClipboard(null);
-			setClipboardMode(null);
-			setUniqueChoices([]);
-			setPrintOptions({
-				...defaultPrintOptions,
-				firstPage: printFirstpage ?? defaultPrintOptions.firstPage,
-				pdfOptions: {
-					...defaultPrintOptions.pdfOptions,
-					firstPageView: { ...views },
-				},
-			});
-			setDocumentTitle(name);
-			setTab(1);
-			setSubMenus((old) => ({
-				...old,
-				printLabelsOpened: false,
-				printSchemaOpened: false,
-				printSummaryOpened: false,
-			}));
-			scrollToProject();
-		},
-		[
-			defaultTheme,
-			defaultPrintOptions,
-			defaultStepSize,
-			modulesAutoId,
-			defaultProject,
-			createRow,
-		],
-	);
-
-	const resetProject = useCallback(() => {
+	const resetProject = () => {
 		importRef.current.value = "";
 
 		setClipboardMode(null);
 		setUniqueChoices([]);
-		setDocumentTitle(defaultProjectName);
+		setDocumentTitle(VITE_DEFAULT_PROJECT_NAME);
 		setPrintOptions({ ...defaultPrintOptions });
 		setTheme(defaultTheme);
 		setSubMenus((old) => ({
@@ -933,21 +370,13 @@ function App() {
 		localStorage.removeItem(`${pkg.name}_autoResize`);
 
 		createProject(
-			defaultProjectName,
-			defaultStepsPerRows,
-			defaultNpRows,
-			defaultHRow,
-			defaultStepSize,
+			VITE_DEFAULT_PROJECT_NAME,
+			VITE_DEFAULT_STEPSPERROW,
+			VITE_DEFAULT_ROWS,
+			VITE_DEFAULT_ROWHEIGHT,
+			VITE_DEFAULT_STEPSIZE,
 		);
-	}, [
-		createProject,
-		defaultHRow,
-		defaultNpRows,
-		defaultProjectName,
-		defaultStepsPerRows,
-		defaultTheme,
-		defaultStepSize,
-	]);
+	};
 
 	const _importProject = (data) => {
 		try {
@@ -990,15 +419,16 @@ function App() {
 					if (!nm.kcType) nm = { ...nm, kcType: "NO" };
 					if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
 					if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
-					if (!nm.vref) nm = { ...nm, vref: import.meta.env.VITE_VREF_230V };
+					if (!nm.vref) nm = { ...nm, vref: VITE_VREF_230V };
 					if (!nm.srcId) nm = { ...nm, srcId: "" };
 
 					return nm;
 				});
 			});
+			swb = { ...swb, rows: _rows };
 
 			setTheme(swb.theme);
-			setSwitchboard(() => modulesAutoId({ ...swb }));
+			setSwitchboard(() => autoCorrectModuleIDs({ ...swb }));
 
 			//const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
 			//setDocumentTitle(filename);
@@ -1068,7 +498,7 @@ function App() {
 		const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
 		const link = document.createElement("a");
 		link.href = jsonString;
-		link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? defaultProjectName)} - v${swb.prjversion}.json`;
+		link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? VITE_DEFAULT_PROJECT_NAME)} - v${swb.prjversion}.json`;
 		link.click();
 
 		setSwitchboard(swb);
@@ -1128,7 +558,7 @@ function App() {
 		form.style.display = "none";
 		form.name = "toLabelerForm";
 		form.method = "POST";
-		form.action = `${import.meta.env.VITE_APP_API_URL}toLabeler.php`;
+		form.action = `${VITE_APP_API_URL}toLabeler.php`;
 		//form.target = '_blank';
 
 		let params = Object.fromEntries(
@@ -1139,7 +569,7 @@ function App() {
 				selections: { value: JSON.stringify(uniqueSelectedPositions) },
 				tv: { value: JSON.stringify(pkg.version) },
 				isDev: {
-					value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0",
+					value: VITE_APP_MODE === "development" ? "1" : "0",
 				},
 			}).map(([key, value]) => {
 				const i = document.createElement("input");
@@ -1188,7 +618,7 @@ function App() {
 			form.style.display = "none";
 			form.name = "toPdfForm";
 			form.method = "POST";
-			form.action = `${import.meta.env.VITE_APP_API_URL}toPdf.php?lang=${po.lang}`;
+			form.action = `${VITE_APP_API_URL}toPdf.php?lang=${po.lang}`;
 			if (po.pdfOptions.openWindow) form.target = "_blank";
 
 			let params = Object.fromEntries(
@@ -1198,7 +628,7 @@ function App() {
 					tv: { value: JSON.stringify(pkg.version) },
 					auto: { value: po.pdfOptions.autoPrint ? "1" : "0" },
 					isDev: {
-						value: import.meta.env.VITE_APP_MODE === "development" ? "1" : "0",
+						value: VITE_APP_MODE === "development" ? "1" : "0",
 					},
 					schemaGridColor: {
 						value: Array.isArray(po.pdfOptions.schemaGridColor)
@@ -1230,6 +660,8 @@ function App() {
 				"theme",
 				[`${switchboard.theme.group} - ${switchboard.theme.title}`],
 				true,
+				uniqueChoices,
+				setUniqueChoices,
 			);
 
 			const sc = [];
@@ -1238,7 +670,7 @@ function App() {
 			if (po.summary) sc.push("Nomenclature");
 			if (po.schema) sc.push("Schéma unifilaire");
 			if (po.modulelist) sc.push("Liste des modules");
-			sendChoice("print", sc);
+			sendChoice("print", sc, false, uniqueChoices, setUniqueChoices);
 
 			const sf = [];
 			if (po.labels) sf.push(`Etiquettes : ${po.pdfOptions.labelsPrintFormat}`);
@@ -1246,13 +678,31 @@ function App() {
 				sf.push(`Nomenclature : ${po.pdfOptions.summaryPrintFormat}`);
 			if (po.schema)
 				sf.push(`Schema unifilaire : ${po.pdfOptions.schemaPrintFormat}`);
-			sendChoice("print_format", sf);
+			sendChoice("print_format", sf, false, uniqueChoices, setUniqueChoices);
 
-			sendChoice("labels_module_height_mm", [switchboard.height]);
-			sendChoice("labels_module_width_mm", [switchboard.stepSize]);
-			sendChoice("labels_rows_length", [switchboard.stepsPerRows]);
+			sendChoice(
+				"labels_module_height_mm",
+				[switchboard.height],
+				false,
+				uniqueChoices,
+				setUniqueChoices,
+			);
+			sendChoice(
+				"labels_module_width_mm",
+				[switchboard.stepSize],
+				false,
+				uniqueChoices,
+				setUniqueChoices,
+			);
+			sendChoice(
+				"labels_rows_length",
+				[switchboard.stepsPerRows],
+				false,
+				uniqueChoices,
+				setUniqueChoices,
+			);
 
-			/*const url = import.meta.env.VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
+			/*const url = VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
 			const link = document.createElement("a");
 			link.href = url;
 			link.target = "_blank";
@@ -1470,9 +920,7 @@ function App() {
 				: ""
 		).trim();
 		const coef = data.currentModule.coef ?? 0.5;
-		const vref = (
-			data.currentModule.vref ?? import.meta.env.VITE_VREF_230V
-		).trim();
+		const vref = (data.currentModule.vref ?? VITE_VREF_230V).trim();
 		const pole = (
 			schemaFunctions[data.currentModule.func]?.hasPole
 				? (data.currentModule.pole ?? "")
@@ -1555,7 +1003,7 @@ function App() {
 				});
 			});
 
-			return modulesAutoId({ ...old, rows });
+			return autoCorrectModuleIDs({ ...old, rows });
 		});
 
 		// ré-assigne automatiquement tous les identifiants parents et contacts concernés par la modification de l'identifiant du module en cours d'édition
@@ -1586,7 +1034,7 @@ function App() {
 				return r;
 			});
 
-			return modulesAutoId({ ...old, rows });
+			return autoCorrectModuleIDs({ ...old, rows });
 		});
 	};
 
@@ -1612,7 +1060,7 @@ function App() {
 				return r.filter((rr) => rr !== null);
 			});
 
-			return modulesAutoId({ ...old, rows });
+			return autoCorrectModuleIDs({ ...old, rows });
 		});
 	};
 
@@ -1637,7 +1085,7 @@ function App() {
 					return r;
 				});
 
-				return modulesAutoId({ ...old, rows });
+				return autoCorrectModuleIDs({ ...old, rows });
 			});
 		}
 	};
@@ -1663,7 +1111,7 @@ function App() {
 					return r;
 				});
 
-				return modulesAutoId({ ...old, rows });
+				return autoCorrectModuleIDs({ ...old, rows });
 			});
 		}
 	};
@@ -1691,7 +1139,9 @@ function App() {
 		const selected = findThemeByName(name);
 		if (selected) {
 			setTheme(selected);
-			setSwitchboard((old) => modulesAutoId({ ...old, theme: selected }));
+			setSwitchboard((old) =>
+				autoCorrectModuleIDs({ ...old, theme: selected }),
+			);
 			setTab(1);
 		}
 	};
@@ -1790,7 +1240,7 @@ function App() {
 			rows[rowIndex] = row;
 			setSwitchboard((old) => {
 				moduleFocus(rowIndex + 1, moduleIndex);
-				return modulesAutoId({ ...old, rows });
+				return autoCorrectModuleIDs({ ...old, rows });
 			});
 		}
 	};
@@ -1814,7 +1264,7 @@ function App() {
 			rows[rowIndex] = row;
 			setSwitchboard((old) => {
 				moduleFocus(rowIndex + 1, moduleIndex + 2);
-				return modulesAutoId({ ...old, rows });
+				return autoCorrectModuleIDs({ ...old, rows });
 			});
 		}
 	};
@@ -1874,7 +1324,7 @@ function App() {
 						...module,
 						id:
 							clipboardMode.mode !== "cut"
-								? getNextId(clipboard.id)
+								? getNextId(switchboard, clipboard.id)
 								: clipboard.id,
 						free: clipboard.free,
 						span: clipboard.span,
@@ -1932,7 +1382,7 @@ function App() {
 				return r;
 			});*/
 
-			return modulesAutoId({ ...old, rows });
+			return autoCorrectModuleIDs({ ...old, rows });
 		});
 
 		setClipboard(null);
@@ -2027,7 +1477,7 @@ function App() {
 				return r;
 			});
 
-			return modulesAutoId({ ...old, rows });
+			return autoCorrectModuleIDs({ ...old, rows });
 		});
 
 		setClipboard(null);
@@ -2065,7 +1515,7 @@ function App() {
 			rows[rowIndex] = row;
 			setSwitchboard((old) => {
 				moduleFocus(rowIndex + 1, moduleIndex + 2);
-				return modulesAutoId({ ...old, rows });
+				return autoCorrectModuleIDs({ ...old, rows });
 			});
 		}
 	};
@@ -2117,9 +1567,9 @@ function App() {
 
 	const handleRowAdd = (rowIndex) => {
 		const rows = switchboard.rows;
-		if (rows.length >= rowsMax) {
+		if (rows.length >= VITE_ROWS_MAX) {
 			alert(
-				`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${rowsMax} rangées`,
+				`Impossible d'ajouter une nouvelle rangée.\nTaille maximum atteinte: ${VITE_ROWS_MAX} rangées`,
 			);
 			return;
 		}
@@ -2127,7 +1577,7 @@ function App() {
 		const newRow = createRow(switchboard.stepsPerRows, 1);
 		rows.splice(rowIndex, 0, ...newRow);
 
-		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+		setSwitchboard((old) => autoCorrectModuleIDs({ ...old, rows }));
 	};
 
 	const handleRowAddBefore = (rowIndex) => {
@@ -2142,7 +1592,7 @@ function App() {
 		const rows = switchboard.rows;
 		rows.splice(rowIndex, 1);
 
-		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+		setSwitchboard((old) => autoCorrectModuleIDs({ ...old, rows }));
 	};
 
 	const handleRowMove = (rowIndex, toRowIndex) => {
@@ -2151,7 +1601,7 @@ function App() {
 		rows[rowIndex] = rows[toRowIndex];
 		rows[toRowIndex] = r;
 
-		setSwitchboard((old) => modulesAutoId({ ...old, rows }));
+		setSwitchboard((old) => autoCorrectModuleIDs({ ...old, rows }));
 
 		const e = document.getElementById(`row_${toRowIndex}`);
 		if (e) {
@@ -2176,7 +1626,7 @@ function App() {
 	};
 
 	const rowAddAllowed = () => {
-		return switchboard.rows.length < rowsMax;
+		return switchboard.rows.length < VITE_ROWS_MAX;
 	};
 
 	const isLastRow = (rowIndex) => {
@@ -2279,11 +1729,11 @@ function App() {
 
 	useEffect(() => {
 		setLabelerOptionsRowsSelection(
-			switchboard.rows.length > 1
-				? `1-${switchboard.rows.length}`
-				: `${switchboard.rows.length}`,
+			(switchboard?.rows ?? []).length > 1
+				? `1-${(switchboard?.rows ?? []).length}`
+				: `${(switchboard?.rows ?? []).length}`,
 		);
-	}, [switchboard.rows.length]);
+	}, [(switchboard?.rows ?? []).length]);
 
 	useEffect(() => {
 		let t = null;
@@ -2425,7 +1875,7 @@ function App() {
 			return true;
 		});
 
-		fetch(`${import.meta.env.VITE_APP_API_URL}i18n.php?api_availlable`, {
+		fetch(`${VITE_APP_API_URL}i18n.php?api_availlable`, {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
@@ -2463,7 +1913,12 @@ function App() {
 			<nav
 				ref={navRef}
 				className={`button_group ${UIFrozen ? "disabled" : ""}`.trim()}
-				style={{ position: "sticky", top: "0.25rem", zIndex: 5000 }}
+				style={{
+					position: "sticky",
+					top: "0.25rem",
+					zIndex: 5000,
+					boxSizing: "border-box",
+				}}
 			>
 				{/** ----------------------------------------------------------- */}
 				{/** TOOLBAR PROJECTS **/}
@@ -2481,7 +1936,7 @@ function App() {
 						src={newProjectIcon}
 						width={16}
 						height={16}
-						alt={defaultProjectName}
+						alt={VITE_DEFAULT_PROJECT_NAME}
 					/>
 					<span className={"responsive"}>Projets...</span>
 				</button>
@@ -2584,7 +2039,7 @@ function App() {
 									ref={labelerRef}
 									value={
 										labelerOptionsRowsSelection ??
-										`1-${switchboard.rows.length}`
+										`1-${(switchboard?.rows ?? []).length}`
 									}
 									onChange={(e) =>
 										setLabelerOptionsRowsSelection(e.target.value)
@@ -3089,7 +2544,7 @@ function App() {
 								id="print_pdf_openWindow"
 								name="print_pdf_openWindow"
 								type="checkbox"
-								checked={printOptions.pdfOptions.openWindow}
+								checked={printOptions?.pdfOptions?.openWindow}
 								onChange={(e) =>
 									setPrintOptions((old) => ({
 										...old,
@@ -3112,7 +2567,7 @@ function App() {
 								id="print_pdf_autoPrint"
 								name="print_pdf_autoPrint"
 								type="checkbox"
-								checked={printOptions.pdfOptions.autoPrint}
+								checked={printOptions?.pdfOptions?.autoPrint}
 								onChange={(e) =>
 									setPrintOptions((old) => ({
 										...old,
@@ -3127,7 +2582,6 @@ function App() {
 								Ouvrir automatiquement les propriétés d&#39;impressions
 							</label>
 						</div>
-
 						{Array.isArray(apiAvaillableLanguages) &&
 							apiAvaillableLanguages.length > 0 && (
 								<>
@@ -3148,7 +2602,7 @@ function App() {
 											style={{ width: "100%" }}
 											name="print_language"
 											id="print_language"
-											value={printOptions.lang}
+											value={printOptions?.lang ?? ""}
 											onChange={(e) =>
 												setPrintOptions((old) => ({
 													...old,
@@ -3277,10 +2731,10 @@ function App() {
 					alt="Projet courant"
 				/>
 				<ContentEditable
-					value={switchboard.prjname ?? defaultProjectName}
+					value={switchboard.prjname ?? VITE_DEFAULT_PROJECT_NAME}
 					onChange={(value) => {
 						let v = value.trim();
-						if (v === "") v = defaultProjectName;
+						if (v === "") v = VITE_DEFAULT_PROJECT_NAME;
 						setSwitchboard((old) => ({
 							...old,
 							prjname: v,
@@ -3308,7 +2762,8 @@ function App() {
 				<li title="Description">
 					<LazyImage src={infoIcon} alt="Description" width={16} height={16} />
 					<span>
-						{switchboard.rows.length} x {switchboard.stepsPerRows} module
+						{(switchboard?.rows ?? []).length} x {switchboard.stepsPerRows}{" "}
+						module
 						{switchboard.stepsPerRows > 1 ? "s" : ""} / {switchboard.height}mm
 					</span>
 				</li>
@@ -3398,7 +2853,7 @@ function App() {
 						<div className="tabPageBandCol">
 							<select
 								id="switchboardThemeChoice"
-								value={theme?.name ?? defaultTheme}
+								value={theme?.name ?? defaultTheme ?? ""}
 								onChange={(e) => {
 									updateTheme(e.target.value);
 								}}
@@ -3464,7 +2919,7 @@ function App() {
 								})}
 							</select>
 						</div>
-						{theme.name.startsWith("custom") && theme?.data && (
+						{(theme?.name ?? "").startsWith("custom") && theme?.data && (
 							<div className="tabPageBandCol">
 								<button
 									id="switchboardThemeEdit"
@@ -3504,14 +2959,14 @@ function App() {
 							<input
 								id="switchboardHeightChoice"
 								type="range"
-								min={heightMin}
-								max={heightMax}
+								min={VITE_HEIGHT_MIN}
+								max={VITE_HEIGHT_MAX}
 								step={1}
 								style={{ width: "100px" }}
 								value={switchboard.height}
 								onChange={(e) => {
 									const value = parseInt(e.target.value, 10);
-									if (value >= heightMin)
+									if (value >= VITE_HEIGHT_MIN)
 										setSwitchboard((old) => ({ ...old, height: value }));
 								}}
 								disabled={UIFrozen}
@@ -3539,7 +2994,7 @@ function App() {
 						<div className="tabPageBandCol">
 							<select
 								id="switchboardStepSizeChoice"
-								value={switchboard.stepSize ?? defaultStepSize}
+								value={switchboard.stepSize ?? VITE_DEFAULT_STEPSIZE ?? ""}
 								onChange={(e) => {
 									const value = parseFloat(e.target.value);
 									if (value === 17.5 || value === 18)
@@ -3690,7 +3145,7 @@ function App() {
 					</div>
 				)}
 
-				{switchboard.rows.map((row, i) => (
+				{(switchboard?.rows ?? []).map((row, i) => (
 					<Row
 						key={i}
 						rowIndex={i}
@@ -3880,14 +3335,14 @@ function App() {
 				<ThemeEditorPopup
 					switchboard={switchboard}
 					stepSize={switchboard.stepSize}
-					heightMin={heightMin}
-					heightMax={heightMax}
+					heightMin={VITE_HEIGHT_MIN}
+					heightMax={VITE_HEIGHT_MAX}
 					theme={theme}
 					onCancel={() => setThemeEditor(false)}
 					onApply={(editedTheme) => {
 						setTheme(editedTheme);
 						setSwitchboard((old) =>
-							modulesAutoId({ ...old, theme: editedTheme }),
+							autoCorrectModuleIDs({ ...old, theme: editedTheme }),
 						);
 						setThemeEditor(false);
 					}}

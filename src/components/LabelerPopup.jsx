@@ -198,7 +198,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 					<select
 						name="labeler_model"
 						id={`labeler_model`}
-						value={model}
+						value={model ?? ""}
 						onChange={(e) => {
 							saveOptions();
 							setModel(e.target.value);
@@ -364,7 +364,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 						<select
 							name="labeler_ribbon"
 							id="labeler_ribbon"
-							value={options.ribbon.value}
+							value={options.ribbon.value ?? ""}
 							onChange={(e) =>
 								setOptions((old) => {
 									const newOptions = {
@@ -437,7 +437,7 @@ export default function LabelerPopup({ switchboard, onApply, onCancel }) {
 						<select
 							name="labeler_stepsize"
 							id="labeler_stepsize"
-							value={options?.stepSize?.value ?? switchboard.stepSize}
+							value={options?.stepSize?.value ?? switchboard.stepSize ?? ""}
 							onChange={(e) =>
 								setOptions((old) => {
 									const newOptions = {

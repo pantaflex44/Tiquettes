@@ -39,6 +39,20 @@
 			"actions": {
 				"patches": [
 					{
+						"text": "Correction du bug empêchant la saisie multiligne des adresses postales dans les données utilisateurs.",
+						"from": {
+							"name": "Issue #116",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/116"
+						}
+					},
+					{
+						"text": "Correction du bug empêchant l'importation des données utilisateurs.",
+						"from": {
+							"name": "Issue #117",
+							"link": "https://github.com/pantaflex44/Tiquettes/issues/117"
+						}
+					},
+					{
 						"text": "Correctif dans le hook useKeyPress par Théo BARRAGUÉ : 'le callback n'est plus appelé deux fois par appui'",
 						"from": {
 							"name": "PR #109",

@@ -19,6 +19,7 @@
 import "./twofaInput.css";
 
 import { createRef, useEffect, useMemo, useState } from "react";
+import { VITE_APP_API_URL } from "../libs/config";
 import useLocalDebounce from "./useLocalDebounce";
 
 export default function TwofaInput({
@@ -98,7 +99,7 @@ export default function TwofaInput({
 			if (onErrorCleared) onErrorCleared();
 
 			fetch(
-				`${import.meta.env.VITE_APP_API_URL}auth.php?function=twoFaCheck&email=${encodeURIComponent(email)}&token=${encodeURIComponent(debouncedValue)}`,
+				`${VITE_APP_API_URL}auth.php?function=twoFaCheck&email=${encodeURIComponent(email)}&token=${encodeURIComponent(debouncedValue)}`,
 				{
 					method: "GET",
 					headers: { "Content-Type": "application/json" },
@@ -140,7 +141,7 @@ export default function TwofaInput({
 		if (onSend) onSend();
 
 		fetch(
-			`${import.meta.env.VITE_APP_API_URL}auth.php?function=twoFaSend&email=${encodeURIComponent(email)}`,
+			`${VITE_APP_API_URL}auth.php?function=twoFaSend&email=${encodeURIComponent(email)}`,
 			{
 				method: "GET",
 				headers: { "Content-Type": "application/json" },

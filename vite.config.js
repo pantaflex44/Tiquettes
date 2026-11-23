@@ -5,8 +5,14 @@ import biomePlugin from "vite-plugin-biome";
 import mkcert from "vite-plugin-mkcert";
 import ogPlugin from "vite-plugin-open-graph";
 import { VitePWA } from "vite-plugin-pwa";
-
 import * as pkg from "./package.json" with { type: "json" };
+import {
+	VITE_APP_BASE,
+	VITE_APP_LOCALE,
+	VITE_APP_URL,
+	VITE_SERVER_PORT,
+} from "./src/libs/config.js";
+import { bob } from "./src/libs/essai.js";
 
 // https://vitejs.dev/config/
 
@@ -21,7 +27,7 @@ export default async ({ mode }) => {
 				const found = await glob(["./public/**/*.svg"]);
 				for (const img of found) {
 					const filename = img.split(/[\\/]/).pop();
-					const filepath = `${env.VITE_APP_BASE}${filename}`;
+					const filepath = `${VITE_APP_BASE}${filename}`;
 					const link = `<link rel="preload" as="image" href="${filepath}" fetchpriority="high" />`;
 					if (!images.includes(link)) {
 						images.push(link);
@@ -38,12 +44,24 @@ export default async ({ mode }) => {
 	};
 
 	let options = {
-		base: env.VITE_APP_BASE,
+		base: VITE_APP_BASE,
 		server: {
-			port: env.VITE_SERVER_PORT,
+			VITE_SERVER_PORT,
+		},
+		define: {
+			"process.env": env,
 		},
 		plugins: [
 			//svgPreloader(),
+			{
+				name: "api-handler",
+				configureServer(server) {
+					server.middlewares.use("/mcp", (_req, res, _next) => {
+						res.writeHead(200, { "Content-Type": "application/json" });
+						res.end(JSON.stringify({ url: bob() }));
+					});
+				},
+			},
 			react(),
 			VitePWA({
 				registerType: "autoUpdate",
@@ -84,28 +102,28 @@ export default async ({ mode }) => {
 			}),
 			ogPlugin({
 				basic: {
-					url: env.VITE_APP_URL,
+					url: VITE_APP_URL,
 					title: pkg.title,
 					type: "website",
 					image: [
 						{
 							width: 1200,
-							url: `${env.VITE_APP_URL}og_1200x630.webp`,
+							url: `${VITE_APP_URL}og_1200x630.webp`,
 							height: 630,
 							alt: "L'application Tiquettes.fr",
 						},
 					],
 					determiner: "auto",
 					description: pkg.description,
-					locale: env.VITE_APP_LOCALE.replaceAll("-", "_"),
-					localeAlternate: [env.VITE_APP_LOCALE.replaceAll("-", "_")],
+					locale: VITE_APP_LOCALE.replaceAll("-", "_"),
+					localeAlternate: [VITE_APP_LOCALE.replaceAll("-", "_")],
 					siteName: pkg.title,
 				},
 				twitter: {
 					image: [
 						{
 							width: 1280,
-							url: `${env.VITE_APP_URL}twitter_1280x640.webp`,
+							url: `${VITE_APP_URL}twitter_1280x640.webp`,
 							height: 640,
 							alt: "L'application Tiquettes.fr",
 						},
@@ -113,7 +131,7 @@ export default async ({ mode }) => {
 					card: "summary_large_image",
 					description: pkg.description,
 					title: pkg.title,
-					site: env.VITE_APP_URL,
+					site: VITE_APP_URL,
 					creator: pkg.author,
 				},
 			}),

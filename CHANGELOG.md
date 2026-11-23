@@ -4,6 +4,8 @@
 
 ### Corrections
 
+- [[Issue #116](https://github.com/pantaflex44/Tiquettes/issues/116)] Correction du bug empêchant la saisie multiligne des adresses postales dans les données utilisateurs.
+- [[Issue #117](https://github.com/pantaflex44/Tiquettes/issues/117)] Correction du bug empêchant l'importation des données utilisateurs.
 - [[PR #109](https://github.com/pantaflex44/Tiquettes/pull/109)] Correctif dans le hook useKeyPress par Théo BARRAGUÉ : 'le callback n'est plus appelé deux fois par appui'
 
 ### Modifications

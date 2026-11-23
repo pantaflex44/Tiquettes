@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { VITE_APP_API_URL, VITE_APP_MODE } from "../../src/libs/config";
+
 function formatURL(url, args = {}) {
 	let u = url;
 	if (Object.keys(args).length > 0) u += "?";
@@ -28,8 +30,8 @@ function formatURL(url, args = {}) {
 }
 
 function fetchURL(filename, args = {}) {
-	const url = formatURL(import.meta.env.VITE_APP_API_URL + filename, {
-		m: import.meta.env.VITE_APP_MODE,
+	const url = formatURL(VITE_APP_API_URL + filename, {
+		m: VITE_APP_MODE,
 		...args,
 	});
 	fetch(url)
@@ -39,7 +41,7 @@ function fetchURL(filename, args = {}) {
 			let { response, text } = data;
 			text = text.trim();
 			if (text === "") text = "no content";
-			/*if (import.meta.env.VITE_APP_MODE === 'development') {
+			/*if (VITE_APP_MODE === 'development') {
                 console.log(`Fetch response ${response.status} ${response.statusText} from ${url} [${text}]`)
             }*/
 		})

@@ -31,6 +31,7 @@ import numbersIcon from "../assets/numbers.svg";
 import sourcesIcon from "../assets/sources.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
+import { VITE_APP_BASE, VITE_VREF_230V } from "../libs/config.js";
 import swbIcons from "../switchboard_icons.json";
 import LazyImage from "./LazyImage.jsx";
 import SchemaItem from "./SchemaItem.jsx";
@@ -80,7 +81,7 @@ export default function SchemaTab({
 		let rpCnt = 1;
 		let rps = {};
 
-		let r = switchboard.rows.flatMap((row) =>
+		let r = (switchboard?.rows ?? []).flatMap((row) =>
 			row
 				.map((module) => {
 					if (!module?.id) return null;
@@ -398,9 +399,7 @@ export default function SchemaTab({
 				};
 
 				const getVref = (module) => {
-					const _currentVref = (
-						module?.vref ?? import.meta.env.VITE_VREF_230V
-					).split("/");
+					const _currentVref = (module?.vref ?? VITE_VREF_230V).split("/");
 					if (_currentVref.length > 0)
 						return parseInt(
 							_currentVref[_currentVref.length - 1].replace(/\D/g, ""),
@@ -997,7 +996,7 @@ export default function SchemaTab({
 						<div className="schemaGroundLine">
 							<LazyImage
 								className=""
-								src={`${import.meta.env.VITE_APP_BASE}circuit-ground.svg`}
+								src={`${VITE_APP_BASE}circuit-ground.svg`}
 								width={24}
 								height={24}
 							/>
