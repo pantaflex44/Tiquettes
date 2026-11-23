@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [2.2.9.1] - 2026-11-16
+## [2.2.9.2] - 2026-11-16
 
 ### Corrections
 
@@ -15,6 +15,7 @@
 
 ### Ajouts
 
+- Ajout du pictogramme 'Fil pilote' suite à la demande d'Eric M.
 - Ajout des modules 'Bobine MN' et 'Bobine MX'.
 
 
