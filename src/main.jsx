@@ -133,7 +133,9 @@ export default function Main() {
 				const currentVersion = json.version ?? "0.0.0";
 				const localVersion = pkg.version;
 
-				if (semver.gt(currentVersion, localVersion)) {
+				if (
+					semver.gt(semver.coerce(currentVersion), semver.coerce(localVersion))
+				) {
 					console.log(
 						`New version ${currentVersion} availlable ! Please force your browser to reload before using it.`,
 					);
