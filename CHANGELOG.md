@@ -1,9 +1,11 @@
 # ChangeLog
 
-## [2.2.9.2] - 2026-11-16
+## [2.2.9.3] - 2026-11-16
 
 ### Corrections
 
+- Modification du coefficient de la règle de calcul de l'aval dans le cas d'un projet tertiaire et correction d'un bug dans la définition d'un répartiteur auto après remarques de Marc K.
+- [[PR #115](https://github.com/pantaflex44/Tiquettes/pull/115)] Correctif dans la gestion du copier/coller des  modules. Un bug, soit, empêchait le collage dans le dernier module disponible, soir permettait de coller un module plus loin que la place disponible!
 - [[Issue #116](https://github.com/pantaflex44/Tiquettes/issues/116)] Correction du bug empêchant la saisie multiligne des adresses postales dans les données utilisateurs.
 - [[Issue #117](https://github.com/pantaflex44/Tiquettes/issues/117)] Correction du bug empêchant l'importation des données utilisateurs.
 - [[PR #109](https://github.com/pantaflex44/Tiquettes/pull/109)] Correctif dans le hook useKeyPress par Théo BARRAGUÉ : 'le callback n'est plus appelé deux fois par appui'

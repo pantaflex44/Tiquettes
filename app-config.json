@@ -34,10 +34,20 @@
 		}
 	],
 	"changelog": {
-		"2.2.9.2": {
+		"2.2.9.3": {
 			"date": "2026-11-16",
 			"actions": {
 				"patches": [
+					{
+						"text": "Modification du coefficient de la règle de calcul de l'aval dans le cas d'un projet tertiaire et correction d'un bug dans la définition d'un répartiteur auto après remarques de Marc K."
+					},
+					{
+						"text": "Correctif dans la gestion du copier/coller des  modules. Un bug, soit, empêchait le collage dans le dernier module disponible, soir permettait de coller un module plus loin que la place disponible!",
+						"from": {
+							"name": "PR #115",
+							"link": "https://github.com/pantaflex44/Tiquettes/pull/115"
+						}
+					},
 					{
 						"text": "Correction du bug empêchant la saisie multiligne des adresses postales dans les données utilisateurs.",
 						"from": {

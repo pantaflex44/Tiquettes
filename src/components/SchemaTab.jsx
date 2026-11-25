@@ -122,6 +122,7 @@ export default function SchemaTab({
 									srcId: ks,
 									func: "rp",
 									text: "Répartiteur de branchement",
+
 									_auto: true,
 								};
 
@@ -168,7 +169,10 @@ export default function SchemaTab({
 
 						const childsPole = r
 							.filter((m) => m.parentId === rp.id)
-							.map((m) => getSimplyPole(m));
+							.map((m) => getSimplyPole(m))
+							.filter((m) => !Number.isNaN(m));
+
+						console.log(childsPole);
 
 						r = [
 							...r,
@@ -415,6 +419,10 @@ export default function SchemaTab({
 					return module?.func;
 				};
 
+				const getCoef = (module) => {
+					return module?.coef ?? 1;
+				};
+
 				const getSensibility = (module) => {
 					return parseInt((module?.sensibility ?? "0").replace(/\D/g, ""), 10);
 				};
@@ -438,7 +446,8 @@ export default function SchemaTab({
 				const getTrueCoef = (module) => {
 					return switchboard.projectType === "R" && isMono(currentPole)
 						? Math.round((module?.coef ?? 0.5) * 10) / 10
-						: 1;
+						: //: 1;
+							Math.round((module?.coef ?? 0.5) * 10) / 10;
 				};
 
 				const getTrueFactor = (module) => {
@@ -503,6 +512,7 @@ export default function SchemaTab({
 				const currentCurrent = getCurrent(data.module);
 				const currentPower = currentCurrent * getVref(data.module);
 				const currentIsCurrentLimiter = getIsCurrentLimiter(data.module);
+				const currentCoef = getCoef(data.module);
 				const vDivider =
 					getVref(data.module) *
 					(isTri(currentPole) ? 3 : isMono(currentPole) ? 1 : 1);
@@ -577,6 +587,16 @@ export default function SchemaTab({
 						return 0;
 					});
 
+					// getTrueCoef : adaptée pour le tertiaire
+
+					/*const totalCurrentsWithCoef = Object.entries(data.childs)
+						.map(([_, cdata]) => {
+							if (getFunc(cdata.module) === "q")
+								return getCurrent(cdata.module) * getTrueCoef(cdata.module);
+							return 0;
+						})
+						.reduce((p, a) => p + a);*/
+
 					const total = Math.ceil(
 						powers.reduce((partialSum, a) => {
 							return partialSum + a;
@@ -629,6 +649,10 @@ export default function SchemaTab({
 					add_info(
 						id,
 						`Puissance maximum admissible: ${powerDetails.value}${powerDetails.unit}`,
+					);
+					add_info(
+						id,
+						`Charge retenue pour la règle de l'aval: ${currentCurrent * currentCoef}A`,
 					);
 
 					const iconDetails = getIconDetails(data.module);
