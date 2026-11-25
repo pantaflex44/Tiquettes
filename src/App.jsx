@@ -92,16 +92,18 @@ import {
 	defaultPrintOptions,
 	defaultProject,
 	defaultTheme,
+	exportProject,
 	getLastFreeID,
 	getNextId,
+	importProject,
 	isEmptySwitchboard,
 	newProject,
+	printProject,
 	replaceAllModulesID,
 	verifyVersion,
 } from "./libs/project.js";
 import { sendChoice } from "./libs/stats.js";
 import schemaFunctions from "./schema_functions.json" with { type: "json" };
-import swbIcons from "./switchboard_icons.json" with { type: "json" };
 import themesList from "./themes.json" with { type: "json" };
 
 function App() {
@@ -380,58 +382,10 @@ function App() {
 
 	const _importProject = (data) => {
 		try {
-			let swb = typeof data === "string" ? JSON.parse(data) : data;
-			swb = autoUpdateProjectProperties(swb);
-
-			const _rows = swb.rows.map((r) => {
-				return r.map((m) => {
-					let nm = { ...m };
-
-					// <=1.4.0 : remove old theme definitions
-					if (nm.theme) delete nm.theme;
-
-					// <=2.0.0 : add module default values fors schema definitions
-					if (nm.icon) {
-						const sic = swbIcons.filter((si) => si.filename === nm.icon);
-						if (sic.length === 1) {
-							if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
-						}
-					}
-
-					// <=2.0.3 : add half module size
-					if (!nm.half) nm = { ...nm, half: "none" };
-
-					// <=2.2.3 : add modtype and wire property
-					if (!nm.modtype) nm = { ...nm, modtype: "" };
-					if (!nm.wire) nm = { ...nm, wire: "" };
-
-					// <=2.2.4 : add grp property
-					if (!nm.grp) nm = { ...nm, grp: "" };
-
-					// <=2.2.5 : add line property
-					if (!nm.line) nm = { ...nm, line: "" };
-
-					// <=2.2.6 : add partialKc property
-					if (!nm.partialKc) nm = { ...nm, partialKc: false };
-
-					// <=2.2.8 : add new properties
-					if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
-					if (!nm.kcType) nm = { ...nm, kcType: "NO" };
-					if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
-					if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
-					if (!nm.vref) nm = { ...nm, vref: VITE_VREF_230V };
-					if (!nm.srcId) nm = { ...nm, srcId: "" };
-
-					return nm;
-				});
-			});
-			swb = { ...swb, rows: _rows };
+			const swb = importProject(data);
 
 			setTheme(swb.theme);
-			setSwitchboard(() => autoCorrectModuleIDs({ ...swb }));
-
-			//const filename = importRef.current.value.replaceAll("\\", "/").split("/").pop();
-			//setDocumentTitle(filename);
+			setSwitchboard(() => ({ ...swb }));
 
 			setClipboard(null);
 			setClipboardMode(null);
@@ -474,7 +428,7 @@ function App() {
 		}
 	};
 
-	const importProject = (file) => {
+	const projectImportMethod = (file) => {
 		if (file) {
 			const fileReader = new FileReader();
 			fileReader.readAsText(file, "UTF-8");
@@ -485,23 +439,16 @@ function App() {
 		}
 	};
 
-	const exportProject = () => {
-		const swb = {
-			...switchboard,
-			prjversion: switchboard.prjversion
-				? parseInt(switchboard.prjversion, 10) + 1
-				: 1,
-			appversion: pkg.version,
-			printOptions: { ...printOptions },
-		};
+	const projectExportMethod = () => {
+		const project = exportProject(switchboard);
 
-		const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(swb))}`;
+		const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(project.data)}`;
 		const link = document.createElement("a");
 		link.href = jsonString;
-		link.download = `${pkg.title} - ${sanitizeFilename(swb.prjname ?? VITE_DEFAULT_PROJECT_NAME)} - v${swb.prjversion}.json`;
+		link.download = project.filename;
 		link.click();
 
-		setSwitchboard(swb);
+		setSwitchboard(project.switchboard);
 
 		statsPush("action", "export");
 	};
@@ -593,7 +540,7 @@ function App() {
 		form = null;
 	};
 
-	const printProject = () => {
+	const printProjectMethod = () => {
 		toPdf();
 
 		const types = ["pdf"];
@@ -613,35 +560,23 @@ function App() {
 					"ATTENTION: Veuillez imprimer en 'Taille réelle' ou 'Echelle 100%'. Ne pas 'ajuster à la page' dans les paramètres d'impression sous peine de déformer vos étiquettes.",
 				))
 		) {
+			const printData = printProject(switchboard, printOptionsEx);
+
 			let form = document.createElement("form");
 			document.body.appendChild(form);
 			form.style.display = "none";
 			form.name = "toPdfForm";
 			form.method = "POST";
-			form.action = `${VITE_APP_API_URL}toPdf.php?lang=${po.lang}`;
+			form.action = printData.apiUrl;
 			if (po.pdfOptions.openWindow) form.target = "_blank";
 
 			let params = Object.fromEntries(
-				Object.entries({
-					switchboard: { value: JSON.stringify(switchboard) },
-					printOptions: { value: JSON.stringify(po) },
-					tv: { value: JSON.stringify(pkg.version) },
-					auto: { value: po.pdfOptions.autoPrint ? "1" : "0" },
-					isDev: {
-						value: VITE_APP_MODE === "development" ? "1" : "0",
-					},
-					schemaGridColor: {
-						value: Array.isArray(po.pdfOptions.schemaGridColor)
-							? po.pdfOptions.schemaGridColor.join(",")
-							: Object.values(po.pdfOptions.schemaGridColor).join(","),
-					},
-					labelsCutLines: { value: po.pdfOptions.labelsCutLines ? "1" : "0" },
-				}).map(([key, value]) => {
+				Object.entries(printData.params).map(([key, value]) => {
 					const i = document.createElement("input");
 					i.type = "hidden";
 					i.name = key;
-					i.value = value.value;
-					return [key, { ...value, input: form.appendChild(i) }];
+					i.value = value;
+					return [key, { value, input: form.appendChild(i) }];
 				}),
 			);
 
@@ -701,12 +636,6 @@ function App() {
 				uniqueChoices,
 				setUniqueChoices,
 			);
-
-			/*const url = VITE_APP_API_URL + "toPdf.php?switchboard=" + encodeURIComponent(JSON.stringify(switchboard)) + "&printOptions=" + encodeURIComponent(JSON.stringify(po));
-			const link = document.createElement("a");
-			link.href = url;
-			link.target = "_blank";
-			link.click();*/
 		}
 	};
 
@@ -1414,30 +1343,19 @@ function App() {
 		const currentModule = row[moduleIndex];
 		if (currentModule.span >= clipboard.span) return true;
 
-		let allowed = true;
-		let max = clipboard.span;
-		let i = 0;
-		while (max > 0) {
-			//const nextModule =
-			//	moduleIndex + currentModule.span < switchboard.stepsPerRows
-			//		? row[moduleIndex + 1]
-			//		: null;
-			// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
-			// https://github.com/pantaflex44/Tiquettes/pull/115
-			const nextModule =
-				moduleIndex + currentModule.span <= switchboard.stepsPerRows
-					? row[moduleIndex + 1]
-					: null;
+		let count = moduleIndex - 1 + currentModule.span;
+		for (let i = 1; i < clipboard.span; i++) {
+			const nextModuleIndex = moduleIndex + i;
+			const nextModule = row[nextModuleIndex];
+			if (!nextModule) return false;
 
-			if (!nextModule?.free || nextModule.span !== 1) {
-				allowed = false;
-				break;
-			}
+			count += nextModule.span;
+			if (count > switchboard.stepsPerRows) return false;
 
-			max -= nextModule.span;
-			i++;
+			if (nextModule.span !== 1) return false;
 		}
-		return allowed;
+
+		return true;
 	};
 
 	const handleCancelPaste = () => {
@@ -1927,6 +1845,14 @@ function App() {
 			});
 	}, []);
 
+	useEffect(() => {
+		if (
+			JSON.stringify(printOptions) !== JSON.stringify(switchboard.printOptions)
+		) {
+			setSwitchboard((old) => ({ ...old, printOptions }));
+		}
+	}, [printOptions, switchboard.printOptions]);
+
 	return (
 		<div
 			ref={projectRef}
@@ -1985,7 +1911,7 @@ function App() {
 					type="file"
 					onChange={(e) => {
 						if (e.target.files && e.target.files.length > 0)
-							importProject(e.target.files[0]);
+							projectImportMethod(e.target.files[0]);
 					}}
 					style={{
 						visibility: "hidden",
@@ -2033,7 +1959,7 @@ function App() {
 									style={{ marginBlock: "0" }}
 									title="Exporter le projet"
 									onClick={() => {
-										exportProject();
+										projectExportMethod();
 									}}
 								>
 									<LazyImage src={downloadIcon} width={16} height={16} />
@@ -2665,7 +2591,7 @@ function App() {
 								style={{ fontSize: "100%" }}
 								title="Lancer l'impression"
 								onClick={() => {
-									printProject();
+									printProjectMethod();
 								}}
 							>
 								Lancer l&apos;impression...

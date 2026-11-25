@@ -576,8 +576,11 @@ export default function SchemaTab({
 							);
 						return 0;
 					});
+
 					const total = Math.ceil(
-						powers.reduce((partialSum, a) => partialSum + a, 0) / vDivider,
+						powers.reduce((partialSum, a) => {
+							return partialSum + a;
+						}, 0) / vDivider,
 					);
 
 					let loadError = false;

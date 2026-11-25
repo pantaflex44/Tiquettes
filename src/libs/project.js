@@ -1,8 +1,12 @@
 import { satisfies } from "compare-versions";
 import * as pkg from "../../package.json" with { type: "json" };
+import { sanitizeFileName } from "../others/files.js";
 import schemaSources from "../schema_sources.json" with { type: "json" };
+import swbIcons from "../switchboard_icons.json" with { type: "json" };
 import themesList from "../themes.json" with { type: "json" };
 import {
+	VITE_APP_API_URL,
+	VITE_APP_MODE,
 	VITE_APP_VERSION_RANGE,
 	VITE_AUTO_ADD_RPS,
 	VITE_DEFAULT_DESC,
@@ -588,4 +592,108 @@ export const newDefaultProject = () => {
 		VITE_DEFAULT_ROWHEIGHT,
 		VITE_DEFAULT_STEPSIZE,
 	);
+};
+
+/**
+ * Importe un projet, le contrôle et met à jour ses propriétés
+ * @param {string|object} data Données du projet
+ * @returns Données du projet importées
+ */
+export const importProject = (data) => {
+	let swb = typeof data === "string" ? JSON.parse(data) : data;
+	swb = autoUpdateProjectProperties(swb);
+
+	const _rows = swb.rows.map((r) => {
+		return r.map((m) => {
+			let nm = { ...m };
+
+			// <=1.4.0 : remove old theme definitions
+			if (nm.theme) delete nm.theme;
+
+			// <=2.0.0 : add module default values fors schema definitions
+			if (nm.icon) {
+				const sic = swbIcons.filter((si) => si.filename === nm.icon);
+				if (sic.length === 1) {
+					if (!nm.coef) nm = { ...nm, coef: sic[0].coef };
+				}
+			}
+
+			// <=2.0.3 : add half module size
+			if (!nm.half) nm = { ...nm, half: "none" };
+
+			// <=2.2.3 : add modtype and wire property
+			if (!nm.modtype) nm = { ...nm, modtype: "" };
+			if (!nm.wire) nm = { ...nm, wire: "" };
+
+			// <=2.2.4 : add grp property
+			if (!nm.grp) nm = { ...nm, grp: "" };
+
+			// <=2.2.5 : add line property
+			if (!nm.line) nm = { ...nm, line: "" };
+
+			// <=2.2.6 : add partialKc property
+			if (!nm.partialKc) nm = { ...nm, partialKc: false };
+
+			// <=2.2.8 : add new properties
+			if (!nm.onlyChilds) nm = { ...nm, onlyChilds: true };
+			if (!nm.kcType) nm = { ...nm, kcType: "NO" };
+			if (!nm.noAutoId) nm = { ...nm, noAutoId: false };
+			if (!nm.kcOrder) nm = { ...nm, kcOrder: "after" };
+			if (!nm.vref) nm = { ...nm, vref: VITE_VREF_230V };
+			if (!nm.srcId) nm = { ...nm, srcId: "" };
+
+			return nm;
+		});
+	});
+	swb = { ...swb, rows: _rows };
+
+	return autoCorrectModuleIDs({ ...swb });
+};
+
+/**
+ * Exporte un projet
+ * @param {object} swb Données du projet
+ * @returns Un object contenant les données du projet (switchboard), les données à exporter (data) et le nom du fichier (filename)
+ */
+export const exportProject = (swb) => {
+	const _swb = {
+		...swb,
+		prjversion: swb.prjversion ? parseInt(swb.prjversion, 10) + 1 : 1,
+		appversion: pkg.version,
+	};
+
+	return {
+		switchboard: _swb,
+		data: JSON.stringify(_swb),
+		//urldata: `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(_swb))}`,
+		filename: `${pkg.title} - ${sanitizeFileName(_swb.prjname ?? VITE_DEFAULT_PROJECT_NAME)} - v${_swb.prjversion}.json`,
+	};
+};
+
+/**
+ * Prépare un projet pour l'impression en PDF via l'API de Tiquettes
+ * @param {object} swb Données du projet
+ * @returns Un objet contenant l'url de l'API toPDF (apiUrl) et les paramètres nécessaires (params)
+ */
+export const printProject = (swb, printOptionsEx = null) => {
+	const po = printOptionsEx ?? swb.printOptions;
+
+	const apiUrl = `${VITE_APP_API_URL}toPdf.php?lang=${po.lang}`;
+
+	const params = {
+		switchboard: JSON.stringify(swb),
+		printOptions: JSON.stringify(po),
+		tv: JSON.stringify(pkg.version),
+		auto: po.pdfOptions.autoPrint ? "1" : "0",
+		isDev: VITE_APP_MODE === "development" ? "1" : "0",
+		schemaGridColor: Array.isArray(po.pdfOptions.schemaGridColor)
+			? po.pdfOptions.schemaGridColor.join(",")
+			: Object.values(po.pdfOptions.schemaGridColor).join(","),
+		labelsCutLines: po.pdfOptions.labelsCutLines ? "1" : "0",
+	};
+
+	return {
+		apiUrl,
+		params,
+	};
 };
