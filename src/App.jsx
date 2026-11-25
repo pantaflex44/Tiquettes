@@ -1733,10 +1733,7 @@ function App() {
 	const handleModuleGrow = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
-		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
-				? row[moduleIndex + 1]
-				: null;
+		const nextModule = moduleIndex + 1 < row.length ? row[moduleIndex + 1] : null;
 
 		if (nextModule?.free === true && nextModule?.span === 1) {
 			moduleGrow(rowIndex, moduleIndex);
@@ -1803,10 +1800,7 @@ function App() {
 		const rows = switchboard.rows;
 		const row = rows[rowIndex];
 		const currentModule = row[moduleIndex];
-		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
-				? row[moduleIndex + 1]
-				: null;
+		const nextModule = moduleIndex + 1 < row.length ? row[moduleIndex + 1] : null;
 
 		if (
 			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
@@ -1998,10 +1992,7 @@ function App() {
 	const moduleGrowAllowed = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
-		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
-				? row[moduleIndex + 1]
-				: null;
+		const nextModule = moduleIndex + 1 < row.length ? row[moduleIndex + 1] : null;
 
 		return nextModule?.free === true && nextModule?.span === 1;
 	};
@@ -2021,10 +2012,7 @@ function App() {
 	const moduleMoveRightAllowed = (rowIndex, moduleIndex) => {
 		const row = switchboard.rows[rowIndex];
 		const currentModule = row[moduleIndex];
-		const nextModule =
-			moduleIndex + currentModule.span < switchboard.stepsPerRows
-				? row[moduleIndex + 1]
-				: null;
+		const nextModule = moduleIndex + 1 < row.length ? row[moduleIndex + 1] : null;
 
 		return (
 			(!currentModule.free || (currentModule.free && currentModule.span > 1)) &&
