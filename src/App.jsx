@@ -69,6 +69,10 @@ import ThemeEditorPopup from "./components/ThemeEditorPopup.jsx";
 import WelcomePopup from "./components/WelcomePopup.jsx";
 import useDropdownToolbarMenuPlacing from "./hooks/useDropdownToolbarMenuPlacing.jsx";
 import labelersOptions from "./labelers_options.json" with { type: "json" };
+import {
+	applyModulePasteRowsPure,
+	modulePasteAllowedPure,
+} from "./others/pasteLogic.js";
 import schemaFunctions from "./schema_functions.json" with { type: "json" };
 import schemaSources from "./schema_sources.json" with { type: "json" };
 import swbIcons from "./switchboard_icons.json" with { type: "json" };
@@ -1842,95 +1846,19 @@ function App() {
 		if (clipboardMode?.mode !== "cut" && clipboardMode?.mode !== "copy") return;
 
 		setSwitchboard((old) => {
-			let deleteLength = 0;
-			let addLength = 0;
-
-			const rows = old.rows.map((row, i) => {
-				let r = row.map((module, j) => {
-					if (
-						clipboardMode.mode === "cut" &&
-						i === clipboardMode.rowIndex &&
-						j === clipboardMode.moduleIndex
-					) {
-						return { ...defaultModule, span: module.span };
-					}
-
-					if (i !== rowIndex) return module;
-
-					if (j === moduleIndex) {
-						deleteLength = clipboard.span - module.span;
-						addLength += module.span - clipboard.span;
-					}
-
-					// si le module qui va réceptionner le presse-papier est trop petit, on supprime les modules libres nécessaires pour libérer la place avant collage.
-					if (j > moduleIndex && deleteLength > 0 && module.free) {
-						deleteLength--;
-						return null;
-					}
-
-					if (j !== moduleIndex) return module;
-
-					return {
-						...module,
-						id:
-							clipboardMode.mode !== "cut"
-								? getNextId(clipboard.id)
-								: clipboard.id,
-						free: clipboard.free,
-						span: clipboard.span,
-						icon: clipboard.icon,
-						text: clipboard.text,
-						desc: clipboard.desc,
-						parentId: clipboard.parentId,
-						srcId: clipboard.srcId,
-						kcId: clipboard.kcId,
-						kcType: clipboard.kcType,
-						kcOrder: clipboard.ksOrder,
-						partialKc: clipboard.partialKc,
-						onlyChilds: clipboard.onlyChilds,
-						noAutoId: clipboard.noAutoId,
-						func: clipboard.func,
-						crb: clipboard.crb,
-						modtype: clipboard.modtype,
-						type: clipboard.type,
-						current: clipboard.current,
-						sensibility: clipboard.sensibility,
-						coef: clipboard.coef,
-						pole: clipboard.pole,
-						vref: clipboard.vref,
-						wire: clipboard.wire,
-						line: clipboard.line,
-						grp: clipboard.grp,
-						associateId: clipboard.associateId,
-					};
-				});
-
-				r = r.filter((rr) => rr !== null);
-
-				// si le module qui a réceptionné le presse-papier est désormais plus petit, alors on compense en ajoutant des modules libres
-				if (addLength > 0) {
-					for (let al = 0; al < addLength; al++) {
-						r.splice(moduleIndex + 1, 0, { ...defaultModule });
-					}
-					addLength = 0;
-				}
-
-				return r;
-			});
-
-			/*rows = old.rows.map((row, i) => {
-				let r = row.map((module, j) => {
-					let mm = { ...module };
-					if (module.parentId === oldModuleId) {
-						mm = { ...mm, parentId: newModuleId };
-					}
-					if (module.kcId === oldModuleId) {
-						mm = { ...mm, kcId: newModuleId };
-					}
-					return mm;
-				});
-				return r;
-			});*/
+			// applique le collage; si la place n'est pas entièrement disponible ou si une
+			// rangée résultante dépasserait stepsPerRows, le collage est refusé (old renvoyé).
+			const rows = applyModulePasteRowsPure(
+				old.rows,
+				rowIndex,
+				moduleIndex,
+				clipboard,
+				clipboardMode,
+				defaultModule,
+				old.stepsPerRows ?? switchboard.stepsPerRows,
+				getNextId,
+			);
+			if (!rows) return old;
 
 			return modulesAutoId({ ...old, rows });
 		});
@@ -1942,32 +1870,22 @@ function App() {
 	const modulePasteAllowed = (rowIndex, moduleIndex) => {
 		if (
 			!clipboard ||
-			(clipboardMode.mode !== "cut" && clipboardMode.mode !== "copy")
+			(clipboardMode?.mode !== "cut" && clipboardMode?.mode !== "copy")
 		)
 			return false;
 
 		const row = switchboard.rows[rowIndex];
 
-		const currentModule = row[moduleIndex];
-		if (currentModule.span >= clipboard.span) return true;
-
-		let allowed = true;
-		let max = clipboard.span;
-		let i = 0;
-		while (max > 0) {
-			const nextModule =
-				moduleIndex + clipboard.span <= switchboard.stepsPerRows
-					? row[moduleIndex + i]
-					: null;
-			if (!nextModule?.free || nextModule.span !== 1) {
-				allowed = false;
-				break;
-			}
-
-			max -= nextModule.span;
-			i++;
-		}
-		return allowed;
+		// la vérification porte sur la position en unités (somme des spans) de la cible:
+		// position + clipboard.span <= stepsPerRows, collage tenant exactement en fin de
+		// rangée inclus, et les modules suivants à absorber doivent exister, être libres
+		// et de span 1.
+		return modulePasteAllowedPure(
+			row,
+			moduleIndex,
+			clipboard.span,
+			switchboard.stepsPerRows,
+		);
 	};
 
 	const handleCancelPaste = () => {
