@@ -563,6 +563,17 @@
 		"hidden": false
 	},
 	{
+		"filename": "swb_pilote.svg",
+		"title": "Fil pilote",
+		"modtype": "Chauffage",
+		"coef": 0.5,
+		"func": "q",
+		"crb": "C",
+		"current": "10A",
+		"wire": "1.5",
+		"hidden": false
+	},
+	{
 		"filename": "swb_remswitch.svg",
 		"title": "Telerupteur",
 		"modtype": "Divers",

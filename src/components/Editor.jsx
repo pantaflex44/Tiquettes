@@ -23,6 +23,7 @@ import numberAutoIcon from "../assets/numbers_auto.svg";
 import numberManIcon from "../assets/numbers_man.svg";
 import switchboardIcon from "../assets/project.svg";
 import schemaIcon from "../assets/schema.svg";
+import { VITE_DEFAULT_ID } from "../libs/config.js";
 //import useKeyPress from "../hooks/useKeyPress.jsx";
 import { polesCounter } from "../others/functions.js";
 import schemaFunctions from "../schema_functions.json";
@@ -64,7 +65,6 @@ export default function Editor({
 
 	hasBlankId = false,
 }) {
-	const defaultModuleId = import.meta.env.VITE_DEFAULT_ID;
 	const [ed, setEd] = useState(editor);
 	const [isCustomFunction, setIsCustomFunction] = useState(false);
 	const [internalPopupOpened, setInternalPopupOpened] = useState(false);
@@ -139,8 +139,8 @@ export default function Editor({
 			});
 		});
 
-		let prefix = (func ?? defaultModuleId).trim().toUpperCase();
-		if (prefix === "") prefix = defaultModuleId;
+		let prefix = (func ?? VITE_DEFAULT_ID).trim().toUpperCase();
+		if (prefix === "") prefix = VITE_DEFAULT_ID;
 
 		let found = "";
 		let count = 1;
@@ -152,7 +152,7 @@ export default function Editor({
 
 	const lastFreeId = useMemo(() => {
 		return getLastFreeId(ed.currentModule.func);
-	}, [switchboard, defaultModuleId, ed.currentModule.func]);
+	}, [switchboard, ed.currentModule.func]);
 
 	const onUpdateModuleEditor = (data) => {
 		setEd((old) => ({

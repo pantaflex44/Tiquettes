@@ -17,6 +17,7 @@
  */
 
 import { useMemo } from "react";
+import { VITE_APP_BASE } from "../libs/config.js";
 import Color, { hexToRgb } from "../others/color.js";
 import Solver from "../others/colorSolver.js";
 import LazyImage from "./LazyImage.jsx";
@@ -355,7 +356,7 @@ function CustomTheme({ item, data, style }) {
 					) : (
 						<LazyImage
 							style={styles.iconImg}
-							src={`${import.meta.env.VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
+							src={`${VITE_APP_BASE}${item.icon ?? "swb_blank.svg"}`}
 							lazy={false}
 							onlyInView={false}
 							width={null}

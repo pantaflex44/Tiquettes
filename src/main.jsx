@@ -29,6 +29,7 @@ import "./css/main.css";
 import * as pkg from "../package.json" with { type: "json" };
 import { statsPush } from "../public/api/stats.js";
 import NewVersionPopup from "./components/NewVersionPopup.jsx";
+import { VITE_APP_MODE, VITE_SERVER_PORT } from "./libs/config.js";
 
 function Footer() {
 	return (
@@ -40,7 +41,7 @@ function Footer() {
 			}}
 			className="footer"
 		>
-			{pkg.title} {pkg.version} {/*import.meta.env.VITE_APP_MODE && "(DEV)"*/}
+			{pkg.title} {pkg.version} {/*VITE_APP_MODE && "(DEV)"*/}
 			<span className="not_printable">
 				{" "}
 				|{" "}
@@ -74,14 +75,23 @@ function Footer() {
 	);
 }
 
+export function MainApp() {
+	return (
+		<>
+			<App />
+			<Footer />
+		</>
+	);
+}
+
 export default function Main() {
 	const [newVersionAvaillable, setNewVersionAvaillable] = useState(null);
 	const [statsSended, setStatsSended] = useState(false);
 
 	useEffect(() => {
-		console.log("Mode:", import.meta.env.VITE_APP_MODE);
+		console.log("Mode:", VITE_APP_MODE);
 
-		//if (import.meta.env.VITE_APP_MODE !== "development") {
+		//if (VITE_APP_MODE !== "development") {
 		const defaultUrl = "https://www.tiquettes.fr/app/?enjoy";
 
 		const domains = ["tiquettes.fr", "www.tiquettes.fr"];
@@ -103,8 +113,8 @@ export default function Main() {
 				origins.push(k);
 			});
 		});
-		origins.push(`http://localhost:${import.meta.env.VITE_SERVER_PORT}`);
-		origins.push(`https://localhost:${import.meta.env.VITE_SERVER_PORT}`);
+		origins.push(`http://localhost:${VITE_SERVER_PORT}`);
+		origins.push(`https://localhost:${VITE_SERVER_PORT}`);
 
 		const origin = window.location.origin.split("?")[0].toLowerCase().trim();
 		if (!origins.includes(origin)) window.location.replace(defaultUrl);
@@ -123,7 +133,9 @@ export default function Main() {
 				const currentVersion = json.version ?? "0.0.0";
 				const localVersion = pkg.version;
 
-				if (semver.gt(currentVersion, localVersion)) {
+				if (
+					semver.gt(semver.coerce(currentVersion), semver.coerce(localVersion))
+				) {
 					console.log(
 						`New version ${currentVersion} availlable ! Please force your browser to reload before using it.`,
 					);
@@ -152,8 +164,7 @@ export default function Main() {
 
 	return (
 		<>
-			<App />
-			<Footer />
+			<MainApp />
 
 			{newVersionAvaillable && (
 				<NewVersionPopup

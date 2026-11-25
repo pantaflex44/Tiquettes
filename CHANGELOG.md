@@ -1,9 +1,11 @@
 # ChangeLog
 
-## [2.3.0] - 2026-11-16
+## [2.2.9.2] - 2026-11-16
 
 ### Corrections
 
+- [[Issue #116](https://github.com/pantaflex44/Tiquettes/issues/116)] Correction du bug empêchant la saisie multiligne des adresses postales dans les données utilisateurs.
+- [[Issue #117](https://github.com/pantaflex44/Tiquettes/issues/117)] Correction du bug empêchant l'importation des données utilisateurs.
 - [[PR #109](https://github.com/pantaflex44/Tiquettes/pull/109)] Correctif dans le hook useKeyPress par Théo BARRAGUÉ : 'le callback n'est plus appelé deux fois par appui'
 
 ### Modifications
@@ -13,6 +15,7 @@
 
 ### Ajouts
 
+- Ajout du pictogramme 'Fil pilote' suite à la demande d'Eric M.
 - Ajout des modules 'Bobine MN' et 'Bobine MX'.
 
 
@@ -140,10 +143,10 @@
 
 ### Corrections
 
-- Correction d'un bug rendant obligatoire la définition de la section des conducteurs affiliés à chaque module.  3 nouvelles possibilité:
-	- Détection automatique : défini automatiquement la section en fonction du calibre
-	- Inconnue : pas de section définie
-	- Xmm² : définition arbitraire
+- Correction d'un bug rendant obligatoire la définition de la section des conducteurs affiliés à chaque module. 3 nouvelles possibilité:
+  - Détection automatique : défini automatiquement la section en fonction du calibre
+  - Inconnue : pas de section définie
+  - Xmm² : définition arbitraire
 
 
 ## [2.2.3] - 2025-08-25
@@ -181,8 +184,8 @@
 ### Corrections
 
 - Gros correctif suite à la dernière mise à jour majeure.
-	- Téléchargement des thèmes : corrigé
-	- Impression au format PDF : corrigé
+  - Téléchargement des thèmes : corrigé
+  - Impression au format PDF : corrigé
 
 
 ## [2.2.0] - 2025-05-11
@@ -205,13 +208,13 @@
 ### Ajouts
 
 - [[PR #21](https://github.com/pantaflex44/Tiquettes/pull/21)] Nouveaux pictogrammes:
-	- Horloge Journaliere
-	- Horloge Hebdomadaire
-	- Moteur Electrique
-	- Chargeur
-	- Maison / Dépendance / Extension
-	- Onduleur
-	- Interrupteur différentiel
+  - Horloge Journaliere
+  - Horloge Hebdomadaire
+  - Moteur Electrique
+  - Chargeur
+  - Maison / Dépendance / Extension
+  - Onduleur
+  - Interrupteur différentiel
 
 
 ## [2.1.4] - 2025-04-22
@@ -230,7 +233,7 @@
 ### Ajouts
 
 - [[Discussions #19](https://github.com/pantaflex44/Tiquettes/discussions/19)] Nouveau pictogramme:
-	- Pompe de relevage
+  - Pompe de relevage
 
 
 ## [2.1.3] - 2025-04-11
@@ -242,10 +245,10 @@
 ### Ajouts
 
 - [[Issue #13](https://github.com/pantaflex44/Tiquettes/issues/13)] Nouveau pictogramme:
-	- Détecteur de fumées
-	- Sonnette / Carillon
-	- Alarme intrusion
-	- Transformateur
+  - Détecteur de fumées
+  - Sonnette / Carillon
+  - Alarme intrusion
+  - Transformateur
 
 
 ## [2.1.2] - 2025-03-23
@@ -276,8 +279,8 @@
 ### Ajouts
 
 - Nouveau pictogramme:
-	- Telerupteur
-	- Parafoudre
+  - Telerupteur
+  - Parafoudre
 - Ajout d'un éditeur pour personnaliser le thème de ses étiquettes.
 - Ajout de 2 nouveaux thèmes personnalisés dans la rubrique 'Créations: GoldenWine, 'Créations: Orange is the new dark'.
 
@@ -367,11 +370,11 @@
 ### Ajouts
 
 - Nouveaux pictogrammes:
-	- Alarme incendie
-	- Lingerie / Repassage
-	- Bateaux / Ponton / Port
-	- Audio / Musique / Multimédia
-	- Télévision / Ecran / Projecteur
+  - Alarme incendie
+  - Lingerie / Repassage
+  - Bateaux / Ponton / Port
+  - Audio / Musique / Multimédia
+  - Télévision / Ecran / Projecteur
 - Ajout d'une prévisualisation (démo) du module en cours d'édition.
 - Nouvelle fonctionnalité permettant de duppliquer un module (Copier / Coller) vers un emplacement suffisament grand de n'importe quelle rangée.
 
@@ -486,5 +489,3 @@
 - Possibilité de déplacer horizontalement un module dans l'espace libre à ses cotés en utilisant les icones flèches.
 - Possibilité de sélectionner un module puis de le déplacer ou le redimmensionner en utilisant le clavier [-] [+] [←] [→] [Entrée] [Suppr].
 - Ajout d'un fichier CHANGELOG.md.
-
-

@@ -31,6 +31,7 @@ import ThemeEditorPartColumn from "./ThemeEditorPartColumn.jsx";
 import VerticalRule from "./VerticalRule.jsx";
 
 import "../css/themeEditorPopup.css";
+import { VITE_HEIGHT_MIN } from "../libs/config.js";
 import LazyImage from "./LazyImage.jsx";
 
 export default function ThemeEditorPopup({
@@ -857,7 +858,7 @@ export default function ThemeEditorPopup({
 								value={sample.height}
 								onChange={(e) => {
 									const value = parseInt(e.target.value, 10);
-									if (value >= heightMin)
+									if (value >= VITE_HEIGHT_MIN)
 										setSample((old) => ({ ...old, height: value }));
 								}}
 								style={{ width: "initial", margin: 0, padding: 0 }}

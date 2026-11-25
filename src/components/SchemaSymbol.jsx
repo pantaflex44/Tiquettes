@@ -17,7 +17,7 @@
  */
 
 import { useMemo } from "react";
-
+import { VITE_APP_BASE } from "../libs/config";
 import schemaFunctions from "../schema_functions.json" with { type: "json" };
 import LazyImage from "./LazyImage";
 
@@ -142,7 +142,7 @@ export default function SchemaSymbol({
 						<div className="schemaItemSymbolPole">{module.pole}</div>
 						<LazyImage
 							className="schemaItemSymbolImgPole"
-							src={`${import.meta.env.VITE_APP_BASE}schema_${module.pole}.svg`}
+							src={`${VITE_APP_BASE}schema_${module.pole}.svg`}
 							alt={module.pole}
 							width={11}
 						/>

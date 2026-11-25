@@ -31,6 +31,7 @@ import numbersIcon from "../assets/numbers.svg";
 import sourcesIcon from "../assets/sources.svg";
 import zoomPlusIcon from "../assets/zoom-in.svg";
 import zoomMinusIcon from "../assets/zoom-out.svg";
+import { VITE_APP_BASE, VITE_VREF_230V } from "../libs/config.js";
 import swbIcons from "../switchboard_icons.json";
 import LazyImage from "./LazyImage.jsx";
 import SchemaItem from "./SchemaItem.jsx";
@@ -66,7 +67,10 @@ export default function SchemaTab({
 
 	const getSimplyPole = (module) => {
 		const p = (module?.pole ?? "1P+N").trim().toUpperCase();
-		let pc = p.replace(/\D/g, "");
+		//let pc = p.replace(/\D/g, "");
+		// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+		// https://github.com/pantaflex44/Tiquettes/pull/113
+		let pc = parseInt(p.replace(/\D/g, ""), 10);
 		if ((pc === 1 || pc === 3) && p.includes("+N")) pc++;
 		if (pc < 2) pc = 2;
 		if (pc > 4) pc = 4;
@@ -80,7 +84,7 @@ export default function SchemaTab({
 		let rpCnt = 1;
 		let rps = {};
 
-		let r = switchboard.rows.flatMap((row) =>
+		let r = (switchboard?.rows ?? []).flatMap((row) =>
 			row
 				.map((module) => {
 					if (!module?.id) return null;
@@ -398,9 +402,7 @@ export default function SchemaTab({
 				};
 
 				const getVref = (module) => {
-					const _currentVref = (
-						module?.vref ?? import.meta.env.VITE_VREF_230V
-					).split("/");
+					const _currentVref = (module?.vref ?? VITE_VREF_230V).split("/");
 					if (_currentVref.length > 0)
 						return parseInt(
 							_currentVref[_currentVref.length - 1].replace(/\D/g, ""),
@@ -471,17 +473,23 @@ export default function SchemaTab({
 					return schemaFunctions[module.func]?.isCurrentLimiter === true;
 				};
 
+				// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+				// https://github.com/pantaflex44/Tiquettes/pull/111
 				const applyPowerRound = (value) => {
-					if (value >= 1000)
-						return {
-							value: Math.round((value / 1000) * 100) / 100,
-							unit: "kW",
-						};
-					if (value >= 1000000)
+					if (value >= 1000000) {
 						return {
 							value: Math.round((value / 1000000) * 100) / 100,
 							unit: "m.W",
 						};
+					}
+
+					if (value >= 1000) {
+						return {
+							value: Math.round((value / 1000) * 100) / 100,
+							unit: "kW",
+						};
+					}
+
 					return { value, unit: "W" };
 				};
 
@@ -653,7 +661,10 @@ export default function SchemaTab({
 				) {
 					add_error(
 						id,
-						`Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`,
+						//`Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule.id}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`,
+						// Correction par Théo BARRAGUÉ (https://github.com/theobarrague)
+						// https://github.com/pantaflex44/Tiquettes/pull/112
+						`Câblage incohérent. Le nombre de pôles du module parent (${lastParentModule?.id ?? source?.name ?? "-"}: ${parentPole}) ne permet pas de câbler correctement ce module (${currentPole}).`,
 					);
 				}
 
@@ -997,7 +1008,7 @@ export default function SchemaTab({
 						<div className="schemaGroundLine">
 							<LazyImage
 								className=""
-								src={`${import.meta.env.VITE_APP_BASE}circuit-ground.svg`}
+								src={`${VITE_APP_BASE}circuit-ground.svg`}
 								width={24}
 								height={24}
 							/>

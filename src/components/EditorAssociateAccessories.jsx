@@ -60,7 +60,7 @@ export default function EditorAssociateAccessories({
 		<select
 			id={id}
 			name={id}
-			value={currentAssociate}
+			value={currentAssociate ?? ""}
 			onChange={(e) => {
 				setCurrentAssociate(e.target.value);
 				if (onChange) onChange(e.target.value);

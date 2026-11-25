@@ -73,6 +73,8 @@ export default function FirstpageSettingsPopup({
 
 	const importRef = useRef();
 
+	const [noEnterKeyPressAllowed, setNoEnterKeyPressAllowed] = useState(false);
+
 	const merge = (a, b) =>
 		[a, b].reduce(
 			(r, o) =>
@@ -478,6 +480,7 @@ export default function FirstpageSettingsPopup({
 			onOk={apply}
 			okButtonDisabled={!options}
 			onCancel={cancel}
+			noEnterKeyPressAllowed={noEnterKeyPressAllowed}
 		>
 			<input
 				id="importlogo"
@@ -531,7 +534,7 @@ export default function FirstpageSettingsPopup({
 					<div className="tabPageBandGroup">
 						<div className="tabPageBandCol">
 							<button
-								id="importdatafile"
+								id="btn"
 								type="button"
 								style={{ height: "34px" }}
 								title="Importer les données installateur"
@@ -979,6 +982,8 @@ export default function FirstpageSettingsPopup({
 										(options?.views?.from?.postalAddress ?? false) === false &&
 										withViewSelector
 									}
+									onFocus={() => setNoEnterKeyPressAllowed(true)}
+									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
 							</div>
 
@@ -1296,6 +1301,8 @@ export default function FirstpageSettingsPopup({
 										(options?.views?.to?.postalAddress ?? false) === false &&
 										withViewSelector
 									}
+									onFocus={() => setNoEnterKeyPressAllowed(true)}
+									onBlur={() => setNoEnterKeyPressAllowed(false)}
 								/>
 							</div>
 
@@ -1634,7 +1641,7 @@ export default function FirstpageSettingsPopup({
 									/>
 								</button>
 								<select
-									value={zoom}
+									value={zoom ?? ""}
 									onChange={(e) => {
 										setZoom(parseInt(e.target.value, 10));
 									}}

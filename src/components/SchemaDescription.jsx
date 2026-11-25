@@ -17,6 +17,7 @@
  */
 
 import { useMemo } from "react";
+import { VITE_APP_BASE } from "../libs/config";
 import LazyImage from "./LazyImage";
 
 export default function SchemaDescription({ module }) {
@@ -71,7 +72,7 @@ export default function SchemaDescription({ module }) {
 						alt="Pictogramme"
 						width={24}
 						height={24}
-						src={`${import.meta.env.VITE_APP_BASE}${infos.icon}`}
+						src={`${VITE_APP_BASE}${infos.icon}`}
 						className="schemaItemLastIcon"
 					/>
 				</div>

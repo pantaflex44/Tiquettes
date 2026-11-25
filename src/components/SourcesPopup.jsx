@@ -41,7 +41,7 @@ export default function SourcesPopup({
 	const [sources, setSources] = useState(
 		[
 			...(switchboard.sources ??
-				import.meta.env.VITE_SOURCES.split("|")
+				VITE_SOURCES.split("|")
 					.map((v) => v.trim())
 					.filter((v) => v !== "")),
 		].sort((a, b) => a.localeCompare(b)),

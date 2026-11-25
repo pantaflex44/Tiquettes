@@ -34,6 +34,7 @@ import growIcon from "../assets/plus.svg";
 import rightIcon from "../assets/right.svg";
 import clearIcon from "../assets/trash.svg";
 import cancelredIcon from "../assets/x.svg";
+import { VITE_DEFAULT_PRINT_EMPTY } from "../libs/config.js";
 import themesList from "../themes.json" with { type: "json" };
 import LazyImage from "./LazyImage.jsx";
 
@@ -184,7 +185,7 @@ function Module({
 	return (
 		item && (
 			<div
-				className={`module ${item.free ? "free" : ""} ${item.free && (import.meta.env.VITE_DEFAULT_PRINT_EMPTY !== "true" || !printFreeModuleAllowed()) ? "noprint" : ""} ${isDemo ? "demo" : ""}${hasClipboard && item.free && !canPaste ? "disabled" : ""}`.trim()}
+				className={`module ${item.free ? "free" : ""} ${item.free && (!VITE_DEFAULT_PRINT_EMPTY || !printFreeModuleAllowed()) ? "noprint" : ""} ${isDemo ? "demo" : ""}${hasClipboard && item.free && !canPaste ? "disabled" : ""}`.trim()}
 				id={`module_${rowPosition}_${modulePosition}`}
 				data-row={rowPosition}
 				style={{
