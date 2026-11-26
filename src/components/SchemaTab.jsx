@@ -172,8 +172,6 @@ export default function SchemaTab({
 							.map((m) => getSimplyPole(m))
 							.filter((m) => !Number.isNaN(m));
 
-						console.log(childsPole);
-
 						r = [
 							...r,
 							{
